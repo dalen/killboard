@@ -1,0 +1,5 @@
+schema: http://localhost:5156/graphql
+generates:
+  src/types.ts:
+    plugins:
+      - '@graphql-codegen/typescript'
