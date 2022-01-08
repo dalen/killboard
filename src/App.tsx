@@ -1,10 +1,15 @@
-import { LatestKills } from './components/LatestKills';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Home } from './pages/Home';
+import { Kill } from './pages/Kill';
 
 function App() {
   return (
-    <div className="App">
-      <LatestKills />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/kill/:id" element={<Kill />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 
