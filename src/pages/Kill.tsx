@@ -1,7 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { Query } from '../types';
+import { careerIcon } from '../utils';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -13,15 +14,25 @@ const KILL_DETAILS = gql`
       }
       victim {
         character {
+          id
           name
           career
+        }
+        guild {
+          id
+          name
         }
       }
       attackers {
         damagePercent
         character {
+          id
           name
           career
+        }
+        guild {
+          id
+          name
         }
       }
     }
@@ -44,6 +55,8 @@ export const Kill = (): JSX.Element => {
       </div>
     );
 
+  const kill = data.kill;
+
   return (
     <div className="container is-max-desktop mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
@@ -60,6 +73,33 @@ export const Kill = (): JSX.Element => {
       </nav>
       <div className="columns">
         <div className="column">
+          <nav className="panel is-info">
+            <p className="panel-heading">
+              <Link to={`/character/${kill.attackers[0].character.id}`}>
+                {data.kill.attackers[0].character.name}
+              </Link>
+            </p>
+            <Link
+              className="panel-block"
+              to={`/character/${kill.attackers[0].character.id}`}
+            >
+              <span className="panel-icon">
+                <img
+                  src={careerIcon(data.kill.attackers[0].character.career)}
+                />
+              </span>
+              {data.kill.attackers[0].character.name}
+            </Link>
+            <Link
+              className="panel-block"
+              to={`/guild/${kill.attackers[0].guild?.id}`}
+            >
+              <span className="panel-icon">
+                <img src="/images/icons/guild.png" />
+              </span>
+              {data.kill.attackers[0].guild?.name}
+            </Link>
+          </nav>
           <div className="card">
             <header className="card-header has-background-info-dark">
               <div className="card-header-icon">
@@ -75,7 +115,24 @@ export const Kill = (): JSX.Element => {
               </div>
             </header>
             <div className="card-content">
-              <div className="content">test test</div>
+              <div className="media">
+                <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
+                  <div className="media-left">
+                    <figure className="image is-32x32">
+                      <img src="/images/icons/guild.png" />
+                    </figure>
+                  </div>
+                  <div className="media-content">
+                    {data.kill.attackers[0].guild?.name}
+                  </div>
+                </Link>
+              </div>
+              <span className="icon-text">
+                <span className="icon">
+                  <i className="fas fa-home"></i>
+                </span>
+                <span>Home</span>
+              </span>
             </div>
           </div>{' '}
         </div>

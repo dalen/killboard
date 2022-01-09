@@ -4,9 +4,9 @@ $scheme-main: rgba(20, 20, 20, 0.5);
 $scheme-main-ter: rgba(50, 50, 50, 0.2);
 $scheme-main-bis: rgba(50, 50, 50, 0.2);
 
-$link: #f90;
-$info: #ccc;
 $primary: #bf4000;
+$link: #f90;
+$info: #bbb;
 $text: #877b69;
 $text-strong: rgb(227, 214, 196);
 
@@ -23,3 +23,30 @@ $table-row-hover-background-color: rgba(0, 0, 0, 0.5);
 $table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5);
 
 @import '../node_modules/bulma/bulma.sass';
+
+// RoR style on navbar
+nav.navbar {
+  background: url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/bar-bg-red.jpg')
+    no-repeat scroll 50% 100% #2a0304;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  border-bottom: 1px solid #7e0505;
+}
+
+a.navbar-item {
+  border-right: 3px solid #450404;
+  border-left: 1px solid #230101;
+}
+
+html {
+  background: #000
+    url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/theme/ror.jpg')
+    no-repeat top center fixed;
+}
+
+@font-face {
+  font-family: 'Caslon Antique Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Caslon Antique Regular'), url('Caslo-an.woff') format('woff');
+}

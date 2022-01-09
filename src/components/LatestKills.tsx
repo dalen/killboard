@@ -14,10 +14,12 @@ const LATEST_KILLS = gql`
           level
           renownRank
           character {
+            id
             career
             name
           }
           guild {
+            id
             name
           }
         }
@@ -25,10 +27,12 @@ const LATEST_KILLS = gql`
           level
           renownRank
           character {
+            id
             career
             name
           }
           guild {
+            id
             name
           }
         }
@@ -86,9 +90,15 @@ export const LatestKills = (): JSX.Element => {
                     </figure>
                     <div className="media-content">
                       <div className="content">
-                        <strong>{kill.attackers[0].character.name}</strong>
+                        <Link
+                          to={`/character/${kill.attackers[0].character.id}`}
+                        >
+                          <strong>{kill.attackers[0].character.name}</strong>
+                        </Link>
                         <br />
-                        {kill.attackers[0].guild?.name}
+                        <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
+                          {kill.attackers[0].guild?.name}
+                        </Link>
                       </div>
                     </div>
                     <div className="media-right">
@@ -107,9 +117,13 @@ export const LatestKills = (): JSX.Element => {
                     </figure>
                     <div className="media-content">
                       <div className="content">
-                        <strong>{kill.victim.character.name}</strong>
+                        <Link to={`/character/${kill.victim.character.id}`}>
+                          <strong>{kill.victim.character.name}</strong>
+                        </Link>
                         <br />
-                        {kill.victim.guild?.name}
+                        <Link to={`/guild/${kill.victim.guild?.id}`}>
+                          {kill.victim.guild?.name}
+                        </Link>
                       </div>
                     </div>
                     <div className="media-right">
