@@ -1,13 +1,23 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+nav.navbar {
+  background: url('/public/images/bar-bg-red.jpg') no-repeat scroll 50% 100%
+    #2a0304;
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  border-bottom: 1px solid #7e0505;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+a.navbar-item {
+  border-right: 3px solid #450404;
+  border-left: 1px solid #230101;
+}
+
+html {
+  background: #000 url('/public/images/ror.jpg') no-repeat top center fixed;
+}
+
+@font-face {
+  font-family: 'Caslon Antique Regular';
+  font-style: normal;
+  font-weight: normal;
+  src: local('Caslon Antique Regular'), url('Caslo-an.woff') format('woff');
 }

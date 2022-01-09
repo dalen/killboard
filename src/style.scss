@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+$scheme-main: rgba(20, 20, 20, 0.5);
+$scheme-main-ter: rgba(50, 50, 50, 0.2);
+$scheme-main-bis: rgba(50, 50, 50, 0.2);
+
+$link: #f90;
+$info: #ccc;
+$primary: #bf4000;
+$text: #877b69;
+$text-strong: rgb(227, 214, 196);
+
+$family-secondary: 'Caslon Antique Regular';
+
+$navbar-height: 41px;
+$navbar-padding-vertical: 20px;
+$navbar-item-color: rgb(255, 153, 0);
+$navbar-item-hover-color: #fff;
+$navbar-item-hover-background-color: 'transparent';
+
+$table-cell-border: none;
+$table-row-hover-background-color: rgba(0, 0, 0, 0.5);
+$table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5);
+
+@import '../node_modules/bulma/bulma.sass';

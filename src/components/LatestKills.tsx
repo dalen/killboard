@@ -55,85 +55,82 @@ export const LatestKills = (): JSX.Element => {
   if (data?.kills?.nodes == null) return <p>error</p>;
 
   return (
-    <table className="table is-striped is-hoverable is-fullwidth">
-      <thead>
-        <tr>
-          <th
-            colSpan={4}
-            className="has-background-info-dark has-text-white is-size-5 has-text-centered"
-          >
-            Recent Kills
-          </th>
-        </tr>
-        <tr>
-          <th>Time</th>
-          <th>Attacker</th>
-          <th>Victim</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.kills.nodes.map((kill) => {
-          const date = new Date(kill.time * 1000);
+    <div>
+      <div className="is-size-4 is-family-secondary is-uppercase">
+        Recent Kills
+      </div>
+      <table className="table is-striped is-hoverable is-fullwidth">
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Attacker</th>
+            <th>Victim</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.kills.nodes.map((kill) => {
+            const date = new Date(kill.time * 1000);
 
-          return (
-            <tr key={kill.id}>
-              <td>
-                {formatISO(date, { representation: 'date' })}
-                <br />
-                {format(date, 'HH:mm:ss')}
-              </td>
-              <td>
-                <article className="media">
-                  <figure className="media-left">
-                    <CareerIcon career={kill.attackers[0].character.career} />
-                  </figure>
-                  <div className="media-content">
-                    <div className="content">
-                      <strong>{kill.attackers[0].character.name}</strong>
-                      <br />
-                      {kill.attackers[0].guild?.name}
+            return (
+              <tr key={kill.id}>
+                <td>
+                  {formatISO(date, { representation: 'date' })}
+                  <br />
+                  {format(date, 'HH:mm:ss')}
+                </td>
+                <td>
+                  <article className="media">
+                    <figure className="media-left">
+                      <CareerIcon career={kill.attackers[0].character.career} />
+                    </figure>
+                    <div className="media-content">
+                      <div className="content">
+                        <strong>{kill.attackers[0].character.name}</strong>
+                        <br />
+                        {kill.attackers[0].guild?.name}
+                      </div>
                     </div>
-                  </div>
-                  <div className="media-right">
-                    <small>
-                      Lvl {kill.attackers[0].level}
-                      <br />
-                      RR {kill.attackers[0].renownRank}
-                    </small>
-                  </div>
-                </article>
-              </td>
-              <td>
-                <article className="media">
-                  <figure className="media-left">
-                    <CareerIcon career={kill.victim.character.career} />
-                  </figure>
-                  <div className="media-content">
-                    <div className="content">
-                      <strong>{kill.victim.character.name}</strong>
-                      <br />
-                      {kill.victim.guild?.name}
+                    <div className="media-right">
+                      <small>
+                        Lvl {kill.attackers[0].level}
+                        <br />
+                        RR {kill.attackers[0].renownRank}
+                      </small>
                     </div>
-                  </div>
-                  <div className="media-right">
-                    <small>
-                      Lvl {kill.victim.level}
-                      <br />
-                      RR {kill.victim.renownRank}
-                    </small>
-                  </div>
-                </article>
-              </td>
-              <td>
-                <Link to={`/kill/${kill.id}`} className="button is-info">
-                  Details
-                </Link>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+                  </article>
+                </td>
+                <td>
+                  <article className="media">
+                    <figure className="media-left">
+                      <CareerIcon career={kill.victim.character.career} />
+                    </figure>
+                    <div className="media-content">
+                      <div className="content">
+                        <strong>{kill.victim.character.name}</strong>
+                        <br />
+                        {kill.victim.guild?.name}
+                      </div>
+                    </div>
+                    <div className="media-right">
+                      <small>
+                        Lvl {kill.victim.level}
+                        <br />
+                        RR {kill.victim.renownRank}
+                      </small>
+                    </div>
+                  </article>
+                </td>
+                <td>
+                  <Link to={`/kill/${kill.id}`} className="button is-primary">
+                    Details
+                  </Link>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
   );
 };
