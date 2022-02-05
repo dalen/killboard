@@ -64,7 +64,9 @@ export const Kill = (): JSX.Element => {
           <li>
             <a href="/">Home</a>
           </li>
-          <li className="is-active">Kill #{id}</li>
+          <li className="is-active">
+            <Link to={`/kill/${id}`}>Kill #{id}</Link>
+          </li>
         </ul>
       </nav>
       <div className="columns">
