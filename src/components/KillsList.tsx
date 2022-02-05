@@ -1,4 +1,4 @@
-import { DocumentNode, useQuery } from '@apollo/client';
+import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import { format, formatISO } from 'date-fns';
 import {
   Progress,
@@ -13,12 +13,16 @@ import { CareerIcon } from './CareerIcon';
 
 export const KillsList = ({
   query,
-  title,
+  queryOptions,
+  showVictim = true,
+  showKiller = true,
 }: {
   query: DocumentNode;
-  title: string;
+  queryOptions?: QueryHookOptions;
+  showVictim?: boolean;
+  showKiller?: boolean;
 }): JSX.Element => {
-  const { loading, error, data } = useQuery<Query>(query);
+  const { loading, error, data } = useQuery<Query>(query, queryOptions);
 
   if (loading) return <Progress />;
   if (error)
@@ -33,29 +37,28 @@ export const KillsList = ({
   if (data?.kills?.nodes == null) return <p>error</p>;
 
   return (
-    <div>
-      <div className="is-size-4 is-family-secondary is-uppercase">{title}</div>
-      <Table striped hoverable size="fullwidth">
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Killer</th>
-            <th>Victim</th>
-            <th>Location</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.kills.nodes.map((kill) => {
-            const date = new Date(kill.time * 1000);
+    <Table striped hoverable size="fullwidth">
+      <thead>
+        <tr>
+          <th>Time</th>
+          {showKiller && <th>Killer</th>}
+          {showVictim && <th>Victim</th>}
+          <th>Location</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.kills.nodes.map((kill) => {
+          const date = new Date(kill.time * 1000);
 
-            return (
-              <tr key={kill.id}>
-                <td>
-                  {formatISO(date, { representation: 'date' })}
-                  <br />
-                  {format(date, 'HH:mm:ss')}
-                </td>
+          return (
+            <tr key={kill.id}>
+              <td>
+                {formatISO(date, { representation: 'date' })}
+                <br />
+                {format(date, 'HH:mm:ss')}
+              </td>
+              {showKiller && (
                 <td>
                   <Media>
                     <Media.Item align="left">
@@ -83,6 +86,8 @@ export const KillsList = ({
                     </Media.Item>
                   </Media>
                 </td>
+              )}
+              {showVictim && (
                 <td>
                   <Media>
                     <Media.Item align="left">
@@ -108,20 +113,20 @@ export const KillsList = ({
                     </Media.Item>
                   </Media>
                 </td>
-                <td>
-                  Zone: {kill.position?.zoneId}
-                  {kill.scenarioId !== 0 && <p>Scenario: {kill.scenarioId}</p>}
-                </td>
-                <td>
-                  <Link to={`/kill/${kill.id}`} className="button is-primary">
-                    Details
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </Table>
-    </div>
+              )}
+              <td>
+                Zone: {kill.position?.zoneId}
+                {kill.scenarioId !== 0 && <p>Scenario: {kill.scenarioId}</p>}
+              </td>
+              <td>
+                <Link to={`/kill/${kill.id}`} className="button is-primary">
+                  Details
+                </Link>
+              </td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </Table>
   );
 };
