@@ -33,13 +33,14 @@ export const CharacterRecentKills = ({ id }: { id: number }): JSX.Element => {
   return (
     <div>
       <div className="is-size-4 is-family-secondary is-uppercase">
-        Recent Deaths
+        Recent Kills
       </div>
       <KillsList
         query={RECENT_KILLS}
         queryOptions={{
           variables: { id },
         }}
+        showTime={false}
         showKiller={false}
       />
     </div>

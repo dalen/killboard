@@ -53,6 +53,7 @@ export const CharacterRecentDeaths = ({ id }: { id: number }): JSX.Element => {
         queryOptions={{
           variables: { id },
         }}
+        showTime={false}
         showVictim={false}
       />
     </div>

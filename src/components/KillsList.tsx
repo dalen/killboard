@@ -6,19 +6,23 @@ import {
   Table,
   Media,
   Content,
+  Image,
 } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
+import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import { CareerIcon } from './CareerIcon';
 
 export const KillsList = ({
   query,
   queryOptions,
+  showTime = true,
   showVictim = true,
   showKiller = true,
 }: {
   query: DocumentNode;
   queryOptions?: QueryHookOptions;
+  showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
 }): JSX.Element => {
@@ -40,7 +44,7 @@ export const KillsList = ({
     <Table striped hoverable size="fullwidth">
       <thead>
         <tr>
-          <th>Time</th>
+          {showTime && <th>Time</th>}
           {showKiller && <th>Killer</th>}
           {showVictim && <th>Victim</th>}
           <th>Location</th>
@@ -53,11 +57,13 @@ export const KillsList = ({
 
           return (
             <tr key={kill.id}>
-              <td>
-                {formatISO(date, { representation: 'date' })}
-                <br />
-                {format(date, 'HH:mm:ss')}
-              </td>
+              {showTime && (
+                <td>
+                  {formatISO(date, { representation: 'date' })}
+                  <br />
+                  {format(date, 'HH:mm:ss')}
+                </td>
+              )}
               {showKiller && (
                 <td>
                   <Media>
@@ -115,11 +121,27 @@ export const KillsList = ({
                 </td>
               )}
               <td>
-                Zone: {kill.position?.zoneId}
-                {kill.scenarioId !== 0 && <p>Scenario: {kill.scenarioId}</p>}
+                {kill.scenarioId === 0 ? (
+                  <Media>
+                    <Media.Item align="left">
+                      <Image src={`/images/icons/rvr.png`} alt="RvR" />
+                    </Media.Item>
+                    <Media.Item>{Zones[kill.position?.zoneId]}</Media.Item>
+                  </Media>
+                ) : (
+                  <Media>
+                    <Media.Item align="left">
+                      <Image
+                        src={`/images/icons/scenario.png`}
+                        alt="Scenario"
+                      />
+                    </Media.Item>
+                    <Media.Item>{Scenarios[kill.scenarioId]}</Media.Item>
+                  </Media>
+                )}
               </td>
               <td>
-                <Link to={`/kill/${kill.id}`} className="button is-primary">
+                <Link to={`/kill/${kill.id}`} className="button is-primary p-1">
                   Details
                 </Link>
               </td>
