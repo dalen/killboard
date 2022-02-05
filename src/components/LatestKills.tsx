@@ -10,6 +10,10 @@ const LATEST_KILLS = gql`
       nodes {
         id
         time
+        position {
+          zoneId
+        }
+        scenarioId
         victim {
           level
           renownRank
@@ -67,8 +71,9 @@ export const LatestKills = (): JSX.Element => {
         <thead>
           <tr>
             <th>Time</th>
-            <th>Attacker</th>
+            <th>Killer</th>
             <th>Victim</th>
+            <th>Location</th>
             <th></th>
           </tr>
         </thead>
@@ -134,6 +139,10 @@ export const LatestKills = (): JSX.Element => {
                       </small>
                     </div>
                   </article>
+                </td>
+                <td>
+                  Zone: {kill.position?.zoneId}
+                  {kill.scenarioId !== 0 && <p>Scenario: {kill.scenarioId}</p>}
                 </td>
                 <td>
                   <Link to={`/kill/${kill.id}`} className="button is-primary">
