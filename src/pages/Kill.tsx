@@ -64,11 +64,7 @@ export const Kill = (): JSX.Element => {
           <li>
             <a href="/">Home</a>
           </li>
-          <li className="is-active">
-            <a href="#" aria-current="page">
-              Kill #{id}
-            </a>
-          </li>
+          <li className="is-active">Kill #{id}</li>
         </ul>
       </nav>
       <div className="columns">
@@ -86,6 +82,7 @@ export const Kill = (): JSX.Element => {
               <span className="panel-icon">
                 <img
                   src={careerIcon(data.kill.attackers[0].character.career)}
+                  alt={data.kill.attackers[0].character.career}
                 />
               </span>
               {data.kill.attackers[0].character.name}
@@ -95,7 +92,7 @@ export const Kill = (): JSX.Element => {
               to={`/guild/${kill.attackers[0].guild?.id}`}
             >
               <span className="panel-icon">
-                <img src="/images/icons/guild.png" />
+                <img src="/images/icons/guild.png" alt="Guild" />
               </span>
               {data.kill.attackers[0].guild?.name}
             </Link>
@@ -119,7 +116,7 @@ export const Kill = (): JSX.Element => {
                 <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
                   <div className="media-left">
                     <figure className="image is-32x32">
-                      <img src="/images/icons/guild.png" />
+                      <img src="/images/icons/guild.png" alt="Guild" />
                     </figure>
                   </div>
                   <div className="media-content">
