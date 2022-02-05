@@ -1,4 +1,4 @@
-schema: http://localhost:5156/graphql
+schema: https://production-api.waremu.com/graphql
 generates:
   src/types.ts:
     plugins:

@@ -288,11 +288,17 @@ export type Position = {
 
 export type Query = {
   __typename?: 'Query';
+  character?: Maybe<Character>;
   characters?: Maybe<CharactersConnection>;
   guild?: Maybe<Guild>;
   guilds?: Maybe<GuildsConnection>;
   kill?: Maybe<Kill>;
   kills?: Maybe<KillsConnection>;
+};
+
+
+export type QueryCharacterArgs = {
+  id?: InputMaybe<Scalars['ID']>;
 };
 
 
