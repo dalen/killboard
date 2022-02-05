@@ -1,9 +1,10 @@
+import { Container } from 'react-bulma-components';
 import { LatestKills } from '../components/LatestKills';
 
 export const Home = (): JSX.Element => {
   return (
-    <div className="container is-max-desktop mt-2">
+    <Container max breakpoint={'desktop'} mt={2}>
       <LatestKills />
-    </div>
+    </Container>
   );
 };

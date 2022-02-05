@@ -1,4 +1,17 @@
 import { gql, useQuery } from '@apollo/client';
+import {
+  Progress,
+  Notification,
+  Container,
+  Breadcrumb,
+  Columns,
+  Panel,
+  Card,
+  Tag,
+  Media,
+  Icon,
+  Content,
+} from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { Query } from '../types';
@@ -45,112 +58,110 @@ export const Kill = (): JSX.Element => {
     variables: { id },
   });
 
-  if (loading || data?.kill == null) return <p>Loading...</p>;
+  if (loading || data?.kill == null) return <Progress />;
   if (error)
     return (
-      <div>
+      <Notification color={'danger'}>
         <p>Error :(</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
-      </div>
+      </Notification>
     );
 
   const kill = data.kill;
 
   return (
-    <div className="container is-max-desktop mt-2">
-      <nav className="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-          <li>
-            <a href="/">Home</a>
-          </li>
-          <li className="is-active">
-            <Link to={`/kill/${id}`}>Kill #{id}</Link>
-          </li>
-        </ul>
-      </nav>
-      <div className="columns">
-        <div className="column">
-          <nav className="panel is-info">
-            <p className="panel-heading">
+    <Container max breakpoint={'desktop'} mt={2}>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/">Home</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>
+          <Link to={`/kill/${id}`}>Kill #{id}</Link>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <Columns>
+        <Columns.Column>
+          <Panel color="info">
+            <Panel.Header>
               <Link to={`/character/${kill.attackers[0].character.id}`}>
                 {data.kill.attackers[0].character.name}
               </Link>
-            </p>
+            </Panel.Header>
             <Link
               className="panel-block"
               to={`/character/${kill.attackers[0].character.id}`}
             >
-              <span className="panel-icon">
+              <Panel.Icon>
                 <img
                   src={careerIcon(data.kill.attackers[0].character.career)}
                   alt={data.kill.attackers[0].character.career}
                 />
-              </span>
+              </Panel.Icon>
               {data.kill.attackers[0].character.name}
             </Link>
             <Link
               className="panel-block"
               to={`/guild/${kill.attackers[0].guild?.id}`}
             >
-              <span className="panel-icon">
+              <Panel.Icon>
                 <img src="/images/icons/guild.png" alt="Guild" />
-              </span>
+              </Panel.Icon>
               {data.kill.attackers[0].guild?.name}
             </Link>
-          </nav>
-          <div className="card">
-            <header className="card-header has-background-info-dark">
-              <div className="card-header-icon">
+          </Panel>
+          <Card>
+            <Card.Header backgroundColor="info-dark">
+              <Card.Header.Icon>
                 <CareerIcon career={data.kill.attackers[0].character.career} />
-              </div>
-              <p className="card-header-title has-text-white">
+              </Card.Header.Icon>
+              <Card.Header.Title textColor="white">
                 {data.kill.attackers[0].character.name}
-              </p>
+              </Card.Header.Title>
               <div className="m-3">
-                <span className="tag is-rounded is-medium">
+                <Tag rounded size={'medium'}>
                   {data.kill.attackers[0].damagePercent}%
-                </span>
+                </Tag>
               </div>
-            </header>
-            <div className="card-content">
-              <div className="media">
+            </Card.Header>
+            <Card.Content>
+              <Media>
                 <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
-                  <div className="media-left">
+                  <Media.Item align={'left'}>
                     <figure className="image is-32x32">
                       <img src="/images/icons/guild.png" alt="Guild" />
                     </figure>
-                  </div>
+                  </Media.Item>
                   <div className="media-content">
                     {data.kill.attackers[0].guild?.name}
                   </div>
                 </Link>
-              </div>
-              <span className="icon-text">
-                <span className="icon">
+              </Media>
+              <Icon.Text>
+                <Icon>
                   <i className="fas fa-home"></i>
-                </span>
-                <span>Home</span>
-              </span>
-            </div>
-          </div>{' '}
-        </div>
-        <div className="column">
-          <div className="card">
-            <header className="card-header has-background-info-dark">
-              <div className="card-header-icon">
+                  <span>Home</span>
+                </Icon>
+              </Icon.Text>
+            </Card.Content>
+          </Card>{' '}
+        </Columns.Column>
+        <Columns.Column>
+          <Card>
+            <Card.Header backgroundColor="info-dark">
+              <Card.Header.Icon>
                 <CareerIcon career={data.kill.victim.character.career} />
-              </div>
-              <p className="card-header-title has-text-white">
+              </Card.Header.Icon>
+              <Card.Header.Title textColor="white">
                 {data.kill.victim.character.name}
-              </p>
-            </header>
-            <div className="card-content">
-              <div className="content">test test</div>
-            </div>
-          </div>{' '}
-        </div>
-      </div>
-    </div>
+              </Card.Header.Title>
+            </Card.Header>
+            <Card.Content>
+              <Content>test test</Content>
+            </Card.Content>
+          </Card>{' '}
+        </Columns.Column>
+      </Columns>
+    </Container>
   );
 };

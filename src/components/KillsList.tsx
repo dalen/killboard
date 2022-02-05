@@ -1,5 +1,12 @@
 import { DocumentNode, useQuery } from '@apollo/client';
 import { format, formatISO } from 'date-fns';
+import {
+  Progress,
+  Notification,
+  Table,
+  Media,
+  Content,
+} from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { Query } from '../types';
 import { CareerIcon } from './CareerIcon';
@@ -13,14 +20,14 @@ export const KillsList = ({
 }): JSX.Element => {
   const { loading, error, data } = useQuery<Query>(query);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Progress />;
   if (error)
     return (
-      <div>
+      <Notification color={'danger'}>
         <p>Error :(</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
-      </div>
+      </Notification>
     );
 
   if (data?.kills?.nodes == null) return <p>error</p>;
@@ -28,7 +35,7 @@ export const KillsList = ({
   return (
     <div>
       <div className="is-size-4 is-family-secondary is-uppercase">{title}</div>
-      <table className="table is-striped is-hoverable is-fullwidth">
+      <Table striped hoverable size="fullwidth">
         <thead>
           <tr>
             <th>Time</th>
@@ -50,12 +57,12 @@ export const KillsList = ({
                   {format(date, 'HH:mm:ss')}
                 </td>
                 <td>
-                  <article className="media">
-                    <figure className="media-left">
+                  <Media>
+                    <Media.Item align="left">
                       <CareerIcon career={kill.attackers[0].character.career} />
-                    </figure>
-                    <div className="media-content">
-                      <div className="content">
+                    </Media.Item>
+                    <Media.Item>
+                      <Content>
                         <Link
                           to={`/character/${kill.attackers[0].character.id}`}
                         >
@@ -65,24 +72,24 @@ export const KillsList = ({
                         <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
                           {kill.attackers[0].guild?.name}
                         </Link>
-                      </div>
-                    </div>
-                    <div className="media-right">
+                      </Content>
+                    </Media.Item>
+                    <Media.Item align="right">
                       <small>
                         Lvl {kill.attackers[0].level}
                         <br />
                         RR {kill.attackers[0].renownRank}
                       </small>
-                    </div>
-                  </article>
+                    </Media.Item>
+                  </Media>
                 </td>
                 <td>
-                  <article className="media">
-                    <figure className="media-left">
+                  <Media>
+                    <Media.Item align="left">
                       <CareerIcon career={kill.victim.character.career} />
-                    </figure>
-                    <div className="media-content">
-                      <div className="content">
+                    </Media.Item>
+                    <Media.Item>
+                      <Content>
                         <Link to={`/character/${kill.victim.character.id}`}>
                           <strong>{kill.victim.character.name}</strong>
                         </Link>
@@ -90,16 +97,16 @@ export const KillsList = ({
                         <Link to={`/guild/${kill.victim.guild?.id}`}>
                           {kill.victim.guild?.name}
                         </Link>
-                      </div>
-                    </div>
-                    <div className="media-right">
+                      </Content>
+                    </Media.Item>
+                    <Media.Item align="right">
                       <small>
                         Lvl {kill.victim.level}
                         <br />
                         RR {kill.victim.renownRank}
                       </small>
-                    </div>
-                  </article>
+                    </Media.Item>
+                  </Media>
                 </td>
                 <td>
                   Zone: {kill.position?.zoneId}
@@ -114,7 +121,7 @@ export const KillsList = ({
             );
           })}
         </tbody>
-      </table>
+      </Table>
     </div>
   );
 };
