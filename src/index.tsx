@@ -12,7 +12,7 @@ import {
 } from '@apollo/client';
 
 const client = new ApolloClient({
-  uri: 'http://localhost:5156/graphql',
+  uri: 'https://production-api.waremu.com/graphql',
   cache: new InMemoryCache(),
 });
 
