@@ -11,7 +11,7 @@ export const Attacker = ({
   attacker: AttackerType;
 }): JSX.Element => {
   return (
-    <Card>
+    <Card mb={2}>
       <Card.Header backgroundColor="info-dark">
         <Card.Header.Icon>
           <CareerIcon career={attacker.character.career} />
