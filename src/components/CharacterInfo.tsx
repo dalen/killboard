@@ -14,7 +14,7 @@ import { careerIcon } from '../utils';
 // Temporary way of fetching this until new API version is deployed
 const CHARACTER_INFO = gql`
   query GetCharacterInfo($id: ID!) {
-    character(victimId: $id) {
+    character(id: $id) {
       name
       career
       level
