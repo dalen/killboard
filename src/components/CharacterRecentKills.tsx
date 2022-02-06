@@ -11,6 +11,9 @@ const RECENT_KILLS = gql`
           zoneId
         }
         scenarioId
+        attackers {
+          damagePercent
+        }
         victim {
           level
           renownRank

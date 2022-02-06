@@ -27,6 +27,7 @@ const LATEST_KILLS = gql`
         attackers {
           level
           renownRank
+          damagePercent
           character {
             id
             career

@@ -7,6 +7,7 @@ import {
   Media,
   Content,
   Image,
+  Icon,
 } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { Scenarios, Zones } from '../enums';
@@ -47,7 +48,7 @@ export const KillsList = ({
           {showTime && <th>Time</th>}
           {showKiller && <th>Killer</th>}
           {showVictim && <th>Victim</th>}
-          <th>Location</th>
+          <th>Type</th>
           <th></th>
         </tr>
       </thead>
@@ -126,9 +127,25 @@ export const KillsList = ({
                 {kill.scenarioId === 0 ? (
                   <Media>
                     <Media.Item align="left">
-                      <Image src={`/images/icons/rvr.png`} alt="RvR" />
+                      <Image
+                        src={`/images/icons/rvr.png`}
+                        alt="RvR"
+                        title="RvR"
+                      />
                     </Media.Item>
-                    <Media.Item>{Zones[kill.position?.zoneId]}</Media.Item>
+                    <Media.Item>
+                      {Zones[kill.position?.zoneId]}{' '}
+                      {kill.attackers[0].damagePercent === 100 && (
+                        <p>
+                          <Icon.Text>
+                            <Icon>
+                              <i className="fas fa-star mr-2 has-text-warning"></i>
+                            </Icon>
+                            <strong>Solo kill</strong>
+                          </Icon.Text>
+                        </p>
+                      )}
+                    </Media.Item>
                   </Media>
                 ) : (
                   <Media>
@@ -136,9 +153,22 @@ export const KillsList = ({
                       <Image
                         src={`/images/icons/scenario.png`}
                         alt="Scenario"
+                        title="Scenario"
                       />
                     </Media.Item>
-                    <Media.Item>{Scenarios[kill.scenarioId]}</Media.Item>
+                    <Media.Item>
+                      {Scenarios[kill.scenarioId]}{' '}
+                      {kill.attackers[0].damagePercent === 100 && (
+                        <p>
+                          <Icon.Text>
+                            <Icon>
+                              <i className="fas fa-star mr-2 has-text-warning"></i>
+                            </Icon>
+                            <strong>Solo kill</strong>
+                          </Icon.Text>
+                        </p>
+                      )}
+                    </Media.Item>
                   </Media>
                 )}
               </td>
