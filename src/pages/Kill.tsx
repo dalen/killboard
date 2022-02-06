@@ -5,21 +5,21 @@ import {
   Container,
   Breadcrumb,
   Columns,
-  Panel,
   Card,
-  Tag,
   Media,
-  Icon,
-  Content,
+  Image,
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
+import { Attacker } from '../components/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
+import { PlayerFeud } from '../components/PlayerFeud';
+import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
-import { careerIcon } from '../utils';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
     kill(id: $id) {
+      scenarioId
       position {
         zoneId
         x
@@ -68,8 +68,6 @@ export const Kill = (): JSX.Element => {
       </Notification>
     );
 
-  const kill = data.kill;
-
   return (
     <Container max breakpoint={'desktop'} mt={2}>
       <Breadcrumb>
@@ -80,71 +78,34 @@ export const Kill = (): JSX.Element => {
           <Link to={`/kill/${id}`}>Kill #{id}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
+      <Card mb={5}>
+        <Card.Header backgroundColor="dark">
+          <Card.Header.Icon>
+            {data.kill.scenarioId === 0 ? (
+              <Image src={`/images/icons/rvr.png`} alt="RvR" title="RvR" />
+            ) : (
+              <Image
+                src={`/images/icons/scenario.png`}
+                alt="Scenario"
+                title="Scenario"
+              />
+            )}
+          </Card.Header.Icon>
+          <Card.Header.Title textColor="white">
+            <strong>
+              {data.kill.scenarioId === 0
+                ? Zones[data.kill.position?.zoneId]
+                : Scenarios[data.kill.scenarioId]}
+            </strong>
+          </Card.Header.Title>
+        </Card.Header>
+      </Card>
       <Columns>
         <Columns.Column>
-          <Panel color="info">
-            <Panel.Header>
-              <Link to={`/character/${kill.attackers[0].character.id}`}>
-                {data.kill.attackers[0].character.name}
-              </Link>
-            </Panel.Header>
-            <Link
-              className="panel-block"
-              to={`/character/${kill.attackers[0].character.id}`}
-            >
-              <Panel.Icon>
-                <img
-                  src={careerIcon(data.kill.attackers[0].character.career)}
-                  alt={data.kill.attackers[0].character.career}
-                />
-              </Panel.Icon>
-              {data.kill.attackers[0].character.name}
-            </Link>
-            <Link
-              className="panel-block"
-              to={`/guild/${kill.attackers[0].guild?.id}`}
-            >
-              <Panel.Icon>
-                <img src="/images/icons/guild.png" alt="Guild" />
-              </Panel.Icon>
-              {data.kill.attackers[0].guild?.name}
-            </Link>
-          </Panel>
-          <Card>
-            <Card.Header backgroundColor="info-dark">
-              <Card.Header.Icon>
-                <CareerIcon career={data.kill.attackers[0].character.career} />
-              </Card.Header.Icon>
-              <Card.Header.Title textColor="white">
-                {data.kill.attackers[0].character.name}
-              </Card.Header.Title>
-              <div className="m-3">
-                <Tag rounded size={'medium'}>
-                  {data.kill.attackers[0].damagePercent}%
-                </Tag>
-              </div>
-            </Card.Header>
-            <Card.Content>
-              <Media>
-                <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
-                  <Media.Item align={'left'}>
-                    <figure className="image is-32x32">
-                      <img src="/images/icons/guild.png" alt="Guild" />
-                    </figure>
-                  </Media.Item>
-                  <div className="media-content">
-                    {data.kill.attackers[0].guild?.name}
-                  </div>
-                </Link>
-              </Media>
-              <Icon.Text>
-                <Icon>
-                  <i className="fas fa-home"></i>
-                  <span>Home</span>
-                </Icon>
-              </Icon.Text>
-            </Card.Content>
-          </Card>{' '}
+          <Attacker title="Killer" attacker={data.kill.attackers[0]} />
+          {data.kill.attackers.slice(1).map((attacker) => (
+            <Attacker title="Assist" attacker={attacker} />
+          ))}
         </Columns.Column>
         <Columns.Column>
           <Card>
@@ -153,15 +114,35 @@ export const Kill = (): JSX.Element => {
                 <CareerIcon career={data.kill.victim.character.career} />
               </Card.Header.Icon>
               <Card.Header.Title textColor="white">
-                {data.kill.victim.character.name}
+                <strong className="mr-1">Victim:</strong>
+                <Link to={`/character/${data.kill.victim.character.id}`}>
+                  {data.kill.victim.character.name}
+                </Link>
               </Card.Header.Title>
             </Card.Header>
-            <Card.Content>
-              <Content>test test</Content>
-            </Card.Content>
-          </Card>{' '}
+            {data.kill.victim.guild && (
+              <Card.Content>
+                <Media>
+                  <Media.Item align={'left'}>
+                    <figure className="image is-32x32">
+                      <img src="/images/icons/guild.png" alt="Guild" />
+                    </figure>
+                  </Media.Item>
+                  <Media.Item>
+                    <Link to={`/guild/${data.kill.victim.guild?.id}`}>
+                      {data.kill.victim.guild?.name}
+                    </Link>
+                  </Media.Item>
+                </Media>
+              </Card.Content>
+            )}
+          </Card>
         </Columns.Column>
       </Columns>
+      <PlayerFeud
+        player1={data.kill.attackers[0].character.id ?? ''}
+        player2={data.kill.victim.character.id ?? ''}
+      />
     </Container>
   );
 };

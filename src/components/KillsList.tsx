@@ -1,5 +1,6 @@
 import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import { format, formatISO } from 'date-fns';
+import React from 'react';
 import {
   Progress,
   Notification,
@@ -26,7 +27,7 @@ export const KillsList = ({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
-}): JSX.Element => {
+}): React.ReactElement | null => {
   const { loading, error, data } = useQuery<Query>(query, queryOptions);
 
   if (loading) return <Progress />;
@@ -40,6 +41,8 @@ export const KillsList = ({
     );
 
   if (data?.kills?.nodes == null) return <p>error</p>;
+
+  if (data.kills.nodes.length === 0) return null;
 
   return (
     <Table striped hoverable size="fullwidth">
