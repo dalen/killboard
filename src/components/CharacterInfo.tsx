@@ -55,7 +55,7 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
   const character = data?.kills?.nodes[0]?.victim;
 
   return (
-    <Card>
+    <Card mb={4}>
       <Card.Content>
         <Media>
           <Media.Item align={'left'}>
@@ -78,7 +78,7 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
                     alt={character.character.career}
                   />
                 </Icon>
-                {character.character.career}
+                <span>{character.character.career}</span>
               </Icon.Text>
             </p>
             <p>
