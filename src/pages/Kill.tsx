@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
+import { format, formatISO } from 'date-fns';
 import {
   Progress,
   Notification,
@@ -20,6 +21,7 @@ const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
     kill(id: $id) {
       scenarioId
+      time
       position {
         zoneId
         x
@@ -68,6 +70,8 @@ export const Kill = (): JSX.Element => {
       </Notification>
     );
 
+  const date = new Date(data.kill.time * 1000);
+
   return (
     <Container max breakpoint={'desktop'} mt={2}>
       <Breadcrumb>
@@ -79,26 +83,34 @@ export const Kill = (): JSX.Element => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <Card mb={5}>
-        <Card.Header backgroundColor="dark">
-          <Card.Header.Icon>
-            {data.kill.scenarioId === 0 ? (
-              <Image src={`/images/icons/rvr.png`} alt="RvR" title="RvR" />
-            ) : (
+        <Card.Content>
+          <Media>
+            <Media.Item align={'left'}>
               <Image
-                src={`/images/icons/scenario.png`}
-                alt="Scenario"
-                title="Scenario"
+                size={'128'}
+                src={`/images/corner_icons/ea_icon_corner_rvr.png`}
+                alt="Guild"
               />
-            )}
-          </Card.Header.Icon>
-          <Card.Header.Title textColor="white">
-            <strong>
-              {data.kill.scenarioId === 0
-                ? Zones[data.kill.position?.zoneId]
-                : Scenarios[data.kill.scenarioId]}
-            </strong>
-          </Card.Header.Title>
-        </Card.Header>
+            </Media.Item>
+            <Media.Item>
+              <p className="is-size-4">
+                <strong>
+                  {data.kill.scenarioId === 0
+                    ? Zones[data.kill.position?.zoneId]
+                    : Scenarios[data.kill.scenarioId]}
+                </strong>
+              </p>
+              <p>
+                <strong>Date: </strong>
+                {formatISO(date, { representation: 'date' })}
+              </p>
+              <p>
+                <strong>Time: </strong>
+                {format(date, 'HH:mm:ss')}
+              </p>
+            </Media.Item>
+          </Media>
+        </Card.Content>
       </Card>
       <Columns>
         <Columns.Column>
