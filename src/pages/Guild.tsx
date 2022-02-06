@@ -7,6 +7,7 @@ import {
   Progress,
   Notification,
   Media,
+  Tabs,
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
@@ -98,6 +99,10 @@ export const Guild = (): JSX.Element => {
           </Media>
         </Card.Content>
       </Card>
+      <Tabs>
+        <Tabs.Tab active>Kills</Tabs.Tab>
+        <Tabs.Tab>Members</Tabs.Tab>
+      </Tabs>
       <GuildRecentKills id={Number(id)} />
       <GuildRecentDeaths id={Number(id)} />
     </Container>
