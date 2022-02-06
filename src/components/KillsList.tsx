@@ -59,9 +59,11 @@ export const KillsList = ({
             <tr key={kill.id}>
               {showTime && (
                 <td>
-                  {formatISO(date, { representation: 'date' })}
-                  <br />
-                  {format(date, 'HH:mm:ss')}
+                  <small>
+                    {formatISO(date, { representation: 'date' })}
+                    <br />
+                    {format(date, 'HH:mm:ss')}
+                  </small>
                 </td>
               )}
               {showKiller && (
