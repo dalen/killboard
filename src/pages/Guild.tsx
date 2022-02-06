@@ -18,7 +18,8 @@ const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
     guild(id: $id) {
       name
-      aboutUs
+      description
+      briefDescription
       level
       realm
       leader {
@@ -92,8 +93,8 @@ export const Guild = (): JSX.Element => {
                 </Link>
               </p>
               <p>
-                <strong>About Us: </strong>
-                {data.guild.aboutUs}
+                <strong>Description: </strong>
+                {data.guild.description}
               </p>
             </Media.Item>
           </Media>

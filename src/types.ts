@@ -93,13 +93,15 @@ export type Character = {
   __typename?: 'Character';
   /** Career/Class of the character */
   career: Career;
+  /** Current Guild membership */
+  guildMembership: GuildMember;
   /** Character Id */
   id?: Maybe<Scalars['ID']>;
-  /** Level */
+  /** Current Level */
   level: Scalars['Byte'];
   /** First name */
   name: Scalars['String'];
-  /** Renown Rank */
+  /** Current Renown Rank */
   renownRank: Scalars['Byte'];
 };
 
@@ -133,8 +135,10 @@ export type CharactersEdge = {
 
 export type Guild = {
   __typename?: 'Guild';
-  /** About Us text */
-  aboutUs: Scalars['String'];
+  /** Recruiting brief description */
+  briefDescription: Scalars['String'];
+  /** Recruiting description */
+  description: Scalars['String'];
   /** Guild Id */
   id?: Maybe<Scalars['ID']>;
   /** Guild leader */
@@ -170,6 +174,8 @@ export type GuildMember = {
   __typename?: 'GuildMember';
   /** Character info */
   character: Character;
+  /** Guild */
+  guild: Guild;
   /** Guild rank */
   rank: GuildRank;
 };
