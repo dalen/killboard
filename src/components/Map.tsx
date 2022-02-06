@@ -51,11 +51,11 @@ export const Map = ({
   }, []);
 
   return (
-    <div>
+    <>
       <div className="is-size-4 is-family-secondary is-uppercase ">
         Location
       </div>
       <canvas ref={canvasElement} style={{ width: '100%' }} />
-    </div>
+    </>
   );
 };

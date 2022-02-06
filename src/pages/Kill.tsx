@@ -117,7 +117,11 @@ export const Kill = (): JSX.Element => {
         <Columns.Column>
           <Attacker title="Killer" attacker={data.kill.attackers[0]} />
           {data.kill.attackers.slice(1).map((attacker) => (
-            <Attacker title="Assist" attacker={attacker} />
+            <Attacker
+              title="Assist"
+              attacker={attacker}
+              key={`assisting_attacker_${attacker.character.id}`}
+            />
           ))}
         </Columns.Column>
         <Columns.Column>
