@@ -4,9 +4,11 @@ import {
   Progress,
   Table,
   Notification,
+  Breadcrumb,
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
+import { SearchBox } from '../components/SearchBox';
 import { Query } from '../types';
 
 const SEARCH_CHARACTERS = gql`
@@ -48,6 +50,15 @@ export const Search = (): JSX.Element => {
 
   return (
     <Container max breakpoint={'desktop'} mt={2}>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/">Home</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>
+          <Link to={`/search/${query}`}>Search</Link>
+        </Breadcrumb.Item>
+      </Breadcrumb>
+      <SearchBox initialQuery={query} />
       <Table striped hoverable size="fullwidth">
         <thead>
           <tr>
