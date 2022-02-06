@@ -1,5 +1,13 @@
 import { gql, useQuery } from '@apollo/client';
-import { Progress, Notification, Panel } from 'react-bulma-components';
+import {
+  Progress,
+  Notification,
+  Card,
+  Icon,
+  Media,
+  Image,
+} from 'react-bulma-components';
+import { Link } from 'react-router-dom';
 import { Query } from '../types';
 import { careerIcon } from '../utils';
 
@@ -9,12 +17,12 @@ const CHARACTER_INFO = gql`
     kills(victimId: $id, first: 1) {
       nodes {
         victim {
-          level
-          renownRank
           character {
             id
             career
             name
+            level
+            renownRank
           }
           guild {
             id
@@ -47,24 +55,61 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
   const character = data?.kills?.nodes[0]?.victim;
 
   return (
-    <Panel>
-      <Panel.Block>
-        <Panel.Icon>
-          <img
-            src={careerIcon(character.character.career)}
-            alt={character.character.career}
-          />
-        </Panel.Icon>
-        {character.character.name}
-      </Panel.Block>
-      {character.guild && (
-        <Panel.Block>
-          <Panel.Icon>
-            <img src="/images/icons/guild.png" alt={character.guild?.name} />
-          </Panel.Icon>
-          {character.guild?.name}
-        </Panel.Block>
-      )}
-    </Panel>
+    <Card>
+      <Card.Content>
+        <Media>
+          <Media.Item align={'left'}>
+            <Image
+              size={'128'}
+              src={`/images/corner_icons/ea_icon_corner_character.png`}
+              alt="Character"
+            />
+          </Media.Item>
+          <Media.Item>
+            <p className="is-size-4">
+              <strong>{character.character.name}</strong>
+            </p>
+            <p>
+              <Icon.Text>
+                <Icon>
+                  {' '}
+                  <img
+                    src={careerIcon(character.character.career)}
+                    alt={character.character.career}
+                  />
+                </Icon>
+                <strong>Career: </strong>
+                {character.character.career}
+              </Icon.Text>
+            </p>
+            <p>
+              <strong>Level: </strong>
+              {character.character.level}
+            </p>
+            <p>
+              <strong>Renown Rank: </strong>
+              {character.character.renownRank}
+            </p>
+            {character.guild != null && (
+              <p>
+                <Icon.Text>
+                  <Icon>
+                    {' '}
+                    <img
+                      src="/images/icons/guild.png"
+                      alt={character.guild.name}
+                    />
+                  </Icon>
+                  <strong>Guild: </strong>
+                  <Link to={`/guild/${character.guild.id}`}>
+                    {character.guild.name}
+                  </Link>
+                </Icon.Text>
+              </p>
+            )}
+          </Media.Item>
+        </Media>
+      </Card.Content>
+    </Card>
   );
 };

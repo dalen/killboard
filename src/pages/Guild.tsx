@@ -2,7 +2,6 @@ import { gql, useQuery } from '@apollo/client';
 import {
   Breadcrumb,
   Card,
-  Columns,
   Container,
   Image,
   Progress,
@@ -10,12 +9,8 @@ import {
   Media,
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
-import { CharacterInfo } from '../components/CharacterInfo';
-import { CharacterRecentDeaths } from '../components/CharacterRecentDeaths';
-import { CharacterRecentKills } from '../components/CharacterRecentKills';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/GuildRecentKills';
-import { Zones, Scenarios } from '../enums';
 import { Query } from '../types';
 
 const GUILD_INFO = gql`
@@ -23,6 +18,8 @@ const GUILD_INFO = gql`
     guild(id: $id) {
       name
       aboutUs
+      level
+      realm
       leader {
         id
         name
@@ -78,7 +75,7 @@ export const Guild = (): JSX.Element => {
           <Media>
             <Media.Item align={'left'}>
               <Image
-                size={'48'}
+                size={'128'}
                 src={`/images/corner_icons/ea_icon_corner_guild.png`}
                 alt="Guild"
               />
