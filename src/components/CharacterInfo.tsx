@@ -71,14 +71,13 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
             </p>
             <p>
               <Icon.Text>
+                <strong>Career: </strong>
                 <Icon>
-                  {' '}
                   <img
                     src={careerIcon(character.character.career)}
                     alt={character.character.career}
                   />
                 </Icon>
-                <strong>Career: </strong>
                 {character.character.career}
               </Icon.Text>
             </p>
@@ -92,19 +91,10 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
             </p>
             {character.guild != null && (
               <p>
-                <Icon.Text>
-                  <Icon>
-                    {' '}
-                    <img
-                      src="/images/icons/guild.png"
-                      alt={character.guild.name}
-                    />
-                  </Icon>
-                  <strong>Guild: </strong>
-                  <Link to={`/guild/${character.guild.id}`}>
-                    {character.guild.name}
-                  </Link>
-                </Icon.Text>
+                <strong>Guild: </strong>
+                <Link to={`/guild/${character.guild.id}`}>
+                  {character.guild.name}
+                </Link>
               </p>
             )}
           </Media.Item>
