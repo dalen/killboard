@@ -16,6 +16,7 @@ import { CareerIcon } from '../components/CareerIcon';
 import { PlayerFeud } from '../components/PlayerFeud';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
+import * as _ from 'lodash';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -115,9 +116,11 @@ export const Kill = (): JSX.Element => {
       <Columns>
         <Columns.Column>
           <Attacker title="Killer" attacker={data.kill.attackers[0]} />
-          {data.kill.attackers.slice(1).map((attacker) => (
-            <Attacker title="Assist" attacker={attacker} />
-          ))}
+          {_.sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
+            (attacker) => (
+              <Attacker title="Assist" attacker={attacker} />
+            )
+          )}
         </Columns.Column>
         <Columns.Column>
           <Card>
