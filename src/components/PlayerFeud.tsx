@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 import { KillsList } from './KillsList';
 
 const PLAYER_FEUD = gql`
-  query GetPlayerFeud($killerId: ID!, $victimId: ID!) {
-    kills(killerId: $killerId, victimId: $victimId, first: 10) {
+  query GetPlayerFeud($player1Id: ID!, $player2Id: ID!) {
+    playerFeudKills(player1Id: $player1Id, player2Id: $player2Id, first: 10) {
       nodes {
         id
         time
@@ -58,13 +58,7 @@ export const PlayerFeud = ({
       <KillsList
         query={PLAYER_FEUD}
         queryOptions={{
-          variables: { killerId: player1, victimId: player2 },
-        }}
-      />
-      <KillsList
-        query={PLAYER_FEUD}
-        queryOptions={{
-          variables: { killerId: player2, victimId: player1 },
+          variables: { player1Id: player1, player2Id: player2 },
         }}
       />
     </div>

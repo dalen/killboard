@@ -40,9 +40,12 @@ export const KillsList = ({
       </Notification>
     );
 
-  if (data?.kills?.nodes == null) return <p>error</p>;
+  // This is a bit ugly, maybe we should add feud filtering options directly to the kills query in API server?
+  const kills = data?.kills || data?.playerFeudKills || data?.guildFeudKills;
 
-  if (data.kills.nodes.length === 0) return null;
+  if (kills?.nodes == null) return <p>error</p>;
+
+  if (kills.nodes.length === 0) return null;
 
   return (
     <Table striped hoverable size="fullwidth">
@@ -56,7 +59,7 @@ export const KillsList = ({
         </tr>
       </thead>
       <tbody>
-        {data.kills.nodes.map((kill) => {
+        {kills.nodes.map((kill) => {
           const date = new Date(kill.time * 1000);
 
           return (
