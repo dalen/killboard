@@ -18,6 +18,7 @@ import { Map } from '../components/Map';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import * as _ from 'lodash';
+import { GuildFeud } from '../components/GuildFeud';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -170,6 +171,12 @@ export const Kill = (): JSX.Element => {
         player1={data.kill.attackers[0].character.id ?? ''}
         player2={data.kill.victim.character.id ?? ''}
       />
+      {data.kill.attackers[0].guild && data.kill.victim.guild && (
+        <GuildFeud
+          guild1={data.kill.attackers[0].guild.id ?? ''}
+          guild2={data.kill.victim.guild.id ?? ''}
+        />
+      )}
     </Container>
   );
 };
