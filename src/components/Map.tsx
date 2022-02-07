@@ -44,7 +44,7 @@ export const Map = ({
         };
       }
     }
-  }, []);
+  }, [x, y, zoneId]);
 
   return (
     <>
