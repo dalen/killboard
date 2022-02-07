@@ -14,20 +14,15 @@ import { careerIcon } from '../utils';
 // Temporary way of fetching this until new API version is deployed
 const CHARACTER_INFO = gql`
   query GetCharacterInfo($id: ID!) {
-    kills(victimId: $id, first: 1) {
-      nodes {
-        victim {
-          character {
-            id
-            career
-            name
-            level
-            renownRank
-          }
-          guild {
-            id
-            name
-          }
+    character(id: $id) {
+      name
+      career
+      level
+      renownRank
+      guildMembership {
+        guild {
+          id
+          name
         }
       }
     }
@@ -49,10 +44,8 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
       </Notification>
     );
 
-  if (data?.kills?.nodes == null)
+  if (data?.character == null)
     return <Notification color={'danger'}>Not found</Notification>;
-
-  const character = data?.kills?.nodes[0]?.victim;
 
   return (
     <Card mb={5}>
@@ -67,33 +60,33 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
           </Media.Item>
           <Media.Item>
             <p className="is-size-4">
-              <strong>{character.character.name}</strong>
+              <strong>{data.character.name}</strong>
             </p>
             <p>
               <Icon.Text>
                 <strong>Career: </strong>
                 <Icon>
                   <img
-                    src={careerIcon(character.character.career)}
-                    alt={character.character.career}
+                    src={careerIcon(data.character.career)}
+                    alt={data.character.career}
                   />
                 </Icon>
-                <span>{character.character.career}</span>
+                <span>{data.character.career}</span>
               </Icon.Text>
             </p>
             <p>
               <strong>Level: </strong>
-              {character.character.level}
+              {data.character.level}
             </p>
             <p>
               <strong>Renown Rank: </strong>
-              {character.character.renownRank}
+              {data.character.renownRank}
             </p>
-            {character.guild != null && (
+            {data.character.guildMembership?.guild != null && (
               <p>
                 <strong>Guild: </strong>
-                <Link to={`/guild/${character.guild.id}`}>
-                  {character.guild.name}
+                <Link to={`/guild/${data.character.guildMembership.guild.id}`}>
+                  {data.character.guildMembership.guild.name}
                 </Link>
               </p>
             )}
