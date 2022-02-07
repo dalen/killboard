@@ -13,10 +13,15 @@ export const Map = ({
 
   useEffect(() => {
     if (canvasElement.current) {
+      const iconSize = 16;
       const canvasWidth = canvasElement.current.width;
       canvasElement.current.height = canvasWidth;
-      const xTranslated = x ? (x / 65535) * canvasWidth : undefined;
-      const yTranslated = y ? (y / 65535) * canvasWidth : undefined;
+      const xTranslated = x
+        ? (x / 65535) * canvasWidth - iconSize / 2
+        : undefined;
+      const yTranslated = y
+        ? (y / 65535) * canvasWidth - iconSize / 2
+        : undefined;
       const ctx = canvasElement.current.getContext('2d');
       if (ctx) {
         const image = new Image();
@@ -40,7 +45,13 @@ export const Map = ({
         skullImage.onload = () => {
           xTranslated &&
             yTranslated &&
-            ctx.drawImage(skullImage, xTranslated, yTranslated, 16, 16);
+            ctx.drawImage(
+              skullImage,
+              xTranslated,
+              yTranslated,
+              iconSize,
+              iconSize
+            );
         };
       }
     }
