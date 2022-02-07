@@ -156,7 +156,6 @@ export const Kill = (): JSX.Element => {
             <Card.Content>
               <Map
                 zoneId={data.kill.position?.zoneId}
-                scenarioId={data.kill.scenarioId}
                 x={data.kill.position?.x}
                 y={data.kill.position?.y}
               />

@@ -4,12 +4,10 @@ export const Map = ({
   x,
   y,
   zoneId,
-  scenarioId,
 }: {
   x?: number;
   y?: number;
   zoneId?: number;
-  scenarioId?: number;
 }): JSX.Element => {
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
@@ -23,9 +21,7 @@ export const Map = ({
       if (ctx) {
         const image = new Image();
         const skullImage = new Image();
-        image.src = scenarioId
-          ? `/images/maps/zones/${scenarioId}.webp`
-          : `/images/maps/zones/${zoneId}.webp`;
+        image.src = `/images/maps/${zoneId}.webp`;
         image.onload = () => {
           ctx.drawImage(
             image,
