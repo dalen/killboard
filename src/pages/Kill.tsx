@@ -14,6 +14,7 @@ import { Link, useParams } from 'react-router-dom';
 import { Attacker } from '../components/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
 import { PlayerFeud } from '../components/PlayerFeud';
+import { Map } from '../components/Map';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import * as _ from 'lodash';
@@ -118,7 +119,11 @@ export const Kill = (): JSX.Element => {
           <Attacker title="Killer" attacker={data.kill.attackers[0]} />
           {_.sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
             (attacker) => (
-              <Attacker title="Assist" attacker={attacker} />
+              <Attacker
+                title="Assist"
+                attacker={attacker}
+                key={`assisting_attacker_${attacker.character.id}`}
+              />
             )
           )}
         </Columns.Column>
@@ -151,6 +156,13 @@ export const Kill = (): JSX.Element => {
                 </Media>
               </Card.Content>
             )}
+            <Card.Content>
+              <Map
+                zoneId={data.kill.position?.zoneId}
+                x={data.kill.position?.x}
+                y={data.kill.position?.y}
+              />
+            </Card.Content>
           </Card>
         </Columns.Column>
       </Columns>
