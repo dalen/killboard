@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const RECENT_KILLS = gql`
@@ -44,10 +45,12 @@ const RECENT_KILLS = gql`
 `;
 
 export const GuildRecentKills = ({ id }: { id: number }): JSX.Element => {
+  const { t } = useTranslation('components');
+
   return (
     <div>
       <div className="is-size-4 is-family-secondary is-uppercase">
-        Recent Kills
+        {t('guildRecentKills.title')}
       </div>
       <KillsList
         query={RECENT_KILLS}

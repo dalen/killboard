@@ -10,6 +10,7 @@ import {
   Media,
   Image,
 } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { Attacker } from '../components/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
@@ -58,6 +59,7 @@ const KILL_DETAILS = gql`
 `;
 
 export const Kill = (): JSX.Element => {
+  const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(KILL_DETAILS, {
     variables: { id },
@@ -67,7 +69,7 @@ export const Kill = (): JSX.Element => {
   if (error)
     return (
       <Notification color={'danger'}>
-        <p>Error :(</p>
+        <p>{t('common:errorWithSadSmiley')}</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
       </Notification>
@@ -79,10 +81,12 @@ export const Kill = (): JSX.Element => {
     <Container max breakpoint={'desktop'} mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to="/">Home</Link>
+          <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/kill/${id}`}>Kill #{id}</Link>
+          <Link to={`/kill/${id}`}>
+            {t('pages:killPage.killId', { killId: id })}
+          </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Card mb={5}>
@@ -117,7 +121,10 @@ export const Kill = (): JSX.Element => {
       </Card>
       <Columns>
         <Columns.Column>
-          <Attacker title="Killer" attacker={data.kill.attackers[0]} />
+          <Attacker
+            title={t('pages:killPage.killer')}
+            attacker={data.kill.attackers[0]}
+          />
           {_.sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
             (attacker) => (
               <Attacker

@@ -10,6 +10,7 @@ import {
   Image,
   Icon,
 } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
@@ -28,13 +29,14 @@ export const KillsList = ({
   showVictim?: boolean;
   showKiller?: boolean;
 }): React.ReactElement | null => {
+  const { t } = useTranslation(['common', 'components']);
   const { loading, error, data } = useQuery<Query>(query, queryOptions);
 
   if (loading) return <Progress />;
   if (error)
     return (
       <Notification color={'danger'}>
-        <p>Error :(</p>
+        <p>{t('common:errorWithSadSmiley')}</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
       </Notification>
@@ -51,10 +53,10 @@ export const KillsList = ({
     <Table striped hoverable size="fullwidth">
       <thead>
         <tr>
-          {showTime && <th>Time</th>}
-          {showKiller && <th>Killer</th>}
-          {showVictim && <th>Victim</th>}
-          <th>Type</th>
+          {showTime && <th>{t('components:killsList.time')}</th>}
+          {showKiller && <th>{t('components:killsList.killer')}</th>}
+          {showVictim && <th>{t('components:killsList.victim')}</th>}
+          <th>{t('components:killsList.type')}</th>
           <th></th>
         </tr>
       </thead>
@@ -145,9 +147,11 @@ export const KillsList = ({
                         <p>
                           <Icon.Text>
                             <Icon>
-                              <i className="fas fa-star mr-2 has-text-warning"></i>
+                              <i className="fas fa-star mr-2 has-text-warning" />
                             </Icon>
-                            <strong>Solo kill</strong>
+                            <strong>
+                              {t('components:killsList.soloKill')}
+                            </strong>
                           </Icon.Text>
                         </p>
                       )}
@@ -168,9 +172,11 @@ export const KillsList = ({
                         <p>
                           <Icon.Text>
                             <Icon>
-                              <i className="fas fa-star mr-2 has-text-warning"></i>
+                              <i className="fas fa-star mr-2 has-text-warning" />
                             </Icon>
-                            <strong>Solo kill</strong>
+                            <strong>
+                              {t('components:killsList.soloKill')}
+                            </strong>
                           </Icon.Text>
                         </p>
                       )}
@@ -180,7 +186,7 @@ export const KillsList = ({
               </td>
               <td>
                 <Link to={`/kill/${kill.id}`} className="button is-primary p-1">
-                  Details
+                  {t('components:killsList.details')}
                 </Link>
               </td>
             </tr>

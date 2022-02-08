@@ -6,6 +6,7 @@ import {
   Notification,
   Breadcrumb,
 } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { SearchBox } from '../components/SearchBox';
@@ -26,6 +27,7 @@ const SEARCH_CHARACTERS = gql`
 `;
 
 export const Search = (): JSX.Element => {
+  const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
   const { loading, error, data } = useQuery<Query>(SEARCH_CHARACTERS, {
     variables: { query },
@@ -35,7 +37,7 @@ export const Search = (): JSX.Element => {
   if (error)
     return (
       <Notification color={'danger'}>
-        <p>Error :(</p>
+        <p>{t('common:errorWithSadSmiley')}</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
       </Notification>
@@ -44,7 +46,7 @@ export const Search = (): JSX.Element => {
   if (data?.characters?.nodes == null)
     return (
       <Notification color={'danger'}>
-        <p>Not found</p>
+        <p>{t('common:notFound')}</p>
       </Notification>
     );
 
@@ -52,10 +54,10 @@ export const Search = (): JSX.Element => {
     <Container max breakpoint={'desktop'} mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to="/">Home</Link>
+          <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/search/${query}`}>Search</Link>
+          <Link to={`/search/${query}`}>{t('pages:searchPage.search')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <SearchBox initialQuery={query} />
@@ -63,9 +65,9 @@ export const Search = (): JSX.Element => {
         <thead>
           <tr>
             <th></th>
-            <th>Name</th>
-            <th>Level</th>
-            <th>RR</th>
+            <th>{t('pages:searchPage.name')}</th>
+            <th>{t('pages:searchPage.level')}</th>
+            <th>{t('pages:searchPage.renownRank')}</th>
           </tr>
         </thead>
         <tbody>
