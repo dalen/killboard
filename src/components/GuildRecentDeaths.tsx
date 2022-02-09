@@ -50,7 +50,7 @@ export const GuildRecentDeaths = ({ id }: { id: number }): JSX.Element => {
   return (
     <div>
       <div className="is-size-4 is-family-secondary is-uppercase">
-        {t('guildRecentKills.title')}
+        {t('guildRecentDeaths.title')}
       </div>
       <KillsList
         query={RECENT_DEATHS}
