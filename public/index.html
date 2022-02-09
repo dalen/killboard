@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="theme-color" content="#000000"/>
     <meta
-      name="description"
-      content="Return of Reckoning Kill Board"
+            name="description"
+            content="Return of Reckoning Kill Board"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png"/>
     <!--
       manifest.json provides metadata used when your web app is installed on a
       user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
     -->
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json"/>
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -27,97 +27,97 @@
 
     <!-- Start Single Page Apps for GitHub Pages -->
     <script type="text/javascript">
-      // Single Page Apps for GitHub Pages
-      // MIT License
-      // https://github.com/rafgraph/spa-github-pages
-      // This script checks to see if a redirect is present in the query string,
-      // converts it back into the correct url and adds it to the
-      // browser's history using window.history.replaceState(...),
-      // which won't cause the browser to attempt to load the new url.
-      // When the single page app is loaded further down in this file,
-      // the correct url will be waiting in the browser's history for
-      // the single page app to route accordingly.
-      (function(l) {
-        if (l.search[1] === '/' ) {
-          var decoded = l.search.slice(1).split('&').map(function(s) {
-            return s.replace(/~and~/g, '&')
-          }).join('?');
-          window.history.replaceState(null, null,
-              l.pathname.slice(0, -1) + decoded + l.hash
-          );
-        }
-      }(window.location))
+        // Single Page Apps for GitHub Pages
+        // MIT License
+        // https://github.com/rafgraph/spa-github-pages
+        // This script checks to see if a redirect is present in the query string,
+        // converts it back into the correct url and adds it to the
+        // browser's history using window.history.replaceState(...),
+        // which won't cause the browser to attempt to load the new url.
+        // When the single page app is loaded further down in this file,
+        // the correct url will be waiting in the browser's history for
+        // the single page app to route accordingly.
+        (function (l) {
+            if (l.search[1] === '/') {
+                var decoded = l.search.slice(1).split('&').map(function (s) {
+                    return s.replace(/~and~/g, '&')
+                }).join('?');
+                window.history.replaceState(null, null,
+                    l.pathname.slice(0, -1) + decoded + l.hash
+                );
+            }
+        }(window.location))
     </script>
     <!-- End Single Page Apps for GitHub Pages -->
 
     <title>Kill Board</title>
-  </head>
-  <body class="has-navbar-fixed-top">
-    <nav class="navbar is-fixed-top">
-      <div class="navbar-menu">
+</head>
+<body class="has-navbar-fixed-top">
+<nav class="navbar is-fixed-top">
+    <div class="navbar-menu">
         <div class="navbar-start">
-          <a class="navbar-item is-expanded"></a>
-          <a class="navbar-item" href="https://www.returnofreckoning.com/">
-            <i class="mr-1 has-text-grey fas fa-sm fa-home"></i>
-            Home
-          </a>
+            <a class="navbar-item is-expanded"></a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/">
+                <i class="mr-1 has-text-grey fas fa-sm fa-home"></i>
+                Home
+            </a>
 
-          <a class="navbar-item" href="https://www.returnofreckoning.com/join.php#download">
-            <i class="mr-1 has-text-grey fas fa-sm fa-cloud-download-alt"></i>
-            Download game
-          </a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/join.php#download">
+                <i class="mr-1 has-text-grey fas fa-sm fa-cloud-download-alt"></i>
+                Download game
+            </a>
 
-          <a class="navbar-item" href="https://www.returnofreckoning.com/forum/">
-            <i class="mr-1 has-text-grey fas fa-sm fa-comments"></i>
-            Forum
-          </a>
-          <a class="navbar-item" href="https://wiki.returnofreckoning.com">
-            <i class="mr-1 has-text-grey fab fa-sm fa-wikipedia-w"></i>
-            Wiki
-          </a>
-          <a class="navbar-item" href="https://www.returnofreckoning.com/whos-online">
-            <i class="mr-1 has-text-grey fas fa-sm fa-users"></i>
-            Who's Online
-          </a>
-          <a class="navbar-item" href="https://www.returnofreckoning.com/armory">
-            <i class="mr-1 has-text-grey fas fa-sm fa-shield-alt"></i>
-            Armory
-          </a>
-          <a class="navbar-item" href="https://github.com/WarEmu/WarBugs/issues?state=open" target="_blank">
-            <i class="mr-1 has-text-grey fas fa-sm fa-cog"></i>
-            Bugtracker
-          </a>
-          <a class="navbar-item" href="https://builder.returnofreckoning.com" target="_blank">
-            <i class="mr-1 has-text-grey fas fa-sm fa-gavel fa-flip-horizontal"></i>
-            Career builder
-          </a>
-          <a class="navbar-item" href="https://www.returnofreckoning.com/about">
-            <i class="mr-1 has-text-grey fas fa-sm fa-question"></i>
-            About
-          </a>
-          <a class="navbar-item" href="https://www.facebook.com/returnofreckoning">
-            <i class="has-text-grey fab fa-sm fa-facebook-f"></i>
-          </a>
-          <a class="navbar-item" href="https://twitter.com/WAR_RoR">
-            <i class="has-text-grey fab fa-sm fa-twitter"></i>
-          </a>
-          <a class="navbar-item" href="https://www.youtube.com/channel/UC1KHAWDQvsyOXIF12wUMFPQ">
-            <i class="has-text-grey fab fa-sm fa-youtube"></i>
-          </a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/forum/">
+                <i class="mr-1 has-text-grey fas fa-sm fa-comments"></i>
+                Forum
+            </a>
+            <a class="navbar-item" href="https://wiki.returnofreckoning.com">
+                <i class="mr-1 has-text-grey fab fa-sm fa-wikipedia-w"></i>
+                Wiki
+            </a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/whos-online">
+                <i class="mr-1 has-text-grey fas fa-sm fa-users"></i>
+                Who's Online
+            </a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/armory">
+                <i class="mr-1 has-text-grey fas fa-sm fa-shield-alt"></i>
+                Armory
+            </a>
+            <a class="navbar-item" href="https://github.com/WarEmu/WarBugs/issues?state=open" target="_blank">
+                <i class="mr-1 has-text-grey fas fa-sm fa-cog"></i>
+                Bugtracker
+            </a>
+            <a class="navbar-item" href="https://builder.returnofreckoning.com" target="_blank">
+                <i class="mr-1 has-text-grey fas fa-sm fa-gavel fa-flip-horizontal"></i>
+                Career builder
+            </a>
+            <a class="navbar-item" href="https://www.returnofreckoning.com/about">
+                <i class="mr-1 has-text-grey fas fa-sm fa-question"></i>
+                About
+            </a>
+            <a class="navbar-item" href="https://www.facebook.com/returnofreckoning">
+                <i class="has-text-grey fab fa-sm fa-facebook-f"></i>
+            </a>
+            <a class="navbar-item" href="https://twitter.com/WAR_RoR">
+                <i class="has-text-grey fab fa-sm fa-twitter"></i>
+            </a>
+            <a class="navbar-item" href="https://www.youtube.com/channel/UC1KHAWDQvsyOXIF12wUMFPQ">
+                <i class="has-text-grey fab fa-sm fa-youtube"></i>
+            </a>
         </div>
-      </div>
-    </nav>
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+    </div>
+</nav>
+<noscript>You need to enable JavaScript to run this app.</noscript>
+<div id="root"></div>
+<!--
+  This HTML file is a template.
+  If you open it directly in the browser, you will see an empty page.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+  You can add webfonts, meta tags, or analytics to this file.
+  The build step will place the bundled scripts into the <body> tag.
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
-  </body>
+  To begin the development, run `npm start` or `yarn start`.
+  To create a production bundle, use `npm run build` or `yarn build`.
+-->
+</body>
 </html>

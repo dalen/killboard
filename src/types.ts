@@ -1,8 +1,14 @@
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -78,7 +84,7 @@ export enum Career {
   /** Witch Hunter */
   WitchHunter = 'WITCH_HUNTER',
   /** Zealot */
-  Zealot = 'ZEALOT'
+  Zealot = 'ZEALOT',
 }
 
 export type CareerOperationFilterInput = {
@@ -154,7 +160,6 @@ export type Guild = {
   /** Realm */
   realm: Realm;
 };
-
 
 export type GuildMembersArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -344,11 +349,9 @@ export type Query = {
   playerFeudKills?: Maybe<PlayerFeudKillsConnection>;
 };
 
-
 export type QueryCharacterArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCharactersArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -358,11 +361,9 @@ export type QueryCharactersArgs = {
   where?: InputMaybe<CharacterFilterInput>;
 };
 
-
 export type QueryGuildArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryGuildFeudKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -376,7 +377,6 @@ export type QueryGuildFeudKillsArgs = {
   zoneId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryGuildsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -385,12 +385,10 @@ export type QueryGuildsArgs = {
   where?: InputMaybe<GuildFilterInput>;
 };
 
-
 export type QueryKillArgs = {
   id?: InputMaybe<Scalars['ID']>;
   includeAssists?: Scalars['Boolean'];
 };
-
 
 export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -406,7 +404,6 @@ export type QueryKillsArgs = {
   zoneId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryPlayerFeudKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -421,7 +418,7 @@ export type QueryPlayerFeudKillsArgs = {
 
 export enum Realm {
   Destruction = 'DESTRUCTION',
-  Order = 'ORDER'
+  Order = 'ORDER',
 }
 
 export type RealmOperationFilterInput = {

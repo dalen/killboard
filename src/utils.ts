@@ -1,56 +1,56 @@
-import { Career } from "./types";
+import { Career } from './types';
 
 export const careerIcon = (career: Career): string => {
-	switch (career) {
-		case Career.Archmage:
-			return '/images/icons/archmage.png'
-		case Career.Blackguard:
-			return '/images/icons/black-guard.png'
-		case Career.BlackOrc:
-			return '/images/icons/black-orc.png'
-		case Career.BrightWizard:
-			return '/images/icons/bright-wizard.png'
-		case Career.Choppa:
-			return '/images/icons/choppa.png'
-		case Career.Chosen:
-			return '/images/icons/chosen.png'
-		case Career.Disciple:
-			return '/images/icons/disciple-of-khaine.png'
-		case Career.Engineer:
-			return '/images/icons/engineer.png'
-		case Career.Ironbreaker:
-			return '/images/icons/ironbreaker.png'
-		case Career.Knight:
-			return '/images/icons/knight-of-the-blazing-sun.png'
-		case Career.Magus:
-			return '/images/icons/magus.png'
-		case Career.Marauder:
-			return '/images/icons/marauder.png'
-		case Career.RunePriest:
-			return '/images/icons/rune-priest.png'
-		case Career.ShadowWarrior:
-			return '/images/icons/shadow-warrior.png'
-		case Career.Shaman:
-			return '/images/icons/shaman.png'
-		case Career.Slayer:
-			return '/images/icons/slayer.png'
-		case Career.Sorcerer:
-			return '/images/icons/sorcerer.png'
-		case Career.SquigHerder:
-			return '/images/icons/squig-herder.png'
-		case Career.Swordmaster:
-			return '/images/icons/sword-master.png'
-		case Career.WarriorPriest:
-			return '/images/icons/warrior-priest.png'
-		case Career.WhiteLion:
-			return '/images/icons/white-lion.png'
-		case Career.WitchElf:
-			return '/images/icons/witch-elf.png'
-		case Career.WitchHunter:
-			return '/images/icons/witch-hunter.png'
-		case Career.Zealot:
-			return '/images/icons/zealot.png'
-		default:
-			return '/images/icons/hidden.png'
-	}
-}
+  switch (career) {
+    case Career.Archmage:
+      return '/images/icons/archmage.png';
+    case Career.Blackguard:
+      return '/images/icons/black-guard.png';
+    case Career.BlackOrc:
+      return '/images/icons/black-orc.png';
+    case Career.BrightWizard:
+      return '/images/icons/bright-wizard.png';
+    case Career.Choppa:
+      return '/images/icons/choppa.png';
+    case Career.Chosen:
+      return '/images/icons/chosen.png';
+    case Career.Disciple:
+      return '/images/icons/disciple-of-khaine.png';
+    case Career.Engineer:
+      return '/images/icons/engineer.png';
+    case Career.Ironbreaker:
+      return '/images/icons/ironbreaker.png';
+    case Career.Knight:
+      return '/images/icons/knight-of-the-blazing-sun.png';
+    case Career.Magus:
+      return '/images/icons/magus.png';
+    case Career.Marauder:
+      return '/images/icons/marauder.png';
+    case Career.RunePriest:
+      return '/images/icons/rune-priest.png';
+    case Career.ShadowWarrior:
+      return '/images/icons/shadow-warrior.png';
+    case Career.Shaman:
+      return '/images/icons/shaman.png';
+    case Career.Slayer:
+      return '/images/icons/slayer.png';
+    case Career.Sorcerer:
+      return '/images/icons/sorcerer.png';
+    case Career.SquigHerder:
+      return '/images/icons/squig-herder.png';
+    case Career.Swordmaster:
+      return '/images/icons/sword-master.png';
+    case Career.WarriorPriest:
+      return '/images/icons/warrior-priest.png';
+    case Career.WhiteLion:
+      return '/images/icons/white-lion.png';
+    case Career.WitchElf:
+      return '/images/icons/witch-elf.png';
+    case Career.WitchHunter:
+      return '/images/icons/witch-hunter.png';
+    case Career.Zealot:
+      return '/images/icons/zealot.png';
+    default:
+      return '/images/icons/hidden.png';
+  }
+};
