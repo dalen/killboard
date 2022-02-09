@@ -1,5 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { format, formatISO } from 'date-fns';
+import sortBy from 'lodash/sortBy';
 import {
   Progress,
   Notification,
@@ -18,7 +19,6 @@ import { PlayerFeud } from '../components/PlayerFeud';
 import { Map } from '../components/Map';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
-import * as _ from 'lodash';
 import { GuildFeud } from '../components/GuildFeud';
 
 const KILL_DETAILS = gql`
@@ -125,7 +125,7 @@ export const Kill = (): JSX.Element => {
             title={t('pages:killPage.killer')}
             attacker={data.kill.attackers[0]}
           />
-          {_.sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
+          {sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
             (attacker) => (
               <Attacker
                 title="Assist"
