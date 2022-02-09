@@ -3,7 +3,6 @@ import { format, formatISO } from 'date-fns';
 import React from 'react';
 import {
   Progress,
-  Notification,
   Table,
   Media,
   Content,

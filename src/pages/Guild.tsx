@@ -5,7 +5,6 @@ import {
   Container,
   Image,
   Progress,
-  Notification,
   Media,
   Tabs,
 } from 'react-bulma-components';

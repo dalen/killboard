@@ -1,12 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Progress,
-  Notification,
-  Card,
-  Icon,
-  Media,
-  Image,
-} from 'react-bulma-components';
+import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Query } from '../types';

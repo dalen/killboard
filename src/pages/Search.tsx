@@ -1,11 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Container,
-  Progress,
-  Table,
-  Notification,
-  Breadcrumb,
-} from 'react-bulma-components';
+import { Container, Progress, Table, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';

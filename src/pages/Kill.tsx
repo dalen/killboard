@@ -3,7 +3,6 @@ import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
 import {
   Progress,
-  Notification,
   Container,
   Breadcrumb,
   Columns,
