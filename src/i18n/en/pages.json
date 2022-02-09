@@ -1,0 +1,22 @@
+{
+  "characterPage": {
+    "characterId": "Character #{{characterId}}"
+  },
+  "guildPage": {
+    "description": "Description:",
+    "guildId": "Guild #{{guildId}}",
+    "kills": "Kills",
+    "leader": "Leader:",
+    "members": "Members"
+  },
+  "killPage": {
+    "killer": "Killer",
+    "killId": "Kill #{{killId}}"
+  },
+  "searchPage": {
+    "level": "Level",
+    "name": "Name",
+    "renownRank": "RR",
+    "search": "Search"
+  }
+}

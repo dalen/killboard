@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const PLAYER_FEUD = gql`
@@ -50,10 +51,12 @@ export const PlayerFeud = ({
   player1: string;
   player2: string;
 }): JSX.Element => {
+  const { t } = useTranslation('components');
+
   return (
     <div className="mt-3">
       <div className="is-size-4 is-family-secondary is-uppercase">
-        Player Feud
+        {t('playerFeud.title')}
       </div>
       <KillsList
         query={PLAYER_FEUD}

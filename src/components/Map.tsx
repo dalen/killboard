@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Map = ({
   x,
@@ -9,6 +10,7 @@ export const Map = ({
   y?: number;
   zoneId?: number;
 }): JSX.Element => {
+  const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export const Map = ({
   return (
     <>
       <div className="is-size-4 is-family-secondary is-uppercase ">
-        Location
+        {t('map.title')}
       </div>
       <canvas ref={canvasElement} style={{ width: '100%' }} />
     </>

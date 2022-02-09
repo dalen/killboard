@@ -9,6 +9,7 @@ import {
   Media,
   Tabs,
 } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/GuildRecentKills';
@@ -44,6 +45,7 @@ const GUILD_INFO = gql`
 `;
 
 export const Guild = (): JSX.Element => {
+  const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(GUILD_INFO, {
     variables: { id: Number(id) },
@@ -53,23 +55,25 @@ export const Guild = (): JSX.Element => {
   if (error)
     return (
       <Notification color={'danger'}>
-        <p>Error :(</p>
+        <p>{t('common:errorWithSadSmiley')}</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
       </Notification>
     );
 
   if (data?.guild == null)
-    return <Notification color={'danger'}>Not found</Notification>;
+    return <Notification color={'danger'}>{t('common:notFound')}</Notification>;
 
   return (
     <Container max breakpoint={'widescreen'} mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
-          <Link to="/">Home</Link>
+          <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/guild/${id}`}>Guild #{id}</Link>
+          <Link to={`/guild/${id}`}>
+            {t('pages:guildPage.guildId', { guildId: id })}
+          </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Card mb={5}>
@@ -87,13 +91,13 @@ export const Guild = (): JSX.Element => {
                 <strong>{data.guild.name}</strong>
               </p>
               <p>
-                <strong>Leader: </strong>
+                <strong>{`${t('pages:guildPage.leader')} `}</strong>
                 <Link to={`/character/${data.guild.leader.id}`}>
                   {data.guild.leader.name}
                 </Link>
               </p>
               <p>
-                <strong>Description: </strong>
+                <strong>{`${t('pages:guildPage.description')} `}</strong>
                 {data.guild.description}
               </p>
             </Media.Item>
@@ -101,8 +105,8 @@ export const Guild = (): JSX.Element => {
         </Card.Content>
       </Card>
       <Tabs>
-        <Tabs.Tab active>Kills</Tabs.Tab>
-        <Tabs.Tab>Members</Tabs.Tab>
+        <Tabs.Tab active>{t('pages:guildPage.kills')}</Tabs.Tab>
+        <Tabs.Tab>{t('pages:guildPage.members')}</Tabs.Tab>
       </Tabs>
       <GuildRecentKills id={Number(id)} />
       <GuildRecentDeaths id={Number(id)} />

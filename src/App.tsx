@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import './i18n/config';
 import { Character } from './pages/Character';
 import { Home } from './pages/Home';
 import { Kill } from './pages/Kill';

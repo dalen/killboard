@@ -7,6 +7,7 @@ import {
   Media,
   Image,
 } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Query } from '../types';
 import { careerIcon } from '../utils';
@@ -30,6 +31,7 @@ const CHARACTER_INFO = gql`
 `;
 
 export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
+  const { t } = useTranslation(['common', 'components']);
   const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
     variables: { id },
   });
@@ -38,14 +40,14 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
   if (error)
     return (
       <Notification color={'danger'}>
-        <p>Error :(</p>
+        <p>{t('common:errorWithSadSmiley')}</p>
         <pre>{error.name}</pre>
         <pre>{error.message}</pre>
       </Notification>
     );
 
   if (data?.character == null)
-    return <Notification color={'danger'}>Not found</Notification>;
+    return <Notification color={'danger'}>{t('common:notFound')}</Notification>;
 
   return (
     <Card mb={5}>
@@ -64,7 +66,7 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
             </p>
             <p>
               <Icon.Text>
-                <strong>Career: </strong>
+                <strong>{`${t('components:characterInfo.career')} `}</strong>
                 <Icon>
                   <img
                     src={careerIcon(data.character.career)}
@@ -75,16 +77,16 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
               </Icon.Text>
             </p>
             <p>
-              <strong>Level: </strong>
+              <strong>{`${t('components:characterInfo.level')} `}</strong>
               {data.character.level}
             </p>
             <p>
-              <strong>Renown Rank: </strong>
+              <strong>{`${t('components:characterInfo.renownRank')} `}</strong>
               {data.character.renownRank}
             </p>
             {data.character.guildMembership?.guild != null && (
               <p>
-                <strong>Guild: </strong>
+                <strong>{`${t('components:characterInfo.guild')} `}</strong>
                 <Link to={`/guild/${data.character.guildMembership.guild.id}`}>
                   {data.character.guildMembership.guild.name}
                 </Link>

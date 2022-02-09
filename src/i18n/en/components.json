@@ -1,0 +1,44 @@
+{
+  "characterInfo": {
+    "career": "Career:",
+    "guild": "Guild:",
+    "level": "Level:",
+    "renownRank": "Renown Rank:"
+  },
+  "characterRecentDeaths": {
+    "title": "Recent Deaths"
+  },
+  "characterRecentKills": {
+    "title": "Recent Kills"
+  },
+  "guildFeud": {
+    "title": "Guild Feud"
+  },
+  "guildRecentDeaths": {
+    "title": "Recent Deaths"
+  },
+  "guildRecentKills": {
+    "title": "Recent Kills"
+  },
+  "killsList": {
+    "details": "Details",
+    "errorTitle": "Error :(",
+    "killer": "Killer",
+    "soloKill": "Solo kill",
+    "time": "Time",
+    "type": "Type",
+    "victim": "Victim"
+  },
+  "latestKills": {
+    "title": "Recent Kills"
+  },
+  "map": {
+    "title": "Location"
+  },
+  "playerFeud": {
+    "title": "Player Feud"
+  },
+  "searchBox": {
+    "placeholder": "Search"
+  }
+}
