@@ -11,6 +11,7 @@ import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { SearchBox } from '../components/SearchBox';
 import { Query } from '../types';
+import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const SEARCH_CHARACTERS = gql`
   query SearchCharacters($query: String!) {
@@ -34,21 +35,9 @@ export const Search = (): JSX.Element => {
   });
 
   if (loading) return <Progress />;
-  if (error)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:errorWithSadSmiley')}</p>
-        <pre>{error.name}</pre>
-        <pre>{error.message}</pre>
-      </Notification>
-    );
-
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.characters?.nodes == null)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:notFound')}</p>
-      </Notification>
-    );
+    return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
     <Container max breakpoint={'desktop'} mt={2}>

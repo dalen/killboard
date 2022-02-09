@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import { CareerIcon } from './CareerIcon';
+import { ErrorMessage } from './global/ErrorMessage';
 
 export const KillsList = ({
   query,
@@ -33,19 +34,12 @@ export const KillsList = ({
   const { loading, error, data } = useQuery<Query>(query, queryOptions);
 
   if (loading) return <Progress />;
-  if (error)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:errorWithSadSmiley')}</p>
-        <pre>{error.name}</pre>
-        <pre>{error.message}</pre>
-      </Notification>
-    );
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   // This is a bit ugly, maybe we should add feud filtering options directly to the kills query in API server?
   const kills = data?.kills || data?.playerFeudKills || data?.guildFeudKills;
 
-  if (kills?.nodes == null) return <p>error</p>;
+  if (kills?.nodes == null) return <p>{t('common:error')}</p>;
 
   if (kills.nodes.length === 0) return null;
 

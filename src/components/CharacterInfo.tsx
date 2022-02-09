@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Query } from '../types';
 import { careerIcon } from '../utils';
+import { ErrorMessage } from './global/ErrorMessage';
 
 // Temporary way of fetching this until new API version is deployed
 const CHARACTER_INFO = gql`
@@ -37,17 +38,10 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
   });
 
   if (loading) return <Progress />;
-  if (error)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:errorWithSadSmiley')}</p>
-        <pre>{error.name}</pre>
-        <pre>{error.message}</pre>
-      </Notification>
-    );
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.character == null)
-    return <Notification color={'danger'}>{t('common:notFound')}</Notification>;
+    return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
     <Card mb={5}>

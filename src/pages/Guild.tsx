@@ -14,6 +14,7 @@ import { Link, useParams } from 'react-router-dom';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/GuildRecentKills';
 import { Query } from '../types';
+import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -52,17 +53,9 @@ export const Guild = (): JSX.Element => {
   });
 
   if (loading) return <Progress />;
-  if (error)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:errorWithSadSmiley')}</p>
-        <pre>{error.name}</pre>
-        <pre>{error.message}</pre>
-      </Notification>
-    );
-
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.guild == null)
-    return <Notification color={'danger'}>{t('common:notFound')}</Notification>;
+    return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
     <Container max breakpoint={'widescreen'} mt={2}>
