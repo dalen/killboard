@@ -40,5 +40,10 @@
   },
   "searchBox": {
     "placeholder": "Search"
+  },
+  "global": {
+    "errorMessage": {
+      "errorWithSadSmiley": "Error :("
+    }
   }
 }

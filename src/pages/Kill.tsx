@@ -3,7 +3,6 @@ import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
 import {
   Progress,
-  Notification,
   Container,
   Breadcrumb,
   Columns,
@@ -20,6 +19,7 @@ import { Map } from '../components/Map';
 import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import { GuildFeud } from '../components/GuildFeud';
+import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -66,14 +66,7 @@ export const Kill = (): JSX.Element => {
   });
 
   if (loading || data?.kill == null) return <Progress />;
-  if (error)
-    return (
-      <Notification color={'danger'}>
-        <p>{t('common:errorWithSadSmiley')}</p>
-        <pre>{error.name}</pre>
-        <pre>{error.message}</pre>
-      </Notification>
-    );
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const date = new Date(data.kill.time * 1000);
 

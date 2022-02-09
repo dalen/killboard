@@ -1,5 +1,5 @@
- {
-    "errorWithSadSmiley": "Error :(",
-    "notFound": "Not found",
-    "home": "Home"
-  }
+{
+  "error": "error",
+  "home": "Home",
+  "notFound": "Not found"
+}
