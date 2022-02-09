@@ -56,7 +56,7 @@ export const GuildFeud = ({
   return (
     <div className="mt-3">
       <div className="is-size-4 is-family-secondary is-uppercase">
-        {t('guildRecentKills.title')}
+        {t('guildFeud.title')}
       </div>
       <KillsList
         query={GUILD_FEUD}
