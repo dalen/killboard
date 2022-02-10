@@ -64,7 +64,7 @@ export const GuildMemberList = ({
         </thead>
         <tbody>
           {data.guild.members.nodes.map((member) => (
-            <tr>
+            <tr key={member.character.id}>
               <td>
                 <CareerIcon career={member.character.career} />
               </td>

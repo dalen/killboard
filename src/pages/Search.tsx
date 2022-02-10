@@ -85,7 +85,7 @@ export const Search = (): JSX.Element => {
         </thead>
         <tbody>
           {data.characters.nodes.map((character) => (
-            <tr>
+            <tr key={character.id}>
               <td>
                 <CareerIcon career={character.career} />
               </td>
