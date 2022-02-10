@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const GUILD_FEUD = gql`
-  query GetGuildFeud($guild1Id: ID!, $guild2Id: ID!) {
-    guildFeudKills(guild1Id: $guild1Id, guild2Id: $guild2Id, first: 10) {
+  query GetGuildFeud($guild1Id: ID!, $guild2Id: ID!, $cursor: String) {
+    guildFeudKills(
+      guild1Id: $guild1Id
+      guild2Id: $guild2Id
+      first: 10
+      after: $cursor
+    ) {
       nodes {
         id
         time
@@ -39,6 +44,10 @@ const GUILD_FEUD = gql`
             name
           }
         }
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
       }
     }
   }

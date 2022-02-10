@@ -27,7 +27,8 @@
     "soloKill": "Solo kill",
     "time": "Time",
     "type": "Type",
-    "victim": "Victim"
+    "victim": "Victim",
+    "loadMore": "Next"
   },
   "latestKills": {
     "title": "Recent Kills"
