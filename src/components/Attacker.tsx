@@ -29,7 +29,7 @@ export const Attacker = ({
         </div>
       </Card.Header>
       {attacker.guild && (
-        <Card.Content>
+        <Card.Content py={2}>
           <Media>
             <Media.Item align={'left'}>
               <figure className="image is-32x32">

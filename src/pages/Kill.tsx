@@ -142,7 +142,7 @@ export const Kill = (): JSX.Element => {
               </Card.Header.Title>
             </Card.Header>
             {data.kill.victim.guild && (
-              <Card.Content>
+              <Card.Content py={2}>
                 <Media>
                   <Media.Item align={'left'}>
                     <figure className="image is-32x32">
