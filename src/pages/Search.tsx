@@ -14,11 +14,16 @@ import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const SEARCH_CHARACTERS = gql`
-  query SearchCharacters($query: String!, $cursor: String) {
+  query SearchCharacters(
+    $query: String!
+    $prevCursor: String
+    $nextCursor: String
+  ) {
     characters(
       where: { name: { contains: $query } }
       first: 15
-      after: $cursor
+      before: $prevCursor
+      after: $nextCursor
     ) {
       nodes {
         id
@@ -101,7 +106,7 @@ export const Search = (): JSX.Element => {
               size={'small'}
               onClick={() =>
                 fetchMore({
-                  variables: { cursor: pageInfo.startCursor },
+                  variables: { prevCursor: pageInfo.startCursor },
                 })
               }
             >
@@ -115,7 +120,7 @@ export const Search = (): JSX.Element => {
               size={'small'}
               onClick={() =>
                 fetchMore({
-                  variables: { cursor: pageInfo.endCursor },
+                  variables: { nextCursor: pageInfo.endCursor },
                 })
               }
             >
