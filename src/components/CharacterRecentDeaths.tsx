@@ -12,19 +12,6 @@ const RECENT_DEATHS = gql`
           zoneId
         }
         scenarioId
-        victim {
-          level
-          renownRank
-          character {
-            id
-            career
-            name
-          }
-          guild {
-            id
-            name
-          }
-        }
         attackers {
           level
           renownRank
