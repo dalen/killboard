@@ -1,6 +1,6 @@
 import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import React from 'react';
-import { Progress, Button } from 'react-bulma-components';
+import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
@@ -45,25 +45,16 @@ export const KillsList = ({
         showTime={showTime}
         showKiller={showKiller}
         showVictim={showVictim}
+        pageInfo={pageInfo}
+        onNext={() =>
+          refetch({
+            first: perPage,
+            after: pageInfo?.endCursor,
+            last: undefined,
+            before: undefined,
+          })
+        }
       />
-      {pageInfo?.hasNextPage && (
-        <Button
-          pull="right"
-          color={'info'}
-          size={'small'}
-          onClick={() =>
-            refetch({
-              first: perPage,
-              after: pageInfo.endCursor,
-              last: undefined,
-              before: undefined,
-            })
-          }
-        >
-          {t('components:killsList.loadMore')}
-          <i className="fas fa-circle-chevron-right ml-1" />
-        </Button>
-      )}
     </div>
   );
 };

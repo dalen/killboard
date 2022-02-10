@@ -1,19 +1,30 @@
 import { format, formatISO } from 'date-fns';
 import React from 'react';
-import { Table, Media, Content, Image, Icon } from 'react-bulma-components';
+import {
+  Table,
+  Media,
+  Content,
+  Image,
+  Icon,
+  Button,
+} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Scenarios, Zones } from '../enums';
-import { Kill } from '../types';
+import { Kill, PageInfo } from '../types';
 import { CareerIcon } from './CareerIcon';
 
 export const KillsListTable = ({
   data,
+  pageInfo,
+  onNext,
   showTime = true,
   showVictim = true,
   showKiller = true,
 }: {
   data: Kill[];
+  pageInfo?: PageInfo;
+  onNext?: () => void;
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
@@ -156,7 +167,10 @@ export const KillsListTable = ({
                 )}
               </td>
               <td>
-                <Link to={`/kill/${kill.id}`} className="button is-primary p-1">
+                <Link
+                  to={`/kill/${kill.id}`}
+                  className="button is-primary p-2 is-pulled-right"
+                >
                   {t('components:killsList.details')}
                 </Link>
               </td>
@@ -164,6 +178,29 @@ export const KillsListTable = ({
           );
         })}
       </tbody>
+      {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
+        <tfoot>
+          <tr>
+            {showTime && <td></td>}
+            {showKiller && <td></td>}
+            {showVictim && <td></td>}
+            <td colSpan={2}>
+              {pageInfo.hasNextPage && (
+                <Button
+                  p={2}
+                  pull="right"
+                  color={'info'}
+                  size={'small'}
+                  onClick={onNext}
+                >
+                  {t('components:killsList.loadMore')}
+                  <i className="fas fa-circle-chevron-right ml-1" />
+                </Button>
+              )}
+            </td>
+          </tr>
+        </tfoot>
+      )}
     </Table>
   );
 };
