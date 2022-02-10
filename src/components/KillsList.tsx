@@ -52,11 +52,6 @@ export const KillsList = ({
           onClick={() =>
             fetchMore({
               variables: { cursor: pageInfo.endCursor },
-              updateQuery: (prev, { fetchMoreResult }) => {
-                if (!fetchMoreResult) return prev;
-
-                return fetchMoreResult;
-              },
             })
           }
         >
