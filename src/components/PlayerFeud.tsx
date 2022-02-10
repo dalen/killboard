@@ -3,12 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const PLAYER_FEUD = gql`
-  query GetPlayerFeud($player1Id: ID!, $player2Id: ID!, $cursor: String) {
+  query GetPlayerFeud(
+    $player1Id: ID!
+    $player2Id: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
     playerFeudKills(
       player1Id: $player1Id
       player2Id: $player2Id
-      first: 10
-      after: $cursor
+      first: $first
+      last: $last
+      before: $before
+      after: $after
     ) {
       nodes {
         id
@@ -48,6 +57,8 @@ const PLAYER_FEUD = gql`
       pageInfo {
         hasNextPage
         endCursor
+        hasPreviousPage
+        startCursor
       }
     }
   }
@@ -72,6 +83,7 @@ export const PlayerFeud = ({
         queryOptions={{
           variables: { player1Id: player1, player2Id: player2 },
         }}
+        perPage={10}
       />
     </div>
   );

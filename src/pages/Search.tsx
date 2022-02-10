@@ -16,14 +16,17 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 const SEARCH_CHARACTERS = gql`
   query SearchCharacters(
     $query: String!
-    $prevCursor: String
-    $nextCursor: String
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
   ) {
     characters(
       where: { name: { contains: $query } }
-      first: 15
-      before: $prevCursor
-      after: $nextCursor
+      first: $first
+      last: $last
+      before: $before
+      after: $after
     ) {
       nodes {
         id
@@ -43,14 +46,13 @@ const SEARCH_CHARACTERS = gql`
 `;
 
 export const Search = (): JSX.Element => {
+  const perPage = 15;
+
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
-  const { loading, error, data, fetchMore, refetch } = useQuery<Query>(
-    SEARCH_CHARACTERS,
-    {
-      variables: { query: query },
-    }
-  );
+  const { loading, error, data, refetch } = useQuery<Query>(SEARCH_CHARACTERS, {
+    variables: { query: query, first: perPage },
+  });
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -60,7 +62,7 @@ export const Search = (): JSX.Element => {
   const pageInfo = data.characters.pageInfo;
 
   const handleSubmit = (newQuery: string): void => {
-    refetch({ query: newQuery });
+    refetch({ query: newQuery, first: perPage });
   };
 
   return (
@@ -104,11 +106,14 @@ export const Search = (): JSX.Element => {
             <Button
               color={'info'}
               size={'small'}
-              onClick={() =>
-                fetchMore({
-                  variables: { prevCursor: pageInfo.startCursor },
-                })
-              }
+              onClick={() => {
+                refetch({
+                  first: undefined,
+                  after: undefined,
+                  last: perPage,
+                  before: pageInfo.startCursor,
+                });
+              }}
             >
               {t('common:prevPage')}
               <i className="fas fa-circle-chevron-left ml-1" />
@@ -118,11 +123,14 @@ export const Search = (): JSX.Element => {
             <Button
               color={'info'}
               size={'small'}
-              onClick={() =>
-                fetchMore({
-                  variables: { nextCursor: pageInfo.endCursor },
-                })
-              }
+              onClick={() => {
+                refetch({
+                  first: perPage,
+                  after: pageInfo.endCursor,
+                  last: undefined,
+                  before: undefined,
+                });
+              }}
             >
               {t('common:nextPage')}
               <i className="fas fa-circle-chevron-right ml-1" />

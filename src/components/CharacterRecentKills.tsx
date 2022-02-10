@@ -3,8 +3,20 @@ import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const RECENT_KILLS = gql`
-  query GetLatestCharacterKills($id: ID!, $cursor: String) {
-    kills(killerId: $id, first: 5, after: $cursor) {
+  query GetLatestCharacterKills(
+    $id: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
+    kills(
+      killerId: $id
+      first: $first
+      last: $last
+      before: $before
+      after: $after
+    ) {
       nodes {
         id
         time
@@ -32,6 +44,8 @@ const RECENT_KILLS = gql`
       pageInfo {
         hasNextPage
         endCursor
+        hasPreviousPage
+        startCursor
       }
     }
   }
@@ -50,6 +64,7 @@ export const CharacterRecentKills = ({ id }: { id: number }): JSX.Element => {
         queryOptions={{
           variables: { id },
         }}
+        perPage={5}
         showTime={false}
         showKiller={false}
       />

@@ -9,21 +9,23 @@ import { KillsListTable } from './KillsListTable';
 export const KillsList = ({
   query,
   queryOptions,
+  perPage,
   showTime = true,
   showVictim = true,
   showKiller = true,
 }: {
   query: DocumentNode;
   queryOptions?: QueryHookOptions;
+  perPage: number;
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
-  const { loading, error, data, fetchMore } = useQuery<Query>(
-    query,
-    queryOptions
-  );
+  const { loading, error, data, refetch } = useQuery<Query>(query, {
+    ...queryOptions,
+    variables: { ...queryOptions?.variables, first: perPage },
+  });
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -50,8 +52,11 @@ export const KillsList = ({
           color={'info'}
           size={'small'}
           onClick={() =>
-            fetchMore({
-              variables: { cursor: pageInfo.endCursor },
+            refetch({
+              first: perPage,
+              after: pageInfo.endCursor,
+              last: undefined,
+              before: undefined,
             })
           }
         >

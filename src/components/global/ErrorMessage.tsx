@@ -1,3 +1,4 @@
+import { ApolloError } from '@apollo/client';
 import React from 'react';
 import { Notification } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';

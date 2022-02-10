@@ -54,3 +54,29 @@ export const careerIcon = (career: Career): string => {
       return '/images/icons/hidden.png';
   }
 };
+
+export const variablesFromCursor = (
+  type: 'after' | 'before',
+  cursor: string,
+  perPage: number
+): {
+  after: string | undefined;
+  before: string | undefined;
+  first: number | undefined;
+  last: number | undefined;
+} => {
+  if (type === 'after')
+    return {
+      after: cursor,
+      before: undefined,
+      first: perPage,
+      last: undefined,
+    };
+
+  return {
+    after: undefined,
+    before: cursor,
+    first: undefined,
+    last: perPage,
+  };
+};

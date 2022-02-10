@@ -3,8 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
 
 const LATEST_KILLS = gql`
-  query GetLatestKills($cursor: String) {
-    kills(first: 10, after: $cursor) {
+  query GetLatestKills(
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
+    kills(first: $first, last: $last, before: $before, after: $after) {
       nodes {
         id
         time
@@ -43,6 +48,8 @@ const LATEST_KILLS = gql`
       pageInfo {
         hasNextPage
         endCursor
+        hasPreviousPage
+        startCursor
       }
     }
   }
@@ -56,7 +63,7 @@ export const LatestKills = (): JSX.Element => {
       <div className="is-size-4 is-family-secondary is-uppercase">
         {t('latestKills.title')}
       </div>
-      <KillsList query={LATEST_KILLS} />
+      <KillsList query={LATEST_KILLS} perPage={10} />
     </div>
   );
 };
