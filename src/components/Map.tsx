@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { zoneCoordinates } from '../zoneCoordinates';
 
 export const Map = ({
   x,
@@ -15,15 +16,23 @@ export const Map = ({
 
   useEffect(() => {
     if (canvasElement.current) {
+      const zoneCoord = zoneCoordinates[Number(zoneId)];
+      // or 1 here to avoid any div by zero errors
+      const zoneWidth = zoneCoord['SE-X'] - zoneCoord['NW-X'] || 1;
+      const zoneHeight = zoneCoord['SE-Y'] - zoneCoord['NW-Y'] || 1;
+
       const iconSize = 16;
       const canvasWidth = canvasElement.current.width;
       canvasElement.current.height = canvasWidth;
-      const xTranslated = x
-        ? (x / 65535) * canvasWidth - iconSize / 2
-        : undefined;
-      const yTranslated = y
-        ? (y / 65535) * canvasWidth - iconSize / 2
-        : undefined;
+      const xTranslated =
+        x != null
+          ? ((x - zoneCoord['NW-X']) / zoneWidth) * canvasWidth - iconSize / 2
+          : undefined;
+      const yTranslated =
+        y != null
+          ? ((y - zoneCoord['NW-Y']) / zoneHeight) * canvasWidth - iconSize / 2
+          : undefined;
+
       const ctx = canvasElement.current.getContext('2d');
       if (ctx) {
         const image = new Image();
