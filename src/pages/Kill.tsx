@@ -32,6 +32,8 @@ const KILL_DETAILS = gql`
         y
       }
       victim {
+        level
+        renownRank
         character {
           id
           name
@@ -146,6 +148,13 @@ export const Kill = (): JSX.Element => {
             {data.kill.victim.guild && (
               <Card.Content py={2}>
                 <Media>
+                  <Media.Item align={'left'}>
+                    <small>
+                      Lvl {data.kill.victim.level}
+                      <br />
+                      RR {data.kill.victim.renownRank}
+                    </small>
+                  </Media.Item>
                   <Media.Item align={'left'}>
                     <figure className="image is-32x32">
                       <img src="/images/icons/guild.png" alt="Guild" />
