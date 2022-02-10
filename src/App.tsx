@@ -13,7 +13,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/kill/:id" element={<Kill />} />
         <Route path="/character/:id" element={<Character />} />
-        <Route path="/guild/:id" element={<Guild />} />
+        <Route path="/guild/:id" element={<Guild tab="kills" />} />
+        <Route path="/guild/:id/members" element={<Guild tab="members" />} />
         <Route path="/search/:query" element={<Search />} />
       </Routes>
     </BrowserRouter>

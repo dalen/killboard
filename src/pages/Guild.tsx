@@ -14,6 +14,7 @@ import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/GuildRecentKills';
 import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
+import { GuildMemberList } from '../components/GuildMemberList';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -39,12 +40,18 @@ const GUILD_INFO = gql`
             career
           }
         }
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
+        }
       }
     }
   }
 `;
 
-export const Guild = (): JSX.Element => {
+export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(GUILD_INFO, {
@@ -97,11 +104,22 @@ export const Guild = (): JSX.Element => {
         </Card.Content>
       </Card>
       <Tabs>
-        <Tabs.Tab active>{t('pages:guildPage.kills')}</Tabs.Tab>
-        <Tabs.Tab>{t('pages:guildPage.members')}</Tabs.Tab>
+        <li className={tab === 'kills' ? 'is-active' : ''}>
+          <Link to={`/guild/${id}`}>{t('pages:guildPage.kills')}</Link>
+        </li>
+        <li className={tab === 'members' ? 'is-active' : ''}>
+          <Link to={`/guild/${id}/members`}>
+            {t('pages:guildPage.members')}
+          </Link>
+        </li>
       </Tabs>
-      <GuildRecentKills id={Number(id)} />
-      <GuildRecentDeaths id={Number(id)} />
+      {tab === 'kills' && (
+        <div>
+          <GuildRecentKills id={Number(id)} />
+          <GuildRecentDeaths id={Number(id)} />
+        </div>
+      )}
+      {tab === 'members' && <GuildMemberList id={id} />}
     </Container>
   );
 };

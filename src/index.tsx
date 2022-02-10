@@ -18,6 +18,11 @@ const client = new ApolloClient({
           characters: relayStylePagination(),
         },
       },
+      Guild: {
+        fields: {
+          members: relayStylePagination(),
+        },
+      },
     },
   }),
 });

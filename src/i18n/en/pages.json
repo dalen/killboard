@@ -20,5 +20,11 @@
     "search": "Search",
     "prevPage": "Prev",
     "nextPage": "Next"
+  },
+  "guildMembers": {
+    "level": "Level",
+    "name": "Name",
+    "renownRank": "RR",
+    "guildRank": "Rank"
   }
 }
