@@ -44,6 +44,8 @@ const KILL_DETAILS = gql`
       }
       attackers {
         damagePercent
+        level
+        renownRank
         character {
           id
           name

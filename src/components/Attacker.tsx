@@ -28,22 +28,31 @@ export const Attacker = ({
           </Tag>
         </div>
       </Card.Header>
-      {attacker.guild && (
-        <Card.Content py={2}>
-          <Media>
-            <Media.Item align={'left'}>
-              <figure className="image is-32x32">
-                <img src="/images/icons/guild.png" alt="Guild" />
-              </figure>
-            </Media.Item>
-            <Media.Item>
-              <Link to={`/guild/${attacker.guild?.id}`}>
-                {attacker.guild?.name}
-              </Link>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      )}
+      <Card.Content py={2}>
+        <Media>
+          <Media.Item align={'left'}>
+            <small>
+              Lvl {attacker.level}
+              <br />
+              RR {attacker.renownRank}
+            </small>
+          </Media.Item>
+          {attacker.guild && (
+            <>
+              <Media.Item align={'left'}>
+                <figure className="image is-32x32">
+                  <img src="/images/icons/guild.png" alt="Guild" />
+                </figure>
+              </Media.Item>
+              <Media.Item>
+                <Link to={`/guild/${attacker.guild?.id}`}>
+                  {attacker.guild?.name}
+                </Link>
+              </Media.Item>
+            </>
+          )}
+        </Media>
+      </Card.Content>
     </Card>
   );
 };
