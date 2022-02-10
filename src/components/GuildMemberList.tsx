@@ -59,73 +59,77 @@ export const GuildMemberList = ({
   const pageInfo = data.guild.members.pageInfo;
 
   return (
-    <div>
-      <Table striped hoverable size="fullwidth">
-        <thead>
-          <tr>
-            <th></th>
-            <th>{t('pages:guildMembers.name')}</th>
-            <th>{t('pages:guildMembers.level')}</th>
-            <th>{t('pages:guildMembers.renownRank')}</th>
-            <th>{t('pages:guildMembers.guildRank')}</th>
+    <Table striped hoverable size="fullwidth">
+      <thead>
+        <tr>
+          <th></th>
+          <th>{t('pages:guildMembers.name')}</th>
+          <th>{t('pages:guildMembers.level')}</th>
+          <th>{t('pages:guildMembers.renownRank')}</th>
+          <th>{t('pages:guildMembers.guildRank')}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {data.guild.members.nodes.map((member) => (
+          <tr key={member.character.id}>
+            <td>
+              <CareerIcon career={member.character.career} />
+            </td>
+            <td>
+              <Link to={`/character/${member.character.id}`}>
+                {member.character.name}
+              </Link>
+            </td>
+            <td>{member.character.level}</td>
+            <td>{member.character.renownRank}</td>
+            <td>{member.rank.name}</td>
           </tr>
-        </thead>
-        <tbody>
-          {data.guild.members.nodes.map((member) => (
-            <tr key={member.character.id}>
-              <td>
-                <CareerIcon career={member.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${member.character.id}`}>
-                  {member.character.name}
-                </Link>
-              </td>
-              <td>{member.character.level}</td>
-              <td>{member.character.renownRank}</td>
-              <td>{member.rank.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+        ))}
+      </tbody>
       {pageInfo && (
-        <div className="field is-grouped is-pulled-right">
-          {pageInfo.hasPreviousPage && (
-            <Button
-              color={'info'}
-              size={'small'}
-              onClick={() =>
-                refetch({
-                  first: undefined,
-                  after: undefined,
-                  before: pageInfo.startCursor,
-                  last: perPage,
-                })
-              }
-            >
-              {t('common:prevPage')}
-              <i className="fas fa-circle-chevron-left ml-1" />
-            </Button>
-          )}
-          {pageInfo.hasNextPage && (
-            <Button
-              color={'info'}
-              size={'small'}
-              onClick={() =>
-                refetch({
-                  first: perPage,
-                  after: pageInfo.endCursor,
-                  before: undefined,
-                  last: undefined,
-                })
-              }
-            >
-              {t('common:nextPage')}
-              <i className="fas fa-circle-chevron-right ml-1" />
-            </Button>
-          )}
-        </div>
+        <tfoot>
+          <tr>
+            <td colSpan={5}>
+              <div className="field is-grouped is-pulled-right">
+                {pageInfo.hasPreviousPage && (
+                  <Button
+                    color={'info'}
+                    size={'small'}
+                    onClick={() =>
+                      refetch({
+                        first: undefined,
+                        after: undefined,
+                        before: pageInfo.startCursor,
+                        last: perPage,
+                      })
+                    }
+                  >
+                    {t('common:prevPage')}
+                    <i className="fas fa-circle-chevron-left ml-1" />
+                  </Button>
+                )}
+                {pageInfo.hasNextPage && (
+                  <Button
+                    color={'info'}
+                    size={'small'}
+                    onClick={() =>
+                      refetch({
+                        first: perPage,
+                        after: pageInfo.endCursor,
+                        before: undefined,
+                        last: undefined,
+                      })
+                    }
+                  >
+                    {t('common:nextPage')}
+                    <i className="fas fa-circle-chevron-right ml-1" />
+                  </Button>
+                )}
+              </div>
+            </td>
+          </tr>
+        </tfoot>
       )}
-    </div>
+    </Table>
   );
 };
