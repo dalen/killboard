@@ -4,12 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { Query } from '../types';
+import { ApolloErrorMessage } from '../components/global/ApolloErrorMessage';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const GUILD_MEMBERS = gql`
-  query GetGuildMembers($id: ID!, $cursor: String) {
+  query GetGuildMembers(
+    $id: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
     guild(id: $id) {
-      members(first: 25, after: $cursor) {
+      members(first: $first, last: $last, before: $before, after: $after) {
         nodes {
           rank {
             name
@@ -38,13 +45,15 @@ export const GuildMemberList = ({
 }: {
   id: string | undefined;
 }): JSX.Element => {
+  const perPage = 25;
+
   const { t } = useTranslation(['common', 'pages']);
-  const { loading, error, data, fetchMore } = useQuery<Query>(GUILD_MEMBERS, {
-    variables: { id },
+  const { loading, error, data, refetch } = useQuery<Query>(GUILD_MEMBERS, {
+    variables: { id, first: perPage },
   });
 
   if (loading) return <Progress />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (error) return <ApolloErrorMessage error={error} />;
   if (data?.guild?.members?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
@@ -87,8 +96,11 @@ export const GuildMemberList = ({
               color={'info'}
               size={'small'}
               onClick={() =>
-                fetchMore({
-                  variables: { cursor: pageInfo.startCursor },
+                refetch({
+                  first: undefined,
+                  after: undefined,
+                  before: pageInfo.startCursor,
+                  last: perPage,
                 })
               }
             >
@@ -101,8 +113,11 @@ export const GuildMemberList = ({
               color={'info'}
               size={'small'}
               onClick={() =>
-                fetchMore({
-                  variables: { cursor: pageInfo.endCursor },
+                refetch({
+                  first: perPage,
+                  after: pageInfo.endCursor,
+                  before: undefined,
+                  last: undefined,
                 })
               }
             >
