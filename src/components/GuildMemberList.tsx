@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { Query } from '../types';
-import { ApolloErrorMessage } from '../components/global/ApolloErrorMessage';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 
 const GUILD_MEMBERS = gql`
@@ -53,7 +52,7 @@ export const GuildMemberList = ({
   });
 
   if (loading) return <Progress />;
-  if (error) return <ApolloErrorMessage error={error} />;
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.guild?.members?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
