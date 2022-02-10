@@ -17,6 +17,8 @@
     "level": "Level",
     "name": "Name",
     "renownRank": "RR",
-    "search": "Search"
+    "search": "Search",
+    "prevPage": "Prev",
+    "nextPage": "Next"
   }
 }

@@ -1,5 +1,7 @@
 {
   "error": "error",
   "home": "Home",
-  "notFound": "Not found"
+  "notFound": "Not found",
+  "prevPage": "Previous",
+  "nextPage": "Next"
 }
