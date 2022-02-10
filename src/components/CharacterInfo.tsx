@@ -25,7 +25,7 @@ const CHARACTER_INFO = gql`
 `;
 
 export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
-  const { t } = useTranslation(['common', 'components']);
+  const { t } = useTranslation(['common', 'components', 'enums']);
   const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
     variables: { id },
   });
@@ -57,10 +57,10 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
                 <Icon>
                   <img
                     src={careerIcon(data.character.career)}
-                    alt={data.character.career}
+                    alt={t(`enums:career.${data.character.career}`)}
                   />
                 </Icon>
-                <span>{data.character.career}</span>
+                <span>{t(`enums:career.${data.character.career}`)}</span>
               </Icon.Text>
             </p>
             <p>

@@ -1,0 +1,28 @@
+{
+  "career": {
+    "ARCHMAGE": "Archmage",
+    "BLACKGUARD": "Blackguard",
+    "BLACK_ORC": "Black Orc",
+    "BRIGHT_WIZARD": "Bright Wizard",
+    "CHOPPA": "Choppa",
+    "CHOSEN": "Chosen",
+    "DISCIPLE": "Disciple of Khaine",
+    "ENGINEER": "Engineer",
+    "IRONBREAKER": "Ironbreaker",
+    "KNIGHT": "Knight of the Blazing Sun",
+    "MAGUS": "Magus",
+    "MARAUDER": "Marauder",
+    "RUNE_PRIEST": "Rune Priest",
+    "SHADOW_WARRIOR": "Shadow Warrior",
+    "SHAMAN": "Shaman",
+    "SLAYER": "Slayer",
+    "SORCERER": "Sorcerer",
+    "SQUIG_HERDER": "Squig Herder",
+    "SWORDMASTER": "Swordmaster",
+    "WARRIOR_PRIEST": "Warrior Priest",
+    "WHITE_LION": "White Lion",
+    "WITCH_ELF": "Witch Elf",
+    "WITCH_HUNTER": "Witch Hunter",
+    "ZEALOT": "Zealot"
+  }
+}
