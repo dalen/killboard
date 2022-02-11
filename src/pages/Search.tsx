@@ -12,6 +12,7 @@ import { CareerIcon } from '../components/CareerIcon';
 import { SearchBox } from '../components/SearchBox';
 import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
+import useWindowDimensions from '../hooks/useWindowDimensions';
 
 const SEARCH_CHARACTERS = gql`
   query SearchCharacters(
@@ -53,6 +54,8 @@ export const Search = (): JSX.Element => {
   const { loading, error, data, refetch } = useQuery<Query>(SEARCH_CHARACTERS, {
     variables: { query: query, first: perPage },
   });
+  const { width } = useWindowDimensions();
+  const isMobile = width <= 768;
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -76,30 +79,34 @@ export const Search = (): JSX.Element => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <SearchBox initialQuery={query} onSubmit={handleSubmit} />
-      <Table striped hoverable size="fullwidth">
-        <thead>
-          <tr>
-            <th></th>
-            <th>{t('pages:searchPage.name')}</th>
-            <th>{t('pages:searchPage.level')}</th>
-            <th>{t('pages:searchPage.renownRank')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.characters.nodes.map((character) => (
-            <tr key={character.id}>
-              <td>
-                <CareerIcon career={character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${character.id}`}>{character.name}</Link>
-              </td>
-              <td>{character.level}</td>
-              <td>{character.renownRank}</td>
+      <div className="table-container">
+        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+          <thead>
+            <tr>
+              <th></th>
+              <th>{t('pages:searchPage.name')}</th>
+              <th>{t('pages:searchPage.level')}</th>
+              <th>{t('pages:searchPage.renownRank')}</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {data.characters.nodes.map((character) => (
+              <tr key={character.id}>
+                <td>
+                  <CareerIcon career={character.career} />
+                </td>
+                <td>
+                  <Link to={`/character/${character.id}`}>
+                    {character.name}
+                  </Link>
+                </td>
+                <td>{character.level}</td>
+                <td>{character.renownRank}</td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
       {pageInfo && (
         <div className="field is-grouped is-pulled-right">
           {pageInfo.hasPreviousPage && (
