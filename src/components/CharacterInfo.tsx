@@ -48,9 +48,14 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
             />
           </Media.Item>
           <Media.Item>
-            <p className="is-size-4">
+            <a
+              className="is-size-4"
+              target="_blank"
+              rel="noopener noreferrer"
+              href={`https://www.returnofreckoning.com/armory/character/${id}`}
+            >
               <strong>{data.character.name}</strong>
-            </p>
+            </a>
             <p>
               <Icon.Text>
                 <strong>{`${t('components:characterInfo.career')} `}</strong>
