@@ -33,6 +33,15 @@
   "latestKills": {
     "title": "Recent Kills"
   },
+  "leaderboard": {
+    "weeklyTitle": "Weekly Leaderboard",
+    "monthlyTitle": "Monthly Leaderboard",
+    "title": "Leaderboard",
+    "rank": "Rank",
+    "player": "Player",
+    "kills": "Kills",
+    "deaths": "Deaths"
+  },
   "map": {
     "title": "Location"
   },
