@@ -64,7 +64,7 @@ export const CharacterRecentKills = ({ id }: { id: number }): JSX.Element => {
         queryOptions={{
           variables: { id },
         }}
-        perPage={5}
+        perPage={10}
         showTime={false}
         showKiller={false}
       />
