@@ -37,7 +37,7 @@
     "weeklyTitle": "Weekly Leaderboard",
     "monthlyTitle": "Monthly Leaderboard",
     "title": "Leaderboard",
-    "rank": "Rank",
+    "rank": "#",
     "player": "Player",
     "kills": "Kills",
     "deaths": "Deaths"
