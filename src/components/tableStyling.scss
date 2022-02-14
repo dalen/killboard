@@ -1,0 +1,18 @@
+.leaderboard-player-data {
+  @media (max-width: 475px) {
+    display: grid;
+    grid-template-columns: 0fr 1fr;
+    grid-template-rows: 1fr;
+  }
+}
+
+.player-rr {
+  @media (max-width: 475px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-start: 2;
+  }
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: 60px;
+  justify-content: end;
+}
