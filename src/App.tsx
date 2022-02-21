@@ -7,6 +7,7 @@ import { Guild } from './pages/Guild';
 import { Search } from './pages/Search';
 import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
+import { Kills } from './pages/Kills';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/kill/:id" element={<Kill />} />
+        <Route path="/kills" element={<Kills />} />
         <Route path="/character/:id" element={<Character />} />
         <Route path="/guild/:id" element={<Guild tab="kills" />} />
         <Route path="/guild/:id/members" element={<Guild tab="members" />} />

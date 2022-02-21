@@ -27,6 +27,9 @@
     "renownRank": "RR",
     "guildRank": "Rank"
   },
+  "killsPage": {
+    "title": "Kills"
+  },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
   },
