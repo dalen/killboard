@@ -12,9 +12,8 @@ const PLAYER_FEUD = gql`
     $before: String
     $after: String
   ) {
-    playerFeudKills(
-      player1Id: $player1Id
-      player2Id: $player2Id
+    kills(
+      playerFeudFilter: { player1Id: $player1Id, player2Id: $player2Id }
       first: $first
       last: $last
       before: $before

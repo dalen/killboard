@@ -30,8 +30,7 @@ export const KillsList = ({
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  // This is a bit ugly, maybe we should add feud filtering options directly to the kills query in API server?
-  const kills = data?.kills || data?.playerFeudKills || data?.guildFeudKills;
+  const kills = data?.kills;
   const pageInfo = kills?.pageInfo;
 
   if (kills?.nodes == null) return <p>{t('common:error')}</p>;
