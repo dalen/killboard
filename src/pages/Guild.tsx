@@ -1,13 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Image,
-  Progress,
-  Media,
-  Tabs,
-} from 'react-bulma-components';
+import { Breadcrumb, Container, Progress, Tabs } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
@@ -15,6 +7,7 @@ import { GuildRecentKills } from '../components/GuildRecentKills';
 import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildMemberList } from '../components/GuildMemberList';
+import { GuildInfo } from '../components/GuildInfo';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -30,6 +23,7 @@ const GUILD_INFO = gql`
         career
       }
       members {
+        totalCount
         nodes {
           rank {
             name
@@ -75,34 +69,7 @@ export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Card mb={5}>
-        <Card.Content>
-          <Media>
-            <Media.Item align={'left'}>
-              <Image
-                size={'128'}
-                src={`/images/corner_icons/ea_icon_corner_guild.png`}
-                alt="Guild"
-              />
-            </Media.Item>
-            <Media.Item>
-              <p className="is-size-4">
-                <strong>{data.guild.name}</strong>
-              </p>
-              <p>
-                <strong>{`${t('pages:guildPage.leader')} `}</strong>
-                <Link to={`/character/${data.guild.leader.id}`}>
-                  {data.guild.leader.name}
-                </Link>
-              </p>
-              <p>
-                <strong>{`${t('pages:guildPage.description')} `}</strong>
-                {data.guild.description}
-              </p>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
+      <GuildInfo guild={data.guild} />
       <Tabs>
         <li className={tab === 'kills' ? 'is-active' : ''}>
           <Link to={`/guild/${id}`}>{t('pages:guildPage.kills')}</Link>
