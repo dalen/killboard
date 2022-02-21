@@ -1,13 +1,14 @@
 import { gql, useQuery } from '@apollo/client';
+import { getUnixTime, startOfWeek } from 'date-fns/esm';
 import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Query } from '../types';
+import { KillsConnection, Query } from '../types';
 import { careerIcon } from '../utils';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const CHARACTER_INFO = gql`
-  query GetCharacterInfo($id: ID!) {
+  query GetCharacterInfo($id: ID!, $startOfWeek: Long!) {
     character(id: $id) {
       name
       career
@@ -20,13 +21,26 @@ const CHARACTER_INFO = gql`
         }
       }
     }
+
+    killsThisWeek: kills(killerId: $id, from: $startOfWeek, first: 0) {
+      totalCount
+    }
+
+    deathsThisWeek: kills(victimId: $id, from: $startOfWeek, first: 0) {
+      totalCount
+    }
   }
 `;
 
 export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
   const { t } = useTranslation(['common', 'components', 'enums']);
-  const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
-    variables: { id },
+  const { loading, error, data } = useQuery<
+    Query & { killsThisWeek: KillsConnection; deathsThisWeek: KillsConnection }
+  >(CHARACTER_INFO, {
+    variables: {
+      id,
+      startOfWeek: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+    },
   });
 
   if (loading) return <Progress />;
@@ -75,6 +89,7 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
               <strong>{`${t('components:characterInfo.renownRank')} `}</strong>
               {data.character.renownRank}
             </p>
+
             {data.character.guildMembership?.guild != null && (
               <p>
                 <strong>{`${t('components:characterInfo.guild')} `}</strong>

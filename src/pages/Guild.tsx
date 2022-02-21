@@ -8,6 +8,7 @@ import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildMemberList } from '../components/GuildMemberList';
 import { GuildInfo } from '../components/GuildInfo';
+import { KillsFilters } from '../components/KillsFilters';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -82,6 +83,7 @@ export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
       </Tabs>
       {tab === 'kills' && (
         <div>
+          <KillsFilters />
           <GuildRecentKills id={Number(id)} />
           <GuildRecentDeaths id={Number(id)} />
         </div>

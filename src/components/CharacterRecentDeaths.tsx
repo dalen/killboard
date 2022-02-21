@@ -9,6 +9,9 @@ const RECENT_DEATHS = gql`
     $last: Int
     $before: String
     $after: String
+    $from: Long
+    $to: Long
+    $soloOnly: Boolean
   ) {
     kills(
       victimId: $id
@@ -16,6 +19,9 @@ const RECENT_DEATHS = gql`
       last: $last
       before: $before
       after: $after
+      from: $from
+      to: $to
+      soloOnly: $soloOnly
     ) {
       nodes {
         id

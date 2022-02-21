@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { CharacterInfo } from '../components/CharacterInfo';
 import { CharacterRecentDeaths } from '../components/CharacterRecentDeaths';
 import { CharacterRecentKills } from '../components/CharacterRecentKills';
+import { KillsFilters } from '../components/KillsFilters';
 
 export const Character = (): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
@@ -22,6 +23,7 @@ export const Character = (): JSX.Element => {
         </Breadcrumb.Item>
       </Breadcrumb>
       <CharacterInfo id={Number(id)} />
+      <KillsFilters />
       <Columns breakpoint={'desktop'}>
         <Columns.Column>
           <CharacterRecentKills id={Number(id)} />

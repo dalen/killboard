@@ -2,8 +2,10 @@ import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import React from 'react';
 import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
+import { getCurrentFilters } from './KillsFilters';
 import { KillsListTable } from './KillsListTable';
 
 export const KillsList = ({
@@ -22,9 +24,15 @@ export const KillsList = ({
   showKiller?: boolean;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
+  const [search] = useSearchParams();
+
   const { loading, error, data, refetch } = useQuery<Query>(query, {
     ...queryOptions,
-    variables: { ...queryOptions?.variables, first: perPage },
+    variables: {
+      ...queryOptions?.variables,
+      first: perPage,
+      ...getCurrentFilters(search),
+    },
   });
 
   if (loading) return <Progress />;

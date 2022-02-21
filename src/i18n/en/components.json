@@ -6,10 +6,10 @@
     "renownRank": "Renown Rank:"
   },
   "characterRecentDeaths": {
-    "title": "Recent Deaths"
+    "title": "Deaths"
   },
   "characterRecentKills": {
-    "title": "Recent Kills"
+    "title": "Kills"
   },
   "guildFeud": {
     "title": "Guild Feud"
@@ -20,10 +20,18 @@
     "members": "Members:"
   },
   "guildRecentDeaths": {
-    "title": "Recent Deaths"
+    "title": "Deaths"
   },
   "guildRecentKills": {
-    "title": "Recent Kills"
+    "title": "Kills"
+  },
+  "killsFilters": {
+    "allTime": "All time",
+    "thisWeek": "This Week",
+    "lastWeek": "Last Week",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "soloOnly": "Solo Kills Only"
   },
   "killsList": {
     "details": "Details",
