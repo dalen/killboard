@@ -1,15 +1,8 @@
-import { gql, useQuery } from '@apollo/client';
-import { Breadcrumb, Container, Progress, Tabs } from 'react-bulma-components';
+import { gql } from '@apollo/client';
+import { Breadcrumb, Container } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
-import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
-import { GuildRecentKills } from '../components/GuildRecentKills';
-import { Query } from '../types';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { GuildMemberList } from '../components/GuildMemberList';
-import { GuildInfo } from '../components/GuildInfo';
+import { Link } from 'react-router-dom';
 import { KillsFilters } from '../components/KillsFilters';
-import { LatestKills } from '../components/LatestKills';
 import { KillsList } from '../components/KillsList';
 
 const LATEST_KILLS = gql`
