@@ -28,12 +28,12 @@ export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
               </Link>
             </p>
             <p>
-              <strong>{`${t('components:guildInfo.description')} `}</strong>
-              {guild.description}
-            </p>
-            <p>
               <strong>{`${t('components:guildInfo.members')} `}</strong>
               {guild.members?.totalCount}
+            </p>
+            <p>
+              <strong>{`${t('components:guildInfo.description')} `}</strong>
+              {guild.description}
             </p>
           </Media.Item>
         </Media>
