@@ -6,7 +6,7 @@ import { KillsFilters } from '../components/KillsFilters';
 import { KillsList } from '../components/KillsList';
 
 const LATEST_KILLS = gql`
-  query GetLatestKills(
+  query GetKills(
     $first: Int
     $last: Int
     $before: String
