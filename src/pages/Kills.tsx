@@ -91,7 +91,11 @@ export const Kills = (): JSX.Element => {
       </Breadcrumb>
       <div>
         <KillsFilters />
-        <KillsList query={LATEST_KILLS} perPage={10} />
+        <KillsList
+          query={LATEST_KILLS}
+          perPage={10}
+          title={t('pages:killsPage.title')}
+        />
       </div>
     </Container>
   );

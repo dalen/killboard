@@ -23,6 +23,7 @@ const RECENT_DEATHS = gql`
       to: $to
       soloOnly: $soloOnly
     ) {
+      totalCount
       nodes {
         id
         time
@@ -72,17 +73,13 @@ export const GuildRecentDeaths = ({ id }: { id: number }): JSX.Element => {
   const { t } = useTranslation('components');
 
   return (
-    <div>
-      <div className="is-size-4 is-family-secondary is-uppercase">
-        {t('guildRecentDeaths.title')}
-      </div>
-      <KillsList
-        query={RECENT_DEATHS}
-        queryOptions={{
-          variables: { id },
-        }}
-        perPage={10}
-      />
-    </div>
+    <KillsList
+      title={t('guildRecentDeaths.title')}
+      query={RECENT_DEATHS}
+      queryOptions={{
+        variables: { id },
+      }}
+      perPage={10}
+    />
   );
 };

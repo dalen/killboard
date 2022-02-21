@@ -12,6 +12,7 @@ export const KillsList = ({
   query,
   queryOptions,
   perPage,
+  title = undefined,
   showTime = true,
   showVictim = true,
   showKiller = true,
@@ -19,6 +20,7 @@ export const KillsList = ({
   query: DocumentNode;
   queryOptions?: QueryHookOptions;
   perPage: number;
+  title?: string;
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
@@ -47,6 +49,11 @@ export const KillsList = ({
 
   return (
     <div>
+      {title && (
+        <div className="is-size-4 is-family-secondary is-uppercase">
+          {title} {kills.totalCount != null && kills.totalCount}
+        </div>
+      )}
       <KillsListTable
         data={kills.nodes}
         showTime={showTime}
