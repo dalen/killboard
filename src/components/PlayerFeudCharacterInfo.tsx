@@ -1,39 +1,17 @@
-import { gql, useQuery } from '@apollo/client';
-import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
+import { Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Query } from '../types';
+import { Character } from '../types';
 import { careerIcon } from '../utils';
-import { ErrorMessage } from './global/ErrorMessage';
 
-const CHARACTER_INFO = gql`
-  query GetCharacterInfo($id: ID!) {
-    character(id: $id) {
-      name
-      career
-      level
-      renownRank
-      guildMembership {
-        guild {
-          id
-          name
-        }
-      }
-    }
-  }
-`;
-
-export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
+export const PlayerFeudCharacterInfo = ({
+  character,
+  id,
+}: {
+  character: Character;
+  id: string | number;
+}): JSX.Element => {
   const { t } = useTranslation(['common', 'components', 'enums']);
-  const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
-    variables: { id },
-  });
-
-  if (loading) return <Progress />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
-
-  if (data?.character == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
     <Card mb={5}>
@@ -53,33 +31,33 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
               rel="noopener noreferrer"
               href={`https://www.returnofreckoning.com/armory/character/${id}`}
             >
-              <strong>{data.character.name}</strong>
+              <strong>{character.name}</strong>
             </a>
             <p>
               <Icon.Text>
                 <strong>{`${t('components:characterInfo.career')} `}</strong>
                 <Icon>
                   <img
-                    src={careerIcon(data.character.career)}
-                    alt={t(`enums:career.${data.character.career}`)}
+                    src={careerIcon(character.career)}
+                    alt={t(`enums:career.${character.career}`)}
                   />
                 </Icon>
-                <span>{t(`enums:career.${data.character.career}`)}</span>
+                <span>{t(`enums:career.${character.career}`)}</span>
               </Icon.Text>
             </p>
             <p>
               <strong>{`${t('components:characterInfo.level')} `}</strong>
-              {data.character.level}
+              {character.level}
             </p>
             <p>
               <strong>{`${t('components:characterInfo.renownRank')} `}</strong>
-              {data.character.renownRank}
+              {character.renownRank}
             </p>
-            {data.character.guildMembership?.guild != null && (
+            {character.guildMembership?.guild != null && (
               <p>
                 <strong>{`${t('components:characterInfo.guild')} `}</strong>
-                <Link to={`/guild/${data.character.guildMembership.guild.id}`}>
-                  {data.character.guildMembership.guild.name}
+                <Link to={`/guild/${character.guildMembership.guild.id}`}>
+                  {character.guildMembership.guild.name}
                 </Link>
               </p>
             )}

@@ -26,5 +26,8 @@
     "name": "Name",
     "renownRank": "RR",
     "guildRank": "Rank"
+  },
+  "playerFeud": {
+    "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
   }
 }

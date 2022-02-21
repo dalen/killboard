@@ -270,6 +270,7 @@ export type KillsConnection = {
   nodes?: Maybe<Array<Kill>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
 };
 
 /** An edge in a connection. */

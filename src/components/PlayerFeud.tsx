@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { KillsList } from './KillsList';
 
 const PLAYER_FEUD = gql`
@@ -76,7 +77,9 @@ export const PlayerFeud = ({
   return (
     <div className="mt-3">
       <div className="is-size-4 is-family-secondary is-uppercase">
-        {t('playerFeud.title')}
+        <Link to={`/playerfeud/${player1}/${player2}`}>
+          {t('playerFeud.title')}
+        </Link>
       </div>
       <KillsList
         query={PLAYER_FEUD}
