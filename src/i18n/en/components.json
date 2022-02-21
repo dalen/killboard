@@ -33,7 +33,8 @@
     "time": "Time",
     "type": "Type",
     "victim": "Victim",
-    "loadMore": "Next"
+    "loadMore": "Next",
+    "loadPrevious": "Previous"
   },
   "latestKills": {
     "title": "Recent Kills"

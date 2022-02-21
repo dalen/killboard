@@ -53,6 +53,14 @@ export const KillsList = ({
             before: undefined,
           })
         }
+        onPrevious={() =>
+          refetch({
+            first: undefined,
+            after: undefined,
+            last: perPage,
+            before: pageInfo?.startCursor,
+          })
+        }
       />
     </div>
   );
