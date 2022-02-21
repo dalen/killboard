@@ -7,68 +7,82 @@ import {
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PlayerFeud } from '../components/PlayerFeud';
 import { gql, useQuery } from '@apollo/client';
-import { Character, KillsConnection } from '../types';
+import { Guild, KillsConnection } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { PlayerFeudCharacterInfo } from '../components/PlayerFeudCharacterInfo';
+import { GuildInfo } from '../components/GuildInfo';
+import { GuildFeud } from '../components/GuildFeud';
 
-const PLAYER_FEUD_INFO = gql`
-  query GetPlayerFeudInfo($playerId1: ID!, $playerId2: ID!) {
-    player1: character(id: $playerId1) {
+const GUILD_FEUD_INFO = gql`
+  query GetGuildFeudInfo($guildId1: ID!, $guildId2: ID!) {
+    guild1: guild(id: $guildId1) {
       name
-      career
+      description
+      briefDescription
       level
-      renownRank
-      guildMembership {
-        guild {
-          id
-          name
-        }
+      realm
+      leader {
+        id
+        name
+        career
+      }
+      members {
+        totalCount
       }
     }
 
-    player2: character(id: $playerId2) {
+    guild2: guild(id: $guildId2) {
       name
-      career
+      description
+      briefDescription
       level
-      renownRank
-      guildMembership {
-        guild {
-          id
-          name
-        }
+      realm
+      leader {
+        id
+        name
+        career
+      }
+      members {
+        totalCount
       }
     }
 
-    player1kills: kills(first: 0, killerId: $playerId1, victimId: $playerId2) {
+    guild1kills: kills(
+      first: 0
+      killerGuildId: $guildId1
+      victimGuildId: $guildId2
+    ) {
       totalCount
     }
 
-    player2kills: kills(first: 0, killerId: $playerId2, victimId: $playerId1) {
+    guild2kills: kills(
+      first: 0
+      killerGuildId: $guildId2
+      victimGuildId: $guildId1
+    ) {
       totalCount
     }
   }
 `;
 
-export const PlayerFeudPage = (): JSX.Element => {
+export const GuildFeudPage = (): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
 
-  const { playerId1, playerId2 } = useParams();
+  const { guildId1, guildId2 } = useParams();
 
   const { loading, error, data } = useQuery<{
-    player1: Character;
-    player1kills: KillsConnection;
-    player2: Character;
-    player2kills: KillsConnection;
-  }>(PLAYER_FEUD_INFO, {
-    variables: { playerId1, playerId2 },
+    guild1: Guild;
+    guild1kills: KillsConnection;
+    guild2: Guild;
+    guild2kills: KillsConnection;
+  }>(GUILD_FEUD_INFO, {
+    variables: { guildId1, guildId2 },
   });
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  if (data?.player1 == null || data?.player2 == null)
+  if (data?.guild1 == null || data?.guild2 == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
@@ -78,17 +92,14 @@ export const PlayerFeudPage = (): JSX.Element => {
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/character/${playerId1}/feud/${playerId2}`}>
-            {t('pages:playerFeud.playerFeudId', { playerId1, playerId2 })}
+          <Link to={`/guild/${guildId1}/feud/${guildId2}`}>
+            {t('pages:guildFeud.guildFeudId', { guildId1, guildId2 })}
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Columns breakpoint={'desktop'}>
         <Columns.Column size={5}>
-          <PlayerFeudCharacterInfo
-            id={playerId1 || ''}
-            character={data.player1}
-          />
+          <GuildInfo guild={data.guild1} />
         </Columns.Column>
         <Columns.Column>
           <Container justifyContent="center" className="is-flex">
@@ -100,22 +111,19 @@ export const PlayerFeudPage = (): JSX.Element => {
           </Container>
           <Container justifyContent="center" className="is-flex" textSize={5}>
             <span className="has-text-weight-bold has-text-info">
-              {data.player1kills.totalCount}
+              {data.guild1kills.totalCount}
             </span>
             <span className="mx-3">vs</span>{' '}
             <span className="has-text-weight-bold has-text-info">
-              {data.player2kills.totalCount}
+              {data.guild2kills.totalCount}
             </span>
           </Container>
         </Columns.Column>
         <Columns.Column size={5}>
-          <PlayerFeudCharacterInfo
-            id={playerId2 || ''}
-            character={data.player2}
-          />
+          <GuildInfo guild={data.guild2} />
         </Columns.Column>
       </Columns>
-      <PlayerFeud player1={playerId1 || ''} player2={playerId2 || ''} />
+      <GuildFeud guild1={guildId1 || ''} guild2={guildId2 || ''} />
     </Container>
   );
 };

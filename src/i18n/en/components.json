@@ -14,6 +14,11 @@
   "guildFeud": {
     "title": "Guild Feud"
   },
+  "guildInfo": {
+    "description": "Description:",
+    "leader": "Leader:",
+    "members": "Members:"
+  },
   "guildRecentDeaths": {
     "title": "Recent Deaths"
   },

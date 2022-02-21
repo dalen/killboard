@@ -29,5 +29,8 @@
   },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
+  },
+  "guildFeud": {
+    "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
   }
 }
