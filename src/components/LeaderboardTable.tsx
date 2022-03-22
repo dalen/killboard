@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { KillLeaderboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
+import './tableStyling.scss';
 
 export const LeaderboardTable = ({
   data,
@@ -31,7 +32,7 @@ export const LeaderboardTable = ({
             <tr key={leaderboardEntry.rank}>
               <td>{leaderboardEntry.rank}</td>
               <td>
-                <Media>
+                <Media className="leaderboard-player-data">
                   <Media.Item align="left">
                     <CareerIcon career={leaderboardEntry.character.career} />
                   </Media.Item>
@@ -51,12 +52,9 @@ export const LeaderboardTable = ({
                       </Link>
                     </Content>
                   </Media.Item>
-                  <Media.Item align="right">
-                    <small>
-                      Lvl {leaderboardEntry.character.level}
-                      <br />
-                      RR {leaderboardEntry.character.renownRank}
-                    </small>
+                  <Media.Item className="player-rr">
+                    <span>Lvl {leaderboardEntry.character.level}</span>
+                    <span>RR {leaderboardEntry.character.renownRank}</span>
                   </Media.Item>
                 </Media>
               </td>

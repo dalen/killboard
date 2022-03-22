@@ -1,0 +1,22 @@
+@import '../../node_modules/bulma/sass/utilities/mixins.sass';
+
+$breakpoint-small: 475px;
+
+.leaderboard-player-data {
+  @include until($breakpoint-small) {
+    display: grid;
+    grid-template-columns: 40px 1fr;
+    grid-template-rows: 1fr;
+  }
+}
+
+.player-rr {
+  @include until($breakpoint-small) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-column-start: 2;
+  }
+  font-size: 13px;
+  display: grid;
+  grid-template-columns: 60px;
+  justify-content: end;
+}
