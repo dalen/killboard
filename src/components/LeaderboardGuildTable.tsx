@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { KillGuildLeaderboardEntry } from '../types';
 import './styles/table.scss';
-import './styles/table.scss';
 
 export const LeaderboardGuildTable = ({
   data,
