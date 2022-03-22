@@ -12,6 +12,8 @@ export type Scalars = {
   Float: number;
   /** The `Byte` scalar type represents non-fractional whole numeric values. Byte can represent values between 0 and 255. */
   Byte: any;
+  /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
+  Long: any;
 };
 
 /** Holds information about one attacker in a kill */
@@ -164,24 +166,9 @@ export type GuildMembersArgs = {
   last?: InputMaybe<Scalars['Int']>;
 };
 
-/** A connection to a list of items. */
-export type GuildFeudKillsConnection = {
-  __typename?: 'GuildFeudKillsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<GuildFeudKillsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Kill>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type GuildFeudKillsEdge = {
-  __typename?: 'GuildFeudKillsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: Kill;
+export type GuildFeudFilterInput = {
+  guild1Id?: InputMaybe<Scalars['ID']>;
+  guild2Id?: InputMaybe<Scalars['ID']>;
 };
 
 export type GuildFilterInput = {
@@ -247,6 +234,18 @@ export type Kill = {
   totalRenown: Scalars['Int'];
   /** The victim */
   victim: Victim;
+};
+
+export type KillGuildLeaderboardEntry = {
+  __typename?: 'KillGuildLeaderboardEntry';
+  /** Number of deaths */
+  deaths: Scalars['Int'];
+  /** Guild information */
+  guild: Guild;
+  /** Number of kills */
+  kills: Scalars['Int'];
+  /** Rank */
+  rank: Scalars['Int'];
 };
 
 export type KillLeaderboardEntry = {
@@ -316,24 +315,9 @@ export type PageInfo = {
   startCursor?: Maybe<Scalars['String']>;
 };
 
-/** A connection to a list of items. */
-export type PlayerFeudKillsConnection = {
-  __typename?: 'PlayerFeudKillsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<PlayerFeudKillsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Kill>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type PlayerFeudKillsEdge = {
-  __typename?: 'PlayerFeudKillsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String'];
-  /** The item at the end of the edge. */
-  node: Kill;
+export type PlayerFeudFilterInput = {
+  player1Id?: InputMaybe<Scalars['ID']>;
+  player2Id?: InputMaybe<Scalars['ID']>;
 };
 
 export type Position = {
@@ -353,12 +337,12 @@ export type Query = {
   character?: Maybe<Character>;
   characters?: Maybe<CharactersConnection>;
   guild?: Maybe<Guild>;
-  guildFeudKills?: Maybe<GuildFeudKillsConnection>;
   guilds?: Maybe<GuildsConnection>;
   kill?: Maybe<Kill>;
   kills?: Maybe<KillsConnection>;
+  monthlyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   monthlyKillLeaderboard: Array<KillLeaderboardEntry>;
-  playerFeudKills?: Maybe<PlayerFeudKillsConnection>;
+  weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
 
@@ -382,19 +366,6 @@ export type QueryGuildArgs = {
 };
 
 
-export type QueryGuildFeudKillsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  guild1Id?: InputMaybe<Scalars['ID']>;
-  guild2Id?: InputMaybe<Scalars['ID']>;
-  includeAssists?: Scalars['Boolean'];
-  last?: InputMaybe<Scalars['Int']>;
-  scenarioId?: InputMaybe<Scalars['ID']>;
-  zoneId?: InputMaybe<Scalars['ID']>;
-};
-
-
 export type QueryGuildsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
@@ -414,14 +385,25 @@ export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
+  from?: Scalars['Long'];
+  guildFeudFilter?: InputMaybe<GuildFeudFilterInput>;
   includeAssists?: Scalars['Boolean'];
   killerGuildId?: InputMaybe<Scalars['ID']>;
   killerId?: InputMaybe<Scalars['ID']>;
   last?: InputMaybe<Scalars['Int']>;
+  playerFeudFilter?: InputMaybe<PlayerFeudFilterInput>;
   scenarioId?: InputMaybe<Scalars['ID']>;
+  soloOnly?: Scalars['Boolean'];
+  to?: Scalars['Long'];
   victimGuildId?: InputMaybe<Scalars['ID']>;
   victimId?: InputMaybe<Scalars['ID']>;
   zoneId?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryMonthlyGuildKillLeaderboardArgs = {
+  month?: InputMaybe<Scalars['ID']>;
+  year: Scalars['Int'];
 };
 
 
@@ -431,16 +413,9 @@ export type QueryMonthlyKillLeaderboardArgs = {
 };
 
 
-export type QueryPlayerFeudKillsArgs = {
-  after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  includeAssists?: Scalars['Boolean'];
-  last?: InputMaybe<Scalars['Int']>;
-  player1Id?: InputMaybe<Scalars['ID']>;
-  player2Id?: InputMaybe<Scalars['ID']>;
-  scenarioId?: InputMaybe<Scalars['ID']>;
-  zoneId?: InputMaybe<Scalars['ID']>;
+export type QueryWeeklyGuildKillLeaderboardArgs = {
+  week?: InputMaybe<Scalars['ID']>;
+  year: Scalars['Int'];
 };
 
 
