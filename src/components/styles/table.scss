@@ -1,4 +1,4 @@
-@import '../../node_modules/bulma/sass/utilities/mixins.sass';
+@import '../../../node_modules/bulma/sass/utilities/mixins';
 
 $breakpoint-small: 475px;
 
@@ -10,7 +10,7 @@ $breakpoint-small: 475px;
   }
 }
 
-.player-rr {
+.player-rr-lvl-container {
   @include until($breakpoint-small) {
     grid-template-columns: repeat(2, 1fr);
     grid-column-start: 2;

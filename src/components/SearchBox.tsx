@@ -5,9 +5,11 @@ import { useNavigate } from 'react-router-dom';
 export const SearchBox = ({
   initialQuery,
   onSubmit,
+  isPlayer,
 }: {
   initialQuery?: string;
   onSubmit?: (query: string) => void;
+  isPlayer?: boolean;
 }): JSX.Element => {
   const { t } = useTranslation('components');
   const navigate = useNavigate();
@@ -17,11 +19,11 @@ export const SearchBox = ({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        navigate(`/search/${query}`);
+        navigate(isPlayer ? `/search/${query}` : `/search/guild/${query}`);
         onSubmit && onSubmit(query);
       }}
     >
-      <div className="field">
+      <div className="field mb-4">
         <p className="control has-icons-left has-icons-right">
           <input
             className="input"

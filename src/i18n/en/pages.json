@@ -2,6 +2,9 @@
   "characterPage": {
     "characterId": "Character #{{characterId}}"
   },
+  "guildFeud": {
+    "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
+  },
   "guildPage": {
     "description": "Description:",
     "guildId": "Guild #{{guildId}}",
@@ -9,9 +12,25 @@
     "leader": "Leader:",
     "members": "Members"
   },
+  "guildMembers": {
+    "level": "Level",
+    "name": "Name",
+    "renownRank": "RR",
+    "guildRank": "Rank"
+  },
+  "home": {
+    "showGuildLeaderboard": "Guilds",
+    "showPlayerLeaderboard": "Players"
+  },
   "killPage": {
     "killer": "Killer",
     "killId": "Kill #{{killId}}"
+  },
+  "killsPage": {
+    "title": "Kills"
+  },
+  "playerFeud": {
+    "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
   },
   "searchPage": {
     "level": "Level",
@@ -21,19 +40,13 @@
     "prevPage": "Prev",
     "nextPage": "Next"
   },
-  "guildMembers": {
+  "searchPageGuild": {
     "level": "Level",
     "name": "Name",
-    "renownRank": "RR",
-    "guildRank": "Rank"
-  },
-  "killsPage": {
-    "title": "Kills"
-  },
-  "playerFeud": {
-    "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
-  },
-  "guildFeud": {
-    "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
+    "leader": "Leader",
+    "members": "Members",
+    "search": "Search",
+    "prevPage": "Prev",
+    "nextPage": "Next"
   }
 }

@@ -56,6 +56,15 @@
     "kills": "Kills",
     "deaths": "Deaths"
   },
+  "leaderboardGuild": {
+    "weeklyTitle": "Weekly Leaderboard",
+    "monthlyTitle": "Monthly Leaderboard",
+    "title": "Leaderboard",
+    "rank": "#",
+    "guildName": "Name",
+    "kills": "Kills",
+    "deaths": "Deaths"
+  },
   "map": {
     "title": "Location"
   },

@@ -5,6 +5,7 @@ import { Home } from './pages/Home';
 import { Kill } from './pages/Kill';
 import { Guild } from './pages/Guild';
 import { Search } from './pages/Search';
+import { SearchGuild } from './pages/SearchGuild';
 import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
@@ -20,6 +21,7 @@ function App() {
         <Route path="/guild/:id" element={<Guild tab="kills" />} />
         <Route path="/guild/:id/members" element={<Guild tab="members" />} />
         <Route path="/search/:query" element={<Search />} />
+        <Route path="/search/guild/:query" element={<SearchGuild />} />
         <Route
           path="/character/:playerId1/feud/:playerId2"
           element={<PlayerFeudPage />}
