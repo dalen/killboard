@@ -8,7 +8,7 @@ import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const WEEKLY_LEADERBOARD_GUILD = gql`
-  query GetWeeklyGuildLeaderboard($year: Int!, $week: ID!) {
+  query GetWeeklyGuildLeaderboard($year: Int!, $week: Int!) {
     weeklyGuildKillLeaderboard(year: $year, week: $week) {
       guild {
         id

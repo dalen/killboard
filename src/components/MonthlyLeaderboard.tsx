@@ -6,7 +6,7 @@ import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const MONTHLY_LEADERBOARD = gql`
-  query GetMonthlyLeaderboard($year: Int!, $month: ID!) {
+  query GetMonthlyLeaderboard($year: Int!, $month: Int!) {
     monthlyKillLeaderboard(year: $year, month: $month) {
       rank
       kills

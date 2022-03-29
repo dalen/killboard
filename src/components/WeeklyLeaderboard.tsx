@@ -8,7 +8,7 @@ import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const WEEKLY_LEADERBOARD = gql`
-  query GetWeeklyLeaderboard($year: Int!, $week: ID!) {
+  query GetWeeklyLeaderboard($year: Int!, $week: Int!) {
     weeklyKillLeaderboard(year: $year, week: $week) {
       rank
       kills

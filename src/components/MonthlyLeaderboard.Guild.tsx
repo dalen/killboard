@@ -6,7 +6,7 @@ import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const MONTHLY_GUILD_LEADERBOARD = gql`
-  query GetMonthlyGuildLeaderboard($year: Int!, $month: ID!) {
+  query GetMonthlyGuildLeaderboard($year: Int!, $month: Int!) {
     monthlyGuildKillLeaderboard(year: $year, month: $month) {
       guild {
         id
