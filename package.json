@@ -28,7 +28,7 @@
   "devDependencies": {
     "@graphql-codegen/cli": "^2.6.2",
     "@graphql-codegen/typescript": "^2.4.8",
-    "@types/lodash": "^4.14.180",
+    "@types/lodash": "^4.14.181",
     "bulma": "^0.9.3",
     "eslint-config-airbnb-typescript-prettier": "^5.0.0"
   },
