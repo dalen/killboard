@@ -1,7 +1,8 @@
-import { Table, Media, Content } from 'react-bulma-components';
+import { Table, Media, Content, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { KillGuildLeaderboardEntry } from '../types';
+import { GuildHeraldry } from './GuildHeraldry';
 import './styles/table.scss';
 
 export const LeaderboardGuildTable = ({
@@ -32,14 +33,19 @@ export const LeaderboardGuildTable = ({
               <tr key={leaderboardEntry.rank}>
                 <td>{leaderboardEntry.rank}</td>
                 <td>
-                  <Media.Item>
-                    <Content>
-                      <Link to={`/guild/${leaderboardEntry.guild.id}`}>
-                        <strong>{leaderboardEntry.guild.name}</strong>
-                      </Link>
-                      <br />
-                    </Content>
-                  </Media.Item>
+                  <Media>
+                    <Media.Item align="left">
+                      <GuildHeraldry size="48" guild={leaderboardEntry.guild} />
+                    </Media.Item>
+                    <Media.Item>
+                      <Content>
+                        <Link to={`/guild/${leaderboardEntry.guild.id}`}>
+                          <strong>{leaderboardEntry.guild.name}</strong>
+                        </Link>
+                        <br />
+                      </Content>
+                    </Media.Item>
+                  </Media>
                 </td>
                 <td className="has-text-right">{leaderboardEntry.kills}</td>
                 <td className="has-text-right">{leaderboardEntry.deaths}</td>

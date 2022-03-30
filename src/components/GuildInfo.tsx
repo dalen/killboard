@@ -2,20 +2,19 @@ import { Card, Image, Media } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Guild } from '../types';
+import { GuildHeraldry } from './GuildHeraldry';
 
 export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
   const { t } = useTranslation(['components']);
+
+  const realmNum = guild.realm === 'ORDER' ? 1 : 2;
 
   return (
     <Card mb={5}>
       <Card.Content>
         <Media>
           <Media.Item align={'left'}>
-            <Image
-              size={'128'}
-              src={`/images/corner_icons/ea_icon_corner_guild.png`}
-              alt="Guild"
-            />
+            <GuildHeraldry size="128" guild={guild} />
           </Media.Item>
           <Media.Item>
             <p className="is-size-4">

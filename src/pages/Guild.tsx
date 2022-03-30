@@ -18,6 +18,13 @@ const GUILD_INFO = gql`
       briefDescription
       level
       realm
+      heraldry {
+        emblem
+        pattern
+        color1
+        color2
+        shape
+      }
       leader {
         id
         name

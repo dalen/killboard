@@ -11,6 +11,14 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
       guild {
         id
         name
+        realm
+        heraldry {
+          emblem
+          pattern
+          color1
+          color2
+          shape
+        }
       }
       rank
       kills

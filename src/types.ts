@@ -14,6 +14,7 @@ export type Scalars = {
   Byte: any;
   /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: any;
+  UUID: any;
 };
 
 /** Holds information about one attacker in a kill */
@@ -142,6 +143,8 @@ export type Guild = {
   briefDescription: Scalars['String'];
   /** Recruiting description */
   description: Scalars['String'];
+  /** Guild heraldry */
+  heraldry: GuildHeraldry;
   /** Guild Id */
   id?: Maybe<Scalars['ID']>;
   /** Guild leader */
@@ -176,6 +179,15 @@ export type GuildFilterInput = {
   name?: InputMaybe<StringOperationFilterInput>;
   /** Guild realm */
   realm?: InputMaybe<RealmOperationFilterInput>;
+};
+
+export type GuildHeraldry = {
+  __typename?: 'GuildHeraldry';
+  color1: Scalars['Int'];
+  color2: Scalars['Int'];
+  emblem: Scalars['Int'];
+  pattern: Scalars['Int'];
+  shape: Scalars['Int'];
 };
 
 export type GuildMember = {
@@ -224,8 +236,12 @@ export type Kill = {
   attackers: Array<Attacker>;
   /** Kill Id */
   id?: Maybe<Scalars['ID']>;
+  /** InstanceId, specifies the instance of a scenario this kill happened in */
+  instanceId?: Maybe<Scalars['ID']>;
   /** Position information */
   position: Position;
+  /** Scenario information */
+  scenario?: Maybe<Scenario>;
   /** ScenarioId, 0 if not in a scenario */
   scenarioId: Scalars['Int'];
   /** UTC Timestamp */
@@ -342,6 +358,9 @@ export type Query = {
   kills?: Maybe<KillsConnection>;
   monthlyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   monthlyKillLeaderboard: Array<KillLeaderboardEntry>;
+  /** Get scenario result from instance id */
+  scenario?: Maybe<Scenario>;
+  scenarios?: Maybe<ScenariosConnection>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
@@ -385,16 +404,17 @@ export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
   before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
-  from?: Scalars['Long'];
+  from?: InputMaybe<Scalars['Long']>;
   guildFeudFilter?: InputMaybe<GuildFeudFilterInput>;
   includeAssists?: Scalars['Boolean'];
+  instanceId?: InputMaybe<Scalars['String']>;
   killerGuildId?: InputMaybe<Scalars['ID']>;
   killerId?: InputMaybe<Scalars['ID']>;
   last?: InputMaybe<Scalars['Int']>;
   playerFeudFilter?: InputMaybe<PlayerFeudFilterInput>;
   scenarioId?: InputMaybe<Scalars['ID']>;
   soloOnly?: Scalars['Boolean'];
-  to?: Scalars['Long'];
+  to?: InputMaybe<Scalars['Long']>;
   victimGuildId?: InputMaybe<Scalars['ID']>;
   victimId?: InputMaybe<Scalars['ID']>;
   zoneId?: InputMaybe<Scalars['ID']>;
@@ -402,25 +422,43 @@ export type QueryKillsArgs = {
 
 
 export type QueryMonthlyGuildKillLeaderboardArgs = {
-  month?: InputMaybe<Scalars['ID']>;
+  month: Scalars['Int'];
   year: Scalars['Int'];
 };
 
 
 export type QueryMonthlyKillLeaderboardArgs = {
-  month?: InputMaybe<Scalars['ID']>;
+  month: Scalars['Int'];
   year: Scalars['Int'];
 };
 
 
+export type QueryScenarioArgs = {
+  id?: InputMaybe<Scalars['ID']>;
+};
+
+
+export type QueryScenariosArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  characterId?: InputMaybe<Scalars['ID']>;
+  first?: InputMaybe<Scalars['Int']>;
+  from?: InputMaybe<Scalars['Long']>;
+  guildId?: InputMaybe<Scalars['ID']>;
+  last?: InputMaybe<Scalars['Int']>;
+  scenarioId?: InputMaybe<Scalars['ID']>;
+  to?: InputMaybe<Scalars['Long']>;
+};
+
+
 export type QueryWeeklyGuildKillLeaderboardArgs = {
-  week?: InputMaybe<Scalars['ID']>;
+  week: Scalars['Int'];
   year: Scalars['Int'];
 };
 
 
 export type QueryWeeklyKillLeaderboardArgs = {
-  week?: InputMaybe<Scalars['ID']>;
+  week: Scalars['Int'];
   year: Scalars['Int'];
 };
 
@@ -434,6 +472,108 @@ export type RealmOperationFilterInput = {
   in?: InputMaybe<Array<Realm>>;
   neq?: InputMaybe<Realm>;
   nin?: InputMaybe<Array<Realm>>;
+};
+
+export type Scenario = {
+  __typename?: 'Scenario';
+  /** End time as Unix timestamp */
+  endTime: Scalars['Long'];
+  /** Scenario instance Id */
+  instanceId: Scalars['UUID'];
+  /** Points for each team, 0 is order, 1 is destruction */
+  points: Array<Scalars['Int']>;
+  /** Queue type */
+  queueType: ScenarioQueueType;
+  /** Scenario Id */
+  scenarioId: Scalars['Int'];
+  /** Scoreboard entries */
+  scoreboardEntries: Array<ScenarioScoreboardEntry>;
+  /** Start time as Unix timestamp */
+  startTime: Scalars['Long'];
+  /** Scenario tier */
+  tier: Scalars['Byte'];
+  /** Winning team, 0 is order, 1 is destruction */
+  winner: Scalars['Byte'];
+};
+
+export enum ScenarioQueueType {
+  City = 'CITY',
+  Duo = 'DUO',
+  GroupChallenge = 'GROUP_CHALLENGE',
+  GroupRanked = 'GROUP_RANKED',
+  SoloRanked = 'SOLO_RANKED',
+  Standard = 'STANDARD'
+}
+
+export type ScenarioScoreboardEntry = {
+  __typename?: 'ScenarioScoreboardEntry';
+  /** Character information */
+  character: Character;
+  /** Damage */
+  damage: Scalars['Int'];
+  /** Damage Received */
+  damageReceived: Scalars['Int'];
+  /** Death blows */
+  deathBlows: Scalars['Int'];
+  /** Deaths */
+  deaths: Scalars['Int'];
+  /** Guild at the time of the scenario */
+  guild?: Maybe<Guild>;
+  /** Healing */
+  healing: Scalars['Int'];
+  /** Healing of others */
+  healingOthers: Scalars['Int'];
+  /** Healing Received */
+  healingReceived: Scalars['Int'];
+  /** Healing of self */
+  healingSelf: Scalars['Int'];
+  /** Damage contributing to kills */
+  killDamage: Scalars['Int'];
+  /** Kills */
+  kills: Scalars['Int'];
+  /** Solo Kills */
+  killsSolo: Scalars['Int'];
+  /** Level at the time of the scenario */
+  level: Scalars['Byte'];
+  /** Objective Score */
+  objectiveScore: Scalars['Int'];
+  /** Damage Prevented */
+  protection: Scalars['Int'];
+  /** Protection of others */
+  protectionOthers: Scalars['Int'];
+  /** Protection Received */
+  protectionReceived: Scalars['Int'];
+  /** Protection of self */
+  protectionSelf: Scalars['Int'];
+  /** If true the player left the scenario before it ended */
+  quitter: Scalars['Boolean'];
+  /** Renown rank at the time of the scenario */
+  renownRank: Scalars['Byte'];
+  /** Resurrections */
+  resurrectionsDone: Scalars['Int'];
+  /** The team of the player. Normally Order=0, Destruction=1. */
+  team: Scalars['Byte'];
+};
+
+/** A connection to a list of items. */
+export type ScenariosConnection = {
+  __typename?: 'ScenariosConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<ScenariosEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Scenario>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  totalCount: Scalars['Int'];
+};
+
+/** An edge in a connection. */
+export type ScenariosEdge = {
+  __typename?: 'ScenariosEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String'];
+  /** The item at the end of the edge. */
+  node: Scenario;
 };
 
 export type StringOperationFilterInput = {
