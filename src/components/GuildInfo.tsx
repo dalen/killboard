@@ -32,7 +32,8 @@ export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
             </p>
             <p>
               <strong>{`${t('components:guildInfo.description')} `}</strong>
-              {guild.description}
+              <br />
+              <div style={{ whiteSpace: 'pre-wrap' }}>{guild.description}</div>
             </p>
           </Media.Item>
         </Media>
