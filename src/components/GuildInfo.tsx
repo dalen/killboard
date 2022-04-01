@@ -1,4 +1,4 @@
-import { Card, Image, Media } from 'react-bulma-components';
+import { Card, Media } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Guild } from '../types';
@@ -6,8 +6,6 @@ import { GuildHeraldry } from './GuildHeraldry';
 
 export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
   const { t } = useTranslation(['components']);
-
-  const realmNum = guild.realm === 'ORDER' ? 1 : 2;
 
   return (
     <Card mb={5}>

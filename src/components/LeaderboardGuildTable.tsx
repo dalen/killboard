@@ -1,4 +1,4 @@
-import { Table, Media, Content, Image } from 'react-bulma-components';
+import { Table, Media, Content } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { KillGuildLeaderboardEntry } from '../types';
