@@ -14,7 +14,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home tab="players" />} />
+        <Route path="/guilds" element={<Home tab="guilds" />} />
         <Route path="/kill/:id" element={<Kill />} />
         <Route path="/kills" element={<Kills />} />
         <Route path="/character/:id" element={<Character />} />
