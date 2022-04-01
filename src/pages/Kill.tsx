@@ -20,6 +20,7 @@ import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import { GuildFeud } from '../components/GuildFeud';
 import { ErrorMessage } from '../components/global/ErrorMessage';
+import { GuildHeraldry } from '../components/GuildHeraldry';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -42,6 +43,14 @@ const KILL_DETAILS = gql`
         guild {
           id
           name
+          realm
+          heraldry {
+            emblem
+            pattern
+            color1
+            color2
+            shape
+          }
         }
       }
       attackers {
@@ -56,6 +65,14 @@ const KILL_DETAILS = gql`
         guild {
           id
           name
+          realm
+          heraldry {
+            emblem
+            pattern
+            color1
+            color2
+            shape
+          }
         }
       }
     }
@@ -156,9 +173,7 @@ export const Kill = (): JSX.Element => {
                     </small>
                   </Media.Item>
                   <Media.Item align={'left'}>
-                    <figure className="image is-32x32">
-                      <img src="/images/icons/guild.png" alt="Guild" />
-                    </figure>
+                    <GuildHeraldry size="48" guild={data.kill.victim.guild} />
                   </Media.Item>
                   <Media.Item>
                     <Link to={`/guild/${data.kill.victim.guild?.id}`}>

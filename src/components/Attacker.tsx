@@ -2,6 +2,7 @@ import { Card, Tag, Media } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { Attacker as AttackerType } from '../types';
 import { CareerIcon } from './CareerIcon';
+import { GuildHeraldry } from './GuildHeraldry';
 
 export const Attacker = ({
   title,
@@ -40,9 +41,7 @@ export const Attacker = ({
           {attacker.guild && (
             <>
               <Media.Item align={'left'}>
-                <figure className="image is-32x32">
-                  <img src="/images/icons/guild.png" alt="Guild" />
-                </figure>
+                <GuildHeraldry size="48" guild={attacker.guild} />
               </Media.Item>
               <Media.Item>
                 <Link to={`/guild/${attacker.guild?.id}`}>
