@@ -78,5 +78,8 @@
     "errorMessage": {
       "errorWithSadSmiley": "Error :("
     }
+  },
+  "scenarioKills": {
+    "title": "Kills"
   }
 }

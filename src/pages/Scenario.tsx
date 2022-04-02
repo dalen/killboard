@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ScenarioKills } from '../components/ScenarioKills';
 import { Scenarios } from '../enums';
 import { Query } from '../types';
 
@@ -149,6 +150,7 @@ export const Scenario = (): JSX.Element => {
           ))}
         </tbody>
       </Table>
+      <ScenarioKills id={id || ''} />
     </Container>
   );
 };
