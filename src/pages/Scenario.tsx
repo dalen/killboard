@@ -114,7 +114,7 @@ export const Scenario = (): JSX.Element => {
         </Card.Content>
       </Card>
 
-      <Table striped className="is-fullwidth">
+      <Table className="is-fullwidth">
         <thead>
           <tr>
             <th>Career</th>
@@ -131,7 +131,7 @@ export const Scenario = (): JSX.Element => {
         </thead>
         <tbody>
           {scenario.scoreboardEntries.map((entry) => (
-            <tr>
+            <tr className={`scenario-scoreboard-row-team-${entry.team}`}>
               <td>
                 <CareerIcon career={entry.character.career} />
               </td>

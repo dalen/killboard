@@ -48,3 +48,11 @@ html {
   font-weight: normal;
   src: local('Caslon Antique Regular'), url('Caslo-an.woff') format('woff');
 }
+
+tr.scenario-scoreboard-row-team-0 {
+  background-color: midnightblue;
+}
+
+tr.scenario-scoreboard-row-team-1 {
+  background-color: #450404;
+}
