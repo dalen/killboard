@@ -1,15 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  format,
-  formatDuration,
-  formatISO,
-  intervalToDuration,
-} from 'date-fns';
-import { t } from 'i18next';
+import { format, formatISO, intervalToDuration } from 'date-fns';
 import {
   Breadcrumb,
   Card,
-  Columns,
   Container,
   Progress,
   Table,
