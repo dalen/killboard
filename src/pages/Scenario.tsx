@@ -135,7 +135,11 @@ export const Scenario = (): JSX.Element => {
               <td>
                 <CareerIcon career={entry.character.career} />
               </td>
-              <td>{entry.character.name}</td>
+              <td>
+                <Link to={`/character/${entry.character.id}`}>
+                  {entry.character.name}
+                </Link>
+              </td>
               <td align="right">{entry.level}</td>
               <td align="right">{entry.kills}</td>
               <td align="right">{entry.deaths}</td>
