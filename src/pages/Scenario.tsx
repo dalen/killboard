@@ -120,19 +120,19 @@ export const Scenario = (): JSX.Element => {
         </Card.Content>
       </Card>
 
-      <Table striped>
+      <Table striped className="is-fullwidth">
         <thead>
           <tr>
             <th>Career</th>
             <th>Name</th>
-            <th>Rank</th>
-            <th>Kills</th>
-            <th>Deaths</th>
-            <th>DBs</th>
-            <th>Damage</th>
-            <th>Healing</th>
-            <th>Protection</th>
-            <th>Objective Score</th>
+            <th align="right">Rank</th>
+            <th align="right">Kills</th>
+            <th align="right">Deaths</th>
+            <th align="right">DBs</th>
+            <th align="right">Damage</th>
+            <th align="right">Healing</th>
+            <th align="right">Protection</th>
+            <th align="right">Objective Score</th>
           </tr>
         </thead>
         <tbody>
