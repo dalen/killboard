@@ -48,5 +48,8 @@
     "search": "Search",
     "prevPage": "Prev",
     "nextPage": "Next"
+  },
+  "scenarioPage": {
+    "scenarioId": "Scenario #{{scenarioId}}"
   }
 }

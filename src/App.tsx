@@ -10,6 +10,7 @@ import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
 import React from 'react';
+import { Scenario } from './pages/Scenario';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -44,6 +45,7 @@ function App() {
         path="/guild/:guildId1/feud/:guildId2"
         element={<GuildFeudPage />}
       />
+      <Route path="/scenario/:id" element={<Scenario />} />
     </Routes>
   );
 }
