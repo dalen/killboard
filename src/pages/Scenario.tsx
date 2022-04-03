@@ -6,7 +6,6 @@ import {
   Container,
   Progress,
   Table,
-  Button
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -71,7 +70,9 @@ export const Scenario = (): JSX.Element => {
     variables: { id: id },
   });
 
-  const { items, requestSort, sortConfig } = useSortableData(data?.scenario?.scoreboardEntries || []);
+  const { items, requestSort, sortConfig } = useSortableData(
+    data?.scenario?.scoreboardEntries || []
+  );
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -85,7 +86,6 @@ export const Scenario = (): JSX.Element => {
     start: startDate,
     end: endDate,
   });
-
 
   return (
     <Container max breakpoint={'widescreen'} mt={2}>
@@ -122,17 +122,76 @@ export const Scenario = (): JSX.Element => {
       <Table className="is-fullwidth">
         <thead>
           <tr>
-            <th align="left" onClick={() => requestSort('career')} className="is-clickable has-text-link">
-            {t('pages:scenarioPage.career')}</th>
-            <th align="left" onClick={() => requestSort('name')} className="is-clickable has-text-link">{t('pages:scenarioPage.name')}</th>
-            <th align="right"onClick={() => requestSort('level')} className="is-clickable has-text-link">{t('pages:scenarioPage.rank')}</th>
-            <th align="right"onClick={() => requestSort('kills')} className="is-clickable has-text-link">{t('pages:scenarioPage.kills')}</th>
-            <th align="right" onClick={() => requestSort('deaths')} className="is-clickable has-text-link">{t('pages:scenarioPage.deaths')}</th>
-            <th align="right" onClick={() => requestSort('deathBlows')} className="is-clickable has-text-link">{t('pages:scenarioPage.dbs')}</th>
-            <th align="right" onClick={() => requestSort('damage')} className="is-clickable has-text-link">{t('pages:scenarioPage.damage')}</th>
-            <th align="right" onClick={() => requestSort('healing')} className="is-clickable has-text-link">{t('pages:scenarioPage.healing')}</th>
-            <th align="right" onClick={() => requestSort('protection')} className="is-clickable has-text-link">{t('pages:scenarioPage.protection')}</th>
-            <th align="right" onClick={() => requestSort('objectiveScore')} className="is-clickable has-text-link">{t('pages:scenarioPage.objectiveScore')}</th>
+            <th
+              align="left"
+              onClick={() => requestSort('career')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.career')}
+            </th>
+            <th
+              align="left"
+              onClick={() => requestSort('name')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.name')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('level')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.rank')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('kills')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.kills')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('deaths')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.deaths')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('deathBlows')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.dbs')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('damage')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.damage')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('healing')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.healing')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('protection')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.protection')}
+            </th>
+            <th
+              align="right"
+              onClick={() => requestSort('objectiveScore')}
+              className="is-clickable has-text-link"
+            >
+              {t('pages:scenarioPage.objectiveScore')}
+            </th>
           </tr>
         </thead>
         <tbody>
