@@ -41,8 +41,8 @@
     "nextPage": "Next"
   },
   "searchPageGuild": {
+    "guild": "Guild",
     "level": "Level",
-    "name": "Name",
     "leader": "Leader",
     "members": "Members",
     "search": "Search",
@@ -50,6 +50,16 @@
     "nextPage": "Next"
   },
   "scenarioPage": {
+    "career": "Career",
+    "damage": "Damage",
+    "dbs": "DBs",
+    "deaths": "Deaths",
+    "healing": "Healing",
+    "kills": "Kills",
+    "name": "Name",
+    "objectiveScore": "Objective Score",
+    "protection": "Protection",
+    "rank": "Rank",
     "scenarioId": "Scenario #{{scenarioId}}"
   }
 }
