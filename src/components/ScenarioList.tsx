@@ -11,6 +11,7 @@ const SCENARIO_LIST = gql`
   query GetScenarioList(
     $characterId: ID
     $guildId: ID
+    $queueType: ScenarioQueueType
     $first: Int
     $last: Int
     $before: String
@@ -19,6 +20,7 @@ const SCENARIO_LIST = gql`
     scenarios(
       characterId: $characterId
       guildId: $guildId
+      queueType: $queueType
       first: $first
       last: $last
       before: $before
