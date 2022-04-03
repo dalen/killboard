@@ -87,13 +87,13 @@
     "damage": "Damage",
     "dbs": "DBs",
     "deaths": "Deaths",
+    "guild": "Guild",
     "healing": "Healing",
     "kills": "Kills",
     "name": "Name",
-    "objectiveScore": "Objective Score",
+    "objectiveScore": "Objectives",
     "protection": "Protection",
-    "rank": "Rank",
-    "guild": "Guild"
+    "rank": "Rank"
   },
   "scenarioList": {
     "name": "Name",

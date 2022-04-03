@@ -77,4 +77,20 @@ td.scenariolist-score-order {
 td.scenariolist-score-destruction {
   color: rgba(158, 12, 13);
   font-weight: bold;
-} 
+}
+
+thead .ascending::after {
+  content: url(../public/images/icons/scenario/uparrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 5px;
+  transform: scale(.5);
+}
+
+thead .descending::after {
+  content: url(../public/images/icons/scenario/downarrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  transform: scale(.5);
+}
