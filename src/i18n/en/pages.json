@@ -50,16 +50,8 @@
     "nextPage": "Next"
   },
   "scenarioPage": {
-    "career": "Career",
-    "damage": "Damage",
-    "dbs": "DBs",
-    "deaths": "Deaths",
-    "healing": "Healing",
+    "scenarioId": "Scenario #{{scenarioId}}",
     "kills": "Kills",
-    "name": "Name",
-    "objectiveScore": "Objective Score",
-    "protection": "Protection",
-    "rank": "Rank",
-    "scenarioId": "Scenario #{{scenarioId}}"
+    "scoreboard": "Scoreboard"
   }
 }

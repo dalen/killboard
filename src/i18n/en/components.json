@@ -81,5 +81,17 @@
   },
   "scenarioKills": {
     "title": "Kills"
+  },
+  "scenarioScoreboard": {
+    "career": "Career",
+    "damage": "Damage",
+    "dbs": "DBs",
+    "deaths": "Deaths",
+    "healing": "Healing",
+    "kills": "Kills",
+    "name": "Name",
+    "objectiveScore": "Objective Score",
+    "protection": "Protection",
+    "rank": "Rank"
   }
 }

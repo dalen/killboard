@@ -45,7 +45,8 @@ function App() {
         path="/guild/:guildId1/feud/:guildId2"
         element={<GuildFeudPage />}
       />
-      <Route path="/scenario/:id" element={<Scenario />} />
+      <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
+      <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
     </Routes>
   );
 }

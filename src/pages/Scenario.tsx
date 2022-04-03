@@ -1,20 +1,24 @@
 import { gql, useQuery } from '@apollo/client';
-import { format, formatISO, formatDuration, intervalToDuration } from 'date-fns';
+import {
+  format,
+  formatISO,
+  formatDuration,
+  intervalToDuration,
+} from 'date-fns';
 import {
   Breadcrumb,
   Card,
   Container,
   Progress,
-  Table,
+  Tabs,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { CareerIcon } from '../components/CareerIcon';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ScenarioKills } from '../components/ScenarioKills';
 import { Scenarios } from '../enums';
 import { Query } from '../types';
-import { useSortableData } from '../hooks/useSortableData';
+import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID) {
@@ -62,18 +66,17 @@ const SCENARIO_INFO = gql`
   }
 `;
 
-export const Scenario = (): JSX.Element => {
+export const Scenario = ({
+  tab,
+}: {
+  tab: 'scoreboard' | 'kills';
+}): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_INFO, {
     variables: { id: id },
   });
-
-  //@todo use sortConfig to display up/down arrow on active thead or get rid of it
-  const { items, requestSort, sortConfig } = useSortableData(
-    data?.scenario?.scoreboardEntries || []
-  );
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -83,10 +86,12 @@ export const Scenario = (): JSX.Element => {
   const { scenario } = data;
   const startDate = new Date(scenario.startTime * 1000);
   const endDate = new Date(scenario.endTime * 1000);
-  const duration = formatDuration(intervalToDuration({
-    start: startDate,
-    end: endDate,
-  }));
+  const duration = formatDuration(
+    intervalToDuration({
+      start: startDate,
+      end: endDate,
+    })
+  );
 
   return (
     <Container max breakpoint={'widescreen'} mt={2}>
@@ -119,108 +124,22 @@ export const Scenario = (): JSX.Element => {
           </p>
         </Card.Content>
       </Card>
-
-      <Table className="is-fullwidth">
-        <thead>
-          <tr>
-            <th
-              align="left"
-              onClick={() => requestSort('career')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.career')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('name')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.name')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('level')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.rank')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('kills')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.kills')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('deaths')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.deaths')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('deathBlows')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.dbs')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('damage')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.damage')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('healing')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.healing')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('protection')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.protection')}
-            </th>
-            <th
-              align="right"
-              onClick={() => requestSort('objectiveScore')}
-              className="is-clickable has-text-link"
-            >
-              {t('pages:scenarioPage.objectiveScore')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((entry) => (
-            <tr className={`scenario-scoreboard-row-team-${entry.team}`}>
-              <td>
-                <CareerIcon career={entry.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${entry.character.id}`}>
-                  {entry.character.name}
-                </Link>
-              </td>
-              <td align="right">{entry.level}</td>
-              <td align="right">{entry.kills}</td>
-              <td align="right">{entry.deaths}</td>
-              <td align="right">{entry.deathBlows}</td>
-              <td align="right">{Number(entry.damage).toLocaleString()}</td>
-              <td align="right">{Number(entry.healing).toLocaleString()}</td>
-              <td align="right">{Number(entry.protection).toLocaleString()}</td>
-              <td align="right">
-                {Number(entry.objectiveScore).toLocaleString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      <ScenarioKills id={id || ''} />
+      <Tabs>
+        <li className={tab === 'scoreboard' ? 'is-active' : ''}>
+          <Link to={`/scenario/${id}`}>
+            {t('pages:scenarioPage.scoreboard')}
+          </Link>
+        </li>
+        <li className={tab === 'kills' ? 'is-active' : ''}>
+          <Link to={`/scenario/${id}/kills`}>
+            {t('pages:scenarioPage.kills')}
+          </Link>
+        </li>
+      </Tabs>
+      {tab === 'scoreboard' && (
+        <ScenarioScoreboard entries={scenario.scoreboardEntries} />
+      )}
+      {tab === 'kills' && <ScenarioKills id={id || ''} />}
     </Container>
   );
 };
