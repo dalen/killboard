@@ -23,7 +23,8 @@
   },
   "home": {
     "showGuildLeaderboard": "Guilds",
-    "showPlayerLeaderboard": "Players"
+    "showPlayerLeaderboard": "Players",
+    "showScenarios": "Scenarios"
   },
   "killPage": {
     "killer": "Killer",

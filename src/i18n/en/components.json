@@ -106,6 +106,7 @@
     "scenarioDuration": "{{minutes}}m {{seconds}}s"
   },
   "scenarioFilters": {
+    "queueType": "Type",
     "queueTypeAll": "All",
     "queueTypeStandard": "Standard",
     "queueTypeDuo": "Pickup",

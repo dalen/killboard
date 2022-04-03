@@ -302,6 +302,7 @@ export const Scenarios: { [key: number]: string } = {
   2252: 'Caledor Woods (Ranked)',
   2253: 'Phoenix Gate (Ranked Solo)',
   2254: 'Phoenix Gate (Ranked)',
+  2400: 'Pyramid of Settra',
   3000: 'Ranked Solo',
   3001: 'Ranked',
   3002: '6v6 Challenge ',

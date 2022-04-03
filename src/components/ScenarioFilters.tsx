@@ -1,4 +1,4 @@
-import { Card, Columns } from 'react-bulma-components';
+import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
@@ -28,39 +28,48 @@ export const ScenarioFilters = (): JSX.Element => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
-  const period = search.get('period') || 'all';
+  const queueType = search.get('queue_type') || 'all';
 
   return (
     <Card mb={5}>
       <Card.Content>
         <Columns>
           <Columns.Column>
-            <div className="select">
-              <select
-                value={period}
-                onChange={(event) => {
-                  search.set('queue_type', event.target.value);
-                  setSearch(search);
-                }}
-              >
-                <option value="all">{t('scenarioFilters.queueTypeAll')}</option>
-                <option value="standard">
-                  {t('scenarioFilters.queueTypeStandard')}
-                </option>
-                <option value="duo">{t('scenarioFilters.queueTypeDuo')}</option>
-                <option value="city">
-                  {t('scenarioFilters.queueTypeCity')}
-                </option>
-                <option value="group_ranked">
-                  {t('scenarioFilters.queueTypeGroupRanked')}
-                </option>
-                <option value="solo_ranked">
-                  {t('scenarioFilters.queueTypeSoloRanked')}
-                </option>
-                <option value="group_challenge">
-                  {t('scenarioFilters.queueTypeGroupChallenge')}
-                </option>
-              </select>
+            <div className="field">
+              <label className="label">{t('scenarioFilters.queueType')}</label>
+              <div className="control">
+                <div className="select">
+                  <select
+                    value={queueType}
+                    onChange={(event) => {
+                      search.set('queue_type', event.target.value);
+                      setSearch(search);
+                    }}
+                  >
+                    <option value="all">
+                      {t('scenarioFilters.queueTypeAll')}
+                    </option>
+                    <option value="standard">
+                      {t('scenarioFilters.queueTypeStandard')}
+                    </option>
+                    <option value="duo">
+                      {t('scenarioFilters.queueTypeDuo')}
+                    </option>
+                    <option value="city">
+                      {t('scenarioFilters.queueTypeCity')}
+                    </option>
+                    <option value="group_ranked">
+                      {t('scenarioFilters.queueTypeGroupRanked')}
+                    </option>
+                    <option value="solo_ranked">
+                      {t('scenarioFilters.queueTypeSoloRanked')}
+                    </option>
+                    <option value="group_challenge">
+                      {t('scenarioFilters.queueTypeGroupChallenge')}
+                    </option>
+                  </select>
+                </div>
+              </div>
             </div>
           </Columns.Column>
         </Columns>

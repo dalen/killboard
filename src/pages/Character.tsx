@@ -6,6 +6,7 @@ import { CharacterRecentDeaths } from '../components/CharacterRecentDeaths';
 import { CharacterRecentKills } from '../components/CharacterRecentKills';
 import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
+import { ScenarioFilters } from '../components/ScenarioFilters';
 
 export const Character = ({
   tab,
@@ -53,7 +54,12 @@ export const Character = ({
           </Columns>
         </>
       )}
-      {tab === 'scenarios' && <ScenarioList characterId={id} />}
+      {tab === 'scenarios' && (
+        <div>
+          <ScenarioFilters />
+          <ScenarioList characterId={id} />
+        </div>
+      )}
     </Container>
   );
 };

@@ -52,8 +52,8 @@ export const ScenarioList = ({
   guildId?: String;
   perPage?: number;
 }): React.ReactElement | null => {
-  const [search] = useSearchParams();
   const { t } = useTranslation(['common', 'components']);
+  const [search] = useSearchParams();
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
     variables: {
