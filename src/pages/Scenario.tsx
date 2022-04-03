@@ -120,8 +120,8 @@ export const Scenario = (): JSX.Element => {
       <Table className="is-fullwidth">
         <thead>
           <tr>
-            <th align="right"><button onClick={() => requestSort('character.career')}>Career</button></th>
-            <th align="right"><button onClick={() => requestSort('character.name')}>Name</button></th>
+            <th align="right"><button onClick={() => requestSort('career')}>Career</button></th>
+            <th align="right"><button onClick={() => requestSort('name')}>Name</button></th>
             <th align="right"><button onClick={() => requestSort('level')}>Rank</button></th>
             <th align="right"><button onClick={() => requestSort('kills')}>Kills</button></th>
             <th align="right"><button onClick={() => requestSort('deaths')}>Deaths</button></th>
