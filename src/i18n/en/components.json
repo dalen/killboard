@@ -104,5 +104,14 @@
     "order": "Order",
     "destruction": "Destruction",
     "scenarioDuration": "{{minutes}}m {{seconds}}s"
+  },
+  "scenarioFilters": {
+    "queueTypeAll": "All",
+    "queueTypeStandard": "Standard",
+    "queueTypeDuo": "Pickup",
+    "queueTypeCity": "City Siege",
+    "queueTypeGroupRanked": "Group Ranked",
+    "queueTypeSoloRanked": "Solo Ranked",
+    "queueTypeGroupChallenge": "Group Challenge"
   }
 }

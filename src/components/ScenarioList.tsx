@@ -1,8 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
+import { getScenarioFilters } from './ScenarioFilters';
 import { ScenarioListTable } from './ScenarioListTable';
 
 const SCENARIO_LIST = gql`
@@ -50,10 +52,16 @@ export const ScenarioList = ({
   guildId?: String;
   perPage?: number;
 }): React.ReactElement | null => {
+  const [search] = useSearchParams();
   const { t } = useTranslation(['common', 'components']);
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
-    variables: { characterId, guildId, first: perPage },
+    variables: {
+      characterId,
+      guildId,
+      first: perPage,
+      ...getScenarioFilters(search),
+    },
   });
 
   if (loading) return <Progress />;

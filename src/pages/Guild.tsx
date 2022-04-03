@@ -10,6 +10,7 @@ import { GuildMemberList } from '../components/GuildMemberList';
 import { GuildInfo } from '../components/GuildInfo';
 import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
+import { ScenarioFilters } from '../components/ScenarioFilters';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -106,7 +107,12 @@ export const Guild = ({
         </div>
       )}
       {tab === 'members' && <GuildMemberList id={id} />}
-      {tab === 'scenarios' && <ScenarioList guildId={id} />}
+      {tab === 'scenarios' && (
+        <div>
+          <ScenarioFilters />
+          <ScenarioList guildId={id} />
+        </div>
+      )}
     </Container>
   );
 };
