@@ -1,6 +1,8 @@
 {
   "characterPage": {
-    "characterId": "Character #{{characterId}}"
+    "characterId": "Character #{{characterId}}",
+    "kills": "Kills",
+    "scenarios": "Scenarios"
   },
   "guildFeud": {
     "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
@@ -10,7 +12,8 @@
     "guildId": "Guild #{{guildId}}",
     "kills": "Kills",
     "leader": "Leader:",
-    "members": "Members"
+    "members": "Members",
+    "scenarios": "Scenarios"
   },
   "guildMembers": {
     "level": "Level",
@@ -20,7 +23,8 @@
   },
   "home": {
     "showGuildLeaderboard": "Guilds",
-    "showPlayerLeaderboard": "Players"
+    "showPlayerLeaderboard": "Players",
+    "showScenarios": "Scenarios"
   },
   "killPage": {
     "killer": "Killer",
@@ -41,12 +45,19 @@
     "nextPage": "Next"
   },
   "searchPageGuild": {
+    "guild": "Guild",
     "level": "Level",
-    "name": "Name",
     "leader": "Leader",
     "members": "Members",
     "search": "Search",
     "prevPage": "Prev",
     "nextPage": "Next"
+  },
+  "scenarioPage": {
+    "scenarioId": "Scenario #{{scenarioId}}",
+    "kills": "Kills",
+    "scoreboard": "Scoreboard",
+    "order": "Order",
+    "destruction": "Destruction"
   }
 }

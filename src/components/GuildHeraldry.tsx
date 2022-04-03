@@ -12,7 +12,7 @@ export const GuildHeraldry = ({
 
   return (
     <Image
-      size={size}
+      size={Number(size)}
       src={`https://armory.returnofreckoning.com/heraldry/frame/${size}/${size}/${realmNum}/${guild.heraldry.emblem}/${guild.heraldry.pattern}/${guild.heraldry.color1}/${guild.heraldry.color2}/${guild.heraldry.shape}`}
       alt="Heraldry"
     />

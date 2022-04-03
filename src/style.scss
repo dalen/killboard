@@ -48,3 +48,59 @@ html {
   font-weight: normal;
   src: local('Caslon Antique Regular'), url('Caslo-an.woff') format('woff');
 }
+
+tr.scenario-scoreboard-row-team-0 {
+  background-color: rgba(12, 47, 158, 0.2);
+  border-bottom: 2px solid #000000;
+}
+
+tr.scenario-scoreboard-row-team-1 {
+  background-color: rgba(158, 12, 13, 0.2);
+  border-bottom: 2px solid #000000;
+}
+
+p.scenario-score-order {
+  color: rgba(12, 47, 158);
+  font-weight: bold;
+}
+
+p.scenario-score-destruction {
+  color: rgba(158, 12, 13);
+  font-weight: bold;
+}
+
+td.scenariolist-score-order {
+  color: rgba(12, 47, 158);
+  font-weight: bold;
+} 
+
+td.scenariolist-score-destruction {
+  color: rgba(158, 12, 13);
+  font-weight: bold;
+}
+
+thead .ascending::after {
+  content: url(../public/images/icons/scenario/uparrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 5px;
+  transform: scale(.5);
+}
+
+thead .descending::after {
+  content: url(../public/images/icons/scenario/downarrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  transform: scale(.5);
+}
+
+div.scenario-scoreboard-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: rgb(227, 214, 196);
+  padding: 10px;
+}
+
+.tooltip {
+  cursor: help;
+}

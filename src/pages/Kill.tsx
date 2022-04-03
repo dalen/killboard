@@ -26,6 +26,7 @@ const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
     kill(id: $id) {
       scenarioId
+      instanceId
       time
       position {
         zoneId
@@ -129,6 +130,13 @@ export const Kill = (): JSX.Element => {
                 <strong>Time: </strong>
                 {format(date, 'HH:mm:ss')}
               </p>
+              {data.kill.instanceId && (
+                <p>
+                  <Link to={`/scenario/${data.kill.instanceId}`}>
+                    Scenario Scoreboard
+                  </Link>
+                </p>
+              )}
             </Media.Item>
           </Media>
         </Card.Content>

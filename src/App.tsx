@@ -10,6 +10,7 @@ import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
 import React from 'react';
+import { Scenario } from './pages/Scenario';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -29,11 +30,17 @@ function App() {
     <Routes>
       <Route path="/" element={<Home tab="players" />} />
       <Route path="/guilds" element={<Home tab="guilds" />} />
+      <Route path="/scenarios" element={<Home tab="scenarios" />} />
       <Route path="/kill/:id" element={<Kill />} />
       <Route path="/kills" element={<Kills />} />
-      <Route path="/character/:id" element={<Character />} />
+      <Route path="/character/:id" element={<Character tab="kills" />} />
+      <Route
+        path="/character/:id/scenarios"
+        element={<Character tab="scenarios" />}
+      />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
+      <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />
       <Route
@@ -44,6 +51,8 @@ function App() {
         path="/guild/:guildId1/feud/:guildId2"
         element={<GuildFeudPage />}
       />
+      <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
+      <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
     </Routes>
   );
 }

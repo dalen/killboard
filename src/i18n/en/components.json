@@ -61,7 +61,7 @@
     "monthlyTitle": "Monthly Leaderboard",
     "title": "Leaderboard",
     "rank": "#",
-    "guildName": "Name",
+    "guildName": "Guild",
     "kills": "Kills",
     "deaths": "Deaths"
   },
@@ -78,5 +78,41 @@
     "errorMessage": {
       "errorWithSadSmiley": "Error :("
     }
+  },
+  "scenarioKills": {
+    "title": "Kills"
+  },
+  "scenarioScoreboard": {
+    "career": "Career",
+    "damage": "Damage",
+    "dbs": "DBs",
+    "deaths": "Deaths",
+    "guild": "Guild",
+    "healing": "Healing",
+    "kills": "Kills",
+    "name": "Name",
+    "objectiveScore": "Objectives",
+    "protection": "Protection",
+    "rank": "Rank"
+  },
+  "scenarioList": {
+    "name": "Name",
+    "details": "Details",
+    "time": "Time",
+    "duration": "Duration",
+    "winner": "Winner",
+    "order": "Order",
+    "destruction": "Destruction",
+    "scenarioDuration": "{{minutes}}m {{seconds}}s"
+  },
+  "scenarioFilters": {
+    "queueType": "Type",
+    "queueTypeAll": "All",
+    "queueTypeStandard": "Standard",
+    "queueTypeDuo": "Pickup",
+    "queueTypeCity": "City Siege",
+    "queueTypeGroupRanked": "Group Ranked",
+    "queueTypeSoloRanked": "Solo Ranked",
+    "queueTypeGroupChallenge": "Group Challenge"
   }
 }

@@ -89,7 +89,7 @@ export const SearchGuild = (): JSX.Element => {
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
             <tr>
-              <th>{t('pages:searchPageGuild.name')}</th>
+              <th>{t('pages:searchPageGuild.guild')}</th>
               <th>{t('pages:searchPageGuild.leader')}</th>
               <th>{t('pages:searchPageGuild.members')}</th>
               <th>{t('pages:searchPageGuild.level')}</th>
