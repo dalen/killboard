@@ -1,5 +1,14 @@
 import React from 'react';
-import { SortConfig, SortConfigDirection } from '../types';
+
+export enum SortConfigDirection {
+  ascending = 'ascending',
+  descending = 'descending',
+}
+
+export type SortConfig = {
+  key: number | string;
+  direction: SortConfigDirection;
+};
 
 export const useSortableData = (
   items: any,
