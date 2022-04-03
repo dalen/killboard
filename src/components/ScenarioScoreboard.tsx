@@ -12,7 +12,7 @@ export const ScenarioScoreboard = ({
   entries: ScenarioScoreboardEntry[];
 }): JSX.Element => {
   //@todo use sortConfig to display up/down arrow on active thead or get rid of it
-  const { items, requestSort, sortConfig } = useSortableData(entries);
+  const { items, requestSort } = useSortableData(entries);
 
   return (
     <Table className="is-fullwidth">

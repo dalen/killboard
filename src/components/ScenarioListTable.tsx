@@ -1,9 +1,4 @@
-import {
-  format,
-  formatDuration,
-  formatISO,
-  intervalToDuration,
-} from 'date-fns';
+import { format, formatISO, intervalToDuration } from 'date-fns';
 import { Button, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
@@ -73,17 +68,19 @@ export const ScenarioListTable = ({
                   })}
                 </td>
                 <td align="center">
-                  {scenario.winner == 0 ? (
+                  {scenario.winner === 0 ? (
                     <img
                       src="/images/icons/scenario/order.png"
                       width={40}
                       height={40}
+                      alt="Order"
                     />
                   ) : (
                     <img
                       src="/images/icons/scenario/destruction.png"
                       width={40}
                       height={40}
+                      alt="Destruction"
                     />
                   )}
                 </td>
