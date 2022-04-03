@@ -603,3 +603,13 @@ export type Victim = {
   /** Renown rank at the time of the kill */
   renownRank: Scalars['Byte'];
 };
+
+export enum SortConfigDirection {
+  ascending = 'ascending',
+  descending = 'descending',
+}
+
+export type SortConfig = {
+  key: number | string;
+  direction: SortConfigDirection;
+}

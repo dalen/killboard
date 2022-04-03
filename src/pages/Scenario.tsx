@@ -14,6 +14,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ScenarioKills } from '../components/ScenarioKills';
 import { Scenarios } from '../enums';
 import { Query } from '../types';
+import { useSortableData } from '../hooks/useSortableData';
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID) {
@@ -69,12 +70,14 @@ export const Scenario = (): JSX.Element => {
     variables: { id: id },
   });
 
+  const { items, requestSort } = useSortableData(data?.scenario?.scoreboardEntries || []);
+
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.scenario == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const scenario = data.scenario;
+  const { scenario } = data;
   const startDate = new Date(scenario.startTime * 1000);
   const endDate = new Date(scenario.endTime * 1000);
   const duration = intervalToDuration({
@@ -117,20 +120,20 @@ export const Scenario = (): JSX.Element => {
       <Table className="is-fullwidth">
         <thead>
           <tr>
-            <th>Career</th>
-            <th>Name</th>
-            <th align="right">Rank</th>
-            <th align="right">Kills</th>
-            <th align="right">Deaths</th>
-            <th align="right">DBs</th>
-            <th align="right">Damage</th>
-            <th align="right">Healing</th>
-            <th align="right">Protection</th>
-            <th align="right">Objective Score</th>
+            <th align="right"><button onClick={() => requestSort('character.career')}>Career</button></th>
+            <th align="right"><button onClick={() => requestSort('character.name')}>Name</button></th>
+            <th align="right"><button onClick={() => requestSort('level')}>Rank</button></th>
+            <th align="right"><button onClick={() => requestSort('kills')}>Kills</button></th>
+            <th align="right"><button onClick={() => requestSort('deaths')}>Deaths</button></th>
+            <th align="right"><button onClick={() => requestSort('deathBlows')}>DBs</button></th>
+            <th align="right"><button onClick={() => requestSort('damage')}>Damage</button></th>
+            <th align="right"><button onClick={() => requestSort('healing')}>Healing</button></th>
+            <th align="right"><button onClick={() => requestSort('protection')}>Protection</button></th>
+            <th align="right"><button onClick={() => requestSort('objectiveScore')}>Objective Scoer</button></th>
           </tr>
         </thead>
         <tbody>
-          {scenario.scoreboardEntries.map((entry) => (
+          {items.map((entry) => (
             <tr className={`scenario-scoreboard-row-team-${entry.team}`}>
               <td>
                 <CareerIcon career={entry.character.career} />
