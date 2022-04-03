@@ -5,6 +5,7 @@ import { ScenarioScoreboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
+import { Tooltip } from 'react-tippy';
 
 export const ScenarioScoreboard = ({
   entries,
@@ -142,60 +143,77 @@ export const ScenarioScoreboard = ({
                 )}
               </td>
               <td align="left">{entry.level}</td>
+
               <td align="left">
-                <span
-                  className="tooltip"
-                  title={'solo kills: ' + entry.killsSolo}
+                <Tooltip
+                  position="top"
+                  html={
+                    <div className="scenario-scoreboard-tooltip">
+                      Solo Kills: {entry.killsSolo}
+                    </div>
+                  }
                 >
                   {entry.kills}
-                </span>
+                </Tooltip>
               </td>
-              <td align="left">{entry.deaths}</td>
+              <td align="left">
+                <Tooltip
+                  position="top"
+                  html={
+                    <div className="scenario-scoreboard-tooltip">
+                      Damage Receive: {entry.damageReceived}
+                      <br />
+                      Healing Received: {entry.healingReceived}
+                      <br />
+                      Protection Received: {entry.protectionReceived}
+                    </div>
+                  }
+                >
+                  {entry.deaths}
+                </Tooltip>
+              </td>
               <td align="left">{entry.deathBlows}</td>
               <td align="left">
-                <span
-                  className="tooltip"
-                  title={
-                    'kill damage: ' +
-                    entry.killDamage +
-                    '\ndamage received: ' +
-                    entry.damageReceived
+                <Tooltip
+                  position="top"
+                  html={
+                    <div className="scenario-scoreboard-tooltip">
+                      Kill Damage: {entry.killDamage}
+                    </div>
                   }
                 >
                   {Number(entry.damage).toLocaleString()}
-                </span>
+                </Tooltip>
               </td>
               <td align="left">
-                <span
-                  className="tooltip"
-                  title={
-                    'self: ' +
-                    entry.healingSelf +
-                    '\nothers: ' +
-                    entry.healingOthers +
-                    '\nreceived: ' +
-                    entry.healingReceived +
-                    '\nresurrections done: ' +
-                    entry.resurrectionsDone
+                <Tooltip
+                  position="top"
+                  html={
+                    <div className="scenario-scoreboard-tooltip">
+                      Healing of Self: {entry.healingSelf}
+                      <br />
+                      Healing of Others: {entry.healingOthers}
+                      <br />
+                      Resurrections Done: {entry.resurrectionsDone}
+                    </div>
                   }
                 >
                   {Number(entry.healing).toLocaleString()}
-                </span>
+                </Tooltip>
               </td>
               <td align="left">
-                <span
-                  className="tooltip"
-                  title={
-                    'self: ' +
-                    entry.protectionSelf +
-                    '\nothers: ' +
-                    entry.protectionOthers +
-                    '\nreceived: ' +
-                    entry.protectionReceived
+                <Tooltip
+                  position="top"
+                  html={
+                    <div className="scenario-scoreboard-tooltip">
+                      Protection of Self: {entry.protectionSelf}
+                      <br />
+                      Protection of Others: {entry.protectionOthers}
+                    </div>
                   }
                 >
                   {Number(entry.protection).toLocaleString()}
-                </span>
+                </Tooltip>
               </td>
               <td align="left">
                 {Number(entry.objectiveScore).toLocaleString()}
