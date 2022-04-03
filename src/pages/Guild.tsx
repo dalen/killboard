@@ -9,6 +9,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildMemberList } from '../components/GuildMemberList';
 import { GuildInfo } from '../components/GuildInfo';
 import { KillsFilters } from '../components/KillsFilters';
+import { ScenarioList } from '../components/ScenarioList';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -53,7 +54,11 @@ const GUILD_INFO = gql`
   }
 `;
 
-export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
+export const Guild = ({
+  tab,
+}: {
+  tab: 'kills' | 'members' | 'scenarios';
+}): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(GUILD_INFO, {
@@ -87,6 +92,11 @@ export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
             {t('pages:guildPage.members')}
           </Link>
         </li>
+        <li className={tab === 'scenarios' ? 'is-active' : ''}>
+          <Link to={`/guild/${id}/scenarios`}>
+            {t('pages:guildPage.scenarios')}
+          </Link>
+        </li>
       </Tabs>
       {tab === 'kills' && (
         <div>
@@ -96,6 +106,7 @@ export const Guild = ({ tab }: { tab: 'kills' | 'members' }): JSX.Element => {
         </div>
       )}
       {tab === 'members' && <GuildMemberList id={id} />}
+      {tab === 'scenarios' && <ScenarioList guildId={id} />}
     </Container>
   );
 };

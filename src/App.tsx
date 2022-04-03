@@ -39,6 +39,7 @@ function App() {
       />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
+      <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />
       <Route

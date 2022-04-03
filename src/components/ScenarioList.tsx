@@ -7,14 +7,16 @@ import { ScenarioListTable } from './ScenarioListTable';
 
 const SCENARIO_LIST = gql`
   query GetScenarioList(
-    $id: ID
+    $characterId: ID
+    $guildId: ID
     $first: Int
     $last: Int
     $before: String
     $after: String
   ) {
     scenarios(
-      characterId: $id
+      characterId: $characterId
+      guildId: $guildId
       first: $first
       last: $last
       before: $before
@@ -41,15 +43,17 @@ const SCENARIO_LIST = gql`
 
 export const ScenarioList = ({
   characterId,
+  guildId,
   perPage = 15,
 }: {
   characterId?: string;
+  guildId?: String;
   perPage?: number;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
-    variables: { characterId: characterId, first: perPage },
+    variables: { characterId, guildId, first: perPage },
   });
 
   if (loading) return <Progress />;

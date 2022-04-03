@@ -12,7 +12,8 @@
     "guildId": "Guild #{{guildId}}",
     "kills": "Kills",
     "leader": "Leader:",
-    "members": "Members"
+    "members": "Members",
+    "scenarios": "Scenarios"
   },
   "guildMembers": {
     "level": "Level",
