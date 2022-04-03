@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { format, formatISO, intervalToDuration } from 'date-fns';
+import { format, formatISO, formatDuration, intervalToDuration } from 'date-fns';
 import {
   Breadcrumb,
   Card,
@@ -83,10 +83,10 @@ export const Scenario = (): JSX.Element => {
   const { scenario } = data;
   const startDate = new Date(scenario.startTime * 1000);
   const endDate = new Date(scenario.endTime * 1000);
-  const duration = intervalToDuration({
+  const duration = formatDuration(intervalToDuration({
     start: startDate,
     end: endDate,
-  });
+  }));
 
   return (
     <Container max breakpoint={'widescreen'} mt={2}>
@@ -115,7 +115,7 @@ export const Scenario = (): JSX.Element => {
           </p>
           <p>
             <strong>Duration: </strong>
-            {duration.minutes}:{duration.seconds}
+            {duration}
           </p>
         </Card.Content>
       </Card>
