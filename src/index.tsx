@@ -1,5 +1,5 @@
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.scss';
 import App from './App';
@@ -11,18 +11,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const container = document.getElementById('root');
-if (container == null) {
-  throw new Error('No root found');
-}
-
-const root = createRoot(container);
-root.render(
+ReactDOM.render(
   <React.StrictMode>
     <ApolloProvider client={client}>
       <BrowserRouter>
         <App />
       </BrowserRouter>
     </ApolloProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
+  document.getElementById('root')
 );
