@@ -94,5 +94,15 @@
     "protection": "Protection",
     "rank": "Rank",
     "guild": "Guild"
+  },
+  "scenarioList": {
+    "name": "Name",
+    "details": "Details",
+    "time": "Time",
+    "duration": "Duration",
+    "winner": "Winner",
+    "order": "Order",
+    "destruction": "Destruction",
+    "scenarioDuration": "{{minutes}}m {{seconds}}s"
   }
 }

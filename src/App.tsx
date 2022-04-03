@@ -32,7 +32,11 @@ function App() {
       <Route path="/guilds" element={<Home tab="guilds" />} />
       <Route path="/kill/:id" element={<Kill />} />
       <Route path="/kills" element={<Kills />} />
-      <Route path="/character/:id" element={<Character />} />
+      <Route path="/character/:id" element={<Character tab="kills" />} />
+      <Route
+        path="/character/:id/scenarios"
+        element={<Character tab="scenarios" />}
+      />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
       <Route path="/search/:query" element={<Search />} />
