@@ -79,7 +79,7 @@ export const ScenarioKills = ({ id }: { id: string }): JSX.Element => {
       queryOptions={{
         variables: { id },
       }}
-      perPage={20}
+      perPage={10}
     />
   );
 };
