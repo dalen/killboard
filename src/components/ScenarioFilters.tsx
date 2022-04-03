@@ -1,4 +1,4 @@
-import { Card, Columns, Form } from 'react-bulma-components';
+import { Card, Columns } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
 
