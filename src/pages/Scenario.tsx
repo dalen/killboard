@@ -41,6 +41,13 @@ const SCENARIO_INFO = gql`
         guild {
           id
           name
+          heraldry {
+            emblem
+            pattern
+            color1
+            color2
+            shape
+          }
         }
         team
         level

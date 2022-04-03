@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { ScenarioScoreboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { useSortableData } from '../hooks/useSortableData';
+import { GuildHeraldry } from './GuildHeraldry';
 
 export const ScenarioScoreboard = ({
   entries,
@@ -30,6 +31,14 @@ export const ScenarioScoreboard = ({
             className="is-clickable has-text-link"
           >
             {t('components:scenarioScoreboard.name')}
+          </th>
+          <th
+            colSpan={2}
+            align="left"
+            onClick={() => requestSort('guild')}
+            className="is-clickable has-text-link"
+          >
+            {t('components:scenarioScoreboard.guild')}
           </th>
           <th
             align="right"
@@ -102,6 +111,18 @@ export const ScenarioScoreboard = ({
               <Link to={`/character/${entry.character.id}`}>
                 {entry.character.name}
               </Link>
+            </td>
+            <td>
+              {entry.guild && (
+                <Link to={`/guild/${entry.guild.id}`}>
+                  <GuildHeraldry size="32" guild={entry.guild} />
+                </Link>
+              )}
+            </td>
+            <td>
+              {entry.guild && (
+                <Link to={`/guild/${entry.guild.id}`}>{entry.guild.name}</Link>
+              )}
             </td>
             <td align="right">{entry.level}</td>
             <td align="right">{entry.kills}</td>

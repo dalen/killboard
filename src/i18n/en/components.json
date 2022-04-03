@@ -92,6 +92,7 @@
     "name": "Name",
     "objectiveScore": "Objective Score",
     "protection": "Protection",
-    "rank": "Rank"
+    "rank": "Rank",
+    "guild": "Guild"
   }
 }

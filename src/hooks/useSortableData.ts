@@ -21,6 +21,7 @@ export const useSortableData = (
               ? -1
               : 1;
           }
+
           if (
             a.character[sortConfig.key].localeCompare(
               b.character[sortConfig.key]
@@ -32,6 +33,18 @@ export const useSortableData = (
           }
           return 0;
         }
+
+        if (sortConfig.key === 'guild') {
+          if (
+            (a.guild?.['name'] ?? '').localeCompare(b.guild?.['name'] ?? '') ===
+            -1
+          ) {
+            return sortConfig.direction === SortConfigDirection.ascending
+              ? -1
+              : 1;
+          }
+        }
+
         if (a[sortConfig.key] < b[sortConfig.key]) {
           return sortConfig.direction === SortConfigDirection.ascending
             ? -1
