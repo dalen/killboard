@@ -70,6 +70,7 @@ export const Scenario = (): JSX.Element => {
     variables: { id: id },
   });
 
+  //@todo use sortConfig to display up/down arrow on active thead or get rid of it
   const { items, requestSort, sortConfig } = useSortableData(
     data?.scenario?.scoreboardEntries || []
   );
