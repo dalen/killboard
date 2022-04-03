@@ -142,12 +142,61 @@ export const ScenarioScoreboard = ({
                 )}
               </td>
               <td align="left">{entry.level}</td>
-              <td align="left">{entry.kills}</td>
+              <td align="left">
+                <span
+                  className="tooltip"
+                  title={'solo kills: ' + entry.killsSolo}
+                >
+                  {entry.kills}
+                </span>
+              </td>
               <td align="left">{entry.deaths}</td>
               <td align="left">{entry.deathBlows}</td>
-              <td align="left">{Number(entry.damage).toLocaleString()}</td>
-              <td align="left">{Number(entry.healing).toLocaleString()}</td>
-              <td align="left">{Number(entry.protection).toLocaleString()}</td>
+              <td align="left">
+                <span
+                  className="tooltip"
+                  title={
+                    'kill damage: ' +
+                    entry.killDamage +
+                    '\ndamage received: ' +
+                    entry.damageReceived
+                  }
+                >
+                  {Number(entry.damage).toLocaleString()}
+                </span>
+              </td>
+              <td align="left">
+                <span
+                  className="tooltip"
+                  title={
+                    'self: ' +
+                    entry.healingSelf +
+                    '\nothers: ' +
+                    entry.healingOthers +
+                    '\nreceived: ' +
+                    entry.healingReceived +
+                    '\nresurrections done: ' +
+                    entry.resurrectionsDone
+                  }
+                >
+                  {Number(entry.healing).toLocaleString()}
+                </span>
+              </td>
+              <td align="left">
+                <span
+                  className="tooltip"
+                  title={
+                    'self: ' +
+                    entry.protectionSelf +
+                    '\nothers: ' +
+                    entry.protectionOthers +
+                    '\nreceived: ' +
+                    entry.protectionReceived
+                  }
+                >
+                  {Number(entry.protection).toLocaleString()}
+                </span>
+              </td>
               <td align="left">
                 {Number(entry.objectiveScore).toLocaleString()}
               </td>
