@@ -8,9 +8,11 @@ import {
 import {
   Breadcrumb,
   Card,
+  Columns,
   Container,
   Progress,
   Tabs,
+  Image,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
@@ -107,21 +109,55 @@ export const Scenario = ({
       </Breadcrumb>
       <Card mb={5}>
         <Card.Content>
-          <p className="is-size-4">
-            <strong>{Scenarios[scenario.scenarioId]}</strong>
-          </p>
-          <p>
-            <strong>Date: </strong>
-            {formatISO(startDate, { representation: 'date' })}
-          </p>
-          <p>
-            <strong>Time: </strong>
-            {format(startDate, 'HH:mm:ss')}
-          </p>
-          <p>
-            <strong>Duration: </strong>
-            {duration}
-          </p>
+          <Columns>
+            <Columns.Column size={4}>
+              <p className="is-size-4">
+                <strong>{Scenarios[scenario.scenarioId]}</strong>
+              </p>
+              <p>
+                <strong>Date: </strong>
+                {formatISO(startDate, { representation: 'date' })}
+              </p>
+              <p>
+                <strong>Time: </strong>
+                {format(startDate, 'HH:mm:ss')}
+              </p>
+              <p>
+                <strong>Duration: </strong>
+                {duration}
+              </p>
+            </Columns.Column>
+            <Columns.Column size={2} className="has-text-centered">
+              <p>
+                <img
+                  src="/images/icons/scenario/order.png"
+                  width={55}
+                  height={55}
+                />
+              </p>
+              <p className="is-size-4 scenario-score-order">
+                {scenario.points[0]}
+              </p>
+              <p className="scenario-score-order">
+                {t('pages:scenarioPage.order')}
+              </p>
+            </Columns.Column>
+            <Columns.Column size={2} className="has-text-centered">
+              <p>
+                <img
+                  src="/images/icons/scenario/destruction.png"
+                  width={55}
+                  height={55}
+                />
+              </p>
+              <p className="is-size-4 scenario-score-destruction">
+                {scenario.points[1]}
+              </p>
+              <p className="scenario-score-destruction">
+                {t('pages:scenarioPage.destruction')}
+              </p>
+            </Columns.Column>
+          </Columns>
         </Card.Content>
       </Card>
       <Tabs>

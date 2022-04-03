@@ -52,6 +52,8 @@
   "scenarioPage": {
     "scenarioId": "Scenario #{{scenarioId}}",
     "kills": "Kills",
-    "scoreboard": "Scoreboard"
+    "scoreboard": "Scoreboard",
+    "order": "Order",
+    "destruction": "Destruction"
   }
 }
