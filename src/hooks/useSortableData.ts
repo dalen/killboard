@@ -71,13 +71,13 @@ export const useSortableData = (
   }, [items, sortConfig]);
 
   const requestSort = (key: string) => {
-    let direction = SortConfigDirection.ascending;
+    let direction = SortConfigDirection.descending;
     if (
       sortConfig &&
       sortConfig.key === key &&
-      sortConfig.direction === SortConfigDirection.ascending
+      sortConfig.direction === SortConfigDirection.descending
     ) {
-      direction = SortConfigDirection.descending;
+      direction = SortConfigDirection.ascending;
     }
     setSortConfig({ key, direction });
   };
