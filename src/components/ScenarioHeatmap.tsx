@@ -65,8 +65,8 @@ export const ScenarioHeatmap = ({ id }: { id: string }): JSX.Element => {
   const zoneHeight = zoneCoord['SE-Y'] - zoneCoord['NW-Y'] || 1;
 
   const killsCoords = kills.map((k) => [
-    Math.round(((k.position.x - offsetX) * squares) / zoneWidth),
-    Math.round(((k.position.y - offsetY) * squares) / zoneHeight),
+    Math.floor(((k.position.x - offsetX) * squares) / zoneWidth),
+    Math.floor(((k.position.y - offsetY) * squares) / zoneHeight),
   ]);
 
   console.log(killsCoords);
@@ -76,8 +76,8 @@ export const ScenarioHeatmap = ({ id }: { id: string }): JSX.Element => {
   const heatmapData = _.map(_.countBy(killsCoords), (k, v) => {
     console.log(k, v);
     return {
-      x: Number(v.split(',')[0]) * 10,
-      y: Number(v.split(',')[1]) * 10,
+      x: Number(v.split(',')[0]) * 10 + 5,
+      y: Number(v.split(',')[1]) * 10 + 5,
       value: k,
     };
   });
