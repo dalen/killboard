@@ -4,93 +4,73 @@ import { useTranslation } from 'react-i18next';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ZoneHeatmap } from './ZoneHeatmap';
-import { zoneCoordinates } from '../zoneCoordinates';
+import { scenarioToZoneId, zoneCoordinates } from '../zoneCoordinates';
 import _ from 'lodash';
-import { HeatmapData } from 'heatmap.js';
 
 const SCENARIO_KILL_POSITIONS = gql`
-  query GetScenarioKillPositions(
-    $id: String
-    $first: Int
-    $last: Int
-    $before: String
-    $after: String
+  query GetScenarioHeatmap(
+    $id: ID
+    $minX: Int
+    $minY: Int
+    $maxX: Int
+    $maxY: Int
   ) {
-    kills(
+    killsHeatmap(
       instanceId: $id
-      first: $first
-      last: $last
-      before: $before
-      after: $after
+      minX: $minX
+      minY: $minY
+      maxX: $maxX
+      maxY: $maxY
     ) {
-      totalCount
-      nodes {
-        position {
-          zoneId
-          x
-          y
-        }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-        hasPreviousPage
-        startCursor
-      }
+      x
+      y
+      count
     }
   }
 `;
 
-export const ScenarioHeatmap = ({ id }: { id: string }): JSX.Element => {
+export const ScenarioHeatmap = ({
+  scenarioId,
+  id,
+}: {
+  scenarioId: number;
+  id: string;
+}): JSX.Element => {
+  const zoneId = scenarioToZoneId[scenarioId];
+  const zoneCoord = zoneCoordinates[zoneId];
+
   const { loading, error, data } = useQuery<Query>(SCENARIO_KILL_POSITIONS, {
-    variables: { id, first: 50 },
+    variables: {
+      id,
+      minX: zoneCoord['NW-X'],
+      minY: zoneCoord['NW-Y'],
+      maxX: zoneCoord['SE-X'],
+      maxY: zoneCoord['SE-Y'],
+    },
   });
 
   const { t } = useTranslation(['common', 'components']);
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.kills?.nodes == null || data?.kills?.nodes.length === 0)
+  if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const kills = data.kills.nodes;
-  const zoneId = kills[0].position.zoneId;
+  const heatmapData = data.killsHeatmap.map((point) => ({
+    x: point.x * 10 + 5,
+    y: point.y * 10 + 5,
+    value: point.count,
+  }));
 
-  const squares = 64;
-  const zoneCoord = zoneCoordinates[Number(zoneId)];
-  // or 1 here to avoid any div by zero errors
-  const offsetX = zoneCoord['NW-X'];
-  const offsetY = zoneCoord['NW-Y'];
-  const zoneWidth = zoneCoord['SE-X'] - zoneCoord['NW-X'] || 1;
-  const zoneHeight = zoneCoord['SE-Y'] - zoneCoord['NW-Y'] || 1;
-
-  const killsCoords = kills.map((k) => [
-    Math.floor(((k.position.x - offsetX) * squares) / zoneWidth),
-    Math.floor(((k.position.y - offsetY) * squares) / zoneHeight),
-  ]);
-
-  console.log(killsCoords);
-
-  console.log(_.countBy(killsCoords));
-
-  const heatmapData = _.map(_.countBy(killsCoords), (k, v) => {
-    console.log(k, v);
-    return {
-      x: Number(v.split(',')[0]) * 10 + 5,
-      y: Number(v.split(',')[1]) * 10 + 5,
-      value: k,
-    };
-  });
-
-  const max = _.maxBy(heatmapData, (d) => d.value)?.value || 0;
+  const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
 
   return (
     <Container breakpoint={'desktop'} max>
       <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
       <ZoneHeatmap
-        zoneId={kills[0].position.zoneId}
+        zoneId={zoneId}
         data={{ min: 0, max, data: heatmapData }}
-        size={squares}
+        size={64}
       />
     </Container>
   );

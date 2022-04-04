@@ -188,7 +188,9 @@ export const Scenario = ({
         <ScenarioScoreboard entries={scenario.scoreboardEntries} />
       )}
       {tab === 'kills' && <ScenarioKills id={id || ''} />}
-      {tab === 'map' && <ScenarioHeatmap id={id || ''} />}
+      {tab === 'map' && (
+        <ScenarioHeatmap scenarioId={scenario.scenarioId} id={id || ''} />
+      )}
     </Container>
   );
 };
