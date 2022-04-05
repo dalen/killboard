@@ -20,6 +20,7 @@ import { ScenarioKills } from '../components/ScenarioKills';
 import { Scenarios } from '../enums';
 import { Query } from '../types';
 import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
+import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID) {
@@ -77,7 +78,7 @@ const SCENARIO_INFO = gql`
 export const Scenario = ({
   tab,
 }: {
-  tab: 'scoreboard' | 'kills';
+  tab: 'scoreboard' | 'kills' | 'map';
 }): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
@@ -179,11 +180,17 @@ export const Scenario = ({
             {t('pages:scenarioPage.kills')}
           </Link>
         </li>
+        <li className={tab === 'map' ? 'is-active' : ''}>
+          <Link to={`/scenario/${id}/map`}>{t('pages:scenarioPage.map')}</Link>
+        </li>
       </Tabs>
       {tab === 'scoreboard' && (
         <ScenarioScoreboard entries={scenario.scoreboardEntries} />
       )}
       {tab === 'kills' && <ScenarioKills id={id || ''} />}
+      {tab === 'map' && (
+        <ScenarioHeatmap scenarioId={scenario.scenarioId} id={id || ''} />
+      )}
     </Container>
   );
 };

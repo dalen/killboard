@@ -53,6 +53,7 @@ function App() {
       />
       <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
       <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
+      <Route path="/scenario/:id/map" element={<Scenario tab="map" />} />
     </Routes>
   );
 }

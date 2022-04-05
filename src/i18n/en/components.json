@@ -114,5 +114,8 @@
     "queueTypeGroupRanked": "Group Ranked",
     "queueTypeSoloRanked": "Solo Ranked",
     "queueTypeGroupChallenge": "Group Challenge"
+  },
+  "scenarioHeatmap": {
+    "description": "Heatmap of kills in the scenario"
   }
 }
