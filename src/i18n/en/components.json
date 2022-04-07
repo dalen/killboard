@@ -103,7 +103,8 @@
     "winner": "Winner",
     "order": "Order",
     "destruction": "Destruction",
-    "scenarioDuration": "{{minutes}}m {{seconds}}s"
+    "scenarioDuration": "{{minutes}}m {{seconds}}s",
+    "scenarioDurationHour": "{{hours}}h {{minutes}}m {{seconds}}s"
   },
   "scenarioFilters": {
     "queueType": "Type",

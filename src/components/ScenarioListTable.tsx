@@ -62,10 +62,16 @@ export const ScenarioListTable = ({
                   </small>
                 </td>
                 <td>
-                  {t('components:scenarioList.scenarioDuration', {
-                    minutes: duration.minutes,
-                    seconds: duration.seconds,
-                  })}
+                  {t(
+                    duration.hours === 0
+                      ? 'components:scenarioList.scenarioDuration'
+                      : 'components:scenarioList.scenarioDurationHour',
+                    {
+                      hours: duration.hours,
+                      minutes: duration.minutes,
+                      seconds: duration.seconds,
+                    }
+                  )}
                 </td>
                 <td align="center">
                   {scenario.winner === 0 ? (
