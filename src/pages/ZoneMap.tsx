@@ -1,26 +1,29 @@
 import { gql, useQuery } from '@apollo/client';
-import { Container, Progress } from 'react-bulma-components';
-import { useTranslation } from 'react-i18next';
-import { Query } from '../types';
-import { ErrorMessage } from './global/ErrorMessage';
-import { ZoneHeatmap } from './ZoneHeatmap';
-import { zoneCoordinates } from '../zoneCoordinates';
 import _ from 'lodash';
+import { Progress, Container, Breadcrumb } from 'react-bulma-components';
+import { useTranslation } from 'react-i18next';
+import { useParams, Link } from 'react-router-dom';
+import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ZoneHeatmap } from '../components/ZoneHeatmap';
+import { Query } from '../types';
+import { zoneCoordinates } from '../zoneCoordinates';
 
-const SCENARIO_HEATMAP = gql`
-  query GetScenarioHeatmap(
+const ZONE_HEATMAP = gql`
+  query GetZoneHeatmap(
     $id: ID
     $minX: UnsignedShort!
     $minY: UnsignedShort!
     $maxX: UnsignedShort!
     $maxY: UnsignedShort!
+    $from: Long
   ) {
     killsHeatmap(
-      instanceId: $id
+      zoneId: $id
       minX: $minX
       minY: $minY
       maxX: $maxX
       maxY: $maxY
+      from: $from
     ) {
       x
       y
@@ -29,26 +32,25 @@ const SCENARIO_HEATMAP = gql`
   }
 `;
 
-export const ScenarioHeatmap = ({
-  zoneId,
-  id,
-}: {
-  zoneId: string;
-  id: string;
-}): JSX.Element => {
-  const zoneCoord = zoneCoordinates[Number(zoneId)];
+export const ZoneMap = (): JSX.Element => {
+  const { t } = useTranslation(['common', 'pages']);
+  const { id } = useParams();
 
-  const { loading, error, data } = useQuery<Query>(SCENARIO_HEATMAP, {
+  const zoneCoord = zoneCoordinates[Number(id)];
+
+  const date =
+    Math.round(new Date().setUTCHours(0, 0, 0, 0) / 1000) - 60 * 60 * 24 * 30;
+
+  const { loading, error, data } = useQuery<Query>(ZONE_HEATMAP, {
     variables: {
       id,
       minX: zoneCoord['NW-X'],
       minY: zoneCoord['NW-Y'],
       maxX: zoneCoord['SE-X'],
       maxY: zoneCoord['SE-Y'],
+      from: date,
     },
   });
-
-  const { t } = useTranslation(['common', 'components']);
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
@@ -64,10 +66,19 @@ export const ScenarioHeatmap = ({
   const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
 
   return (
-    <Container breakpoint={'desktop'} max>
-      <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
+    <Container max breakpoint={'widescreen'} mt={2}>
+      <Breadcrumb>
+        <Breadcrumb.Item>
+          <Link to="/">{t('common:home')}</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item active>
+          <Link to={`/zone_heatmap/${id}`}>
+            {t('pages:mapPage.zoneId', { zoneId: id })}
+          </Link>
+        </Breadcrumb.Item>
+      </Breadcrumb>
       <ZoneHeatmap
-        zoneId={zoneId}
+        zoneId={Number(id).toString()}
         data={{ min: 0, max, data: heatmapData }}
         size={64}
       />

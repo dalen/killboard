@@ -11,6 +11,7 @@ import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
 import React from 'react';
 import { Scenario } from './pages/Scenario';
+import { ZoneMap } from './pages/ZoneMap';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -58,6 +59,7 @@ function App() {
       <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
       <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
       <Route path="/scenario/:id/map" element={<Scenario tab="map" />} />
+      <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
     </Routes>
   );
 }

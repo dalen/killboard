@@ -61,5 +61,8 @@
     "map": "Map",
     "order": "Order",
     "destruction": "Destruction"
+  },
+  "mapPage": {
+    "zoneId": "Zone #{{zoneId}}"
   }
 }
