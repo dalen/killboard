@@ -1,11 +1,11 @@
-import { t } from 'i18next';
 import { Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { ScenarioScoreboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
-import { Tooltip } from 'react-tippy';
+import Tippy from '@tippyjs/react';
+import { useTranslation } from 'react-i18next';
 
 export const ScenarioScoreboard = ({
   entries,
@@ -13,6 +13,7 @@ export const ScenarioScoreboard = ({
   entries: ScenarioScoreboardEntry[];
 }): JSX.Element => {
   const { items, requestSort, sortConfig } = useSortableData(entries);
+  const { t } = useTranslation(['components']);
 
   const getClassName = (name: string) => {
     if (!sortConfig) {
@@ -145,21 +146,21 @@ export const ScenarioScoreboard = ({
               <td align="left">{entry.level}</td>
 
               <td align="left">
-                <Tooltip
-                  position="top"
-                  html={
+                <Tippy
+                  placement="top"
+                  content={
                     <div className="scenario-scoreboard-tooltip">
                       Solo Kills: {entry.killsSolo}
                     </div>
                   }
                 >
-                  {entry.kills}
-                </Tooltip>
+                  <span>{entry.kills}</span>
+                </Tippy>
               </td>
               <td align="left">
-                <Tooltip
-                  position="top"
-                  html={
+                <Tippy
+                  placement="top"
+                  content={
                     <div className="scenario-scoreboard-tooltip">
                       Damage Receive: {entry.damageReceived}
                       <br />
@@ -169,26 +170,26 @@ export const ScenarioScoreboard = ({
                     </div>
                   }
                 >
-                  {entry.deaths}
-                </Tooltip>
+                  <span>{entry.deaths}</span>
+                </Tippy>
               </td>
               <td align="left">{entry.deathBlows}</td>
               <td align="left">
-                <Tooltip
-                  position="top"
-                  html={
+                <Tippy
+                  placement="top"
+                  content={
                     <div className="scenario-scoreboard-tooltip">
                       Kill Damage: {entry.killDamage}
                     </div>
                   }
                 >
-                  {Number(entry.damage).toLocaleString()}
-                </Tooltip>
+                  <span>{Number(entry.damage).toLocaleString()}</span>
+                </Tippy>
               </td>
               <td align="left">
-                <Tooltip
-                  position="top"
-                  html={
+                <Tippy
+                  placement="top"
+                  content={
                     <div className="scenario-scoreboard-tooltip">
                       Healing of Self: {entry.healingSelf}
                       <br />
@@ -198,13 +199,13 @@ export const ScenarioScoreboard = ({
                     </div>
                   }
                 >
-                  {Number(entry.healing).toLocaleString()}
-                </Tooltip>
+                  <span>{Number(entry.healing).toLocaleString()}</span>
+                </Tippy>
               </td>
               <td align="left">
-                <Tooltip
-                  position="top"
-                  html={
+                <Tippy
+                  placement="top"
+                  content={
                     <div className="scenario-scoreboard-tooltip">
                       Protection of Self: {entry.protectionSelf}
                       <br />
@@ -212,8 +213,8 @@ export const ScenarioScoreboard = ({
                     </div>
                   }
                 >
-                  {Number(entry.protection).toLocaleString()}
-                </Tooltip>
+                  <span>{Number(entry.protection).toLocaleString()}</span>
+                </Tippy>
               </td>
               <td align="left">
                 {Number(entry.objectiveScore).toLocaleString()}
