@@ -1,4 +1,3 @@
-import { t } from 'i18next';
 import { Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import { ScenarioScoreboardEntry } from '../types';
@@ -6,6 +5,7 @@ import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
 import { Tooltip } from 'react-tippy';
+import { useTranslation } from 'react-i18next';
 
 export const ScenarioScoreboard = ({
   entries,
@@ -13,6 +13,7 @@ export const ScenarioScoreboard = ({
   entries: ScenarioScoreboardEntry[];
 }): JSX.Element => {
   const { items, requestSort, sortConfig } = useSortableData(entries);
+  const { t } = useTranslation(['components']);
 
   const getClassName = (name: string) => {
     if (!sortConfig) {
