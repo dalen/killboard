@@ -159,6 +159,7 @@ export const ScenarioScoreboard = ({
               </td>
               <td align="left">
                 <Tippy
+                  duration={0}
                   placement="top"
                   content={
                     <div className="scenario-scoreboard-tooltip">
@@ -176,6 +177,7 @@ export const ScenarioScoreboard = ({
               <td align="left">{entry.deathBlows}</td>
               <td align="left">
                 <Tippy
+                  duration={0}
                   placement="top"
                   content={
                     <div className="scenario-scoreboard-tooltip">
@@ -188,6 +190,7 @@ export const ScenarioScoreboard = ({
               </td>
               <td align="left">
                 <Tippy
+                  duration={0}
                   placement="top"
                   content={
                     <div className="scenario-scoreboard-tooltip">
@@ -204,6 +207,7 @@ export const ScenarioScoreboard = ({
               </td>
               <td align="left">
                 <Tippy
+                  duration={0}
                   placement="top"
                   content={
                     <div className="scenario-scoreboard-tooltip">
