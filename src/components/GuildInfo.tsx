@@ -18,12 +18,14 @@ export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
             <p className="is-size-4">
               <strong>{guild.name}</strong>
             </p>
-            <p>
-              <strong>{`${t('components:guildInfo.leader')} `}</strong>
-              <Link to={`/character/${guild.leader.id}`}>
-                {guild.leader.name}
-              </Link>
-            </p>
+            {guild.leader && (
+              <p>
+                <strong>{`${t('components:guildInfo.leader')} `}</strong>
+                <Link to={`/character/${guild.leader.id}`}>
+                  {guild.leader.name}
+                </Link>
+              </p>
+            )}
             <p>
               <strong>{`${t('components:guildInfo.members')} `}</strong>
               {guild.members?.totalCount}

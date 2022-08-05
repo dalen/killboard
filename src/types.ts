@@ -148,7 +148,7 @@ export type Guild = {
   /** Guild Id */
   id?: Maybe<Scalars['ID']>;
   /** Guild leader */
-  leader: Character;
+  leader?: Maybe<Character>;
   /** Guild level */
   level: Scalars['Byte'];
   /** Guild members */
