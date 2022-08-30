@@ -11,7 +11,7 @@
     "@tippyjs/react": "^4.2.6",
     "@types/jest": "^28.1.6",
     "@types/node": "^18.7.14",
-    "@types/react": "^18.0.16",
+    "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
     "clsx": "^1.2.1",
     "date-fns": "^2.29.1",
@@ -32,7 +32,7 @@
     "@graphql-codegen/cli": "^2.11.8",
     "@graphql-codegen/typescript": "^2.7.2",
     "@types/heatmap.js": "^2.0.37",
-    "@types/lodash": "^4.14.182",
+    "@types/lodash": "^4.14.184",
     "bulma": "^0.9.4",
     "eslint-config-airbnb-typescript-prettier": "^5.0.0"
   },
