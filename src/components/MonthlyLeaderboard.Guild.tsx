@@ -30,7 +30,7 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
 export const MonthlyGuildLeaderboard = (): JSX.Element => {
   const { t } = useTranslation(['common', 'components']);
 
-  const month = new Date().getUTCMonth();
+  const month = new Date().getUTCMonth() + 1;
   const year = new Date().getUTCFullYear();
 
   const { loading, error, data } = useQuery<Query>(MONTHLY_GUILD_LEADERBOARD, {
