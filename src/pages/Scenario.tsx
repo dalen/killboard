@@ -140,7 +140,7 @@ export const Scenario = ({
                   src="/images/icons/scenario/order.png"
                   width={55}
                   height={55}
-                  alt={t('pages:scenarioPage.order')}
+                  alt={t('pages:scenarioPage.order') ?? ''}
                 />
               </p>
               <p className="is-size-4 scenario-score-order">
@@ -156,7 +156,7 @@ export const Scenario = ({
                   src="/images/icons/scenario/destruction.png"
                   width={55}
                   height={55}
-                  alt={t('pages:scenarioPage.destruction')}
+                  alt={t('pages:scenarioPage.destruction') ?? ''}
                 />
               </p>
               <p className="is-size-4 scenario-score-destruction">

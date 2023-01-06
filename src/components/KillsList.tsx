@@ -20,7 +20,7 @@ export const KillsList = ({
   query: DocumentNode;
   queryOptions?: QueryHookOptions;
   perPage: number;
-  title?: string;
+  title?: string | null;
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;

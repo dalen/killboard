@@ -28,7 +28,7 @@ export const SearchBox = ({
           <input
             className="input"
             type="search"
-            placeholder={t('searchBox.placeholder')}
+            placeholder={t('searchBox.placeholder') ?? ''}
             defaultValue={initialQuery}
             onChange={(e) => setQuery(e.target.value)}
           />

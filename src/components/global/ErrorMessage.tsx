@@ -8,7 +8,7 @@ export const ErrorMessage = ({
 }: {
   message?: string;
   name?: string;
-  customText?: string;
+  customText?: string | null;
 }): JSX.Element => {
   const { t } = useTranslation('components');
 

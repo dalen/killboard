@@ -39,7 +39,7 @@ export const PlayerFeudCharacterInfo = ({
                 <Icon>
                   <img
                     src={careerIcon(character.career)}
-                    alt={t(`enums:career.${character.career}`)}
+                    alt={t(`enums:career.${character.career}`) ?? ''}
                   />
                 </Icon>
                 <span>{t(`enums:career.${character.career}`)}</span>

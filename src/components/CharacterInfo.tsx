@@ -75,7 +75,7 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
                 <Icon>
                   <img
                     src={careerIcon(data.character.career)}
-                    alt={t(`enums:career.${data.character.career}`)}
+                    alt={t(`enums:career.${data.character.career}`) ?? ''}
                   />
                 </Icon>
                 <span>{t(`enums:career.${data.character.career}`)}</span>
