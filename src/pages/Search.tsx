@@ -78,7 +78,7 @@ export const Search = (): JSX.Element => {
           <Link to={`/search`}>{t('pages:searchPage.search')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} />
+      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer={true} />
       <div className="table-container">
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
