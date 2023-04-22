@@ -762,4 +762,10 @@ export const zoneCoordinates: { [key: number]: ZoneCoordinateSetup } = {
     'SE-X': 51984,
     'SE-Y': 31193,
   },
+  414: {
+    'NW-X': 28342,
+    'NW-Y': 27428,
+    'SE-X': 37394,
+    'SE-Y': 37342,
+  },
 };
