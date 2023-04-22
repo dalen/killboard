@@ -168,6 +168,12 @@ export const zoneCoordinates: { [key: number]: ZoneCoordinateSetup } = {
     'SE-X': 38688,
     'SE-Y': 38112,
   },
+  47: {
+    'NW-X': 20758,
+    'NW-Y': 37147,
+    'SE-X': 35998,
+    'SE-Y': 53447,
+  },
   48: {
     'NW-X': 0,
     'NW-Y': 0,
@@ -377,6 +383,12 @@ export const zoneCoordinates: { [key: number]: ZoneCoordinateSetup } = {
     'NW-Y': 25504,
     'SE-X': 33728,
     'SE-Y': 34720,
+  },
+  141: {
+    'NW-X': 29342,
+    'NW-Y': 29428,
+    'SE-X': 36194,
+    'SE-Y': 36242,
   },
   152: {
     'NW-X': 0,
