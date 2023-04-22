@@ -112,7 +112,7 @@
     "queueTypeStandard": "Standard",
     "queueTypeDuo": "Pickup",
     "queueTypeCity": "City Siege",
-    "queueTypeGroupRanked": "Group Ranked",
+    "queueTypePremade": "Group Ranked",
     "queueTypeSoloRanked": "Solo Ranked",
     "queueTypeGroupChallenge": "Group Challenge"
   },
