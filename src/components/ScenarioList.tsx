@@ -29,7 +29,10 @@ const SCENARIO_LIST = gql`
       totalCount
       nodes {
         instanceId
-        scenarioId
+        scenario {
+          id
+          name
+        }
         startTime
         endTime
         winner

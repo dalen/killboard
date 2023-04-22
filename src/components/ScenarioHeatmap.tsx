@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ZoneHeatmap } from './ZoneHeatmap';
-import { scenarioToZoneId, zoneCoordinates } from '../zoneCoordinates';
+import { zoneCoordinates } from '../zoneCoordinates';
 import _ from 'lodash';
 
 const SCENARIO_KILL_POSITIONS = gql`
@@ -30,14 +30,13 @@ const SCENARIO_KILL_POSITIONS = gql`
 `;
 
 export const ScenarioHeatmap = ({
-  scenarioId,
+  zoneId,
   id,
 }: {
-  scenarioId: number;
+  zoneId: string;
   id: string;
 }): JSX.Element => {
-  const zoneId = scenarioToZoneId[scenarioId];
-  const zoneCoord = zoneCoordinates[zoneId];
+  const zoneCoord = zoneCoordinates[Number(zoneId)];
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_KILL_POSITIONS, {
     variables: {

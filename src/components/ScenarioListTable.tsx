@@ -2,9 +2,8 @@ import { format, formatISO, intervalToDuration } from 'date-fns';
 import { Button, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Scenarios } from '../enums';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { PageInfo, Scenario } from '../types';
+import { PageInfo, ScenarioRecord } from '../types';
 
 export const ScenarioListTable = ({
   data,
@@ -12,7 +11,7 @@ export const ScenarioListTable = ({
   onNext,
   onPrevious,
 }: {
-  data: Scenario[];
+  data: ScenarioRecord[];
   pageInfo?: PageInfo;
   onNext?: () => void;
   onPrevious?: () => void;
@@ -52,7 +51,7 @@ export const ScenarioListTable = ({
 
             return (
               <tr key={scenario.instanceId}>
-                <td>{Scenarios[scenario.scenarioId]}</td>
+                <td>{scenario.scenario.name}</td>
                 <td>
                   {' '}
                   <small>

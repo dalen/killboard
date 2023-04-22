@@ -16,7 +16,6 @@ import { Attacker } from '../components/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
 import { PlayerFeud } from '../components/PlayerFeud';
 import { Map } from '../components/Map';
-import { Scenarios, Zones } from '../enums';
 import { Query } from '../types';
 import { GuildFeud } from '../components/GuildFeud';
 import { ErrorMessage } from '../components/global/ErrorMessage';
@@ -25,11 +24,17 @@ import { GuildHeraldry } from '../components/GuildHeraldry';
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
     kill(id: $id) {
-      scenarioId
+      scenario {
+        id
+        name
+      }
       instanceId
       time
       position {
         zoneId
+        zone {
+          name
+        }
         x
         y
       }
@@ -117,9 +122,9 @@ export const Kill = (): JSX.Element => {
             <Media.Item>
               <p className="is-size-4">
                 <strong>
-                  {data.kill.scenarioId === 0
-                    ? Zones[data.kill.position?.zoneId]
-                    : Scenarios[data.kill.scenarioId]}
+                  {data.kill.scenario == null
+                    ? data.kill.position.zone?.name
+                    : data.kill.scenario?.name}
                 </strong>
               </p>
               <p>

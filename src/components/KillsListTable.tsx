@@ -10,7 +10,6 @@ import {
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Scenarios, Zones } from '../enums';
 import { Kill, PageInfo } from '../types';
 import { CareerIcon } from './CareerIcon';
 import useWindowDimensions from '../hooks/useWindowDimensions';
@@ -127,7 +126,7 @@ export const KillsListTable = ({
                   </td>
                 )}
                 <td>
-                  {kill.scenarioId === 0 ? (
+                  {kill.scenario == null ? (
                     <Media>
                       <Media.Item align="left">
                         <Image
@@ -137,7 +136,7 @@ export const KillsListTable = ({
                         />
                       </Media.Item>
                       <Media.Item>
-                        {Zones[kill.position?.zoneId]}{' '}
+                        {kill.position.zoneId}{' '}
                         {kill.attackers[0].damagePercent === 100 && (
                           <p>
                             <Icon.Text>
@@ -162,7 +161,7 @@ export const KillsListTable = ({
                         />
                       </Media.Item>
                       <Media.Item>
-                        {Scenarios[kill.scenarioId]}{' '}
+                        {kill.scenario.name}{' '}
                         {kill.attackers[0].damagePercent === 100 && (
                           <p>
                             <Icon.Text>

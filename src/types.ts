@@ -10,11 +10,25 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The `Byte` scalar type represents non-fractional whole numeric values. Byte can represent values between 0 and 255. */
   Byte: any;
-  /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
   Long: any;
   UUID: any;
+  UnsignedInt: any;
+  UnsignedLong: any;
+  UnsignedShort: any;
+};
+
+export type AssistFilterInput = {
+  and?: InputMaybe<Array<AssistFilterInput>>;
+  characterId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  damagePercent?: InputMaybe<ComparableByteOperationFilterInput>;
+  guildId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  id?: InputMaybe<ComparableUInt64OperationFilterInput>;
+  kill?: InputMaybe<KillFilterInput>;
+  killId?: InputMaybe<ComparableUInt64OperationFilterInput>;
+  level?: InputMaybe<ComparableByteOperationFilterInput>;
+  or?: InputMaybe<Array<AssistFilterInput>>;
+  renownRank?: InputMaybe<ComparableByteOperationFilterInput>;
 };
 
 /** Holds information about one attacker in a kill */
@@ -30,6 +44,11 @@ export type Attacker = {
   level: Scalars['Byte'];
   /** Renown rank at the time of the kill */
   renownRank: Scalars['Byte'];
+};
+
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']>;
+  neq?: InputMaybe<Scalars['Boolean']>;
 };
 
 /** Player Career/Class */
@@ -137,6 +156,126 @@ export type CharactersEdge = {
   node: Character;
 };
 
+export type ComparableByteOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Byte']>;
+  gt?: InputMaybe<Scalars['Byte']>;
+  gte?: InputMaybe<Scalars['Byte']>;
+  in?: InputMaybe<Array<Scalars['Byte']>>;
+  lt?: InputMaybe<Scalars['Byte']>;
+  lte?: InputMaybe<Scalars['Byte']>;
+  neq?: InputMaybe<Scalars['Byte']>;
+  ngt?: InputMaybe<Scalars['Byte']>;
+  ngte?: InputMaybe<Scalars['Byte']>;
+  nin?: InputMaybe<Array<Scalars['Byte']>>;
+  nlt?: InputMaybe<Scalars['Byte']>;
+  nlte?: InputMaybe<Scalars['Byte']>;
+};
+
+export type ComparableGuidOperationFilterInput = {
+  eq?: InputMaybe<Scalars['UUID']>;
+  gt?: InputMaybe<Scalars['UUID']>;
+  gte?: InputMaybe<Scalars['UUID']>;
+  in?: InputMaybe<Array<Scalars['UUID']>>;
+  lt?: InputMaybe<Scalars['UUID']>;
+  lte?: InputMaybe<Scalars['UUID']>;
+  neq?: InputMaybe<Scalars['UUID']>;
+  ngt?: InputMaybe<Scalars['UUID']>;
+  ngte?: InputMaybe<Scalars['UUID']>;
+  nin?: InputMaybe<Array<Scalars['UUID']>>;
+  nlt?: InputMaybe<Scalars['UUID']>;
+  nlte?: InputMaybe<Scalars['UUID']>;
+};
+
+export type ComparableInt32OperationFilterInput = {
+  eq?: InputMaybe<Scalars['Int']>;
+  gt?: InputMaybe<Scalars['Int']>;
+  gte?: InputMaybe<Scalars['Int']>;
+  in?: InputMaybe<Array<Scalars['Int']>>;
+  lt?: InputMaybe<Scalars['Int']>;
+  lte?: InputMaybe<Scalars['Int']>;
+  neq?: InputMaybe<Scalars['Int']>;
+  ngt?: InputMaybe<Scalars['Int']>;
+  ngte?: InputMaybe<Scalars['Int']>;
+  nin?: InputMaybe<Array<Scalars['Int']>>;
+  nlt?: InputMaybe<Scalars['Int']>;
+  nlte?: InputMaybe<Scalars['Int']>;
+};
+
+export type ComparableInt64OperationFilterInput = {
+  eq?: InputMaybe<Scalars['Long']>;
+  gt?: InputMaybe<Scalars['Long']>;
+  gte?: InputMaybe<Scalars['Long']>;
+  in?: InputMaybe<Array<Scalars['Long']>>;
+  lt?: InputMaybe<Scalars['Long']>;
+  lte?: InputMaybe<Scalars['Long']>;
+  neq?: InputMaybe<Scalars['Long']>;
+  ngt?: InputMaybe<Scalars['Long']>;
+  ngte?: InputMaybe<Scalars['Long']>;
+  nin?: InputMaybe<Array<Scalars['Long']>>;
+  nlt?: InputMaybe<Scalars['Long']>;
+  nlte?: InputMaybe<Scalars['Long']>;
+};
+
+export type ComparableNullableOfGuidOperationFilterInput = {
+  eq?: InputMaybe<Scalars['UUID']>;
+  gt?: InputMaybe<Scalars['UUID']>;
+  gte?: InputMaybe<Scalars['UUID']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']>>>;
+  lt?: InputMaybe<Scalars['UUID']>;
+  lte?: InputMaybe<Scalars['UUID']>;
+  neq?: InputMaybe<Scalars['UUID']>;
+  ngt?: InputMaybe<Scalars['UUID']>;
+  ngte?: InputMaybe<Scalars['UUID']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']>>>;
+  nlt?: InputMaybe<Scalars['UUID']>;
+  nlte?: InputMaybe<Scalars['UUID']>;
+};
+
+export type ComparableUInt16OperationFilterInput = {
+  eq?: InputMaybe<Scalars['UnsignedShort']>;
+  gt?: InputMaybe<Scalars['UnsignedShort']>;
+  gte?: InputMaybe<Scalars['UnsignedShort']>;
+  in?: InputMaybe<Array<Scalars['UnsignedShort']>>;
+  lt?: InputMaybe<Scalars['UnsignedShort']>;
+  lte?: InputMaybe<Scalars['UnsignedShort']>;
+  neq?: InputMaybe<Scalars['UnsignedShort']>;
+  ngt?: InputMaybe<Scalars['UnsignedShort']>;
+  ngte?: InputMaybe<Scalars['UnsignedShort']>;
+  nin?: InputMaybe<Array<Scalars['UnsignedShort']>>;
+  nlt?: InputMaybe<Scalars['UnsignedShort']>;
+  nlte?: InputMaybe<Scalars['UnsignedShort']>;
+};
+
+export type ComparableUInt32OperationFilterInput = {
+  eq?: InputMaybe<Scalars['UnsignedInt']>;
+  gt?: InputMaybe<Scalars['UnsignedInt']>;
+  gte?: InputMaybe<Scalars['UnsignedInt']>;
+  in?: InputMaybe<Array<Scalars['UnsignedInt']>>;
+  lt?: InputMaybe<Scalars['UnsignedInt']>;
+  lte?: InputMaybe<Scalars['UnsignedInt']>;
+  neq?: InputMaybe<Scalars['UnsignedInt']>;
+  ngt?: InputMaybe<Scalars['UnsignedInt']>;
+  ngte?: InputMaybe<Scalars['UnsignedInt']>;
+  nin?: InputMaybe<Array<Scalars['UnsignedInt']>>;
+  nlt?: InputMaybe<Scalars['UnsignedInt']>;
+  nlte?: InputMaybe<Scalars['UnsignedInt']>;
+};
+
+export type ComparableUInt64OperationFilterInput = {
+  eq?: InputMaybe<Scalars['UnsignedLong']>;
+  gt?: InputMaybe<Scalars['UnsignedLong']>;
+  gte?: InputMaybe<Scalars['UnsignedLong']>;
+  in?: InputMaybe<Array<Scalars['UnsignedLong']>>;
+  lt?: InputMaybe<Scalars['UnsignedLong']>;
+  lte?: InputMaybe<Scalars['UnsignedLong']>;
+  neq?: InputMaybe<Scalars['UnsignedLong']>;
+  ngt?: InputMaybe<Scalars['UnsignedLong']>;
+  ngte?: InputMaybe<Scalars['UnsignedLong']>;
+  nin?: InputMaybe<Array<Scalars['UnsignedLong']>>;
+  nlt?: InputMaybe<Scalars['UnsignedLong']>;
+  nlte?: InputMaybe<Scalars['UnsignedLong']>;
+};
+
 export type Guild = {
   __typename?: 'Guild';
   /** Recruiting brief description */
@@ -229,27 +368,53 @@ export type GuildsEdge = {
   node: Guild;
 };
 
-/** Holds information about a kill */
 export type Kill = {
   __typename?: 'Kill';
   /** List of all enemy players contributing to the kill */
   attackers: Array<Attacker>;
   /** Kill Id */
-  id?: Maybe<Scalars['ID']>;
-  /** InstanceId, specifies the instance of a scenario this kill happened in */
+  id: Scalars['UnsignedLong'];
+  /** Specifies the instance of a scenario this kill happened in */
   instanceId?: Maybe<Scalars['ID']>;
-  /** Position information */
+  /** Position of the victim at the time of the kill */
   position: Position;
-  /** Scenario information */
+  /** Scenario, null if not in a scenario */
   scenario?: Maybe<Scenario>;
   /** ScenarioId, 0 if not in a scenario */
-  scenarioId: Scalars['Int'];
+  scenarioId: Scalars['UnsignedInt'];
+  /** Scenario information */
+  scenarioRecord?: Maybe<ScenarioRecord>;
   /** UTC Timestamp */
   time: Scalars['Int'];
   /** The total renown generated from the kill, including AAO modifiers */
-  totalRenown: Scalars['Int'];
+  totalRenown: Scalars['UnsignedInt'];
   /** The victim */
   victim: Victim;
+};
+
+export type KillFilterInput = {
+  and?: InputMaybe<Array<KillFilterInput>>;
+  assists?: InputMaybe<ListFilterInputTypeOfAssistFilterInput>;
+  damagePercent?: InputMaybe<ComparableByteOperationFilterInput>;
+  id?: InputMaybe<ComparableUInt64OperationFilterInput>;
+  instanceId?: InputMaybe<ComparableNullableOfGuidOperationFilterInput>;
+  killerCharacterId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  killerGuildId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  killerLevel?: InputMaybe<ComparableByteOperationFilterInput>;
+  killerRenownRank?: InputMaybe<ComparableByteOperationFilterInput>;
+  numAssists?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  or?: InputMaybe<Array<KillFilterInput>>;
+  scenarioId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  time?: InputMaybe<ComparableInt32OperationFilterInput>;
+  totalRenown?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  victimCharacterId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  victimGuildId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  victimLevel?: InputMaybe<ComparableByteOperationFilterInput>;
+  victimRenownRank?: InputMaybe<ComparableByteOperationFilterInput>;
+  zoneId?: InputMaybe<ComparableUInt16OperationFilterInput>;
+  zoneX?: InputMaybe<ComparableUInt16OperationFilterInput>;
+  zoneY?: InputMaybe<ComparableUInt16OperationFilterInput>;
+  zoneZ?: InputMaybe<ComparableUInt16OperationFilterInput>;
 };
 
 export type KillGuildLeaderboardEntry = {
@@ -299,9 +464,23 @@ export type KillsEdge = {
 
 export type KillsHeatmapPoint = {
   __typename?: 'KillsHeatmapPoint';
-  count: Scalars['Int'];
-  x: Scalars['Int'];
-  y: Scalars['Int'];
+  count: Scalars['UnsignedInt'];
+  x: Scalars['UnsignedInt'];
+  y: Scalars['UnsignedInt'];
+};
+
+export type ListFilterInputTypeOfAssistFilterInput = {
+  all?: InputMaybe<AssistFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']>;
+  none?: InputMaybe<AssistFilterInput>;
+  some?: InputMaybe<AssistFilterInput>;
+};
+
+export type ListFilterInputTypeOfScenarioScoreboardEntryFilterInput = {
+  all?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']>;
+  none?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
+  some?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
 };
 
 /** A connection to a list of items. */
@@ -345,14 +524,16 @@ export type PlayerFeudFilterInput = {
 
 export type Position = {
   __typename?: 'Position';
-  /** Zone X position of Victim at the time of the kill */
-  x: Scalars['Int'];
-  /** Zone Y position of Victim at the time of the kill */
-  y: Scalars['Int'];
-  /** Z position of Victim at the time of the kill */
-  z: Scalars['Int'];
-  /** ZoneId of Victim at the time of the kill */
-  zoneId: Scalars['Int'];
+  /** Zone X position */
+  x: Scalars['UnsignedShort'];
+  /** Zone Y position */
+  y: Scalars['UnsignedShort'];
+  /** Z position */
+  z: Scalars['UnsignedShort'];
+  /** Zone Info */
+  zone?: Maybe<Zone>;
+  /** ZoneId */
+  zoneId: Scalars['UnsignedShort'];
 };
 
 export type Query = {
@@ -367,7 +548,7 @@ export type Query = {
   monthlyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   monthlyKillLeaderboard: Array<KillLeaderboardEntry>;
   /** Get scenario result from instance id */
-  scenario?: Maybe<Scenario>;
+  scenario?: Maybe<ScenarioRecord>;
   scenarios?: Maybe<ScenariosConnection>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
@@ -425,6 +606,7 @@ export type QueryKillsArgs = {
   to?: InputMaybe<Scalars['Long']>;
   victimGuildId?: InputMaybe<Scalars['ID']>;
   victimId?: InputMaybe<Scalars['ID']>;
+  where?: InputMaybe<KillFilterInput>;
   zoneId?: InputMaybe<Scalars['ID']>;
 };
 
@@ -474,6 +656,7 @@ export type QueryScenariosArgs = {
   queueType?: InputMaybe<ScenarioQueueType>;
   scenarioId?: InputMaybe<Scalars['ID']>;
   to?: InputMaybe<Scalars['Long']>;
+  where?: InputMaybe<ScenarioRecordFilterInput>;
 };
 
 
@@ -502,19 +685,43 @@ export type RealmOperationFilterInput = {
 
 export type Scenario = {
   __typename?: 'Scenario';
-  /** End time as Unix timestamp */
+  /** The unique id of the scenario */
+  id: Scalars['ID'];
+  /** The name of the scenario */
+  name: Scalars['String'];
+  /** Zone information */
+  zone: Zone;
+};
+
+export enum ScenarioQueueType {
+  City = 'CITY',
+  Duo = 'DUO',
+  GroupChallenge = 'GROUP_CHALLENGE',
+  Premade = 'PREMADE',
+  SoloRanked = 'SOLO_RANKED',
+  Standard = 'STANDARD',
+  Unused = 'UNUSED'
+}
+
+export type ScenarioRecord = {
+  __typename?: 'ScenarioRecord';
+  /** The end time of the scenario */
   endTime: Scalars['Long'];
   /** Scenario instance Id */
-  instanceId: Scalars['UUID'];
+  instanceId: Scalars['ID'];
+  /** The kills that occurred in the scenario */
+  kills: Array<Kill>;
   /** Points for each team, 0 is order, 1 is destruction */
-  points: Array<Scalars['Int']>;
+  points: Array<Maybe<Scalars['UnsignedInt']>>;
   /** Queue type */
-  queueType: ScenarioQueueType;
+  queueType: Scalars['Byte'];
+  /** Scenario information */
+  scenario: Scenario;
   /** Scenario Id */
-  scenarioId: Scalars['Int'];
+  scenarioId: Scalars['ID'];
   /** Scoreboard entries */
   scoreboardEntries: Array<ScenarioScoreboardEntry>;
-  /** Start time as Unix timestamp */
+  /** The start time of the scenario */
   startTime: Scalars['Long'];
   /** Scenario tier */
   tier: Scalars['Byte'];
@@ -522,63 +729,100 @@ export type Scenario = {
   winner: Scalars['Byte'];
 };
 
-export enum ScenarioQueueType {
-  City = 'CITY',
-  Duo = 'DUO',
-  GroupChallenge = 'GROUP_CHALLENGE',
-  GroupRanked = 'GROUP_RANKED',
-  SoloRanked = 'SOLO_RANKED',
-  Standard = 'STANDARD'
-}
+export type ScenarioRecordFilterInput = {
+  and?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  endTime?: InputMaybe<ComparableInt64OperationFilterInput>;
+  id?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  instanceId?: InputMaybe<ComparableGuidOperationFilterInput>;
+  or?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  pointsTeam0?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  pointsTeam1?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  queueType?: InputMaybe<ComparableByteOperationFilterInput>;
+  scenarioId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  scoreboardEntries?: InputMaybe<ListFilterInputTypeOfScenarioScoreboardEntryFilterInput>;
+  startTime?: InputMaybe<ComparableInt64OperationFilterInput>;
+  tier?: InputMaybe<ComparableByteOperationFilterInput>;
+  winner?: InputMaybe<ComparableByteOperationFilterInput>;
+};
 
 export type ScenarioScoreboardEntry = {
   __typename?: 'ScenarioScoreboardEntry';
   /** Character information */
   character: Character;
   /** Damage */
-  damage: Scalars['Int'];
+  damage: Scalars['UnsignedInt'];
   /** Damage Received */
-  damageReceived: Scalars['Int'];
+  damageReceived: Scalars['UnsignedInt'];
   /** Death blows */
-  deathBlows: Scalars['Int'];
+  deathBlows: Scalars['UnsignedInt'];
   /** Deaths */
-  deaths: Scalars['Int'];
+  deaths: Scalars['UnsignedInt'];
   /** Guild at the time of the scenario */
   guild?: Maybe<Guild>;
   /** Healing */
-  healing: Scalars['Int'];
+  healing: Scalars['UnsignedInt'];
   /** Healing of others */
-  healingOthers: Scalars['Int'];
-  /** Healing Received */
-  healingReceived: Scalars['Int'];
+  healingOthers: Scalars['UnsignedInt'];
   /** Healing of self */
-  healingSelf: Scalars['Int'];
+  healingReceived: Scalars['UnsignedInt'];
+  /** Healing of self */
+  healingSelf: Scalars['UnsignedInt'];
   /** Damage contributing to kills */
-  killDamage: Scalars['Int'];
+  killDamage: Scalars['UnsignedInt'];
   /** Kills */
-  kills: Scalars['Int'];
+  kills: Scalars['UnsignedInt'];
   /** Solo Kills */
-  killsSolo: Scalars['Int'];
+  killsSolo: Scalars['UnsignedInt'];
   /** Level at the time of the scenario */
   level: Scalars['Byte'];
   /** Objective Score */
-  objectiveScore: Scalars['Int'];
+  objectiveScore: Scalars['UnsignedInt'];
   /** Damage Prevented */
-  protection: Scalars['Int'];
+  protection: Scalars['UnsignedInt'];
   /** Protection of others */
-  protectionOthers: Scalars['Int'];
+  protectionOthers: Scalars['UnsignedInt'];
   /** Protection Received */
-  protectionReceived: Scalars['Int'];
+  protectionReceived: Scalars['UnsignedInt'];
   /** Protection of self */
-  protectionSelf: Scalars['Int'];
+  protectionSelf: Scalars['UnsignedInt'];
   /** If true the player left the scenario before it ended */
   quitter: Scalars['Boolean'];
   /** Renown rank at the time of the scenario */
   renownRank: Scalars['Byte'];
   /** Resurrections */
-  resurrectionsDone: Scalars['Int'];
+  resurrectionsDone: Scalars['UnsignedInt'];
   /** The team of the player. Normally Order=0, Destruction=1. */
   team: Scalars['Byte'];
+};
+
+export type ScenarioScoreboardEntryFilterInput = {
+  and?: InputMaybe<Array<ScenarioScoreboardEntryFilterInput>>;
+  characterId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  damage?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  damageReceived?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  deathBlows?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  deaths?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  guildId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  healing?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  healingOthers?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  healingReceived?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  healingSelf?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  killDamage?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  kills?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  killsSolo?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  level?: InputMaybe<ComparableByteOperationFilterInput>;
+  objectiveScore?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  or?: InputMaybe<Array<ScenarioScoreboardEntryFilterInput>>;
+  protection?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  protectionOthers?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  protectionReceived?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  protectionSelf?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  quitter?: InputMaybe<BooleanOperationFilterInput>;
+  renownRank?: InputMaybe<ComparableByteOperationFilterInput>;
+  ressesDone?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  scenario?: InputMaybe<ScenarioRecordFilterInput>;
+  scenarioId?: InputMaybe<ComparableUInt32OperationFilterInput>;
+  team?: InputMaybe<ComparableByteOperationFilterInput>;
 };
 
 /** A connection to a list of items. */
@@ -587,7 +831,7 @@ export type ScenariosConnection = {
   /** A list of edges. */
   edges?: Maybe<Array<ScenariosEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Scenario>>;
+  nodes?: Maybe<Array<ScenarioRecord>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   totalCount: Scalars['Int'];
@@ -599,7 +843,7 @@ export type ScenariosEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String'];
   /** The item at the end of the edge. */
-  node: Scenario;
+  node: ScenarioRecord;
 };
 
 export type StringOperationFilterInput = {
@@ -628,4 +872,12 @@ export type Victim = {
   level: Scalars['Byte'];
   /** Renown rank at the time of the kill */
   renownRank: Scalars['Byte'];
+};
+
+export type Zone = {
+  __typename?: 'Zone';
+  /** The unique id of the zone */
+  id: Scalars['ID'];
+  /** The name of the zone */
+  name: Scalars['String'];
 };

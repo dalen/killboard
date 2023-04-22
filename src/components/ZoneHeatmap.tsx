@@ -6,7 +6,7 @@ export const ZoneHeatmap = ({
   data,
   size,
 }: {
-  zoneId: number;
+  zoneId: string;
   data: h337.HeatmapData<h337.DataPoint<'value', 'x', 'y'>>;
   size: number;
 }): JSX.Element => {

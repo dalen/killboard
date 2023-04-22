@@ -17,7 +17,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ScenarioKills } from '../components/ScenarioKills';
-import { Scenarios } from '../enums';
 import { Query } from '../types';
 import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
 import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
@@ -26,7 +25,13 @@ const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID) {
     scenario(id: $id) {
       instanceId
-      scenarioId
+      scenario {
+        id
+        name
+        zone {
+          id
+        }
+      }
       startTime
       endTime
       winner
@@ -119,7 +124,7 @@ export const Scenario = ({
           <Columns>
             <Columns.Column size={4}>
               <p className="is-size-4">
-                <strong>{Scenarios[scenario.scenarioId]}</strong>
+                <strong>{scenario.scenario.name}</strong>
               </p>
               <p>
                 <strong>Date: </strong>
@@ -144,7 +149,7 @@ export const Scenario = ({
                 />
               </p>
               <p className="is-size-4 scenario-score-order">
-                {scenario.points[0]}
+                {scenario.points?.[0]}
               </p>
               <p className="scenario-score-order">
                 {t('pages:scenarioPage.order')}
@@ -160,7 +165,7 @@ export const Scenario = ({
                 />
               </p>
               <p className="is-size-4 scenario-score-destruction">
-                {scenario.points[1]}
+                {scenario.points?.[1]}
               </p>
               <p className="scenario-score-destruction">
                 {t('pages:scenarioPage.destruction')}
@@ -189,7 +194,7 @@ export const Scenario = ({
       )}
       {tab === 'kills' && <ScenarioKills id={id || ''} />}
       {tab === 'map' && (
-        <ScenarioHeatmap scenarioId={scenario.scenarioId} id={id || ''} />
+        <ScenarioHeatmap zoneId={scenario.scenario.zone.id} id={id || ''} />
       )}
     </Container>
   );
