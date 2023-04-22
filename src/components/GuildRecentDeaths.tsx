@@ -28,9 +28,15 @@ const RECENT_DEATHS = gql`
         id
         time
         position {
-          zoneId
+          zone {
+            id
+            name
+          }
         }
-        scenarioId
+        scenario {
+          id
+          name
+        }
         attackers {
           level
           renownRank

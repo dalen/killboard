@@ -28,9 +28,15 @@ const RECENT_KILLS = gql`
         id
         time
         position {
-          zoneId
+          zone {
+            id
+            name
+          }
         }
-        scenarioId
+        scenario {
+          id
+          name
+        }
         attackers {
           damagePercent
         }

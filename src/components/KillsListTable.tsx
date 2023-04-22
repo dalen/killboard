@@ -136,7 +136,7 @@ export const KillsListTable = ({
                         />
                       </Media.Item>
                       <Media.Item>
-                        {kill.position.zoneId}{' '}
+                        {kill.position.zone?.name}{' '}
                         {kill.attackers[0].damagePercent === 100 && (
                           <p>
                             <Icon.Text>
