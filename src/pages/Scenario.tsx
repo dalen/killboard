@@ -80,6 +80,16 @@ const SCENARIO_INFO = gql`
   }
 `;
 
+const ScenarioQueueTypes: { [key: number]: string } = {
+  0: 'Standard',
+  1: 'Group Ranked',
+  2: 'Discordant Skirmish',
+  3: 'Unused',
+  4: 'City Siege',
+  5: 'Solo Ranked',
+  6: 'Group Challenge',
+};
+
 export const Scenario = ({
   tab,
 }: {
@@ -137,6 +147,10 @@ export const Scenario = ({
               <p>
                 <strong>Duration: </strong>
                 {duration}
+              </p>
+              <p>
+                <strong>Type: </strong>
+                {ScenarioQueueTypes[scenario.queueType]}
               </p>
             </Columns.Column>
             <Columns.Column size={2} className="has-text-centered">
