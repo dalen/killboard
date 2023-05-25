@@ -27,7 +27,8 @@ $table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5);
 
 // RoR style on navbar
 nav.navbar {
-  background: url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/bar-bg-red.jpg') no-repeat scroll 50% 100% #2a0304;
+  background: url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/bar-bg-red.jpg')
+    no-repeat scroll 50% 100% #2a0304;
   font-family: Arial, sans-serif;
   font-size: 13px;
   border-bottom: 1px solid #7e0505;
@@ -39,7 +40,9 @@ a.navbar-item {
 }
 
 html {
-  background: #000 url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/theme/ror.jpg') no-repeat top center fixed;
+  background: #000
+    url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/theme/ror.jpg')
+    no-repeat top center fixed;
 }
 
 @font-face {
@@ -72,7 +75,7 @@ p.scenario-score-destruction {
 td.scenariolist-score-order {
   color: rgba(12, 47, 158);
   font-weight: bold;
-} 
+}
 
 td.scenariolist-score-destruction {
   color: rgba(158, 12, 13);
@@ -84,7 +87,7 @@ thead .ascending::after {
   display: inline-block;
   position: absolute;
   top: 5px;
-  transform: scale(.5);
+  transform: scale(0.5);
 }
 
 thead .descending::after {
@@ -92,7 +95,7 @@ thead .descending::after {
   display: inline-block;
   position: absolute;
   top: 10px;
-  transform: scale(.5);
+  transform: scale(0.5);
 }
 
 div.scenario-scoreboard-tooltip {
@@ -103,4 +106,70 @@ div.scenario-scoreboard-tooltip {
 
 .tooltip {
   cursor: help;
+}
+
+$mythic: gold;
+$epic: orange;
+$very-rare: rgb(189, 81, 222);
+$rare: #02a4fb;
+$uncommon: #00c100;
+$common: rgb(180, 180, 180);
+
+.item-name-7X {
+  color: $mythic;
+}
+.item-name-6X {
+  color: $epic;
+}
+.item-name-5X {
+  color: $very-rare;
+}
+.item-name-4X {
+  color: $uncommon;
+}
+.item-name-3X {
+  color: $rare;
+}
+.item-name-2X {
+  color: $common;
+}
+.item-name-1X {
+  color: $common;
+}
+.item-name-0X {
+  color: $common;
+}
+
+.item-figure {
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+.item-figure-7X {
+  border-color: $mythic;
+}
+.item-figure-6X {
+  border-color: $epic;
+}
+.item-figure-5X {
+  border-color: $very-rare;
+}
+.item-figure-4X {
+  border-color: $rare;
+}
+.item-figure-3X {
+  border-color: $uncommon;
+}
+.item-figure-2X {
+  border-color: $common;
+}
+.item-figure-1X {
+  border-color: $common;
+}
+.item-figure-0X {
+  border-color: $common;
+}
+
+.stats-text-highlight {
+  color: gold;
 }

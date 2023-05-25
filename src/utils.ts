@@ -80,3 +80,27 @@ export const variablesFromCursor = (
     last: perPage,
   };
 };
+
+export const isPercentage = (stat: string) => {
+  const statIsPercentage = [
+    'BLOCK',
+    'PARRY',
+    'DISRUPT',
+    'EVADE',
+    'CRITICAL_HIT_RATE_REDUCTION',
+    'MELEE_CRIT_RATE',
+    'RANGED_CRIT_RATE',
+    'MAGIC_CRIT_RATE',
+    'HEAL_CRIT_RATE',
+    'AUTO_ATTACK_SPEED',
+    'INCOMING_HEAL_PERCENT',
+    'DISRUPT_STRIKETHROUGH',
+    'EVADE_STRIKETHROUGH',
+    'PARRY_STRIKETHROUGH',
+    'BLOCK_STRIKETHROUGH',
+  ];
+
+  if (statIsPercentage.includes(stat)) {
+    return '%';
+  }
+};
