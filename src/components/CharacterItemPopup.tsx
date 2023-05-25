@@ -1,8 +1,5 @@
-import { Card, Media, Image } from 'react-bulma-components';
 import { Item } from '../types';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { sep } from 'path';
 import { isPercentage } from '../utils';
 
 export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
@@ -14,7 +11,7 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
   };
 
   const statMultiplier = (stat: string) => {
-    if (stat == 'HEALTH_REGEN') {
+    if (stat === 'HEALTH_REGEN') {
       return 4;
     } else {
       return 1;
@@ -82,7 +79,7 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
         <div className="is-size-7 has-text-white">
           Career:{' '}
           {item.careerRestriction.map((career, i) => {
-            const seperator = i == 0 ? '' : ', ';
+            const seperator = i === 0 ? '' : ', ';
             return (
               <span>
                 {seperator}

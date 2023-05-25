@@ -1,4 +1,4 @@
-import { Media, Image } from 'react-bulma-components';
+import { Media} from 'react-bulma-components';
 import { Item } from '../types';
 import { useState } from 'react';
 import { CharacterItemPopup } from './CharacterItemPopup';
