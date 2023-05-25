@@ -46,7 +46,7 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
         </div>
       </div>
       <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>
-      {item.type != 'NONE' && (
+      {item.type !== 'NONE' && (
         <div className="is-size-7">{t(`enums:itemType.${item.type}`)}</div>
       )}
       {item.itemLevel > 0 && (

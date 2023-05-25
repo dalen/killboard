@@ -1,4 +1,4 @@
-import { Media} from 'react-bulma-components';
+import { Media } from 'react-bulma-components';
 import { Item } from '../types';
 import { useState } from 'react';
 import { CharacterItemPopup } from './CharacterItemPopup';
@@ -19,7 +19,7 @@ export const CharacterItem = ({ item }: { item: Item }): JSX.Element => {
   };
 
   const showModal = () => {
-    if (!modalOpen && item.name != '') {
+    if (!modalOpen && item.name !== '') {
       setModalOpen(true);
     }
   };
