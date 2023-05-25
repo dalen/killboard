@@ -1,8 +1,16 @@
+import { AnyRecord } from 'dns';
+
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -56,7 +64,7 @@ export enum Career {
   /** Archmage */
   Archmage = 'ARCHMAGE',
   /** Blackguard */
-  Blackguard = 'BLACKGUARD',
+  Blackguard = 'BLACK_GUARD',
   /** Black Orc */
   BlackOrc = 'BLACK_ORC',
   /** Bright Wizard */
@@ -66,13 +74,13 @@ export enum Career {
   /** Chosen */
   Chosen = 'CHOSEN',
   /** Disciple of Khaine */
-  Disciple = 'DISCIPLE',
+  Disciple = 'DISCIPLE_OF_KHAINE',
   /** Engineer */
   Engineer = 'ENGINEER',
   /** Ironbreaker */
-  Ironbreaker = 'IRONBREAKER',
+  Ironbreaker = 'IRON_BREAKER',
   /** Knight of the Blazing Sun */
-  Knight = 'KNIGHT',
+  Knight = 'KNIGHT_OF_THE_BLAZING_SUN',
   /** Magus */
   Magus = 'MAGUS',
   /** Marauder */
@@ -90,7 +98,7 @@ export enum Career {
   /** Squig Herder */
   SquigHerder = 'SQUIG_HERDER',
   /** Swordmaster */
-  Swordmaster = 'SWORDMASTER',
+  Swordmaster = 'SWORD_MASTER',
   /** Warrior Priest */
   WarriorPriest = 'WARRIOR_PRIEST',
   /** White Lion */
@@ -100,7 +108,7 @@ export enum Career {
   /** Witch Hunter */
   WitchHunter = 'WITCH_HUNTER',
   /** Zealot */
-  Zealot = 'ZEALOT'
+  Zealot = 'ZEALOT',
 }
 
 export type CareerOperationFilterInput = {
@@ -125,6 +133,8 @@ export type Character = {
   name: Scalars['String'];
   /** Current Renown Rank */
   renownRank: Scalars['Byte'];
+  /* Iteems aka Gear */
+  items: Array<ItemSlot>;
 };
 
 /** Info about a character */
@@ -299,7 +309,6 @@ export type Guild = {
   /** Realm */
   realm: Realm;
 };
-
 
 export type GuildMembersArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -554,11 +563,9 @@ export type Query = {
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
 
-
 export type QueryCharacterArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryCharactersArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -568,11 +575,9 @@ export type QueryCharactersArgs = {
   where?: InputMaybe<CharacterFilterInput>;
 };
 
-
 export type QueryGuildArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryGuildsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -582,12 +587,10 @@ export type QueryGuildsArgs = {
   where?: InputMaybe<GuildFilterInput>;
 };
 
-
 export type QueryKillArgs = {
   id?: InputMaybe<Scalars['ID']>;
   includeAssists?: Scalars['Boolean'];
 };
-
 
 export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -610,7 +613,6 @@ export type QueryKillsArgs = {
   zoneId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryKillsHeatmapArgs = {
   from?: InputMaybe<Scalars['Long']>;
   instanceId?: InputMaybe<Scalars['ID']>;
@@ -627,23 +629,19 @@ export type QueryKillsHeatmapArgs = {
   zoneId?: InputMaybe<Scalars['ID']>;
 };
 
-
 export type QueryMonthlyGuildKillLeaderboardArgs = {
   month: Scalars['Int'];
   year: Scalars['Int'];
 };
-
 
 export type QueryMonthlyKillLeaderboardArgs = {
   month: Scalars['Int'];
   year: Scalars['Int'];
 };
 
-
 export type QueryScenarioArgs = {
   id?: InputMaybe<Scalars['ID']>;
 };
-
 
 export type QueryScenariosArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -659,12 +657,10 @@ export type QueryScenariosArgs = {
   where?: InputMaybe<ScenarioRecordFilterInput>;
 };
 
-
 export type QueryWeeklyGuildKillLeaderboardArgs = {
   week: Scalars['Int'];
   year: Scalars['Int'];
 };
-
 
 export type QueryWeeklyKillLeaderboardArgs = {
   week: Scalars['Int'];
@@ -673,7 +669,7 @@ export type QueryWeeklyKillLeaderboardArgs = {
 
 export enum Realm {
   Destruction = 'DESTRUCTION',
-  Order = 'ORDER'
+  Order = 'ORDER',
 }
 
 export type RealmOperationFilterInput = {
@@ -700,7 +696,7 @@ export enum ScenarioQueueType {
   Premade = 'PREMADE',
   SoloRanked = 'SOLO_RANKED',
   Standard = 'STANDARD',
-  Unused = 'UNUSED'
+  Unused = 'UNUSED',
 }
 
 export type ScenarioRecord = {
@@ -880,4 +876,29 @@ export type Zone = {
   id: Scalars['ID'];
   /** The name of the zone */
   name: Scalars['String'];
+};
+
+export type ItemSlot = {
+  __typename?: 'CharacterItem';
+  equipSlot: Scalars['String'];
+  item: Item;
+};
+
+export type Item = {
+  name: Scalars['String'];
+  rarity: Scalars['String'];
+  itemLevel: Scalars['Int'];
+  iconUrl: Scalars['String'];
+  renownRankRequirement: Scalars['Int'];
+  levelRequirement: Scalars['Int'];
+  type: Scalars['String'];
+  slot: Scalars['String'];
+  stats: Array<ItemStat>;
+  armor: Scalars['Int'];
+  careerRestriction: Array<Career>;
+};
+
+export type ItemStat = {
+  stat: Scalars['String'];
+  value: Scalars['Float'];
 };

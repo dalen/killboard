@@ -38,6 +38,10 @@ function App() {
         path="/character/:id/scenarios"
         element={<Character tab="scenarios" />}
       />
+      <Route
+        path="/character/:id/armory"
+        element={<Character tab="armory" />}
+      />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
       <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />

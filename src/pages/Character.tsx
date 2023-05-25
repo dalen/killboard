@@ -7,11 +7,12 @@ import { CharacterRecentKills } from '../components/CharacterRecentKills';
 import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
+import { CharacterArmory } from '../components/CharacterArmory';
 
 export const Character = ({
   tab,
 }: {
-  tab: 'kills' | 'scenarios';
+  tab: 'kills' | 'scenarios' | 'armory';
 }): JSX.Element => {
   const { t } = useTranslation(['common', 'pages']);
 
@@ -39,6 +40,11 @@ export const Character = ({
             {t('pages:characterPage.scenarios')}
           </Link>
         </li>
+        <li className={tab === 'armory' ? 'is-active' : ''}>
+          <Link to={`/character/${id}/armory`}>
+            {t('pages:characterPage.armory')}
+          </Link>
+        </li>
       </Tabs>
 
       {tab === 'kills' && (
@@ -60,6 +66,7 @@ export const Character = ({
           <ScenarioList characterId={id} />
         </div>
       )}
+      {tab === 'armory' && <CharacterArmory id={Number(id)} />}
     </Container>
   );
 };

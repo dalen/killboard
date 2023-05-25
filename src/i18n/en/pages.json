@@ -2,7 +2,8 @@
   "characterPage": {
     "characterId": "Character #{{characterId}}",
     "kills": "Kills",
-    "scenarios": "Scenarios"
+    "scenarios": "Scenarios",
+    "armory": "Armory"
   },
   "guildFeud": {
     "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
