@@ -22,7 +22,7 @@ import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
 import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
 
 const SCENARIO_INFO = gql`
-  query GetScenarioInfo($id: ID) {
+  query GetScenarioInfo($id: ID!) {
     scenario(id: $id) {
       instanceId
       scenario {
