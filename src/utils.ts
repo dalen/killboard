@@ -4,7 +4,7 @@ export const careerIcon = (career: Career): string => {
   switch (career) {
     case Career.Archmage:
       return '/images/icons/archmage.png';
-    case Career.Blackguard:
+    case Career.BlackGuard:
       return '/images/icons/black-guard.png';
     case Career.BlackOrc:
       return '/images/icons/black-orc.png';
@@ -14,13 +14,13 @@ export const careerIcon = (career: Career): string => {
       return '/images/icons/choppa.png';
     case Career.Chosen:
       return '/images/icons/chosen.png';
-    case Career.Disciple:
+    case Career.DiscipleOfKhaine:
       return '/images/icons/disciple-of-khaine.png';
     case Career.Engineer:
       return '/images/icons/engineer.png';
-    case Career.Ironbreaker:
+    case Career.IronBreaker:
       return '/images/icons/ironbreaker.png';
-    case Career.Knight:
+    case Career.KnightOfTheBlazingSun:
       return '/images/icons/knight-of-the-blazing-sun.png';
     case Career.Magus:
       return '/images/icons/magus.png';
@@ -38,7 +38,7 @@ export const careerIcon = (career: Career): string => {
       return '/images/icons/sorcerer.png';
     case Career.SquigHerder:
       return '/images/icons/squig-herder.png';
-    case Career.Swordmaster:
+    case Career.SwordMaster:
       return '/images/icons/sword-master.png';
     case Career.WarriorPriest:
       return '/images/icons/warrior-priest.png';

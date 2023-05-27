@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { Query } from '../types';
+import { EquipSlot, ItemRarity, ItemType, Query } from '../types';
 import { useTranslation } from 'react-i18next';
 import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
@@ -76,11 +76,18 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
       <CharacterItem
         item={{
           name: '',
+          description: '',
+          dps: 0,
+          id: '0',
+          raceRestriction: [],
+          uniqueEquipped: false,
+          speed: 0,
+          talismanSlots: 0,
           itemLevel: 1,
           iconUrl: 'https://armory.returnofreckoning.com/icon/1',
-          rarity: 'EMPTY',
-          slot: '',
-          type: '',
+          rarity: ItemRarity.Utility,
+          slot: EquipSlot.None,
+          type: ItemType.None,
           stats: [],
           renownRankRequirement: 0,
           levelRequirement: 0,
