@@ -7,9 +7,9 @@ const getQueueTypeFilters = (search: URLSearchParams) => {
 
   switch (queueType) {
     case 'standard':
-    case 'duo':
-    case 'city':
-    case 'premade':
+    case 'solo':
+    case 'city_siege':
+    case 'group_ranked':
     case 'solo_ranked':
     case 'group_challenge':
       return {
@@ -52,14 +52,14 @@ export const ScenarioFilters = (): JSX.Element => {
                     <option value="standard">
                       {t('scenarioFilters.queueTypeStandard')}
                     </option>
-                    <option value="duo">
-                      {t('scenarioFilters.queueTypeDuo')}
+                    <option value="solo">
+                      {t('scenarioFilters.queueTypeSolo')}
                     </option>
-                    <option value="city">
-                      {t('scenarioFilters.queueTypeCity')}
+                    <option value="city_siege">
+                      {t('scenarioFilters.queueTypeCitySiege')}
                     </option>
-                    <option value="premade">
-                      {t('scenarioFilters.queueTypePremade')}
+                    <option value="group_ranked">
+                      {t('scenarioFilters.queueTypeGroupRanked')}
                     </option>
                     <option value="solo_ranked">
                       {t('scenarioFilters.queueTypeSoloRanked')}

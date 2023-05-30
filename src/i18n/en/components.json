@@ -110,9 +110,9 @@
     "queueType": "Type",
     "queueTypeAll": "All",
     "queueTypeStandard": "Standard",
-    "queueTypeDuo": "Pickup",
-    "queueTypeCity": "City Siege",
-    "queueTypePremade": "Group Ranked",
+    "queueTypeSolo": "Pickup",
+    "queueTypeCitySiege": "City Siege",
+    "queueTypeGroupRanked": "Group Ranked",
     "queueTypeSoloRanked": "Solo Ranked",
     "queueTypeGroupChallenge": "Group Challenge"
   },
