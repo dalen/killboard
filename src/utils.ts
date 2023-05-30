@@ -98,6 +98,7 @@ export const isPercentage = (stat: string) => {
     'EVADE_STRIKETHROUGH',
     'PARRY_STRIKETHROUGH',
     'BLOCK_STRIKETHROUGH',
+    'ARMOR_PENETRATION_REDUCTION',
   ];
 
   if (statIsPercentage.includes(stat)) {

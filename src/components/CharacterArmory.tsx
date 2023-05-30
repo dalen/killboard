@@ -10,6 +10,15 @@ const CHARACTER_INFO = gql`
     character(id: $id) {
       items {
         equipSlot
+        talismans {
+          name
+          rarity
+          iconUrl
+          stats {
+            stat
+            value
+          }
+        }
         item {
           name
           careerRestriction
@@ -27,6 +36,7 @@ const CHARACTER_INFO = gql`
           slot
           armor
           careerRestriction
+          talismanSlots
         }
       }
     }
@@ -94,47 +104,130 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
           armor: 0,
           careerRestriction: [],
         }}
+        talismans={[]}
       />
     );
   };
 
   return (
-    <div className="columns pl-3" style={{ marginBottom: '150px' }}>
+    <div className="columns pl-3" style={{ marginBottom: '250px' }}>
       <div className="column">
         <div className="content">
           <strong className="mb-2">{`Armor`}</strong>
-          {helm ? <CharacterItem item={helm.item} /> : <NoItem />}
-          {shoulder ? <CharacterItem item={shoulder.item} /> : <NoItem />}
-          {back ? <CharacterItem item={back.item} /> : <NoItem />}
-          {body ? <CharacterItem item={body.item} /> : <NoItem />}
-          {gloves ? <CharacterItem item={gloves.item} /> : <NoItem />}
-          {belt ? <CharacterItem item={belt.item} /> : <NoItem />}
-          {boots ? <CharacterItem item={boots.item} /> : <NoItem />}
+          {helm ? (
+            <CharacterItem item={helm.item} talismans={helm.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {shoulder ? (
+            <CharacterItem
+              item={shoulder.item}
+              talismans={shoulder.talismans}
+            />
+          ) : (
+            <NoItem />
+          )}
+          {back ? (
+            <CharacterItem item={back.item} talismans={back.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {body ? (
+            <CharacterItem item={body.item} talismans={body.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {gloves ? (
+            <CharacterItem item={gloves.item} talismans={gloves.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {belt ? (
+            <CharacterItem item={belt.item} talismans={belt.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {boots ? (
+            <CharacterItem item={boots.item} talismans={boots.talismans} />
+          ) : (
+            <NoItem />
+          )}
         </div>
       </div>
       <div className="column">
         <div className="mb-5">
           <strong className="mb-2">{`Weapons`}</strong>
-          {mainHand ? <CharacterItem item={mainHand.item} /> : <NoItem />}
-          {offHand && <CharacterItem item={offHand.item} />}
-          {ranged && <CharacterItem item={ranged.item} />}
+          {mainHand ? (
+            <CharacterItem
+              item={mainHand.item}
+              talismans={mainHand.talismans}
+            />
+          ) : (
+            <NoItem />
+          )}
+          {offHand && (
+            <CharacterItem item={offHand.item} talismans={offHand.talismans} />
+          )}
+          {ranged && (
+            <CharacterItem item={ranged.item} talismans={ranged.talismans} />
+          )}
         </div>
         <div className="mb-5">
           <strong className="mb-2">{`Event Item`}</strong>
-          {event ? <CharacterItem item={event.item} /> : <NoItem />}
+          {event ? (
+            <CharacterItem item={event.item} talismans={event.talismans} />
+          ) : (
+            <NoItem />
+          )}
         </div>
         <div className="mb-5">
           <strong className="mb-2">{`Pocket`}</strong>
-          {pocket1 ? <CharacterItem item={pocket1.item} /> : <NoItem />}
-          {pocket2 ? <CharacterItem item={pocket2.item} /> : <NoItem />}
+          {pocket1 ? (
+            <CharacterItem item={pocket1.item} talismans={pocket1.talismans} />
+          ) : (
+            <NoItem />
+          )}
+          {pocket2 ? (
+            <CharacterItem item={pocket2.item} talismans={pocket2.talismans} />
+          ) : (
+            <NoItem />
+          )}
         </div>
       </div>
       <div className="column">
         <strong className="mb-2">{`Jewellery`}</strong>
-        {jewellery_1 ? <CharacterItem item={jewellery_1.item} /> : <NoItem />}
-        {jewellery_2 ? <CharacterItem item={jewellery_2.item} /> : <NoItem />}
-        {jewellery_3 ? <CharacterItem item={jewellery_3.item} /> : <NoItem />}
-        {jewellery_4 ? <CharacterItem item={jewellery_4.item} /> : <NoItem />}
+        {jewellery_1 ? (
+          <CharacterItem
+            item={jewellery_1.item}
+            talismans={jewellery_1.talismans}
+          />
+        ) : (
+          <NoItem />
+        )}
+        {jewellery_2 ? (
+          <CharacterItem
+            item={jewellery_2.item}
+            talismans={jewellery_2.talismans}
+          />
+        ) : (
+          <NoItem />
+        )}
+        {jewellery_3 ? (
+          <CharacterItem
+            item={jewellery_3.item}
+            talismans={jewellery_3.talismans}
+          />
+        ) : (
+          <NoItem />
+        )}
+        {jewellery_4 ? (
+          <CharacterItem
+            item={jewellery_4.item}
+            talismans={jewellery_4.talismans}
+          />
+        ) : (
+          <NoItem />
+        )}
       </div>
     </div>
   );

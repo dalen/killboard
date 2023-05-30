@@ -4,7 +4,13 @@ import { useState } from 'react';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { useTranslation } from 'react-i18next';
 
-export const CharacterItem = ({ item }: { item: Item }): JSX.Element => {
+export const CharacterItem = ({
+  item,
+  talismans,
+}: {
+  item: Item;
+  talismans: Array<Item>;
+}): JSX.Element => {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -54,7 +60,7 @@ export const CharacterItem = ({ item }: { item: Item }): JSX.Element => {
           </Media.Item>
         )}
       </Media>
-      {modalOpen && <CharacterItemPopup item={item} />}
+      {modalOpen && <CharacterItemPopup item={item} talismans={talismans} />}
     </div>
   );
 };
