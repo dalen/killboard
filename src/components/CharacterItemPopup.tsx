@@ -75,7 +75,7 @@ export const CharacterItemPopup = ({
       {talismans.map((talisman, index) => {
         return (
           <div className="is-flex is-flex-direction-row my-2" key={index}>
-            <figure className="image is-32x32 m-0">
+            <figure className="image is-32x32 m-0 mr-1">
               <img src={talisman.iconUrl} alt={talisman.name} />
             </figure>
             <div>
