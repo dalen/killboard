@@ -2,7 +2,13 @@ import { Item } from '../types';
 import { useTranslation } from 'react-i18next';
 import { isPercentage } from '../utils';
 
-export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
+export const CharacterItemPopup = ({
+  item,
+  talismans,
+}: {
+  item: Item;
+  talismans: Array<Item>;
+}): JSX.Element => {
   const { t } = useTranslation(['enums']);
 
   const itemNameClass = (): string => {
@@ -25,9 +31,10 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
         top: '0px',
         left: '64px',
         background: 'rgba(0,0,0,0.9)',
-        padding: '10px',
+        padding: '10px 10px 30px 10px',
         minWidth: '88%',
         borderRadius: '5px',
+        border: '1px solid rgb(82,52,71)',
         zIndex: 5,
         pointerEvents: 'none',
       }}
@@ -56,15 +63,40 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
         <div className="is-size-7 stats-text-highlight">{item.armor} Armor</div>
       )}
       <div className="is-size-7 stats-text-highlight">
-        {item.stats.map((stat) => {
+        {item.stats.map((stat, index) => {
           return (
-            <div className="">
+            <div key={index}>
               + {stat.value * statMultiplier(stat.stat)}
               {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
             </div>
           );
         })}
       </div>
+      {talismans.map((talisman, index) => {
+        return (
+          <div className="is-flex is-flex-direction-row my-2" key={index}>
+            <figure className="image is-32x32 m-0">
+              <img src={talisman.iconUrl} alt={talisman.name} />
+            </figure>
+            <div>
+              <div className="is-size-7 stats-text-highlight">
+                {talisman.name}
+              </div>
+              {talisman.stats.map((stat, index) => {
+                return (
+                  <div className="is-size-7 stats-text-highlight" key={index}>
+                    + {stat.value * statMultiplier(stat.stat)}
+                    {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })}
+      {item.talismanSlots > talismans.length && (
+        <div className="is-size-7">Empty Talisman Slot</div>
+      )}
       {item.levelRequirement > 0 && (
         <div className="is-size-7 has-text-white">
           Minumum Rank: {item.levelRequirement}
@@ -81,7 +113,7 @@ export const CharacterItemPopup = ({ item }: { item: Item }): JSX.Element => {
           {item.careerRestriction.map((career, i) => {
             const seperator = i === 0 ? '' : ', ';
             return (
-              <span>
+              <span key={i}>
                 {seperator}
                 {t(`enums:career.${career}`)}
               </span>

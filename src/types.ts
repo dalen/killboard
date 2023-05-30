@@ -880,6 +880,7 @@ export type ItemSlot = {
   __typename?: 'CharacterItem';
   equipSlot: Scalars['String'];
   item: Item;
+  talismans: Array<Item>;
 };
 
 export type Item = {
@@ -894,6 +895,7 @@ export type Item = {
   stats: Array<ItemStat>;
   armor: Scalars['Int'];
   careerRestriction: Array<Career>;
+  talismanSlots: Scalars['Int'];
 };
 
 export type ItemStat = {

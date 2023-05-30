@@ -89,7 +89,7 @@
     "MAGIC_CRIT_RATE": "Magic Critical Chance",
     "ACTION_POINT_REGEN": "AP per second",
     "HEALTH_REGEN": "Hit Points every 4s",
-    "CRITICAL_HIT_RATE_REDUCTION": "Reduced change to be Critically Hit",
+    "CRITICAL_HIT_RATE_REDUCTION": "Reduced chance to be Critically Hit",
     "BLOCK_STRIKETHROUGH": "Reduced chance to be Blocked",
     "DISRUPT_STRIKETHROUGH": "Reduced chance to be Disrupted",
     "EVADE_STRIKETHROUGH": "Reduced chance to be Dodged",
