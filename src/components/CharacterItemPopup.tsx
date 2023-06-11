@@ -59,8 +59,23 @@ export const CharacterItemPopup = ({
       {item.itemLevel > 0 && (
         <div className="is-size-7">Item Level {item.itemLevel}</div>
       )}
-      {item.armor > 0 && (
+      {item.armor > 0 && item.type !== 'SHIELD' && (
         <div className="is-size-7 stats-text-highlight">{item.armor} Armor</div>
+      )}
+      {item.dps > 0 && item.type !== 'SHIELD' && (
+        <div className="is-size-7 stats-text-highlight">
+          {(item.dps / 10).toFixed(1)} DPS
+        </div>
+      )}
+      {item.speed > 0 && (
+        <div className="is-size-7 stats-text-highlight">
+          {(item.speed / 100).toFixed(1)} Speed
+        </div>
+      )}
+      {item.type === 'SHIELD' && (
+        <div className="is-size-7 stats-text-highlight">
+          {item.armor} Block Rating
+        </div>
       )}
       <div className="is-size-7 stats-text-highlight">
         {item.stats.map((stat, index) => {
