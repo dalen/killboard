@@ -74,7 +74,7 @@ export const CharacterItemPopup = ({
       )}
       {item.type === 'SHIELD' && (
         <div className="is-size-7 stats-text-highlight">
-          {item.dps} Block Rating
+          {item.armor} Block Rating
         </div>
       )}
       <div className="is-size-7 stats-text-highlight">
