@@ -37,6 +37,8 @@ const CHARACTER_INFO = gql`
           armor
           careerRestriction
           talismanSlots
+          speed
+          dps
         }
       }
     }
