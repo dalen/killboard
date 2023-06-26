@@ -15,7 +15,7 @@
     "@types/react-dom": "^18.2.6",
     "clsx": "^1.2.1",
     "date-fns": "^2.30.0",
-    "graphql": "^16.6.0",
+    "graphql": "^16.7.1",
     "heatmap.js": "^2.0.5",
     "i18next": "^23.2.3",
     "lodash": "^4.17.21",
