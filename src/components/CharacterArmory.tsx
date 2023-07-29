@@ -5,8 +5,8 @@ import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 import { CharacterItem } from './CharacterItem';
 
-const CHARACTER_INFO = gql`
-  query GetCharacterInfo($id: ID!) {
+const CHARACTER_ARMORY = gql`
+  query GetCharacterArmory($id: ID!) {
     character(id: $id) {
       items {
         equipSlot
@@ -47,7 +47,7 @@ const CHARACTER_INFO = gql`
 
 export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
   const { t } = useTranslation('components');
-  const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
+  const { loading, error, data } = useQuery<Query>(CHARACTER_ARMORY, {
     variables: {
       id,
     },
