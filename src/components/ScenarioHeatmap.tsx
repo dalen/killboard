@@ -10,10 +10,10 @@ import _ from 'lodash';
 const SCENARIO_KILL_POSITIONS = gql`
   query GetScenarioHeatmap(
     $id: ID
-    $minX: Int
-    $minY: Int
-    $maxX: Int
-    $maxY: Int
+    $minX: UnsignedShort!
+    $minY: UnsignedShort!
+    $maxX: UnsignedShort!
+    $maxY: UnsignedShort!
   ) {
     killsHeatmap(
       instanceId: $id
