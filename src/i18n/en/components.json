@@ -113,8 +113,7 @@
     "queueTypeSolo": "Pickup",
     "queueTypeCitySiege": "City Siege",
     "queueTypeGroupRanked": "Group Ranked",
-    "queueTypeSoloRanked": "Solo Ranked",
-    "queueTypeGroupChallenge": "Group Challenge"
+    "queueTypeSoloRanked": "Solo Ranked"
   },
   "scenarioHeatmap": {
     "description": "Heatmap of kills in the scenario"
