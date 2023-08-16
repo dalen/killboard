@@ -8,6 +8,7 @@ import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { CharacterArmory } from '../components/CharacterArmory';
+import { ScenarioCount } from '../components/ScenarioCount';
 
 export const Character = ({
   tab,
@@ -63,6 +64,14 @@ export const Character = ({
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters />
+          <Columns breakpoint={'desktop'}>
+            <Columns.Column>
+              <ScenarioCount characterId={id} wins={true} title="Wins" />
+            </Columns.Column>
+            <Columns.Column>
+              <ScenarioCount characterId={id} wins={false} title="Losses" />
+            </Columns.Column>
+          </Columns>
           <ScenarioList characterId={id} />
         </div>
       )}

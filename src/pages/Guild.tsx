@@ -1,5 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
-import { Breadcrumb, Container, Progress, Tabs } from 'react-bulma-components';
+import {
+  Breadcrumb,
+  Columns,
+  Container,
+  Progress,
+  Tabs,
+} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
@@ -11,6 +17,7 @@ import { GuildInfo } from '../components/GuildInfo';
 import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
+import { ScenarioCount } from '../components/ScenarioCount';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -110,6 +117,14 @@ export const Guild = ({
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters />
+          <Columns breakpoint={'desktop'}>
+            <Columns.Column>
+              <ScenarioCount guildId={id} wins={true} title="Wins" />
+            </Columns.Column>
+            <Columns.Column>
+              <ScenarioCount guildId={id} wins={false} title="Losses" />
+            </Columns.Column>
+          </Columns>
           <ScenarioList guildId={id} />
         </div>
       )}
