@@ -13,7 +13,7 @@
     "@types/node": "^20.4.5",
     "@types/react": "^18.2.17",
     "@types/react-dom": "^18.2.7",
-    "clsx": "^1.2.1",
+    "clsx": "^2.0.0",
     "date-fns": "^2.30.0",
     "graphql": "^16.7.1",
     "heatmap.js": "https://github.com/ionata/heatmap.js.git",
