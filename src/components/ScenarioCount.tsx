@@ -11,12 +11,14 @@ const SCENARIO_COUNT = gql`
     $characterId: ID
     $guildId: ID
     $queueType: ScenarioQueueType
+    $premadeOnly: Boolean
     $wins: Boolean
   ) {
     scenarios(
       characterId: $characterId
       guildId: $guildId
       queueType: $queueType
+      premadeOnly: $premadeOnly
       wins: $wins
     ) {
       totalCount

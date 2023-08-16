@@ -12,6 +12,7 @@ const SCENARIO_LIST = gql`
     $characterId: ID
     $guildId: ID
     $queueType: ScenarioQueueType
+    $premadeOnly: Boolean
     $first: Int
     $last: Int
     $before: String
@@ -21,6 +22,7 @@ const SCENARIO_LIST = gql`
       characterId: $characterId
       guildId: $guildId
       queueType: $queueType
+      premadeOnly: $premadeOnly
       first: $first
       last: $last
       before: $before
