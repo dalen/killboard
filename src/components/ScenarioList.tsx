@@ -30,7 +30,7 @@ const SCENARIO_LIST = gql`
     ) {
       totalCount
       nodes {
-        instanceId
+        id
         scenario {
           id
           name
