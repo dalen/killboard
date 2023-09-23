@@ -50,7 +50,7 @@ export function ScenarioListTable({
             });
 
             return (
-              <tr key={scenario.instanceId}>
+              <tr key={scenario.id}>
                 <td>{scenario.scenario.name}</td>
                 <td>
                   {' '}
@@ -97,7 +97,7 @@ export function ScenarioListTable({
                 </td>
                 <td>
                   <Link
-                    to={`/scenario/${scenario.instanceId}`}
+                    to={`/scenario/${scenario.id}`}
                     className="button is-primary p-2 is-pulled-right"
                   >
                     {t('components:scenarioList.details')}
