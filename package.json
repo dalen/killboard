@@ -37,7 +37,7 @@
     "@vitejs/plugin-react": "^4.0.4",
     "bulma": "^0.9.4",
     "eslint-config-airbnb": "^19.0.4",
-    "vite": "^4.4.7"
+    "vite": "^4.4.9"
   },
   "scripts": {
     "start": "vite",
