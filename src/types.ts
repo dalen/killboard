@@ -643,6 +643,8 @@ export type Kill = {
   scenarioId: Scalars['UnsignedInt']['output'];
   /** Scenario information */
   scenarioRecord?: Maybe<ScenarioRecord>;
+  /** Skirmish information */
+  skirmish?: Maybe<Skirmish>;
   /** UTC Timestamp */
   time: Scalars['Int']['output'];
   /** The total renown generated from the kill, including AAO modifiers */
@@ -655,6 +657,7 @@ export type KillFilterInput = {
   and?: InputMaybe<Array<KillFilterInput>>;
   damagePercent?: InputMaybe<ByteOperationFilterInput>;
   instanceId?: InputMaybe<UuidOperationFilterInput>;
+  killerCareer?: InputMaybe<ByteOperationFilterInput>;
   killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerLevel?: InputMaybe<ByteOperationFilterInput>;
@@ -663,6 +666,7 @@ export type KillFilterInput = {
   or?: InputMaybe<Array<KillFilterInput>>;
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   time?: InputMaybe<IntOperationFilterInput>;
+  victimCareer?: InputMaybe<ByteOperationFilterInput>;
   victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimLevel?: InputMaybe<ByteOperationFilterInput>;
@@ -819,6 +823,10 @@ export type Query = {
   scenario?: Maybe<ScenarioRecord>;
   /** Get scenarios */
   scenarios?: Maybe<ScenariosConnection>;
+  /** Get one skirmish */
+  skirmish?: Maybe<Skirmish>;
+  /** Get skirmishes */
+  skirmishes?: Maybe<SkirmishesConnection>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
@@ -936,6 +944,18 @@ export type QueryScenariosArgs = {
   to?: InputMaybe<Scalars['Long']['input']>;
   where?: InputMaybe<ScenarioRecordFilterInput>;
   wins?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
+export type QuerySkirmishArgs = {
+  id: Scalars['ID']['input'];
+};
+
+export type QuerySkirmishesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<SkirmishFilterInput>;
 };
 
 export type QueryWeeklyGuildKillLeaderboardArgs = {
@@ -1095,6 +1115,8 @@ export type ScenarioRecord = {
   scenarioId: Scalars['ID']['output'];
   /** Scoreboard entries */
   scoreboardEntries: Array<ScenarioScoreboardEntry>;
+  /** The skirmishes that occurred in the scenario */
+  skirmishes: Array<Skirmish>;
   /** The start time of the scenario */
   startTime: Scalars['Long']['output'];
   /** Scenario tier */
@@ -1212,12 +1234,164 @@ export type ScenariosEdge = {
   node: ScenarioRecord;
 };
 
+/** A connection to a list of items. */
+export type ScoreboardEntriesConnection = {
+  __typename?: 'ScoreboardEntriesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<ScoreboardEntriesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<SkirmishScoreboardEntry>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type ScoreboardEntriesEdge = {
+  __typename?: 'ScoreboardEntriesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: SkirmishScoreboardEntry;
+};
+
 export enum Sex {
   /** Female */
   Female = 'FEMALE',
   /** Male */
   Male = 'MALE',
 }
+
+export type Skirmish = {
+  __typename?: 'Skirmish';
+  /** UTC Timestamp of Skirmish end */
+  endTime: Scalars['Long']['output'];
+  /** Heatmap of kills that happened during this skirmish primary zone */
+  heatmap: Array<KillsHeatmapPoint>;
+  /** Skirmish Id */
+  id: Scalars['ID']['output'];
+  /** Scenario instance, null if not in a scenario */
+  instance?: Maybe<ScenarioRecord>;
+  /** Specifies the instance of a scenario this kill happened in */
+  instanceId?: Maybe<Scalars['ID']['output']>;
+  /** Kills that happened during this skirmish */
+  kills?: Maybe<KillsConnection>;
+  /** Scenario, null if not in a scenario */
+  scenario?: Maybe<Scenario>;
+  /** Scoreboard entries */
+  scoreboardEntries?: Maybe<ScoreboardEntriesConnection>;
+  /** UTC Timestamp of Skirmish start */
+  startTime: Scalars['Long']['output'];
+};
+
+export type SkirmishKillsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type SkirmishScoreboardEntriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<SkirmishScoreboardEntrySortInput>>;
+};
+
+export type SkirmishFilterInput = {
+  and?: InputMaybe<Array<SkirmishFilterInput>>;
+  /** End time */
+  endTime?: InputMaybe<LongOperationFilterInput>;
+  /** Scenario instance */
+  instanceId?: InputMaybe<Scalars['ID']['input']>;
+  or?: InputMaybe<Array<SkirmishFilterInput>>;
+  /** Primary Zone */
+  primaryZoneId?: InputMaybe<Scalars['ID']['input']>;
+  /** Scenario Id */
+  scenarioId?: InputMaybe<Scalars['ID']['input']>;
+  /** Start time */
+  startTime?: InputMaybe<LongOperationFilterInput>;
+};
+
+export type SkirmishScoreboardEntry = {
+  __typename?: 'SkirmishScoreboardEntry';
+  /** If true the player left the scenario before it ended */
+  career: Career;
+  /** Character information */
+  character: Character;
+  /** Damage */
+  damage: Scalars['UnsignedInt']['output'];
+  /** Damage Received */
+  damageReceived: Scalars['UnsignedInt']['output'];
+  /** Death blows */
+  deathBlows: Scalars['UnsignedInt']['output'];
+  /** Deaths */
+  deaths: Scalars['UnsignedInt']['output'];
+  /** Guild at the time of the scenario */
+  guild?: Maybe<Guild>;
+  /** Healing */
+  healing: Scalars['UnsignedInt']['output'];
+  /** Healing of others */
+  healingOthers: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingReceived: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingSelf: Scalars['UnsignedInt']['output'];
+  /** Damage contributing to kills */
+  killDamage: Scalars['UnsignedInt']['output'];
+  /** Kills */
+  kills: Scalars['UnsignedInt']['output'];
+  /** Solo Kills */
+  killsSolo: Scalars['UnsignedInt']['output'];
+  /** Level at the time of the scenario */
+  level: Scalars['Byte']['output'];
+  /** Damage Prevented */
+  protection: Scalars['UnsignedInt']['output'];
+  /** Protection of others */
+  protectionOthers: Scalars['UnsignedInt']['output'];
+  /** Protection Received */
+  protectionReceived: Scalars['UnsignedInt']['output'];
+  /** Protection of self */
+  protectionSelf: Scalars['UnsignedInt']['output'];
+  /** The realm of the player */
+  realm: Realm;
+  /** Renown rank at the time of the scenario */
+  renownRank: Scalars['Byte']['output'];
+  /** Resurrections */
+  resurrectionsDone: Scalars['UnsignedInt']['output'];
+};
+
+export type SkirmishScoreboardEntrySortInput = {
+  damage?: InputMaybe<SortEnumType>;
+  deathBlows?: InputMaybe<SortEnumType>;
+  healing?: InputMaybe<SortEnumType>;
+  kills?: InputMaybe<SortEnumType>;
+  protection?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type SkirmishesConnection = {
+  __typename?: 'SkirmishesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<SkirmishesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Skirmish>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type SkirmishesEdge = {
+  __typename?: 'SkirmishesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Skirmish;
+};
 
 /** A connection to a list of items. */
 export type SoloLeaderboardConnection = {
