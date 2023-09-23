@@ -24,7 +24,7 @@ import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID!) {
     scenario(id: $id) {
-      instanceId
+      id
       scenario {
         id
         name

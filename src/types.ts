@@ -633,6 +633,8 @@ export type Kill = {
   attackers: Array<Attacker>;
   /** Kill Id */
   id: Scalars['ID']['output'];
+  /** Scenario instance, null if not in a scenario */
+  instance?: Maybe<ScenarioRecord>;
   /** Specifies the instance of a scenario this kill happened in */
   instanceId?: Maybe<Scalars['ID']['output']>;
   /** Position of the victim at the time of the kill */
@@ -1102,7 +1104,7 @@ export type ScenarioRecord = {
   /** The end time of the scenario */
   endTime: Scalars['Long']['output'];
   /** Scenario instance Id */
-  instanceId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
   /** The kills that occurred in the scenario */
   kills: Array<Kill>;
   /** Points for each team, 0 is order, 1 is destruction */
@@ -1273,10 +1275,10 @@ export type Skirmish = {
   id: Scalars['ID']['output'];
   /** Scenario instance, null if not in a scenario */
   instance?: Maybe<ScenarioRecord>;
-  /** Specifies the instance of a scenario this kill happened in */
-  instanceId?: Maybe<Scalars['ID']['output']>;
   /** Kills that happened during this skirmish */
   kills?: Maybe<KillsConnection>;
+  /** Primary Zone Info */
+  primaryZone?: Maybe<Zone>;
   /** Scenario, null if not in a scenario */
   scenario?: Maybe<Scenario>;
   /** Scoreboard entries */
