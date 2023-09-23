@@ -1242,7 +1242,7 @@ function print() { __p += __j.call(arguments, '') }
 `;function gJ({zoneId:e,id:t}){var g;const r=Ay[Number(e)],{loading:n,error:i,data:a}=Mt(mJ,{variables:{id:t,minX:r["NW-X"],minY:r["NW-Y"],maxX:r["SE-X"],maxY:r["SE-Y"]}}),{t:o}=Ne(["common","components"]);if(n)return b.jsx(A.Progress,{});if(i)return b.jsx(Ve,{name:i.name,message:i.message});if((a==null?void 0:a.killsHeatmap)==null||a.killsHeatmap.length===0)return b.jsx(Ve,{customText:o("common:notFound")});const h=a.killsHeatmap.map(d=>({x:d.x*10+5,y:d.y*10+5,value:d.count})),m=((g=ik.maxBy(h,d=>d.value))==null?void 0:g.value)||1;return b.jsxs(A.Container,{breakpoint:"desktop",max:!0,children:[b.jsx("p",{className:"mb-2",children:o("components:scenarioHeatmap.description")}),b.jsx(ok,{zoneId:e,data:{min:0,max:m,data:h},size:64})]})}const yJ=Ye`
   query GetScenarioInfo($id: ID!) {
     scenario(id: $id) {
-      instanceId
+      id
       scenario {
         id
         name
