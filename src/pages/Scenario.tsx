@@ -114,7 +114,7 @@ export function Scenario({
     intervalToDuration({
       start: startDate,
       end: endDate,
-    })
+    }),
   );
 
   return (

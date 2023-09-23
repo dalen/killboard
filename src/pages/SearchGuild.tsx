@@ -68,7 +68,7 @@ export function SearchGuild(): JSX.Element {
   if (data?.guilds?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const {pageInfo} = data.guilds;
+  const { pageInfo } = data.guilds;
 
   const handleSubmit = (newQuery: string): void => {
     refetch({ query: newQuery, first: perPage });

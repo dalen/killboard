@@ -29,27 +29,27 @@ export function LeaderboardGuildTable({
         </thead>
         <tbody>
           {data.map((leaderboardEntry) => (
-              <tr key={leaderboardEntry.rank}>
-                <td>{leaderboardEntry.rank}</td>
-                <td>
-                  <Media>
-                    <Media.Item align="left">
-                      <GuildHeraldry size="48" guild={leaderboardEntry.guild} />
-                    </Media.Item>
-                    <Media.Item>
-                      <Content>
-                        <Link to={`/guild/${leaderboardEntry.guild.id}`}>
-                          <strong>{leaderboardEntry.guild.name}</strong>
-                        </Link>
-                        <br />
-                      </Content>
-                    </Media.Item>
-                  </Media>
-                </td>
-                <td className="has-text-right">{leaderboardEntry.kills}</td>
-                <td className="has-text-right">{leaderboardEntry.deaths}</td>
-              </tr>
-            ))}
+            <tr key={leaderboardEntry.rank}>
+              <td>{leaderboardEntry.rank}</td>
+              <td>
+                <Media>
+                  <Media.Item align="left">
+                    <GuildHeraldry size="48" guild={leaderboardEntry.guild} />
+                  </Media.Item>
+                  <Media.Item>
+                    <Content>
+                      <Link to={`/guild/${leaderboardEntry.guild.id}`}>
+                        <strong>{leaderboardEntry.guild.name}</strong>
+                      </Link>
+                      <br />
+                    </Content>
+                  </Media.Item>
+                </Media>
+              </td>
+              <td className="has-text-right">{leaderboardEntry.kills}</td>
+              <td className="has-text-right">{leaderboardEntry.deaths}</td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </div>

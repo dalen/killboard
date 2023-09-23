@@ -20,5 +20,5 @@ root.render(
         <App />
       </BrowserRouter>
     </ApolloProvider>
-  </React.StrictMode>
+  </React.StrictMode>,
 );

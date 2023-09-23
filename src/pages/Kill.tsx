@@ -159,7 +159,7 @@ export function Kill(): JSX.Element {
                 attacker={attacker}
                 key={`assisting_attacker_${attacker.character.id}`}
               />
-            )
+            ),
           )}
         </Columns.Column>
         <Columns.Column>

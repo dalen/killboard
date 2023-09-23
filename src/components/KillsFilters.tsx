@@ -22,7 +22,7 @@ const getPeriodFilters = (search: URLSearchParams) => {
     case 'lastWeek':
       return {
         from: getUnixTime(
-          startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 })
+          startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }),
         ),
         to: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
       };
@@ -48,7 +48,10 @@ const getSoloKillsFilters = (search: URLSearchParams) => {
   return {};
 };
 
-export const getCurrentFilters = (search: URLSearchParams) => ({ ...getPeriodFilters(search), ...getSoloKillsFilters(search) });
+export const getCurrentFilters = (search: URLSearchParams) => ({
+  ...getPeriodFilters(search),
+  ...getSoloKillsFilters(search),
+});
 
 export function KillsFilters(): JSX.Element {
   const { t } = useTranslation('components');

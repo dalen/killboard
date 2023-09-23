@@ -37,7 +37,7 @@ export function WeeklyLeaderboardGuild(): JSX.Element {
   const utcDate = new Date(
     now.getUTCFullYear(),
     now.getUTCMonth(),
-    now.getUTCDate()
+    now.getUTCDate(),
   );
 
   const week = getISOWeek(utcDate);

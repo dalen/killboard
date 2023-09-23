@@ -5,7 +5,6 @@ import components from './en/components.json';
 import enums from './en/enums.json';
 import pages from './en/pages.json';
 
-
 export const resources = {
   en: {
     common: commonTranslations,

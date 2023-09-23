@@ -12,7 +12,7 @@ export type SortConfig = {
 
 export const useSortableData = (
   items: any,
-  config: SortConfig | null = null
+  config: SortConfig | null = null,
 ) => {
   const [sortConfig, setSortConfig] = React.useState(config);
 
@@ -23,7 +23,7 @@ export const useSortableData = (
         if (sortConfig.key === 'name' || sortConfig.key === 'career') {
           if (
             a.character[sortConfig.key].localeCompare(
-              b.character[sortConfig.key]
+              b.character[sortConfig.key],
             ) === -1
           ) {
             return sortConfig.direction === SortConfigDirection.ascending
@@ -33,7 +33,7 @@ export const useSortableData = (
 
           if (
             a.character[sortConfig.key].localeCompare(
-              b.character[sortConfig.key]
+              b.character[sortConfig.key],
             ) === 1
           ) {
             return sortConfig.direction === SortConfigDirection.ascending
@@ -44,10 +44,7 @@ export const useSortableData = (
         }
 
         if (sortConfig.key === 'guild') {
-          if (
-            (a.guild?.name ?? '').localeCompare(b.guild?.name ?? '') ===
-            -1
-          ) {
+          if ((a.guild?.name ?? '').localeCompare(b.guild?.name ?? '') === -1) {
             return sortConfig.direction === SortConfigDirection.ascending
               ? -1
               : 1;

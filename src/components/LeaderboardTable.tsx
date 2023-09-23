@@ -28,39 +28,36 @@ export function LeaderboardTable({
       </thead>
       <tbody>
         {data.map((leaderboardEntry) => (
-            <tr key={leaderboardEntry.rank}>
-              <td>{leaderboardEntry.rank}</td>
-              <td>
-                <Media className="leaderboard-player-data">
-                  <Media.Item align="left">
-                    <CareerIcon career={leaderboardEntry.character.career} />
-                  </Media.Item>
-                  <Media.Item>
-                    <Content>
-                      <Link to={`/character/${leaderboardEntry.character.id}`}>
-                        <strong>{leaderboardEntry.character.name}</strong>
-                      </Link>
-                      <br />
-                      <Link
-                        to={`/guild/${leaderboardEntry.character.guildMembership?.guild?.id}`}
-                      >
-                        {
-                          leaderboardEntry.character.guildMembership?.guild
-                            ?.name
-                        }
-                      </Link>
-                    </Content>
-                  </Media.Item>
-                  <Media.Item className="player-rr-lvl-container">
-                    <span>Lvl {leaderboardEntry.character.level}</span>
-                    <span>RR {leaderboardEntry.character.renownRank}</span>
-                  </Media.Item>
-                </Media>
-              </td>
-              <td className="has-text-right">{leaderboardEntry.kills}</td>
-              <td className="has-text-right">{leaderboardEntry.deaths}</td>
-            </tr>
-          ))}
+          <tr key={leaderboardEntry.rank}>
+            <td>{leaderboardEntry.rank}</td>
+            <td>
+              <Media className="leaderboard-player-data">
+                <Media.Item align="left">
+                  <CareerIcon career={leaderboardEntry.character.career} />
+                </Media.Item>
+                <Media.Item>
+                  <Content>
+                    <Link to={`/character/${leaderboardEntry.character.id}`}>
+                      <strong>{leaderboardEntry.character.name}</strong>
+                    </Link>
+                    <br />
+                    <Link
+                      to={`/guild/${leaderboardEntry.character.guildMembership?.guild?.id}`}
+                    >
+                      {leaderboardEntry.character.guildMembership?.guild?.name}
+                    </Link>
+                  </Content>
+                </Media.Item>
+                <Media.Item className="player-rr-lvl-container">
+                  <span>Lvl {leaderboardEntry.character.level}</span>
+                  <span>RR {leaderboardEntry.character.renownRank}</span>
+                </Media.Item>
+              </Media>
+            </td>
+            <td className="has-text-right">{leaderboardEntry.kills}</td>
+            <td className="has-text-right">{leaderboardEntry.deaths}</td>
+          </tr>
+        ))}
       </tbody>
     </Table>
   );
