@@ -47,6 +47,9 @@
   "latestKills": {
     "title": "Recent Kills"
   },
+  "latestSkirmishes": {
+    "title": "Recent Skirmishes"
+  },
   "leaderboard": {
     "weeklyTitle": "Weekly Leaderboard",
     "monthlyTitle": "Monthly Leaderboard",
@@ -118,5 +121,30 @@
   },
   "scenarioHeatmap": {
     "description": "Heatmap of kills in the scenario"
+  },
+  "skirmishList": {
+    "time": "Time",
+    "location": "Location",
+    "guilds": "Guilds",
+    "players": "Players",
+    "kills": "Kills",
+    "details": "Details",
+    "loadMore": "Next",
+    "loadPrevious": "Previous"
+  },
+  "skirmishScoreboard": {
+    "career": "Career",
+    "damage": "Damage",
+    "dbs": "DBs",
+    "deaths": "Deaths",
+    "guild": "Guild",
+    "healing": "Healing",
+    "kills": "Kills",
+    "name": "Name",
+    "protection": "Protection",
+    "rank": "Rank"
+  },
+  "topSkirmishes": {
+    "title": "Top Skirmishes in past week"
   }
 }

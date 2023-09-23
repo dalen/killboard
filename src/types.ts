@@ -659,7 +659,7 @@ export type KillFilterInput = {
   and?: InputMaybe<Array<KillFilterInput>>;
   damagePercent?: InputMaybe<ByteOperationFilterInput>;
   instanceId?: InputMaybe<UuidOperationFilterInput>;
-  killerCareer?: InputMaybe<ByteOperationFilterInput>;
+  killerCareer?: InputMaybe<CareerLineOperationFilterInput>;
   killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerLevel?: InputMaybe<ByteOperationFilterInput>;
@@ -667,8 +667,9 @@ export type KillFilterInput = {
   numAssists?: InputMaybe<UnsignedIntOperationFilterInputType>;
   or?: InputMaybe<Array<KillFilterInput>>;
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  skirmishId?: InputMaybe<UuidOperationFilterInput>;
   time?: InputMaybe<IntOperationFilterInput>;
-  victimCareer?: InputMaybe<ByteOperationFilterInput>;
+  victimCareer?: InputMaybe<CareerLineOperationFilterInput>;
   victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimLevel?: InputMaybe<ByteOperationFilterInput>;
@@ -829,6 +830,8 @@ export type Query = {
   skirmish?: Maybe<Skirmish>;
   /** Get skirmishes */
   skirmishes?: Maybe<SkirmishesConnection>;
+  /** Get top skirmishes in last seven days */
+  topSkirmishes: Array<Skirmish>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
@@ -955,7 +958,9 @@ export type QuerySkirmishArgs = {
 export type QuerySkirmishesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
+  characterId?: InputMaybe<Scalars['ID']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  guildId?: InputMaybe<Scalars['ID']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<SkirmishFilterInput>;
 };
@@ -1279,12 +1284,18 @@ export type Skirmish = {
   kills?: Maybe<KillsConnection>;
   /** Primary Zone Info */
   primaryZone?: Maybe<Zone>;
+  /** Primary Zone Area Info */
+  primaryZoneArea?: Maybe<ZoneArea>;
   /** Scenario, null if not in a scenario */
   scenario?: Maybe<Scenario>;
   /** Scoreboard entries */
   scoreboardEntries?: Maybe<ScoreboardEntriesConnection>;
   /** UTC Timestamp of Skirmish start */
   startTime: Scalars['Long']['output'];
+  /** Top guilds by kills */
+  topGuildsByKills: Array<SkirmishTopGuild>;
+  /** Top guilds by players */
+  topGuildsByPlayers: Array<SkirmishTopGuild>;
 };
 
 export type SkirmishKillsArgs = {
@@ -1307,12 +1318,14 @@ export type SkirmishFilterInput = {
   /** End time */
   endTime?: InputMaybe<LongOperationFilterInput>;
   /** Scenario instance */
-  instanceId?: InputMaybe<Scalars['ID']['input']>;
+  instanceId?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<SkirmishFilterInput>>;
+  /** Primary Area */
+  primaryAreaId?: InputMaybe<UnsignedShortOperationFilterInputType>;
   /** Primary Zone */
-  primaryZoneId?: InputMaybe<Scalars['ID']['input']>;
+  primaryZoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
   /** Scenario Id */
-  scenarioId?: InputMaybe<Scalars['ID']['input']>;
+  scenarioId?: InputMaybe<UnsignedShortOperationFilterInputType>;
   /** Start time */
   startTime?: InputMaybe<LongOperationFilterInput>;
 };
@@ -1368,9 +1381,21 @@ export type SkirmishScoreboardEntry = {
 export type SkirmishScoreboardEntrySortInput = {
   damage?: InputMaybe<SortEnumType>;
   deathBlows?: InputMaybe<SortEnumType>;
+  deaths?: InputMaybe<SortEnumType>;
   healing?: InputMaybe<SortEnumType>;
+  killDamage?: InputMaybe<SortEnumType>;
   kills?: InputMaybe<SortEnumType>;
+  level?: InputMaybe<SortEnumType>;
   protection?: InputMaybe<SortEnumType>;
+  renownRank?: InputMaybe<SortEnumType>;
+};
+
+export type SkirmishTopGuild = {
+  __typename?: 'SkirmishTopGuild';
+  /** Value */
+  count: Scalars['Int']['output'];
+  /** Guild information */
+  guild: Guild;
 };
 
 /** A connection to a list of items. */
@@ -1621,6 +1646,16 @@ export type Zone = {
   id: Scalars['ID']['output'];
   /** The name of the zone */
   name: Scalars['String']['output'];
+};
+
+export type ZoneArea = {
+  __typename?: 'ZoneArea';
+  /** The unique id of the zone area */
+  id: Scalars['ID']['output'];
+  /** The name of the zone area */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Zone information */
+  zone: Zone;
 };
 
 export enum ZoneType {

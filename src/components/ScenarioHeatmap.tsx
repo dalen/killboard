@@ -55,22 +55,20 @@ export function ScenarioHeatmap({
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const heatmapData = data.killsHeatmap.map((point) => ({
-    x: point.x * 10 + 5,
-    y: point.y * 10 + 5,
-    value: point.count,
-  }));
+  const heatmapData = data.killsHeatmap.map(
+    (point): [number, number, number] => [
+      point.x * 10 + 5,
+      point.y * 10 + 5,
+      point.count,
+    ],
+  );
 
-  const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
+  const max = _.maxBy(heatmapData, (d) => d[2])?.[2] || 1;
 
   return (
     <Container breakpoint="desktop" max>
       <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
-      <ZoneHeatmap
-        zoneId={zoneId}
-        data={{ min: 0, max, data: heatmapData }}
-        size={64}
-      />
+      <ZoneHeatmap zoneId={zoneId} max={max} data={heatmapData} size={640} />
     </Container>
   );
 }

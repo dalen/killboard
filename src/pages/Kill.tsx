@@ -29,6 +29,9 @@ const KILL_DETAILS = gql`
         name
       }
       instanceId
+      skirmish {
+        id
+      }
       time
       position {
         zoneId
@@ -139,6 +142,13 @@ export function Kill(): JSX.Element {
                 <p>
                   <Link to={`/scenario/${data.kill.instanceId}`}>
                     Scenario Scoreboard
+                  </Link>
+                </p>
+              )}
+              {data.kill.skirmish?.id && (
+                <p>
+                  <Link to={`/skirmish/${data.kill.skirmish.id}`}>
+                    Skirmish
                   </Link>
                 </p>
               )}

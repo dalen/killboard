@@ -3,6 +3,7 @@
     "characterId": "Character #{{characterId}}",
     "kills": "Kills",
     "scenarios": "Scenarios",
+    "skirmishes": "Skirmishes",
     "armory": "Armory"
   },
   "guildFeud": {
@@ -14,7 +15,8 @@
     "kills": "Kills",
     "leader": "Leader:",
     "members": "Members",
-    "scenarios": "Scenarios"
+    "scenarios": "Scenarios",
+    "skirmishes": "Skirmishes"
   },
   "guildMembers": {
     "level": "Level",
@@ -25,7 +27,8 @@
   "home": {
     "showGuildLeaderboard": "Guilds",
     "showPlayerLeaderboard": "Players",
-    "showScenarios": "Scenarios"
+    "showScenarios": "Scenarios",
+    "showSkirmishes": "Skirmishes"
   },
   "killPage": {
     "killer": "Killer",
@@ -61,6 +64,19 @@
     "map": "Map",
     "order": "Order",
     "destruction": "Destruction"
+  },
+  "skirmishPage": {
+    "skirmishId": "Skirmish Report #{{skirmishId}}",
+    "kills": "Kills",
+    "scoreboard": "Scoreboard",
+    "topDamagePlayer": "Most Damage",
+    "topHealingPlayer": "Most Healing",
+    "topDeathBlowsPlayer": "Deadliest Player",
+    "topProtectionPlayer": "Most Protection",
+    "startTime": "Start Time:",
+    "duration": "Duration:",
+    "totalPlayers": "Total Players:",
+    "totalKills": "Total Kills:"
   },
   "mapPage": {
     "zoneId": "Zone #{{zoneId}}"

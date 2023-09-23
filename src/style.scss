@@ -49,7 +49,9 @@ html {
   font-family: 'Caslon Antique Regular';
   font-style: normal;
   font-weight: normal;
-  src: local('Caslon Antique Regular'), url('Caslo-an.woff') format('woff');
+  src:
+    local('Caslon Antique Regular'),
+    url('Caslo-an.woff') format('woff');
 }
 
 tr.scenario-scoreboard-row-team-0 {
@@ -80,6 +82,16 @@ td.scenariolist-score-order {
 td.scenariolist-score-destruction {
   color: rgba(158, 12, 13);
   font-weight: bold;
+}
+
+tr.skirmish-scoreboard-row-realm-order {
+  background-color: rgba(12, 47, 158, 0.2);
+  border-bottom: 2px solid #000000;
+}
+
+tr.skirmish-scoreboard-row-realm-destruction {
+  background-color: rgba(158, 12, 13, 0.2);
+  border-bottom: 2px solid #000000;
 }
 
 thead .ascending::after {
@@ -172,4 +184,32 @@ $common: rgb(180, 180, 180);
 
 .stats-text-highlight {
   color: gold;
+}
+
+.skirmish-top-damage-player {
+  height: 148px;
+  border-left: solid 3px rgb(220, 43, 25);
+}
+
+.skirmish-top-deathblows-player {
+  height: 148px;
+  border-left: solid 3px rgb(186, 42, 26);
+}
+
+.skirmish-top-healing-player {
+  height: 148px;
+  border-left: solid 3px rgb(0, 146, 81);
+}
+
+.skirmish-top-protection-player {
+  height: 148px;
+  border-left: solid 3px rgb(1, 78, 154);
+}
+
+.text-color-order {
+  color: rgb(0, 148, 225);
+}
+
+.text-color-destruction {
+  color: rgb(255, 5, 5);
 }

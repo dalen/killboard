@@ -12,6 +12,7 @@ import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
 import { Scenario } from './pages/Scenario';
 import { ZoneMap } from './pages/ZoneMap';
+import { Skirmish } from './pages/Skirmish';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -40,12 +41,20 @@ function App() {
         element={<Character tab="scenarios" />}
       />
       <Route
+        path="/character/:id/skirmishes"
+        element={<Character tab="skirmishes" />}
+      />
+      <Route
         path="/character/:id/armory"
         element={<Character tab="armory" />}
       />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
       <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />
+      <Route
+        path="/guild/:id/skirmishes"
+        element={<Guild tab="skirmishes" />}
+      />
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />
       <Route
@@ -59,6 +68,9 @@ function App() {
       <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
       <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
       <Route path="/scenario/:id/map" element={<Scenario tab="map" />} />
+      <Route path="/skirmishes" element={<Home tab="skirmishes" />} />
+      <Route path="/skirmish/:id" element={<Skirmish tab="scoreboard" />} />
+      <Route path="/skirmish/:id/kills" element={<Skirmish tab="kills" />} />
       <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
     </Routes>
   );

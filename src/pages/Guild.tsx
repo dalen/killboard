@@ -18,6 +18,7 @@ import { KillsFilters } from '../components/KillsFilters';
 import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { ScenarioCount } from '../components/ScenarioCount';
+import { GuildLatestSkirmishes } from '../components/GuildLatestSkirmishes';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -65,7 +66,7 @@ const GUILD_INFO = gql`
 export function Guild({
   tab,
 }: {
-  tab: 'kills' | 'members' | 'scenarios';
+  tab: 'kills' | 'members' | 'scenarios' | 'skirmishes';
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
@@ -105,6 +106,11 @@ export function Guild({
             {t('pages:guildPage.scenarios')}
           </Link>
         </li>
+        <li className={tab === 'skirmishes' ? 'is-active' : ''}>
+          <Link to={`/guild/${id}/skirmishes`}>
+            {t('pages:guildPage.skirmishes')}
+          </Link>
+        </li>
       </Tabs>
       {tab === 'kills' && (
         <div>
@@ -128,6 +134,7 @@ export function Guild({
           <ScenarioList guildId={id} />
         </div>
       )}
+      {tab === 'skirmishes' && <GuildLatestSkirmishes guildId={id} />}
     </Container>
   );
 }

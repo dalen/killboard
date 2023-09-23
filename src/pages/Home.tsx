@@ -10,11 +10,13 @@ import { MonthlyGuildLeaderboard } from '../components/MonthlyLeaderboard.Guild'
 import { WeeklyLeaderboardGuild } from '../components/WeeklyLeaderboardGuild';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { ScenarioList } from '../components/ScenarioList';
+import { LatestSkirmishes } from '../components/LatestSkirmishes';
+import { TopSkirmishes } from '../components/TopSkirmishes';
 
 export function Home({
   tab,
 }: {
-  tab: 'players' | 'guilds' | 'scenarios';
+  tab: 'players' | 'guilds' | 'scenarios' | 'skirmishes';
 }): JSX.Element {
   const { t } = useTranslation();
 
@@ -29,6 +31,9 @@ export function Home({
         </li>
         <li className={clsx({ 'is-active': tab === 'scenarios' })}>
           <Link to="/scenarios">{t('pages:home.showScenarios')}</Link>
+        </li>
+        <li className={clsx({ 'is-active': tab === 'skirmishes' })}>
+          <Link to="/skirmishes">{t('pages:home.showSkirmishes')}</Link>
         </li>
       </Tabs>
       {tab === 'scenarios' && (
@@ -64,6 +69,15 @@ export function Home({
           </Columns>
           <LatestKills />
         </>
+      )}
+      {tab === 'skirmishes' && (
+        <LatestSkirmishes />
+        /*
+        <>
+          <TopSkirmishes />
+          <LatestSkirmishes />
+        </>
+        */
       )}
     </Container>
   );

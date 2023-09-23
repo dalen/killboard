@@ -9,11 +9,12 @@ import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { CharacterArmory } from '../components/CharacterArmory';
 import { ScenarioCount } from '../components/ScenarioCount';
+import { CharacterLatestSkirmishes } from '../components/CharacterLatestSkirmishes';
 
 export function Character({
   tab,
 }: {
-  tab: 'kills' | 'scenarios' | 'armory';
+  tab: 'kills' | 'scenarios' | 'skirmishes' | 'armory';
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
 
@@ -39,6 +40,11 @@ export function Character({
         <li className={tab === 'scenarios' ? 'is-active' : ''}>
           <Link to={`/character/${id}/scenarios`}>
             {t('pages:characterPage.scenarios')}
+          </Link>
+        </li>
+        <li className={tab === 'skirmishes' ? 'is-active' : ''}>
+          <Link to={`/character/${id}/skirmishes`}>
+            {t('pages:characterPage.skirmishes')}
           </Link>
         </li>
         <li className={tab === 'armory' ? 'is-active' : ''}>
@@ -75,6 +81,7 @@ export function Character({
           <ScenarioList characterId={id} />
         </div>
       )}
+      {tab === 'skirmishes' && <CharacterLatestSkirmishes characterId={id} />}
       {tab === 'armory' && <CharacterArmory id={Number(id)} />}
     </Container>
   );
