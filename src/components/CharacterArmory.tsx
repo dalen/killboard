@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
-import { EquipSlot, ItemRarity, ItemType, Query } from '../types';
 import { useTranslation } from 'react-i18next';
 import { Progress } from 'react-bulma-components';
+import { EquipSlot, ItemRarity, ItemType, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { CharacterItem } from './CharacterItem';
 
@@ -45,7 +45,35 @@ const CHARACTER_ARMORY = gql`
   }
 `;
 
-export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
+function NoItem() {
+  return (
+    <CharacterItem
+      item={{
+        name: '',
+        description: '',
+        dps: 0,
+        id: '0',
+        raceRestriction: [],
+        uniqueEquipped: false,
+        speed: 0,
+        talismanSlots: 0,
+        itemLevel: 1,
+        iconUrl: 'https://armory.returnofreckoning.com/icon/1',
+        rarity: ItemRarity.Utility,
+        slot: EquipSlot.None,
+        type: ItemType.None,
+        stats: [],
+        renownRankRequirement: 0,
+        levelRequirement: 0,
+        armor: 0,
+        careerRestriction: [],
+      }}
+      talismans={[]}
+    />
+  );
+}
+
+export function CharacterArmory({ id }: { id: number }): JSX.Element {
   const { t } = useTranslation('components');
   const { loading, error, data } = useQuery<Query>(CHARACTER_ARMORY, {
     variables: {
@@ -74,48 +102,20 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
   const belt = items.find((item) => item.equipSlot === 'BELT');
   const gloves = items.find((item) => item.equipSlot === 'GLOVES');
 
-  const jewellery_1 = items.find((item) => item.equipSlot === 'JEWELLERY_1');
-  const jewellery_2 = items.find((item) => item.equipSlot === 'JEWELLERY_2');
-  const jewellery_3 = items.find((item) => item.equipSlot === 'JEWELLERY_3');
-  const jewellery_4 = items.find((item) => item.equipSlot === 'JEWELLERY_4');
+  const jewellery1 = items.find((item) => item.equipSlot === 'JEWELLERY_1');
+  const jewellery2 = items.find((item) => item.equipSlot === 'JEWELLERY_2');
+  const jewellery3 = items.find((item) => item.equipSlot === 'JEWELLERY_3');
+  const jewellery4 = items.find((item) => item.equipSlot === 'JEWELLERY_4');
 
   const event = items.find((item) => item.equipSlot === 'EVENT');
   const pocket1 = items.find((item) => item.equipSlot === 'POCKET_1');
   const pocket2 = items.find((item) => item.equipSlot === 'POCKET_2');
 
-  const NoItem = () => {
-    return (
-      <CharacterItem
-        item={{
-          name: '',
-          description: '',
-          dps: 0,
-          id: '0',
-          raceRestriction: [],
-          uniqueEquipped: false,
-          speed: 0,
-          talismanSlots: 0,
-          itemLevel: 1,
-          iconUrl: 'https://armory.returnofreckoning.com/icon/1',
-          rarity: ItemRarity.Utility,
-          slot: EquipSlot.None,
-          type: ItemType.None,
-          stats: [],
-          renownRankRequirement: 0,
-          levelRequirement: 0,
-          armor: 0,
-          careerRestriction: [],
-        }}
-        talismans={[]}
-      />
-    );
-  };
-
   return (
     <div className="columns pl-3" style={{ marginBottom: '250px' }}>
       <div className="column">
         <div className="content">
-          <strong className="mb-2">{`Armor`}</strong>
+          <strong className="mb-2">Armor</strong>
           {helm ? (
             <CharacterItem item={helm.item} talismans={helm.talismans} />
           ) : (
@@ -158,7 +158,7 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
       </div>
       <div className="column">
         <div className="mb-5">
-          <strong className="mb-2">{`Weapons`}</strong>
+          <strong className="mb-2">Weapons</strong>
           {mainHand ? (
             <CharacterItem
               item={mainHand.item}
@@ -175,7 +175,7 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
           )}
         </div>
         <div className="mb-5">
-          <strong className="mb-2">{`Event Item`}</strong>
+          <strong className="mb-2">Event Item</strong>
           {event ? (
             <CharacterItem item={event.item} talismans={event.talismans} />
           ) : (
@@ -183,7 +183,7 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
           )}
         </div>
         <div className="mb-5">
-          <strong className="mb-2">{`Pocket`}</strong>
+          <strong className="mb-2">Pocket</strong>
           {pocket1 ? (
             <CharacterItem item={pocket1.item} talismans={pocket1.talismans} />
           ) : (
@@ -197,35 +197,35 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
         </div>
       </div>
       <div className="column">
-        <strong className="mb-2">{`Jewellery`}</strong>
-        {jewellery_1 ? (
+        <strong className="mb-2">Jewellery</strong>
+        {jewellery1 ? (
           <CharacterItem
-            item={jewellery_1.item}
-            talismans={jewellery_1.talismans}
+            item={jewellery1.item}
+            talismans={jewellery1.talismans}
           />
         ) : (
           <NoItem />
         )}
-        {jewellery_2 ? (
+        {jewellery2 ? (
           <CharacterItem
-            item={jewellery_2.item}
-            talismans={jewellery_2.talismans}
+            item={jewellery2.item}
+            talismans={jewellery2.talismans}
           />
         ) : (
           <NoItem />
         )}
-        {jewellery_3 ? (
+        {jewellery3 ? (
           <CharacterItem
-            item={jewellery_3.item}
-            talismans={jewellery_3.talismans}
+            item={jewellery3.item}
+            talismans={jewellery3.talismans}
           />
         ) : (
           <NoItem />
         )}
-        {jewellery_4 ? (
+        {jewellery4 ? (
           <CharacterItem
-            item={jewellery_4.item}
-            talismans={jewellery_4.talismans}
+            item={jewellery4.item}
+            talismans={jewellery4.talismans}
           />
         ) : (
           <NoItem />
@@ -233,4 +233,4 @@ export const CharacterArmory = ({ id }: { id: number }): JSX.Element => {
       </div>
     </div>
   );
-};
+}

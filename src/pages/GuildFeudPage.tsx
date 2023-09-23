@@ -79,7 +79,7 @@ const GUILD_FEUD_INFO = gql`
   }
 `;
 
-export const GuildFeudPage = (): JSX.Element => {
+export function GuildFeudPage(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
 
   const { guildId1, guildId2 } = useParams();
@@ -100,7 +100,7 @@ export const GuildFeudPage = (): JSX.Element => {
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -111,7 +111,7 @@ export const GuildFeudPage = (): JSX.Element => {
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Columns breakpoint={'desktop'}>
+      <Columns breakpoint="desktop">
         <Columns.Column size={5}>
           <GuildInfo guild={data.guild1} />
         </Columns.Column>
@@ -140,4 +140,4 @@ export const GuildFeudPage = (): JSX.Element => {
       <GuildFeud guild1={guildId1 || ''} guild2={guildId2 || ''} />
     </Container>
   );
-};
+}

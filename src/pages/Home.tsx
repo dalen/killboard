@@ -1,25 +1,25 @@
 import { Columns, Container, Tabs } from 'react-bulma-components';
 import clsx from 'clsx';
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { LatestKills } from '../components/LatestKills';
 import { WeeklyLeaderboard } from '../components/WeeklyLeaderboard';
 import { SearchBox } from '../components/SearchBox';
 import { MonthlyLeaderboard } from '../components/MonthlyLeaderboard';
 import { MonthlyGuildLeaderboard } from '../components/MonthlyLeaderboard.Guild';
-import { useTranslation } from 'react-i18next';
 import { WeeklyLeaderboardGuild } from '../components/WeeklyLeaderboardGuild';
-import { Link } from 'react-router-dom';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { ScenarioList } from '../components/ScenarioList';
 
-export const Home = ({
+export function Home({
   tab,
 }: {
   tab: 'players' | 'guilds' | 'scenarios';
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation();
 
   return (
-    <Container breakpoint={'mobile'} mt={2}>
+    <Container breakpoint="mobile" mt={2}>
       <Tabs fullwidth>
         <li className={clsx({ 'is-active': tab === 'players' })}>
           <Link to="/">{t('pages:home.showPlayerLeaderboard')}</Link>
@@ -39,7 +39,7 @@ export const Home = ({
       )}
       {tab === 'players' && (
         <>
-          <SearchBox isPlayer={true} />
+          <SearchBox isPlayer />
           <Columns>
             <Columns.Column size={6}>
               <MonthlyLeaderboard />
@@ -67,4 +67,4 @@ export const Home = ({
       )}
     </Container>
   );
-};
+}

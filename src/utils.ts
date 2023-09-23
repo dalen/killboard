@@ -58,7 +58,7 @@ export const careerIcon = (career: Career): string => {
 export const variablesFromCursor = (
   type: 'after' | 'before',
   cursor: string,
-  perPage: number
+  perPage: number,
 ): {
   after: string | undefined;
   before: string | undefined;
@@ -104,4 +104,6 @@ export const isPercentage = (stat: string) => {
   if (statIsPercentage.includes(stat)) {
     return '%';
   }
+
+  return '';
 };

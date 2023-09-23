@@ -1,23 +1,23 @@
 import { Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
+import Tippy from '@tippyjs/react';
+import { useTranslation } from 'react-i18next';
 import { ScenarioScoreboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
-import Tippy from '@tippyjs/react';
-import { useTranslation } from 'react-i18next';
 
-export const ScenarioScoreboard = ({
+export function ScenarioScoreboard({
   entries,
 }: {
   entries: ScenarioScoreboardEntry[];
-}): JSX.Element => {
+}): JSX.Element {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
 
   const getClassName = (name: string) => {
     if (!sortConfig) {
-      return;
+      return '';
     }
     return sortConfig.key === name ? sortConfig.direction : '';
   };
@@ -30,14 +30,14 @@ export const ScenarioScoreboard = ({
             <th
               align="left"
               onClick={() => requestSort('career')}
-              className={getClassName('career') + ' is-clickable has-text-link'}
+              className={`${getClassName('career')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.career')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('name')}
-              className={getClassName('name') + ' is-clickable has-text-link'}
+              className={`${getClassName('name')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.name')}
             </th>
@@ -45,71 +45,71 @@ export const ScenarioScoreboard = ({
               colSpan={2}
               align="left"
               onClick={() => requestSort('guild')}
-              className={getClassName('guild') + ' is-clickable has-text-link'}
+              className={`${getClassName('guild')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.guild')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('level')}
-              className={getClassName('level') + ' is-clickable has-text-link'}
+              className={`${getClassName('level')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.rank')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('kills')}
-              className={getClassName('kills') + ' is-clickable has-text-link'}
+              className={`${getClassName('kills')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.kills')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('deaths')}
-              className={getClassName('deaths') + ' is-clickable has-text-link'}
+              className={`${getClassName('deaths')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.deaths')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('deathBlows')}
-              className={
-                getClassName('deathBlows') + ' is-clickable has-text-link'
-              }
+              className={`${getClassName(
+                'deathBlows',
+              )} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.dbs')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('damage')}
-              className={getClassName('damage') + ' is-clickable has-text-link'}
+              className={`${getClassName('damage')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.damage')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('healing')}
-              className={
-                getClassName('healing') + ' is-clickable has-text-link'
-              }
+              className={`${getClassName(
+                'healing',
+              )} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.healing')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('protection')}
-              className={
-                getClassName('protection') + ' is-clickable has-text-link'
-              }
+              className={`${getClassName(
+                'protection',
+              )} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.protection')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('objectiveScore')}
-              className={
-                getClassName('objectiveScore') + ' is-clickable has-text-link'
-              }
+              className={`${getClassName(
+                'objectiveScore',
+              )} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.objectiveScore')}
             </th>
@@ -229,4 +229,4 @@ export const ScenarioScoreboard = ({
       </Table>
     </div>
   );
-};
+}

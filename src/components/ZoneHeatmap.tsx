@@ -1,15 +1,15 @@
 import { useEffect, useRef } from 'react';
 import h337 from 'heatmap.js';
 
-export const ZoneHeatmap = ({
+export function ZoneHeatmap({
   zoneId,
   data,
-  size,
+  size = 640,
 }: {
   zoneId: string;
   data: h337.HeatmapData<h337.DataPoint<'value', 'x', 'y'>>;
   size: number;
-}): JSX.Element => {
+}): JSX.Element {
   const divElement = useRef<HTMLDivElement>(null);
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
@@ -33,7 +33,7 @@ export const ZoneHeatmap = ({
         0,
         0,
         canvasWidth,
-        canvasWidth
+        canvasWidth,
       );
     };
 
@@ -44,13 +44,13 @@ export const ZoneHeatmap = ({
   });
 
   return (
-    <div ref={divElement} style={{ width: '640px', height: '640px' }}>
+    <div ref={divElement} style={{ width: `${size}px`, height: `${size}px` }}>
       <canvas
         ref={canvasElement}
-        width="640"
-        height="640"
+        width={size}
+        height={size}
         style={{ position: 'absolute', left: '0px', top: '0px' }}
       />
     </div>
   );
-};
+}

@@ -52,13 +52,13 @@ const SEARCH_GUILD = gql`
   }
 `;
 
-export const SearchGuild = (): JSX.Element => {
+export function SearchGuild(): JSX.Element {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
   const { loading, error, data, refetch } = useQuery<Query>(SEARCH_GUILD, {
-    variables: { query: query, first: perPage },
+    variables: { query, first: perPage },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -68,20 +68,20 @@ export const SearchGuild = (): JSX.Element => {
   if (data?.guilds?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const pageInfo = data.guilds.pageInfo;
+  const {pageInfo} = data.guilds;
 
   const handleSubmit = (newQuery: string): void => {
     refetch({ query: newQuery, first: perPage });
   };
 
   return (
-    <Container max breakpoint={'desktop'} mt={2}>
+    <Container max breakpoint="desktop" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/search`}>{t('pages:searchPageGuild.search')}</Link>
+          <Link to="/search">{t('pages:searchPageGuild.search')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <SearchBox initialQuery={query} onSubmit={handleSubmit} />
@@ -117,8 +117,8 @@ export const SearchGuild = (): JSX.Element => {
         <div className="field is-grouped is-pulled-right">
           {pageInfo.hasPreviousPage && (
             <Button
-              color={'info'}
-              size={'small'}
+              color="info"
+              size="small"
               onClick={() => {
                 refetch({
                   first: undefined,
@@ -134,8 +134,8 @@ export const SearchGuild = (): JSX.Element => {
           )}
           {pageInfo.hasNextPage && (
             <Button
-              color={'info'}
-              size={'small'}
+              color="info"
+              size="small"
               onClick={() => {
                 refetch({
                   first: perPage,
@@ -153,4 +153,4 @@ export const SearchGuild = (): JSX.Element => {
       )}
     </Container>
   );
-};
+}

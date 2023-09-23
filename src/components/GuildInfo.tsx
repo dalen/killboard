@@ -4,14 +4,14 @@ import { Link } from 'react-router-dom';
 import { Guild } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 
-export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
+export function GuildInfo({ guild }: { guild: Guild }): JSX.Element {
   const { t } = useTranslation(['components']);
 
   return (
     <Card mb={5}>
       <Card.Content>
         <Media>
-          <Media.Item align={'left'}>
+          <Media.Item align="left">
             <GuildHeraldry size="128" guild={guild} />
           </Media.Item>
           <Media.Item>
@@ -40,4 +40,4 @@ export const GuildInfo = ({ guild }: { guild: Guild }): JSX.Element => {
       </Card.Content>
     </Card>
   );
-};
+}

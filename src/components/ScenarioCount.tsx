@@ -26,7 +26,7 @@ const SCENARIO_COUNT = gql`
   }
 `;
 
-export const ScenarioCount = ({
+export function ScenarioCount({
   characterId,
   guildId,
   wins,
@@ -36,7 +36,7 @@ export const ScenarioCount = ({
   guildId?: String;
   wins: boolean;
   title: string;
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -59,4 +59,4 @@ export const ScenarioCount = ({
       {title} {data.scenarios.totalCount != null && data.scenarios.totalCount}
     </div>
   );
-};
+}

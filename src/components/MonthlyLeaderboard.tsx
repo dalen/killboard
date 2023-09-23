@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardTable } from './LeaderboardTable';
-import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const MONTHLY_LEADERBOARD = gql`
@@ -28,7 +28,7 @@ const MONTHLY_LEADERBOARD = gql`
   }
 `;
 
-export const MonthlyLeaderboard = (): JSX.Element => {
+export function MonthlyLeaderboard(): JSX.Element {
   const { t } = useTranslation(['common', 'components']);
 
   const month = new Date().getUTCMonth() + 1;
@@ -50,4 +50,4 @@ export const MonthlyLeaderboard = (): JSX.Element => {
       <LeaderboardTable data={data.monthlyKillLeaderboard.slice(0, 10)} />
     </div>
   );
-};
+}

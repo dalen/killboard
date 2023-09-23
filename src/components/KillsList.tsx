@@ -8,7 +8,7 @@ import { ErrorMessage } from './global/ErrorMessage';
 import { getCurrentFilters } from './KillsFilters';
 import { KillsListTable } from './KillsListTable';
 
-export const KillsList = ({
+export function KillsList({
   query,
   queryOptions,
   perPage,
@@ -24,7 +24,7 @@ export const KillsList = ({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -79,4 +79,4 @@ export const KillsList = ({
       />
     </div>
   );
-};
+}

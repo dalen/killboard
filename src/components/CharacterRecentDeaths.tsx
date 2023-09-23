@@ -62,7 +62,7 @@ const RECENT_DEATHS = gql`
   }
 `;
 
-export const CharacterRecentDeaths = ({ id }: { id: number }): JSX.Element => {
+export function CharacterRecentDeaths({ id }: { id: number }): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
@@ -77,4 +77,4 @@ export const CharacterRecentDeaths = ({ id }: { id: number }): JSX.Element => {
       showVictim={false}
     />
   );
-};
+}

@@ -14,7 +14,7 @@ import { Kill, PageInfo } from '../types';
 import { CareerIcon } from './CareerIcon';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
-export const KillsListTable = ({
+export function KillsListTable({
   data,
   pageInfo,
   onNext,
@@ -30,7 +30,7 @@ export const KillsListTable = ({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -49,7 +49,7 @@ export const KillsListTable = ({
             {showKiller && <th>{t('components:killsList.killer')}</th>}
             {showVictim && <th>{t('components:killsList.victim')}</th>}
             <th>{t('components:killsList.type')}</th>
-            <th></th>
+            <th aria-label="empty header" />
           </tr>
         </thead>
         <tbody>
@@ -130,7 +130,7 @@ export const KillsListTable = ({
                     <Media>
                       <Media.Item align="left">
                         <Image
-                          src={`/images/icons/rvr.png`}
+                          src="/images/icons/rvr.png"
                           alt="RvR"
                           title="RvR"
                         />
@@ -155,7 +155,7 @@ export const KillsListTable = ({
                     <Media>
                       <Media.Item align="left">
                         <Image
-                          src={`/images/icons/scenario.png`}
+                          src="/images/icons/scenario.png"
                           alt="Scenario"
                           title="Scenario"
                         />
@@ -193,17 +193,17 @@ export const KillsListTable = ({
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              {showTime && <td></td>}
-              {showKiller && <td></td>}
-              {showVictim && <td></td>}
+              {showTime && <td />}
+              {showKiller && <td />}
+              {showVictim && <td />}
               <td colSpan={2}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button
                       p={2}
                       pull="right"
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={onPrevious}
                     >
                       {t('components:killsList.loadPrevious')}
@@ -214,8 +214,8 @@ export const KillsListTable = ({
                     <Button
                       p={2}
                       pull="right"
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={onNext}
                     >
                       {t('components:killsList.loadMore')}
@@ -230,4 +230,4 @@ export const KillsListTable = ({
       </Table>
     </div>
   );
-};
+}

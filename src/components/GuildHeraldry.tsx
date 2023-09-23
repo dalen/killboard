@@ -1,13 +1,13 @@
 import { Image } from 'react-bulma-components';
 import { Guild } from '../types';
 
-export const GuildHeraldry = ({
+export function GuildHeraldry({
   size,
   guild,
 }: {
   size: '32' | '48' | '64' | '128';
   guild: Guild;
-}): JSX.Element => {
+}): JSX.Element {
   const realmNum = guild.realm === 'ORDER' ? 1 : 2;
 
   return (
@@ -17,4 +17,4 @@ export const GuildHeraldry = ({
       alt="Heraldry"
     />
   );
-};
+}

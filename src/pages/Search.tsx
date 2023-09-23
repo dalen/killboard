@@ -46,13 +46,13 @@ const SEARCH_CHARACTERS = gql`
   }
 `;
 
-export const Search = (): JSX.Element => {
+export function Search(): JSX.Element {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
   const { loading, error, data, refetch } = useQuery<Query>(SEARCH_CHARACTERS, {
-    variables: { query: query, first: perPage },
+    variables: { query, first: perPage },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -62,28 +62,28 @@ export const Search = (): JSX.Element => {
   if (data?.characters?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const pageInfo = data.characters.pageInfo;
+  const { pageInfo } = data.characters;
 
   const handleSubmit = (newQuery: string): void => {
     refetch({ query: newQuery, first: perPage });
   };
 
   return (
-    <Container max breakpoint={'desktop'} mt={2}>
+    <Container max breakpoint="desktop" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/search`}>{t('pages:searchPage.search')}</Link>
+          <Link to="/search">{t('pages:searchPage.search')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer={true} />
+      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
       <div className="table-container">
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
             <tr>
-              <th></th>
+              <th aria-label="empty header" />
               <th>{t('pages:searchPage.name')}</th>
               <th>{t('pages:searchPage.level')}</th>
               <th>{t('pages:searchPage.renownRank')}</th>
@@ -111,8 +111,8 @@ export const Search = (): JSX.Element => {
         <div className="field is-grouped is-pulled-right">
           {pageInfo.hasPreviousPage && (
             <Button
-              color={'info'}
-              size={'small'}
+              color="info"
+              size="small"
               onClick={() => {
                 refetch({
                   first: undefined,
@@ -128,8 +128,8 @@ export const Search = (): JSX.Element => {
           )}
           {pageInfo.hasNextPage && (
             <Button
-              color={'info'}
-              size={'small'}
+              color="info"
+              size="small"
               onClick={() => {
                 refetch({
                   first: perPage,
@@ -147,4 +147,4 @@ export const Search = (): JSX.Element => {
       )}
     </Container>
   );
-};
+}

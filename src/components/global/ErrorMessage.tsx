@@ -1,7 +1,7 @@
 import { Notification } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 
-export const ErrorMessage = ({
+export function ErrorMessage({
   message,
   name,
   customText,
@@ -9,15 +9,15 @@ export const ErrorMessage = ({
   message?: string;
   name?: string;
   customText?: string | null;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
-    <Notification color={'danger'}>
+    <Notification color="danger">
       <p>{t('global.errorMessage.errorWithSadSmiley')}</p>
       {name && <pre>{name}</pre>}
       {message && <pre>{message}</pre>}
       {customText && customText}
     </Notification>
   );
-};
+}

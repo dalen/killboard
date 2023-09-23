@@ -5,11 +5,11 @@ import { KillLeaderboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import './styles/table.scss';
 
-export const LeaderboardTable = ({
+export function LeaderboardTable({
   data,
 }: {
   data: KillLeaderboardEntry[];
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
 
   return (
@@ -27,8 +27,7 @@ export const LeaderboardTable = ({
         </tr>
       </thead>
       <tbody>
-        {data.map((leaderboardEntry) => {
-          return (
+        {data.map((leaderboardEntry) => (
             <tr key={leaderboardEntry.rank}>
               <td>{leaderboardEntry.rank}</td>
               <td>
@@ -61,9 +60,8 @@ export const LeaderboardTable = ({
               <td className="has-text-right">{leaderboardEntry.kills}</td>
               <td className="has-text-right">{leaderboardEntry.deaths}</td>
             </tr>
-          );
-        })}
+          ))}
       </tbody>
     </Table>
   );
-};
+}

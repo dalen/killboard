@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardGuildTable } from './LeaderboardGuildTable';
-import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const MONTHLY_GUILD_LEADERBOARD = gql`
@@ -27,7 +27,7 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
   }
 `;
 
-export const MonthlyGuildLeaderboard = (): JSX.Element => {
+export function MonthlyGuildLeaderboard(): JSX.Element {
   const { t } = useTranslation(['common', 'components']);
 
   const month = new Date().getUTCMonth() + 1;
@@ -52,4 +52,4 @@ export const MonthlyGuildLeaderboard = (): JSX.Element => {
       />
     </div>
   );
-};
+}

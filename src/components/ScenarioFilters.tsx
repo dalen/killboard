@@ -4,7 +4,7 @@ import { useSearchParams } from 'react-router-dom';
 
 const getQueueTypeFilters = (search: URLSearchParams) => {
   const queueType = search.get('queue_type');
-  const premadeOnly = search.get('premadeOnly') == 'true' ? true : undefined;
+  const premadeOnly = search.get('premadeOnly') === 'true' ? true : undefined;
 
   switch (queueType) {
     case 'standard':
@@ -21,15 +21,15 @@ const getQueueTypeFilters = (search: URLSearchParams) => {
   return { premadeOnly };
 };
 
-export const getScenarioFilters = (search: URLSearchParams) => {
-  return { ...getQueueTypeFilters(search) };
-};
+export const getScenarioFilters = (search: URLSearchParams) => ({
+  ...getQueueTypeFilters(search),
+});
 
-export const ScenarioFilters = ({
+export function ScenarioFilters({
   showPremadeOnly = false,
 }: {
   showPremadeOnly?: boolean;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -42,7 +42,7 @@ export const ScenarioFilters = ({
           <Columns.Column>
             <div className="field is-horizontal">
               <div className="field-label is-normal">
-                <label className="label">
+                <label className="label" htmlFor="queueType-select">
                   {t('scenarioFilters.queueType')}
                 </label>
               </div>
@@ -50,6 +50,7 @@ export const ScenarioFilters = ({
                 <div className="control">
                   <div className="select">
                     <select
+                      id="queueType-select"
                       value={queueType}
                       onChange={(event) => {
                         search.set('queue_type', event.target.value);
@@ -99,4 +100,4 @@ export const ScenarioFilters = ({
       </Card.Content>
     </Card>
   );
-};
+}

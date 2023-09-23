@@ -10,16 +10,16 @@ import { ScenarioFilters } from '../components/ScenarioFilters';
 import { CharacterArmory } from '../components/CharacterArmory';
 import { ScenarioCount } from '../components/ScenarioCount';
 
-export const Character = ({
+export function Character({
   tab,
 }: {
   tab: 'kills' | 'scenarios' | 'armory';
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
 
   const { id } = useParams();
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -51,7 +51,7 @@ export const Character = ({
       {tab === 'kills' && (
         <>
           <KillsFilters />
-          <Columns breakpoint={'desktop'}>
+          <Columns breakpoint="desktop">
             <Columns.Column>
               <CharacterRecentKills id={Number(id)} />
             </Columns.Column>
@@ -64,9 +64,9 @@ export const Character = ({
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters />
-          <Columns breakpoint={'desktop'}>
+          <Columns breakpoint="desktop">
             <Columns.Column>
-              <ScenarioCount characterId={id} wins={true} title="Wins" />
+              <ScenarioCount characterId={id} wins title="Wins" />
             </Columns.Column>
             <Columns.Column>
               <ScenarioCount characterId={id} wins={false} title="Losses" />
@@ -78,4 +78,4 @@ export const Character = ({
       {tab === 'armory' && <CharacterArmory id={Number(id)} />}
     </Container>
   );
-};
+}

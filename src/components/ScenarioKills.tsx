@@ -69,7 +69,7 @@ const SCENARIO_KILLS = gql`
   }
 `;
 
-export const ScenarioKills = ({ id }: { id: string }): JSX.Element => {
+export function ScenarioKills({ id }: { id: string }): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
@@ -82,4 +82,4 @@ export const ScenarioKills = ({ id }: { id: string }): JSX.Element => {
       perPage={10}
     />
   );
-};
+}

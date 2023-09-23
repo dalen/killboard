@@ -1,5 +1,6 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './i18n/config';
+import React from 'react';
 import { Character } from './pages/Character';
 import { Home } from './pages/Home';
 import { Kill } from './pages/Kill';
@@ -9,13 +10,12 @@ import { SearchGuild } from './pages/SearchGuild';
 import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
-import React from 'react';
 import { Scenario } from './pages/Scenario';
 import { ZoneMap } from './pages/ZoneMap';
 
 // Send page views to google analytics
 function usePageViews() {
-  let location = useLocation();
+  const location = useLocation();
   React.useEffect(() => {
     if ((window as any).gtag == null) return;
     (window as any).gtag('event', 'pageview', {

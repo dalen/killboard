@@ -61,7 +61,7 @@ const LATEST_KILLS = gql`
   }
 `;
 
-export const LatestKills = (): JSX.Element => {
+export function LatestKills(): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
@@ -72,4 +72,4 @@ export const LatestKills = (): JSX.Element => {
       <KillsList query={LATEST_KILLS} perPage={10} />
     </div>
   );
-};
+}

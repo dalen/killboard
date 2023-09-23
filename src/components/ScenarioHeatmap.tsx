@@ -1,11 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
 import { Container, Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
+import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ZoneHeatmap } from './ZoneHeatmap';
 import { zoneCoordinates } from '../zoneCoordinates';
-import _ from 'lodash';
 
 const SCENARIO_HEATMAP = gql`
   query GetScenarioHeatmap(
@@ -29,13 +29,13 @@ const SCENARIO_HEATMAP = gql`
   }
 `;
 
-export const ScenarioHeatmap = ({
+export function ScenarioHeatmap({
   zoneId,
   id,
 }: {
   zoneId: string;
   id: string;
-}): JSX.Element => {
+}): JSX.Element {
   const zoneCoord = zoneCoordinates[Number(zoneId)];
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_HEATMAP, {
@@ -64,7 +64,7 @@ export const ScenarioHeatmap = ({
   const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
 
   return (
-    <Container breakpoint={'desktop'} max>
+    <Container breakpoint="desktop" max>
       <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
       <ZoneHeatmap
         zoneId={zoneId}
@@ -73,4 +73,4 @@ export const ScenarioHeatmap = ({
       />
     </Container>
   );
-};
+}

@@ -4,13 +4,13 @@ import { Attacker as AttackerType } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 
-export const Attacker = ({
+export function Attacker({
   title,
   attacker,
 }: {
   title: string;
   attacker: AttackerType;
-}): JSX.Element => {
+}): JSX.Element {
   return (
     <Card mb={2}>
       <Card.Header backgroundColor="info-dark">
@@ -24,14 +24,14 @@ export const Attacker = ({
           </Link>
         </Card.Header.Title>
         <div className="m-3">
-          <Tag rounded size={'medium'}>
+          <Tag rounded size="medium">
             {attacker.damagePercent}%
           </Tag>
         </div>
       </Card.Header>
       <Card.Content py={2}>
         <Media>
-          <Media.Item align={'left'}>
+          <Media.Item align="left">
             <small>
               Lvl {attacker.level}
               <br />
@@ -40,7 +40,7 @@ export const Attacker = ({
           </Media.Item>
           {attacker.guild && (
             <>
-              <Media.Item align={'left'}>
+              <Media.Item align="left">
                 <GuildHeraldry size="48" guild={attacker.guild} />
               </Media.Item>
               <Media.Item>
@@ -54,4 +54,4 @@ export const Attacker = ({
       </Card.Content>
     </Card>
   );
-};
+}

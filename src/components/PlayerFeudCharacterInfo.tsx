@@ -4,23 +4,23 @@ import { Link } from 'react-router-dom';
 import { Character } from '../types';
 import { careerIcon } from '../utils';
 
-export const PlayerFeudCharacterInfo = ({
+export function PlayerFeudCharacterInfo({
   character,
   id,
 }: {
   character: Character;
   id: string | number;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation(['common', 'components', 'enums']);
 
   return (
     <Card mb={5}>
       <Card.Content>
         <Media>
-          <Media.Item align={'left'}>
+          <Media.Item align="left">
             <Image
-              size={'128'}
-              src={`/images/corner_icons/ea_icon_corner_character.png`}
+              size="128"
+              src="/images/corner_icons/ea_icon_corner_character.png"
               alt="Character"
             />
           </Media.Item>
@@ -66,4 +66,4 @@ export const PlayerFeudCharacterInfo = ({
       </Card.Content>
     </Card>
   );
-};
+}

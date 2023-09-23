@@ -7,8 +7,8 @@ import {
 } from 'react-bulma-components';
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { PlayerFeud } from '../components/PlayerFeud';
 import { gql, useQuery } from '@apollo/client';
+import { PlayerFeud } from '../components/PlayerFeud';
 import { Character, KillsConnection } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { PlayerFeudCharacterInfo } from '../components/PlayerFeudCharacterInfo';
@@ -51,7 +51,7 @@ const PLAYER_FEUD_INFO = gql`
   }
 `;
 
-export const PlayerFeudPage = (): JSX.Element => {
+export function PlayerFeudPage(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
 
   const { playerId1, playerId2 } = useParams();
@@ -72,7 +72,7 @@ export const PlayerFeudPage = (): JSX.Element => {
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -83,7 +83,7 @@ export const PlayerFeudPage = (): JSX.Element => {
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Columns breakpoint={'desktop'}>
+      <Columns breakpoint="desktop">
         <Columns.Column size={5}>
           <PlayerFeudCharacterInfo
             id={playerId1 || ''}
@@ -118,4 +118,4 @@ export const PlayerFeudPage = (): JSX.Element => {
       <PlayerFeud player1={playerId1 || ''} player2={playerId2 || ''} />
     </Container>
   );
-};
+}

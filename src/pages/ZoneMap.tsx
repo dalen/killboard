@@ -32,7 +32,7 @@ const ZONE_HEATMAP = gql`
   }
 `;
 
-export const ZoneMap = (): JSX.Element => {
+export function ZoneMap(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
@@ -66,7 +66,7 @@ export const ZoneMap = (): JSX.Element => {
   const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -84,4 +84,4 @@ export const ZoneMap = (): JSX.Element => {
       />
     </Container>
   );
-};
+}

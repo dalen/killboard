@@ -64,13 +64,13 @@ const PLAYER_FEUD = gql`
   }
 `;
 
-export const PlayerFeud = ({
+export function PlayerFeud({
   player1,
   player2,
 }: {
   player1: string;
   player2: string;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
@@ -89,4 +89,4 @@ export const PlayerFeud = ({
       />
     </div>
   );
-};
+}

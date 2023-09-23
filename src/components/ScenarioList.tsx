@@ -50,7 +50,7 @@ const SCENARIO_LIST = gql`
   }
 `;
 
-export const ScenarioList = ({
+export function ScenarioList({
   characterId,
   guildId,
   perPage = 15,
@@ -58,7 +58,7 @@ export const ScenarioList = ({
   characterId?: string;
   guildId?: String;
   perPage?: number;
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -100,4 +100,4 @@ export const ScenarioList = ({
       }
     />
   );
-};
+}

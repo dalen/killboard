@@ -90,16 +90,16 @@ const ScenarioQueueTypes: { [key: number]: string } = {
   6: 'Group Challenge',
 };
 
-export const Scenario = ({
+export function Scenario({
   tab,
 }: {
   tab: 'scoreboard' | 'kills' | 'map';
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_INFO, {
-    variables: { id: id },
+    variables: { id },
   });
 
   if (loading) return <Progress />;
@@ -118,7 +118,7 @@ export const Scenario = ({
   );
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -212,4 +212,4 @@ export const Scenario = ({
       )}
     </Container>
   );
-};
+}

@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { PageInfo, ScenarioRecord } from '../types';
 
-export const ScenarioListTable = ({
+export function ScenarioListTable({
   data,
   pageInfo,
   onNext,
@@ -15,7 +15,7 @@ export const ScenarioListTable = ({
   pageInfo?: PageInfo;
   onNext?: () => void;
   onPrevious?: () => void;
-}): JSX.Element => {
+}): JSX.Element {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
@@ -37,7 +37,7 @@ export const ScenarioListTable = ({
             <th align="center">{t('components:scenarioList.winner')}</th>
             <th align="right">{t('components:scenarioList.order')}</th>
             <th align="right">{t('components:scenarioList.destruction')}</th>
-            <th></th>
+            <th aria-label="empty" />
           </tr>
         </thead>
         <tbody>
@@ -69,7 +69,7 @@ export const ScenarioListTable = ({
                       hours: duration.hours,
                       minutes: duration.minutes,
                       seconds: duration.seconds,
-                    }
+                    },
                   )}
                 </td>
                 <td align="center">
@@ -116,8 +116,8 @@ export const ScenarioListTable = ({
                     <Button
                       p={2}
                       pull="right"
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={onPrevious}
                     >
                       {t('components:killsList.loadPrevious')}
@@ -128,8 +128,8 @@ export const ScenarioListTable = ({
                     <Button
                       p={2}
                       pull="right"
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={onNext}
                     >
                       {t('components:killsList.loadMore')}
@@ -144,4 +144,4 @@ export const ScenarioListTable = ({
       </Table>
     </div>
   );
-};
+}

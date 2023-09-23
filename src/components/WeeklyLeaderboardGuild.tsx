@@ -2,9 +2,9 @@ import getISOWeekYear from 'date-fns/getISOWeekYear';
 import getISOWeek from 'date-fns/getISOWeek';
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardGuildTable } from './LeaderboardGuildTable';
-import { Progress } from 'react-bulma-components';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const WEEKLY_LEADERBOARD_GUILD = gql`
@@ -29,12 +29,12 @@ const WEEKLY_LEADERBOARD_GUILD = gql`
   }
 `;
 
-export const WeeklyLeaderboardGuild = (): JSX.Element => {
+export function WeeklyLeaderboardGuild(): JSX.Element {
   const { t } = useTranslation(['common', 'components']);
 
   // To make sure we get the current week, even if local timezone differs.
   const now = new Date();
-  var utcDate = new Date(
+  const utcDate = new Date(
     now.getUTCFullYear(),
     now.getUTCMonth(),
     now.getUTCDate()
@@ -62,4 +62,4 @@ export const WeeklyLeaderboardGuild = (): JSX.Element => {
       />
     </div>
   );
-};
+}

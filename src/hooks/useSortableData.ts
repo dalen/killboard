@@ -17,7 +17,7 @@ export const useSortableData = (
   const [sortConfig, setSortConfig] = React.useState(config);
 
   const sortedItems = React.useMemo(() => {
-    let sortableItems = [...items];
+    const sortableItems = [...items];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
         if (sortConfig.key === 'name' || sortConfig.key === 'career') {
@@ -45,7 +45,7 @@ export const useSortableData = (
 
         if (sortConfig.key === 'guild') {
           if (
-            (a.guild?.['name'] ?? '').localeCompare(b.guild?.['name'] ?? '') ===
+            (a.guild?.name ?? '').localeCompare(b.guild?.name ?? '') ===
             -1
           ) {
             return sortConfig.direction === SortConfigDirection.ascending

@@ -69,17 +69,17 @@ const LATEST_KILLS = gql`
   }
 `;
 
-export const Kills = (): JSX.Element => {
+export function Kills(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/kills`}>{t('pages:killsPage.title')}</Link>
+          <Link to="/kills">{t('pages:killsPage.title')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <div>
@@ -92,4 +92,4 @@ export const Kills = (): JSX.Element => {
       </div>
     </Container>
   );
-};
+}

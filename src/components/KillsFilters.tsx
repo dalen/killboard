@@ -48,11 +48,9 @@ const getSoloKillsFilters = (search: URLSearchParams) => {
   return {};
 };
 
-export const getCurrentFilters = (search: URLSearchParams) => {
-  return { ...getPeriodFilters(search), ...getSoloKillsFilters(search) };
-};
+export const getCurrentFilters = (search: URLSearchParams) => ({ ...getPeriodFilters(search), ...getSoloKillsFilters(search) });
 
-export const KillsFilters = (): JSX.Element => {
+export function KillsFilters(): JSX.Element {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -96,4 +94,4 @@ export const KillsFilters = (): JSX.Element => {
       </Card.Content>
     </Card>
   );
-};
+}

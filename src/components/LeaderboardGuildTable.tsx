@@ -5,16 +5,16 @@ import { KillGuildLeaderboardEntry } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 import './styles/table.scss';
 
-export const LeaderboardGuildTable = ({
+export function LeaderboardGuildTable({
   data,
 }: {
   data: KillGuildLeaderboardEntry[];
-}): React.ReactElement | null => {
+}): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
 
   return (
     <div className="table-container">
-      <Table striped hoverable marginless size={'fullwidth'}>
+      <Table striped hoverable marginless size="fullwidth">
         <thead>
           <tr>
             <th>{t('components:leaderboardGuild.rank')}</th>
@@ -28,8 +28,7 @@ export const LeaderboardGuildTable = ({
           </tr>
         </thead>
         <tbody>
-          {data.map((leaderboardEntry) => {
-            return (
+          {data.map((leaderboardEntry) => (
               <tr key={leaderboardEntry.rank}>
                 <td>{leaderboardEntry.rank}</td>
                 <td>
@@ -50,10 +49,9 @@ export const LeaderboardGuildTable = ({
                 <td className="has-text-right">{leaderboardEntry.kills}</td>
                 <td className="has-text-right">{leaderboardEntry.deaths}</td>
               </tr>
-            );
-          })}
+            ))}
         </tbody>
       </Table>
     </div>
   );
-};
+}

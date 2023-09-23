@@ -64,13 +64,13 @@ const GUILD_FEUD = gql`
   }
 `;
 
-export const GuildFeud = ({
+export function GuildFeud({
   guild1,
   guild2,
 }: {
   guild1: string;
   guild2: string;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation('components');
 
   return (
@@ -89,4 +89,4 @@ export const GuildFeud = ({
       />
     </div>
   );
-};
+}

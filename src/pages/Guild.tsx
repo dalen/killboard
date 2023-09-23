@@ -62,11 +62,11 @@ const GUILD_INFO = gql`
   }
 `;
 
-export const Guild = ({
+export function Guild({
   tab,
 }: {
   tab: 'kills' | 'members' | 'scenarios';
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(GUILD_INFO, {
@@ -79,7 +79,7 @@ export const Guild = ({
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint={'widescreen'} mt={2}>
+    <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -117,9 +117,9 @@ export const Guild = ({
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters showPremadeOnly />
-          <Columns breakpoint={'desktop'}>
+          <Columns breakpoint="desktop">
             <Columns.Column>
-              <ScenarioCount guildId={id} wins={true} title="Wins" />
+              <ScenarioCount guildId={id} wins title="Wins" />
             </Columns.Column>
             <Columns.Column>
               <ScenarioCount guildId={id} wins={false} title="Losses" />
@@ -130,4 +130,4 @@ export const Guild = ({
       )}
     </Container>
   );
-};
+}

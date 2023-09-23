@@ -1,27 +1,27 @@
 import { Media } from 'react-bulma-components';
-import { Item } from '../types';
 import { useState } from 'react';
-import { CharacterItemPopup } from './CharacterItemPopup';
 import { useTranslation } from 'react-i18next';
+import { Item } from '../types';
+import { CharacterItemPopup } from './CharacterItemPopup';
 
-export const CharacterItem = ({
+export function CharacterItem({
   item,
   talismans,
 }: {
   item: Item;
   talismans: Array<Item>;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 
   const itemNameClass = (): string => {
     const itemLevel = Math.floor(item.itemLevel / 10);
-    return 'item-name-' + itemLevel + 'X';
+    return `item-name-${itemLevel}X`;
   };
 
   const itemFigureClass = (): string => {
     const itemLevel = Math.floor(item.itemLevel / 10);
-    return 'item-figure-' + itemLevel + 'X';
+    return `item-figure-${itemLevel}X`;
   };
 
   const showModal = () => {
@@ -41,9 +41,11 @@ export const CharacterItem = ({
       className="my-2 is-relative is-clickable"
       onMouseOver={showModal}
       onMouseLeave={hideModal}
+      onFocus={showModal}
+      onBlur={hideModal}
     >
       <Media>
-        <Media.Item align={'left'}>
+        <Media.Item align="left">
           <figure
             className={`${itemFigureClass()} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
           >
@@ -63,4 +65,4 @@ export const CharacterItem = ({
       {modalOpen && <CharacterItemPopup item={item} talismans={talismans} />}
     </div>
   );
-};
+}

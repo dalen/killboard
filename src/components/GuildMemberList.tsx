@@ -40,11 +40,11 @@ const GUILD_MEMBERS = gql`
   }
 `;
 
-export const GuildMemberList = ({
+export function GuildMemberList({
   id,
 }: {
   id: string | undefined;
-}): JSX.Element => {
+}): JSX.Element {
   const perPage = 25;
 
   const { t } = useTranslation(['common', 'pages']);
@@ -59,14 +59,14 @@ export const GuildMemberList = ({
   if (data?.guild?.members?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const pageInfo = data.guild.members.pageInfo;
+  const { pageInfo } = data.guild.members;
 
   return (
     <div className="table-container">
       <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
         <thead>
           <tr>
-            <th></th>
+            <th aria-label="empty header" />
             <th>{t('pages:guildMembers.name')}</th>
             <th>{t('pages:guildMembers.level')}</th>
             <th>{t('pages:guildMembers.renownRank')}</th>
@@ -97,8 +97,8 @@ export const GuildMemberList = ({
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={() =>
                         refetch({
                           first: undefined,
@@ -114,8 +114,8 @@ export const GuildMemberList = ({
                   )}
                   {pageInfo.hasNextPage && (
                     <Button
-                      color={'info'}
-                      size={'small'}
+                      color="info"
+                      size="small"
                       onClick={() =>
                         refetch({
                           first: perPage,
@@ -137,4 +137,4 @@ export const GuildMemberList = ({
       </Table>
     </div>
   );
-};
+}

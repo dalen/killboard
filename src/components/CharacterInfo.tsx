@@ -32,7 +32,7 @@ const CHARACTER_INFO = gql`
   }
 `;
 
-export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
+export function CharacterInfo({ id }: { id: number }): JSX.Element {
   const { t } = useTranslation(['common', 'components', 'enums']);
   const { loading, error, data } = useQuery<
     Query & { killsThisWeek: KillsConnection; deathsThisWeek: KillsConnection }
@@ -53,10 +53,10 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
     <Card mb={5}>
       <Card.Content>
         <Media>
-          <Media.Item align={'left'}>
+          <Media.Item align="left">
             <Image
-              size={'128'}
-              src={`/images/corner_icons/ea_icon_corner_character.png`}
+              size="128"
+              src="/images/corner_icons/ea_icon_corner_character.png"
               alt="Character"
             />
           </Media.Item>
@@ -103,4 +103,4 @@ export const CharacterInfo = ({ id }: { id: number }): JSX.Element => {
       </Card.Content>
     </Card>
   );
-};
+}

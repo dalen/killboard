@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { zoneCoordinates } from '../zoneCoordinates';
 
-export const Map = ({
+export function Map({
   x,
   y,
   zoneId,
@@ -10,7 +10,7 @@ export const Map = ({
   x?: number;
   y?: number;
   zoneId?: number;
-}): JSX.Element => {
+}): JSX.Element {
   const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
@@ -48,21 +48,21 @@ export const Map = ({
             0,
             0,
             canvasWidth,
-            canvasWidth
+            canvasWidth,
           );
           // load the indicator image after the map, so it is drawn on top
           skullImage.src = '/images/maps/icons/skull_red.png';
         };
         skullImage.onload = () => {
-          xTranslated &&
-            yTranslated &&
+          if (xTranslated && yTranslated) {
             ctx.drawImage(
               skullImage,
               xTranslated,
               yTranslated,
               iconSize,
-              iconSize
+              iconSize,
             );
+          }
         };
       }
     }
@@ -76,4 +76,4 @@ export const Map = ({
       <canvas ref={canvasElement} style={{ width: '100%' }} />
     </>
   );
-};
+}

@@ -85,7 +85,7 @@ const KILL_DETAILS = gql`
   }
 `;
 
-export const Kill = (): JSX.Element => {
+export function Kill(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(KILL_DETAILS, {
@@ -98,7 +98,7 @@ export const Kill = (): JSX.Element => {
   const date = new Date(data.kill.time * 1000);
 
   return (
-    <Container max breakpoint={'desktop'} mt={2}>
+    <Container max breakpoint="desktop" mt={2}>
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
@@ -112,10 +112,10 @@ export const Kill = (): JSX.Element => {
       <Card mb={5}>
         <Card.Content>
           <Media>
-            <Media.Item align={'left'}>
+            <Media.Item align="left">
               <Image
-                size={'128'}
-                src={`/images/corner_icons/ea_icon_corner_rvr.png`}
+                size="128"
+                src="/images/corner_icons/ea_icon_corner_rvr.png"
                 alt="Guild"
               />
             </Media.Item>
@@ -178,14 +178,14 @@ export const Kill = (): JSX.Element => {
             {data.kill.victim.guild && (
               <Card.Content py={2}>
                 <Media>
-                  <Media.Item align={'left'}>
+                  <Media.Item align="left">
                     <small>
                       Lvl {data.kill.victim.level}
                       <br />
                       RR {data.kill.victim.renownRank}
                     </small>
                   </Media.Item>
-                  <Media.Item align={'left'}>
+                  <Media.Item align="left">
                     <GuildHeraldry size="48" guild={data.kill.victim.guild} />
                   </Media.Item>
                   <Media.Item>
@@ -218,4 +218,4 @@ export const Kill = (): JSX.Element => {
       )}
     </Container>
   );
-};
+}
