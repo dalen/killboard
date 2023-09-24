@@ -1,10 +1,10 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Progress } from 'react-bulma-components';
+import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { SkirmishListTable } from './SkirmishListTable';
-import _ from 'lodash';
 
 const TOP_SKIRMISHES = gql`
   query GetTopSkirmishes {
