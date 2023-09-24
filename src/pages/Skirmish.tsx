@@ -141,8 +141,8 @@ export function Skirmish({
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
-      <Columns breakpoint="desktop" style={{ height: '200px' }}>
-        <Columns.Column>
+      <Columns breakpoint="desktop">
+        <Columns.Column style={{ height: '200px' }}>
           <Card style={{ height: '100%' }}>
             <Card.Content style={{ height: '100%' }}>
               <p className="is-size-5">
@@ -186,7 +186,7 @@ export function Skirmish({
             </Card.Content>
           </Card>
         </Columns.Column>
-        <Columns.Column>
+        <Columns.Column style={{ height: '200px' }}>
           <Card style={{ height: '100%' }}>
             <Card.Content style={{ height: '100%' }}>
               <p className="is-size-5">
@@ -219,7 +219,7 @@ export function Skirmish({
             </Card.Content>
           </Card>
         </Columns.Column>
-        <Columns.Column>
+        <Columns.Column style={{ height: '200px' }}>
           <Card style={{ height: '100%' }}>
             <Card.Content style={{ height: '100%' }}>
               <p className="is-size-5">
