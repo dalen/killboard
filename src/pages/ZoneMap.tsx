@@ -57,13 +57,15 @@ export function ZoneMap(): JSX.Element {
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const heatmapData = data.killsHeatmap.map((point) => ({
-    x: point.x * 10 + 5,
-    y: point.y * 10 + 5,
-    value: point.count,
-  }));
+  const heatmapData = data.killsHeatmap.map(
+    (point): [number, number, number] => [
+      point.x * 10 + 5,
+      point.y * 10 + 5,
+      point.count,
+    ],
+  );
 
-  const max = _.maxBy(heatmapData, (d) => d.value)?.value || 1;
+  const max = _.maxBy(heatmapData, (d) => d[2])?.[2] || 1;
 
   return (
     <Container max breakpoint="widescreen" mt={2}>
@@ -79,8 +81,9 @@ export function ZoneMap(): JSX.Element {
       </Breadcrumb>
       <ZoneHeatmap
         zoneId={Number(id).toString()}
-        data={{ min: 0, max, data: heatmapData }}
-        size={64}
+        max={max}
+        data={heatmapData}
+        size={640}
       />
     </Container>
   );

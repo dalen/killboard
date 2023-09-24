@@ -17,7 +17,7 @@ export function ZoneHeatmap({
 
   useEffect(() => {
     if (canvasElement.current == null || divElement.current == null) return;
-    var heat = simpleheat(canvasElement.current);
+    const heat = simpleheat(canvasElement.current);
     heat
       .data(data)
       .max(max)
@@ -30,7 +30,7 @@ export function ZoneHeatmap({
       ref={divElement}
       style={{ width: `${size}px`, height: `${size}px`, position: 'relative' }}
     >
-      <img src={`/images/maps/${zoneId}.webp`} />
+      <img src={`/images/maps/${zoneId}.webp`} alt="Zone kills heatmap" />
       <canvas
         ref={canvasElement}
         width={size}
