@@ -71,13 +71,10 @@ export function Home({
         </>
       )}
       {tab === 'skirmishes' && (
-        <LatestSkirmishes />
-        /*
         <>
           <TopSkirmishes />
           <LatestSkirmishes />
         </>
-        */
       )}
     </Container>
   );
