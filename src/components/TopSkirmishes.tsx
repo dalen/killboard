@@ -4,6 +4,7 @@ import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { SkirmishListTable } from './SkirmishListTable';
+import _ from 'lodash';
 
 const TOP_SKIRMISHES = gql`
   query GetTopSkirmishes {
@@ -72,7 +73,11 @@ export function TopSkirmishes(): JSX.Element {
       </div>
     );
 
-  const skirmishes = data?.topSkirmishes;
+  const skirmishes = _.orderBy(
+    data?.topSkirmishes,
+    (s) => s.kills?.totalCount,
+    'desc',
+  );
 
   if (skirmishes == null) return <p>{t('common:error')}</p>;
 
