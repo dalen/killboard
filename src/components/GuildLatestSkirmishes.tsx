@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
+import { useSearchParams } from 'react-router-dom';
 import { SkirmishList } from './SkirmishList';
-import { SkirmishFilters } from './SkirmishFilters';
+import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
 
 const LATEST_SKIRMISHES = gql`
   query GetGuildLatestSkirmishes(
@@ -74,12 +75,16 @@ export function GuildLatestSkirmishes({
   guildId?: String;
   perPage?: number;
 }): JSX.Element {
+  const [search] = useSearchParams();
+
   return (
     <>
       <SkirmishFilters />
       <SkirmishList
         query={LATEST_SKIRMISHES}
-        queryOptions={{ variables: { guildId } }}
+        queryOptions={{
+          variables: { guildId, where: getskirmishFilters(search) },
+        }}
         perPage={perPage}
       />
     </>
