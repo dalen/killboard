@@ -21,7 +21,7 @@ export function ZoneHeatmap({
     heat
       .data(data)
       .max(max)
-      .radius((size / 64) * 3)
+      .radius((size / 64) * 2.4)
       .draw();
   });
 
