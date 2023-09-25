@@ -61,6 +61,7 @@
     "scenarioId": "Scenario #{{scenarioId}}",
     "kills": "Kills",
     "scoreboard": "Scoreboard",
+    "skirmishes": "Skirmishes",
     "map": "Map",
     "order": "Order",
     "destruction": "Destruction"

@@ -20,6 +20,7 @@ import { ScenarioKills } from '../components/ScenarioKills';
 import { Query } from '../types';
 import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
 import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
+import { ScenarioSkirmishes } from '../components/ScenarioSkirmishes';
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID!) {
@@ -93,7 +94,7 @@ const ScenarioQueueTypes: { [key: number]: string } = {
 export function Scenario({
   tab,
 }: {
-  tab: 'scoreboard' | 'kills' | 'map';
+  tab: 'scoreboard' | 'kills' | 'skirmishes' | 'map';
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
@@ -199,6 +200,11 @@ export function Scenario({
             {t('pages:scenarioPage.kills')}
           </Link>
         </li>
+        <li className={tab === 'skirmishes' ? 'is-active' : ''}>
+          <Link to={`/scenario/${id}/skirmishes`}>
+            {t('pages:scenarioPage.skirmishes')}
+          </Link>
+        </li>
         <li className={tab === 'map' ? 'is-active' : ''}>
           <Link to={`/scenario/${id}/map`}>{t('pages:scenarioPage.map')}</Link>
         </li>
@@ -207,6 +213,7 @@ export function Scenario({
         <ScenarioScoreboard entries={scenario.scoreboardEntries} />
       )}
       {tab === 'kills' && <ScenarioKills id={id || ''} />}
+      {tab === 'skirmishes' && <ScenarioSkirmishes id={id || ''} />}
       {tab === 'map' && (
         <ScenarioHeatmap zoneId={scenario.scenario.zone.id} id={id || ''} />
       )}
