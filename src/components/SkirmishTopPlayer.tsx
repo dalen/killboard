@@ -80,7 +80,7 @@ export function SkirmishTopPlayer({
       <Card className={className}>
         <Card.Header>
           <Card.Header.Title>{t(title)}</Card.Header.Title>
-          <Card.Header.Title className="is-justify-content-right">
+          <Card.Header.Title className="is-justify-content-right has-text-grey">
             -
           </Card.Header.Title>
         </Card.Header>
@@ -105,7 +105,7 @@ export function SkirmishTopPlayer({
     <Card className={`mb-1 ${className}`}>
       <Card.Header>
         <Card.Header.Title>{t(title)}</Card.Header.Title>
-        <Card.Header.Title className="is-justify-content-right">
+        <Card.Header.Title className="is-justify-content-right has-text-grey">
           {Number(player[attribute]).toLocaleString()}
         </Card.Header.Title>
       </Card.Header>
