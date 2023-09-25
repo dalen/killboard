@@ -42,8 +42,8 @@ export function SkirmishListTable({
             <th>{t('components:skirmishList.time')}</th>
             {showZone && <th>{t('components:skirmishList.location')}</th>}
             <th>{t('components:skirmishList.guilds')}</th>
-            <th align="right">{t('components:skirmishList.players')}</th>
-            <th align="right">{t('components:skirmishList.kills')}</th>
+            <th align="center">{t('components:skirmishList.players')}</th>
+            <th align="center">{t('components:skirmishList.kills')}</th>
           </tr>
         </thead>
         <tbody>
@@ -132,8 +132,28 @@ export function SkirmishListTable({
                     </div>
                   ))}
                 </td>
-                <td align="right">{skirmish.scoreboardEntries?.totalCount}</td>
-                <td align="right">{skirmish.kills?.totalCount}</td>
+                <td align="center">
+                  {skirmish.numberOfPlayers}
+                  <br />
+                  <span className="text-color-order">
+                    {skirmish.numberOfPlayersOrder}
+                  </span>
+                  <span className="has-text-grey"> / </span>
+                  <span className="text-color-destruction">
+                    {skirmish.numberOfPlayersDestruction}
+                  </span>
+                </td>
+                <td align="center">
+                  {skirmish.numberOfKills}
+                  <br />
+                  <span className="text-color-order">
+                    {skirmish.numberOfKillsOrder}
+                  </span>
+                  <span className="has-text-grey"> / </span>
+                  <span className="text-color-destruction">
+                    {skirmish.numberOfKillsDestruction}
+                  </span>
+                </td>
                 <td>
                   <Link
                     to={`/skirmish/${skirmish.id}`}

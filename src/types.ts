@@ -1282,6 +1282,18 @@ export type Skirmish = {
   instance?: Maybe<ScenarioRecord>;
   /** Kills that happened during this skirmish */
   kills?: Maybe<KillsConnection>;
+  /** Total number of kills that happened during this skirmish */
+  numberOfKills: Scalars['Int']['output'];
+  /** Total number of kills that happened during this skirmish for Destruction */
+  numberOfKillsDestruction: Scalars['Int']['output'];
+  /** Total number of kills that happened during this skirmish for Order */
+  numberOfKillsOrder: Scalars['Int']['output'];
+  /** Total number of players that participated in this skirmish */
+  numberOfPlayers: Scalars['Int']['output'];
+  /** Total number of destruction players that participated in this skirmish */
+  numberOfPlayersDestruction: Scalars['Int']['output'];
+  /** Total number of order players that participated in this skirmish */
+  numberOfPlayersOrder: Scalars['Int']['output'];
   /** Primary Zone Info */
   primaryZone?: Maybe<Zone>;
   /** Primary Zone Area Info */

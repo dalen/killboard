@@ -47,12 +47,12 @@ const LATEST_SKIRMISHES = gql`
           }
           count
         }
-        scoreboardEntries {
-          totalCount
-        }
-        kills {
-          totalCount
-        }
+        numberOfKills
+        numberOfKillsOrder
+        numberOfKillsDestruction
+        numberOfPlayers
+        numberOfPlayersOrder
+        numberOfPlayersDestruction
       }
       pageInfo {
         hasNextPage

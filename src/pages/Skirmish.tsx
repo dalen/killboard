@@ -47,12 +47,12 @@ const SKIRMISH_INFO = gql`
         y
         count
       }
-      scoreboardEntries {
-        totalCount
-      }
-      kills {
-        totalCount
-      }
+      numberOfKills
+      numberOfKillsOrder
+      numberOfKillsDestruction
+      numberOfPlayers
+      numberOfPlayersOrder
+      numberOfPlayersDestruction
       topGuildsByPlayers {
         guild {
           id
@@ -175,13 +175,41 @@ export function Skirmish({
                 <div>
                   <strong>{t('pages:skirmishPage.totalPlayers')}</strong>
                 </div>
-                <div>{skirmish.scoreboardEntries?.totalCount}</div>
+                <div>
+                  {skirmish.numberOfPlayers}
+                  <span className="has-text-grey">
+                    {' '}
+                    (
+                    <span className="text-color-order">
+                      {skirmish.numberOfPlayersOrder}
+                    </span>{' '}
+                    /{' '}
+                    <span className="text-color-destruction">
+                      {skirmish.numberOfPlayersDestruction}
+                    </span>
+                    )
+                  </span>
+                </div>
               </div>
               <div className="is-flex is-justify-content-space-between">
                 <div>
                   <strong>{t('pages:skirmishPage.totalKills')}</strong>
                 </div>
-                <div>{skirmish.kills?.totalCount}</div>
+                <div>
+                  {skirmish.numberOfKills}{' '}
+                  <span className="has-text-grey">
+                    {' '}
+                    (
+                    <span className="text-color-order">
+                      {skirmish.numberOfKillsOrder}
+                    </span>{' '}
+                    /{' '}
+                    <span className="text-color-destruction">
+                      {skirmish.numberOfKillsDestruction}
+                    </span>
+                    )
+                  </span>
+                </div>
               </div>
             </Card.Content>
           </Card>
