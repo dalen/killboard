@@ -311,12 +311,14 @@ export function Skirmish({
           />
         </Columns.Column>
         <Columns.Column size="one-third">
-          <ZoneHeatmap
-            zoneId={skirmish.primaryZone?.id ?? ''}
-            max={max}
-            data={heatmapData}
-            size={mapSize}
-          />
+          <div className="mx-4">
+            <ZoneHeatmap
+              zoneId={skirmish.primaryZone?.id ?? ''}
+              max={max}
+              data={heatmapData}
+              size={mapSize}
+            />
+          </div>
         </Columns.Column>
       </Columns>
       <Tabs>
