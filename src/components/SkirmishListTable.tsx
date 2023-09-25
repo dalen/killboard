@@ -101,7 +101,16 @@ export function SkirmishListTable({
                             title="Scenario"
                           />
                         </Media.Item>
-                        <Media.Item>{skirmish.scenario.name}</Media.Item>
+                        <Media.Item>
+                          {skirmish.scenario.name}
+                          {skirmish.primaryZoneArea?.name !==
+                            skirmish.scenario.name && (
+                            <>
+                              <br />
+                              {skirmish.primaryZoneArea?.name}
+                            </>
+                          )}
+                        </Media.Item>
                       </Media>
                     )}
                   </td>
