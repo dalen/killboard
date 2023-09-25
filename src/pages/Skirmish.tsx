@@ -135,6 +135,9 @@ export function Skirmish({
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/skirmishes">{t('common:skirmishes')}</Link>
+        </Breadcrumb.Item>
         <Breadcrumb.Item active>
           <Link to={`/skirmish/${id}`}>
             {t('pages:skirmishPage.skirmishId', { skirmishId: id })}
