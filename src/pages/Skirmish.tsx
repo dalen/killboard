@@ -254,7 +254,7 @@ export function Skirmish({
         </Columns.Column>
       </Columns>
       <Columns breakpoint="desktop">
-        <Columns.Column size="one-quarter">
+        <Columns.Column size="one-third">
           <SkirmishTopPlayer
             id={id ?? ''}
             attribute="damage"
@@ -268,7 +268,7 @@ export function Skirmish({
             className="skirmish-top-healing-player"
           />
         </Columns.Column>
-        <Columns.Column size="one-quarter">
+        <Columns.Column size="one-third">
           <SkirmishTopPlayer
             id={id ?? ''}
             attribute="deathBlows"
@@ -282,7 +282,7 @@ export function Skirmish({
             className="skirmish-top-protection-player"
           />
         </Columns.Column>
-        <Columns.Column size="half">
+        <Columns.Column size="one-third">
           <ZoneHeatmap
             zoneId={skirmish.primaryZone?.id ?? ''}
             max={max}
