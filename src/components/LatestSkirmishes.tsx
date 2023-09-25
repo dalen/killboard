@@ -1,6 +1,8 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router-dom';
 import { SkirmishList } from './SkirmishList';
+import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
 
 const LATEST_SKIRMISHES = gql`
   query GetLatestSkirmishes(
@@ -8,8 +10,15 @@ const LATEST_SKIRMISHES = gql`
     $last: Int
     $before: String
     $after: String
+    $where: SkirmishFilterInput
   ) {
-    skirmishes(first: $first, last: $last, before: $before, after: $after) {
+    skirmishes(
+      first: $first
+      last: $last
+      before: $before
+      after: $after
+      where: $where
+    ) {
       nodes {
         id
         scenario {
@@ -64,13 +73,19 @@ export function LatestSkirmishes({
   perPage?: number;
 }): JSX.Element {
   const { t } = useTranslation('components');
+  const [search] = useSearchParams();
 
   return (
     <div>
       <div className="is-size-4 is-family-secondary is-uppercase">
         {t('latestSkirmishes.title')}
       </div>
-      <SkirmishList query={LATEST_SKIRMISHES} perPage={perPage} />
+      <SkirmishFilters />
+      <SkirmishList
+        query={LATEST_SKIRMISHES}
+        queryOptions={{ variables: { where: getskirmishFilters(search) } }}
+        perPage={perPage}
+      />
     </div>
   );
 }

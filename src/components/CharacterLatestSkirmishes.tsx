@@ -1,9 +1,11 @@
 import { gql } from '@apollo/client';
 import { SkirmishList } from './SkirmishList';
+import { SkirmishFilters } from './SkirmishFilters';
 
 const LATEST_SKIRMISHES = gql`
   query GetCharacterLatestSkirmishes(
     $characterId: ID
+    $where: SkirmishFilterInput
     $first: Int
     $last: Int
     $before: String
@@ -11,6 +13,7 @@ const LATEST_SKIRMISHES = gql`
   ) {
     skirmishes(
       characterId: $characterId
+      where: $where
       first: $first
       last: $last
       before: $before
@@ -72,10 +75,13 @@ export function CharacterLatestSkirmishes({
   perPage?: number;
 }): JSX.Element {
   return (
-    <SkirmishList
-      query={LATEST_SKIRMISHES}
-      queryOptions={{ variables: { characterId } }}
-      perPage={perPage}
-    />
+    <>
+      <SkirmishFilters />
+      <SkirmishList
+        query={LATEST_SKIRMISHES}
+        queryOptions={{ variables: { characterId } }}
+        perPage={perPage}
+      />
+    </>
   );
 }

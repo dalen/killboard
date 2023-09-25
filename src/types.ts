@@ -1331,6 +1331,18 @@ export type SkirmishFilterInput = {
   endTime?: InputMaybe<LongOperationFilterInput>;
   /** Scenario instance */
   instanceId?: InputMaybe<UuidOperationFilterInput>;
+  /** Total number of kills */
+  numberOfKills?: InputMaybe<IntOperationFilterInput>;
+  /** Total number of kills for destruction */
+  numberOfKillsDestruction?: InputMaybe<IntOperationFilterInput>;
+  /** Total number of kills for order */
+  numberOfKillsOrder?: InputMaybe<IntOperationFilterInput>;
+  /** Total number of players */
+  numberOfPlayers?: InputMaybe<IntOperationFilterInput>;
+  /** Total number of players destruction */
+  numberOfPlayersDestruction?: InputMaybe<IntOperationFilterInput>;
+  /** Total number of players order */
+  numberOfPlayersOrder?: InputMaybe<IntOperationFilterInput>;
   or?: InputMaybe<Array<SkirmishFilterInput>>;
   /** Primary Area */
   primaryAreaId?: InputMaybe<UnsignedShortOperationFilterInputType>;

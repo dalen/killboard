@@ -146,5 +146,17 @@
   },
   "topSkirmishes": {
     "title": "Top Skirmishes in past week"
+  },
+  "skirmishFilters": {
+    "locationType": "Location Type",
+    "locationTypeAll": "All",
+    "locationTypeRvr": "T2+ RvR",
+    "locationTypeRvrT1": "T1 RvR",
+    "locationTypeScenario": "Scenarios",
+    "minPlayers": "Min Players",
+    "minPlayersAll": "All",
+    "minPlayers12": "12+",
+    "minPlayers48": "48+",
+    "minPlayers100": "100+"
   }
 }
