@@ -73,10 +73,9 @@ export function TopSkirmishes(): JSX.Element {
       </div>
     );
 
-  const skirmishes = _.orderBy(
-    data?.topSkirmishes,
-    (s) => s.kills?.totalCount,
-    'desc',
+  const skirmishes = _.uniqBy(
+    _.orderBy(data?.topSkirmishes, (s) => s.kills?.totalCount, 'desc'),
+    (s) => s.id,
   );
 
   if (skirmishes == null) return <p>{t('common:error')}</p>;
