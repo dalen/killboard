@@ -18,6 +18,10 @@ const CHARACTER_ARMORY = gql`
             stat
             value
           }
+          buffs {
+            id
+            description
+          }
         }
         item {
           name
@@ -39,6 +43,32 @@ const CHARACTER_ARMORY = gql`
           talismanSlots
           speed
           dps
+          itemSet {
+            id
+            name
+            items {
+              id
+            }
+            bonuses {
+              itemsRequired
+              bonus {
+                ... on Ability {
+                  description
+                  __typename
+                }
+                ... on ItemStat {
+                  stat
+                  value
+                  percentage
+                  __typename
+                }
+              }
+            }
+          }
+          buffs {
+            id
+            description
+          }
         }
       }
     }
@@ -67,8 +97,10 @@ function NoItem() {
         levelRequirement: 0,
         armor: 0,
         careerRestriction: [],
+        buffs: [],
       }}
       talismans={[]}
+      itemsEquipped={[]}
     />
   );
 }
@@ -117,7 +149,11 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
         <div className="content">
           <strong className="mb-2">Armor</strong>
           {helm ? (
-            <CharacterItem item={helm.item} talismans={helm.talismans} />
+            <CharacterItem
+              item={helm.item}
+              talismans={helm.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
@@ -125,32 +161,53 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
             <CharacterItem
               item={shoulder.item}
               talismans={shoulder.talismans}
+              itemsEquipped={items}
             />
           ) : (
             <NoItem />
           )}
           {back ? (
-            <CharacterItem item={back.item} talismans={back.talismans} />
+            <CharacterItem
+              item={back.item}
+              talismans={back.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
           {body ? (
-            <CharacterItem item={body.item} talismans={body.talismans} />
+            <CharacterItem
+              item={body.item}
+              talismans={body.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
           {gloves ? (
-            <CharacterItem item={gloves.item} talismans={gloves.talismans} />
+            <CharacterItem
+              item={gloves.item}
+              talismans={gloves.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
           {belt ? (
-            <CharacterItem item={belt.item} talismans={belt.talismans} />
+            <CharacterItem
+              item={belt.item}
+              talismans={belt.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
           {boots ? (
-            <CharacterItem item={boots.item} talismans={boots.talismans} />
+            <CharacterItem
+              item={boots.item}
+              talismans={boots.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
@@ -163,21 +220,34 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
             <CharacterItem
               item={mainHand.item}
               talismans={mainHand.talismans}
+              itemsEquipped={items}
             />
           ) : (
             <NoItem />
           )}
           {offHand && (
-            <CharacterItem item={offHand.item} talismans={offHand.talismans} />
+            <CharacterItem
+              item={offHand.item}
+              talismans={offHand.talismans}
+              itemsEquipped={items}
+            />
           )}
           {ranged && (
-            <CharacterItem item={ranged.item} talismans={ranged.talismans} />
+            <CharacterItem
+              item={ranged.item}
+              talismans={ranged.talismans}
+              itemsEquipped={items}
+            />
           )}
         </div>
         <div className="mb-5">
           <strong className="mb-2">Event Item</strong>
           {event ? (
-            <CharacterItem item={event.item} talismans={event.talismans} />
+            <CharacterItem
+              item={event.item}
+              talismans={event.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
@@ -185,12 +255,20 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
         <div className="mb-5">
           <strong className="mb-2">Pocket</strong>
           {pocket1 ? (
-            <CharacterItem item={pocket1.item} talismans={pocket1.talismans} />
+            <CharacterItem
+              item={pocket1.item}
+              talismans={pocket1.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
           {pocket2 ? (
-            <CharacterItem item={pocket2.item} talismans={pocket2.talismans} />
+            <CharacterItem
+              item={pocket2.item}
+              talismans={pocket2.talismans}
+              itemsEquipped={items}
+            />
           ) : (
             <NoItem />
           )}
@@ -202,6 +280,7 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
           <CharacterItem
             item={jewellery1.item}
             talismans={jewellery1.talismans}
+            itemsEquipped={items}
           />
         ) : (
           <NoItem />
@@ -210,6 +289,7 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
           <CharacterItem
             item={jewellery2.item}
             talismans={jewellery2.talismans}
+            itemsEquipped={items}
           />
         ) : (
           <NoItem />
@@ -218,6 +298,7 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
           <CharacterItem
             item={jewellery3.item}
             talismans={jewellery3.talismans}
+            itemsEquipped={items}
           />
         ) : (
           <NoItem />
@@ -226,6 +307,7 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
           <CharacterItem
             item={jewellery4.item}
             talismans={jewellery4.talismans}
+            itemsEquipped={items}
           />
         ) : (
           <NoItem />

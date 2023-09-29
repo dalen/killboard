@@ -68,7 +68,15 @@
       "react/react-in-jsx-scope": "off",
       "import/prefer-default-export": "off",
       "react/require-default-props": "off",
-      "default-case": "off"
+      "default-case": "off",
+      "no-underscore-dangle": [
+        "error",
+        {
+          "allow": [
+            "__typename"
+          ]
+        }
+      ]
     },
     "parser": "@typescript-eslint/parser",
     "parserOptions": {

@@ -1,19 +1,57 @@
 import { useTranslation } from 'react-i18next';
-import { Item } from '../types';
+import clsx from 'clsx';
+import { CharacterItem, Item, ItemRarity, ItemSet } from '../types';
 import { isPercentage } from '../utils';
+
+const numEquippedInSet = (
+  itemSet: ItemSet,
+  itemsEquipped: Array<CharacterItem>,
+): number => {
+  let numEquipped = 0;
+
+  itemsEquipped.forEach((item) => {
+    if (
+      item.item.itemSet &&
+      item.item.itemSet.id === itemSet.id &&
+      item.equipSlot !== 'NONE'
+    ) {
+      numEquipped += 1;
+    }
+  });
+
+  return numEquipped;
+};
 
 export function CharacterItemPopup({
   item,
   talismans,
+  itemsEquipped,
 }: {
   item: Item;
   talismans: Array<Item>;
+  itemsEquipped: Array<CharacterItem>;
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
 
   const itemNameClass = (): string => {
-    const itemLevel = Math.floor(item.itemLevel / 10);
-    return `item-name-${itemLevel}X`;
+    if (item.itemSet) return 'item-name-item-set';
+
+    switch (item.rarity) {
+      case ItemRarity.Utility:
+        return 'item-name-utility';
+      case ItemRarity.Common:
+        return 'item-name-common';
+      case ItemRarity.Uncommon:
+        return 'item-name-uncommon';
+      case ItemRarity.Rare:
+        return 'item-name-rare';
+      case ItemRarity.VeryRare:
+        return 'item-name-very-rare';
+      case ItemRarity.Mythic:
+        return 'item-name-mythic';
+    }
+
+    return 'item-name-utility';
   };
 
   const statMultiplier = (stat: string) => {
@@ -23,21 +61,14 @@ export function CharacterItemPopup({
     return 1;
   };
 
+  const numEquipped = item.itemSet
+    ? numEquippedInSet(item.itemSet, itemsEquipped)
+    : 0;
+
+  console.log(item.name, numEquipped, itemsEquipped);
+
   return (
-    <div
-      style={{
-        position: 'absolute',
-        top: '0px',
-        left: '64px',
-        background: 'rgba(0,0,0,0.9)',
-        padding: '10px 10px 30px 10px',
-        minWidth: '88%',
-        borderRadius: '5px',
-        border: '1px solid rgb(82,52,71)',
-        zIndex: 5,
-        pointerEvents: 'none',
-      }}
-    >
+    <div className="popup">
       <div className="is-flex mb-4">
         <figure className="image is-32x32 m-0">
           <img
@@ -78,7 +109,7 @@ export function CharacterItemPopup({
       )}
       <div className="is-size-7 stats-text-highlight">
         {item.stats.map((stat) => (
-          <div key={item.slot}>
+          <div key={stat.stat}>
             + {stat.value * statMultiplier(stat.stat)}
             {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
           </div>
@@ -99,12 +130,48 @@ export function CharacterItemPopup({
                 {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
               </div>
             ))}
+            {talisman.buffs.length > 0 &&
+              talisman.buffs.map((buff) => (
+                <div key={buff.id} className="is-size-7 item-text-buff">
+                  {buff.description}
+                </div>
+              ))}
           </div>
         </div>
       ))}
       {item.talismanSlots > talismans.length && (
         <div className="is-size-7">Empty Talisman Slot</div>
       )}
+      {item.itemSet && (
+        <div className="is-size-7 mb-3 item-text-set-bonus-enabled">
+          {item.itemSet.name}
+          {item.itemSet.bonuses.map((bonus) => (
+            <div
+              className={clsx('ml-2', {
+                'item-text-set-bonus-enabled':
+                  numEquipped >= bonus.itemsRequired,
+                'item-text-set-bonus-disabled':
+                  numEquipped < bonus.itemsRequired,
+              })}
+            >
+              ({bonus.itemsRequired} piece bonus):{' '}
+              {bonus.bonus.__typename === 'Ability' && bonus.bonus.description}
+              {bonus.bonus.__typename === 'ItemStat' &&
+                `+ ${
+                  bonus.bonus.value * statMultiplier(bonus.bonus.stat)
+                } ${isPercentage(bonus.bonus.stat)} ${t(
+                  `enums:stat.${bonus.bonus.stat}`,
+                )}`}
+            </div>
+          ))}
+        </div>
+      )}
+      {item.buffs.length > 0 &&
+        item.buffs.map((buff) => (
+          <div key={buff.id} className="is-size-7 item-text-buff">
+            + {buff.description}
+          </div>
+        ))}
       {item.levelRequirement > 0 && (
         <div className="is-size-7 has-text-white">
           Minumum Rank: {item.levelRequirement}

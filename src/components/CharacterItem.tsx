@@ -1,27 +1,61 @@
 import { Media } from 'react-bulma-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Item } from '../types';
+import { CharacterItem as CharacterItemType, Item, ItemRarity } from '../types';
 import { CharacterItemPopup } from './CharacterItemPopup';
 
 export function CharacterItem({
   item,
   talismans,
+  itemsEquipped,
 }: {
   item: Item;
   talismans: Array<Item>;
+  itemsEquipped: Array<CharacterItemType>;
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 
   const itemNameClass = (): string => {
-    const itemLevel = Math.floor(item.itemLevel / 10);
-    return `item-name-${itemLevel}X`;
+    if (item.itemSet) return 'item-name-item-set';
+
+    switch (item.rarity) {
+      case ItemRarity.Utility:
+        return 'item-name-utility';
+      case ItemRarity.Common:
+        return 'item-name-common';
+      case ItemRarity.Uncommon:
+        return 'item-name-uncommon';
+      case ItemRarity.Rare:
+        return 'item-name-rare';
+      case ItemRarity.VeryRare:
+        return 'item-name-very-rare';
+      case ItemRarity.Mythic:
+        return 'item-name-mythic';
+    }
+
+    return 'item-name-utility';
   };
 
   const itemFigureClass = (): string => {
-    const itemLevel = Math.floor(item.itemLevel / 10);
-    return `item-figure-${itemLevel}X`;
+    if (item.itemSet) return 'item-figure-item-set';
+
+    switch (item.rarity) {
+      case ItemRarity.Utility:
+        return 'item-figure-utility';
+      case ItemRarity.Common:
+        return 'item-figure-common';
+      case ItemRarity.Uncommon:
+        return 'item-figure-uncommon';
+      case ItemRarity.Rare:
+        return 'item-figure-rare';
+      case ItemRarity.VeryRare:
+        return 'item-figure-very-rare';
+      case ItemRarity.Mythic:
+        return 'item-figure-mythic';
+    }
+
+    return 'item-figure-utility';
   };
 
   const showModal = () => {
@@ -62,7 +96,13 @@ export function CharacterItem({
           </Media.Item>
         )}
       </Media>
-      {modalOpen && <CharacterItemPopup item={item} talismans={talismans} />}
+      {modalOpen && (
+        <CharacterItemPopup
+          item={item}
+          talismans={talismans}
+          itemsEquipped={itemsEquipped}
+        />
+      )}
     </div>
   );
 }

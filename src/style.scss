@@ -120,36 +120,38 @@ div.scenario-scoreboard-tooltip {
   cursor: help;
 }
 
-$mythic: gold;
-$epic: orange;
-$very-rare: rgb(189, 81, 222);
-$rare: #02a4fb;
-$uncommon: #00c100;
-$common: rgb(180, 180, 180);
+// From defaultcolor.lua
+$rarity-utility: rgb(150, 150, 150);
+$rarity-common: rgb(255, 255, 255);
+$rarity-uncommon: rgb(24, 240, 0);
+$rarity-rare: rgb(0, 100, 195);
+$rarity-very-rare: rgb(146, 56, 208);
+$rarity-mythic: rgb(200, 60, 0);
+$rarity-item-set: rgb(240, 190, 40);
+$tooltip-item-set-enabled: rgb(0, 255, 0);
+$tooltip-item-set-disabled: rgb(175, 175, 175);
+$tooltip-item-bonus: rgb(255, 255, 0);
 
-.item-name-7X {
-  color: $mythic;
+.item-name-utility {
+  color: $rarity-utility;
 }
-.item-name-6X {
-  color: $epic;
+.item-name-common {
+  color: $rarity-common;
 }
-.item-name-5X {
-  color: $very-rare;
+.item-name-uncommon {
+  color: $rarity-uncommon;
 }
-.item-name-4X {
-  color: $uncommon;
+.item-name-rare {
+  color: $rarity-rare;
 }
-.item-name-3X {
-  color: $rare;
+.item-name-very-rare {
+  color: $rarity-very-rare;
 }
-.item-name-2X {
-  color: $common;
+.item-name-mythic {
+  color: $rarity-mythic;
 }
-.item-name-1X {
-  color: $common;
-}
-.item-name-0X {
-  color: $common;
+.item-name-item-set {
+  color: $rarity-item-set;
 }
 
 .item-figure {
@@ -157,33 +159,42 @@ $common: rgb(180, 180, 180);
   border-radius: 2px;
 }
 
-.item-figure-7X {
-  border-color: $mythic;
+.item-figure-utility {
+  border-color: $rarity-utility;
 }
-.item-figure-6X {
-  border-color: $epic;
+.item-figure-common {
+  border-color: $rarity-common;
 }
-.item-figure-5X {
-  border-color: $very-rare;
+.item-figure-uncommon {
+  border-color: $rarity-uncommon;
 }
-.item-figure-4X {
-  border-color: $rare;
+.item-figure-rare {
+  border-color: $rarity-rare;
 }
-.item-figure-3X {
-  border-color: $uncommon;
+.item-figure-very-rare {
+  border-color: $rarity-very-rare;
 }
-.item-figure-2X {
-  border-color: $common;
+.item-figure-mythic {
+  border-color: $rarity-mythic;
 }
-.item-figure-1X {
-  border-color: $common;
+.item-figure-item-set {
+  border-color: $rarity-item-set;
 }
-.item-figure-0X {
-  border-color: $common;
+
+.item-text-set-bonus-enabled {
+  color: $tooltip-item-set-enabled;
+}
+
+.item-text-set-bonus-disabled {
+  color: $tooltip-item-set-disabled;
+}
+
+.item-text-buff {
+  color: $tooltip-item-set-enabled;
 }
 
 .stats-text-highlight {
-  color: gold;
+  color: $tooltip-item-bonus;
 }
 
 .skirmish-top-damage-player {
@@ -212,4 +223,17 @@ $common: rgb(180, 180, 180);
 
 .text-color-destruction {
   color: rgb(255, 5, 5);
+}
+
+.popup {
+  position: absolute;
+  top: 0px;
+  left: 64px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px 10px 30px 10px;
+  min-width: 88%;
+  border-radius: 5px;
+  border: 1px solid rgb(82, 52, 71);
+  z-index: 5;
+  pointer-events: none;
 }
