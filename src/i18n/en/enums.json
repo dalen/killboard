@@ -30,7 +30,7 @@
     "WITCH_HUNTER": "Witch Hunter",
     "ZEALOT": "Zealot"
   },
-  "itemSlot" : {
+  "itemSlot": {
     "HELM": "Helm",
     "BODY": "Body",
     "SHOULDER": "Shoulder",
@@ -50,7 +50,7 @@
     "OFF_HAND": "Off Hand",
     "RANGED_WEAPON": "Ranged Weapon"
   },
-  "itemType" : {
+  "itemType": {
     "HEAVY_ARMOR": "Heavy Armor",
     "MEDIUM_ARMOR": "Medium Armor",
     "LIGHT_ARMOR": "Light Armor",
@@ -66,7 +66,7 @@
     "SPEAR": "Spear",
     "CHARM": "Charm"
   },
-  "stat" : {
+  "stat": {
     "WOUNDS": "Wounds",
     "WEAPON_SKILL": "Weapon Skill",
     "WILLPOWER": "Willpower",
@@ -106,6 +106,10 @@
     "ARMOR_PENETRATION_REDUCTION": "Reduced Armor Penetration",
     "HATE_CAUSED": "Hate Caused",
     "HATE_RECEIVED": "Hate Received",
-    "ARMOR": "Armor"
+    "ARMOR": "Armor",
+    "OUTGOING_DAMAGE": "Damage",
+    "MASTERY_1_BONUS": "Mastery 1 Level",
+    "MASTERY_2_BONUS": "Mastery 2 Level",
+    "MASTERY_3_BONUS": "Mastery 3 Level"
   }
 }
