@@ -65,8 +65,6 @@ export function CharacterItemPopup({
     ? numEquippedInSet(item.itemSet, itemsEquipped)
     : 0;
 
-  console.log(item.name, numEquipped, itemsEquipped);
-
   return (
     <div className="popup">
       <div className="is-flex mb-4">
