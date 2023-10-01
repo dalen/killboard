@@ -163,7 +163,17 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
               {Array(item.talismanSlots)
                 .fill(0)
                 .map(() => (
-                  <div>Empty Talisman Slot</div>
+                  <div>
+                    <span className="icon-text">
+                      <figure className="image is-24x24 mr-1">
+                        <img
+                          src="https://armory.returnofreckoning.com/icon/1"
+                          alt={t('components:itemVendors.order')}
+                        />
+                      </figure>
+                      Empty Talisman Slot
+                    </span>
+                  </div>
                 ))}
 
               {item.itemSet && (
