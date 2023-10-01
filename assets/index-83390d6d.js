@@ -1921,6 +1921,7 @@ function print() { __p += __j.call(arguments, '') }
         requiredItems {
           count
           item {
+            id
             name
             iconUrl
           }
