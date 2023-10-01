@@ -1,7 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import { CharacterItem, Item, ItemRarity, ItemSet } from '../types';
+import { CharacterItem, Item, ItemSet } from '../types';
 import { isPercentage } from '../utils';
+import { itemNameClass, statMultiplier } from '../itemUtils';
 
 const numEquippedInSet = (
   itemSet: ItemSet,
@@ -33,34 +34,6 @@ export function CharacterItemPopup({
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
 
-  const itemNameClass = (): string => {
-    if (item.itemSet) return 'item-name-item-set';
-
-    switch (item.rarity) {
-      case ItemRarity.Utility:
-        return 'item-name-utility';
-      case ItemRarity.Common:
-        return 'item-name-common';
-      case ItemRarity.Uncommon:
-        return 'item-name-uncommon';
-      case ItemRarity.Rare:
-        return 'item-name-rare';
-      case ItemRarity.VeryRare:
-        return 'item-name-very-rare';
-      case ItemRarity.Mythic:
-        return 'item-name-mythic';
-    }
-
-    return 'item-name-utility';
-  };
-
-  const statMultiplier = (stat: string) => {
-    if (stat === 'HEALTH_REGEN') {
-      return 4;
-    }
-    return 1;
-  };
-
   const numEquipped = item.itemSet
     ? numEquippedInSet(item.itemSet, itemsEquipped)
     : 0;
@@ -77,7 +50,7 @@ export function CharacterItemPopup({
         </figure>
 
         <div className="ml-2 is-size-6">
-          <div className={itemNameClass()}>{item.name}</div>
+          <div className={itemNameClass(item)}>{item.name}</div>
         </div>
       </div>
       <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>

@@ -81,5 +81,10 @@
   },
   "mapPage": {
     "zoneId": "Zone #{{zoneId}}"
+  },
+  "itemPage": {
+    "itemId": "Item #{{itemId}}",
+    "vendors": "Sold by",
+    "quests": "Quests"
   }
 }

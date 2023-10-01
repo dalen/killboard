@@ -44,6 +44,11 @@ export type Attacker = {
   renownRank: Scalars['Byte']['output'];
 };
 
+export type BooleanOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Boolean']['input']>;
+  neq?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type ByteOperationFilterInput = {
   eq?: InputMaybe<Scalars['Byte']['input']>;
   gt?: InputMaybe<Scalars['Byte']['input']>;
@@ -145,6 +150,13 @@ export enum CareerMask {
   Zealot = 'ZEALOT'
 }
 
+export type CareerMaskOperationFilterInput = {
+  eq?: InputMaybe<CareerMask>;
+  in?: InputMaybe<Array<CareerMask>>;
+  neq?: InputMaybe<CareerMask>;
+  nin?: InputMaybe<Array<CareerMask>>;
+};
+
 /** Info about a character */
 export type Character = {
   __typename?: 'Character';
@@ -243,6 +255,282 @@ export enum CraftingItemType {
   TalismanContainer = 'TALISMAN_CONTAINER'
 }
 
+export type Creature = {
+  __typename?: 'Creature';
+  creatureSubType: CreatureSubType;
+  creatureType: CreatureType;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  realm?: Maybe<Realm>;
+  spawns: Array<CreatureSpawn>;
+};
+
+export type CreatureFilterInput = {
+  and?: InputMaybe<Array<CreatureFilterInput>>;
+  /** Sub Type */
+  creatureSubType?: InputMaybe<CreatureSubTypesOperationFilterInput>;
+  /** Type */
+  creatureType?: InputMaybe<CreatureTypesOperationFilterInput>;
+  /** Name */
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<CreatureFilterInput>>;
+};
+
+export type CreatureSortInput = {
+  creatureSubType?: InputMaybe<SortEnumType>;
+  creatureType?: InputMaybe<SortEnumType>;
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+};
+
+export type CreatureSpawn = {
+  __typename?: 'CreatureSpawn';
+  id: Scalars['ID']['output'];
+  /** Position Info */
+  position: Position;
+  /** Zone Info */
+  zone: Zone;
+};
+
+export enum CreatureSubType {
+  AnimalsBeastsBasilisk = 'ANIMALS_BEASTS_BASILISK',
+  AnimalsBeastsBear = 'ANIMALS_BEASTS_BEAR',
+  AnimalsBeastsBoar = 'ANIMALS_BEASTS_BOAR',
+  AnimalsBeastsGiantBat = 'ANIMALS_BEASTS_GIANT_BAT',
+  AnimalsBeastsGreatCat = 'ANIMALS_BEASTS_GREAT_CAT',
+  AnimalsBeastsHound = 'ANIMALS_BEASTS_HOUND',
+  AnimalsBeastsRhinox = 'ANIMALS_BEASTS_RHINOX',
+  AnimalsBeastsWolf = 'ANIMALS_BEASTS_WOLF',
+  AnimalsBirdsGreatEagle = 'ANIMALS_BIRDS_GREAT_EAGLE',
+  AnimalsBirdsVulture = 'ANIMALS_BIRDS_VULTURE',
+  AnimalsBirdsWarhawk = 'ANIMALS_BIRDS_WARHAWK',
+  AnimalsCritterBat = 'ANIMALS_CRITTER_BAT',
+  AnimalsCritterBird = 'ANIMALS_CRITTER_BIRD',
+  AnimalsCritterCrab = 'ANIMALS_CRITTER_CRAB',
+  AnimalsCritterDeer = 'ANIMALS_CRITTER_DEER',
+  AnimalsCritterHare = 'ANIMALS_CRITTER_HARE',
+  AnimalsCritterLizard = 'ANIMALS_CRITTER_LIZARD',
+  AnimalsCritterMaggot = 'ANIMALS_CRITTER_MAGGOT',
+  AnimalsCritterRat = 'ANIMALS_CRITTER_RAT',
+  AnimalsCritterSpider = 'ANIMALS_CRITTER_SPIDER',
+  AnimalsInsectsArachnidsGiantScarab = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SCARAB',
+  AnimalsInsectsArachnidsGiantScorpion = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SCORPION',
+  AnimalsInsectsArachnidsGiantSpider = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SPIDER',
+  AnimalsInsectsArachnidsTombSwarm = 'ANIMALS_INSECTS_ARACHNIDS_TOMB_SWARM',
+  AnimalsLivestockCat = 'ANIMALS_LIVESTOCK_CAT',
+  AnimalsLivestockChicken = 'ANIMALS_LIVESTOCK_CHICKEN',
+  AnimalsLivestockCow = 'ANIMALS_LIVESTOCK_COW',
+  AnimalsLivestockDog = 'ANIMALS_LIVESTOCK_DOG',
+  AnimalsLivestockHorse = 'ANIMALS_LIVESTOCK_HORSE',
+  AnimalsLivestockPig = 'ANIMALS_LIVESTOCK_PIG',
+  AnimalsLivestockSheep = 'ANIMALS_LIVESTOCK_SHEEP',
+  AnimalsReptilesColdOne = 'ANIMALS_REPTILES_COLD_ONE',
+  AnimalsReptilesGiantLizard = 'ANIMALS_REPTILES_GIANT_LIZARD',
+  DaemonsKhorneBloodbeast = 'DAEMONS_KHORNE_BLOODBEAST',
+  DaemonsKhorneBloodletter = 'DAEMONS_KHORNE_BLOODLETTER',
+  DaemonsKhorneBloodthirster = 'DAEMONS_KHORNE_BLOODTHIRSTER',
+  DaemonsKhorneFleshHound = 'DAEMONS_KHORNE_FLESH_HOUND',
+  DaemonsKhorneJuggernautOfKhorne = 'DAEMONS_KHORNE_JUGGERNAUT_OF_KHORNE',
+  DaemonsNurgleGreatUncleanOne = 'DAEMONS_NURGLE_GREAT_UNCLEAN_ONE',
+  DaemonsNurgleNurgling = 'DAEMONS_NURGLE_NURGLING',
+  DaemonsNurglePlaguebearer = 'DAEMONS_NURGLE_PLAGUEBEARER',
+  DaemonsNurglePlaguebeast = 'DAEMONS_NURGLE_PLAGUEBEAST',
+  DaemonsNurgleSlimeHound = 'DAEMONS_NURGLE_SLIME_HOUND',
+  DaemonsSlaaneshDaemonette = 'DAEMONS_SLAANESH_DAEMONETTE',
+  DaemonsSlaaneshFiend = 'DAEMONS_SLAANESH_FIEND',
+  DaemonsSlaaneshKeeperOfSecrets = 'DAEMONS_SLAANESH_KEEPER_OF_SECRETS',
+  DaemonsTzeentchFirewyrm = 'DAEMONS_TZEENTCH_FIREWYRM',
+  DaemonsTzeentchFlamer = 'DAEMONS_TZEENTCH_FLAMER',
+  DaemonsTzeentchHorror = 'DAEMONS_TZEENTCH_HORROR',
+  DaemonsTzeentchLordOfChange = 'DAEMONS_TZEENTCH_LORD_OF_CHANGE',
+  DaemonsTzeentchScreamer = 'DAEMONS_TZEENTCH_SCREAMER',
+  DaemonsTzeentchWatcher = 'DAEMONS_TZEENTCH_WATCHER',
+  DaemonsUnmarkedDaemonsChaosFury = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_FURY',
+  DaemonsUnmarkedDaemonsChaosHound = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_HOUND',
+  DaemonsUnmarkedDaemonsChaosSpawn = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_SPAWN',
+  DaemonsUnmarkedDaemonsDaemonvine = 'DAEMONS_UNMARKED_DAEMONS_DAEMONVINE',
+  DaemonsUnmarkedDaemonsDaemonPrince = 'DAEMONS_UNMARKED_DAEMONS_DAEMON_PRINCE',
+  DaemonsUnmarkedDaemonsWalker = 'DAEMONS_UNMARKED_DAEMONS_WALKER',
+  DwarvenSlayer = 'DWARVEN_SLAYER',
+  HumanoidsBeastmenBestigor = 'HUMANOIDS_BEASTMEN_BESTIGOR',
+  HumanoidsBeastmenBrayShaman = 'HUMANOIDS_BEASTMEN_BRAY_SHAMAN',
+  HumanoidsBeastmenDoombull = 'HUMANOIDS_BEASTMEN_DOOMBULL',
+  HumanoidsBeastmenGor = 'HUMANOIDS_BEASTMEN_GOR',
+  HumanoidsBeastmenUngor = 'HUMANOIDS_BEASTMEN_UNGOR',
+  HumanoidsDarkElvesBlackGuard = 'HUMANOIDS_DARK_ELVES_BLACK_GUARD',
+  HumanoidsDarkElvesDarkElf = 'HUMANOIDS_DARK_ELVES_DARK_ELF',
+  HumanoidsDarkElvesDiscipleOfKhaine = 'HUMANOIDS_DARK_ELVES_DISCIPLE_OF_KHAINE',
+  HumanoidsDarkElvesSorceress = 'HUMANOIDS_DARK_ELVES_SORCERESS',
+  HumanoidsDarkElvesWitchElves = 'HUMANOIDS_DARK_ELVES_WITCH_ELVES',
+  HumanoidsDwarfsDwarf = 'HUMANOIDS_DWARFS_DWARF',
+  HumanoidsDwarfsEngineer = 'HUMANOIDS_DWARFS_ENGINEER',
+  HumanoidsDwarfsHammerer = 'HUMANOIDS_DWARFS_HAMMERER',
+  HumanoidsDwarfsIronbreaker = 'HUMANOIDS_DWARFS_IRONBREAKER',
+  HumanoidsDwarfsRunepriest = 'HUMANOIDS_DWARFS_RUNEPRIEST',
+  HumanoidsDwarfsSlayer = 'HUMANOIDS_DWARFS_SLAYER',
+  HumanoidsElvesArchmage = 'HUMANOIDS_ELVES_ARCHMAGE',
+  HumanoidsElvesHighElf = 'HUMANOIDS_ELVES_HIGH_ELF',
+  HumanoidsElvesShadowWarrior = 'HUMANOIDS_ELVES_SHADOW_WARRIOR',
+  HumanoidsElvesSwordmaster = 'HUMANOIDS_ELVES_SWORDMASTER',
+  HumanoidsElvesWhiteLion = 'HUMANOIDS_ELVES_WHITE_LION',
+  HumanoidsGreenskinsBlackOrc = 'HUMANOIDS_GREENSKINS_BLACK_ORC',
+  HumanoidsGreenskinsChoppa = 'HUMANOIDS_GREENSKINS_CHOPPA',
+  HumanoidsGreenskinsGnoblar = 'HUMANOIDS_GREENSKINS_GNOBLAR',
+  HumanoidsGreenskinsGoblin = 'HUMANOIDS_GREENSKINS_GOBLIN',
+  HumanoidsGreenskinsNightGoblin = 'HUMANOIDS_GREENSKINS_NIGHT_GOBLIN',
+  HumanoidsGreenskinsOrc = 'HUMANOIDS_GREENSKINS_ORC',
+  HumanoidsGreenskinsSavageOrc = 'HUMANOIDS_GREENSKINS_SAVAGE_ORC',
+  HumanoidsGreenskinsShaman = 'HUMANOIDS_GREENSKINS_SHAMAN',
+  HumanoidsGreenskinsSnotling = 'HUMANOIDS_GREENSKINS_SNOTLING',
+  HumanoidsGreenskinsSquig = 'HUMANOIDS_GREENSKINS_SQUIG',
+  HumanoidsGreenskinsSquigHerder = 'HUMANOIDS_GREENSKINS_SQUIG_HERDER',
+  HumanoidsHumansBandit = 'HUMANOIDS_HUMANS_BANDIT',
+  HumanoidsHumansBrightWizard = 'HUMANOIDS_HUMANS_BRIGHT_WIZARD',
+  HumanoidsHumansChaos = 'HUMANOIDS_HUMANS_CHAOS',
+  HumanoidsHumansChosen = 'HUMANOIDS_HUMANS_CHOSEN',
+  HumanoidsHumansDrakkCultist = 'HUMANOIDS_HUMANS_DRAKK_CULTIST',
+  HumanoidsHumansEmpire = 'HUMANOIDS_HUMANS_EMPIRE',
+  HumanoidsHumansGhoul = 'HUMANOIDS_HUMANS_GHOUL',
+  HumanoidsHumansHuman = 'HUMANOIDS_HUMANS_HUMAN',
+  HumanoidsHumansKnightOfTheBlazingSun = 'HUMANOIDS_HUMANS_KNIGHT_OF_THE_BLAZING_SUN',
+  HumanoidsHumansMagus = 'HUMANOIDS_HUMANS_MAGUS',
+  HumanoidsHumansMarauder = 'HUMANOIDS_HUMANS_MARAUDER',
+  HumanoidsHumansPlagueVictim = 'HUMANOIDS_HUMANS_PLAGUE_VICTIM',
+  HumanoidsHumansWarriorPriest = 'HUMANOIDS_HUMANS_WARRIOR_PRIEST',
+  HumanoidsHumansWitchHunter = 'HUMANOIDS_HUMANS_WITCH_HUNTER',
+  HumanoidsHumansZealot = 'HUMANOIDS_HUMANS_ZEALOT',
+  HumanoidsOgresGorger = 'HUMANOIDS_OGRES_GORGER',
+  HumanoidsOgresOgre = 'HUMANOIDS_OGRES_OGRE',
+  HumanoidsOgresOgreBull = 'HUMANOIDS_OGRES_OGRE_BULL',
+  HumanoidsOgresOgreTyrant = 'HUMANOIDS_OGRES_OGRE_TYRANT',
+  HumanoidsOgresYhetee = 'HUMANOIDS_OGRES_YHETEE',
+  HumanoidsSkavenRatOgre = 'HUMANOIDS_SKAVEN_RAT_OGRE',
+  HumanoidsSkavenSkaven = 'HUMANOIDS_SKAVEN_SKAVEN',
+  MonstersChaosBreedsCentigor = 'MONSTERS_CHAOS_BREEDS_CENTIGOR',
+  MonstersChaosBreedsChaosMutant = 'MONSTERS_CHAOS_BREEDS_CHAOS_MUTANT',
+  MonstersChaosBreedsDragonOgre = 'MONSTERS_CHAOS_BREEDS_DRAGON_OGRE',
+  MonstersChaosBreedsFlayerkin = 'MONSTERS_CHAOS_BREEDS_FLAYERKIN',
+  MonstersChaosBreedsHarpy = 'MONSTERS_CHAOS_BREEDS_HARPY',
+  MonstersChaosBreedsMaggot = 'MONSTERS_CHAOS_BREEDS_MAGGOT',
+  MonstersChaosBreedsMinotaur = 'MONSTERS_CHAOS_BREEDS_MINOTAUR',
+  MonstersChaosBreedsTuskgor = 'MONSTERS_CHAOS_BREEDS_TUSKGOR',
+  MonstersDragonoidsHydra = 'MONSTERS_DRAGONOIDS_HYDRA',
+  MonstersDragonoidsWyvern = 'MONSTERS_DRAGONOIDS_WYVERN',
+  MonstersDragonoidDragon = 'MONSTERS_DRAGONOID_DRAGON',
+  MonstersGiantsChaosGiant = 'MONSTERS_GIANTS_CHAOS_GIANT',
+  MonstersGiantsGiant = 'MONSTERS_GIANTS_GIANT',
+  MonstersMagicalBeastsCockatrice = 'MONSTERS_MAGICAL_BEASTS_COCKATRICE',
+  MonstersMagicalBeastsGriffon = 'MONSTERS_MAGICAL_BEASTS_GRIFFON',
+  MonstersMagicalBeastsImp = 'MONSTERS_MAGICAL_BEASTS_IMP',
+  MonstersMagicalBeastsManticore = 'MONSTERS_MAGICAL_BEASTS_MANTICORE',
+  MonstersMagicalBeastsPegasus = 'MONSTERS_MAGICAL_BEASTS_PEGASUS',
+  MonstersMagicalBeastsUnicorn = 'MONSTERS_MAGICAL_BEASTS_UNICORN',
+  MonstersTrollsChaosTroll = 'MONSTERS_TROLLS_CHAOS_TROLL',
+  MonstersTrollsRiverTroll = 'MONSTERS_TROLLS_RIVER_TROLL',
+  MonstersTrollsStoneTroll = 'MONSTERS_TROLLS_STONE_TROLL',
+  MonstersTrollsTroll = 'MONSTERS_TROLLS_TROLL',
+  PlantsForestSpiritsDryad = 'PLANTS_FOREST_SPIRITS_DRYAD',
+  PlantsForestSpiritsSpite = 'PLANTS_FOREST_SPIRITS_SPITE',
+  PlantsForestSpiritsTreekin = 'PLANTS_FOREST_SPIRITS_TREEKIN',
+  PlantsForestSpiritsTreeman = 'PLANTS_FOREST_SPIRITS_TREEMAN',
+  SiegeCatapult = 'SIEGE_CATAPULT',
+  SiegeGtaoe = 'SIEGE_GTAOE',
+  SiegeOil = 'SIEGE_OIL',
+  SiegeRam = 'SIEGE_RAM',
+  SiegeSingleTarget = 'SIEGE_SINGLE_TARGET',
+  Unclassified = 'UNCLASSIFIED',
+  UndeadConstructsAspBoneConstruct = 'UNDEAD_CONSTRUCTS_ASP_BONE_CONSTRUCT',
+  UndeadConstructsBoneGiant = 'UNDEAD_CONSTRUCTS_BONE_GIANT',
+  UndeadConstructsConstruct = 'UNDEAD_CONSTRUCTS_CONSTRUCT',
+  UndeadConstructsLivingArmor = 'UNDEAD_CONSTRUCTS_LIVING_ARMOR',
+  UndeadConstructsScarabBoneConstruct = 'UNDEAD_CONSTRUCTS_SCARAB_BONE_CONSTRUCT',
+  UndeadConstructsTombScorpion = 'UNDEAD_CONSTRUCTS_TOMB_SCORPION',
+  UndeadConstructsUshabti = 'UNDEAD_CONSTRUCTS_USHABTI',
+  UndeadConstructsWingedNightmare = 'UNDEAD_CONSTRUCTS_WINGED_NIGHTMARE',
+  UndeadGreaterUndeadLiche = 'UNDEAD_GREATER_UNDEAD_LICHE',
+  UndeadGreaterUndeadPreservedDead = 'UNDEAD_GREATER_UNDEAD_PRESERVED_DEAD',
+  UndeadGreaterUndeadVampire = 'UNDEAD_GREATER_UNDEAD_VAMPIRE',
+  UndeadSkeletonsCarrion = 'UNDEAD_SKELETONS_CARRION',
+  UndeadSkeletonsSkeleton = 'UNDEAD_SKELETONS_SKELETON',
+  UndeadSpiritsBanshee = 'UNDEAD_SPIRITS_BANSHEE',
+  UndeadSpiritsSpiritHost = 'UNDEAD_SPIRITS_SPIRIT_HOST',
+  UndeadSpiritsWraith = 'UNDEAD_SPIRITS_WRAITH',
+  UndeadWightsWight = 'UNDEAD_WIGHTS_WIGHT',
+  UndeadZombiesZombie = 'UNDEAD_ZOMBIES_ZOMBIE'
+}
+
+export type CreatureSubTypesOperationFilterInput = {
+  eq?: InputMaybe<CreatureSubType>;
+  in?: InputMaybe<Array<CreatureSubType>>;
+  neq?: InputMaybe<CreatureSubType>;
+  nin?: InputMaybe<Array<CreatureSubType>>;
+};
+
+export enum CreatureType {
+  AnimalsBeasts = 'ANIMALS_BEASTS',
+  AnimalsBirds = 'ANIMALS_BIRDS',
+  AnimalsCritter = 'ANIMALS_CRITTER',
+  AnimalsInsectsArachnids = 'ANIMALS_INSECTS_ARACHNIDS',
+  AnimalsLivestock = 'ANIMALS_LIVESTOCK',
+  AnimalsReptiles = 'ANIMALS_REPTILES',
+  DaemonsKhorne = 'DAEMONS_KHORNE',
+  DaemonsNurgle = 'DAEMONS_NURGLE',
+  DaemonsSlaanesh = 'DAEMONS_SLAANESH',
+  DaemonsTzeentch = 'DAEMONS_TZEENTCH',
+  DaemonsUnmarked = 'DAEMONS_UNMARKED',
+  HumanoidsBeastmen = 'HUMANOIDS_BEASTMEN',
+  HumanoidsDarkElves = 'HUMANOIDS_DARK_ELVES',
+  HumanoidsDwarfs = 'HUMANOIDS_DWARFS',
+  HumanoidsElves = 'HUMANOIDS_ELVES',
+  HumanoidsGreenskins = 'HUMANOIDS_GREENSKINS',
+  HumanoidsHumans = 'HUMANOIDS_HUMANS',
+  HumanoidsOgres = 'HUMANOIDS_OGRES',
+  HumanoidsSkaven = 'HUMANOIDS_SKAVEN',
+  MonstersChaosBreeds = 'MONSTERS_CHAOS_BREEDS',
+  MonstersDragonoids = 'MONSTERS_DRAGONOIDS',
+  MonstersGiants = 'MONSTERS_GIANTS',
+  MonstersMagicalBeasts = 'MONSTERS_MAGICAL_BEASTS',
+  MonstersTrolls = 'MONSTERS_TROLLS',
+  PlantsForestSpirits = 'PLANTS_FOREST_SPIRITS',
+  Siege = 'SIEGE',
+  Unclassified = 'UNCLASSIFIED',
+  UndeadConstructs = 'UNDEAD_CONSTRUCTS',
+  UndeadGreaterUndead = 'UNDEAD_GREATER_UNDEAD',
+  UndeadSkeletons = 'UNDEAD_SKELETONS',
+  UndeadSpirits = 'UNDEAD_SPIRITS',
+  UndeadWights = 'UNDEAD_WIGHTS',
+  UndeadZombies = 'UNDEAD_ZOMBIES'
+}
+
+export type CreatureTypesOperationFilterInput = {
+  eq?: InputMaybe<CreatureType>;
+  in?: InputMaybe<Array<CreatureType>>;
+  neq?: InputMaybe<CreatureType>;
+  nin?: InputMaybe<Array<CreatureType>>;
+};
+
+/** A connection to a list of items. */
+export type CreaturesConnection = {
+  __typename?: 'CreaturesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<CreaturesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Creature>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type CreaturesEdge = {
+  __typename?: 'CreaturesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Creature;
+};
+
 /** Character equipment slots */
 export enum EquipSlot {
   Back = 'BACK',
@@ -271,6 +559,13 @@ export enum EquipSlot {
   Trophy_4 = 'TROPHY_4',
   Trophy_5 = 'TROPHY_5'
 }
+
+export type EquipSlotOperationFilterInput = {
+  eq?: InputMaybe<EquipSlot>;
+  in?: InputMaybe<Array<EquipSlot>>;
+  neq?: InputMaybe<EquipSlot>;
+  nin?: InputMaybe<Array<EquipSlot>>;
+};
 
 export type Event = {
   endTime?: Maybe<Scalars['Long']['output']>;
@@ -455,8 +750,12 @@ export type Item = {
   rarity: ItemRarity;
   /** Renown rank requirement */
   renownRankRequirement: Scalars['Byte']['output'];
+  /** Quests that reward this item */
+  rewardedFromQuests: Array<Quest>;
   /** Character equipment slot */
   slot: EquipSlot;
+  /** Vendors that sell this item */
+  soldByVendors: Array<VendorItem>;
   /** Weapon speed */
   speed: Scalars['UnsignedShort']['output'];
   stats: Array<ItemStat>;
@@ -464,7 +763,7 @@ export type Item = {
   talismanSlots: Scalars['Byte']['output'];
   /** Type */
   type: ItemType;
-  /** Item level */
+  /** Unique equipped */
   uniqueEquipped: Scalars['Boolean']['output'];
 };
 
@@ -501,13 +800,38 @@ export enum ItemExpirationType {
   OnPickup = 'ON_PICKUP'
 }
 
+/** Item filtering options */
 export type ItemFilterInput = {
   and?: InputMaybe<Array<ItemFilterInput>>;
+  /** Armor value, block rating on shields */
+  armor?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  /** Description */
+  description?: InputMaybe<StringOperationFilterInput>;
+  /** Weapon DPS */
+  dps?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  /** Item Id */
   id?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  /** Item level */
+  itemLevel?: InputMaybe<ByteOperationFilterInput>;
+  /** Level requirement */
+  levelRequirement?: InputMaybe<ByteOperationFilterInput>;
+  /** Name */
   name?: InputMaybe<StringOperationFilterInput>;
-  objectLevel?: InputMaybe<ByteOperationFilterInput>;
   or?: InputMaybe<Array<ItemFilterInput>>;
+  /** Rarity level */
+  rarity?: InputMaybe<ItemRarityOperationFilterInput>;
+  /** Renown rank requirement */
+  renownRankRequirement?: InputMaybe<ByteOperationFilterInput>;
+  /** Character equipment slot */
+  slot?: InputMaybe<EquipSlotOperationFilterInput>;
+  /** Weapon speed */
+  speed?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  /** Number of talisman slots */
+  talismanSlots?: InputMaybe<ByteOperationFilterInput>;
+  /** Type */
   type?: InputMaybe<ItemTypesOperationFilterInput>;
+  /** Unique equipped */
+  uniqueEquipped?: InputMaybe<BooleanOperationFilterInput>;
 };
 
 export enum ItemRarity {
@@ -518,6 +842,13 @@ export enum ItemRarity {
   Utility = 'UTILITY',
   VeryRare = 'VERY_RARE'
 }
+
+export type ItemRarityOperationFilterInput = {
+  eq?: InputMaybe<ItemRarity>;
+  in?: InputMaybe<Array<ItemRarity>>;
+  neq?: InputMaybe<ItemRarity>;
+  nin?: InputMaybe<Array<ItemRarity>>;
+};
 
 export type ItemSet = {
   __typename?: 'ItemSet';
@@ -536,10 +867,33 @@ export type ItemSetBonus = {
 
 export type ItemSetBonusValue = Ability | ItemStat;
 
+/** Item sorting options */
 export type ItemSortInput = {
+  /** Armor value, block rating on shields */
+  armor?: InputMaybe<SortEnumType>;
+  /** Description */
+  description?: InputMaybe<SortEnumType>;
+  /** Weapon DPS */
+  dps?: InputMaybe<SortEnumType>;
+  /** Item Id */
   id?: InputMaybe<SortEnumType>;
+  /** Item level */
+  itemLevel?: InputMaybe<SortEnumType>;
+  /** Level requirement */
+  levelRequirement?: InputMaybe<SortEnumType>;
+  /** Name */
   name?: InputMaybe<SortEnumType>;
-  objectLevel?: InputMaybe<SortEnumType>;
+  /** Rarity level */
+  rarity?: InputMaybe<SortEnumType>;
+  /** Renown rank requirement */
+  renownRankRequirement?: InputMaybe<SortEnumType>;
+  /** Character equipment slot */
+  slot?: InputMaybe<SortEnumType>;
+  /** Weapon speed */
+  speed?: InputMaybe<SortEnumType>;
+  /** Number of talisman slots */
+  talismanSlots?: InputMaybe<SortEnumType>;
+  /** Type */
   type?: InputMaybe<SortEnumType>;
 };
 
@@ -655,23 +1009,30 @@ export type Kill = {
 
 export type KillFilterInput = {
   and?: InputMaybe<Array<KillFilterInput>>;
+  /** Percent of the total damage done by the killer */
   damagePercent?: InputMaybe<ByteOperationFilterInput>;
+  /** Specifies the instance of a scenario this kill happened in */
   instanceId?: InputMaybe<UuidOperationFilterInput>;
   killerCareer?: InputMaybe<CareerLineOperationFilterInput>;
   killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerLevel?: InputMaybe<ByteOperationFilterInput>;
   killerRenownRank?: InputMaybe<ByteOperationFilterInput>;
+  /** Number of assists */
   numAssists?: InputMaybe<UnsignedIntOperationFilterInputType>;
   or?: InputMaybe<Array<KillFilterInput>>;
+  /** ScenarioId, 0 if not in a scenario */
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  /** Id of the skirmish the kill happened in */
   skirmishId?: InputMaybe<UuidOperationFilterInput>;
+  /** UTC Timestamp */
   time?: InputMaybe<IntOperationFilterInput>;
   victimCareer?: InputMaybe<CareerLineOperationFilterInput>;
   victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimLevel?: InputMaybe<ByteOperationFilterInput>;
   victimRenownRank?: InputMaybe<ByteOperationFilterInput>;
+  /** Zone Id */
   zoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
 };
 
@@ -806,27 +1167,43 @@ export type Position = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Get one character */
   character?: Maybe<Character>;
+  /** Query for characters matching a filter */
   characters?: Maybe<CharactersConnection>;
+  /** Get one creature */
+  creature?: Maybe<Creature>;
+  /** Query for creatures matching a filter */
+  creatures?: Maybe<CreaturesConnection>;
   events: Array<Event>;
+  /** Get one guild */
   guild?: Maybe<Guild>;
+  /** Query for guilds matching a filter */
   guilds?: Maybe<GuildsConnection>;
+  /** Get one item by Id */
   item?: Maybe<Item>;
+  /** Query for items matching a filter */
   items?: Maybe<ItemsConnection>;
+  /** Get one kill */
   kill?: Maybe<Kill>;
+  /** Query for kills matching a filter */
   kills?: Maybe<KillsConnection>;
   killsHeatmap: Array<KillsHeatmapPoint>;
   monthlyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   monthlyKillLeaderboard: Array<KillLeaderboardEntry>;
+  /** Get one guild */
+  quest?: Maybe<Quest>;
+  /** Query for quests matching a filter */
+  quests?: Maybe<QuestsConnection>;
   rankedSeason?: Maybe<RankedSeason>;
   rankedSeasons: Array<RankedSeason>;
   /** Get scenario result from instance id */
   scenario?: Maybe<ScenarioRecord>;
-  /** Get scenarios */
+  /** Query for scenario records matching a filter */
   scenarios?: Maybe<ScenariosConnection>;
   /** Get one skirmish */
   skirmish?: Maybe<Skirmish>;
-  /** Get skirmishes */
+  /** Query for skirmishes records matching a filter */
   skirmishes?: Maybe<SkirmishesConnection>;
   /** Get top skirmishes in last seven days */
   topSkirmishes: Array<Skirmish>;
@@ -847,6 +1224,21 @@ export type QueryCharactersArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<CharacterSortInput>>;
   where?: InputMaybe<CharacterFilterInput>;
+};
+
+
+export type QueryCreatureArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryCreaturesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<CreatureSortInput>>;
+  where?: InputMaybe<CreatureFilterInput>;
 };
 
 
@@ -874,8 +1266,10 @@ export type QueryItemsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
+  hasStats?: InputMaybe<Array<Stat>>;
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<ItemSortInput>>;
+  usableByCareer?: InputMaybe<Career>;
   where?: InputMaybe<ItemFilterInput>;
 };
 
@@ -937,6 +1331,21 @@ export type QueryMonthlyKillLeaderboardArgs = {
 };
 
 
+export type QueryQuestArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryQuestsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<QuestSortInput>>;
+  where?: InputMaybe<QuestFilterInput>;
+};
+
+
 export type QueryRankedSeasonArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -991,6 +1400,88 @@ export type QueryWeeklyKillLeaderboardArgs = {
   year: Scalars['Int']['input'];
 };
 
+/** Info about a quest */
+export type Quest = {
+  __typename?: 'Quest';
+  /** Available to careers */
+  careerRestriction: Array<Career>;
+  /** Number of choice rewards */
+  choiceCount: Scalars['Byte']['output'];
+  /** Description */
+  description: Scalars['String']['output'];
+  /** Gold reward (in brass coins) */
+  gold: Scalars['UnsignedInt']['output'];
+  /** Id of the quest */
+  id: Scalars['ID']['output'];
+  /** Maximum level */
+  maxLevel: Scalars['Byte']['output'];
+  /** Maximum renown */
+  maxRenown: Scalars['Byte']['output'];
+  /** Minimum level */
+  minLevel: Scalars['Byte']['output'];
+  /** Minimum renown */
+  minRenown: Scalars['Byte']['output'];
+  /** Name */
+  name: Scalars['String']['output'];
+  /** Available to races */
+  raceRestriction: Array<Race>;
+  /** Choice rewards */
+  rewardsChoice: Array<QuestReward>;
+  /** Given rewards */
+  rewardsGiven: Array<QuestReward>;
+  /** Quest Type */
+  type: Scalars['Byte']['output'];
+  /** XP Reward */
+  xp: Scalars['UnsignedInt']['output'];
+};
+
+export type QuestFilterInput = {
+  and?: InputMaybe<Array<QuestFilterInput>>;
+  careerRestriction?: InputMaybe<CareerMaskOperationFilterInput>;
+  id?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<QuestFilterInput>>;
+  raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
+  type?: InputMaybe<ByteOperationFilterInput>;
+};
+
+/** Info about a quest reward */
+export type QuestReward = {
+  __typename?: 'QuestReward';
+  /** Number of items rewarded */
+  count: Scalars['UnsignedShort']['output'];
+  /** Item rewarded */
+  item: Item;
+};
+
+export type QuestSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  type?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type QuestsConnection = {
+  __typename?: 'QuestsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<QuestsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Quest>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type QuestsEdge = {
+  __typename?: 'QuestsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Quest;
+};
+
 /** Player Races */
 export enum Race {
   Chaos = 'CHAOS',
@@ -1011,6 +1502,13 @@ export enum RaceMask {
   HighElf = 'HIGH_ELF',
   Orc = 'ORC'
 }
+
+export type RaceMaskOperationFilterInput = {
+  eq?: InputMaybe<RaceMask>;
+  in?: InputMaybe<Array<RaceMask>>;
+  neq?: InputMaybe<RaceMask>;
+  nin?: InputMaybe<Array<RaceMask>>;
+};
 
 export type RankedLeaderboardCharacter = {
   __typename?: 'RankedLeaderboardCharacter';
@@ -1152,13 +1650,20 @@ export type ScenarioRecord = {
 
 export type ScenarioRecordFilterInput = {
   and?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  /** The end time of the scenario */
   endTime?: InputMaybe<LongOperationFilterInput>;
-  instanceId?: InputMaybe<UuidOperationFilterInput>;
+  /** Scenario instance Id */
+  id?: InputMaybe<UuidOperationFilterInput>;
   or?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  /** Queue type */
   queueType?: InputMaybe<ByteOperationFilterInput>;
+  /** Scenario Id */
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  /** The start time of the scenario */
   startTime?: InputMaybe<LongOperationFilterInput>;
+  /** Scenario tier */
   tier?: InputMaybe<ByteOperationFilterInput>;
+  /** Winning team, 0 is order, 1 is destruction */
   winner?: InputMaybe<ByteOperationFilterInput>;
 };
 
@@ -1662,6 +2167,24 @@ export type UuidOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
   nlt?: InputMaybe<Scalars['UUID']['input']>;
   nlte?: InputMaybe<Scalars['UUID']['input']>;
+};
+
+export type VendorItem = {
+  __typename?: 'VendorItem';
+  count: Scalars['UnsignedShort']['output'];
+  creatures: Array<Creature>;
+  item: Item;
+  /** Cost in copper coins */
+  price: Scalars['UnsignedInt']['output'];
+  requiredItems: Array<VendorItemRequiredItem>;
+  soldBy: Array<Creature>;
+};
+
+export type VendorItemRequiredItem = {
+  __typename?: 'VendorItemRequiredItem';
+  /** Amount needed */
+  count: Scalars['UnsignedShort']['output'];
+  item: Item;
 };
 
 /** Holds information about one attacker in a kill */

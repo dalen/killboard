@@ -25,6 +25,14 @@
   "guildRecentKills": {
     "title": "Kills"
   },
+  "itemVendors": {
+    "creatureName": "Creature Name",
+    "realm": "Realm",
+    "price": "Price",
+    "zone": "Zone",
+    "destruction": "Destruction",
+    "order": "Order"
+  },
   "killsFilters": {
     "allTime": "All time",
     "thisWeek": "This Week",

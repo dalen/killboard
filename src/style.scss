@@ -22,6 +22,7 @@ $navbar-item-hover-background-color: 'transparent';
 $table-cell-border: none;
 $table-row-hover-background-color: rgba(0, 0, 0, 0.5);
 $table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5);
+$table-head-cell-color: $link;
 
 @import '../node_modules/bulma/bulma.sass';
 

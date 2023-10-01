@@ -1,8 +1,9 @@
 import { Media } from 'react-bulma-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CharacterItem as CharacterItemType, Item, ItemRarity } from '../types';
+import { CharacterItem as CharacterItemType, Item } from '../types';
 import { CharacterItemPopup } from './CharacterItemPopup';
+import { itemFigureClass, itemNameClass } from '../itemUtils';
 
 export function CharacterItem({
   item,
@@ -15,48 +16,6 @@ export function CharacterItem({
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
-
-  const itemNameClass = (): string => {
-    if (item.itemSet) return 'item-name-item-set';
-
-    switch (item.rarity) {
-      case ItemRarity.Utility:
-        return 'item-name-utility';
-      case ItemRarity.Common:
-        return 'item-name-common';
-      case ItemRarity.Uncommon:
-        return 'item-name-uncommon';
-      case ItemRarity.Rare:
-        return 'item-name-rare';
-      case ItemRarity.VeryRare:
-        return 'item-name-very-rare';
-      case ItemRarity.Mythic:
-        return 'item-name-mythic';
-    }
-
-    return 'item-name-utility';
-  };
-
-  const itemFigureClass = (): string => {
-    if (item.itemSet) return 'item-figure-item-set';
-
-    switch (item.rarity) {
-      case ItemRarity.Utility:
-        return 'item-figure-utility';
-      case ItemRarity.Common:
-        return 'item-figure-common';
-      case ItemRarity.Uncommon:
-        return 'item-figure-uncommon';
-      case ItemRarity.Rare:
-        return 'item-figure-rare';
-      case ItemRarity.VeryRare:
-        return 'item-figure-very-rare';
-      case ItemRarity.Mythic:
-        return 'item-figure-mythic';
-    }
-
-    return 'item-figure-utility';
-  };
 
   const showModal = () => {
     if (!modalOpen && item.name !== '') {
@@ -81,14 +40,16 @@ export function CharacterItem({
       <Media>
         <Media.Item align="left">
           <figure
-            className={`${itemFigureClass()} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+            className={`${itemFigureClass(
+              item,
+            )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
           >
             <img src={item.iconUrl} alt={item.name} />
           </figure>
         </Media.Item>
         {item.name && (
           <Media.Item>
-            <div className={`${itemNameClass()} has-text-weight-semi/bold`}>
+            <div className={`${itemNameClass(item)} has-text-weight-semi/bold`}>
               {item.name}
             </div>
             <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>
