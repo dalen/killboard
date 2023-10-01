@@ -15,6 +15,7 @@ import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { isPercentage } from '../utils';
 import { ItemVendors } from '../components/ItemVendors';
+import { ItemQuests } from '../components/ItemQuests';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -83,6 +84,25 @@ const ITEM_INFO = gql`
           }
         }
       }
+      rewardedFromQuests {
+        name
+        rewardsChoice {
+          item {
+            id
+            name
+            iconUrl
+          }
+          count
+        }
+        rewardsGiven {
+          item {
+            id
+            name
+            iconUrl
+          }
+          count
+        }
+      }
     }
   }
 `;
@@ -103,6 +123,16 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
     return <ErrorMessage customText={t('common:notFound')} />;
 
   const { item } = data;
+
+  const activeTabs: string[] = [];
+
+  if (item.soldByVendors.length > 0) {
+    activeTabs.push('vendors');
+  }
+  if (item.rewardedFromQuests.length > 0) {
+    activeTabs.push('quests');
+  }
+  const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
   return (
     <Container max breakpoint="widescreen" mt={2}>
@@ -231,14 +261,19 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
         </Card.Content>
       </Card>
       <Tabs>
-        <li className={tab === 'vendors' ? 'is-active' : ''}>
-          <Link to={`/item/${id}`}>{t('pages:itemPage.vendors')}</Link>
-        </li>
-        <li className={tab === 'quests' ? 'is-active' : ''}>
-          <Link to={`/item/${id}`}>{t('pages:itemPage.quests')}</Link>
-        </li>
+        {activeTabs.includes('vendors') && (
+          <li className={activeTab === 'vendors' ? 'is-active' : ''}>
+            <Link to={`/item/${id}`}>{t('pages:itemPage.vendors')}</Link>
+          </li>
+        )}
+        {activeTabs.includes('quests') && (
+          <li className={activeTab === 'quests' ? 'is-active' : ''}>
+            <Link to={`/item/${id}/quests`}>{t('pages:itemPage.quests')}</Link>
+          </li>
+        )}
       </Tabs>
-      {tab === 'vendors' && <ItemVendors item={item} />}
+      {activeTab === 'vendors' && <ItemVendors item={item} />}
+      {activeTab === 'quests' && <ItemQuests item={item} />}
     </Container>
   );
 }

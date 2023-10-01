@@ -79,6 +79,7 @@ function App() {
       <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
 
       <Route path="/item/:id" element={<Item tab="vendors" />} />
+      <Route path="/item/:id/quests" element={<Item tab="quests" />} />
     </Routes>
   );
 }

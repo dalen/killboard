@@ -33,6 +33,11 @@
     "destruction": "Destruction",
     "order": "Order"
   },
+  "itemQuests": {
+    "questName": "Quest Name",
+    "choice": "Choice",
+    "given": "Given"
+  },
   "killsFilters": {
     "allTime": "All time",
     "thisWeek": "This Week",
