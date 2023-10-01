@@ -70,6 +70,7 @@ const ITEM_INFO = gql`
         requiredItems {
           count
           item {
+            id
             name
             iconUrl
           }
