@@ -1,15 +1,22 @@
 import { Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Item } from '../types';
+import { VendorItem } from '../types';
 
-export function ItemVendors({ item }: { item: Item }) {
+export function ItemVendors({
+  vendorItems,
+  showItem = false,
+}: {
+  vendorItems: VendorItem[];
+  showItem?: boolean;
+}) {
   const { t } = useTranslation(['common', 'components']);
 
   return (
     <Table striped className="is-fullwidth">
       <thead>
         <tr>
+          {showItem && <th>{t('components:itemVendors.item')}</th>}
           <th>{t('components:itemVendors.creatureName')}</th>
           <th>{t('components:itemVendors.realm')}</th>
           <th>{t('components:itemVendors.price')}</th>
@@ -17,11 +24,24 @@ export function ItemVendors({ item }: { item: Item }) {
         </tr>
       </thead>
       <tbody>
-        {item.soldByVendors.map((vendorItem) =>
+        {vendorItems.map((vendorItem) =>
           vendorItem.creatures
             .filter((creature) => creature.spawns.length > 0)
             .map((creature) => (
               <tr>
+                {showItem && (
+                  <td>
+                    <span className="icon-text">
+                      <figure className="image is-24x24 mx-1">
+                        <img src={vendorItem.item.iconUrl} alt="Item Icon" />
+                      </figure>
+                      <Link to={`/item/${vendorItem.item.id}`} className="mr-1">
+                        {vendorItem.item.name}
+                      </Link>
+                      x{vendorItem.count}
+                    </span>
+                  </td>
+                )}
                 <td>{creature.name}</td>
                 <td>
                   {creature.realm === 'ORDER' && (

@@ -765,6 +765,8 @@ export type Item = {
   type: ItemType;
   /** Unique equipped */
   uniqueEquipped: Scalars['Boolean']['output'];
+  /** Vendors that trade this item */
+  usedToPurchase: Array<VendorItem>;
 };
 
 export enum ItemBindType {

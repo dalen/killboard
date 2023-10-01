@@ -26,6 +26,7 @@
     "title": "Kills"
   },
   "itemVendors": {
+    "item": "Item",
     "creatureName": "Creature Name",
     "realm": "Realm",
     "price": "Price",

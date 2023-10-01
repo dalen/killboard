@@ -85,6 +85,32 @@ const ITEM_INFO = gql`
           }
         }
       }
+      usedToPurchase {
+        count
+        item {
+          id
+          name
+          iconUrl
+        }
+        price
+        requiredItems {
+          count
+          item {
+            id
+            name
+            iconUrl
+          }
+        }
+        creatures {
+          name
+          realm
+          spawns {
+            zone {
+              name
+            }
+          }
+        }
+      }
       rewardedFromQuests {
         name
         rewardsChoice {
@@ -108,7 +134,11 @@ const ITEM_INFO = gql`
   }
 `;
 
-export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
+export function Item({
+  tab,
+}: {
+  tab: 'vendors' | 'quests' | 'purchase';
+}): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(ITEM_INFO, {
@@ -132,6 +162,9 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
   }
   if (item.rewardedFromQuests.length > 0) {
     activeTabs.push('quests');
+  }
+  if (item.usedToPurchase.length > 0) {
+    activeTabs.push('purchase');
   }
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
@@ -269,13 +302,25 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
             <Link to={`/item/${id}`}>{t('pages:itemPage.vendors')}</Link>
           </li>
         )}
+        {activeTabs.includes('purchase') && (
+          <li className={activeTab === 'purchase' ? 'is-active' : ''}>
+            <Link to={`/item/${id}/purchase`}>
+              {t('pages:itemPage.purchase')}
+            </Link>
+          </li>
+        )}
         {activeTabs.includes('quests') && (
           <li className={activeTab === 'quests' ? 'is-active' : ''}>
             <Link to={`/item/${id}/quests`}>{t('pages:itemPage.quests')}</Link>
           </li>
         )}
       </Tabs>
-      {activeTab === 'vendors' && <ItemVendors item={item} />}
+      {activeTab === 'vendors' && (
+        <ItemVendors vendorItems={item.soldByVendors} />
+      )}
+      {activeTab === 'purchase' && (
+        <ItemVendors vendorItems={item.usedToPurchase} showItem />
+      )}
       {activeTab === 'quests' && <ItemQuests item={item} />}
     </Container>
   );

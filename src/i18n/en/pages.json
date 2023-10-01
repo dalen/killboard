@@ -85,6 +85,7 @@
   "itemPage": {
     "itemId": "Item #{{itemId}}",
     "vendors": "Sold by",
+    "purchase": "Used to purchase",
     "quests": "Quests"
   }
 }
