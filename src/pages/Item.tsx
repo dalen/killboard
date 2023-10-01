@@ -160,7 +160,9 @@ export function Item({ tab }: { tab: 'vendors' | 'quests' }): JSX.Element {
                   <div className={itemNameClass(item)}>{item.name}</div>
                 </div>
               </div>
-              <div>{t(`enums:itemSlot.${item.slot}`)}</div>
+              {item.slot !== 'NONE' && (
+                <div>{t(`enums:itemSlot.${item.slot}`)}</div>
+              )}
               {item.type !== 'NONE' && (
                 <div>{t(`enums:itemType.${item.type}`)}</div>
               )}
