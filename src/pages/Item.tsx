@@ -23,6 +23,7 @@ const ITEM_INFO = gql`
     item(id: $id) {
       id
       name
+      description
       careerRestriction
       description
       rarity
@@ -139,6 +140,7 @@ export function Item({
                   <div className={itemNameClass(item)}>{item.name}</div>
                 </div>
               </div>
+              <div className="mb-1">{item.description}</div>
               {item.slot !== 'NONE' && (
                 <div>{t(`enums:itemSlot.${item.slot}`)}</div>
               )}
