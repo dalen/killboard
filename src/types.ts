@@ -1,25 +1,38 @@
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T,
+> = { [_ in K]?: never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  Byte: { input: any; output: any; }
-  Long: { input: any; output: any; }
-  Short: { input: any; output: any; }
-  URL: { input: any; output: any; }
-  UUID: { input: any; output: any; }
-  UnsignedInt: { input: any; output: any; }
-  UnsignedLong: { input: any; output: any; }
-  UnsignedShort: { input: any; output: any; }
+  ID: { input: string; output: string };
+  String: { input: string; output: string };
+  Boolean: { input: boolean; output: boolean };
+  Int: { input: number; output: number };
+  Float: { input: number; output: number };
+  Byte: { input: any; output: any };
+  Long: { input: any; output: any };
+  Short: { input: any; output: any };
+  URL: { input: any; output: any };
+  UUID: { input: any; output: any };
+  UnsignedInt: { input: any; output: any };
+  UnsignedLong: { input: any; output: any };
+  UnsignedShort: { input: any; output: any };
 };
 
 export type Ability = {
@@ -113,7 +126,7 @@ export enum Career {
   /** Witch Hunter */
   WitchHunter = 'WITCH_HUNTER',
   /** Zealot */
-  Zealot = 'ZEALOT'
+  Zealot = 'ZEALOT',
 }
 
 export type CareerLineOperationFilterInput = {
@@ -147,7 +160,7 @@ export enum CareerMask {
   WhiteLion = 'WHITE_LION',
   WitchElf = 'WITCH_ELF',
   WitchHunter = 'WITCH_HUNTER',
-  Zealot = 'ZEALOT'
+  Zealot = 'ZEALOT',
 }
 
 export type CareerMaskOperationFilterInput = {
@@ -252,7 +265,7 @@ export enum CraftingItemType {
   Quicksilver = 'QUICKSILVER',
   Stabilizer = 'STABILIZER',
   Stimulant = 'STIMULANT',
-  TalismanContainer = 'TALISMAN_CONTAINER'
+  TalismanContainer = 'TALISMAN_CONTAINER',
 }
 
 export type Creature = {
@@ -456,7 +469,7 @@ export enum CreatureSubType {
   UndeadSpiritsSpiritHost = 'UNDEAD_SPIRITS_SPIRIT_HOST',
   UndeadSpiritsWraith = 'UNDEAD_SPIRITS_WRAITH',
   UndeadWightsWight = 'UNDEAD_WIGHTS_WIGHT',
-  UndeadZombiesZombie = 'UNDEAD_ZOMBIES_ZOMBIE'
+  UndeadZombiesZombie = 'UNDEAD_ZOMBIES_ZOMBIE',
 }
 
 export type CreatureSubTypesOperationFilterInput = {
@@ -499,7 +512,7 @@ export enum CreatureType {
   UndeadSkeletons = 'UNDEAD_SKELETONS',
   UndeadSpirits = 'UNDEAD_SPIRITS',
   UndeadWights = 'UNDEAD_WIGHTS',
-  UndeadZombies = 'UNDEAD_ZOMBIES'
+  UndeadZombies = 'UNDEAD_ZOMBIES',
 }
 
 export type CreatureTypesOperationFilterInput = {
@@ -557,7 +570,7 @@ export enum EquipSlot {
   Trophy_2 = 'TROPHY_2',
   Trophy_3 = 'TROPHY_3',
   Trophy_4 = 'TROPHY_4',
-  Trophy_5 = 'TROPHY_5'
+  Trophy_5 = 'TROPHY_5',
 }
 
 export type EquipSlotOperationFilterInput = {
@@ -616,7 +629,6 @@ export type Guild = {
   /** Guild realm */
   realm: Realm;
 };
-
 
 export type GuildMembersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -751,11 +763,11 @@ export type Item = {
   /** Renown rank requirement */
   renownRankRequirement: Scalars['Byte']['output'];
   /** Quests that reward this item */
-  rewardedFromQuests: Array<Quest>;
+  rewardedFromQuests?: Maybe<RewardedFromQuestsConnection>;
   /** Character equipment slot */
   slot: EquipSlot;
   /** Vendors that sell this item */
-  soldByVendors: Array<VendorItem>;
+  soldByVendors?: Maybe<SoldByVendorsConnection>;
   /** Weapon speed */
   speed: Scalars['UnsignedShort']['output'];
   stats: Array<ItemStat>;
@@ -766,7 +778,28 @@ export type Item = {
   /** Unique equipped */
   uniqueEquipped: Scalars['Boolean']['output'];
   /** Vendors that trade this item */
-  usedToPurchase: Array<VendorItem>;
+  usedToPurchase?: Maybe<UsedToPurchaseConnection>;
+};
+
+export type ItemRewardedFromQuestsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ItemSoldByVendorsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+export type ItemUsedToPurchaseArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export enum ItemBindType {
@@ -779,7 +812,7 @@ export enum ItemBindType {
   /** Bound to character on pickup */
   BindOnPickup = 'BIND_ON_PICKUP',
   /** Not Bound */
-  None = 'NONE'
+  None = 'NONE',
 }
 
 export enum ItemExpirationTimeType {
@@ -790,7 +823,7 @@ export enum ItemExpirationTimeType {
   /** Time offset is relative to current time */
   Relative = 'RELATIVE',
   /** This will expire on a hardcoded time (after next zandri expedition) */
-  ZandriExpedition = 'ZANDRI_EXPEDITION'
+  ZandriExpedition = 'ZANDRI_EXPEDITION',
 }
 
 export enum ItemExpirationType {
@@ -799,7 +832,7 @@ export enum ItemExpirationType {
   /** Expire stats on equip */
   OnEquip = 'ON_EQUIP',
   /** Expire starts on pickup */
-  OnPickup = 'ON_PICKUP'
+  OnPickup = 'ON_PICKUP',
 }
 
 /** Item filtering options */
@@ -842,7 +875,7 @@ export enum ItemRarity {
   Rare = 'RARE',
   Uncommon = 'UNCOMMON',
   Utility = 'UTILITY',
-  VeryRare = 'VERY_RARE'
+  VeryRare = 'VERY_RARE',
 }
 
 export type ItemRarityOperationFilterInput = {
@@ -949,7 +982,7 @@ export enum ItemType {
   TeleportGroup = 'TELEPORT_GROUP',
   TreasureChest = 'TREASURE_CHEST',
   TreasureKey = 'TREASURE_KEY',
-  Trophy = 'TROPHY'
+  Trophy = 'TROPHY',
 }
 
 export type ItemTypesOperationFilterInput = {
@@ -1213,11 +1246,9 @@ export type Query = {
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
 };
 
-
 export type QueryCharacterArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryCharactersArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1228,11 +1259,9 @@ export type QueryCharactersArgs = {
   where?: InputMaybe<CharacterFilterInput>;
 };
 
-
 export type QueryCreatureArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryCreaturesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1243,11 +1272,9 @@ export type QueryCreaturesArgs = {
   where?: InputMaybe<CreatureFilterInput>;
 };
 
-
 export type QueryGuildArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryGuildsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1258,11 +1285,9 @@ export type QueryGuildsArgs = {
   where?: InputMaybe<GuildFilterInput>;
 };
 
-
 export type QueryItemArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryItemsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1275,12 +1300,10 @@ export type QueryItemsArgs = {
   where?: InputMaybe<ItemFilterInput>;
 };
 
-
 export type QueryKillArgs = {
   id: Scalars['ID']['input'];
   includeAssists?: Scalars['Boolean']['input'];
 };
-
 
 export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1303,7 +1326,6 @@ export type QueryKillsArgs = {
   zoneId?: InputMaybe<Scalars['ID']['input']>;
 };
 
-
 export type QueryKillsHeatmapArgs = {
   from?: InputMaybe<Scalars['Long']['input']>;
   instanceId?: InputMaybe<Scalars['ID']['input']>;
@@ -1320,23 +1342,19 @@ export type QueryKillsHeatmapArgs = {
   zoneId?: InputMaybe<Scalars['ID']['input']>;
 };
 
-
 export type QueryMonthlyGuildKillLeaderboardArgs = {
   month: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
 };
-
 
 export type QueryMonthlyKillLeaderboardArgs = {
   month: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
 };
 
-
 export type QueryQuestArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryQuestsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1347,16 +1365,13 @@ export type QueryQuestsArgs = {
   where?: InputMaybe<QuestFilterInput>;
 };
 
-
 export type QueryRankedSeasonArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
-
 export type QueryScenarioArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QueryScenariosArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1374,11 +1389,9 @@ export type QueryScenariosArgs = {
   wins?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
-
 export type QuerySkirmishArgs = {
   id: Scalars['ID']['input'];
 };
-
 
 export type QuerySkirmishesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1390,12 +1403,10 @@ export type QuerySkirmishesArgs = {
   where?: InputMaybe<SkirmishFilterInput>;
 };
 
-
 export type QueryWeeklyGuildKillLeaderboardArgs = {
   week: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
 };
-
 
 export type QueryWeeklyKillLeaderboardArgs = {
   week: Scalars['Int']['input'];
@@ -1492,7 +1503,7 @@ export enum Race {
   Empire = 'EMPIRE',
   Goblin = 'GOBLIN',
   HighElf = 'HIGH_ELF',
-  Orc = 'ORC'
+  Orc = 'ORC',
 }
 
 export enum RaceMask {
@@ -1502,7 +1513,7 @@ export enum RaceMask {
   Empire = 'EMPIRE',
   Goblin = 'GOBLIN',
   HighElf = 'HIGH_ELF',
-  Orc = 'ORC'
+  Orc = 'ORC',
 }
 
 export type RaceMaskOperationFilterInput = {
@@ -1540,7 +1551,7 @@ export type RankedLeaderboardCharacter = {
 
 export enum RankedLeaderboardRatingType {
   RankedGroup = 'RANKED_GROUP',
-  RankedSolo = 'RANKED_SOLO'
+  RankedSolo = 'RANKED_SOLO',
 }
 
 export type RankedSeason = {
@@ -1557,7 +1568,6 @@ export type RankedSeason = {
   start: Scalars['Int']['output'];
 };
 
-
 export type RankedSeasonGroupLeaderboardArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
@@ -1565,7 +1575,6 @@ export type RankedSeasonGroupLeaderboardArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<CharacterSeasonStatFilterInput>;
 };
-
 
 export type RankedSeasonSoloLeaderboardArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1581,7 +1590,7 @@ export enum Realm {
   /** No realm */
   Neutral = 'NEUTRAL',
   /** Order */
-  Order = 'ORDER'
+  Order = 'ORDER',
 }
 
 export type RealmsOperationFilterInput = {
@@ -1589,6 +1598,28 @@ export type RealmsOperationFilterInput = {
   in?: InputMaybe<Array<Realm>>;
   neq?: InputMaybe<Realm>;
   nin?: InputMaybe<Array<Realm>>;
+};
+
+/** A connection to a list of items. */
+export type RewardedFromQuestsConnection = {
+  __typename?: 'RewardedFromQuestsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<RewardedFromQuestsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Quest>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type RewardedFromQuestsEdge = {
+  __typename?: 'RewardedFromQuestsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Quest;
 };
 
 export type Scenario = {
@@ -1606,7 +1637,7 @@ export enum ScenarioEnabledType {
   ByCommand = 'BY_COMMAND',
   Developer = 'DEVELOPER',
   Disabled = 'DISABLED',
-  Normal = 'NORMAL'
+  Normal = 'NORMAL',
 }
 
 export enum ScenarioQueueType {
@@ -1619,7 +1650,7 @@ export enum ScenarioQueueType {
   /** Solo Ranked scenarios */
   SoloRanked = 'SOLO_RANKED',
   /** Normal scenarios */
-  Standard = 'STANDARD'
+  Standard = 'STANDARD',
 }
 
 export type ScenarioRecord = {
@@ -1741,7 +1772,7 @@ export enum ScenarioType {
   PickUpGroupRandom = 'PICK_UP_GROUP_RANDOM',
   Random6V6 = 'RANDOM6V6',
   ReverseDaemonBall = 'REVERSE_DAEMON_BALL',
-  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL'
+  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL',
 }
 
 /** A connection to a list of items. */
@@ -1792,7 +1823,7 @@ export enum Sex {
   /** Female */
   Female = 'FEMALE',
   /** Male */
-  Male = 'MALE'
+  Male = 'MALE',
 }
 
 export type Skirmish = {
@@ -1835,14 +1866,12 @@ export type Skirmish = {
   topGuildsByPlayers: Array<SkirmishTopGuild>;
 };
 
-
 export type SkirmishKillsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
 };
-
 
 export type SkirmishScoreboardEntriesArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
@@ -1972,6 +2001,28 @@ export type SkirmishesEdge = {
 };
 
 /** A connection to a list of items. */
+export type SoldByVendorsConnection = {
+  __typename?: 'SoldByVendorsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<SoldByVendorsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<VendorItem>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type SoldByVendorsEdge = {
+  __typename?: 'SoldByVendorsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: VendorItem;
+};
+
+/** A connection to a list of items. */
 export type SoloLeaderboardConnection = {
   __typename?: 'SoloLeaderboardConnection';
   /** A list of edges. */
@@ -1993,7 +2044,7 @@ export type SoloLeaderboardEdge = {
 
 export enum SortEnumType {
   Asc = 'ASC',
-  Desc = 'DESC'
+  Desc = 'DESC',
 }
 
 export enum Stat {
@@ -2098,7 +2149,7 @@ export enum Stat {
   Willpower = 'WILLPOWER',
   Wounds = 'WOUNDS',
   XpReceived = 'XP_RECEIVED',
-  XpWorth = 'XP_WORTH'
+  XpWorth = 'XP_WORTH',
 }
 
 export type StringOperationFilterInput = {
@@ -2123,7 +2174,7 @@ export enum TradeSkill {
   None = 'NONE',
   Salvaging = 'SALVAGING',
   Scavenging = 'SCAVENGING',
-  TalismanMaking = 'TALISMAN_MAKING'
+  TalismanMaking = 'TALISMAN_MAKING',
 }
 
 export type UnsignedIntOperationFilterInputType = {
@@ -2154,6 +2205,28 @@ export type UnsignedShortOperationFilterInputType = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedShort']['input']>>>;
   nlt?: InputMaybe<Scalars['UnsignedShort']['input']>;
   nlte?: InputMaybe<Scalars['UnsignedShort']['input']>;
+};
+
+/** A connection to a list of items. */
+export type UsedToPurchaseConnection = {
+  __typename?: 'UsedToPurchaseConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<UsedToPurchaseEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<VendorItem>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type UsedToPurchaseEdge = {
+  __typename?: 'UsedToPurchaseEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: VendorItem;
 };
 
 export type UuidOperationFilterInput = {
@@ -2230,5 +2303,5 @@ export type ZoneArea = {
 export enum ZoneType {
   Instance = 'INSTANCE',
   Normal = 'NORMAL',
-  Scenario = 'SCENARIO'
+  Scenario = 'SCENARIO',
 }

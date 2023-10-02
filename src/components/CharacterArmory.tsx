@@ -98,9 +98,6 @@ function NoItem() {
         armor: 0,
         careerRestriction: [],
         buffs: [],
-        soldByVendors: [],
-        rewardedFromQuests: [],
-        usedToPurchase: [],
       }}
       talismans={[]}
       itemsEquipped={[]}

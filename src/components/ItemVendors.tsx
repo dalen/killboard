@@ -1,15 +1,21 @@
-import { Table } from 'react-bulma-components';
+import { Button, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { VendorItem } from '../types';
+import { PageInfo, VendorItem } from '../types';
 import { GoldPrice } from './GoldPrice';
 
 export function ItemVendors({
   vendorItems,
   showItem = false,
+  pageInfo,
+  onNext,
+  onPrevious,
 }: {
   vendorItems: VendorItem[];
   showItem?: boolean;
+  pageInfo: PageInfo;
+  onNext?: () => void;
+  onPrevious?: () => void;
 }) {
   const { t } = useTranslation(['common', 'components']);
 
@@ -101,6 +107,41 @@ export function ItemVendors({
             ));
         })}
       </tbody>
+      {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
+        <tfoot>
+          <tr>
+            {showItem && <td />}
+            <td colSpan={4}>
+              <div className="field is-grouped is-pulled-right">
+                {pageInfo.hasPreviousPage && (
+                  <Button
+                    p={2}
+                    pull="right"
+                    color="info"
+                    size="small"
+                    onClick={onPrevious}
+                  >
+                    {t('common:prevPage')}
+                    <i className="fas fa-circle-chevron-left ml-1" />
+                  </Button>
+                )}
+                {pageInfo.hasNextPage && (
+                  <Button
+                    p={2}
+                    pull="right"
+                    color="info"
+                    size="small"
+                    onClick={onNext}
+                  >
+                    {t('common:nextPage')}
+                    <i className="fas fa-circle-chevron-right ml-1" />
+                  </Button>
+                )}
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      )}
     </Table>
   );
 }

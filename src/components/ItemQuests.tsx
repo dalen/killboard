@@ -6,6 +6,8 @@ import { Item } from '../types';
 export function ItemQuests({ item }: { item: Item }) {
   const { t } = useTranslation(['common', 'components']);
 
+  if (item.rewardedFromQuests?.nodes == null) return null;
+
   return (
     <Table striped className="is-fullwidth">
       <thead>
@@ -16,7 +18,7 @@ export function ItemQuests({ item }: { item: Item }) {
         </tr>
       </thead>
       <tbody>
-        {item.rewardedFromQuests.map((quest) => (
+        {item.rewardedFromQuests.nodes.map((quest) => (
           <tr>
             <td>{quest.name}</td>
             <td>

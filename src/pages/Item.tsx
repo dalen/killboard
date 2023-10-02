@@ -18,7 +18,13 @@ import { ItemVendors } from '../components/ItemVendors';
 import { ItemQuests } from '../components/ItemQuests';
 
 const ITEM_INFO = gql`
-  query GetItemInfo($id: ID!) {
+  query GetItemInfo(
+    $id: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
     item(id: $id) {
       name
       careerRestriction
@@ -65,69 +71,111 @@ const ITEM_INFO = gql`
         id
         description
       }
-      soldByVendors {
-        price
-        requiredItems {
-          count
-          item {
-            id
-            name
-            iconUrl
-          }
-        }
-        creatures {
-          name
-          realm
-          spawns {
-            zone {
+      soldByVendors(
+        first: $first
+        last: $last
+        before: $before
+        after: $after
+      ) {
+        totalCount
+        nodes {
+          price
+          requiredItems {
+            count
+            item {
+              id
               name
+              iconUrl
+            }
+          }
+          creatures {
+            name
+            realm
+            spawns {
+              zone {
+                name
+              }
             }
           }
         }
-      }
-      usedToPurchase {
-        count
-        item {
-          id
-          name
-          iconUrl
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
         }
-        price
-        requiredItems {
+      }
+      usedToPurchase(
+        first: $first
+        last: $last
+        before: $before
+        after: $after
+      ) {
+        nodes {
           count
           item {
             id
             name
             iconUrl
           }
-        }
-        creatures {
-          name
-          realm
-          spawns {
-            zone {
+          price
+          requiredItems {
+            count
+            item {
+              id
               name
+              iconUrl
+            }
+          }
+          creatures {
+            name
+            realm
+            spawns {
+              zone {
+                name
+              }
             }
           }
         }
-      }
-      rewardedFromQuests {
-        name
-        rewardsChoice {
-          item {
-            id
-            name
-            iconUrl
-          }
-          count
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
         }
-        rewardsGiven {
-          item {
-            id
-            name
-            iconUrl
+      }
+      rewardedFromQuests(
+        first: $first
+        last: $last
+        before: $before
+        after: $after
+      ) {
+        nodes {
+          name
+          rewardsChoice {
+            item {
+              id
+              name
+              iconUrl
+            }
+            count
           }
-          count
+          rewardsGiven {
+            item {
+              id
+              name
+              iconUrl
+            }
+            count
+          }
+        }
+        totalCount
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
         }
       }
     }
@@ -141,7 +189,7 @@ export function Item({
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(ITEM_INFO, {
+  const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
       id,
     },
@@ -157,13 +205,13 @@ export function Item({
 
   const activeTabs: string[] = [];
 
-  if (item.soldByVendors.length > 0) {
+  if (item.soldByVendors?.totalCount) {
     activeTabs.push('vendors');
   }
-  if (item.usedToPurchase.length > 0) {
+  if (item.usedToPurchase?.totalCount) {
     activeTabs.push('purchase');
   }
-  if (item.rewardedFromQuests.length > 0) {
+  if (item.rewardedFromQuests?.totalCount) {
     activeTabs.push('quests');
   }
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
@@ -299,27 +347,100 @@ export function Item({
       <Tabs>
         {activeTabs.includes('vendors') && (
           <li className={activeTab === 'vendors' ? 'is-active' : ''}>
-            <Link to={`/item/${id}`}>{t('pages:itemPage.vendors')}</Link>
+            <Link
+              to={`/item/${id}`}
+              onClick={() => {
+                refetch({
+                  first: 10,
+                  after: undefined,
+                  last: undefined,
+                  before: undefined,
+                });
+              }}
+            >
+              {t('pages:itemPage.vendors')}
+            </Link>
           </li>
         )}
         {activeTabs.includes('purchase') && (
           <li className={activeTab === 'purchase' ? 'is-active' : ''}>
-            <Link to={`/item/${id}/purchase`}>
+            <Link
+              to={`/item/${id}/purchase`}
+              onClick={() => {
+                refetch({
+                  first: 10,
+                  after: undefined,
+                  last: undefined,
+                  before: undefined,
+                });
+              }}
+            >
               {t('pages:itemPage.purchase')}
             </Link>
           </li>
         )}
         {activeTabs.includes('quests') && (
           <li className={activeTab === 'quests' ? 'is-active' : ''}>
-            <Link to={`/item/${id}/quests`}>{t('pages:itemPage.quests')}</Link>
+            <Link
+              to={`/item/${id}/quests`}
+              onClick={() => {
+                refetch({
+                  first: 10,
+                  after: undefined,
+                  last: undefined,
+                  before: undefined,
+                });
+              }}
+            >
+              {t('pages:itemPage.quests')}
+            </Link>
           </li>
         )}
       </Tabs>
-      {activeTab === 'vendors' && (
-        <ItemVendors vendorItems={item.soldByVendors} />
+      {activeTab === 'vendors' && item.soldByVendors?.nodes && (
+        <ItemVendors
+          vendorItems={item.soldByVendors.nodes}
+          pageInfo={item.soldByVendors.pageInfo}
+          onNext={() =>
+            refetch({
+              first: 10,
+              after: item.soldByVendors?.pageInfo?.endCursor,
+              last: undefined,
+              before: undefined,
+            })
+          }
+          onPrevious={() =>
+            refetch({
+              first: undefined,
+              after: undefined,
+              last: 10,
+              before: item.soldByVendors?.pageInfo?.startCursor,
+            })
+          }
+        />
       )}
-      {activeTab === 'purchase' && (
-        <ItemVendors vendorItems={item.usedToPurchase} showItem />
+      {activeTab === 'purchase' && item.usedToPurchase?.nodes && (
+        <ItemVendors
+          vendorItems={item.usedToPurchase.nodes}
+          pageInfo={item.usedToPurchase.pageInfo}
+          onNext={() =>
+            refetch({
+              first: 10,
+              after: item.usedToPurchase?.pageInfo?.endCursor,
+              last: undefined,
+              before: undefined,
+            })
+          }
+          onPrevious={() =>
+            refetch({
+              first: undefined,
+              after: undefined,
+              last: 10,
+              before: item.usedToPurchase?.pageInfo?.startCursor,
+            })
+          }
+          showItem
+        />
       )}
       {activeTab === 'quests' && <ItemQuests item={item} />}
     </Container>
