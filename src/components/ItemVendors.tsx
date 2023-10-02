@@ -2,6 +2,7 @@ import { Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { VendorItem } from '../types';
+import { GoldPrice } from './GoldPrice';
 
 export function ItemVendors({
   vendorItems,
@@ -71,6 +72,7 @@ export function ItemVendors({
                   )}
                 </td>
                 <td>
+                  <GoldPrice price={vendorItem.price} />
                   {vendorItem.requiredItems.map((requiredItem) => (
                     <span className="icon-text">
                       <figure className="image is-24x24 mx-1">
