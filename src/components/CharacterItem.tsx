@@ -1,6 +1,7 @@
 import { Media } from 'react-bulma-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { CharacterItem as CharacterItemType, Item } from '../types';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
@@ -39,13 +40,15 @@ export function CharacterItem({
     >
       <Media>
         <Media.Item align="left">
-          <figure
-            className={`${itemFigureClass(
-              item,
-            )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
-          >
-            <img src={item.iconUrl} alt={item.name} />
-          </figure>
+          <Link to={`/item/${item.id}`}>
+            <figure
+              className={`${itemFigureClass(
+                item,
+              )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+            >
+              <img src={item.iconUrl} alt={item.name} />
+            </figure>
+          </Link>
         </Media.Item>
         {item.name && (
           <Media.Item>

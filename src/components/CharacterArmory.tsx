@@ -24,6 +24,7 @@ const CHARACTER_ARMORY = gql`
           }
         }
         item {
+          id
           name
           careerRestriction
           description

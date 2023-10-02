@@ -92,17 +92,6 @@ export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
             .filter((creature) => creature.spawns.length > 0)
             .map((creature, index) => (
               <tr>
-                <td rowSpan={numRows}>
-                  <span className="icon-text">
-                    <figure className="image is-24x24 mx-1">
-                      <img src={vendorItem.item.iconUrl} alt="Item Icon" />
-                    </figure>
-                    <Link to={`/item/${vendorItem.item.id}`} className="mr-1">
-                      {vendorItem.item.name}
-                    </Link>
-                    x{vendorItem.count}
-                  </span>
-                </td>
                 {index === 0 && (
                   <td rowSpan={numRows}>
                     <GoldPrice price={vendorItem.price} />
