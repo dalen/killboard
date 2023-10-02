@@ -1,29 +1,81 @@
-import { Button, Table } from 'react-bulma-components';
+import { Button, Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { PageInfo, VendorItem } from '../types';
+import { gql, useQuery } from '@apollo/client';
 import { GoldPrice } from './GoldPrice';
+import { Query } from '../types';
+import { ErrorMessage } from './global/ErrorMessage';
 
-export function ItemVendors({
-  vendorItems,
-  showItem = false,
-  pageInfo,
-  onNext,
-  onPrevious,
-}: {
-  vendorItems: VendorItem[];
-  showItem?: boolean;
-  pageInfo: PageInfo;
-  onNext?: () => void;
-  onPrevious?: () => void;
-}) {
+const ITEM_INFO = gql`
+  query GetItemSoldByVendors(
+    $itemId: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
+    item(id: $itemId) {
+      id
+      soldByVendors(
+        first: $first
+        last: $last
+        before: $before
+        after: $after
+      ) {
+        nodes {
+          price
+          requiredItems {
+            count
+            item {
+              id
+              name
+              iconUrl
+            }
+          }
+          creatures {
+            name
+            realm
+            spawns {
+              zone {
+                name
+              }
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
+        }
+      }
+    }
+  }
+`;
+
+export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
+  const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
+  const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
+    variables: {
+      itemId,
+      first: perPage,
+    },
+  });
+
+  if (loading) return <Progress />;
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+
+  const vendorItems = data?.item?.soldByVendors;
+  const pageInfo = vendorItems?.pageInfo;
+
+  if (vendorItems?.nodes == null)
+    return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
     <Table striped className="is-fullwidth">
       <thead>
         <tr>
-          {showItem && <th>{t('components:itemVendors.item')}</th>}
           <th>{t('components:itemVendors.price')}</th>
           <th>{t('components:itemVendors.creatureName')}</th>
           <th>{t('components:itemVendors.realm')}</th>
@@ -31,7 +83,7 @@ export function ItemVendors({
         </tr>
       </thead>
       <tbody>
-        {vendorItems.map((vendorItem) => {
+        {vendorItems.nodes.map((vendorItem) => {
           const numRows = vendorItem.creatures.filter(
             (c) => c.spawns.length > 0,
           ).length;
@@ -40,19 +92,17 @@ export function ItemVendors({
             .filter((creature) => creature.spawns.length > 0)
             .map((creature, index) => (
               <tr>
-                {showItem && index === 0 && (
-                  <td rowSpan={numRows}>
-                    <span className="icon-text">
-                      <figure className="image is-24x24 mx-1">
-                        <img src={vendorItem.item.iconUrl} alt="Item Icon" />
-                      </figure>
-                      <Link to={`/item/${vendorItem.item.id}`} className="mr-1">
-                        {vendorItem.item.name}
-                      </Link>
-                      x{vendorItem.count}
-                    </span>
-                  </td>
-                )}
+                <td rowSpan={numRows}>
+                  <span className="icon-text">
+                    <figure className="image is-24x24 mx-1">
+                      <img src={vendorItem.item.iconUrl} alt="Item Icon" />
+                    </figure>
+                    <Link to={`/item/${vendorItem.item.id}`} className="mr-1">
+                      {vendorItem.item.name}
+                    </Link>
+                    x{vendorItem.count}
+                  </span>
+                </td>
                 {index === 0 && (
                   <td rowSpan={numRows}>
                     <GoldPrice price={vendorItem.price} />
@@ -110,7 +160,6 @@ export function ItemVendors({
       {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
         <tfoot>
           <tr>
-            {showItem && <td />}
             <td colSpan={4}>
               <div className="field is-grouped is-pulled-right">
                 {pageInfo.hasPreviousPage && (
@@ -119,7 +168,14 @@ export function ItemVendors({
                     pull="right"
                     color="info"
                     size="small"
-                    onClick={onPrevious}
+                    onClick={() =>
+                      refetch({
+                        first: undefined,
+                        after: undefined,
+                        last: perPage,
+                        before: pageInfo?.startCursor,
+                      })
+                    }
                   >
                     {t('common:prevPage')}
                     <i className="fas fa-circle-chevron-left ml-1" />
@@ -131,7 +187,14 @@ export function ItemVendors({
                     pull="right"
                     color="info"
                     size="small"
-                    onClick={onNext}
+                    onClick={() => {
+                      refetch({
+                        first: perPage,
+                        after: pageInfo?.endCursor,
+                        last: undefined,
+                        before: undefined,
+                      });
+                    }}
                   >
                     {t('common:nextPage')}
                     <i className="fas fa-circle-chevron-right ml-1" />

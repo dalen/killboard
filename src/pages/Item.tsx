@@ -14,18 +14,14 @@ import { Query } from '../types';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { isPercentage } from '../utils';
-import { ItemVendors } from '../components/ItemVendors';
 import { ItemQuests } from '../components/ItemQuests';
+import { ItemVendorsPurchase } from '../components/ItemVendorsPurchase';
+import { ItemVendorsSell } from '../components/ItemVendorsSell';
 
 const ITEM_INFO = gql`
-  query GetItemInfo(
-    $id: ID!
-    $first: Int
-    $last: Int
-    $before: String
-    $after: String
-  ) {
+  query GetItemInfo($id: ID!) {
     item(id: $id) {
+      id
       name
       careerRestriction
       description
@@ -71,112 +67,14 @@ const ITEM_INFO = gql`
         id
         description
       }
-      soldByVendors(
-        first: $first
-        last: $last
-        before: $before
-        after: $after
-      ) {
+      soldByVendors {
         totalCount
-        nodes {
-          price
-          requiredItems {
-            count
-            item {
-              id
-              name
-              iconUrl
-            }
-          }
-          creatures {
-            name
-            realm
-            spawns {
-              zone {
-                name
-              }
-            }
-          }
-        }
-        pageInfo {
-          hasNextPage
-          endCursor
-          hasPreviousPage
-          startCursor
-        }
       }
-      usedToPurchase(
-        first: $first
-        last: $last
-        before: $before
-        after: $after
-      ) {
-        nodes {
-          count
-          item {
-            id
-            name
-            iconUrl
-          }
-          price
-          requiredItems {
-            count
-            item {
-              id
-              name
-              iconUrl
-            }
-          }
-          creatures {
-            name
-            realm
-            spawns {
-              zone {
-                name
-              }
-            }
-          }
-        }
+      usedToPurchase {
         totalCount
-        pageInfo {
-          hasNextPage
-          endCursor
-          hasPreviousPage
-          startCursor
-        }
       }
-      rewardedFromQuests(
-        first: $first
-        last: $last
-        before: $before
-        after: $after
-      ) {
-        nodes {
-          name
-          rewardsChoice {
-            item {
-              id
-              name
-              iconUrl
-            }
-            count
-          }
-          rewardsGiven {
-            item {
-              id
-              name
-              iconUrl
-            }
-            count
-          }
-        }
+      rewardedFromQuests {
         totalCount
-        pageInfo {
-          hasNextPage
-          endCursor
-          hasPreviousPage
-          startCursor
-        }
       }
     }
   }
@@ -189,7 +87,7 @@ export function Item({
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
+  const { loading, error, data } = useQuery<Query>(ITEM_INFO, {
     variables: {
       id,
     },
@@ -347,102 +245,30 @@ export function Item({
       <Tabs>
         {activeTabs.includes('vendors') && (
           <li className={activeTab === 'vendors' ? 'is-active' : ''}>
-            <Link
-              to={`/item/${id}`}
-              onClick={() => {
-                refetch({
-                  first: 10,
-                  after: undefined,
-                  last: undefined,
-                  before: undefined,
-                });
-              }}
-            >
-              {t('pages:itemPage.vendors')}
+            <Link to={`/item/${id}`}>
+              {t('pages:itemPage.vendors')} ({item.soldByVendors?.totalCount})
             </Link>
           </li>
         )}
         {activeTabs.includes('purchase') && (
           <li className={activeTab === 'purchase' ? 'is-active' : ''}>
-            <Link
-              to={`/item/${id}/purchase`}
-              onClick={() => {
-                refetch({
-                  first: 10,
-                  after: undefined,
-                  last: undefined,
-                  before: undefined,
-                });
-              }}
-            >
-              {t('pages:itemPage.purchase')}
+            <Link to={`/item/${id}/purchase`}>
+              {t('pages:itemPage.purchase')} ({item.usedToPurchase?.totalCount})
             </Link>
           </li>
         )}
         {activeTabs.includes('quests') && (
           <li className={activeTab === 'quests' ? 'is-active' : ''}>
-            <Link
-              to={`/item/${id}/quests`}
-              onClick={() => {
-                refetch({
-                  first: 10,
-                  after: undefined,
-                  last: undefined,
-                  before: undefined,
-                });
-              }}
-            >
-              {t('pages:itemPage.quests')}
+            <Link to={`/item/${id}/quests`}>
+              {t('pages:itemPage.quests')} (
+              {item.rewardedFromQuests?.totalCount})
             </Link>
           </li>
         )}
       </Tabs>
-      {activeTab === 'vendors' && item.soldByVendors?.nodes && (
-        <ItemVendors
-          vendorItems={item.soldByVendors.nodes}
-          pageInfo={item.soldByVendors.pageInfo}
-          onNext={() =>
-            refetch({
-              first: 10,
-              after: item.soldByVendors?.pageInfo?.endCursor,
-              last: undefined,
-              before: undefined,
-            })
-          }
-          onPrevious={() =>
-            refetch({
-              first: undefined,
-              after: undefined,
-              last: 10,
-              before: item.soldByVendors?.pageInfo?.startCursor,
-            })
-          }
-        />
-      )}
-      {activeTab === 'purchase' && item.usedToPurchase?.nodes && (
-        <ItemVendors
-          vendorItems={item.usedToPurchase.nodes}
-          pageInfo={item.usedToPurchase.pageInfo}
-          onNext={() =>
-            refetch({
-              first: 10,
-              after: item.usedToPurchase?.pageInfo?.endCursor,
-              last: undefined,
-              before: undefined,
-            })
-          }
-          onPrevious={() =>
-            refetch({
-              first: undefined,
-              after: undefined,
-              last: 10,
-              before: item.usedToPurchase?.pageInfo?.startCursor,
-            })
-          }
-          showItem
-        />
-      )}
-      {activeTab === 'quests' && <ItemQuests item={item} />}
+      {activeTab === 'vendors' && <ItemVendorsSell itemId={id} />}
+      {activeTab === 'purchase' && <ItemVendorsPurchase itemId={id} />}
+      {activeTab === 'quests' && <ItemQuests itemId={id} />}
     </Container>
   );
 }

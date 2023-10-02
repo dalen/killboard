@@ -1,12 +1,77 @@
-import { Table } from 'react-bulma-components';
+import { Button, Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Item } from '../types';
+import { gql, useQuery } from '@apollo/client';
+import { Query } from '../types';
+import { ErrorMessage } from './global/ErrorMessage';
 
-export function ItemQuests({ item }: { item: Item }) {
+const ITEM_INFO = gql`
+  query GetItemRewardedFromQuests(
+    $itemId: ID!
+    $first: Int
+    $last: Int
+    $before: String
+    $after: String
+  ) {
+    item(id: $itemId) {
+      id
+      rewardedFromQuests(
+        first: $first
+        last: $last
+        before: $before
+        after: $after
+      ) {
+        nodes {
+          id
+          name
+          rewardsChoice {
+            item {
+              id
+              name
+              iconUrl
+            }
+            count
+          }
+          rewardsGiven {
+            item {
+              id
+              name
+              iconUrl
+            }
+            count
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+          hasPreviousPage
+          startCursor
+        }
+      }
+    }
+  }
+`;
+
+export function ItemQuests({ itemId }: { itemId: string | undefined }) {
+  const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
+  const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
+    variables: {
+      itemId,
+      first: perPage,
+    },
+  });
 
-  if (item.rewardedFromQuests?.nodes == null) return null;
+  if (loading) return <Progress />;
+  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+
+  const rewardedFromQuests = data?.item?.rewardedFromQuests;
+  const pageInfo = rewardedFromQuests?.pageInfo;
+
+  if (rewardedFromQuests?.nodes == null)
+    return <ErrorMessage customText={t('common:notFound')} />;
+
+  if (rewardedFromQuests?.nodes == null) return null;
 
   return (
     <Table striped className="is-fullwidth">
@@ -18,8 +83,8 @@ export function ItemQuests({ item }: { item: Item }) {
         </tr>
       </thead>
       <tbody>
-        {item.rewardedFromQuests.nodes.map((quest) => (
-          <tr>
+        {rewardedFromQuests.nodes.map((quest) => (
+          <tr key={quest.id}>
             <td>{quest.name}</td>
             <td>
               {quest.rewardsChoice.map((rewardItem) => (
@@ -50,6 +115,54 @@ export function ItemQuests({ item }: { item: Item }) {
           </tr>
         ))}
       </tbody>
+      {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
+        <tfoot>
+          <tr>
+            <td colSpan={3}>
+              <div className="field is-grouped is-pulled-right">
+                {pageInfo.hasPreviousPage && (
+                  <Button
+                    p={2}
+                    pull="right"
+                    color="info"
+                    size="small"
+                    onClick={() =>
+                      refetch({
+                        first: undefined,
+                        after: undefined,
+                        last: perPage,
+                        before: pageInfo?.startCursor,
+                      })
+                    }
+                  >
+                    {t('common:prevPage')}
+                    <i className="fas fa-circle-chevron-left ml-1" />
+                  </Button>
+                )}
+                {pageInfo.hasNextPage && (
+                  <Button
+                    p={2}
+                    pull="right"
+                    color="info"
+                    size="small"
+                    onClick={() => {
+                      refetch({
+                        first: perPage,
+                        after: pageInfo?.endCursor,
+                        last: undefined,
+                        before: undefined,
+                      });
+                    }}
+                  >
+                    {t('common:nextPage')}
+                    <i className="fas fa-circle-chevron-right ml-1" />
+                  </Button>
+                )}
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      )}
     </Table>
   );
 }
