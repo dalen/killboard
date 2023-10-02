@@ -172,5 +172,9 @@
     "minPlayers12": "12+",
     "minPlayers48": "48+",
     "minPlayers100": "100+"
+  },
+  "itemVendorsFilters": {
+    "all": "All",
+    "career": "Career"
   }
 }

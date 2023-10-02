@@ -33,6 +33,7 @@ const ITEM_INFO = gql`
             }
           }
           creatures {
+            id
             name
             realm
             spawns {
@@ -96,7 +97,7 @@ export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
                   <td rowSpan={numRows}>
                     <GoldPrice price={vendorItem.price} />
                     {vendorItem.requiredItems.map((requiredItem) => (
-                      <span className="icon-text">
+                      <span key={requiredItem.item.id} className="icon-text">
                         <figure className="image is-24x24 mx-1">
                           <img
                             src={requiredItem.item.iconUrl}
