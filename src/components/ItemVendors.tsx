@@ -18,25 +18,24 @@ export function ItemVendors({
       <thead>
         <tr>
           {showItem && <th>{t('components:itemVendors.item')}</th>}
+          <th>{t('components:itemVendors.price')}</th>
           <th>{t('components:itemVendors.creatureName')}</th>
           <th>{t('components:itemVendors.realm')}</th>
-          <th>{t('components:itemVendors.price')}</th>
           <th>{t('components:itemVendors.zone')}</th>
         </tr>
       </thead>
       <tbody>
-        {vendorItems.map((vendorItem) =>
-          vendorItem.creatures
+        {vendorItems.map((vendorItem) => {
+          const numRows = vendorItem.creatures.filter(
+            (c) => c.spawns.length > 0,
+          ).length;
+
+          return vendorItem.creatures
             .filter((creature) => creature.spawns.length > 0)
             .map((creature, index) => (
               <tr>
                 {showItem && index === 0 && (
-                  <td
-                    rowSpan={
-                      vendorItem.creatures.filter((c) => c.spawns.length > 0)
-                        .length
-                    }
-                  >
+                  <td rowSpan={numRows}>
                     <span className="icon-text">
                       <figure className="image is-24x24 mx-1">
                         <img src={vendorItem.item.iconUrl} alt="Item Icon" />
@@ -46,6 +45,28 @@ export function ItemVendors({
                       </Link>
                       x{vendorItem.count}
                     </span>
+                  </td>
+                )}
+                {index === 0 && (
+                  <td rowSpan={numRows}>
+                    <GoldPrice price={vendorItem.price} />
+                    {vendorItem.requiredItems.map((requiredItem) => (
+                      <span className="icon-text">
+                        <figure className="image is-24x24 mx-1">
+                          <img
+                            src={requiredItem.item.iconUrl}
+                            alt="Item Icon"
+                          />
+                        </figure>
+                        <Link
+                          to={`/item/${requiredItem.item.id}`}
+                          className="mr-1"
+                        >
+                          {requiredItem.item.name}
+                        </Link>
+                        x{requiredItem.count}
+                      </span>
+                    ))}
                   </td>
                 )}
                 <td>{creature.name}</td>
@@ -72,30 +93,13 @@ export function ItemVendors({
                   )}
                 </td>
                 <td>
-                  <GoldPrice price={vendorItem.price} />
-                  {vendorItem.requiredItems.map((requiredItem) => (
-                    <span className="icon-text">
-                      <figure className="image is-24x24 mx-1">
-                        <img src={requiredItem.item.iconUrl} alt="Item Icon" />
-                      </figure>
-                      <Link
-                        to={`/item/${requiredItem.item.id}`}
-                        className="mr-1"
-                      >
-                        {requiredItem.item.name}
-                      </Link>
-                      x{requiredItem.count}
-                    </span>
-                  ))}
-                </td>
-                <td>
                   {creature.spawns
                     .map((creatureSpawn) => creatureSpawn.zone.name)
                     .join(', ')}
                 </td>
               </tr>
-            )),
-        )}
+            ));
+        })}
       </tbody>
     </Table>
   );
