@@ -27,10 +27,15 @@ export function ItemVendors({
         {vendorItems.map((vendorItem) =>
           vendorItem.creatures
             .filter((creature) => creature.spawns.length > 0)
-            .map((creature) => (
+            .map((creature, index) => (
               <tr>
-                {showItem && (
-                  <td>
+                {showItem && index === 0 && (
+                  <td
+                    rowSpan={
+                      vendorItem.creatures.filter((c) => c.spawns.length > 0)
+                        .length
+                    }
+                  >
                     <span className="icon-text">
                       <figure className="image is-24x24 mx-1">
                         <img src={vendorItem.item.iconUrl} alt="Item Icon" />
