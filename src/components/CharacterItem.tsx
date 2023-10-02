@@ -53,7 +53,9 @@ export function CharacterItem({
               {item.name}
             </div>
             <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>
-            <div className="is-size-7">Level {item.itemLevel}</div>
+            {item.itemLevel > 0 && (
+              <div className="is-size-7">Level {item.itemLevel}</div>
+            )}
           </Media.Item>
         )}
       </Media>
