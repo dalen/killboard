@@ -1,6 +1,7 @@
 import {
   Breadcrumb,
   Card,
+  Columns,
   Container,
   Media,
   Progress,
@@ -47,6 +48,8 @@ const ITEM_INFO = gql`
         name
         items {
           id
+          name
+          iconUrl
         }
         bonuses {
           itemsRequired
@@ -135,111 +138,158 @@ export function Item({
               </figure>
             </Media.Item>
             <Media.Item>
-              <div className="is-flex mb-4">
-                <div className="is-size-3  is-family-secondary">
-                  <div className={itemNameClass(item)}>{item.name}</div>
-                </div>
-              </div>
-              <div className="mb-1">{item.description}</div>
-              {item.slot !== 'NONE' && (
-                <div>{t(`enums:itemSlot.${item.slot}`)}</div>
-              )}
-              {item.type !== 'NONE' && (
-                <div>{t(`enums:itemType.${item.type}`)}</div>
-              )}
-              {item.itemLevel > 0 && <div>Item Level {item.itemLevel}</div>}
-              {item.armor > 0 && item.type !== 'SHIELD' && (
-                <div className="stats-text-highlight">{item.armor} Armor</div>
-              )}
-              {item.dps > 0 && item.type !== 'SHIELD' && (
-                <div className="stats-text-highlight">
-                  {(item.dps / 10).toFixed(1)} DPS
-                </div>
-              )}
-              {item.speed > 0 && (
-                <div className="stats-text-highlight">
-                  {(item.speed / 100).toFixed(1)} Speed
-                </div>
-              )}
-              {item.type === 'SHIELD' && (
-                <div className=" stats-text-highlight">
-                  {item.armor} Block Rating
-                </div>
-              )}
-              <div className="stats-text-highlight">
-                {item.stats.map((stat) => (
-                  <div key={stat.stat}>
-                    + {stat.value * statMultiplier(stat.stat)}
-                    {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
-                  </div>
-                ))}
-              </div>
-              {Array(item.talismanSlots)
-                .fill(0)
-                .map(() => (
-                  <div>
-                    <span className="icon-text">
-                      <figure className="image is-24x24 mr-1">
-                        <img
-                          src="https://armory.returnofreckoning.com/icon/1"
-                          alt={t('components:itemVendors.order')}
-                        />
-                      </figure>
-                      Empty Talisman Slot
-                    </span>
-                  </div>
-                ))}
-
-              {item.itemSet && (
-                <div className="mb-3 item-text-set-bonus-enabled">
-                  {item.itemSet.name}
-                  {item.itemSet.bonuses.map((bonus) => (
-                    <div
-                      className={clsx('ml-2', 'item-text-set-bonus-disabled')}
-                    >
-                      ({bonus.itemsRequired} piece bonus):{' '}
-                      {bonus.bonus.__typename === 'Ability' &&
-                        bonus.bonus.description}
-                      {bonus.bonus.__typename === 'ItemStat' &&
-                        `+ ${
-                          bonus.bonus.value * statMultiplier(bonus.bonus.stat)
-                        } ${isPercentage(bonus.bonus.stat)} ${t(
-                          `enums:stat.${bonus.bonus.stat}`,
-                        )}`}
+              <Columns breakpoint="tablet">
+                <Columns.Column>
+                  <div className="is-flex mb-4">
+                    <div className="is-size-3  is-family-secondary">
+                      <div className={itemNameClass(item)}>{item.name}</div>
                     </div>
-                  ))}
-                </div>
-              )}
-              {item.buffs.length > 0 &&
-                item.buffs.map((buff) => (
-                  <div key={buff.id} className="item-text-buff">
-                    + {buff.description}
                   </div>
-                ))}
-              {item.levelRequirement > 0 && (
-                <div className="has-text-white">
-                  Minumum Rank: {item.levelRequirement}
-                </div>
-              )}
-              {item.renownRankRequirement > 0 && (
-                <div className="has-text-white">
-                  Requires {item.renownRankRequirement} Renown
-                </div>
-              )}
-              {item.careerRestriction.length > 0 && (
-                <div className="has-text-white">
-                  Career:{' '}
-                  {item.careerRestriction.map((career, i) => {
-                    const seperator = i === 0 ? '' : ', ';
-                    return (
-                      <span key={career}>
-                        {seperator}
-                        {t(`enums:career.${career}`)}
-                      </span>
-                    );
-                  })}
-                </div>
-              )}
+                  <div className="mb-1">{item.description}</div>
+                  {item.slot !== 'NONE' && (
+                    <div>{t(`enums:itemSlot.${item.slot}`)}</div>
+                  )}
+                  {item.type !== 'NONE' && (
+                    <div>{t(`enums:itemType.${item.type}`)}</div>
+                  )}
+                  {item.itemLevel > 0 && <div>Item Level {item.itemLevel}</div>}
+                  {item.armor > 0 && item.type !== 'SHIELD' && (
+                    <div className="stats-text-highlight">
+                      {item.armor} Armor
+                    </div>
+                  )}
+                  {item.dps > 0 && item.type !== 'SHIELD' && (
+                    <div className="stats-text-highlight">
+                      {(item.dps / 10).toFixed(1)} DPS
+                    </div>
+                  )}
+                  {item.speed > 0 && (
+                    <div className="stats-text-highlight">
+                      {(item.speed / 100).toFixed(1)} Speed
+                    </div>
+                  )}
+                  {item.type === 'SHIELD' && (
+                    <div className=" stats-text-highlight">
+                      {item.armor} Block Rating
+                    </div>
+                  )}
+                  <div className="stats-text-highlight">
+                    {item.stats.map((stat) => (
+                      <div key={stat.stat}>
+                        + {stat.value * statMultiplier(stat.stat)}
+                        {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
+                      </div>
+                    ))}
+                  </div>
+                  {Array(item.talismanSlots)
+                    .fill(0)
+                    .map(() => (
+                      <div>
+                        <span className="icon-text">
+                          <figure className="image is-24x24 mr-1">
+                            <img
+                              src="https://armory.returnofreckoning.com/icon/1"
+                              alt={t('components:itemVendors.order')}
+                            />
+                          </figure>
+                          Empty Talisman Slot
+                        </span>
+                      </div>
+                    ))}
+
+                  {item.itemSet && (
+                    <div className="mb-3 item-text-set-bonus-enabled">
+                      {item.itemSet.name}
+                      {item.itemSet.bonuses.map((bonus) => (
+                        <div
+                          className={clsx(
+                            'ml-2',
+                            'item-text-set-bonus-disabled',
+                          )}
+                        >
+                          ({bonus.itemsRequired} piece bonus):{' '}
+                          {bonus.bonus.__typename === 'Ability' &&
+                            bonus.bonus.description}
+                          {bonus.bonus.__typename === 'ItemStat' &&
+                            `+ ${
+                              bonus.bonus.value *
+                              statMultiplier(bonus.bonus.stat)
+                            } ${isPercentage(bonus.bonus.stat)} ${t(
+                              `enums:stat.${bonus.bonus.stat}`,
+                            )}`}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {item.buffs.length > 0 &&
+                    item.buffs.map((buff) => (
+                      <div key={buff.id} className="item-text-buff">
+                        + {buff.description}
+                      </div>
+                    ))}
+                  {item.levelRequirement > 0 && (
+                    <div className="has-text-white">
+                      Minumum Rank: {item.levelRequirement}
+                    </div>
+                  )}
+                  {item.renownRankRequirement > 0 && (
+                    <div className="has-text-white">
+                      Requires {item.renownRankRequirement} Renown
+                    </div>
+                  )}
+                  {item.careerRestriction.length > 0 && (
+                    <div className="has-text-white">
+                      Career:{' '}
+                      {item.careerRestriction.map((career, i) => {
+                        const seperator = i === 0 ? '' : ', ';
+                        return (
+                          <span key={career}>
+                            {seperator}
+                            {t(`enums:career.${career}`)}
+                          </span>
+                        );
+                      })}
+                    </div>
+                  )}
+                </Columns.Column>
+                {item.itemSet && (
+                  <Columns.Column>
+                    <div className="is-size-5 is-family-secondary">
+                      {item.itemSet.name}
+                    </div>
+                    {item.itemSet.items.map((itemSetItem) => (
+                      <div className="mb-1">
+                        <span key={itemSetItem.id} className="icon-text">
+                          {itemSetItem.id === item.id && (
+                            <>
+                              <figure className="image is-24x24 m-0">
+                                <img
+                                  src={itemSetItem.iconUrl}
+                                  alt="Item Icon"
+                                />
+                              </figure>
+                              {itemSetItem.name}
+                            </>
+                          )}
+                          {itemSetItem.id !== item.id && (
+                            <>
+                              <figure className="image is-24x24 m-0">
+                                <img
+                                  src={itemSetItem.iconUrl}
+                                  alt="Item Icon"
+                                />
+                              </figure>
+                              <Link to={`/item/${itemSetItem.id}`}>
+                                {itemSetItem.name}
+                              </Link>
+                            </>
+                          )}
+                        </span>
+                      </div>
+                    ))}
+                  </Columns.Column>
+                )}
+              </Columns>
             </Media.Item>
           </Media>
         </Card.Content>
