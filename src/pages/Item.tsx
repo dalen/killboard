@@ -160,11 +160,11 @@ export function Item({
   if (item.soldByVendors.length > 0) {
     activeTabs.push('vendors');
   }
-  if (item.rewardedFromQuests.length > 0) {
-    activeTabs.push('quests');
-  }
   if (item.usedToPurchase.length > 0) {
     activeTabs.push('purchase');
+  }
+  if (item.rewardedFromQuests.length > 0) {
+    activeTabs.push('quests');
   }
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
