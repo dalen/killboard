@@ -1495,7 +1495,7 @@ function print() { __p += __j.call(arguments, '') }
       count
     }
   }
-`;function XX({zoneId:e,id:t}){var m;const{loading:r,error:n,data:i}=tt(JX,{variables:{id:t}}),{t:a}=be(["common","components"]);if(r)return g.jsx(R.Progress,{});if(n)return g.jsx(Ee,{name:n.name,message:n.message});if((i==null?void 0:i.killsHeatmap)==null||i.killsHeatmap.length===0)return g.jsx(Ee,{customText:a("common:notFound")});const s=i.killsHeatmap.map(y=>[y.x*10+5,y.y*10+5,y.count]),p=((m=mu.maxBy(s,y=>y[2]))==null?void 0:m[2])||1;return g.jsxs(R.Container,{breakpoint:"desktop",max:!0,children:[g.jsx("p",{className:"mb-2",children:a("components:scenarioHeatmap.description")}),g.jsx(i0,{zoneId:e,max:p,data:s,size:640})]})}const ZX=Ce`
+`;function XX({zoneId:e,id:t}){var y;const{loading:r,error:n,data:i}=tt(JX,{variables:{id:t}}),{t:a}=be(["common","components"]),s=500;if(r)return g.jsx(R.Progress,{});if(n)return g.jsx(Ee,{name:n.name,message:n.message});if((i==null?void 0:i.killsHeatmap)==null||i.killsHeatmap.length===0)return g.jsx(Ee,{customText:a("common:notFound")});const p=i.killsHeatmap.map(d=>[d.x*(s/64)+s/64/2,d.y*(s/64)+s/64/2,d.count]),m=((y=mu.maxBy(p,d=>d[2]))==null?void 0:y[2])||1;return g.jsxs(R.Container,{breakpoint:"desktop",max:!0,children:[g.jsx("p",{className:"mb-2",children:a("components:scenarioHeatmap.description")}),g.jsx(i0,{zoneId:e,max:m,data:p,size:s})]})}const ZX=Ce`
   query GetScenarioSkirmishes(
     $instanceId: UUID
     $first: Int
@@ -1621,7 +1621,7 @@ function print() { __p += __j.call(arguments, '') }
       count
     }
   }
-`;function iZ(){var m;const{t:e}=be(["common","pages"]),{id:t}=Tn(),r=Math.round(new Date().setUTCHours(0,0,0,0)/1e3)-60*60*24*30,{loading:n,error:i,data:a}=tt(nZ,{variables:{id:t,from:r}});if(n)return g.jsx(R.Progress,{});if(i)return g.jsx(Ee,{name:i.name,message:i.message});if((a==null?void 0:a.killsHeatmap)==null||a.killsHeatmap.length===0)return g.jsx(Ee,{customText:e("common:notFound")});const s=a.killsHeatmap.map(y=>[y.x*10+5,y.y*10+5,y.count]),p=((m=mu.maxBy(s,y=>y[2]))==null?void 0:m[2])||1;return g.jsxs(R.Container,{max:!0,breakpoint:"widescreen",mt:2,children:[g.jsxs(R.Breadcrumb,{children:[g.jsx(R.Breadcrumb.Item,{children:g.jsx(ie,{to:"/",children:e("common:home")})}),g.jsx(R.Breadcrumb.Item,{active:!0,children:g.jsx(ie,{to:`/zone_heatmap/${t}`,children:e("pages:mapPage.zoneId",{zoneId:t})})})]}),g.jsx(i0,{zoneId:Number(t).toString(),max:p,data:s,size:640})]})}const aZ=Ce`
+`;function iZ(){var y;const{t:e}=be(["common","pages"]),{id:t}=Tn(),r=500,n=Math.round(new Date().setUTCHours(0,0,0,0)/1e3)-60*60*24*30,{loading:i,error:a,data:s}=tt(nZ,{variables:{id:t,from:n}});if(i)return g.jsx(R.Progress,{});if(a)return g.jsx(Ee,{name:a.name,message:a.message});if((s==null?void 0:s.killsHeatmap)==null||s.killsHeatmap.length===0)return g.jsx(Ee,{customText:e("common:notFound")});const p=s.killsHeatmap.map(d=>[d.x*(r/64)+r/64/2,d.y*(r/64)+r/64/2,d.count]),m=((y=mu.maxBy(p,d=>d[2]))==null?void 0:y[2])||1;return g.jsxs(R.Container,{max:!0,breakpoint:"widescreen",mt:2,children:[g.jsxs(R.Breadcrumb,{children:[g.jsx(R.Breadcrumb.Item,{children:g.jsx(ie,{to:"/",children:e("common:home")})}),g.jsx(R.Breadcrumb.Item,{active:!0,children:g.jsx(ie,{to:`/zone_heatmap/${t}`,children:e("pages:mapPage.zoneId",{zoneId:t})})})]}),g.jsx(i0,{zoneId:Number(t).toString(),max:m,data:p,size:r})]})}const aZ=Ce`
   query GetSkirmishScoreboard(
     $id: ID!
     $first: Int
