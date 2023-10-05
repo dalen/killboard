@@ -21,6 +21,8 @@ export function ZoneMap(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
+  const size = 500;
+
   const date =
     Math.round(new Date().setUTCHours(0, 0, 0, 0) / 1000) - 60 * 60 * 24 * 30;
 
@@ -38,8 +40,8 @@ export function ZoneMap(): JSX.Element {
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [
-      point.x * 10 + 5,
-      point.y * 10 + 5,
+      point.x * (size / 64) + size / 64 / 2,
+      point.y * (size / 64) + size / 64 / 2,
       point.count,
     ],
   );
@@ -62,7 +64,7 @@ export function ZoneMap(): JSX.Element {
         zoneId={Number(id).toString()}
         max={max}
         data={heatmapData}
-        size={640}
+        size={size}
       />
     </Container>
   );

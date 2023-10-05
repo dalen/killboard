@@ -31,6 +31,8 @@ export function ScenarioHeatmap({
 
   const { t } = useTranslation(['common', 'components']);
 
+  const size = 500;
+
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
@@ -38,8 +40,8 @@ export function ScenarioHeatmap({
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [
-      point.x * 10 + 5,
-      point.y * 10 + 5,
+      point.x * (size / 64) + size / 64 / 2,
+      point.y * (size / 64) + size / 64 / 2,
       point.count,
     ],
   );
@@ -49,7 +51,7 @@ export function ScenarioHeatmap({
   return (
     <Container breakpoint="desktop" max>
       <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
-      <ZoneHeatmap zoneId={zoneId} max={max} data={heatmapData} size={640} />
+      <ZoneHeatmap zoneId={zoneId} max={max} data={heatmapData} size={size} />
     </Container>
   );
 }
