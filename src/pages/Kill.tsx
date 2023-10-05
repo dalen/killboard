@@ -40,6 +40,12 @@ const KILL_DETAILS = gql`
         }
         x
         y
+        mapSetup {
+          nwCornerX
+          nwCornerY
+          seCornerX
+          seCornerY
+        }
       }
       victim {
         level
@@ -211,6 +217,10 @@ export function Kill(): JSX.Element {
                 zoneId={data.kill.position?.zoneId}
                 x={data.kill.position?.x}
                 y={data.kill.position?.y}
+                nwCornerX={data.kill.position?.mapSetup?.nwCornerX}
+                nwCornerY={data.kill.position?.mapSetup?.nwCornerY}
+                seCornerX={data.kill.position?.mapSetup?.seCornerX}
+                seCornerY={data.kill.position?.mapSetup?.seCornerY}
               />
             </Card.Content>
           </Card>

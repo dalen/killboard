@@ -6,25 +6,10 @@ import { useParams, Link } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ZoneHeatmap } from '../components/ZoneHeatmap';
 import { Query } from '../types';
-import { zoneCoordinates } from '../zoneCoordinates';
 
 const ZONE_HEATMAP = gql`
-  query GetZoneHeatmap(
-    $id: ID
-    $minX: UnsignedShort!
-    $minY: UnsignedShort!
-    $maxX: UnsignedShort!
-    $maxY: UnsignedShort!
-    $from: Long
-  ) {
-    killsHeatmap(
-      zoneId: $id
-      minX: $minX
-      minY: $minY
-      maxX: $maxX
-      maxY: $maxY
-      from: $from
-    ) {
+  query GetZoneHeatmap($id: ID, $from: Long) {
+    killsHeatmap(zoneId: $id, from: $from) {
       x
       y
       count
@@ -36,18 +21,12 @@ export function ZoneMap(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
-  const zoneCoord = zoneCoordinates[Number(id)];
-
   const date =
     Math.round(new Date().setUTCHours(0, 0, 0, 0) / 1000) - 60 * 60 * 24 * 30;
 
   const { loading, error, data } = useQuery<Query>(ZONE_HEATMAP, {
     variables: {
       id,
-      minX: zoneCoord['NW-X'],
-      minY: zoneCoord['NW-Y'],
-      maxX: zoneCoord['SE-X'],
-      maxY: zoneCoord['SE-Y'],
       from: date,
     },
   });

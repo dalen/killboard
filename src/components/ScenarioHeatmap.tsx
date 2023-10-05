@@ -5,23 +5,10 @@ import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ZoneHeatmap } from './ZoneHeatmap';
-import { zoneCoordinates } from '../zoneCoordinates';
 
 const SCENARIO_HEATMAP = gql`
-  query GetScenarioHeatmap(
-    $id: ID
-    $minX: UnsignedShort!
-    $minY: UnsignedShort!
-    $maxX: UnsignedShort!
-    $maxY: UnsignedShort!
-  ) {
-    killsHeatmap(
-      instanceId: $id
-      minX: $minX
-      minY: $minY
-      maxX: $maxX
-      maxY: $maxY
-    ) {
+  query GetScenarioHeatmap($id: ID) {
+    killsHeatmap(instanceId: $id) {
       x
       y
       count
@@ -36,15 +23,9 @@ export function ScenarioHeatmap({
   zoneId: string;
   id: string;
 }): JSX.Element {
-  const zoneCoord = zoneCoordinates[Number(zoneId)];
-
   const { loading, error, data } = useQuery<Query>(SCENARIO_HEATMAP, {
     variables: {
       id,
-      minX: zoneCoord['NW-X'],
-      minY: zoneCoord['NW-Y'],
-      maxX: zoneCoord['SE-X'],
-      maxY: zoneCoord['SE-Y'],
     },
   });
 

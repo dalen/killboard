@@ -1,36 +1,42 @@
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { zoneCoordinates } from '../zoneCoordinates';
 
 export function Map({
   x,
   y,
   zoneId,
+  nwCornerX,
+  nwCornerY,
+  seCornerX,
+  seCornerY,
 }: {
   x?: number;
   y?: number;
   zoneId?: number;
+  nwCornerX: number;
+  nwCornerY: number;
+  seCornerX: number;
+  seCornerY: number;
 }): JSX.Element {
   const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (canvasElement.current) {
-      const zoneCoord = zoneCoordinates[Number(zoneId)];
       // or 1 here to avoid any div by zero errors
-      const zoneWidth = zoneCoord['SE-X'] - zoneCoord['NW-X'] || 1;
-      const zoneHeight = zoneCoord['SE-Y'] - zoneCoord['NW-Y'] || 1;
+      const zoneWidth = seCornerX - nwCornerX || 1;
+      const zoneHeight = seCornerY - nwCornerY || 1;
 
       const iconSize = 16;
       const canvasWidth = canvasElement.current.width;
       canvasElement.current.height = canvasWidth;
       const xTranslated =
         x != null
-          ? ((x - zoneCoord['NW-X']) / zoneWidth) * canvasWidth - iconSize / 2
+          ? ((x - nwCornerX) / zoneWidth) * canvasWidth - iconSize / 2
           : undefined;
       const yTranslated =
         y != null
-          ? ((y - zoneCoord['NW-Y']) / zoneHeight) * canvasWidth - iconSize / 2
+          ? ((y - nwCornerY) / zoneHeight) * canvasWidth - iconSize / 2
           : undefined;
 
       const ctx = canvasElement.current.getContext('2d');
@@ -66,7 +72,7 @@ export function Map({
         };
       }
     }
-  }, [x, y, zoneId]);
+  }, [x, y, zoneId, nwCornerX, nwCornerY, seCornerX, seCornerY]);
 
   return (
     <>
