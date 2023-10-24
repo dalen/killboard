@@ -32,7 +32,7 @@
     "@types/react-dom": "^18.2.8",
     "@types/simpleheat": "^0.4.1",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
+    "@typescript-eslint/parser": "^6.9.0",
     "@vitejs/plugin-react": "^4.0.4",
     "bulma": "^0.9.4",
     "eslint-config-airbnb": "^19.0.4",
