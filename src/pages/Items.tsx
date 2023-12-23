@@ -21,6 +21,7 @@ const SEARCH_ITEMS = gql`
   query SearchItems(
     $query: ItemFilterInput
     $usableByCareer: Career
+    $hasStats: [Stat!]
     $first: Int
     $last: Int
     $before: String
@@ -29,6 +30,7 @@ const SEARCH_ITEMS = gql`
     items(
       where: $query
       usableByCareer: $usableByCareer
+      hasStats: $hasStats
       first: $first
       last: $last
       before: $before
@@ -126,6 +128,15 @@ const usableByCareerFilter = (search: URLSearchParams) => {
   return { usableByCareer: career };
 };
 
+const hasStatsFilter = (search: URLSearchParams) => {
+  const stat = search.get('stat');
+
+  if (stat === 'any' || !stat) {
+    return {};
+  }
+
+  return { hasStats: [stat] };
+};
 export function Items(): JSX.Element {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
@@ -134,6 +145,7 @@ export function Items(): JSX.Element {
     variables: {
       query: getItemsFilters(search),
       ...usableByCareerFilter(search),
+      ...hasStatsFilter(search),
       first: perPage,
     },
   });
@@ -160,19 +172,17 @@ export function Items(): JSX.Element {
       </Breadcrumb>
       <Card mb={5}>
         <Card.Content>
+          <Form.Field>
+            <Form.Label>{t('pages:items.search')}</Form.Label>
+            <SearchBox
+              initialQuery={search.get('query') || ''}
+              onSubmit={(event) => {
+                search.set('query', event);
+                setSearch(search);
+              }}
+            />
+          </Form.Field>
           <Columns>
-            <Columns.Column>
-              <Form.Field>
-                <Form.Label>{t('pages:items.search')}</Form.Label>
-                <SearchBox
-                  initialQuery={search.get('query') || ''}
-                  onSubmit={(event) => {
-                    search.set('query', event);
-                    setSearch(search);
-                  }}
-                />
-              </Form.Field>
-            </Columns.Column>
             <Columns.Column>
               <Form.Field>
                 <Form.Label>{t('pages:items.itemType')}</Form.Label>
@@ -264,6 +274,116 @@ export function Items(): JSX.Element {
                   </option>
                   <option value="REFINER_TOOL">
                     {t('enums:itemType.REFINER_TOOL')}
+                  </option>
+                </Form.Select>
+              </Form.Field>
+            </Columns.Column>
+            <Columns.Column>
+              <Form.Field>
+                <Form.Label>{t('pages:items.stat')}</Form.Label>
+                <Form.Select
+                  value={search.get('stat')}
+                  onChange={(event) => {
+                    search.set('stat', event.target.value);
+                    setSearch(search);
+                  }}
+                >
+                  <option value="any">{t('pages:items.any')}</option>
+                  <option value="WOUNDS">{t('enums:stat.WOUNDS')}</option>
+                  <option value="WEAPON_SKILL">
+                    {t('enums:stat.WEAPON_SKILL')}
+                  </option>
+                  <option value="WILLPOWER">{t('enums:stat.WILLPOWER')}</option>
+                  <option value="BALLISTIC_SKILL">
+                    {t('enums:stat.BALLISTIC_SKILL')}
+                  </option>
+                  <option value="TOUGHNESS">{t('enums:stat.TOUGHNESS')}</option>
+                  <option value="INITIATIVE">
+                    {t('enums:stat.INITIATIVE')}
+                  </option>
+                  <option value="STRENGTH">{t('enums:stat.STRENGTH')}</option>
+                  <option value="INTELLIGENCE">
+                    {t('enums:stat.INTELLIGENCE')}
+                  </option>
+                  <option value="BLOCK">{t('enums:stat.BLOCK')}</option>
+                  <option value="PARRY">{t('enums:stat.PARRY')}</option>
+                  <option value="DISRUPT">{t('enums:stat.DISRUPT')}</option>
+                  <option value="EVADE">{t('enums:stat.EVADE')}</option>
+                  <option value="ELEMENTAL_RESISTANCE">
+                    {t('enums:stat.ELEMENTAL_RESISTANCE')}
+                  </option>
+                  <option value="SPIRIT_RESISTANCE">
+                    {t('enums:stat.SPIRIT_RESISTANCE')}
+                  </option>
+                  <option value="CORPOREAL_RESISTANCE">
+                    {t('enums:stat.CORPOREAL_RESISTANCE')}
+                  </option>
+                  <option value="HEAL_CRIT_RATE">
+                    {t('enums:stat.HEAL_CRIT_RATE')}
+                  </option>
+                  <option value="RANGED_CRIT_RATE">
+                    {t('enums:stat.RANGED_CRIT_RATE')}
+                  </option>
+                  <option value="MELEE_CRIT_RATE">
+                    {t('enums:stat.MELEE_CRIT_RATE')}
+                  </option>
+                  <option value="MAGIC_CRIT_RATE">
+                    {t('enums:stat.MAGIC_CRIT_RATE')}
+                  </option>
+                  <option value="ACTION_POINT_REGEN">
+                    {t('enums:stat.ACTION_POINT_REGEN')}
+                  </option>
+                  <option value="MORALE_REGEN">
+                    {t('enums:stat.MORALE_REGEN')}
+                  </option>
+                  <option value="HEALTH_REGEN">
+                    {t('enums:stat.HEALTH_REGEN')}
+                  </option>
+                  <option value="CRITICAL_HIT_RATE_REDUCTION">
+                    {t('enums:stat.CRITICAL_HIT_RATE_REDUCTION')}
+                  </option>
+                  <option value="BLOCK_STRIKETHROUGH">
+                    {t('enums:stat.BLOCK_STRIKETHROUGH')}
+                  </option>
+                  <option value="PARRY_STRIKETHROUGH">
+                    {t('enums:stat.PARRY_STRIKETHROUGH')}
+                  </option>
+                  <option value="DISRUPT_STRIKETHROUGH">
+                    {t('enums:stat.DISRUPT_STRIKETHROUGH')}
+                  </option>
+                  <option value="EVADE_STRIKETHROUGH">
+                    {t('enums:stat.EVADE_STRIKETHROUGH')}
+                  </option>
+                  <option value="HEALING_POWER">
+                    {t('enums:stat.HEALING_POWER')}
+                  </option>
+                  <option value="MAGIC_POWER">
+                    {t('enums:stat.MAGIC_POWER')}
+                  </option>
+                  <option value="RANGED_POWER">
+                    {t('enums:stat.RANGED_POWER')}
+                  </option>
+                  <option value="MELEE_POWER">
+                    {t('enums:stat.MELEE_POWER')}
+                  </option>
+                  <option value="FORTITUDE">{t('enums:stat.FORTITUDE')}</option>
+                  <option value="AUTO_ATTACK_SPEED">
+                    {t('enums:stat.AUTO_ATTACK_SPEED')}
+                  </option>
+                  <option value="AUTO_ATTACK_DAMAGE">
+                    {t('enums:stat.AUTO_ATTACK_DAMAGE')}
+                  </option>
+                  <option value="ARMOR_PENETRATION">
+                    {t('enums:stat.ARMOR_PENETRATION')}
+                  </option>
+                  <option value="ARMOR_PENETRATION_REDUCTION">
+                    {t('enums:stat.ARMOR_PENETRATION_REDUCTION')}
+                  </option>
+                  <option value="HATE_CAUSED">
+                    {t('enums:stat.HATE_CAUSED')}
+                  </option>
+                  <option value="HATE_RECEIVED">
+                    {t('enums:stat.HATE_RECEIVED')}
                   </option>
                 </Form.Select>
               </Form.Field>

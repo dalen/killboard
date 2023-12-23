@@ -51,6 +51,11 @@ function App() {
         path="/character/:id/armory"
         element={<Character tab="armory" />}
       />
+      <Route
+        path="/character/:playerId1/feud/:playerId2"
+        element={<PlayerFeudPage />}
+      />
+
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
       <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />
@@ -60,10 +65,7 @@ function App() {
       />
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />
-      <Route
-        path="/character/:playerId1/feud/:playerId2"
-        element={<PlayerFeudPage />}
-      />
+
       <Route
         path="/guild/:guildId1/feud/:guildId2"
         element={<GuildFeudPage />}
