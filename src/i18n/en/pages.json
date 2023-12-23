@@ -88,6 +88,14 @@
     "purchase": "Used to purchase",
     "quests": "Quests"
   },
+  "items": {
+    "title": "Items",
+    "all": "All",
+    "search": "Name",
+    "name": "Name",
+    "slot": "Slot",
+    "usableByCareer": "Usable by"
+  },
   "rankedLeaderboard": {
     "typeSolo": "Solo",
     "typeGroup": "Group"

@@ -8,12 +8,12 @@ import { itemFigureClass, itemNameClass } from '../itemUtils';
 
 export function CharacterItem({
   item,
-  talismans,
-  itemsEquipped,
+  talismans = [],
+  itemsEquipped = [],
 }: {
   item: Item;
-  talismans: Array<Item>;
-  itemsEquipped: Array<CharacterItemType>;
+  talismans?: Array<Item>;
+  itemsEquipped?: Array<CharacterItemType>;
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);

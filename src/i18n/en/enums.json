@@ -7,12 +7,9 @@
     "BRIGHT_WIZARD": "Bright Wizard",
     "CHOPPA": "Choppa",
     "CHOSEN": "Chosen",
-    "DISCIPLE": "Disciple of Khaine",
     "DISCIPLE_OF_KHAINE": "Disciple of Khaine",
     "ENGINEER": "Engineer",
-    "IRONBREAKER": "Ironbreaker",
     "IRON_BREAKER": "Ironbreaker",
-    "KNIGHT": "Knight of the Blazing Sun",
     "KNIGHT_OF_THE_BLAZING_SUN": "Knight of the Blazing Sun",
     "MAGUS": "Magus",
     "MARAUDER": "Marauder",
@@ -22,7 +19,6 @@
     "SLAYER": "Slayer",
     "SORCERER": "Sorcerer",
     "SQUIG_HERDER": "Squig Herder",
-    "SWORDMASTER": "Swordmaster",
     "SWORD_MASTER": "Swordmaster",
     "WARRIOR_PRIEST": "Warrior Priest",
     "WHITE_LION": "White Lion",
@@ -31,6 +27,7 @@
     "ZEALOT": "Zealot"
   },
   "itemSlot": {
+    "NONE": "",
     "HELM": "Helm",
     "BODY": "Body",
     "SHOULDER": "Shoulder",

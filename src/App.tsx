@@ -15,6 +15,7 @@ import { ZoneMap } from './pages/ZoneMap';
 import { Skirmish } from './pages/Skirmish';
 import { Item } from './pages/Item';
 import { RankedLeaderboard } from './pages/RankedLeaderboard';
+import { Items } from './pages/Items';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -79,6 +80,7 @@ function App() {
       <Route path="/skirmish/:id/kills" element={<Skirmish tab="kills" />} />
       <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
 
+      <Route path="/items" element={<Items />} />
       <Route path="/item/:id" element={<Item tab="vendors" />} />
       <Route path="/item/:id/purchase" element={<Item tab="purchase" />} />
       <Route path="/item/:id/quests" element={<Item tab="quests" />} />
