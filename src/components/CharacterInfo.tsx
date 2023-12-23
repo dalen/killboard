@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { getUnixTime, startOfWeek } from 'date-fns/esm';
+import { getUnixTime, startOfWeek } from 'date-fns';
 import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';

@@ -4,7 +4,7 @@ import {
   startOfWeek,
   subMonths,
   subWeeks,
-} from 'date-fns/esm';
+} from 'date-fns';
 import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router-dom';
