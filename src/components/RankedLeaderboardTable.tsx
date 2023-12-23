@@ -117,7 +117,10 @@ export function RankedLeaderboardTable({
           <tr>
             <th>{t('components:rankedLeaderboard.rank')}</th>
             {isMobile ? (
-              <th>{t('components:rankedLeaderboard.name')}</th>
+              <>
+                <th>{t('components:rankedLeaderboard.name')}</th>
+                <th aria-label="empty header" />
+              </>
             ) : (
               <>
                 <th>{t('components:rankedLeaderboard.career')}</th>
@@ -126,11 +129,14 @@ export function RankedLeaderboardTable({
                 <th align="right">
                   {t('components:rankedLeaderboard.renownRank')}
                 </th>
+                <th align="right">{t('components:rankedLeaderboard.wins')}</th>
+                <th align="right">
+                  {t('components:rankedLeaderboard.losses')}
+                </th>
+                <th align="right">{t('components:rankedLeaderboard.draws')}</th>
               </>
             )}
-            <th align="right">{t('components:rankedLeaderboard.wins')}</th>
-            <th align="right">{t('components:rankedLeaderboard.losses')}</th>
-            <th align="right">{t('components:rankedLeaderboard.draws')}</th>
+
             <th align="right">{t('components:rankedLeaderboard.rating')}</th>
           </tr>
         </thead>
@@ -139,26 +145,46 @@ export function RankedLeaderboardTable({
             <tr key={entry.character.id}>
               <td>{entry.rank}</td>
               {isMobile ? (
-                <td>
-                  <Media>
-                    <Media.Item align="left">
-                      <CareerIcon career={entry.character.career} />
-                    </Media.Item>
-                    <Media.Item>
-                      <Content>
-                        <Link to={`/character/${entry.character.id}`}>
-                          <strong>{entry.character.name}</strong>
-                        </Link>
-                        <br />
-                        <Link to={`/guild/${entry.guild?.id}`}>
-                          {entry.guild?.name}
-                        </Link>
-                        <br />
-                        <small>RR {entry.renownRank}</small>
-                      </Content>
-                    </Media.Item>
-                  </Media>
-                </td>
+                <>
+                  <td>
+                    <Media>
+                      <Media.Item align="left">
+                        <CareerIcon career={entry.character.career} />
+                      </Media.Item>
+                      <Media.Item>
+                        <Content>
+                          <Link to={`/character/${entry.character.id}`}>
+                            <strong>{entry.character.name}</strong>
+                          </Link>
+                          <br />
+                          <Link to={`/guild/${entry.guild?.id}`}>
+                            {entry.guild?.name}
+                          </Link>
+                          <br />
+                          <small>
+                            {t('components:rankedLeaderboard.renownRank')}&nbsp;
+                            {entry.renownRank}
+                          </small>
+                        </Content>
+                      </Media.Item>
+                    </Media>
+                  </td>
+                  <td align="right">
+                    <small>
+                      {t('components:rankedLeaderboard.wins')}&nbsp;{entry.wins}
+                    </small>
+                    <br />
+                    <small>
+                      {t('components:rankedLeaderboard.losses')}&nbsp;
+                      {entry.losses}
+                    </small>
+                    <br />
+                    <small>
+                      {t('components:rankedLeaderboard.draws')}&nbsp;
+                      {entry.draws}
+                    </small>
+                  </td>
+                </>
               ) : (
                 <>
                   <td>
@@ -184,11 +210,12 @@ export function RankedLeaderboardTable({
                     )}
                   </td>
                   <td align="right">{entry.renownRank}</td>
+                  <td align="right">{entry.wins}</td>
+                  <td align="right">{entry.losses}</td>
+                  <td align="right">{entry.draws}</td>
                 </>
               )}
-              <td align="right">{entry.wins}</td>
-              <td align="right">{entry.losses}</td>
-              <td align="right">{entry.draws}</td>
+
               <td align="right">{entry.rating}</td>
             </tr>
           ))}
