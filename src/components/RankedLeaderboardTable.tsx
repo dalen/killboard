@@ -1,6 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { Button, Progress, Table } from 'react-bulma-components';
+import {
+  Button,
+  Content,
+  Media,
+  Progress,
+  Table,
+} from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query } from '../types';
@@ -110,12 +116,18 @@ export function RankedLeaderboardTable({
         <thead>
           <tr>
             <th>{t('components:rankedLeaderboard.rank')}</th>
-            <th>{t('components:rankedLeaderboard.career')}</th>
-            <th>{t('components:rankedLeaderboard.name')}</th>
-            <th colSpan={2}>{t('components:rankedLeaderboard.guild')}</th>
-            <th align="right">
-              {t('components:rankedLeaderboard.renownRank')}
-            </th>
+            {isMobile ? (
+              <th>{t('components:rankedLeaderboard.name')}</th>
+            ) : (
+              <>
+                <th>{t('components:rankedLeaderboard.career')}</th>
+                <th>{t('components:rankedLeaderboard.name')}</th>
+                <th colSpan={2}>{t('components:rankedLeaderboard.guild')}</th>
+                <th align="right">
+                  {t('components:rankedLeaderboard.renownRank')}
+                </th>
+              </>
+            )}
             <th align="right">{t('components:rankedLeaderboard.wins')}</th>
             <th align="right">{t('components:rankedLeaderboard.losses')}</th>
             <th align="right">{t('components:rankedLeaderboard.draws')}</th>
@@ -126,29 +138,54 @@ export function RankedLeaderboardTable({
           {entries.map((entry) => (
             <tr key={entry.character.id}>
               <td>{entry.rank}</td>
-              <td>
-                <CareerIcon career={entry.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${entry.character.id}`}>
-                  {entry.character.name}
-                </Link>
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    <GuildHeraldry size="32" guild={entry.guild} />
-                  </Link>
-                )}
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    {entry.guild.name}
-                  </Link>
-                )}
-              </td>
-              <td align="right">{entry.renownRank}</td>
+              {isMobile ? (
+                <td>
+                  <Media>
+                    <Media.Item align="left">
+                      <CareerIcon career={entry.character.career} />
+                    </Media.Item>
+                    <Media.Item>
+                      <Content>
+                        <Link to={`/character/${entry.character.id}`}>
+                          <strong>{entry.character.name}</strong>
+                        </Link>
+                        <br />
+                        <Link to={`/guild/${entry.guild?.id}`}>
+                          {entry.guild?.name}
+                        </Link>
+                        <br />
+                        <small>RR {entry.renownRank}</small>
+                      </Content>
+                    </Media.Item>
+                  </Media>
+                </td>
+              ) : (
+                <>
+                  <td>
+                    <CareerIcon career={entry.character.career} />
+                  </td>
+                  <td>
+                    <Link to={`/character/${entry.character.id}`}>
+                      {entry.character.name}
+                    </Link>
+                  </td>
+                  <td>
+                    {entry.guild && (
+                      <Link to={`/guild/${entry.guild.id}`}>
+                        <GuildHeraldry size="32" guild={entry.guild} />
+                      </Link>
+                    )}
+                  </td>
+                  <td>
+                    {entry.guild && (
+                      <Link to={`/guild/${entry.guild.id}`}>
+                        {entry.guild.name}
+                      </Link>
+                    )}
+                  </td>
+                  <td align="right">{entry.renownRank}</td>
+                </>
+              )}
               <td align="right">{entry.wins}</td>
               <td align="right">{entry.losses}</td>
               <td align="right">{entry.draws}</td>
@@ -159,7 +196,7 @@ export function RankedLeaderboardTable({
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td colSpan={10}>
+              <td colSpan={isMobile ? 6 : 10}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button
