@@ -92,6 +92,7 @@
     "title": "Items",
     "all": "All",
     "search": "Name",
+    "itemType": "Type",
     "name": "Name",
     "slot": "Slot",
     "usableByCareer": "Usable by"

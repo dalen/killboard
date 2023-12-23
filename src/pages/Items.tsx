@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { SearchBox } from '../components/SearchBox';
-import { ItemFilterInput, Query } from '../types';
+import { ItemFilterInput, ItemType, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ItemListEntry } from '../components/ItemListEntry';
@@ -101,8 +101,19 @@ const getSearchFilter = (search: URLSearchParams): ItemFilterInput => {
   return { name: { contains: query } };
 };
 
+const getItemTypeFilter = (search: URLSearchParams): ItemFilterInput => {
+  const type = search.get('type');
+
+  if (!type || type === 'all') {
+    return {};
+  }
+
+  return { type: { eq: type as ItemType } };
+};
+
 const getItemsFilters = (search: URLSearchParams): ItemFilterInput => ({
   ...getSearchFilter(search),
+  ...getItemTypeFilter(search),
 });
 
 const usableByCareerFilter = (search: URLSearchParams) => {
@@ -160,6 +171,101 @@ export function Items(): JSX.Element {
                     setSearch(search);
                   }}
                 />
+              </Form.Field>
+            </Columns.Column>
+            <Columns.Column>
+              <Form.Field>
+                <Form.Label>{t('pages:items.itemType')}</Form.Label>
+                <Form.Select
+                  value={search.get('type')}
+                  onChange={(event) => {
+                    search.set('type', event.target.value);
+                    setSearch(search);
+                  }}
+                >
+                  <option value="all">{t('pages:items.all')}</option>
+                  <option value="SWORD">{t('enums:itemType.SWORD')}</option>
+                  <option value="AXE">{t('enums:itemType.AXE')}</option>
+                  <option value="HAMMER">{t('enums:itemType.HAMMER')}</option>
+                  <option value="BASIC_SHIELD">
+                    {t('enums:itemType.BASIC_SHIELD')}
+                  </option>
+                  <option value="SHIELD">{t('enums:itemType.SHIELD')}</option>
+                  <option value="ROBE">{t('enums:itemType.ROBE')}</option>
+                  <option value="BOW">{t('enums:itemType.BOW')}</option>
+                  <option value="CROSSBOW">
+                    {t('enums:itemType.CROSSBOW')}
+                  </option>
+                  <option value="GUN">{t('enums:itemType.GUN')}</option>
+                  <option value="EXPERT_SHIELD">
+                    {t('enums:itemType.EXPERT_SHIELD')}
+                  </option>
+                  <option value="STAFF">{t('enums:itemType.STAFF')}</option>
+                  <option value="DAGGER">{t('enums:itemType.DAGGER')}</option>
+                  <option value="SPEAR">{t('enums:itemType.SPEAR')}</option>
+                  <option value="PISTOL">{t('enums:itemType.PISTOL')}</option>
+                  <option value="LANCE">{t('enums:itemType.LANCE')}</option>
+                  <option value="REPEATING_CROSSBOW">
+                    {t('enums:itemType.REPEATING_CROSSBOW')}
+                  </option>
+                  <option value="LIGHT_ARMOR">
+                    {t('enums:itemType.LIGHT_ARMOR')}
+                  </option>
+                  <option value="MEDIUM_ARMOR">
+                    {t('enums:itemType.MEDIUM_ARMOR')}
+                  </option>
+                  <option value="HEAVY_ARMOR">
+                    {t('enums:itemType.HEAVY_ARMOR')}
+                  </option>
+                  <option value="QUEST">{t('enums:itemType.QUEST')}</option>
+                  <option value="MEDIUM_ROBE">
+                    {t('enums:itemType.MEDIUM_ROBE')}
+                  </option>
+                  <option value="ENHANCEMENT">
+                    {t('enums:itemType.ENHANCEMENT')}
+                  </option>
+                  <option value="TROPHY">{t('enums:itemType.TROPHY')}</option>
+                  <option value="CHARM">{t('enums:itemType.CHARM')}</option>
+                  <option value="DYE">{t('enums:itemType.DYE')}</option>
+                  <option value="BASIC_MOUNT">
+                    {t('enums:itemType.BASIC_MOUNT')}
+                  </option>
+                  <option value="ADVANCED_MOUNT">
+                    {t('enums:itemType.ADVANCED_MOUNT')}
+                  </option>
+                  <option value="POTION">{t('enums:itemType.POTION')}</option>
+                  <option value="SALVAGING">
+                    {t('enums:itemType.SALVAGING')}
+                  </option>
+                  <option value="MARKETING">
+                    {t('enums:itemType.MARKETING')}
+                  </option>
+                  <option value="CRAFTING">
+                    {t('enums:itemType.CRAFTING')}
+                  </option>
+                  <option value="ACCESSORY">
+                    {t('enums:itemType.ACCESSORY')}
+                  </option>
+                  <option value="CURRENCY">
+                    {t('enums:itemType.CURRENCY')}
+                  </option>
+                  <option value="TELEPORT">
+                    {t('enums:itemType.TELEPORT')}
+                  </option>
+                  <option value="TELEPORT_GROUP">
+                    {t('enums:itemType.TELEPORT_GROUP')}
+                  </option>
+                  <option value="SIEGE">{t('enums:itemType.SIEGE')}</option>
+                  <option value="TREASURE_CHEST">
+                    {t('enums:itemType.TREASURE_CHEST')}
+                  </option>
+                  <option value="TREASURE_KEY">
+                    {t('enums:itemType.TREASURE_KEY')}
+                  </option>
+                  <option value="REFINER_TOOL">
+                    {t('enums:itemType.REFINER_TOOL')}
+                  </option>
+                </Form.Select>
               </Form.Field>
             </Columns.Column>
             <Columns.Column>
