@@ -463,6 +463,7 @@ export function Items(): JSX.Element {
             <tr>
               <th aria-label="empty header" />
               <th>{t('pages:items.name')}</th>
+              <th>{t('pages:items.itemType')}</th>
               <th>{t('pages:items.slot')}</th>
             </tr>
           </thead>

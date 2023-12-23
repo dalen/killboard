@@ -49,6 +49,7 @@ export function ItemListEntry({ item }: { item: Item }): JSX.Element {
           </div>
         </Link>
       </td>
+      <td>{t(`enums:itemType.${item.type}`)}</td>
       <td>{t(`enums:itemSlot.${item.slot}`)}</td>
     </tr>
   );
