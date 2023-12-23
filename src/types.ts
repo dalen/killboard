@@ -180,9 +180,13 @@ export type CharacterFilterInput = {
   and?: InputMaybe<Array<CharacterFilterInput>>;
   /** Character career */
   careerLine?: InputMaybe<CareerLineOperationFilterInput>;
+  /** Character level */
+  level?: InputMaybe<ByteOperationFilterInput>;
   /** Character name */
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<CharacterFilterInput>>;
+  /** Character renown rank */
+  renownRank?: InputMaybe<ByteOperationFilterInput>;
 };
 
 export type CharacterItem = {
@@ -571,26 +575,6 @@ export type Event = {
   endTime?: Maybe<Scalars['Long']['output']>;
   name: Scalars['String']['output'];
   startTime: Scalars['Long']['output'];
-};
-
-/** A connection to a list of items. */
-export type GroupLeaderboardConnection = {
-  __typename?: 'GroupLeaderboardConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<GroupLeaderboardEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<RankedLeaderboardCharacter>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type GroupLeaderboardEdge = {
-  __typename?: 'GroupLeaderboardEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: RankedLeaderboardCharacter;
 };
 
 export type Guild = {
@@ -1117,6 +1101,26 @@ export type KillsHeatmapPoint = {
   y: Scalars['UnsignedInt']['output'];
 };
 
+/** A connection to a list of items. */
+export type LeaderboardConnection = {
+  __typename?: 'LeaderboardConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<LeaderboardEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<RankedLeaderboardCharacter>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+};
+
+/** An edge in a connection. */
+export type LeaderboardEdge = {
+  __typename?: 'LeaderboardEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: RankedLeaderboardCharacter;
+};
+
 export type LiveEvent = Event & {
   __typename?: 'LiveEvent';
   endTime: Scalars['Long']['output'];
@@ -1266,6 +1270,7 @@ export type QueryCharactersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  match?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Array<CharacterSortInput>>;
   where?: InputMaybe<CharacterFilterInput>;
 };
@@ -1296,6 +1301,7 @@ export type QueryGuildsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
+  match?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Array<GuildInfoSortInput>>;
   where?: InputMaybe<GuildFilterInput>;
 };
@@ -1584,32 +1590,23 @@ export enum RankedLeaderboardRatingType {
 export type RankedSeason = {
   __typename?: 'RankedSeason';
   end: Scalars['Int']['output'];
-  groupLeaderboard?: Maybe<GroupLeaderboardConnection>;
   /** Season ID */
   id: Scalars['ID']['output'];
+  leaderboard?: Maybe<LeaderboardConnection>;
   /** Is main season or off season */
   mainSeason: Scalars['Boolean']['output'];
   /** Season name */
   name: Scalars['String']['output'];
-  soloLeaderboard?: Maybe<SoloLeaderboardConnection>;
   start: Scalars['Int']['output'];
 };
 
 
-export type RankedSeasonGroupLeaderboardArgs = {
+export type RankedSeasonLeaderboardArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<CharacterSeasonStatFilterInput>;
-};
-
-
-export type RankedSeasonSoloLeaderboardArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
+  type: RankedLeaderboardRatingType;
   where?: InputMaybe<CharacterSeasonStatFilterInput>;
 };
 
@@ -2053,26 +2050,6 @@ export type SoldByVendorsEdge = {
   node: VendorItem;
 };
 
-/** A connection to a list of items. */
-export type SoloLeaderboardConnection = {
-  __typename?: 'SoloLeaderboardConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<SoloLeaderboardEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<RankedLeaderboardCharacter>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type SoloLeaderboardEdge = {
-  __typename?: 'SoloLeaderboardEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: RankedLeaderboardCharacter;
-};
-
 export enum SortEnumType {
   Asc = 'ASC',
   Desc = 'DESC'
@@ -2094,12 +2071,10 @@ export enum Stat {
   BlockStrikethrough = 'BLOCK_STRIKETHROUGH',
   BuildTime = 'BUILD_TIME',
   Butchering = 'BUTCHERING',
-  ContributionReceived = 'CONTRIBUTION_RECEIVED',
   Cooldown = 'COOLDOWN',
   CorporealResistance = 'CORPOREAL_RESISTANCE',
   CriticalDamage = 'CRITICAL_DAMAGE',
   CriticalDamageTakenReduction = 'CRITICAL_DAMAGE_TAKEN_REDUCTION',
-  CriticalHeal = 'CRITICAL_HEAL',
   CriticalHitRate = 'CRITICAL_HIT_RATE',
   CriticalHitRateReduction = 'CRITICAL_HIT_RATE_REDUCTION',
   Cultivation = 'CULTIVATION',
@@ -2123,25 +2098,18 @@ export enum Stat {
   IncomingDamage = 'INCOMING_DAMAGE',
   IncomingDamagePercent = 'INCOMING_DAMAGE_PERCENT',
   IncomingHealPercent = 'INCOMING_HEAL_PERCENT',
-  IncomingMagicDamage = 'INCOMING_MAGIC_DAMAGE',
-  IncomingMeleeDamage = 'INCOMING_MELEE_DAMAGE',
-  IncomingRangedDamage = 'INCOMING_RANGED_DAMAGE',
   InfluenceReceived = 'INFLUENCE_RECEIVED',
   InfluenceWorth = 'INFLUENCE_WORTH',
   Initiative = 'INITIATIVE',
   Intelligence = 'INTELLIGENCE',
   InteractTime = 'INTERACT_TIME',
-  KnockdownDuration = 'KNOCKDOWN_DURATION',
   LevitationHeight = 'LEVITATION_HEIGHT',
   LootChance = 'LOOT_CHANCE',
   MagicCritRate = 'MAGIC_CRIT_RATE',
   MagicPower = 'MAGIC_POWER',
   Mastery_1Bonus = 'MASTERY_1_BONUS',
-  Mastery_1Damage = 'MASTERY_1_DAMAGE',
   Mastery_2Bonus = 'MASTERY_2_BONUS',
-  Mastery_2Damage = 'MASTERY_2_DAMAGE',
   Mastery_3Bonus = 'MASTERY_3_BONUS',
-  Mastery_3Damage = 'MASTERY_3_DAMAGE',
   MaxActionPoints = 'MAX_ACTION_POINTS',
   MeleeCritRate = 'MELEE_CRIT_RATE',
   MeleePower = 'MELEE_POWER',
@@ -2165,7 +2133,6 @@ export enum Stat {
   Scavenging = 'SCAVENGING',
   SetbackChance = 'SETBACK_CHANCE',
   SetbackValue = 'SETBACK_VALUE',
-  SnareDuration = 'SNARE_DURATION',
   Specialization = 'SPECIALIZATION',
   SpiritResistance = 'SPIRIT_RESISTANCE',
   Stealth = 'STEALTH',
@@ -2174,7 +2141,6 @@ export enum Stat {
   TalismanMaking = 'TALISMAN_MAKING',
   TargetDuration = 'TARGET_DURATION',
   Toughness = 'TOUGHNESS',
-  TwoHandAaDamage = 'TWO_HAND_AA_DAMAGE',
   Velocity = 'VELOCITY',
   WeaponSkill = 'WEAPON_SKILL',
   Willpower = 'WILLPOWER',

@@ -14,6 +14,7 @@ import { Scenario } from './pages/Scenario';
 import { ZoneMap } from './pages/ZoneMap';
 import { Skirmish } from './pages/Skirmish';
 import { Item } from './pages/Item';
+import { RankedLeaderboard } from './pages/RankedLeaderboard';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -81,6 +82,8 @@ function App() {
       <Route path="/item/:id" element={<Item tab="vendors" />} />
       <Route path="/item/:id/purchase" element={<Item tab="purchase" />} />
       <Route path="/item/:id/quests" element={<Item tab="quests" />} />
+
+      <Route path="/ranked-leaderboard" element={<RankedLeaderboard />} />
     </Routes>
   );
 }

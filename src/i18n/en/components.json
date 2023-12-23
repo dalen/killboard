@@ -176,5 +176,16 @@
   "itemVendorsFilters": {
     "all": "All",
     "career": "Career"
+  },
+  "rankedLeaderboard": {
+    "career": "Career",
+    "guild": "Guild",
+    "name": "Name",
+    "rank": "Rank",
+    "renownRank": "Renown Rank",
+    "rating": "Rating",
+    "wins": "Wins",
+    "losses": "Losses",
+    "draws": "Draws"
   }
 }
