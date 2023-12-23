@@ -22,13 +22,13 @@ export function ItemListEntry({ item }: { item: Item }): JSX.Element {
   };
 
   return (
-    <tr
-      onMouseOver={showModal}
-      onMouseLeave={hideModal}
-      onFocus={showModal}
-      onBlur={hideModal}
-    >
-      <td>
+    <tr>
+      <td
+        onMouseOver={showModal}
+        onMouseLeave={hideModal}
+        onFocus={showModal}
+        onBlur={hideModal}
+      >
         <Link to={`/item/${item.id}`}>
           <figure
             className={`${itemFigureClass(
@@ -38,6 +38,9 @@ export function ItemListEntry({ item }: { item: Item }): JSX.Element {
             <img src={item.iconUrl} alt={item.name} />
           </figure>
         </Link>
+        {modalOpen && (
+          <CharacterItemPopup item={item} talismans={[]} itemsEquipped={[]} />
+        )}
       </td>
       <td>
         <Link to={`/item/${item.id}`}>
@@ -47,9 +50,6 @@ export function ItemListEntry({ item }: { item: Item }): JSX.Element {
         </Link>
       </td>
       <td>{t(`enums:itemSlot.${item.slot}`)}</td>
-      {modalOpen && (
-        <CharacterItemPopup item={item} talismans={[]} itemsEquipped={[]} />
-      )}
     </tr>
   );
 }
