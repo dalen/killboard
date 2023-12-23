@@ -52,7 +52,7 @@ export function RankedLeaderboard(): JSX.Element {
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          {t('common:rankedLeaderboard')}
+          <Link to="/ranked-leaderboard">{t('common:rankedLeaderboard')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
 
