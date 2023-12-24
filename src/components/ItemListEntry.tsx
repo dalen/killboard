@@ -29,18 +29,20 @@ export function ItemListEntry({ item }: { item: Item }): JSX.Element {
         onFocus={showModal}
         onBlur={hideModal}
       >
-        <Link to={`/item/${item.id}`}>
-          <figure
-            className={`${itemFigureClass(
-              item,
-            )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
-          >
-            <img src={item.iconUrl} alt={item.name} />
-          </figure>
-        </Link>
-        {modalOpen && (
-          <CharacterItemPopup item={item} talismans={[]} itemsEquipped={[]} />
-        )}
+        <div className="is-relative">
+          <Link to={`/item/${item.id}`}>
+            <figure
+              className={`${itemFigureClass(
+                item,
+              )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+            >
+              <img src={item.iconUrl} alt={item.name} />
+            </figure>
+          </Link>
+          {modalOpen && (
+            <CharacterItemPopup item={item} talismans={[]} itemsEquipped={[]} />
+          )}
+        </div>
       </td>
       <td>
         <Link to={`/item/${item.id}`}>
