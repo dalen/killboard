@@ -48,6 +48,7 @@
     "RANGED_WEAPON": "Ranged Weapon"
   },
   "itemType": {
+    "NONE": "",
     "SWORD": "Sword",
     "AXE": "Axe",
     "HAMMER": "Hammer",
