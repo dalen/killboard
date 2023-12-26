@@ -18,6 +18,7 @@ import { RankedLeaderboard } from './pages/RankedLeaderboard';
 import { Items } from './pages/Items';
 import { Creatures } from './pages/Creatures';
 import { Creature } from './pages/Creature';
+import { Quests } from './pages/Quests';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -69,13 +70,16 @@ function App() {
         path="/guild/:id/skirmishes"
         element={<Guild tab="skirmishes" />}
       />
-      <Route path="/search/:query" element={<Search />} />
-      <Route path="/search/guild/:query" element={<SearchGuild />} />
-
       <Route
         path="/guild/:guildId1/feud/:guildId2"
         element={<GuildFeudPage />}
       />
+
+      <Route path="/quests" element={<Quests />} />
+
+      <Route path="/search/:query" element={<Search />} />
+      <Route path="/search/guild/:query" element={<SearchGuild />} />
+
       <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
       <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
       <Route
