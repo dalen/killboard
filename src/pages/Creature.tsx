@@ -77,6 +77,9 @@ export function Creature(): JSX.Element {
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/creatures">{t('common:creatures')}</Link>
+        </Breadcrumb.Item>
         <Breadcrumb.Item active>
           <Link to={`/creature/${id}`}>
             {t('pages:creature.creatureId', { creatureId: id })}
