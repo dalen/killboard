@@ -23,7 +23,7 @@ export function MapPositions({
       // or 1 here to avoid any div by zero errors
       const zoneWidth = seCornerX - nwCornerX || 1;
       const zoneHeight = seCornerY - nwCornerY || 1;
-      const iconSize = 16;
+      const iconSize = 8;
       const canvasWidth = canvasElement.current.width;
       canvasElement.current.height = canvasWidth;
 
@@ -45,7 +45,7 @@ export function MapPositions({
             canvasWidth,
           );
           // load the indicator image after the map, so it is drawn on top
-          skullImage.src = '/images/maps/icons/skull_red.png';
+          skullImage.src = '/images/maps/icons/red_x.png';
         };
         skullImage.onload = () => {
           forEach(positions, (position) => {
