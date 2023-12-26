@@ -77,12 +77,5 @@ export function MapPositions({
     }
   }, [positions, zoneId, nwCornerX, nwCornerY, seCornerX, seCornerY]);
 
-  return (
-    <>
-      <div className="is-size-4 is-family-secondary is-uppercase ">
-        {t('map.title')}
-      </div>
-      <canvas ref={canvasElement} style={{ width: '100%' }} />
-    </>
-  );
+  return <canvas ref={canvasElement} style={{ width: '100%' }} />;
 }
