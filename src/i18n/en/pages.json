@@ -102,5 +102,11 @@
   "rankedLeaderboard": {
     "typeSolo": "Solo",
     "typeGroup": "Group"
+  },
+  "creatures": {
+    "title": "Creatures",
+    "search": "Name",
+    "name": "Name",
+    "creatureSubType": "Type"
   }
 }

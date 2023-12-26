@@ -16,6 +16,7 @@ import { Skirmish } from './pages/Skirmish';
 import { Item } from './pages/Item';
 import { RankedLeaderboard } from './pages/RankedLeaderboard';
 import { Items } from './pages/Items';
+import { Creatures } from './pages/Creatures';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -55,6 +56,8 @@ function App() {
         path="/character/:playerId1/feud/:playerId2"
         element={<PlayerFeudPage />}
       />
+
+      <Route path="/creatures" element={<Creatures />} />
 
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
