@@ -17,7 +17,6 @@ export function MapPositions({
   seCornerX: number;
   seCornerY: number;
 }): JSX.Element {
-  const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
