@@ -108,5 +108,8 @@
     "search": "Name",
     "name": "Name",
     "creatureSubType": "Type"
+  },
+  "creature": {
+    "creatureId": "Creature #{{creatureId}}"
   }
 }
