@@ -155,7 +155,11 @@ export function ItemVendorsPurchase({
                       </td>
                     </>
                   )}
-                  <td>{creature.name}</td>
+                  <td>
+                    <Link to={`/creature/${creature.id}`}>
+                      {creature.name}{' '}
+                    </Link>
+                  </td>
                   <td>
                     {creature.realm === 'ORDER' && (
                       <figure className="image is-24x24 m-0">
