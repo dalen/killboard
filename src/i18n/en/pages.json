@@ -111,5 +111,12 @@
   },
   "creature": {
     "creatureId": "Creature #{{creatureId}}"
+  },
+  "quests": {
+    "name": "Name",
+    "xp": "XP",
+    "gold": "Gold",
+    "given": "Rewards",
+    "choice": "Choices"
   }
 }

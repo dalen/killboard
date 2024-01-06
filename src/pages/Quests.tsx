@@ -14,6 +14,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query, QuestFilterInput } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
+import { GoldPrice } from '../components/GoldPrice';
 
 const QUESTS = gql`
   query GetQuests(
@@ -163,8 +164,10 @@ export function Quests(): JSX.Element {
           <thead>
             <tr>
               <th>{t('pages:quests.name')}</th>
-              <th>{t('pages:quests.xp')}</th>
-              <th>{t('pages:quests.gold')}</th>
+              <th align="right">{t('pages:quests.xp')}</th>
+              <th align="right">
+                <span className="mr-2">{t('pages:quests.gold')}</span>
+              </th>
               <th>{t('pages:quests.given')}</th>
               <th>{t('pages:quests.choice')}</th>
             </tr>
@@ -184,6 +187,47 @@ export function Quests(): JSX.Element {
                       <span>{quest.name}</span>
                     </div>
                   </Link>
+                </td>
+                <td align="right">{quest.xp}</td>
+                <td align="right">
+                  <GoldPrice price={quest.gold} />
+                </td>
+                <td>
+                  {quest.rewardsGiven.slice(0, 3).map((reward) => (
+                    <div key={`${quest.id}-${reward.item.id}`}>
+                      <span className="icon-text">
+                        <figure className="image is-24x24 mx-1">
+                          <img src={reward.item.iconUrl} alt="Item Icon" />
+                        </figure>
+                        <Link to={`/item/${reward.item.id}`} className="mr-1">
+                          {reward.item.name}
+                        </Link>
+                        x{reward.count}
+                      </span>
+                    </div>
+                  ))}
+                  {quest.rewardsGiven.length > 3 && (
+                    <div>{quest.rewardsGiven.length - 3} other items</div>
+                  )}
+                </td>
+                <td>
+                  {quest.choiceCount > 0 && <div>Pick {quest.choiceCount}</div>}
+                  {quest.rewardsChoice.slice(0, 3).map((reward) => (
+                    <div key={`${quest.id}-${reward.item.id}`}>
+                      <span className="icon-text">
+                        <figure className="image is-24x24 mx-1">
+                          <img src={reward.item.iconUrl} alt="Item Icon" />
+                        </figure>
+                        <Link to={`/item/${reward.item.id}`} className="mr-1">
+                          {reward.item.name}
+                        </Link>
+                        x{reward.count}
+                      </span>
+                    </div>
+                  ))}
+                  {quest.rewardsChoice.length > 3 && (
+                    <div>{quest.rewardsChoice.length - 3} other items</div>
+                  )}
                 </td>
               </tr>
             ))}
