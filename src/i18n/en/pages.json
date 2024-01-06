@@ -113,6 +113,7 @@
     "creatureId": "Creature #{{creatureId}}"
   },
   "quests": {
+    "search": "Search",
     "name": "Name",
     "xp": "XP",
     "gold": "Gold",
