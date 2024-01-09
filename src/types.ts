@@ -1479,6 +1479,8 @@ export type Quest = {
   rewardsChoice: Array<QuestReward>;
   /** Given rewards */
   rewardsGiven: Array<QuestReward>;
+  /** Creatures starting quest */
+  starterCreatures: Array<Creature>;
   /** Quest Type */
   type: Scalars['Byte']['output'];
   /** XP Reward */

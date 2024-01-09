@@ -127,6 +127,7 @@
     "rewards": "Rewards",
     "choiceCount": "Choose {{count}}",
     "xp": "Xp",
-    "money": "Money"
+    "money": "Money",
+    "questGivers": "Quest Givers"
   }
 }

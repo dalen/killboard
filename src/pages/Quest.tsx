@@ -46,6 +46,10 @@ const QUEST_INFO = gql`
       maxLevel
       minRenown
       maxRenown
+      starterCreatures {
+        id
+        name
+      }
     }
   }
 `;
@@ -261,6 +265,25 @@ export function Quest(): JSX.Element {
               </div>
             </>
           )}
+
+          <div className="mb-2 is-size-4 is-family-secondary has-text-info">
+            {t('pages:quest.questGivers')}
+          </div>
+          <div>
+            {quest.starterCreatures.map((creature) => (
+              <div className="icon-text">
+                <span className="icon has-text-info">
+                  <img
+                    src="/images/icons/quest_green.png"
+                    alt="Quest Starter"
+                  />
+                </span>
+                <span>
+                  <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
+                </span>
+              </div>
+            ))}
+          </div>
         </Card.Content>
       </Card>
     </Container>
