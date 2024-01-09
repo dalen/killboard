@@ -2,8 +2,10 @@ import { Button, Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
+import Tippy from '@tippyjs/react';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ItemPopup } from './ItemPopup';
 
 const ITEM_INFO = gql`
   query GetItemRewardedFromQuests(
@@ -78,8 +80,8 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
       <thead>
         <tr>
           <th>{t('components:itemQuests.questName')}</th>
-          <th>{t('components:itemQuests.choice')}</th>
           <th>{t('components:itemQuests.given')}</th>
+          <th>{t('components:itemQuests.choice')}</th>
         </tr>
       </thead>
       <tbody>
@@ -89,30 +91,96 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
               <Link to={`/quest/${quest.id}`}>{quest.name}</Link>
             </td>
             <td>
-              {quest.rewardsChoice.map((rewardItem) => (
-                <span className="icon-text">
-                  <figure className="image is-24x24 mx-1">
-                    <img src={rewardItem.item.iconUrl} alt="Item Icon" />
-                  </figure>
-                  <Link to={`/item/${rewardItem.item.id}`} className="mr-1">
-                    {rewardItem.item.name}
-                  </Link>
-                  x{rewardItem.count}
-                </span>
-              ))}
+              <div className="mb-2 is-flex">
+                {quest.rewardsGiven.slice(0, 5).map((reward) => (
+                  <div key={`${quest.id}-${reward.item.id}`}>
+                    <Tippy
+                      duration={0}
+                      placement="top"
+                      content={<ItemPopup itemId={reward.item.id} />}
+                    >
+                      <div>
+                        <Link to={`/item/${reward.item.id}`}>
+                          <figure className="image is-32x32">
+                            <div style={{ position: 'relative' }}>
+                              <img
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                }}
+                                src={reward.item.iconUrl}
+                                alt={reward.item.name}
+                              />
+                              {reward.count > 1 && (
+                                <div
+                                  className="has-text-white"
+                                  style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 4,
+                                  }}
+                                >
+                                  {reward.count}
+                                </div>
+                              )}
+                            </div>
+                          </figure>
+                        </Link>
+                      </div>
+                    </Tippy>
+                  </div>
+                ))}
+              </div>
+              {quest.rewardsGiven.length > 5 && (
+                <div>{quest.rewardsGiven.length - 5} other items</div>
+              )}
             </td>
             <td>
-              {quest.rewardsGiven.map((rewardItem) => (
-                <span className="icon-text">
-                  <figure className="image is-24x24 mx-1">
-                    <img src={rewardItem.item.iconUrl} alt="Item Icon" />
-                  </figure>
-                  <Link to={`/item/${rewardItem.item.id}`} className="mr-1">
-                    {rewardItem.item.name}
-                  </Link>
-                  x{rewardItem.count}
-                </span>
-              ))}
+              <div className="mb-2 is-flex">
+                {quest.rewardsChoice.slice(0, 5).map((reward) => (
+                  <div key={`${quest.id}-${reward.item.id}`}>
+                    <Tippy
+                      duration={0}
+                      placement="top"
+                      content={<ItemPopup itemId={reward.item.id} />}
+                    >
+                      <div>
+                        <Link to={`/item/${reward.item.id}`}>
+                          <figure className="image is-32x32">
+                            <div style={{ position: 'relative' }}>
+                              <img
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                }}
+                                src={reward.item.iconUrl}
+                                alt={reward.item.name}
+                              />
+                              {reward.count > 1 && (
+                                <div
+                                  className="has-text-white"
+                                  style={{
+                                    position: 'absolute',
+                                    top: 0,
+                                    right: 4,
+                                  }}
+                                >
+                                  {reward.count}
+                                </div>
+                              )}
+                            </div>
+                          </figure>
+                        </Link>
+                      </div>
+                    </Tippy>
+                  </div>
+                ))}
+              </div>
+              {quest.rewardsChoice.length > 5 && (
+                <div>{quest.rewardsChoice.length - 5} other items</div>
+              )}
             </td>
           </tr>
         ))}
