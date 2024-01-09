@@ -8,9 +8,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
+import Tippy from '@tippyjs/react';
 import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GoldPrice } from '../components/GoldPrice';
+import { ItemPopup } from '../components/ItemPopup';
 
 const QUEST_INFO = gql`
   query GetQuestInfo($id: ID!) {
@@ -25,16 +27,100 @@ const QUEST_INFO = gql`
         count
         item {
           id
-          name
           iconUrl
+          name
+          careerRestriction
+          description
+          type
+          slot
+          rarity
+          armor
+          dps
+          speed
+          levelRequirement
+          renownRankRequirement
+          itemLevel
+          talismanSlots
+          itemSet {
+            id
+            name
+            items {
+              id
+            }
+            bonuses {
+              itemsRequired
+              bonus {
+                ... on Ability {
+                  description
+                  __typename
+                }
+                ... on ItemStat {
+                  stat
+                  value
+                  percentage
+                  __typename
+                }
+              }
+            }
+          }
+          buffs {
+            id
+            description
+          }
+          stats {
+            stat
+            value
+          }
         }
       }
       rewardsGiven {
         count
         item {
           id
-          name
           iconUrl
+          name
+          careerRestriction
+          description
+          type
+          slot
+          rarity
+          armor
+          dps
+          speed
+          levelRequirement
+          renownRankRequirement
+          itemLevel
+          talismanSlots
+          itemSet {
+            id
+            name
+            items {
+              id
+            }
+            bonuses {
+              itemsRequired
+              bonus {
+                ... on Ability {
+                  description
+                  __typename
+                }
+                ... on ItemStat {
+                  stat
+                  value
+                  percentage
+                  __typename
+                }
+              }
+            }
+          }
+          buffs {
+            id
+            description
+          }
+          stats {
+            stat
+            value
+          }
         }
       }
       description
@@ -99,15 +185,21 @@ export function Quest(): JSX.Element {
                 {quest.rewardsGiven.map((reward) => (
                   <Columns.Column key={reward.item.id} size="one-quarter">
                     <div key={`${quest.id}-${reward.item.id}`}>
-                      <span className="icon-text">
-                        <figure className="image is-24x24 mx-1">
-                          <img src={reward.item.iconUrl} alt="Item Icon" />
-                        </figure>
-                        <Link to={`/item/${reward.item.id}`} className="mr-1">
-                          {reward.item.name}
-                        </Link>
-                        x{reward.count}
-                      </span>
+                      <Tippy
+                        duration={0}
+                        placement="top"
+                        content={<ItemPopup itemId={reward.item.id} />}
+                      >
+                        <span className="icon-text">
+                          <figure className="image is-24x24 mx-1">
+                            <img src={reward.item.iconUrl} alt="Item Icon" />
+                          </figure>
+                          <Link to={`/item/${reward.item.id}`} className="mr-1">
+                            {reward.item.name}
+                          </Link>
+                          x{reward.count}
+                        </span>
+                      </Tippy>
                     </div>
                   </Columns.Column>
                 ))}
@@ -126,15 +218,21 @@ export function Quest(): JSX.Element {
                 {quest.rewardsChoice.map((reward) => (
                   <Columns.Column key={reward.item.id} size="one-quarter">
                     <div key={`${quest.id}-${reward.item.id}`}>
-                      <span className="icon-text">
-                        <figure className="image is-24x24 mx-1">
-                          <img src={reward.item.iconUrl} alt="Item Icon" />
-                        </figure>
-                        <Link to={`/item/${reward.item.id}`} className="mr-1">
-                          {reward.item.name}
-                        </Link>
-                        x{reward.count}
-                      </span>
+                      <Tippy
+                        duration={0}
+                        placement="top"
+                        content={<ItemPopup itemId={reward.item.id} />}
+                      >
+                        <span className="icon-text">
+                          <figure className="image is-24x24 mx-1">
+                            <img src={reward.item.iconUrl} alt="Item Icon" />
+                          </figure>
+                          <Link to={`/item/${reward.item.id}`} className="mr-1">
+                            {reward.item.name}
+                          </Link>
+                          x{reward.count}
+                        </span>
+                      </Tippy>
                     </div>
                   </Columns.Column>
                 ))}

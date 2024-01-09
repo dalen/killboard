@@ -10,11 +10,13 @@ import {
 import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
+import Tippy from '@tippyjs/react';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query, QuestFilterInput } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { GoldPrice } from '../components/GoldPrice';
+import { ItemPopup } from '../components/ItemPopup';
 
 const QUESTS = gql`
   query GetQuests(
@@ -42,16 +44,16 @@ const QUESTS = gql`
           count
           item {
             id
-            name
             iconUrl
+            name
           }
         }
         rewardsGiven {
           count
           item {
             id
-            name
             iconUrl
+            name
           }
         }
       }
@@ -195,15 +197,21 @@ export function Quests(): JSX.Element {
                 <td>
                   {quest.rewardsGiven.slice(0, 3).map((reward) => (
                     <div key={`${quest.id}-${reward.item.id}`}>
-                      <span className="icon-text">
-                        <figure className="image is-24x24 mx-1">
-                          <img src={reward.item.iconUrl} alt="Item Icon" />
-                        </figure>
-                        <Link to={`/item/${reward.item.id}`} className="mr-1">
-                          {reward.item.name}
-                        </Link>
-                        x{reward.count}
-                      </span>
+                      <Tippy
+                        duration={0}
+                        placement="top"
+                        content={<ItemPopup itemId={reward.item.id} />}
+                      >
+                        <span className="icon-text">
+                          <figure className="image is-24x24 mx-1">
+                            <img src={reward.item.iconUrl} alt="Item Icon" />
+                          </figure>
+                          <Link to={`/item/${reward.item.id}`} className="mr-1">
+                            {reward.item.name}
+                          </Link>
+                          x{reward.count}
+                        </span>
+                      </Tippy>
                     </div>
                   ))}
                   {quest.rewardsGiven.length > 3 && (
@@ -214,15 +222,21 @@ export function Quests(): JSX.Element {
                   {quest.choiceCount > 0 && <div>Pick {quest.choiceCount}</div>}
                   {quest.rewardsChoice.slice(0, 3).map((reward) => (
                     <div key={`${quest.id}-${reward.item.id}`}>
-                      <span className="icon-text">
-                        <figure className="image is-24x24 mx-1">
-                          <img src={reward.item.iconUrl} alt="Item Icon" />
-                        </figure>
-                        <Link to={`/item/${reward.item.id}`} className="mr-1">
-                          {reward.item.name}
-                        </Link>
-                        x{reward.count}
-                      </span>
+                      <Tippy
+                        duration={0}
+                        placement="top"
+                        content={<ItemPopup itemId={reward.item.id} />}
+                      >
+                        <span className="icon-text">
+                          <figure className="image is-24x24 mx-1">
+                            <img src={reward.item.iconUrl} alt="Item Icon" />
+                          </figure>
+                          <Link to={`/item/${reward.item.id}`} className="mr-1">
+                            {reward.item.name}
+                          </Link>
+                          x{reward.count}
+                        </span>
+                      </Tippy>
                     </div>
                   ))}
                   {quest.rewardsChoice.length > 3 && (
