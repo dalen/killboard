@@ -110,7 +110,8 @@
     "creatureSubType": "Type"
   },
   "creature": {
-    "creatureId": "Creature #{{creatureId}}"
+    "creatureId": "Creature #{{creatureId}}",
+    "questsStarter": "Quests"
   },
   "quests": {
     "title": "Quests",

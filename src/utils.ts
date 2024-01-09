@@ -108,3 +108,40 @@ export const isPercentage = (stat: string) => {
 
   return '';
 };
+
+const QuestType = {
+  Group: 1,
+  Travel: 2,
+  Tome: 4,
+  RvR: 8,
+  PlayerKill: 16,
+  Epic: 32,
+} as const;
+
+export const questTypeIcon = (type: number, repeatable: boolean): string => {
+  if ((type & QuestType.PlayerKill) > 0) {
+    return 'quest_rvr.png';
+  }
+
+  if ((type & QuestType.Group) > 0 && (type & QuestType.RvR) > 0) {
+    return 'quest_rvr3.png';
+  }
+
+  if ((type & QuestType.RvR) > 0) {
+    return 'quest_rvr2.png';
+  }
+
+  if ((type & QuestType.Travel) > 0) {
+    return 'quest_travel.png';
+  }
+
+  if ((type & QuestType.Tome) > 0) {
+    return 'quest_tome.png';
+  }
+
+  if (repeatable) {
+    return 'quest_blue.png';
+  }
+
+  return 'quest_green.png';
+};

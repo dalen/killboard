@@ -17,6 +17,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { GoldPrice } from '../components/GoldPrice';
 import { ItemPopup } from '../components/ItemPopup';
+import { questTypeIcon } from '../utils';
 
 const QUESTS = gql`
   query GetQuests(
@@ -66,39 +67,6 @@ const QUESTS = gql`
     }
   }
 `;
-
-const QuestType = {
-  Group: 1,
-  Travel: 2,
-  Tome: 4,
-  RvR: 8,
-  PlayerKill: 16,
-  Epic: 32,
-} as const;
-
-const questTypeIcon = (type: number): string => {
-  if ((type & QuestType.PlayerKill) > 0) {
-    return 'quest_rvr.png';
-  }
-
-  if ((type & QuestType.Group) > 0 && (type & QuestType.RvR) > 0) {
-    return 'quest_rvr3.png';
-  }
-
-  if ((type & QuestType.RvR) > 0) {
-    return 'quest_rvr2.png';
-  }
-
-  if ((type & QuestType.Travel) > 0) {
-    return 'quest_travel.png';
-  }
-
-  if ((type & QuestType.Tome) > 0) {
-    return 'quest_tome.png';
-  }
-
-  return 'quest_green.png';
-};
 
 const getQuestNameFilter = (search: URLSearchParams): QuestFilterInput => {
   const name = search.get('name');
@@ -182,7 +150,10 @@ export function Quests(): JSX.Element {
                     <div className="icon-text">
                       <span className="icon has-text-info">
                         <img
-                          src={`/images/icons/${questTypeIcon(quest.type)}`}
+                          src={`/images/icons/${questTypeIcon(
+                            quest.type,
+                            false,
+                          )}`}
                           alt="Quest Type"
                         />
                       </span>

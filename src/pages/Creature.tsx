@@ -11,6 +11,7 @@ import { gql, useQuery } from '@apollo/client';
 import { MapSetup, Query, Zone } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { MapPositions } from '../components/MapPositions';
+import { questTypeIcon } from '../utils';
 
 const CREATURE_DETAILS = gql`
   query GetCreature($id: ID!) {
@@ -36,6 +37,11 @@ const CREATURE_DETAILS = gql`
             seCornerY
           }
         }
+      }
+      questsStarter {
+        id
+        name
+        type
       }
     }
   }
@@ -89,12 +95,35 @@ export function Creature(): JSX.Element {
 
       <Card mb={5}>
         <Card.Content>
-          <p className="is-size-4 is-family-secondary">
-            <strong>{entry.name}</strong>
+          <p className="is-size-4 is-family-secondary  has-text-info">
+            {entry.name}
           </p>
           <p>{t(`enums:creatureSubType.${entry.creatureSubType}`)}</p>
         </Card.Content>
       </Card>
+
+      {entry.questsStarter && (
+        <Card mb={5}>
+          <Card.Content>
+            <p className="is-size-4 is-family-secondary has-text-info">
+              {t('pages:creature.questsStarter')}
+            </p>
+            {entry.questsStarter.map((quest) => (
+              <Link to={`/quest/${quest.id}`}>
+                <div className="icon-text">
+                  <span className="icon has-text-info">
+                    <img
+                      src={`/images/icons/${questTypeIcon(quest.type, false)}`}
+                      alt="Quest Type"
+                    />
+                  </span>
+                  <span>{quest.name}</span>
+                </div>
+              </Link>
+            ))}
+          </Card.Content>
+        </Card>
+      )}
 
       <Tabs>
         <ul>

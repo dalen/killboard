@@ -6,6 +6,7 @@ import Tippy from '@tippyjs/react';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ItemPopup } from './ItemPopup';
+import { questTypeIcon } from '../utils';
 
 const ITEM_INFO = gql`
   query GetItemRewardedFromQuests(
@@ -26,6 +27,7 @@ const ITEM_INFO = gql`
         nodes {
           id
           name
+          type
           rewardsChoice {
             item {
               id
@@ -88,7 +90,17 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
         {rewardedFromQuests.nodes.map((quest) => (
           <tr key={quest.id}>
             <td>
-              <Link to={`/quest/${quest.id}`}>{quest.name}</Link>
+              <Link to={`/quest/${quest.id}`}>
+                <div className="icon-text">
+                  <span className="icon has-text-info">
+                    <img
+                      src={`/images/icons/${questTypeIcon(quest.type, false)}`}
+                      alt="Quest Type"
+                    />
+                  </span>
+                  <span>{quest.name}</span>
+                </div>
+              </Link>
             </td>
             <td>
               <div className="mb-2 is-flex">

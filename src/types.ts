@@ -265,6 +265,8 @@ export type Creature = {
   creatureType: CreatureType;
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
+  questsFinisher: Array<Quest>;
+  questsStarter: Array<Quest>;
   realm?: Maybe<Realm>;
   spawns: Array<CreatureSpawn>;
 };
