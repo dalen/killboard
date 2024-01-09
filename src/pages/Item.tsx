@@ -264,7 +264,7 @@ export function Item({
                         <span key={itemSetItem.id} className="icon-text">
                           {itemSetItem.id === item.id && (
                             <>
-                              <figure className="image is-24x24 m-0">
+                              <figure className="image is-24x24 m-0 mr-1">
                                 <img
                                   src={itemSetItem.iconUrl}
                                   alt="Item Icon"
@@ -275,7 +275,7 @@ export function Item({
                           )}
                           {itemSetItem.id !== item.id && (
                             <>
-                              <figure className="image is-24x24 m-0">
+                              <figure className="image is-24x24 m-0 mr-1">
                                 <img
                                   src={itemSetItem.iconUrl}
                                   alt="Item Icon"
