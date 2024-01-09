@@ -193,11 +193,11 @@ export function Quest(): JSX.Element {
                           />
                           {reward.count > 1 && (
                             <div
-                              className="has-text-weight-bold s-1"
+                              className="has-text-white"
                               style={{
                                 position: 'absolute',
                                 top: 0,
-                                right: 0,
+                                right: 6,
                               }}
                             >
                               {reward.count}
