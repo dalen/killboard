@@ -19,6 +19,7 @@ import { Items } from './pages/Items';
 import { Creatures } from './pages/Creatures';
 import { Creature } from './pages/Creature';
 import { Quests } from './pages/Quests';
+import { Quest } from './pages/Quest';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -76,6 +77,7 @@ function App() {
       />
 
       <Route path="/quests" element={<Quests />} />
+      <Route path="/quest/:id" element={<Quest />} />
 
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />

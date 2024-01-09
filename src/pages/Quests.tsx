@@ -165,7 +165,7 @@ export function Quests(): JSX.Element {
             <tr>
               <th>{t('pages:quests.name')}</th>
               <th align="right">{t('pages:quests.xp')}</th>
-              <th align="right">
+              <th align="right" id="table_gold">
                 <span className="mr-2">{t('pages:quests.gold')}</span>
               </th>
               <th>{t('pages:quests.given')}</th>
@@ -189,7 +189,7 @@ export function Quests(): JSX.Element {
                   </Link>
                 </td>
                 <td align="right">{quest.xp}</td>
-                <td align="right">
+                <td align="right" aria-labelledby="table_gold">
                   <GoldPrice price={quest.gold} />
                 </td>
                 <td>

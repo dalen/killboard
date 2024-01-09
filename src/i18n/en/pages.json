@@ -119,5 +119,10 @@
     "gold": "Gold",
     "given": "Rewards",
     "choice": "Choices"
+  },
+  "quest": {
+    "questId": "Quest #{{questId}}",
+    "given": "Rewards",
+    "choice": "Choices"
   }
 }
