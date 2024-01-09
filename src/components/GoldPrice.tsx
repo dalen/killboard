@@ -14,7 +14,7 @@ export function GoldPrice({ price }: { price: number }): ReactNode {
       {gold > 0 && (
         <span className="icon-text mr-1">
           {gold}
-          <figure className="image is-16x16 mt-1">
+          <figure className="image is-16x16 mt-1 ml-1">
             <img
               src="https://armory.returnofreckoning.com/icon/46"
               alt="Gold"
@@ -25,7 +25,7 @@ export function GoldPrice({ price }: { price: number }): ReactNode {
       {silver > 0 && (
         <span className="icon-text mr-1">
           {silver}
-          <figure className="image is-16x16 mt-1">
+          <figure className="image is-16x16 mt-1 ml-1">
             <img
               src="https://armory.returnofreckoning.com/icon/47"
               alt="Silver"
@@ -36,7 +36,7 @@ export function GoldPrice({ price }: { price: number }): ReactNode {
       {copper > 0 && (
         <span className="icon-text mr-1">
           {copper}
-          <figure className="image is-16x16 mt-1">
+          <figure className="image is-16x16 mt-1 ml-1">
             <img
               src="https://armory.returnofreckoning.com/icon/47"
               alt="Copper"
