@@ -123,6 +123,7 @@
   },
   "quest": {
     "questId": "Quest #{{questId}}",
+    "objectives": "Objectives",
     "rewards": "Rewards",
     "choiceCount": "Choose {{count}}",
     "xp": "Xp",
