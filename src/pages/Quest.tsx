@@ -174,48 +174,88 @@ export function Quest(): JSX.Element {
           </div>
           <div className="mb-2">{quest.description}</div>
 
-          <div className="mb-2">
-            <GoldPrice price={quest.gold} />
+          <div className="is-size-4 is-family-secondary has-text-info">
+            {t('pages:quest.rewards')}
           </div>
 
-          {quest.rewardsGiven.length > 0 && (
-            <>
-              <div className="is-size-4 is-family-secondary has-text-info">
-                {t('pages:quest.given')}
-              </div>
-              <Columns>
-                {quest.rewardsGiven.map((reward) => (
-                  <Columns.Column key={reward.item.id} size="one-quarter">
-                    <div key={`${quest.id}-${reward.item.id}`}>
-                      <Tippy
-                        duration={0}
-                        placement="top"
-                        content={<ItemPopup itemId={reward.item.id} />}
-                      >
-                        <span className="icon-text">
-                          <figure className="image is-24x24 mx-1">
-                            <img src={reward.item.iconUrl} alt="Item Icon" />
-                          </figure>
-                          <Link to={`/item/${reward.item.id}`} className="mr-1">
-                            {reward.item.name}
-                          </Link>
-                          x{reward.count}
-                        </span>
-                      </Tippy>
+          <div className="mb-2 is-flex">
+            {quest.xp > 0 && (
+              <div>
+                <Tippy
+                  duration={0}
+                  placement="right"
+                  content={
+                    <div className="tooltip-popup">
+                      <div className="is-size-5 is-family-secondary has-text-info">
+                        {t('pages:quest.xp')}
+                      </div>
+                      <div>{quest.xp}</div>
                     </div>
-                  </Columns.Column>
-                ))}
-              </Columns>
-            </>
-          )}
-          {quest.rewardsChoice.length > 0 && (
-            <>
-              <div className="is-size-4 is-family-secondary has-text-info">
-                {t('pages:quest.choice')}
+                  }
+                >
+                  <figure className="image is-32x32">
+                    <img
+                      src="https://armory.returnofreckoning.com/icon/35"
+                      alt="XP"
+                    />
+                  </figure>
+                </Tippy>
               </div>
-              {quest.choiceCount > 0 && (
-                <div className="mb-2">Pick {quest.choiceCount}</div>
-              )}
+            )}
+            {quest.gold > 0 && (
+              <div>
+                <Tippy
+                  duration={0}
+                  placement="right"
+                  content={
+                    <div className="tooltip-popup">
+                      <div className="is-size-5 is-family-secondary has-text-info">
+                        {t('pages:quest.money')}
+                      </div>
+                      <div>
+                        <GoldPrice price={quest.gold} />
+                      </div>
+                    </div>
+                  }
+                >
+                  <figure className="image is-32x32">
+                    <img
+                      src="https://armory.returnofreckoning.com/icon/34"
+                      alt="XP"
+                    />
+                  </figure>
+                </Tippy>
+              </div>
+            )}
+          </div>
+          <Columns>
+            {quest.rewardsGiven.map((reward) => (
+              <Columns.Column key={reward.item.id} size="one-quarter">
+                <div key={`${quest.id}-${reward.item.id}`}>
+                  <Tippy
+                    duration={0}
+                    placement="top"
+                    content={<ItemPopup itemId={reward.item.id} />}
+                  >
+                    <span className="icon-text">
+                      <figure className="image is-24x24 mx-1">
+                        <img src={reward.item.iconUrl} alt="Item Icon" />
+                      </figure>
+                      <Link to={`/item/${reward.item.id}`} className="mr-1">
+                        {reward.item.name}
+                      </Link>
+                      x{reward.count}
+                    </span>
+                  </Tippy>
+                </div>
+              </Columns.Column>
+            ))}
+          </Columns>
+          {quest.choiceCount > 0 && quest.rewardsChoice.length > 0 && (
+            <>
+              <div className="mb-2 is-size-4 is-family-secondary has-text-info">
+                {t('pages:quest.choiceCount', { count: quest.choiceCount })}
+              </div>
               <Columns>
                 {quest.rewardsChoice.map((reward) => (
                   <Columns.Column key={reward.item.id} size="one-quarter">

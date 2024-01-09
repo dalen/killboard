@@ -116,14 +116,16 @@
     "title": "Quests",
     "search": "Search",
     "name": "Name",
-    "xp": "XP",
+    "xp": "Xp",
     "gold": "Gold",
     "given": "Rewards",
     "choice": "Choices"
   },
   "quest": {
     "questId": "Quest #{{questId}}",
-    "given": "Rewards",
-    "choice": "Choices"
+    "rewards": "Rewards",
+    "choiceCount": "Choose {{count}}",
+    "xp": "Xp",
+    "money": "Money"
   }
 }

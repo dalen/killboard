@@ -226,6 +226,14 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   color: rgb(255, 5, 5);
 }
 
+.tooltip-popup {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(83, 66, 53);
+  pointer-events: none;
+}
+
 .popup {
   position: absolute;
   top: 0px;
@@ -234,7 +242,7 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   padding: 10px 10px 30px 10px;
   min-width: 300px;
   border-radius: 5px;
-  border: 1px solid rgb(82, 52, 71);
+  border: 1px solid rgb(83, 66, 53);
   z-index: 5;
   pointer-events: none;
 }
