@@ -24,48 +24,6 @@ const QUEST_INFO = gql`
           id
           iconUrl
           name
-          careerRestriction
-          description
-          type
-          slot
-          rarity
-          armor
-          dps
-          speed
-          levelRequirement
-          renownRankRequirement
-          itemLevel
-          talismanSlots
-          itemSet {
-            id
-            name
-            items {
-              id
-            }
-            bonuses {
-              itemsRequired
-              bonus {
-                ... on Ability {
-                  description
-                  __typename
-                }
-                ... on ItemStat {
-                  stat
-                  value
-                  percentage
-                  __typename
-                }
-              }
-            }
-          }
-          buffs {
-            id
-            description
-          }
-          stats {
-            stat
-            value
-          }
         }
       }
       rewardsGiven {
@@ -74,51 +32,14 @@ const QUEST_INFO = gql`
           id
           iconUrl
           name
-          careerRestriction
-          description
-          type
-          slot
-          rarity
-          armor
-          dps
-          speed
-          levelRequirement
-          renownRankRequirement
-          itemLevel
-          talismanSlots
-          itemSet {
-            id
-            name
-            items {
-              id
-            }
-            bonuses {
-              itemsRequired
-              bonus {
-                ... on Ability {
-                  description
-                  __typename
-                }
-                ... on ItemStat {
-                  stat
-                  value
-                  percentage
-                  __typename
-                }
-              }
-            }
-          }
-          buffs {
-            id
-            description
-          }
-          stats {
-            stat
-            value
-          }
         }
       }
       description
+      objectives {
+        description
+        count
+      }
+      journalEntry
       raceRestriction
       careerRestriction
       minLevel
@@ -168,6 +89,29 @@ export function Quest(): JSX.Element {
             {quest.name}
           </div>
           <div className="mb-2">{quest.description}</div>
+
+          {quest.journalEntry && (
+            <>
+              <div className="columns is-centered">
+                <div className="column is-one-third">
+                  <figure>
+                    <hr />
+                  </figure>
+                </div>
+              </div>
+              <div className="mb-2">{quest.journalEntry}</div>
+            </>
+          )}
+
+          <div className="is-size-4 is-family-secondary has-text-info">
+            {t('pages:quest.objectives')}
+          </div>
+
+          <div>
+            {quest.objectives.map((objective) => (
+              <div>{objective.description}</div>
+            ))}
+          </div>
 
           <div className="is-size-4 is-family-secondary has-text-info">
             {t('pages:quest.rewards')}

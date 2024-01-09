@@ -1459,6 +1459,8 @@ export type Quest = {
   gold: Scalars['UnsignedInt']['output'];
   /** Id of the quest */
   id: Scalars['ID']['output'];
+  /** Journal Entry Text */
+  journalEntry: Scalars['String']['output'];
   /** Maximum level */
   maxLevel: Scalars['Byte']['output'];
   /** Maximum renown */
@@ -1469,6 +1471,8 @@ export type Quest = {
   minRenown: Scalars['Byte']['output'];
   /** Name */
   name: Scalars['String']['output'];
+  /** Objectives */
+  objectives: Array<QuestObjective>;
   /** Available to races */
   raceRestriction: Array<Race>;
   /** Choice rewards */
@@ -1489,6 +1493,15 @@ export type QuestFilterInput = {
   or?: InputMaybe<Array<QuestFilterInput>>;
   raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
   type?: InputMaybe<ByteOperationFilterInput>;
+};
+
+/** Info about a quest objective */
+export type QuestObjective = {
+  __typename?: 'QuestObjective';
+  /** Number of times the objective needs to be done */
+  count: Scalars['UnsignedInt']['output'];
+  /** Objective description */
+  description: Scalars['String']['output'];
 };
 
 /** Info about a quest reward */
