@@ -107,9 +107,20 @@ export function Quest(): JSX.Element {
             {t('pages:quest.objectives')}
           </div>
 
-          <div>
+          <div className="mb-3">
             {quest.objectives.map((objective) => (
-              <div>{objective.description}</div>
+              <div className="icon-text">
+                <span className="icon has-text-info">
+                  <img
+                    src="/images/icons/quest_blue.png"
+                    alt="Quest Objective"
+                  />
+                </span>
+                <span>
+                  {objective.description}
+                  {objective.count > 1 && <span> 0 of {objective.count}</span>}
+                </span>
+              </div>
             ))}
           </div>
 
