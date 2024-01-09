@@ -85,7 +85,9 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
       <tbody>
         {rewardedFromQuests.nodes.map((quest) => (
           <tr key={quest.id}>
-            <td>{quest.name}</td>
+            <td>
+              <Link to={`/quest/${quest.id}`}>{quest.name}</Link>
+            </td>
             <td>
               {quest.rewardsChoice.map((rewardItem) => (
                 <span className="icon-text">
