@@ -49,6 +49,7 @@ const QUEST_INFO = gql`
       starterCreatures {
         id
         name
+        realm
       }
     }
   }
@@ -218,7 +219,7 @@ export function Quest(): JSX.Element {
 
           {quest.choiceCount > 0 && quest.rewardsChoice.length > 0 && (
             <>
-              <div className="mb-2 is-size-4 is-family-secondary has-text-info">
+              <div className="is-size-4 is-family-secondary has-text-info">
                 {t('pages:quest.choiceCount', { count: quest.choiceCount })}
               </div>
 
@@ -266,17 +267,37 @@ export function Quest(): JSX.Element {
             </>
           )}
 
-          <div className="mb-2 is-size-4 is-family-secondary has-text-info">
+          <div className="is-size-4 is-family-secondary has-text-info">
             {t('pages:quest.questGivers')}
           </div>
           <div>
             {quest.starterCreatures.map((creature) => (
               <div className="icon-text">
                 <span className="icon has-text-info">
-                  <img
-                    src="/images/icons/quest_green.png"
-                    alt="Quest Starter"
-                  />
+                  {creature.realm === 'ORDER' && (
+                    <img
+                      src="/images/icons/scenario/order.png"
+                      width={24}
+                      height={24}
+                      alt={t('comon:realmOrder')}
+                    />
+                  )}
+                  {creature.realm === 'DESTRUCTION' && (
+                    <img
+                      src="/images/icons/scenario/destruction.png"
+                      width={24}
+                      height={24}
+                      alt={t('components:realmDestruction')}
+                    />
+                  )}
+                  {creature.realm === 'NEUTRAL' && (
+                    <img
+                      src="/images/icons/quest_green.png"
+                      width={24}
+                      height={24}
+                      alt={t('components:realmNeutral')}
+                    />
+                  )}
                 </span>
                 <span>
                   <Link to={`/creature/${creature.id}`}>{creature.name}</Link>

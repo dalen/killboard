@@ -8,5 +8,8 @@
   "quests": "Quests",
   "notFound": "Not found",
   "prevPage": "Previous",
-  "nextPage": "Next"
+  "nextPage": "Next",
+  "realmOrder": "Order",
+  "realmDestruction": "Destruction",
+  "realmNeutral": "Neutral"
 }
