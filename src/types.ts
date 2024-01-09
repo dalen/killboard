@@ -1477,6 +1477,8 @@ export type Quest = {
   objectives: Array<QuestObjective>;
   /** Available to races */
   raceRestriction: Array<Race>;
+  /** Repeatable Type */
+  repeatableType: QuestRepeatableType;
   /** Choice rewards */
   rewardsChoice: Array<QuestReward>;
   /** Given rewards */
@@ -1507,6 +1509,15 @@ export type QuestObjective = {
   /** Objective description */
   description: Scalars['String']['output'];
 };
+
+export enum QuestRepeatableType {
+  /** Repeatable */
+  Done = 'DONE',
+  /** Not repeatable */
+  None = 'NONE',
+  /** Each Week */
+  Weekly = 'WEEKLY'
+}
 
 /** Info about a quest reward */
 export type QuestReward = {

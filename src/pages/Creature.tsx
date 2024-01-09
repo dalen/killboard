@@ -42,6 +42,7 @@ const CREATURE_DETAILS = gql`
         id
         name
         type
+        repeatableType
       }
     }
   }
@@ -113,7 +114,10 @@ export function Creature(): JSX.Element {
                 <div className="icon-text">
                   <span className="icon has-text-info">
                     <img
-                      src={`/images/icons/${questTypeIcon(quest.type, false)}`}
+                      src={`/images/icons/${questTypeIcon(
+                        quest.type,
+                        quest.repeatableType,
+                      )}`}
                       alt="Quest Type"
                     />
                   </span>

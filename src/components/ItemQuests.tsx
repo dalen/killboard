@@ -28,6 +28,7 @@ const ITEM_INFO = gql`
           id
           name
           type
+          repeatableType
           rewardsChoice {
             item {
               id
@@ -94,7 +95,10 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                 <div className="icon-text">
                   <span className="icon has-text-info">
                     <img
-                      src={`/images/icons/${questTypeIcon(quest.type, false)}`}
+                      src={`/images/icons/${questTypeIcon(
+                        quest.type,
+                        quest.repeatableType,
+                      )}`}
                       alt="Quest Type"
                     />
                   </span>

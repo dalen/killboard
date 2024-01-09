@@ -38,6 +38,7 @@ const QUESTS = gql`
         id
         name
         type
+        repeatableType
         xp
         gold
         choiceCount
@@ -152,7 +153,7 @@ export function Quests(): JSX.Element {
                         <img
                           src={`/images/icons/${questTypeIcon(
                             quest.type,
-                            false,
+                            quest.repeatableType,
                           )}`}
                           alt="Quest Type"
                         />

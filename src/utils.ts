@@ -1,4 +1,4 @@
-import { Career } from './types';
+import { Career, QuestRepeatableType } from './types';
 
 export const careerIcon = (career: Career): string => {
   switch (career) {
@@ -118,7 +118,10 @@ const QuestType = {
   Epic: 32,
 } as const;
 
-export const questTypeIcon = (type: number, repeatable: boolean): string => {
+export const questTypeIcon = (
+  type: number,
+  repeatable: QuestRepeatableType,
+): string => {
   if ((type & QuestType.PlayerKill) > 0) {
     return 'quest_rvr.png';
   }
@@ -139,7 +142,7 @@ export const questTypeIcon = (type: number, repeatable: boolean): string => {
     return 'quest_tome.png';
   }
 
-  if (repeatable) {
+  if (repeatable !== QuestRepeatableType.None) {
     return 'quest_blue.png';
   }
 
