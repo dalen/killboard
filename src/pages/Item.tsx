@@ -125,7 +125,9 @@ export function Item({
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          {t('pages:itemPage.itemId', { itemId: id })}
+          <div className="ml-2">
+            {t('pages:itemPage.itemId', { itemId: id })}
+          </div>
         </Breadcrumb.Item>
       </Breadcrumb>
 
