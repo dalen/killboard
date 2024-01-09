@@ -45,7 +45,7 @@ export function MapPositions({
             canvasWidth,
           );
           // load the indicator image after the map, so it is drawn on top
-          skullImage.src = '/images/icons/map_marker_red.png';
+          skullImage.src = '/images/icons/map_marker_white.png';
         };
         skullImage.onload = () => {
           forEach(positions, (position) => {
