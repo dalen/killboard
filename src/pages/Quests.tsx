@@ -142,7 +142,7 @@ export function Quests(): JSX.Element {
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to="/quests">{t('pages:quests.title')}</Link>
+          <div className="ml-2">{t('pages:quests.title')}</div>
         </Breadcrumb.Item>
       </Breadcrumb>
 

@@ -161,7 +161,9 @@ export function Quest(): JSX.Element {
           <Link to="/quests">{t('common:quests')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          {t('pages:quest.questId', { questId: id })}
+          <div className="ml-2">
+            {t('pages:quest.questId', { questId: id })}
+          </div>
         </Breadcrumb.Item>
       </Breadcrumb>
 
