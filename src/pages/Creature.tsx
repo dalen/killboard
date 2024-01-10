@@ -103,7 +103,7 @@ export function Creature(): JSX.Element {
         </Card.Content>
       </Card>
 
-      {entry.questsStarter && (
+      {entry.questsStarter.length > 0 && (
         <Card mb={5}>
           <Card.Content>
             <p className="is-size-4 is-family-secondary has-text-info">
