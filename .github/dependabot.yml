@@ -8,6 +8,12 @@ updates:
       typescript-eslint:
         patterns:
         - "@typescript-eslint/*"
+      testing-library:
+        patterns:
+        - "@testing-library/*"
+      graphql-codegen:
+        patterns:
+        - "@graphql-codegen/*"
   - package-ecosystem: github-actions
     directory: /
     schedule:
