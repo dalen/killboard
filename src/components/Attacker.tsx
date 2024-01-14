@@ -20,7 +20,7 @@ export function Attacker({
   const killDamageGrouped = killDamage.reduce((acc, curr) => {
     const existing = acc.find(
       (e) =>
-        e.ability?.name === curr.ability?.name &&
+        killDamageText(e) === killDamageText(curr) &&
         e.ability?.iconUrl === curr.ability?.iconUrl,
     );
     if (existing) {

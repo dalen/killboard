@@ -36,7 +36,7 @@ export function SkirmishDamage({ id }: { id: string }): JSX.Element {
   const killDamageGrouped = killDamage.reduce((acc, curr) => {
     const existing = acc.find(
       (e) =>
-        e.ability?.name === curr.ability?.name &&
+        killDamageText(e) === killDamageText(curr) &&
         e.ability?.iconUrl === curr.ability?.iconUrl,
     );
     if (existing) {
