@@ -20,6 +20,7 @@ import { Query } from '../types';
 import { GuildFeud } from '../components/GuildFeud';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildHeraldry } from '../components/GuildHeraldry';
+import { sum } from 'lodash';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -183,6 +184,7 @@ export function Kill(): JSX.Element {
             killDamage={kill.damage.filter(
               (e) => e.attacker?.id === kill.attackers[0].character.id,
             )}
+            killDamageSum={sum(kill.damage.map((d) => d.damageAmount))}
             showKillDamage
           />
           {sortBy(kill.attackers.slice(1), (e) => -e.damagePercent).map(
@@ -193,6 +195,7 @@ export function Kill(): JSX.Element {
                 killDamage={kill.damage.filter(
                   (e) => e.attacker?.id === attacker.character.id,
                 )}
+                killDamageSum={sum(kill.damage.map((d) => d.damageAmount))}
                 showKillDamage
                 key={`assisting_attacker_${attacker.character.id}`}
               />

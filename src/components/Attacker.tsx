@@ -9,11 +9,13 @@ export function Attacker({
   title,
   attacker,
   killDamage,
+  killDamageSum,
   showKillDamage,
 }: {
   title: string;
   attacker: AttackerType;
   killDamage: KillDamage[];
+  killDamageSum: number;
   showKillDamage: boolean;
 }): JSX.Element {
   // Group killdamage by ability.name and ability.iconUrl
@@ -89,6 +91,10 @@ export function Attacker({
                     </td>
                     <td>{killDamageText(damage)}</td>
                     <td align="right">{damage.damageAmount}</td>
+                    <td align="right">
+                      {((damage.damageAmount / killDamageSum) * 100).toFixed(1)}
+                      %
+                    </td>
                   </tr>
                 ))}
             </tbody>
