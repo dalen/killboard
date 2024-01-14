@@ -1918,6 +1918,8 @@ export type Skirmish = {
   id: Scalars['ID']['output'];
   /** Scenario instance, null if not in a scenario */
   instance?: Maybe<ScenarioRecord>;
+  /** Damage leading to player kills in this skirmish */
+  killDamage: Array<KillDamage>;
   /** Kills that happened during this skirmish */
   kills?: Maybe<KillsConnection>;
   /** Total number of kills that happened during this skirmish */

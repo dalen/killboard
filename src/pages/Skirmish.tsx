@@ -24,6 +24,7 @@ import { SkirmishTopPlayer } from '../components/SkirmishTopPlayer';
 import { ZoneHeatmap } from '../components/ZoneHeatmap';
 import { SkirmishKills } from '../components/SkirmishKills';
 import { GuildHeraldry } from '../components/GuildHeraldry';
+import { SkirmishDamage } from '../components/SkirmishDamage';
 
 const SKIRMISH_INFO = gql`
   query GetSkirmishInfo($id: ID!) {
@@ -90,7 +91,7 @@ const SKIRMISH_INFO = gql`
 export function Skirmish({
   tab,
 }: {
-  tab: 'scoreboard' | 'kills';
+  tab: 'scoreboard' | 'kills' | 'damage';
 }): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
@@ -335,6 +336,11 @@ export function Skirmish({
             {t('pages:skirmishPage.kills')}
           </Link>
         </li>
+        <li className={tab === 'damage' ? 'is-active' : ''}>
+          <Link to={`/skirmish/${id}/damage`}>
+            {t('pages:skirmishPage.damage')}
+          </Link>
+        </li>
       </Tabs>
       {tab === 'scoreboard' && <SkirmishScoreboard id={id ?? ''} />}
       {tab === 'kills' && (
@@ -344,6 +350,7 @@ export function Skirmish({
           endTime={skirmish.endTime}
         />
       )}
+      {tab === 'damage' && <SkirmishDamage id={id ?? ''} />}
     </Container>
   );
 }

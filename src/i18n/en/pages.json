@@ -70,6 +70,7 @@
     "skirmishId": "Skirmish Report #{{skirmishId}}",
     "kills": "Kills",
     "scoreboard": "Scoreboard",
+    "damage": "Kill Damage",
     "topDamagePlayer": "Most Damage",
     "topHealingPlayer": "Most Healing",
     "topDeathBlowsPlayer": "Deadliest Player",

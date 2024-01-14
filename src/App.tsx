@@ -92,6 +92,7 @@ function App() {
       <Route path="/skirmishes" element={<Home tab="skirmishes" />} />
       <Route path="/skirmish/:id" element={<Skirmish tab="scoreboard" />} />
       <Route path="/skirmish/:id/kills" element={<Skirmish tab="kills" />} />
+      <Route path="/skirmish/:id/damage" element={<Skirmish tab="damage" />} />
       <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
 
       <Route path="/items" element={<Items />} />
