@@ -59,21 +59,23 @@ export function Attacker({
         {showKillDamage && killDamage.length > 0 && (
           <Table size="narrow" striped width="100%">
             <tbody>
-              {killDamage.map((damage) => (
-                <tr>
-                  <td style={{ verticalAlign: 'middle' }}>
-                    {damage.ability && (
-                      <Image
-                        size={24}
-                        src={damage.ability.iconUrl}
-                        alt="Heraldry"
-                      />
-                    )}
-                  </td>
-                  <td>{killDamageText(damage)}</td>
-                  <td align="right">{damage.damageAmount}</td>
-                </tr>
-              ))}
+              {killDamage
+                .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
+                .map((damage) => (
+                  <tr>
+                    <td style={{ verticalAlign: 'middle' }}>
+                      {damage.ability && (
+                        <Image
+                          size={24}
+                          src={damage.ability.iconUrl}
+                          alt="Heraldry"
+                        />
+                      )}
+                    </td>
+                    <td>{killDamageText(damage)}</td>
+                    <td align="right">{damage.damageAmount}</td>
+                  </tr>
+                ))}
             </tbody>
           </Table>
         )}
