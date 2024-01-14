@@ -23,7 +23,7 @@ import { GuildHeraldry } from '../components/GuildHeraldry';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
-    kill(id: $id) {
+    kill(id: $id, includeAssists: true) {
       scenario {
         id
         name
@@ -191,7 +191,7 @@ export function Kill(): JSX.Element {
                 title="Assist"
                 attacker={attacker}
                 killDamage={kill.damage.filter(
-                  (e) => e.attacker?.id === kill.attackers[0].character.id,
+                  (e) => e.attacker?.id === attacker.character.id,
                 )}
                 showKillDamage
                 key={`assisting_attacker_${attacker.character.id}`}
