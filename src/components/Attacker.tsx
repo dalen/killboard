@@ -16,6 +16,21 @@ export function Attacker({
   killDamage: KillDamage[];
   showKillDamage: boolean;
 }): JSX.Element {
+  // Group killdamage by ability.name and ability.iconUrl
+  const killDamageGrouped = killDamage.reduce((acc, curr) => {
+    const existing = acc.find(
+      (e) =>
+        e.ability?.name === curr.ability?.name &&
+        e.ability?.iconUrl === curr.ability?.iconUrl,
+    );
+    if (existing) {
+      existing.damageAmount += curr.damageAmount;
+    } else {
+      acc.push({ ...curr });
+    }
+    return acc;
+  }, [] as KillDamage[]);
+
   return (
     <Card mb={2}>
       <Card.Header backgroundColor="info-dark">
@@ -59,7 +74,7 @@ export function Attacker({
         {showKillDamage && killDamage.length > 0 && (
           <Table size="narrow" striped width="100%">
             <tbody>
-              {killDamage
+              {killDamageGrouped
                 .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
                 .map((damage) => (
                   <tr>
