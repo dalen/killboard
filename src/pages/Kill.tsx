@@ -90,6 +90,19 @@ const KILL_DETAILS = gql`
           }
         }
       }
+      damage {
+        attackerType
+        damageType
+        attacker {
+          id
+        }
+        ability {
+          id
+          name
+          iconUrl
+        }
+        damageAmount
+      }
     }
   }
 `;
@@ -101,10 +114,12 @@ export function Kill(): JSX.Element {
     variables: { id },
   });
 
-  if (loading || data?.kill == null) return <Progress />;
+  const kill = data?.kill;
+
+  if (loading || kill == null) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  const date = new Date(data.kill.time * 1000);
+  const date = new Date(kill.time * 1000);
 
   return (
     <Container max breakpoint="desktop" mt={2}>
@@ -131,9 +146,9 @@ export function Kill(): JSX.Element {
             <Media.Item>
               <p className="is-size-4">
                 <strong>
-                  {data.kill.scenario == null
-                    ? data.kill.position.zone?.name
-                    : data.kill.scenario?.name}
+                  {kill.scenario == null
+                    ? kill.position.zone?.name
+                    : kill.scenario?.name}
                 </strong>
               </p>
               <p>
@@ -144,18 +159,16 @@ export function Kill(): JSX.Element {
                 <strong>Time: </strong>
                 {format(date, 'HH:mm:ss')}
               </p>
-              {data.kill.instanceId && (
+              {kill.instanceId && (
                 <p>
-                  <Link to={`/scenario/${data.kill.instanceId}`}>
+                  <Link to={`/scenario/${kill.instanceId}`}>
                     Scenario Scoreboard
                   </Link>
                 </p>
               )}
-              {data.kill.skirmish?.id && (
+              {kill.skirmish?.id && (
                 <p>
-                  <Link to={`/skirmish/${data.kill.skirmish.id}`}>
-                    Skirmish
-                  </Link>
+                  <Link to={`/skirmish/${kill.skirmish.id}`}>Skirmish</Link>
                 </p>
               )}
             </Media.Item>
@@ -166,13 +179,21 @@ export function Kill(): JSX.Element {
         <Columns.Column>
           <Attacker
             title={t('pages:killPage.killer')}
-            attacker={data.kill.attackers[0]}
+            attacker={kill.attackers[0]}
+            killDamage={kill.damage.filter(
+              (e) => e.attacker?.id === kill.attackers[0].character.id,
+            )}
+            showKillDamage
           />
-          {sortBy(data.kill.attackers.slice(1), (e) => -e.damagePercent).map(
+          {sortBy(kill.attackers.slice(1), (e) => -e.damagePercent).map(
             (attacker) => (
               <Attacker
                 title="Assist"
                 attacker={attacker}
+                killDamage={kill.damage.filter(
+                  (e) => e.attacker?.id === kill.attackers[0].character.id,
+                )}
+                showKillDamage
                 key={`assisting_attacker_${attacker.character.id}`}
               />
             ),
@@ -182,31 +203,31 @@ export function Kill(): JSX.Element {
           <Card>
             <Card.Header backgroundColor="info-dark">
               <Card.Header.Icon>
-                <CareerIcon career={data.kill.victim.character.career} />
+                <CareerIcon career={kill.victim.character.career} />
               </Card.Header.Icon>
               <Card.Header.Title textColor="white">
                 <strong className="mr-1">Victim:</strong>
-                <Link to={`/character/${data.kill.victim.character.id}`}>
-                  {data.kill.victim.character.name}
+                <Link to={`/character/${kill.victim.character.id}`}>
+                  {kill.victim.character.name}
                 </Link>
               </Card.Header.Title>
             </Card.Header>
-            {data.kill.victim.guild && (
+            {kill.victim.guild && (
               <Card.Content py={2}>
                 <Media>
                   <Media.Item align="left">
                     <small>
-                      Lvl {data.kill.victim.level}
+                      Lvl {kill.victim.level}
                       <br />
-                      RR {data.kill.victim.renownRank}
+                      RR {kill.victim.renownRank}
                     </small>
                   </Media.Item>
                   <Media.Item align="left">
-                    <GuildHeraldry size="48" guild={data.kill.victim.guild} />
+                    <GuildHeraldry size="48" guild={kill.victim.guild} />
                   </Media.Item>
                   <Media.Item>
-                    <Link to={`/guild/${data.kill.victim.guild?.id}`}>
-                      {data.kill.victim.guild?.name}
+                    <Link to={`/guild/${kill.victim.guild?.id}`}>
+                      {kill.victim.guild?.name}
                     </Link>
                   </Media.Item>
                 </Media>
@@ -214,26 +235,26 @@ export function Kill(): JSX.Element {
             )}
             <Card.Content>
               <Map
-                zoneId={data.kill.position?.zoneId}
-                x={data.kill.position?.x}
-                y={data.kill.position?.y}
-                nwCornerX={data.kill.position?.mapSetup?.nwCornerX}
-                nwCornerY={data.kill.position?.mapSetup?.nwCornerY}
-                seCornerX={data.kill.position?.mapSetup?.seCornerX}
-                seCornerY={data.kill.position?.mapSetup?.seCornerY}
+                zoneId={kill.position?.zoneId}
+                x={kill.position?.x}
+                y={kill.position?.y}
+                nwCornerX={kill.position?.mapSetup?.nwCornerX}
+                nwCornerY={kill.position?.mapSetup?.nwCornerY}
+                seCornerX={kill.position?.mapSetup?.seCornerX}
+                seCornerY={kill.position?.mapSetup?.seCornerY}
               />
             </Card.Content>
           </Card>
         </Columns.Column>
       </Columns>
       <PlayerFeud
-        player1={data.kill.attackers[0].character.id ?? ''}
-        player2={data.kill.victim.character.id ?? ''}
+        player1={kill.attackers[0].character.id ?? ''}
+        player2={kill.victim.character.id ?? ''}
       />
-      {data.kill.attackers[0].guild && data.kill.victim.guild && (
+      {kill.attackers[0].guild && kill.victim.guild && (
         <GuildFeud
-          guild1={data.kill.attackers[0].guild.id ?? ''}
-          guild2={data.kill.victim.guild.id ?? ''}
+          guild1={kill.attackers[0].guild.id ?? ''}
+          guild2={kill.victim.guild.id ?? ''}
         />
       )}
     </Container>

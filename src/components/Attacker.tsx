@@ -1,15 +1,20 @@
-import { Card, Tag, Media } from 'react-bulma-components';
+import { Card, Tag, Media, Table, Image } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
-import { Attacker as AttackerType } from '../types';
+import { Attacker as AttackerType, KillDamage } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
+import { killDamageText } from '../utils';
 
 export function Attacker({
   title,
   attacker,
+  killDamage,
+  showKillDamage,
 }: {
   title: string;
   attacker: AttackerType;
+  killDamage: KillDamage[];
+  showKillDamage: boolean;
 }): JSX.Element {
   return (
     <Card mb={2}>
@@ -51,6 +56,27 @@ export function Attacker({
             </>
           )}
         </Media>
+        {showKillDamage && killDamage.length > 0 && (
+          <Table size="narrow" striped width="100%">
+            <tbody>
+              {killDamage.map((damage) => (
+                <tr>
+                  <td style={{ verticalAlign: 'middle' }}>
+                    {damage.ability && (
+                      <Image
+                        size={24}
+                        src={damage.ability.iconUrl}
+                        alt="Heraldry"
+                      />
+                    )}
+                  </td>
+                  <td>{killDamageText(damage)}</td>
+                  <td align="right">{damage.damageAmount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        )}
       </Card.Content>
     </Card>
   );

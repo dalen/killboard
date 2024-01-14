@@ -25,6 +25,7 @@ export type Scalars = {
 export type Ability = {
   __typename?: 'Ability';
   description?: Maybe<Scalars['String']['output']>;
+  iconUrl: Scalars['String']['output'];
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
 };
@@ -997,6 +998,8 @@ export type Kill = {
   __typename?: 'Kill';
   /** List of all enemy players contributing to the kill */
   attackers: Array<Attacker>;
+  /** Damage by attacker and source */
+  damage: Array<KillDamage>;
   /** Kill Id */
   id: Scalars['ID']['output'];
   /** Scenario instance, null if not in a scenario */
@@ -1020,6 +1023,31 @@ export type Kill = {
   /** The victim */
   victim: Victim;
 };
+
+export type KillDamage = {
+  __typename?: 'KillDamage';
+  /** Ability information */
+  ability?: Maybe<Ability>;
+  /** The character doing the damage */
+  attacker?: Maybe<Character>;
+  /** Type of attacker */
+  attackerType: KillDamageAttackerType;
+  /** Damage amount */
+  damageAmount: Scalars['UnsignedInt']['output'];
+  /** Type of damage source */
+  damageType: KillDamageSourceType;
+};
+
+export enum KillDamageAttackerType {
+  Other = 'OTHER',
+  Player = 'PLAYER'
+}
+
+export enum KillDamageSourceType {
+  Ability = 'ABILITY',
+  FallDamage = 'FALL_DAMAGE',
+  Other = 'OTHER'
+}
 
 export type KillFilterInput = {
   and?: InputMaybe<Array<KillFilterInput>>;

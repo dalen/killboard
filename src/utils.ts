@@ -1,4 +1,9 @@
-import { Career, QuestRepeatableType } from './types';
+import {
+  Career,
+  KillDamage,
+  KillDamageSourceType,
+  QuestRepeatableType,
+} from './types';
 
 export const careerIcon = (career: Career): string => {
   switch (career) {
@@ -107,6 +112,16 @@ export const isPercentage = (stat: string) => {
   }
 
   return '';
+};
+
+export const killDamageText = (killDamage: KillDamage): string => {
+  if (killDamage.damageType === KillDamageSourceType.FallDamage)
+    return 'Fall Damage';
+
+  if (killDamage.damageType === KillDamageSourceType.Other)
+    return 'Auto Attack';
+
+  return killDamage.ability?.name || 'Unknown';
 };
 
 const QuestType = {
