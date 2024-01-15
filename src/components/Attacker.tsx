@@ -4,18 +4,17 @@ import { Attacker as AttackerType, KillDamage } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { killDamageText } from '../utils';
+import { sum } from 'lodash';
 
 export function Attacker({
   title,
   attacker,
   killDamage,
-  killDamageSum,
   showKillDamage,
 }: {
   title: string;
   attacker: AttackerType;
   killDamage: KillDamage[];
-  killDamageSum: number;
   showKillDamage: boolean;
 }): JSX.Element {
   // Group killdamage by ability.name and ability.iconUrl
@@ -33,6 +32,8 @@ export function Attacker({
     return acc;
   }, [] as KillDamage[]);
 
+  const killDamageSum = sum(killDamage.map((d) => d.damageAmount));
+
   return (
     <Card mb={2}>
       <Card.Header backgroundColor="info-dark">
@@ -46,6 +47,9 @@ export function Attacker({
           </Link>
         </Card.Header.Title>
         <div className="m-3">
+          <Tag rounded size="medium" mr={2} color="info">
+            {sum(killDamage.map((d) => d.damageAmount))}
+          </Tag>
           <Tag rounded size="medium">
             {attacker.damagePercent}%
           </Tag>
