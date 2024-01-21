@@ -133,7 +133,8 @@
     "OUTGOING_DAMAGE": "Damage",
     "MASTERY_1_BONUS": "Mastery 1 Level",
     "MASTERY_2_BONUS": "Mastery 2 Level",
-    "MASTERY_3_BONUS": "Mastery 3 Level"
+    "MASTERY_3_BONUS": "Mastery 3 Level",
+    "CRITICAL_DAMAGE": "Critical Damage"
   },
   "creatureSubType": {
     "UNCLASSIFIED": "",
