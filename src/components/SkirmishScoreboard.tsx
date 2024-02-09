@@ -268,7 +268,9 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                     </div>
                   }
                 >
-                  <span>{Number(entry.damage).toLocaleString()}</span>
+                  <Link to={`/skirmish/${id}/damage/${entry.character.id}`}>
+                    <span>{Number(entry.damage).toLocaleString()}</span>
+                  </Link>
                 </Tippy>
               </td>
               <td align="left">

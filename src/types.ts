@@ -1920,6 +1920,8 @@ export type Skirmish = {
   instance?: Maybe<ScenarioRecord>;
   /** Damage leading to player kills in this skirmish */
   killDamage: Array<KillDamage>;
+  /** Damage leading to player kills in this skirmish from a spcific character */
+  killDamageByCharacter: Array<KillDamage>;
   /** Kills that happened during this skirmish */
   kills?: Maybe<KillsConnection>;
   /** Total number of kills that happened during this skirmish */
@@ -1948,6 +1950,11 @@ export type Skirmish = {
   topGuildsByKills: Array<SkirmishTopGuild>;
   /** Top guilds by players */
   topGuildsByPlayers: Array<SkirmishTopGuild>;
+};
+
+
+export type SkirmishKillDamageByCharacterArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

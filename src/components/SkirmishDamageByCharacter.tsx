@@ -1,14 +1,15 @@
 import { gql, useQuery } from '@apollo/client';
 import { Table, Image, Progress } from 'react-bulma-components';
+import { useParams } from 'react-router-dom';
 import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { killDamageText } from '../utils';
 
-const SKIRMISH_DAMAGE = gql`
-  query GetSkirmishDamage($id: ID!) {
+const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
+  query GetSkirmishDamageByCharacter($id: ID!, $characterId: ID!) {
     skirmish(id: $id) {
       id
-      killDamage {
+      killDamageByCharacter(id: $characterId) {
         attackerType
         damageType
         ability {
@@ -22,12 +23,17 @@ const SKIRMISH_DAMAGE = gql`
   }
 `;
 
-export function SkirmishDamage({ id }: { id: string }): JSX.Element {
-  const { loading, error, data } = useQuery<Query>(SKIRMISH_DAMAGE, {
-    variables: { id },
-  });
+export function SkirmishDamageByCharacter({ id }: { id: string }): JSX.Element {
+  const { characterId } = useParams();
 
-  const killDamage = data?.skirmish?.killDamage;
+  const { loading, error, data } = useQuery<Query>(
+    SKIRMISH_DAMAGE_BY_CHARACTER,
+    {
+      variables: { id, characterId },
+    },
+  );
+
+  const killDamage = data?.skirmish?.killDamageByCharacter;
 
   if (loading || killDamage == null) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
