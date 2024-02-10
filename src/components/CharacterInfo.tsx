@@ -3,12 +3,12 @@ import { getUnixTime, startOfWeek } from 'date-fns';
 import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { KillsConnection, Query } from '../types';
+import { Query } from '../types';
 import { careerIcon } from '../utils';
 import { ErrorMessage } from './global/ErrorMessage';
 
 const CHARACTER_INFO = gql`
-  query GetCharacterInfo($id: ID!, $startOfWeek: Long!) {
+  query GetCharacterInfo($id: ID!) {
     character(id: $id) {
       name
       career
@@ -21,22 +21,12 @@ const CHARACTER_INFO = gql`
         }
       }
     }
-
-    killsThisWeek: kills(killerId: $id, from: $startOfWeek, first: 0) {
-      totalCount
-    }
-
-    deathsThisWeek: kills(victimId: $id, from: $startOfWeek, first: 0) {
-      totalCount
-    }
   }
 `;
 
 export function CharacterInfo({ id }: { id: number }): JSX.Element {
   const { t } = useTranslation(['common', 'components', 'enums']);
-  const { loading, error, data } = useQuery<
-    Query & { killsThisWeek: KillsConnection; deathsThisWeek: KillsConnection }
-  >(CHARACTER_INFO, {
+  const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
     variables: {
       id,
       startOfWeek: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
