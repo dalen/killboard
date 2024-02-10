@@ -4,9 +4,22 @@ import { useParams } from 'react-router-dom';
 import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { killDamageText } from '../utils';
+import { CharacterInfo } from './CharacterInfo';
 
 const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
   query GetSkirmishDamageByCharacter($id: ID!, $characterId: ID!) {
+    character(id: $characterId) {
+      name
+      renownRank
+      level
+      career
+      guildMembership {
+        guild {
+          id
+          name
+        }
+      }
+    }
     skirmish(id: $id) {
       id
       killDamageByCharacter(id: $characterId) {
@@ -54,28 +67,31 @@ export function SkirmishDamageByCharacter({ id }: { id: string }): JSX.Element {
   }, [] as KillDamage[]);
 
   return (
-    <Table size="narrow" striped width="100%">
-      <tbody>
-        {killDamageGrouped
-          .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
-          .map((damage) => (
-            <tr>
-              <td style={{ verticalAlign: 'middle' }}>
-                {damage.ability && (
-                  <Image
-                    size={24}
-                    src={damage.ability.iconUrl}
-                    alt="Heraldry"
-                  />
-                )}
-              </td>
-              <td>{killDamageText(damage)}</td>
-              <td align="right">
-                {Number(damage.damageAmount).toLocaleString()}
-              </td>
-            </tr>
-          ))}
-      </tbody>
-    </Table>
+    <div>
+      <CharacterInfo id={Number(characterId)} />
+      <Table size="narrow" striped width="100%">
+        <tbody>
+          {killDamageGrouped
+            .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
+            .map((damage) => (
+              <tr>
+                <td style={{ verticalAlign: 'middle' }}>
+                  {damage.ability && (
+                    <Image
+                      size={24}
+                      src={damage.ability.iconUrl}
+                      alt="Heraldry"
+                    />
+                  )}
+                </td>
+                <td>{killDamageText(damage)}</td>
+                <td align="right">
+                  {Number(damage.damageAmount).toLocaleString()}
+                </td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+    </div>
   );
 }
