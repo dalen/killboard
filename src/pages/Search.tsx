@@ -92,7 +92,7 @@ export function Search(): JSX.Element {
           <tbody>
             {data.characters.nodes.map((character) => (
               <tr key={character.id}>
-                <td>
+                <td aria-label="Career">
                   <CareerIcon career={character.career} />
                 </td>
                 <td>
