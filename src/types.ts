@@ -1300,7 +1300,6 @@ export type QueryCharactersArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
-  match?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Array<CharacterSortInput>>;
   where?: InputMaybe<CharacterFilterInput>;
 };
@@ -1331,7 +1330,6 @@ export type QueryGuildsArgs = {
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
-  match?: InputMaybe<Scalars['String']['input']>;
   order?: InputMaybe<Array<GuildInfoSortInput>>;
   where?: InputMaybe<GuildFilterInput>;
 };
