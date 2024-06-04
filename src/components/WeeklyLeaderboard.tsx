@@ -1,5 +1,4 @@
-import getISOWeekYear from 'date-fns/getISOWeekYear';
-import getISOWeek from 'date-fns/getISOWeek';
+import { getISOWeek, getISOWeekYear } from 'date-fns';
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Progress } from 'react-bulma-components';

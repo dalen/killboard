@@ -28,6 +28,7 @@ export function ScenarioScoreboard({
         <thead className="is-relative">
           <tr>
             <th
+              id="th-career"
               align="left"
               onClick={() => requestSort('career')}
               className={`${getClassName('career')} is-clickable has-text-link`}
@@ -121,7 +122,7 @@ export function ScenarioScoreboard({
               key={entry.character.id}
               className={`scenario-scoreboard-row-team-${entry.team}`}
             >
-              <td>
+              <td aria-labelledby="th-career">
                 <CareerIcon career={entry.character.career} />
               </td>
               <td>

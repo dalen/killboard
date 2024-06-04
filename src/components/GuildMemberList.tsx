@@ -66,7 +66,7 @@ export function GuildMemberList({
       <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
         <thead>
           <tr>
-            <th aria-label="empty header" />
+            <th aria-label="Career" id="th-career" />
             <th>{t('pages:guildMembers.name')}</th>
             <th>{t('pages:guildMembers.level')}</th>
             <th>{t('pages:guildMembers.renownRank')}</th>
@@ -76,7 +76,7 @@ export function GuildMemberList({
         <tbody>
           {data.guild.members.nodes.map((member) => (
             <tr key={member.character.id}>
-              <td>
+              <td aria-labelledby="th-career">
                 <CareerIcon career={member.character.career} />
               </td>
               <td>

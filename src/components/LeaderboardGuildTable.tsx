@@ -18,7 +18,9 @@ export function LeaderboardGuildTable({
         <thead>
           <tr>
             <th>{t('components:leaderboardGuild.rank')}</th>
-            <th>{t('components:leaderboardGuild.guildName')}</th>
+            <th id="th-guildname">
+              {t('components:leaderboardGuild.guildName')}
+            </th>
             <th className="has-text-right">
               {t('components:leaderboardGuild.kills')}
             </th>
@@ -31,7 +33,7 @@ export function LeaderboardGuildTable({
           {data.map((leaderboardEntry) => (
             <tr key={leaderboardEntry.rank}>
               <td>{leaderboardEntry.rank}</td>
-              <td>
+              <td aria-labelledby="th-guildname">
                 <Media>
                   <Media.Item align="left">
                     <GuildHeraldry size="48" guild={leaderboardEntry.guild} />

@@ -194,8 +194,7 @@ export function ItemVendorsPurchase({
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td />
-              <td colSpan={4}>
+              <td colSpan={5}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button

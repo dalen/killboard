@@ -39,9 +39,11 @@ export function SkirmishListTable({
       >
         <thead>
           <tr>
-            <th>{t('components:skirmishList.time')}</th>
-            {showZone && <th>{t('components:skirmishList.location')}</th>}
-            <th>{t('components:skirmishList.guilds')}</th>
+            <th id="th-time">{t('components:skirmishList.time')}</th>
+            {showZone && (
+              <th id="th-location">{t('components:skirmishList.location')}</th>
+            )}
+            <th id="th-guilds">{t('components:skirmishList.guilds')}</th>
             <th align="center">{t('components:skirmishList.players')}</th>
             <th align="center">{t('components:skirmishList.kills')}</th>
           </tr>
@@ -178,9 +180,9 @@ export function SkirmishListTable({
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td />
-              {showZone && <td />}
-              <td />
+              <td aria-labelledby="th-time" />
+              {showZone && <td aria-labelledby="th-location" />}
+              <td aria-labelledby="th-guilds" />
               <td colSpan={3}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (

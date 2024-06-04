@@ -52,7 +52,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "vite build && eslint --ext .js,.jsx,.ts,.tsx src",
+    "test": "tsc -p . && vite build && eslint --ext .js,.jsx,.ts,.tsx src",
     "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
     "codegen": "graphql-codegen"
   },
@@ -87,6 +87,9 @@
     "plugins": [
       "@typescript-eslint",
       "prettier"
+    ],
+    "ignorePatterns": [
+      "src/types.ts"
     ]
   },
   "browserslist": {

@@ -123,7 +123,9 @@ export function RankedLeaderboardTable({
               </>
             ) : (
               <>
-                <th>{t('components:rankedLeaderboard.career')}</th>
+                <th id="th-career">
+                  {t('components:rankedLeaderboard.career')}
+                </th>
                 <th>{t('components:rankedLeaderboard.name')}</th>
                 <th colSpan={2}>{t('components:rankedLeaderboard.guild')}</th>
                 <th align="right">
@@ -187,7 +189,7 @@ export function RankedLeaderboardTable({
                 </>
               ) : (
                 <>
-                  <td>
+                  <td aria-labelledby="th-career">
                     <CareerIcon career={entry.character.career} />
                   </td>
                   <td>

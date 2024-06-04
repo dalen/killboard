@@ -136,7 +136,9 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
       <Table className="is-fullwidth">
         <thead className="is-relative">
           <tr>
-            <th align="left">{t('components:skirmishScoreboard.career')}</th>
+            <th align="left" id="th-career">
+              {t('components:skirmishScoreboard.career')}
+            </th>
             <th align="left">{t('components:skirmishScoreboard.name')}</th>
             <th colSpan={2} align="left">
               {t('components:skirmishScoreboard.guild')}
@@ -204,7 +206,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
               key={entry.character.id}
               className={`skirmish-scoreboard-row-realm-${entry.realm}`.toLowerCase()}
             >
-              <td>
+              <td aria-labelledby="th-career">
                 <CareerIcon career={entry.character.career} />
               </td>
               <td>

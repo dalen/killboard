@@ -45,9 +45,13 @@ export function KillsListTable({
       >
         <thead>
           <tr>
-            {showTime && <th>{t('components:killsList.time')}</th>}
-            {showKiller && <th>{t('components:killsList.killer')}</th>}
-            {showVictim && <th>{t('components:killsList.victim')}</th>}
+            {showTime && <th id="th-time">{t('components:killsList.time')}</th>}
+            {showKiller && (
+              <th id="th-killer">{t('components:killsList.killer')}</th>
+            )}
+            {showVictim && (
+              <th id="th-victim">{t('components:killsList.victim')}</th>
+            )}
             <th>{t('components:killsList.type')}</th>
             <th aria-label="empty header" />
           </tr>
@@ -193,9 +197,9 @@ export function KillsListTable({
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              {showTime && <td />}
-              {showKiller && <td />}
-              {showVictim && <td />}
+              {showTime && <td aria-labelledby="th-time" />}
+              {showKiller && <td aria-labelledby="th-killer" />}
+              {showVictim && <td aria-labelledby="th-victim" />}
               <td colSpan={2}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
