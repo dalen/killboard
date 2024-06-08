@@ -23,7 +23,6 @@ const WEEKLY_LEADERBOARD_GUILD = gql`
       }
       rank
       kills
-      deaths
     }
   }
 `;

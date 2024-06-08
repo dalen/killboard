@@ -24,9 +24,6 @@ export function LeaderboardGuildTable({
             <th className="has-text-right">
               {t('components:leaderboardGuild.kills')}
             </th>
-            <th className="has-text-right">
-              {t('components:leaderboardGuild.deaths')}
-            </th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +46,6 @@ export function LeaderboardGuildTable({
                 </Media>
               </td>
               <td className="has-text-right">{leaderboardEntry.kills}</td>
-              <td className="has-text-right">{leaderboardEntry.deaths}</td>
             </tr>
           ))}
         </tbody>

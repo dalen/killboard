@@ -21,9 +21,6 @@ export function LeaderboardTable({
           <th className="has-text-right">
             {t('components:leaderboard.kills')}
           </th>
-          <th className="has-text-right">
-            {t('components:leaderboard.deaths')}
-          </th>
         </tr>
       </thead>
       <tbody>
@@ -55,7 +52,6 @@ export function LeaderboardTable({
               </Media>
             </td>
             <td className="has-text-right">{leaderboardEntry.kills}</td>
-            <td className="has-text-right">{leaderboardEntry.deaths}</td>
           </tr>
         ))}
       </tbody>

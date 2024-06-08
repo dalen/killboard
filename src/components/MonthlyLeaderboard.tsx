@@ -10,7 +10,6 @@ const MONTHLY_LEADERBOARD = gql`
     monthlyKillLeaderboard(year: $year, month: $month) {
       rank
       kills
-      deaths
       character {
         id
         name

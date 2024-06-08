@@ -23,7 +23,6 @@ const RECENT_DEATHS = gql`
       to: $to
       soloOnly: $soloOnly
     ) {
-      totalCount
       nodes {
         id
         time

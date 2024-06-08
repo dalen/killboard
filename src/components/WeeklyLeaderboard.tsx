@@ -11,7 +11,6 @@ const WEEKLY_LEADERBOARD = gql`
     weeklyKillLeaderboard(year: $year, week: $week) {
       rank
       kills
-      deaths
       character {
         id
         name

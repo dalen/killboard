@@ -22,7 +22,6 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
       }
       rank
       kills
-      deaths
     }
   }
 `;
