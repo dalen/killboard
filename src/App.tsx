@@ -5,8 +5,8 @@ import { Character } from './pages/Character';
 import { Home } from './pages/Home';
 import { Kill } from './pages/Kill';
 import { Guild } from './pages/Guild';
-import { Search } from './pages/Search';
-import { SearchGuild } from './pages/SearchGuild';
+import { Characters } from './pages/Characters';
+import { Guilds } from './pages/Guilds';
 import { PlayerFeudPage } from './pages/PlayerFeudPage';
 import { GuildFeudPage } from './pages/GuildFeudPage';
 import { Kills } from './pages/Kills';
@@ -42,6 +42,8 @@ function App() {
       <Route path="/scenarios" element={<Home tab="scenarios" />} />
       <Route path="/kill/:id" element={<Kill />} />
       <Route path="/kills" element={<Kills />} />
+
+      <Route path="/characters" element={<Characters />} />
       <Route path="/character/:id" element={<Character tab="kills" />} />
       <Route
         path="/character/:id/scenarios"
@@ -64,6 +66,7 @@ function App() {
       <Route path="/creature/:id" element={<Creature />} />
       <Route path="/creature/:id/:zoneId" element={<Creature />} />
 
+      <Route path="/guilds" element={<Guilds />} />
       <Route path="/guild/:id" element={<Guild tab="kills" />} />
       <Route path="/guild/:id/members" element={<Guild tab="members" />} />
       <Route path="/guild/:id/scenarios" element={<Guild tab="scenarios" />} />
@@ -78,9 +81,6 @@ function App() {
 
       <Route path="/quests" element={<Quests />} />
       <Route path="/quest/:id" element={<Quest />} />
-
-      <Route path="/search/:query" element={<Search />} />
-      <Route path="/search/guild/:query" element={<SearchGuild />} />
 
       <Route path="/scenario/:id" element={<Scenario tab="scoreboard" />} />
       <Route path="/scenario/:id/kills" element={<Scenario tab="kills" />} />
@@ -105,6 +105,10 @@ function App() {
       <Route path="/item/:id/quests" element={<Item tab="quests" />} />
 
       <Route path="/ranked-leaderboard" element={<RankedLeaderboard />} />
+
+      {/* Legacy routes */}
+      <Route path="/search/:query" element={<Characters />} />
+      <Route path="/search/guild/:query" element={<Guilds />} />
     </Routes>
   );
 }

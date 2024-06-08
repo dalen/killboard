@@ -19,7 +19,9 @@ export function SearchBox({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        navigate(isPlayer ? `/search/${query}` : `/search/guild/${query}`);
+        navigate(
+          isPlayer ? `/characters/?query=${query}` : `/guilds/?query=${query}`,
+        );
         if (onSubmit) {
           onSubmit(query);
         }

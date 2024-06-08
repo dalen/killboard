@@ -1,29 +1,22 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Container,
-  Progress,
-  Table,
-  Breadcrumb,
-  Button,
-} from 'react-bulma-components';
+import { Progress, Table, Button } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
-import { CareerIcon } from '../components/CareerIcon';
-import { SearchBox } from '../components/SearchBox';
-import { Query } from '../types';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { Link, useSearchParams } from 'react-router-dom';
+import { CareerIcon } from './CareerIcon';
+import { CharacterFilterInput, Query } from '../types';
+import { ErrorMessage } from './global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
 const SEARCH_CHARACTERS = gql`
   query SearchCharacters(
-    $query: String!
+    $query: CharacterFilterInput
     $first: Int
     $last: Int
     $before: String
     $after: String
   ) {
     characters(
-      where: { name: { contains: $query } }
+      where: $query
       first: $first
       last: $last
       before: $before
@@ -46,13 +39,23 @@ const SEARCH_CHARACTERS = gql`
   }
 `;
 
-export function Search(): JSX.Element {
+const getSearchFilter = (search: URLSearchParams): CharacterFilterInput => {
+  const query = search.get('query');
+
+  if (!query) {
+    return {};
+  }
+
+  return { name: { contains: query } };
+};
+
+export function CharactersList(): JSX.Element {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
-  const { query } = useParams();
+  const [search] = useSearchParams();
   const { loading, error, data, refetch } = useQuery<Query>(SEARCH_CHARACTERS, {
-    variables: { query, first: perPage },
+    variables: { query: getSearchFilter(search), first: perPage },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -64,21 +67,8 @@ export function Search(): JSX.Element {
 
   const { pageInfo } = data.characters;
 
-  const handleSubmit = (newQuery: string): void => {
-    refetch({ query: newQuery, first: perPage });
-  };
-
   return (
-    <Container max breakpoint="desktop" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/search">{t('pages:searchPage.search')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
+    <div>
       <div className="table-container">
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
@@ -145,6 +135,6 @@ export function Search(): JSX.Element {
           )}
         </div>
       )}
-    </Container>
+    </div>
   );
 }

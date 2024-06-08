@@ -8,9 +8,9 @@ import {
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
-import { SearchBox } from '../components/SearchBox';
+import { SearchBox } from './SearchBox';
 import { Query } from '../types';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ErrorMessage } from './global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
 const SEARCH_GUILD = gql`
@@ -52,7 +52,7 @@ const SEARCH_GUILD = gql`
   }
 `;
 
-export function SearchGuild(): JSX.Element {
+export function GuildsList(): JSX.Element {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
