@@ -164,7 +164,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       to: $to
       soloOnly: $soloOnly
     ) {
-      totalCount
       nodes {
         id
         time
@@ -509,12 +508,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }
     }
   }
-`;function DS(){const{t:e}=ve("components");return l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("latestKills.title")}),l.jsx(ei,{query:M4,perPage:10})]})}function fT({data:e}){const{t}=ve(["common","components"]);return l.jsxs(C.Table,{striped:!0,hoverable:!0,size:"fullwidth",marginless:!0,children:[l.jsx("thead",{children:l.jsxs("tr",{children:[l.jsx("th",{children:t("components:leaderboard.rank")}),l.jsx("th",{children:t("components:leaderboard.player")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboard.kills")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboard.deaths")})]})}),l.jsx("tbody",{children:e.map(r=>{var n,i,a,s;return l.jsxs("tr",{children:[l.jsx("td",{children:r.rank}),l.jsx("td",{children:l.jsxs(C.Media,{className:"leaderboard-player-data",children:[l.jsx(C.Media.Item,{align:"left",children:l.jsx(kn,{career:r.character.career})}),l.jsx(C.Media.Item,{children:l.jsxs(C.Content,{children:[l.jsx(K,{to:`/character/${r.character.id}`,children:l.jsx("strong",{children:r.character.name})}),l.jsx("br",{}),l.jsx(K,{to:`/guild/${(i=(n=r.character.guildMembership)==null?void 0:n.guild)==null?void 0:i.id}`,children:(s=(a=r.character.guildMembership)==null?void 0:a.guild)==null?void 0:s.name})]})}),l.jsxs(C.Media.Item,{className:"player-rr-lvl-container",children:[l.jsxs("span",{children:["Lvl ",r.character.level]}),l.jsxs("span",{children:["RR ",r.character.renownRank]})]})]})}),l.jsx("td",{className:"has-text-right",children:r.kills}),l.jsx("td",{className:"has-text-right",children:r.deaths})]},r.rank)})})]})}const L4=Oe`
+`;function DS(){const{t:e}=ve("components");return l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("latestKills.title")}),l.jsx(ei,{query:M4,perPage:10})]})}function fT({data:e}){const{t}=ve(["common","components"]);return l.jsxs(C.Table,{striped:!0,hoverable:!0,size:"fullwidth",marginless:!0,children:[l.jsx("thead",{children:l.jsxs("tr",{children:[l.jsx("th",{children:t("components:leaderboard.rank")}),l.jsx("th",{children:t("components:leaderboard.player")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboard.kills")})]})}),l.jsx("tbody",{children:e.map(r=>{var n,i,a,s;return l.jsxs("tr",{children:[l.jsx("td",{children:r.rank}),l.jsx("td",{children:l.jsxs(C.Media,{className:"leaderboard-player-data",children:[l.jsx(C.Media.Item,{align:"left",children:l.jsx(kn,{career:r.character.career})}),l.jsx(C.Media.Item,{children:l.jsxs(C.Content,{children:[l.jsx(K,{to:`/character/${r.character.id}`,children:l.jsx("strong",{children:r.character.name})}),l.jsx("br",{}),l.jsx(K,{to:`/guild/${(i=(n=r.character.guildMembership)==null?void 0:n.guild)==null?void 0:i.id}`,children:(s=(a=r.character.guildMembership)==null?void 0:a.guild)==null?void 0:s.name})]})}),l.jsxs(C.Media.Item,{className:"player-rr-lvl-container",children:[l.jsxs("span",{children:["Lvl ",r.character.level]}),l.jsxs("span",{children:["RR ",r.character.renownRank]})]})]})}),l.jsx("td",{className:"has-text-right",children:r.kills})]},r.rank)})})]})}const L4=Oe`
   query GetWeeklyLeaderboard($year: Int!, $week: Int!) {
     weeklyKillLeaderboard(year: $year, week: $week) {
       rank
       kills
-      deaths
       character {
         id
         name
@@ -535,7 +533,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
     monthlyKillLeaderboard(year: $year, month: $month) {
       rank
       kills
-      deaths
       character {
         id
         name
@@ -551,7 +548,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }
     }
   }
-`;function B4(){const{t:e}=ve(["common","components"]),t=new Date().getUTCMonth()+1,r=new Date().getUTCFullYear(),{loading:n,error:i,data:a}=De(F4,{variables:{year:r,month:t}});return n?l.jsx(C.Progress,{}):i?l.jsx(me,{name:i.name,message:i.message}):(a==null?void 0:a.monthlyKillLeaderboard)==null?l.jsx("p",{children:e("common:error")}):l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("components:leaderboard.monthlyTitle")}),l.jsx(fT,{data:a.monthlyKillLeaderboard.slice(0,10)})]})}function dT({data:e}){const{t}=ve(["common","components"]);return l.jsx("div",{className:"table-container",children:l.jsxs(C.Table,{striped:!0,hoverable:!0,marginless:!0,size:"fullwidth",children:[l.jsx("thead",{children:l.jsxs("tr",{children:[l.jsx("th",{children:t("components:leaderboardGuild.rank")}),l.jsx("th",{id:"th-guildname",children:t("components:leaderboardGuild.guildName")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboardGuild.kills")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboardGuild.deaths")})]})}),l.jsx("tbody",{children:e.map(r=>l.jsxs("tr",{children:[l.jsx("td",{children:r.rank}),l.jsx("td",{"aria-labelledby":"th-guildname",children:l.jsxs(C.Media,{children:[l.jsx(C.Media.Item,{align:"left",children:l.jsx(Dn,{size:"48",guild:r.guild})}),l.jsx(C.Media.Item,{children:l.jsxs(C.Content,{children:[l.jsx(K,{to:`/guild/${r.guild.id}`,children:l.jsx("strong",{children:r.guild.name})}),l.jsx("br",{})]})})]})}),l.jsx("td",{className:"has-text-right",children:r.kills}),l.jsx("td",{className:"has-text-right",children:r.deaths})]},r.rank))})]})})}const U4=Oe`
+`;function B4(){const{t:e}=ve(["common","components"]),t=new Date().getUTCMonth()+1,r=new Date().getUTCFullYear(),{loading:n,error:i,data:a}=De(F4,{variables:{year:r,month:t}});return n?l.jsx(C.Progress,{}):i?l.jsx(me,{name:i.name,message:i.message}):(a==null?void 0:a.monthlyKillLeaderboard)==null?l.jsx("p",{children:e("common:error")}):l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("components:leaderboard.monthlyTitle")}),l.jsx(fT,{data:a.monthlyKillLeaderboard.slice(0,10)})]})}function dT({data:e}){const{t}=ve(["common","components"]);return l.jsx("div",{className:"table-container",children:l.jsxs(C.Table,{striped:!0,hoverable:!0,marginless:!0,size:"fullwidth",children:[l.jsx("thead",{children:l.jsxs("tr",{children:[l.jsx("th",{children:t("components:leaderboardGuild.rank")}),l.jsx("th",{id:"th-guildname",children:t("components:leaderboardGuild.guildName")}),l.jsx("th",{className:"has-text-right",children:t("components:leaderboardGuild.kills")})]})}),l.jsx("tbody",{children:e.map(r=>l.jsxs("tr",{children:[l.jsx("td",{children:r.rank}),l.jsx("td",{"aria-labelledby":"th-guildname",children:l.jsxs(C.Media,{children:[l.jsx(C.Media.Item,{align:"left",children:l.jsx(Dn,{size:"48",guild:r.guild})}),l.jsx(C.Media.Item,{children:l.jsxs(C.Content,{children:[l.jsx(K,{to:`/guild/${r.guild.id}`,children:l.jsx("strong",{children:r.guild.name})}),l.jsx("br",{})]})})]})}),l.jsx("td",{className:"has-text-right",children:r.kills})]},r.rank))})]})})}const U4=Oe`
   query GetMonthlyGuildLeaderboard($year: Int!, $month: Int!) {
     monthlyGuildKillLeaderboard(year: $year, month: $month) {
       guild {
@@ -568,7 +565,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }
       rank
       kills
-      deaths
     }
   }
 `;function W4(){const{t:e}=ve(["common","components"]),t=new Date().getUTCMonth()+1,r=new Date().getUTCFullYear(),{loading:n,error:i,data:a}=De(U4,{variables:{year:r,month:t}});return n?l.jsx(C.Progress,{}):i?l.jsx(me,{name:i.name,message:i.message}):(a==null?void 0:a.monthlyGuildKillLeaderboard)==null?l.jsx("p",{children:e("common:error")}):l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("components:leaderboardGuild.monthlyTitle")}),l.jsx(dT,{data:a.monthlyGuildKillLeaderboard.slice(0,10)})]})}const H4=Oe`
@@ -588,7 +584,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
       }
       rank
       kills
-      deaths
     }
   }
 `;function z4(){const{t:e}=ve(["common","components"]),t=new Date,r=new Date(t.getUTCFullYear(),t.getUTCMonth(),t.getUTCDate()),n=Ky(r),i=th(r),{loading:a,error:s,data:p}=De(H4,{variables:{year:i,week:n}});return a?l.jsx(C.Progress,{}):s?l.jsx(me,{name:s.name,message:s.message}):(p==null?void 0:p.weeklyGuildKillLeaderboard)==null?l.jsx("p",{children:e("common:error")}):l.jsxs("div",{children:[l.jsx("div",{className:"is-size-4 is-family-secondary is-uppercase",children:e("components:leaderboardGuild.weeklyTitle")}),l.jsx(dT,{data:p.weeklyGuildKillLeaderboard.slice(0,10)})]})}const q4=Oe`
@@ -942,7 +937,6 @@ function print() { __p += __j.call(arguments, '') }
       to: $to
       soloOnly: $soloOnly
     ) {
-      totalCount
       nodes {
         id
         time
