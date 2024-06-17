@@ -84,19 +84,19 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
   const { loading, error, data, refetch } = useQuery<Query>(
     SKIRMISH_SCOREBOARD,
     {
-      variables: { id, first: perPage, order: [{ deathBlows: 'DESC' }] },
-    },
+      variables: { id, first: perPage, order: [{ deathBlows: 'DESC' }] }
+    }
   );
   const [sortConfig, setSortConfig] = React.useState<SortConfig>({
     key: 'deathBlows',
-    direction: SortConfigDirection.descending,
+    direction: SortConfigDirection.descending
   });
 
   const getSortOrder = () => [
     {
       [sortConfig.key]:
-        sortConfig.direction === SortConfigDirection.ascending ? 'ASC' : 'DESC',
-    },
+        sortConfig.direction === SortConfigDirection.ascending ? 'ASC' : 'DESC'
+    }
   ];
 
   const requestSort = (key: string) => {
@@ -111,8 +111,8 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
     setSortConfig({ key, direction });
     refetch({
       order: {
-        [key]: direction === SortConfigDirection.ascending ? 'ASC' : 'DESC',
-      },
+        [key]: direction === SortConfigDirection.ascending ? 'ASC' : 'DESC'
+      }
     });
   };
 
@@ -135,225 +135,225 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
     <div className="table-container">
       <Table className="is-fullwidth">
         <thead className="is-relative">
-          <tr>
-            <th align="left" id="th-career">
-              {t('components:skirmishScoreboard.career')}
-            </th>
-            <th align="left">{t('components:skirmishScoreboard.name')}</th>
-            <th colSpan={2} align="left">
-              {t('components:skirmishScoreboard.guild')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('level')}
-              className={`${getClassName('level')} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.rank')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('kills')}
-              className={`${getClassName('kills')} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.kills')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('deaths')}
-              className={`${getClassName('deaths')} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.deaths')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('deathBlows')}
-              className={`${getClassName(
-                'deathBlows',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.dbs')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('damage')}
-              className={`${getClassName('damage')} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.damage')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('healing')}
-              className={`${getClassName(
-                'healing',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.healing')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('protection')}
-              className={`${getClassName(
-                'protection',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:skirmishScoreboard.protection')}
-            </th>
-          </tr>
+        <tr>
+          <th align="left" id="th-career">
+            {t('components:skirmishScoreboard.career')}
+          </th>
+          <th align="left">{t('components:skirmishScoreboard.name')}</th>
+          <th colSpan={2} align="left">
+            {t('components:skirmishScoreboard.guild')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('level')}
+            className={`${getClassName('level')} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.rank')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('kills')}
+            className={`${getClassName('kills')} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.kills')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('deaths')}
+            className={`${getClassName('deaths')} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.deaths')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('deathBlows')}
+            className={`${getClassName(
+              'deathBlows'
+            )} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.dbs')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('damage')}
+            className={`${getClassName('damage')} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.damage')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('killDamage')}
+            className={`${getClassName('killDamage')} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.killDamage')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('healing')}
+            className={`${getClassName(
+              'healing'
+            )} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.healing')}
+          </th>
+          <th
+            align="left"
+            onClick={() => requestSort('protection')}
+            className={`${getClassName(
+              'protection'
+            )} is-clickable has-text-link`}
+          >
+            {t('components:skirmishScoreboard.protection')}
+          </th>
+        </tr>
         </thead>
         <tbody>
-          {scoreboardEntries.map((entry) => (
-            <tr
-              key={entry.character.id}
-              className={`skirmish-scoreboard-row-realm-${entry.realm}`.toLowerCase()}
-            >
-              <td aria-labelledby="th-career">
-                <CareerIcon career={entry.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${entry.character.id}`}>
-                  {entry.character.name}
+        {scoreboardEntries.map((entry) => (
+          <tr
+            key={entry.character.id}
+            className={`skirmish-scoreboard-row-realm-${entry.realm}`.toLowerCase()}
+          >
+            <td aria-labelledby="th-career">
+              <CareerIcon career={entry.character.career} />
+            </td>
+            <td>
+              <Link to={`/character/${entry.character.id}`}>
+                {entry.character.name}
+              </Link>
+            </td>
+            <td>
+              {entry.guild && (
+                <Link to={`/guild/${entry.guild.id}`}>
+                  <GuildHeraldry size="32" guild={entry.guild} />
                 </Link>
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    <GuildHeraldry size="32" guild={entry.guild} />
-                  </Link>
-                )}
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    {entry.guild.name}
-                  </Link>
-                )}
-              </td>
-              <td align="left">{entry.level}</td>
+              )}
+            </td>
+            <td>
+              {entry.guild && (
+                <Link to={`/guild/${entry.guild.id}`}>
+                  {entry.guild.name}
+                </Link>
+              )}
+            </td>
+            <td align="left">{entry.level}</td>
 
-              <td align="left">
-                <Tippy
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Solo Kills: {entry.killsSolo}
-                    </div>
-                  }
-                >
-                  <span>{entry.kills}</span>
-                </Tippy>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Damage Receive: {entry.damageReceived}
-                      <br />
-                      Healing Received: {entry.healingReceived}
-                      <br />
-                      Protection Received: {entry.protectionReceived}
-                    </div>
-                  }
-                >
-                  <span>{entry.deaths}</span>
-                </Tippy>
-              </td>
-              <td align="left">{entry.deathBlows}</td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Kill Damage: {entry.killDamage}
-                    </div>
-                  }
-                >
-                  <Link to={`/skirmish/${id}/damage/${entry.character.id}`}>
-                    <span>{Number(entry.damage).toLocaleString()}</span>
-                  </Link>
-                </Tippy>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Healing of Self: {entry.healingSelf}
-                      <br />
-                      Healing of Others: {entry.healingOthers}
-                      <br />
-                      Resurrections Done: {entry.resurrectionsDone}
-                    </div>
-                  }
-                >
-                  <span>{Number(entry.healing).toLocaleString()}</span>
-                </Tippy>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Protection of Self: {entry.protectionSelf}
-                      <br />
-                      Protection of Others: {entry.protectionOthers}
-                    </div>
-                  }
-                >
-                  <span>{Number(entry.protection).toLocaleString()}</span>
-                </Tippy>
-              </td>
-            </tr>
-          ))}
+            <td align="left">
+              <Tippy
+                placement="top"
+                content={
+                  <div className="scenario-scoreboard-tooltip">
+                    Solo Kills: {entry.killsSolo}
+                  </div>
+                }
+              >
+                <span>{entry.kills}</span>
+              </Tippy>
+            </td>
+            <td align="left">
+              <Tippy
+                duration={0}
+                placement="top"
+                content={
+                  <div className="scenario-scoreboard-tooltip">
+                    Damage Receive: {entry.damageReceived}
+                    <br />
+                    Healing Received: {entry.healingReceived}
+                    <br />
+                    Protection Received: {entry.protectionReceived}
+                  </div>
+                }
+              >
+                <span>{entry.deaths}</span>
+              </Tippy>
+            </td>
+            <td align="left">{entry.deathBlows}</td>
+            <td align="left">
+              <Link to={`/skirmish/${id}/damage/${entry.character.id}`}>
+                <span>{Number(entry.damage).toLocaleString()}</span>
+              </Link>
+            </td>
+            <td align="left">
+              <span>{Number(entry.killDamage).toLocaleString()}</span>
+            </td>
+            <td align="left">
+              <Tippy
+                duration={0}
+                placement="top"
+                content={
+                  <div className="scenario-scoreboard-tooltip">
+                    Healing of Self: {entry.healingSelf}
+                    <br />
+                    Healing of Others: {entry.healingOthers}
+                    <br />
+                    Resurrections Done: {entry.resurrectionsDone}
+                  </div>
+                }
+              >
+                <span>{Number(entry.healing).toLocaleString()}</span>
+              </Tippy>
+            </td>
+            <td align="left">
+              <Tippy
+                duration={0}
+                placement="top"
+                content={
+                  <div className="scenario-scoreboard-tooltip">
+                    Protection of Self: {entry.protectionSelf}
+                    <br />
+                    Protection of Others: {entry.protectionOthers}
+                  </div>
+                }
+              >
+                <span>{Number(entry.protection).toLocaleString()}</span>
+              </Tippy>
+            </td>
+          </tr>
+        ))}
         </tbody>
         {pageInfo && (
           <tfoot>
-            <tr>
-              <td colSpan={5}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: undefined,
-                          after: undefined,
-                          before: pageInfo.startCursor,
-                          last: perPage,
-                          order: getSortOrder(),
-                        })
-                      }
-                    >
-                      {t('common:prevPage')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: perPage,
-                          after: pageInfo.endCursor,
-                          before: undefined,
-                          last: undefined,
-                          order: getSortOrder(),
-                        })
-                      }
-                    >
-                      {t('common:nextPage')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
+          <tr>
+            <td colSpan={5}>
+              <div className="field is-grouped is-pulled-right">
+                {pageInfo.hasPreviousPage && (
+                  <Button
+                    color="info"
+                    size="small"
+                    onClick={() =>
+                      refetch({
+                        first: undefined,
+                        after: undefined,
+                        before: pageInfo.startCursor,
+                        last: perPage,
+                        order: getSortOrder()
+                      })
+                    }
+                  >
+                    {t('common:prevPage')}
+                    <i className="fas fa-circle-chevron-left ml-1" />
+                  </Button>
+                )}
+                {pageInfo.hasNextPage && (
+                  <Button
+                    color="info"
+                    size="small"
+                    onClick={() =>
+                      refetch({
+                        first: perPage,
+                        after: pageInfo.endCursor,
+                        before: undefined,
+                        last: undefined,
+                        order: getSortOrder()
+                      })
+                    }
+                  >
+                    {t('common:nextPage')}
+                    <i className="fas fa-circle-chevron-right ml-1" />
+                  </Button>
+                )}
+              </div>
+            </td>
+          </tr>
           </tfoot>
         )}
       </Table>
