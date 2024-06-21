@@ -2,6 +2,8 @@ import { gql, useQuery } from '@apollo/client';
 import {
   Breadcrumb,
   Button,
+  Card,
+  Columns,
   Container,
   Progress,
   Table,
@@ -13,9 +15,9 @@ import {
   formatISO,
   format,
 } from 'date-fns';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { Query } from '../types';
+import { InstanceRunFilterInput, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
 const INSTANCE_RUNS = gql`
@@ -24,13 +26,14 @@ const INSTANCE_RUNS = gql`
     $last: Int
     $before: String
     $after: String
+    $where: InstanceRunFilterInput
   ) {
     instanceRuns(
       first: $first
       last: $last
       before: $before
       after: $after
-      where: { start: { gt: 0 }, scoreboardEntryCount: { gte: 6 } }
+      where: $where
       order: { start: DESC }
     ) {
       nodes {
@@ -60,12 +63,33 @@ const INSTANCE_RUNS = gql`
   }
 `;
 
+const getInstanceFilters = (
+  search: URLSearchParams,
+): InstanceRunFilterInput => {
+  const instance = search.get('instance');
+
+  if (instance && instance !== 'all') {
+    return { instanceId: { eq: Number(instance) } };
+  }
+
+  return {};
+};
+
 export function InstanceRuns() {
   const perPage = 25;
 
+  const [search, setSearch] = useSearchParams();
+  const instance = search.get('instance') || 'all';
   const { t } = useTranslation(['common', 'pages']);
   const { data, error, loading, refetch } = useQuery<Query>(INSTANCE_RUNS, {
-    variables: { first: perPage },
+    variables: {
+      first: perPage,
+      where: {
+        start: { gt: 0 },
+        scoreboardEntryCount: { gte: 6 },
+        ...getInstanceFilters(search),
+      },
+    },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -85,6 +109,30 @@ export function InstanceRuns() {
           <Link to="/kills">{t('pages:instanceRuns.title')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
+      <Card mb={5}>
+        <Card.Content>
+          <Columns>
+            <Columns.Column>
+              <div className="select">
+                <select
+                  value={instance}
+                  onChange={(event) => {
+                    search.set('instance', event.target.value);
+                    setSearch(search);
+                  }}
+                >
+                  <option value="all">{t('instanceRuns.all')}</option>
+                  <option value="176">Sigmar Crypts</option>
+                  <option value="196">Bilerot</option>
+                  <option value="173">Sacellum</option>
+                  <option value="169">Altdorf Sewers</option>
+                  <option value="160">Bastion Stair</option>
+                </select>
+              </div>
+            </Columns.Column>
+          </Columns>
+        </Card.Content>
+      </Card>
       <Table
         striped
         hoverable
