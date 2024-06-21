@@ -158,6 +158,22 @@ export type CareerMaskOperationFilterInput = {
   nin?: InputMaybe<Array<CareerMask>>;
 };
 
+export type Chapter = {
+  __typename?: 'Chapter';
+  id: Scalars['ID']['output'];
+  influenceRewards: Array<ChapterInfluenceReward>;
+  name?: Maybe<Scalars['String']['output']>;
+  position: Position;
+};
+
+export type ChapterInfluenceReward = {
+  __typename?: 'ChapterInfluenceReward';
+  count: Scalars['UnsignedShort']['output'];
+  item: Item;
+  realm: Realm;
+  tier: Scalars['Byte']['output'];
+};
+
 /** Info about a character */
 export type Character = {
   __typename?: 'Character';
@@ -199,9 +215,9 @@ export type CharacterItem = {
   talismans: Array<Item>;
 };
 
-export type CharacterSeasonStatFilterInput = {
-  and?: InputMaybe<Array<CharacterSeasonStatFilterInput>>;
-  or?: InputMaybe<Array<CharacterSeasonStatFilterInput>>;
+export type CharacterSeasonStatsFilterInput = {
+  and?: InputMaybe<Array<CharacterSeasonStatsFilterInput>>;
+  or?: InputMaybe<Array<CharacterSeasonStatsFilterInput>>;
 };
 
 export type CharacterSortInput = {
@@ -697,6 +713,211 @@ export type Icon = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type Instance = {
+  __typename?: 'Instance';
+  /** Encounters */
+  encounters?: Maybe<Array<Maybe<InstanceEncounter>>>;
+  /** Id */
+  id: Scalars['ID']['output'];
+  /** Name */
+  name?: Maybe<Scalars['String']['output']>;
+  /** Zone information */
+  zone: Zone;
+};
+
+export type InstanceEncounter = {
+  __typename?: 'InstanceEncounter';
+  /** Id */
+  Id: Scalars['ID']['output'];
+  /** Name */
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+export type InstanceEncounterRun = {
+  __typename?: 'InstanceEncounterRun';
+  /** Encounter info */
+  encounter?: Maybe<InstanceEncounter>;
+  /** End time of the run */
+  end: Scalars['Long']['output'];
+  /** The unique id of the run */
+  id: Scalars['ID']['output'];
+  /** Scoreboard entries */
+  scoreboardEntries: Array<InstanceEncounterRunScoreboardEntry>;
+  /** Start time of the run */
+  start: Scalars['Long']['output'];
+};
+
+export type InstanceEncounterRunScoreboardEntry = {
+  __typename?: 'InstanceEncounterRunScoreboardEntry';
+  /** Character information */
+  character: Character;
+  /** Damage */
+  damage: Scalars['UnsignedInt']['output'];
+  /** Damage Received */
+  damageReceived: Scalars['UnsignedInt']['output'];
+  /** Deaths */
+  deaths: Scalars['UnsignedInt']['output'];
+  /** Guild at the time of the run */
+  guild?: Maybe<Guild>;
+  /** Healing */
+  healing: Scalars['UnsignedInt']['output'];
+  /** Healing of others */
+  healingOthers: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingReceived: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingSelf: Scalars['UnsignedInt']['output'];
+  /** Total item rating */
+  itemRating: Scalars['UnsignedInt']['output'];
+  /** Damage contributing to kills */
+  killDamage: Scalars['UnsignedInt']['output'];
+  /** Level at the time of the run */
+  level: Scalars['Byte']['output'];
+  /** Damage Prevented */
+  protection: Scalars['UnsignedInt']['output'];
+  /** Protection of others */
+  protectionOthers: Scalars['UnsignedInt']['output'];
+  /** Protection Received */
+  protectionReceived: Scalars['UnsignedInt']['output'];
+  /** Protection of self */
+  protectionSelf: Scalars['UnsignedInt']['output'];
+  /** Renown rank at the time of the run */
+  renownRank: Scalars['Byte']['output'];
+  /** Resurrections */
+  resurrectionsDone: Scalars['UnsignedInt']['output'];
+};
+
+export type InstanceFilterInput = {
+  and?: InputMaybe<Array<InstanceFilterInput>>;
+  id?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<InstanceFilterInput>>;
+};
+
+export type InstanceRun = {
+  __typename?: 'InstanceRun';
+  /** Encounters */
+  encounters: Array<InstanceEncounterRun>;
+  /** End time of the run */
+  end: Scalars['Long']['output'];
+  /** The unique id of the run */
+  id: Scalars['ID']['output'];
+  /** Instance information */
+  instance: Instance;
+  /** The id of the instance */
+  instanceId: Scalars['ID']['output'];
+  /** Scoreboard entries */
+  scoreboardEntries: Array<InstanceRunScoreboardEntry>;
+  /** Start time of the run */
+  start: Scalars['Long']['output'];
+  /** Zone information */
+  zone: Zone;
+};
+
+export type InstanceRunFilterInput = {
+  and?: InputMaybe<Array<InstanceRunFilterInput>>;
+  end?: InputMaybe<LongOperationFilterInput>;
+  id?: InputMaybe<UuidOperationFilterInput>;
+  instanceId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  or?: InputMaybe<Array<InstanceRunFilterInput>>;
+  scoreboardEntryCount?: InputMaybe<IntOperationFilterInput>;
+  start?: InputMaybe<LongOperationFilterInput>;
+};
+
+export type InstanceRunScoreboardEntry = {
+  __typename?: 'InstanceRunScoreboardEntry';
+  /** Character information */
+  character: Character;
+  /** Damage */
+  damage: Scalars['UnsignedInt']['output'];
+  /** Damage Received */
+  damageReceived: Scalars['UnsignedInt']['output'];
+  /** Deaths */
+  deaths: Scalars['UnsignedInt']['output'];
+  /** Guild at the time of the run */
+  guild?: Maybe<Guild>;
+  /** Healing */
+  healing: Scalars['UnsignedInt']['output'];
+  /** Healing of others */
+  healingOthers: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingReceived: Scalars['UnsignedInt']['output'];
+  /** Healing of self */
+  healingSelf: Scalars['UnsignedInt']['output'];
+  /** Total item rating */
+  itemRating: Scalars['UnsignedInt']['output'];
+  /** Damage contributing to kills */
+  killDamage: Scalars['UnsignedInt']['output'];
+  /** Level at the time of the run */
+  level: Scalars['Byte']['output'];
+  /** Damage Prevented */
+  protection: Scalars['UnsignedInt']['output'];
+  /** Protection of others */
+  protectionOthers: Scalars['UnsignedInt']['output'];
+  /** Protection Received */
+  protectionReceived: Scalars['UnsignedInt']['output'];
+  /** Protection of self */
+  protectionSelf: Scalars['UnsignedInt']['output'];
+  /** Renown rank at the time of the run */
+  renownRank: Scalars['Byte']['output'];
+  /** Resurrections */
+  resurrectionsDone: Scalars['UnsignedInt']['output'];
+};
+
+export type InstanceRunSortInput = {
+  end?: InputMaybe<SortEnumType>;
+  start?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type InstanceRunsConnection = {
+  __typename?: 'InstanceRunsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<InstanceRunsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<InstanceRun>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type InstanceRunsEdge = {
+  __typename?: 'InstanceRunsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: InstanceRun;
+};
+
+export type InstanceSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type InstancesConnection = {
+  __typename?: 'InstancesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<InstancesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Instance>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type InstancesEdge = {
+  __typename?: 'InstancesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Instance;
+};
+
 export type IntOperationFilterInput = {
   eq?: InputMaybe<Scalars['Int']['input']>;
   gt?: InputMaybe<Scalars['Int']['input']>;
@@ -737,6 +958,8 @@ export type Item = {
   rarity: ItemRarity;
   /** Renown rank requirement */
   renownRankRequirement: Scalars['Byte']['output'];
+  /** Chapters that reward this item */
+  rewardedFromChapters?: Maybe<RewardedFromChaptersConnection>;
   /** Quests that reward this item */
   rewardedFromQuests?: Maybe<RewardedFromQuestsConnection>;
   /** Character equipment slot */
@@ -754,6 +977,14 @@ export type Item = {
   uniqueEquipped: Scalars['Boolean']['output'];
   /** Vendors that trade this item */
   usedToPurchase?: Maybe<UsedToPurchaseConnection>;
+};
+
+
+export type ItemRewardedFromChaptersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -1209,6 +1440,13 @@ export type MembersEdge = {
   node: GuildMember;
 };
 
+export type NullableOfTomeSectionOperationFilterInput = {
+  eq?: InputMaybe<TomeOfKnowledgeSection>;
+  in?: InputMaybe<Array<InputMaybe<TomeOfKnowledgeSection>>>;
+  neq?: InputMaybe<TomeOfKnowledgeSection>;
+  nin?: InputMaybe<Array<InputMaybe<TomeOfKnowledgeSection>>>;
+};
+
 /** Information about pagination in a connection. */
 export type PageInfo = {
   __typename?: 'PageInfo';
@@ -1258,6 +1496,14 @@ export type Query = {
   guild?: Maybe<Guild>;
   /** Query for guilds matching a filter */
   guilds?: Maybe<GuildsConnection>;
+  /** Get information on an instance */
+  instance?: Maybe<Instance>;
+  /** Get information on an instance run */
+  instanceRun?: Maybe<Instance>;
+  /** Query for instance runs matching a filter */
+  instanceRuns?: Maybe<InstanceRunsConnection>;
+  /** Query for instances matching a filter */
+  instances?: Maybe<InstancesConnection>;
   /** Get one item by Id */
   item?: Maybe<Item>;
   /** Query for items matching a filter */
@@ -1283,6 +1529,20 @@ export type Query = {
   skirmish?: Maybe<Skirmish>;
   /** Query for skirmishes records matching a filter */
   skirmishes?: Maybe<SkirmishesConnection>;
+  /** Query for Tome of Knowledge Achievement entries matching a filter */
+  tomeOfKnowledgeAchievementEntries?: Maybe<TomeOfKnowledgeAchievementEntriesConnection>;
+  /** Get one Tome of Knowledge Achievement entry by Id */
+  tomeOfKnowledgeAchievementEntry?: Maybe<TomeOfKnowledgeAchievementEntry>;
+  /** Get one Tome of Knowledge Achievement subtype by Id */
+  tomeOfKnowledgeAchievementSubType?: Maybe<TomeOfKnowledgeAchievementType>;
+  /** Get one Tome of Knowledge Achievement type by Id */
+  tomeOfKnowledgeAchievementType?: Maybe<TomeOfKnowledgeAchievementType>;
+  /** Query for Tome of Knowledge Achievement types matching a filter */
+  tomeOfKnowledgeAchievementTypes: Array<TomeOfKnowledgeAchievementType>;
+  /** Query for Tome of Knowledge entries matching a filter */
+  tomeOfKnowledgeEntries?: Maybe<TomeOfKnowledgeEntriesConnection>;
+  /** Get one Tome of Knowledge entry by Id */
+  tomeOfKnowledgeEntry?: Maybe<TomeOfKnowledgeEntry>;
   /** Get top skirmishes in last seven days */
   topSkirmishes: Array<Skirmish>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
@@ -1332,6 +1592,36 @@ export type QueryGuildsArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<GuildInfoSortInput>>;
   where?: InputMaybe<GuildFilterInput>;
+};
+
+
+export type QueryInstanceArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryInstanceRunArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryInstanceRunsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InstanceRunSortInput>>;
+  where?: InputMaybe<InstanceRunFilterInput>;
+};
+
+
+export type QueryInstancesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<InstanceSortInput>>;
+  where?: InputMaybe<InstanceFilterInput>;
 };
 
 
@@ -1460,6 +1750,44 @@ export type QuerySkirmishesArgs = {
   guildId?: InputMaybe<Scalars['ID']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   where?: InputMaybe<SkirmishFilterInput>;
+};
+
+
+export type QueryTomeOfKnowledgeAchievementEntriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TomeOfKnowledgeAchievementEntryFilterInput>;
+};
+
+
+export type QueryTomeOfKnowledgeAchievementEntryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTomeOfKnowledgeAchievementSubTypeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTomeOfKnowledgeAchievementTypeArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryTomeOfKnowledgeEntriesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  where?: InputMaybe<TomeOfKnowledgeEntryFilterInput>;
+};
+
+
+export type QueryTomeOfKnowledgeEntryArgs = {
+  id: Scalars['ID']['input'];
 };
 
 
@@ -1661,7 +1989,7 @@ export type RankedSeasonLeaderboardArgs = {
   first?: InputMaybe<Scalars['Int']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   type: RankedLeaderboardRatingType;
-  where?: InputMaybe<CharacterSeasonStatFilterInput>;
+  where?: InputMaybe<CharacterSeasonStatsFilterInput>;
 };
 
 export enum Realm {
@@ -1678,6 +2006,28 @@ export type RealmsOperationFilterInput = {
   in?: InputMaybe<Array<Realm>>;
   neq?: InputMaybe<Realm>;
   nin?: InputMaybe<Array<Realm>>;
+};
+
+/** A connection to a list of items. */
+export type RewardedFromChaptersConnection = {
+  __typename?: 'RewardedFromChaptersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<RewardedFromChaptersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Chapter>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type RewardedFromChaptersEdge = {
+  __typename?: 'RewardedFromChaptersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Chapter;
 };
 
 /** A connection to a list of items. */
@@ -2226,6 +2576,153 @@ export type StringOperationFilterInput = {
   or?: InputMaybe<Array<StringOperationFilterInput>>;
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
+
+/** A connection to a list of items. */
+export type TomeOfKnowledgeAchievementEntriesConnection = {
+  __typename?: 'TomeOfKnowledgeAchievementEntriesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<TomeOfKnowledgeAchievementEntriesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<TomeOfKnowledgeAchievementEntry>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type TomeOfKnowledgeAchievementEntriesEdge = {
+  __typename?: 'TomeOfKnowledgeAchievementEntriesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: TomeOfKnowledgeAchievementEntry;
+};
+
+export type TomeOfKnowledgeAchievementEntry = {
+  __typename?: 'TomeOfKnowledgeAchievementEntry';
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  rewards: Array<TomeOfKnowledgeAchievementReward>;
+  subType: TomeOfKnowledgeAchievementSubType;
+};
+
+export type TomeOfKnowledgeAchievementEntryFilterInput = {
+  and?: InputMaybe<Array<TomeOfKnowledgeAchievementEntryFilterInput>>;
+  /** Name */
+  description?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<TomeOfKnowledgeAchievementEntryFilterInput>>;
+  /** SubType */
+  tomeAchievementSubTypeId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+};
+
+export type TomeOfKnowledgeAchievementReward = {
+  id: Scalars['ID']['output'];
+};
+
+export type TomeOfKnowledgeAchievementRewardAbilityCounter = TomeOfKnowledgeAchievementReward & {
+  __typename?: 'TomeOfKnowledgeAchievementRewardAbilityCounter';
+  /** Ability Info */
+  ability: Ability;
+  id: Scalars['ID']['output'];
+};
+
+export type TomeOfKnowledgeAchievementRewardItem = TomeOfKnowledgeAchievementReward & {
+  __typename?: 'TomeOfKnowledgeAchievementRewardItem';
+  /** Item is automatically added to player inventory */
+  autoCreate: Scalars['Boolean']['output'];
+  id: Scalars['ID']['output'];
+  /** Item info */
+  item: Item;
+};
+
+export type TomeOfKnowledgeAchievementRewardTitle = TomeOfKnowledgeAchievementReward & {
+  __typename?: 'TomeOfKnowledgeAchievementRewardTitle';
+  id: Scalars['ID']['output'];
+  /** Tome of Knowledge entry */
+  title: TomeOfKnowledgeEntry;
+};
+
+export type TomeOfKnowledgeAchievementSubType = {
+  __typename?: 'TomeOfKnowledgeAchievementSubType';
+  description: Scalars['String']['output'];
+  entries: Array<TomeOfKnowledgeAchievementEntry>;
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  type: TomeOfKnowledgeAchievementType;
+};
+
+export type TomeOfKnowledgeAchievementType = {
+  __typename?: 'TomeOfKnowledgeAchievementType';
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  subTypes: Array<TomeOfKnowledgeAchievementSubType>;
+};
+
+/** A connection to a list of items. */
+export type TomeOfKnowledgeEntriesConnection = {
+  __typename?: 'TomeOfKnowledgeEntriesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<TomeOfKnowledgeEntriesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<TomeOfKnowledgeEntry>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type TomeOfKnowledgeEntriesEdge = {
+  __typename?: 'TomeOfKnowledgeEntriesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: TomeOfKnowledgeEntry;
+};
+
+export type TomeOfKnowledgeEntry = {
+  __typename?: 'TomeOfKnowledgeEntry';
+  description: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  realm: Realm;
+  xp: Scalars['UnsignedInt']['output'];
+};
+
+export type TomeOfKnowledgeEntryFilterInput = {
+  and?: InputMaybe<Array<TomeOfKnowledgeEntryFilterInput>>;
+  /** Description */
+  description?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<TomeOfKnowledgeEntryFilterInput>>;
+  /** Realm */
+  realm?: InputMaybe<RealmsOperationFilterInput>;
+  /** Tome of Knowledge section */
+  tomeSection?: InputMaybe<NullableOfTomeSectionOperationFilterInput>;
+  /** Type */
+  type?: InputMaybe<ByteOperationFilterInput>;
+  /** XP reward */
+  xp?: InputMaybe<UnsignedIntOperationFilterInputType>;
+};
+
+/** Tome Of Knowledge sections */
+export enum TomeOfKnowledgeSection {
+  Achievements = 'ACHIEVEMENTS',
+  Bestiary = 'BESTIARY',
+  GameFaq = 'GAME_FAQ',
+  GameManual = 'GAME_MANUAL',
+  Help = 'HELP',
+  HistoryAndLore = 'HISTORY_AND_LORE',
+  LiveEvent = 'LIVE_EVENT',
+  NoteworthyPersons = 'NOTEWORTHY_PERSONS',
+  OldWorldArmory = 'OLD_WORLD_ARMORY',
+  PlayerTitles = 'PLAYER_TITLES',
+  Tactics = 'TACTICS',
+  Ward = 'WARD',
+  WarJournal = 'WAR_JOURNAL',
+  ZoneMaps = 'ZONE_MAPS'
+}
 
 export enum TradeSkill {
   Apothecary = 'APOTHECARY',

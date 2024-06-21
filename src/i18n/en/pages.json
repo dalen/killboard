@@ -131,5 +131,11 @@
     "xp": "Xp",
     "money": "Money",
     "questGivers": "Quest Givers"
+  },
+  "instanceRuns": {
+    "title": "Instance Runs",
+    "startTime": "Time",
+    "duration": "Duration",
+    "instance": "Instance"
   }
 }

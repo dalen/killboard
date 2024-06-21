@@ -20,6 +20,7 @@ import { Creatures } from './pages/Creatures';
 import { Creature } from './pages/Creature';
 import { Quests } from './pages/Quests';
 import { Quest } from './pages/Quest';
+import { InstanceRuns } from './pages/InstanceRuns';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -103,6 +104,8 @@ function App() {
       <Route path="/item/:id" element={<Item tab="vendors" />} />
       <Route path="/item/:id/purchase" element={<Item tab="purchase" />} />
       <Route path="/item/:id/quests" element={<Item tab="quests" />} />
+
+      <Route path="/instance-runs" element={<InstanceRuns />} />
 
       <Route path="/ranked-leaderboard" element={<RankedLeaderboard />} />
     </Routes>
