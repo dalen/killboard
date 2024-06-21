@@ -99,7 +99,9 @@ export function InstanceRun() {
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to={`/instance-run/${id}`}>{t('pages:instanceRun.title')}</Link>
+          <Link to={`/instance-run/${id}`}>
+            {t('pages:instanceRun.title', { id })}
+          </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
 
