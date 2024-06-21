@@ -13,10 +13,10 @@ import {
   formatISO,
   format,
 } from 'date-fns';
+import { Link } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { Link } from 'react-router-dom';
 
 const INSTANCE_RUNS = gql`
   query GetInstanceRuns(
@@ -30,7 +30,8 @@ const INSTANCE_RUNS = gql`
       last: $last
       before: $before
       after: $after
-      where: { start: { gt: 0 } }
+      where: { start: { gt: 0 }, scoreboardEntryCount: { gte: 6 } }
+      order: { start: DESC }
     ) {
       nodes {
         id
@@ -40,6 +41,13 @@ const INSTANCE_RUNS = gql`
         instance {
           id
           name
+        }
+        scoreboardEntries {
+          itemRating
+          deaths
+          character {
+            career
+          }
         }
       }
       pageInfo {
@@ -88,6 +96,13 @@ export function InstanceRuns() {
             <th id="th-time">{t('pages:instanceRuns.startTime')}</th>
             <th id="th-instance">{t('pages:instanceRuns.instance')}</th>
             <th id="th-duration">{t('pages:instanceRuns.duration')}</th>
+            <th id="th-deaths">{t('pages:instanceRuns.deaths')}</th>
+            <th>{t('pages:instanceRuns.itemRatingMin')}</th>
+            <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
+            <th>{t('pages:instanceRuns.itemRatingMax')}</th>
+            <th>{t('pages:instanceRuns.numTanks')}</th>
+            <th>{t('pages:instanceRuns.numHealers')}</th>
+            <th>{t('pages:instanceRuns.numDps')}</th>
           </tr>
         </thead>
         <tbody>
@@ -107,6 +122,37 @@ export function InstanceRuns() {
               durationObject.seconds = undefined;
             }
             const duration = formatDuration(durationObject);
+            const itemRatings = instanceRun.scoreboardEntries.map(
+              (e) => e.itemRating,
+            );
+            const itemRatingMin = Math.min(...itemRatings);
+            const itemRatingMax = Math.max(...itemRatings);
+            const itemRatingAverage =
+              itemRatings.reduce((a, b) => a + b) / itemRatings.length;
+            const numTanks = instanceRun.scoreboardEntries.filter((e) =>
+              [
+                'IRON_BREAKER',
+                'BLACK_ORC',
+                'KNIGHT_OF_THE_BLAZING_SUN',
+                'CHOSEN',
+                'SWORD_MASTER',
+                'BLACK_GUARD',
+              ].includes(e.character.career),
+            ).length;
+
+            const numHealers = instanceRun.scoreboardEntries.filter((e) =>
+              [
+                'RUNE_PRIEST',
+                'SHAMAN',
+                'WARRIOR_PRIEST',
+                'ZEALOT',
+                'ARCHMAGE',
+                'DISCIPLE_OF_KHAINE',
+              ].includes(e.character.career),
+            ).length;
+
+            const numDPS =
+              instanceRun.scoreboardEntries.length - numTanks - numHealers;
 
             return (
               <tr key={instanceRun.id}>
@@ -119,6 +165,18 @@ export function InstanceRuns() {
                 </td>
                 <td>{instanceRun.instance.name}</td>
                 <td>{duration}</td>
+                <td>
+                  {instanceRun.scoreboardEntries.reduce(
+                    (val, entry) => entry.deaths + val,
+                    0,
+                  )}
+                </td>
+                <td>{itemRatingMin}</td>
+                <td>{itemRatingAverage.toFixed(0)}</td>
+                <td>{itemRatingMax}</td>
+                <td>{numTanks}</td>
+                <td>{numHealers}</td>
+                <td>{numDPS}</td>
               </tr>
             );
           })}
@@ -126,7 +184,7 @@ export function InstanceRuns() {
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td colSpan={3}>
+              <td colSpan={10}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button

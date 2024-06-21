@@ -136,6 +136,13 @@
     "title": "Instance Runs",
     "startTime": "Time",
     "duration": "Duration",
-    "instance": "Instance"
+    "instance": "Instance",
+    "deaths": "Deaths",
+    "itemRatingMin": "Min Item",
+    "itemRatingMax": "Max Item",
+    "itemRatingAverage": "Avg Item",
+    "numTanks": "Tanks",
+    "numDps": "Dps",
+    "numHealers": "Healers"
   }
 }
