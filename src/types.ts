@@ -728,7 +728,7 @@ export type Instance = {
 export type InstanceEncounter = {
   __typename?: 'InstanceEncounter';
   /** Id */
-  Id: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
   /** Name */
   name?: Maybe<Scalars['String']['output']>;
 };
@@ -737,6 +737,8 @@ export type InstanceEncounterRun = {
   __typename?: 'InstanceEncounterRun';
   /** Encounter info */
   encounter?: Maybe<InstanceEncounter>;
+  /** The Id of the encounter */
+  encounterId: Scalars['ID']['output'];
   /** End time of the run */
   end: Scalars['Long']['output'];
   /** The unique id of the run */

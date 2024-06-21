@@ -137,6 +137,7 @@
     "startTime": "Time",
     "duration": "Duration",
     "instance": "Instance",
+    "encounters": "Encounters",
     "deaths": "Deaths",
     "itemRatingMin": "Min Item",
     "itemRatingMax": "Max Item",

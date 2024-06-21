@@ -52,6 +52,9 @@ const INSTANCE_RUNS = gql`
             career
           }
         }
+        encounters {
+          encounterId
+        }
       }
       pageInfo {
         hasNextPage
@@ -141,10 +144,11 @@ export function InstanceRuns() {
       >
         <thead>
           <tr>
-            <th id="th-time">{t('pages:instanceRuns.startTime')}</th>
-            <th id="th-instance">{t('pages:instanceRuns.instance')}</th>
-            <th id="th-duration">{t('pages:instanceRuns.duration')}</th>
-            <th id="th-deaths">{t('pages:instanceRuns.deaths')}</th>
+            <th>{t('pages:instanceRuns.startTime')}</th>
+            <th>{t('pages:instanceRuns.instance')}</th>
+            <th>{t('pages:instanceRuns.duration')}</th>
+            <th>{t('pages:instanceRuns.encounters')}</th>
+            <th>{t('pages:instanceRuns.deaths')}</th>
             <th>{t('pages:instanceRuns.itemRatingMin')}</th>
             <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
             <th>{t('pages:instanceRuns.itemRatingMax')}</th>
@@ -202,6 +206,10 @@ export function InstanceRuns() {
             const numDPS =
               instanceRun.scoreboardEntries.length - numTanks - numHealers;
 
+            const numEncounters = new Set(
+              instanceRun.encounters.map((e) => e.encounterId),
+            ).size;
+
             return (
               <tr key={instanceRun.id}>
                 <td>
@@ -213,6 +221,7 @@ export function InstanceRuns() {
                 </td>
                 <td>{instanceRun.instance.name}</td>
                 <td>{duration}</td>
+                <td>{numEncounters}</td>
                 <td>
                   {instanceRun.scoreboardEntries.reduce(
                     (val, entry) => entry.deaths + val,
@@ -232,7 +241,7 @@ export function InstanceRuns() {
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td colSpan={10}>
+              <td colSpan={11}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button
