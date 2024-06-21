@@ -51,6 +51,8 @@ const INSTANCE_RUNS = gql`
           character {
             career
           }
+          damage
+          healing
         }
         encounters {
           encounterId
@@ -192,15 +194,16 @@ export function InstanceRuns() {
               ].includes(e.character.career),
             ).length;
 
-            const numHealers = instanceRun.scoreboardEntries.filter((e) =>
-              [
-                'RUNE_PRIEST',
-                'SHAMAN',
-                'WARRIOR_PRIEST',
-                'ZEALOT',
-                'ARCHMAGE',
-                'DISCIPLE_OF_KHAINE',
-              ].includes(e.character.career),
+            const numHealers = instanceRun.scoreboardEntries.filter(
+              (e) =>
+                [
+                  'RUNE_PRIEST',
+                  'SHAMAN',
+                  'WARRIOR_PRIEST',
+                  'ZEALOT',
+                  'ARCHMAGE',
+                  'DISCIPLE_OF_KHAINE',
+                ].includes(e.character.career) && e.healing > e.damage,
             ).length;
 
             const numDPS =
