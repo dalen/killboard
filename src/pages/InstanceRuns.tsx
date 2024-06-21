@@ -236,7 +236,6 @@ export function InstanceRuns() {
                 <td>{numTanks}</td>
                 <td>{numHealers}</td>
                 <td>{numDPS}</td>
-                <td>{numDPS}</td>
                 <td>
                   <Link
                     to={`/instance-run/${instanceRun.id}`}
