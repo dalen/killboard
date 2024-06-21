@@ -1501,7 +1501,7 @@ export type Query = {
   /** Get information on an instance */
   instance?: Maybe<Instance>;
   /** Get information on an instance run */
-  instanceRun?: Maybe<Instance>;
+  instanceRun?: Maybe<InstanceRun>;
   /** Query for instance runs matching a filter */
   instanceRuns?: Maybe<InstanceRunsConnection>;
   /** Query for instances matching a filter */

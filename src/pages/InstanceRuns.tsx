@@ -111,7 +111,7 @@ export function InstanceRuns() {
           <Link to="/">{t('common:home')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
-          <Link to="/kills">{t('pages:instanceRuns.title')}</Link>
+          <Link to="/instance-runs">{t('pages:instanceRuns.title')}</Link>
         </Breadcrumb.Item>
       </Breadcrumb>
       <Card mb={5}>
@@ -226,10 +226,9 @@ export function InstanceRuns() {
                 <td>{duration}</td>
                 <td>{numEncounters}</td>
                 <td>
-                  {instanceRun.scoreboardEntries.reduce(
-                    (val, entry) => entry.deaths + val,
-                    0,
-                  )}
+                  {instanceRun.scoreboardEntries
+                    .map((e) => e.deaths)
+                    .reduce((a, b) => a + b, 0)}
                 </td>
                 <td>{itemRatingMin}</td>
                 <td>{itemRatingAverage.toFixed(0)}</td>
@@ -237,6 +236,15 @@ export function InstanceRuns() {
                 <td>{numTanks}</td>
                 <td>{numHealers}</td>
                 <td>{numDPS}</td>
+                <td>{numDPS}</td>
+                <td>
+                  <Link
+                    to={`/instance-run/${instanceRun.id}`}
+                    className="button is-primary p-2 is-pulled-right"
+                  >
+                    {t('common:details')}
+                  </Link>
+                </td>
               </tr>
             );
           })}
@@ -244,7 +252,7 @@ export function InstanceRuns() {
         {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
           <tfoot>
             <tr>
-              <td colSpan={11}>
+              <td colSpan={12}>
                 <div className="field is-grouped is-pulled-right">
                   {pageInfo.hasPreviousPage && (
                     <Button
