@@ -187,5 +187,19 @@
     "wins": "Wins",
     "losses": "Losses",
     "draws": "Draws"
+  },
+  "scoreboard": {
+    "career": "Career",
+    "damage": "Damage",
+    "dbs": "DBs",
+    "deaths": "Deaths",
+    "guild": "Guild",
+    "healing": "Healing",
+    "kills": "Kills",
+    "name": "Name",
+    "objectiveScore": "Objectives",
+    "protection": "Protection",
+    "rank": "Rank",
+    "itemRating": "Item Rating"
   }
 }

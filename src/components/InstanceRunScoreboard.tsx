@@ -33,14 +33,14 @@ export function InstanceRunScoreboard({
               onClick={() => requestSort('career')}
               className={`${getClassName('career')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.career')}
+              {t('components:scoreboard.career')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('name')}
               className={`${getClassName('name')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.name')}
+              {t('components:scoreboard.name')}
             </th>
             <th
               colSpan={2}
@@ -48,44 +48,35 @@ export function InstanceRunScoreboard({
               onClick={() => requestSort('guild')}
               className={`${getClassName('guild')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.guild')}
+              {t('components:scoreboard.guild')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('level')}
               className={`${getClassName('level')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.rank')}
+              {t('components:scoreboard.rank')}
             </th>
             <th
               align="left"
-              onClick={() => requestSort('kills')}
-              className={`${getClassName('kills')} is-clickable has-text-link`}
+              onClick={() => requestSort('itemRating')}
+              className={`${getClassName('itemRating')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.kills')}
+              {t('components:scoreboard.itemRating')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('deaths')}
               className={`${getClassName('deaths')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.deaths')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('deathBlows')}
-              className={`${getClassName(
-                'deathBlows',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.dbs')}
+              {t('components:scoreboard.deaths')}
             </th>
             <th
               align="left"
               onClick={() => requestSort('damage')}
               className={`${getClassName('damage')} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.damage')}
+              {t('components:scoreboard.damage')}
             </th>
             <th
               align="left"
@@ -94,7 +85,7 @@ export function InstanceRunScoreboard({
                 'healing',
               )} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.healing')}
+              {t('components:scoreboard.healing')}
             </th>
             <th
               align="left"
@@ -103,16 +94,7 @@ export function InstanceRunScoreboard({
                 'protection',
               )} is-clickable has-text-link`}
             >
-              {t('components:scenarioScoreboard.protection')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('objectiveScore')}
-              className={`${getClassName(
-                'objectiveScore',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.objectiveScore')}
+              {t('components:scoreboard.protection')}
             </th>
           </tr>
         </thead>
@@ -120,7 +102,7 @@ export function InstanceRunScoreboard({
           {items.map((entry) => (
             <tr
               key={entry.character.id}
-              className={`scenario-scoreboard-row-team-${entry.team}`}
+              className={`instance-scoreboard-row-team-${entry.team}`}
             >
               <td aria-labelledby="th-career">
                 <CareerIcon career={entry.character.career} />
@@ -146,24 +128,13 @@ export function InstanceRunScoreboard({
               </td>
               <td align="left">{entry.level}</td>
 
-              <td align="left">
-                <Tippy
-                  placement="top"
-                  content={
-                    <div className="scenario-scoreboard-tooltip">
-                      Solo Kills: {entry.killsSolo}
-                    </div>
-                  }
-                >
-                  <span>{entry.kills}</span>
-                </Tippy>
-              </td>
+              <td align="left">{entry.itemRating}</td>
               <td align="left">
                 <Tippy
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="instance-scoreboard-tooltip">
                       Damage Receive: {entry.damageReceived}
                       <br />
                       Healing Received: {entry.healingReceived}
@@ -175,13 +146,12 @@ export function InstanceRunScoreboard({
                   <span>{entry.deaths}</span>
                 </Tippy>
               </td>
-              <td align="left">{entry.deathBlows}</td>
               <td align="left">
                 <Tippy
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="instance-scoreboard-tooltip">
                       Kill Damage: {entry.killDamage}
                     </div>
                   }
@@ -194,7 +164,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="instance-scoreboard-tooltip">
                       Healing of Self: {entry.healingSelf}
                       <br />
                       Healing of Others: {entry.healingOthers}
@@ -211,7 +181,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="instance-scoreboard-tooltip">
                       Protection of Self: {entry.protectionSelf}
                       <br />
                       Protection of Others: {entry.protectionOthers}
@@ -220,9 +190,6 @@ export function InstanceRunScoreboard({
                 >
                   <span>{Number(entry.protection).toLocaleString()}</span>
                 </Tippy>
-              </td>
-              <td align="left">
-                {Number(entry.objectiveScore).toLocaleString()}
               </td>
             </tr>
           ))}
