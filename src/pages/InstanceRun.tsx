@@ -45,6 +45,7 @@ const INSTANCE_RUN = gql`
         itemRating
         deaths
         damage
+        killDamage
         healing
         healingSelf
         healingOthers
@@ -57,7 +58,6 @@ const INSTANCE_RUN = gql`
         protectionReceived
       }
       encounters {
-        encounterId
         start
         end
         scoreboardEntries {
@@ -70,7 +70,6 @@ const INSTANCE_RUN = gql`
           healing
         }
         encounter {
-          id
           name
         }
       }

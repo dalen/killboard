@@ -234,7 +234,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                 <Tippy
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Solo Kills: {entry.killsSolo}
                     </div>
                   }
@@ -247,7 +247,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Damage Receive: {entry.damageReceived}
                       <br />
                       Healing Received: {entry.healingReceived}
@@ -265,7 +265,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Kill Damage: {entry.killDamage}
                     </div>
                   }
@@ -280,7 +280,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Healing of Self: {entry.healingSelf}
                       <br />
                       Healing of Others: {entry.healingOthers}
@@ -297,7 +297,7 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
                   duration={0}
                   placement="top"
                   content={
-                    <div className="scenario-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Protection of Self: {entry.protectionSelf}
                       <br />
                       Protection of Others: {entry.protectionOthers}

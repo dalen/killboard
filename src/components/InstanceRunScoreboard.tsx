@@ -134,7 +134,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="instance-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Damage Receive: {entry.damageReceived}
                       <br />
                       Healing Received: {entry.healingReceived}
@@ -151,7 +151,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="instance-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Kill Damage: {entry.killDamage}
                     </div>
                   }
@@ -164,7 +164,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="instance-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Healing of Self: {entry.healingSelf}
                       <br />
                       Healing of Others: {entry.healingOthers}
@@ -181,7 +181,7 @@ export function InstanceRunScoreboard({
                   duration={0}
                   placement="top"
                   content={
-                    <div className="instance-scoreboard-tooltip">
+                    <div className="scoreboard-tooltip">
                       Protection of Self: {entry.protectionSelf}
                       <br />
                       Protection of Others: {entry.protectionOthers}
