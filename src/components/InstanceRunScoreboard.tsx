@@ -2,7 +2,10 @@ import { Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
-import { InstanceRunScoreboardEntry } from '../types';
+import {
+  InstanceEncounterRunScoreboardEntry,
+  InstanceRunScoreboardEntry,
+} from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
@@ -10,7 +13,7 @@ import { useSortableData } from '../hooks/useSortableData';
 export function InstanceRunScoreboard({
   entries,
 }: {
-  entries: InstanceRunScoreboardEntry[];
+  entries: (InstanceRunScoreboardEntry | InstanceEncounterRunScoreboardEntry)[];
 }): JSX.Element {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
