@@ -216,6 +216,7 @@ export function InstanceRun() {
         hoverable
         size={isMobile ? 'narrow' : 'fullwidth'}
         marginless
+        mb={5}
       >
         <thead>
           <tr>
