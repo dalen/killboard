@@ -5,24 +5,18 @@ import {
   intervalToDuration,
 } from 'date-fns';
 import React from 'react';
-import { Table, Media, Image, Icon, Button } from 'react-bulma-components';
+import { Table, Media, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Skirmish, PageInfo, Realm } from '../types';
+import { Skirmish, Realm } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { GuildHeraldry } from './GuildHeraldry';
 
 export function SkirmishListTable({
   data,
-  pageInfo,
-  onNext,
-  onPrevious,
   showZone = true,
 }: {
   data: Skirmish[];
-  pageInfo?: PageInfo;
-  onNext?: () => void;
-  onPrevious?: () => void;
   showZone?: boolean;
 }): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);
@@ -177,43 +171,6 @@ export function SkirmishListTable({
             );
           })}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              <td aria-labelledby="th-time" />
-              {showZone && <td aria-labelledby="th-location" />}
-              <td aria-labelledby="th-guilds" />
-              <td colSpan={3}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onPrevious}
-                    >
-                      {t('components:skirmishList.loadPrevious')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onNext}
-                    >
-                      {t('components:skirmishList.loadMore')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
     </div>
   );

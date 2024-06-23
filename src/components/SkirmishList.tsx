@@ -7,6 +7,7 @@ import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { getCurrentFilters } from './KillsFilters';
 import { SkirmishListTable } from './SkirmishListTable';
+import { QueryPagination } from './QueryPagination';
 
 export function SkirmishList({
   query,
@@ -37,11 +38,12 @@ export function SkirmishList({
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const skirmishes = data?.skirmishes;
-  const pageInfo = skirmishes?.pageInfo;
 
   if (skirmishes?.nodes == null) return <p>{t('common:error')}</p>;
 
   if (skirmishes.nodes.length === 0) return null;
+
+  const { pageInfo } = skirmishes;
 
   return (
     <div>
@@ -50,26 +52,11 @@ export function SkirmishList({
           {title} {skirmishes.totalCount != null && skirmishes.totalCount}
         </div>
       )}
-      <SkirmishListTable
-        data={skirmishes.nodes}
-        showZone={showZone}
+      <SkirmishListTable data={skirmishes.nodes} showZone={showZone} />
+      <QueryPagination
         pageInfo={pageInfo}
-        onNext={() =>
-          refetch({
-            first: perPage,
-            after: pageInfo?.endCursor,
-            last: undefined,
-            before: undefined,
-          })
-        }
-        onPrevious={() =>
-          refetch({
-            first: undefined,
-            after: undefined,
-            last: perPage,
-            before: pageInfo?.startCursor,
-          })
-        }
+        perPage={perPage}
+        refetch={refetch}
       />
     </div>
   );
