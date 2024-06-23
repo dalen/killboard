@@ -147,7 +147,23 @@
     "numHealers": "Healers"
   },
   "instanceRun": {
-    "title": "Instance Run #{{id}}",
+    "title": "#{{id}}",
+    "startTime": "Time",
+    "duration": "Duration",
+    "instance": "Instance",
+    "encounters": "Encounters",
+    "encounter": "Encounter",
+    "deaths": "Deaths",
+    "itemRatingMin": "Min Item",
+    "itemRatingMax": "Max Item",
+    "itemRatingAverage": "Avg Item",
+    "numTanks": "Tanks",
+    "numDps": "Dps",
+    "numHealers": "Healers"
+  },
+  "instanceEncounterRun": {
+    "title": "Encounter #{{id}}",
+    "instanceRunId": "#{{id}}",
     "startTime": "Time",
     "duration": "Duration",
     "instance": "Instance",

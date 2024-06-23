@@ -58,6 +58,7 @@ const INSTANCE_RUN = gql`
         protectionReceived
       }
       encounters {
+        id
         start
         end
         instanceId
@@ -197,6 +198,14 @@ export function InstanceRun() {
                 <td>{numTanks}</td>
                 <td>{numHealers}</td>
                 <td>{numDPS}</td>
+                <td>
+                  <Link
+                    to={`/instance-run/${id}/${instanceEncounterRun.id}`}
+                    className="button is-primary p-2 is-pulled-right"
+                  >
+                    {t('common:details')}
+                  </Link>
+                </td>
               </tr>
             );
           })}

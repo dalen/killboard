@@ -23,6 +23,7 @@ import { Quest } from './pages/Quest';
 import { InstanceRuns } from './pages/InstanceRuns';
 import { InstanceRun } from './pages/InstanceRun';
 import { Instances } from './pages/Instances';
+import { InstanceEncounterRun } from './pages/InstanceEncounterRun';
 
 // Send page views to google analytics
 function usePageViews() {
@@ -109,6 +110,10 @@ function App() {
 
       <Route path="/instance-runs" element={<InstanceRuns />} />
       <Route path="/instance-run/:id" element={<InstanceRun />} />
+      <Route
+        path="/instance-run/:instanceRunId/:id"
+        element={<InstanceEncounterRun />}
+      />
 
       <Route path="/instances" element={<Instances />} />
 

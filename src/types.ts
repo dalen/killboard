@@ -743,6 +743,12 @@ export type InstanceEncounterRun = {
   end: Scalars['Long']['output'];
   /** The unique id of the run */
   id: Scalars['ID']['output'];
+  /** Instance information */
+  instance: Instance;
+  /** The Id of the instance */
+  instanceId: Scalars['ID']['output'];
+  /** The Id of the instance run */
+  instanceRunId: Scalars['ID']['output'];
   /** Scoreboard entries */
   scoreboardEntries: Array<InstanceEncounterRunScoreboardEntry>;
   /** Start time of the run */
@@ -1500,6 +1506,8 @@ export type Query = {
   guilds?: Maybe<GuildsConnection>;
   /** Get information on an instance */
   instance?: Maybe<Instance>;
+  /** Get information on an instance encounter run */
+  instanceEncounterRun?: Maybe<InstanceEncounterRun>;
   /** Get information on an instance run */
   instanceRun?: Maybe<InstanceRun>;
   /** Query for instance runs matching a filter */
@@ -1598,6 +1606,11 @@ export type QueryGuildsArgs = {
 
 
 export type QueryInstanceArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryInstanceEncounterRunArgs = {
   id: Scalars['ID']['input'];
 };
 
