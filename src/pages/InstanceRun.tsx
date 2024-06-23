@@ -137,14 +137,7 @@ export function InstanceRun() {
               start: startDate,
               end: endDate,
             });
-            // Skip seconds in the duration
-            if (
-              durationObject.days ||
-              durationObject.hours ||
-              durationObject.minutes
-            ) {
-              durationObject.seconds = undefined;
-            }
+
             const duration = formatDuration(durationObject);
             const itemRatings = instanceEncounterRun.scoreboardEntries.map(
               (e) => e.itemRating,
