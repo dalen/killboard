@@ -1,7 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import {
   Breadcrumb,
-  Button,
   Card,
   Columns,
   Container,
@@ -19,6 +18,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { InstanceRunFilterInput, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
+import { QueryPagination } from '../components/QueryPagination';
 
 const INSTANCE_RUNS = gql`
   query GetInstanceRuns(
@@ -248,55 +248,12 @@ export function InstanceRuns() {
             );
           })}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              <td colSpan={12}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() => {
-                        refetch({
-                          first: undefined,
-                          after: undefined,
-                          last: perPage,
-                          before: pageInfo.startCursor,
-                        });
-                      }}
-                    >
-                      {t('components:skirmishList.loadPrevious')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() => {
-                        refetch({
-                          first: perPage,
-                          after: pageInfo.endCursor,
-                          last: undefined,
-                          before: undefined,
-                        });
-                      }}
-                    >
-                      {t('components:skirmishList.loadMore')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
+      <QueryPagination
+        pageInfo={pageInfo}
+        perPage={perPage}
+        refetch={refetch}
+      />
     </Container>
   );
 }

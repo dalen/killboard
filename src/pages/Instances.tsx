@@ -10,20 +10,20 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { CreatureFilterInput, Query } from '../types';
+import { InstanceFilterInput, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { QueryPagination } from '../components/QueryPagination';
 
-const CREATURES = gql`
-  query GetCreatures(
+const QUERY = gql`
+  query GetInstances(
     $first: Int
     $last: Int
     $before: String
     $after: String
-    $where: CreatureFilterInput
+    $where: InstanceFilterInput
   ) {
-    creatures(
+    instances(
       first: $first
       last: $last
       before: $before
@@ -33,9 +33,9 @@ const CREATURES = gql`
       nodes {
         id
         name
-        creatureType
-        creatureSubType
-        realm
+        encounters {
+          id
+        }
       }
       pageInfo {
         hasNextPage
@@ -47,9 +47,9 @@ const CREATURES = gql`
   }
 `;
 
-const getCreatureNameFilter = (
+const getInstanceNameFilter = (
   search: URLSearchParams,
-): CreatureFilterInput => {
+): InstanceFilterInput => {
   const name = search.get('name');
 
   if (!name) {
@@ -59,15 +59,15 @@ const getCreatureNameFilter = (
   return { name: { contains: name } };
 };
 
-const getFilters = (search: URLSearchParams): CreatureFilterInput => ({
-  ...getCreatureNameFilter(search),
+const getFilters = (search: URLSearchParams): InstanceFilterInput => ({
+  ...getInstanceNameFilter(search),
 });
 
-export function Creatures(): JSX.Element {
+export function Instances(): JSX.Element {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
-  const { loading, error, data, refetch } = useQuery<Query>(CREATURES, {
+  const { loading, error, data, refetch } = useQuery<Query>(QUERY, {
     variables: {
       where: getFilters(search),
       first: perPage,
@@ -78,11 +78,11 @@ export function Creatures(): JSX.Element {
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.creatures?.nodes == null)
+  if (data?.instances?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const entries = data.creatures.nodes;
-  const { pageInfo } = data.creatures;
+  const entries = data.instances.nodes;
+  const { pageInfo } = data.instances;
 
   return (
     <Container max breakpoint="widescreen" mt={2}>
@@ -98,7 +98,7 @@ export function Creatures(): JSX.Element {
       <Card mb={5}>
         <Card.Content>
           <Form.Field>
-            <Form.Label>{t('pages:creatures.search')}</Form.Label>
+            <Form.Label>{t('pages:instances.search')}</Form.Label>
             <SearchBox
               initialQuery={search.get('name') || ''}
               onSubmit={(event) => {
@@ -114,19 +114,17 @@ export function Creatures(): JSX.Element {
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
             <tr>
-              <th>{t('pages:creatures.name')}</th>
-              <th>{t('pages:creatures.creatureSubType')}</th>
+              <th>{t('pages:instances.name')}</th>
+              <th>{t('pages:instances.encounters')}</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map((creature) => (
-              <tr key={creature.id}>
+            {entries.map((instance) => (
+              <tr key={instance.id}>
                 <td>
-                  <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
+                  <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
                 </td>
-                <td>
-                  {t(`enums:creatureSubType.${creature.creatureSubType}`)}
-                </td>
+                <td>{instance.encounters?.length || 0}</td>
               </tr>
             ))}
           </tbody>

@@ -60,6 +60,8 @@ const INSTANCE_RUN = gql`
       encounters {
         start
         end
+        instanceId
+        encounterId
         scoreboardEntries {
           itemRating
           deaths
@@ -96,6 +98,9 @@ export function InstanceRun() {
       <Breadcrumb>
         <Breadcrumb.Item>
           <Link to="/">{t('common:home')}</Link>
+        </Breadcrumb.Item>
+        <Breadcrumb.Item>
+          <Link to="/instance-runs/">{t('common:instanceRuns')}</Link>
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
           <Link to={`/instance-run/${id}`}>
