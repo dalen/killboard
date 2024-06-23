@@ -1,5 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
-import { Breadcrumb, Container, Progress, Table } from 'react-bulma-components';
+import {
+  Breadcrumb,
+  Card,
+  Container,
+  Media,
+  Progress,
+  Table,
+} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import {
   intervalToDuration,
@@ -94,6 +101,51 @@ export function InstanceRun() {
   if (loading || !data?.instanceRun?.encounters) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
+  const { instanceRun } = data;
+
+  const instanceStartDate = new Date(instanceRun.start);
+  const instanceEndDate = new Date(instanceRun.end);
+  const instanceDurationObject = intervalToDuration({
+    start: instanceStartDate,
+    end: instanceEndDate,
+  });
+
+  const instanceDuration = formatDuration(instanceDurationObject);
+  const instanceItemRatings = instanceRun.scoreboardEntries.map(
+    (e) => e.itemRating,
+  );
+  const instanceItemRatingMin = Math.min(...instanceItemRatings);
+  const instanceItemRatingMax = Math.max(...instanceItemRatings);
+  const instanceItemRatingAverage =
+    instanceItemRatings.reduce((a, b) => a + b) / instanceItemRatings.length;
+  const instanceNumTanks = instanceRun.scoreboardEntries.filter((e) =>
+    [
+      'IRON_BREAKER',
+      'BLACK_ORC',
+      'KNIGHT_OF_THE_BLAZING_SUN',
+      'CHOSEN',
+      'SWORD_MASTER',
+      'BLACK_GUARD',
+    ].includes(e.character.career),
+  ).length;
+
+  const instanceNumHealers = instanceRun.scoreboardEntries.filter(
+    (e) =>
+      [
+        'RUNE_PRIEST',
+        'SHAMAN',
+        'WARRIOR_PRIEST',
+        'ZEALOT',
+        'ARCHMAGE',
+        'DISCIPLE_OF_KHAINE',
+      ].includes(e.character.career) && e.healing > e.damage,
+  ).length;
+
+  const instanceNumDPS =
+    instanceRun.scoreboardEntries.length -
+    instanceNumTanks -
+    instanceNumHealers;
+
   return (
     <Container max breakpoint="widescreen" mt={2}>
       <Breadcrumb>
@@ -109,6 +161,55 @@ export function InstanceRun() {
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
+
+      <p className="is-size-4">
+        <strong>{instanceRun.instance?.name}</strong>
+      </p>
+      <Card mb={5}>
+        <Card.Content>
+          <Media>
+            <Media.Item>
+              <p>
+                <strong>{t('pages:instanceRun.startTime')}</strong>{' '}
+                {formatISO(instanceStartDate, { representation: 'date' })}
+                {format(instanceStartDate, 'HH:mm')}
+              </p>
+              <p>
+                <strong>{t('pages:instanceRun.duration')}</strong>{' '}
+                {instanceDuration}
+              </p>
+            </Media.Item>
+            <Media.Item>
+              <p>
+                <strong>{t('pages:instanceRun.itemRatingMin')}</strong>{' '}
+                {instanceItemRatingMin}
+              </p>
+              <p>
+                <strong>{t('pages:instanceRun.itemRatingAverage')}</strong>{' '}
+                {instanceItemRatingAverage.toFixed(0)}
+              </p>
+              <p>
+                <strong>{t('pages:instanceRun.itemRatingMax')}</strong>{' '}
+                {instanceItemRatingMax}
+              </p>
+            </Media.Item>
+            <Media.Item>
+              <p>
+                <strong>{t('pages:instanceRun.numTanks')}</strong>{' '}
+                {instanceNumTanks}
+              </p>
+              <p>
+                <strong>{t('pages:instanceRun.numHealers')}</strong>{' '}
+                {instanceNumHealers}
+              </p>
+              <p>
+                <strong>{t('pages:instanceRun.numDps')}</strong>{' '}
+                {instanceNumDPS}
+              </p>
+            </Media.Item>
+          </Media>
+        </Card.Content>
+      </Card>
 
       <Table
         striped
