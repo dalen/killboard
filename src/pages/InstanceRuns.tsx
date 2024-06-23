@@ -126,7 +126,7 @@ export function InstanceRuns() {
                     setSearch(search);
                   }}
                 >
-                  <option value="all">{t('instanceRuns.all')}</option>
+                  <option value="all">{t('pages:instanceRuns.all')}</option>
                   <option value="176">Sigmar Crypts</option>
                   <option value="196">Bilerot</option>
                   <option value="173">Sacellum</option>

@@ -144,7 +144,8 @@
     "itemRatingAverage": "Avg Item",
     "numTanks": "Tanks",
     "numDps": "Dps",
-    "numHealers": "Healers"
+    "numHealers": "Healers",
+    "all": "All"
   },
   "instanceRun": {
     "title": "#{{id}}",
