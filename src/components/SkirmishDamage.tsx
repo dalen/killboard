@@ -73,7 +73,7 @@ export function SkirmishDamage({ id }: { id: string }): JSX.Element {
                 {Number(damage.damageAmount).toLocaleString()}
               </td>
               <td align="right">
-                {(totalDamage / Number(damage.damageAmount))
+                {((Number(damage.damageAmount) / totalDamage) * 100)
                   .toFixed(2)
                   .toLocaleString()}{' '}
                 %
