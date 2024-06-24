@@ -1,4 +1,4 @@
-import { Button, Progress, Table } from 'react-bulma-components';
+import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router-dom';
 import { gql, useQuery } from '@apollo/client';
