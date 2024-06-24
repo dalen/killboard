@@ -66,6 +66,11 @@ export function SkirmishDamageByCharacter({ id }: { id: string }): JSX.Element {
     return acc;
   }, [] as KillDamage[]);
 
+  const totalDamage = killDamage.reduce(
+    (acc, cur) => acc + cur.damageAmount,
+    0,
+  );
+
   return (
     <div>
       <CharacterInfo id={Number(characterId)} />
@@ -88,8 +93,21 @@ export function SkirmishDamageByCharacter({ id }: { id: string }): JSX.Element {
                 <td align="right">
                   {Number(damage.damageAmount).toLocaleString()}
                 </td>
+                <td align="right">
+                  {((Number(damage.damageAmount) / totalDamage) * 100)
+                    .toFixed(2)
+                    .toLocaleString()}{' '}
+                  %
+                </td>
               </tr>
             ))}
+          <tr>
+            <td align="right" colSpan={3}>
+              Total: {totalDamage.toLocaleString()}
+            </td>
+            {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+            <td />
+          </tr>
         </tbody>
       </Table>
     </div>

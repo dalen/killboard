@@ -80,6 +80,13 @@ export function SkirmishDamage({ id }: { id: string }): JSX.Element {
               </td>
             </tr>
           ))}
+        <tr>
+          <td align="right" colSpan={3}>
+            Total: {totalDamage.toLocaleString()}
+          </td>
+          {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+          <td />
+        </tr>
       </tbody>
     </Table>
   );
