@@ -47,6 +47,11 @@ export function SkirmishDamage({ id }: { id: string }): JSX.Element {
     return acc;
   }, [] as KillDamage[]);
 
+  const totalDamage = killDamage.reduce(
+    (acc, cur) => acc + cur.damageAmount,
+    0,
+  );
+
   return (
     <Table size="narrow" striped width="100%">
       <tbody>
@@ -66,6 +71,12 @@ export function SkirmishDamage({ id }: { id: string }): JSX.Element {
               <td>{killDamageText(damage)}</td>
               <td align="right">
                 {Number(damage.damageAmount).toLocaleString()}
+              </td>
+              <td align="right">
+                {(totalDamage / Number(damage.damageAmount))
+                  .toFixed(2)
+                  .toLocaleString()}{' '}
+                %
               </td>
             </tr>
           ))}
