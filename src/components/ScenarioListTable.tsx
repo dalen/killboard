@@ -1,20 +1,14 @@
 import { format, formatISO, intervalToDuration } from 'date-fns';
-import { Button, Table } from 'react-bulma-components';
+import { Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { PageInfo, ScenarioRecord } from '../types';
+import { ScenarioRecord } from '../types';
 
 export function ScenarioListTable({
   data,
-  pageInfo,
-  onNext,
-  onPrevious,
 }: {
   data: ScenarioRecord[];
-  pageInfo?: PageInfo;
-  onNext?: () => void;
-  onPrevious?: () => void;
 }): JSX.Element {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -107,40 +101,6 @@ export function ScenarioListTable({
             );
           })}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              <td colSpan={7}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onPrevious}
-                    >
-                      {t('components:killsList.loadPrevious')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onNext}
-                    >
-                      {t('components:killsList.loadMore')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
     </div>
   );

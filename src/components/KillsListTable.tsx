@@ -1,32 +1,19 @@
 import { format, formatISO } from 'date-fns';
 import React from 'react';
-import {
-  Table,
-  Media,
-  Content,
-  Image,
-  Icon,
-  Button,
-} from 'react-bulma-components';
+import { Table, Media, Content, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Kill, PageInfo } from '../types';
+import { Kill } from '../types';
 import { CareerIcon } from './CareerIcon';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 
 export function KillsListTable({
   data,
-  pageInfo,
-  onNext,
-  onPrevious,
   showTime = true,
   showVictim = true,
   showKiller = true,
 }: {
   data: Kill[];
-  pageInfo?: PageInfo;
-  onNext?: () => void;
-  onPrevious?: () => void;
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
@@ -194,43 +181,6 @@ export function KillsListTable({
             );
           })}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              {showTime && <td aria-labelledby="th-time" />}
-              {showKiller && <td aria-labelledby="th-killer" />}
-              {showVictim && <td aria-labelledby="th-victim" />}
-              <td colSpan={2}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onPrevious}
-                    >
-                      {t('components:killsList.loadPrevious')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={onNext}
-                    >
-                      {t('components:killsList.loadMore')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
     </div>
   );

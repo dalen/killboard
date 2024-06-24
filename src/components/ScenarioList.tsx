@@ -6,6 +6,7 @@ import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { getScenarioFilters } from './ScenarioFilters';
 import { ScenarioListTable } from './ScenarioListTable';
+import { QueryPagination } from './QueryPagination';
 
 const SCENARIO_LIST = gql`
   query GetScenarioList(
@@ -79,25 +80,13 @@ export function ScenarioList({
   const pageInfo = data?.scenarios?.pageInfo;
 
   return (
-    <ScenarioListTable
-      data={data.scenarios.nodes}
-      pageInfo={data.scenarios.pageInfo}
-      onNext={() =>
-        refetch({
-          first: perPage,
-          after: pageInfo?.endCursor,
-          last: undefined,
-          before: undefined,
-        })
-      }
-      onPrevious={() =>
-        refetch({
-          first: undefined,
-          after: undefined,
-          last: perPage,
-          before: pageInfo?.startCursor,
-        })
-      }
-    />
+    <>
+      <ScenarioListTable data={data.scenarios.nodes} />
+      <QueryPagination
+        pageInfo={pageInfo}
+        perPage={perPage}
+        refetch={refetch}
+      />
+    </>
   );
 }

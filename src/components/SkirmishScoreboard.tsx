@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Progress, Table } from 'react-bulma-components';
+import { Progress, Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
@@ -9,6 +9,7 @@ import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { SortConfig, SortConfigDirection } from '../hooks/useSortableData';
 import { ErrorMessage } from './global/ErrorMessage';
+import { QueryPagination } from './QueryPagination';
 
 const SKIRMISH_SCOREBOARD = gql`
   query GetSkirmishScoreboard(
@@ -91,13 +92,6 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
     key: 'deathBlows',
     direction: SortConfigDirection.descending,
   });
-
-  const getSortOrder = () => [
-    {
-      [sortConfig.key]:
-        sortConfig.direction === SortConfigDirection.ascending ? 'ASC' : 'DESC',
-    },
-  ];
 
   const requestSort = (key: string) => {
     let direction = SortConfigDirection.descending;
@@ -310,53 +304,12 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
             </tr>
           ))}
         </tbody>
-        {pageInfo && (
-          <tfoot>
-            <tr>
-              <td colSpan={5}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: undefined,
-                          after: undefined,
-                          before: pageInfo.startCursor,
-                          last: perPage,
-                          order: getSortOrder(),
-                        })
-                      }
-                    >
-                      {t('common:prevPage')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: perPage,
-                          after: pageInfo.endCursor,
-                          before: undefined,
-                          last: undefined,
-                          order: getSortOrder(),
-                        })
-                      }
-                    >
-                      {t('common:nextPage')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
+      <QueryPagination
+        pageInfo={pageInfo}
+        perPage={perPage}
+        refetch={refetch}
+      />
     </div>
   );
 }

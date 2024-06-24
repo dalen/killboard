@@ -7,6 +7,7 @@ import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { getCurrentFilters } from './KillsFilters';
 import { KillsListTable } from './KillsListTable';
+import { QueryPagination } from './QueryPagination';
 
 export function KillsList({
   query,
@@ -41,11 +42,12 @@ export function KillsList({
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const kills = data?.kills;
-  const pageInfo = kills?.pageInfo;
 
   if (kills?.nodes == null) return <p>{t('common:error')}</p>;
 
   if (kills.nodes.length === 0) return null;
+
+  const { pageInfo } = kills;
 
   return (
     <div>
@@ -59,23 +61,11 @@ export function KillsList({
         showTime={showTime}
         showKiller={showKiller}
         showVictim={showVictim}
+      />
+      <QueryPagination
         pageInfo={pageInfo}
-        onNext={() =>
-          refetch({
-            first: perPage,
-            after: pageInfo?.endCursor,
-            last: undefined,
-            before: undefined,
-          })
-        }
-        onPrevious={() =>
-          refetch({
-            first: undefined,
-            after: undefined,
-            last: perPage,
-            before: pageInfo?.startCursor,
-          })
-        }
+        perPage={perPage}
+        refetch={refetch}
       />
     </div>
   );

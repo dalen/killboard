@@ -1,18 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import {
-  Button,
-  Content,
-  Media,
-  Progress,
-  Table,
-} from 'react-bulma-components';
+import { Content, Media, Progress, Table } from 'react-bulma-components';
 import { Link } from 'react-router-dom';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { GuildHeraldry } from './GuildHeraldry';
 import { CareerIcon } from './CareerIcon';
+import { QueryPagination } from './QueryPagination';
 
 const RANKED_LEADERBOARD = gql`
   query GetRankedLeaderboard(
@@ -98,12 +93,11 @@ export function RankedLeaderboardTable({
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  const entries = data?.rankedSeason?.leaderboard?.nodes;
-
-  if (entries == null)
+  if (data?.rankedSeason?.leaderboard?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const pageInfo = data?.rankedSeason?.leaderboard?.pageInfo;
+  const entries = data.rankedSeason.leaderboard.nodes;
+  const { pageInfo } = data.rankedSeason.leaderboard;
 
   return (
     <div className="table-container">
@@ -222,55 +216,12 @@ export function RankedLeaderboardTable({
             </tr>
           ))}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              <td colSpan={isMobile ? 6 : 10}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: undefined,
-                          after: undefined,
-                          last: perPage,
-                          before: pageInfo?.startCursor,
-                        })
-                      }
-                    >
-                      {t('common:prevPage')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: perPage,
-                          after: pageInfo?.endCursor,
-                          last: undefined,
-                          before: undefined,
-                        })
-                      }
-                    >
-                      {t('common:nextPage')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
+      <QueryPagination
+        pageInfo={pageInfo}
+        perPage={perPage}
+        refetch={refetch}
+      />
     </div>
   );
 }

@@ -6,6 +6,7 @@ import { GoldPrice } from './GoldPrice';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ItemVendorsFilters, getCurrentFilters } from './ItemVendorsFilters';
+import { QueryPagination } from './QueryPagination';
 
 const ITEM_INFO = gql`
   query GetItemUsedToPurchase(
@@ -83,10 +84,11 @@ export function ItemVendorsPurchase({
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const vendorItems = data?.item?.usedToPurchase;
-  const pageInfo = vendorItems?.pageInfo;
 
   if (vendorItems?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
+
+  const { pageInfo } = vendorItems;
 
   return (
     <>
@@ -191,57 +193,12 @@ export function ItemVendorsPurchase({
               ));
           })}
         </tbody>
-        {(pageInfo?.hasNextPage || pageInfo?.hasPreviousPage) && (
-          <tfoot>
-            <tr>
-              <td colSpan={5}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          ...getCurrentFilters(search),
-                          first: undefined,
-                          after: undefined,
-                          last: perPage,
-                          before: pageInfo?.startCursor,
-                        })
-                      }
-                    >
-                      {t('common:prevPage')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      p={2}
-                      pull="right"
-                      color="info"
-                      size="small"
-                      onClick={() => {
-                        refetch({
-                          ...getCurrentFilters(search),
-                          first: perPage,
-                          after: pageInfo?.endCursor,
-                          last: undefined,
-                          before: undefined,
-                        });
-                      }}
-                    >
-                      {t('common:nextPage')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
+      <QueryPagination
+        pageInfo={pageInfo}
+        refetch={refetch}
+        perPage={perPage}
+      />
     </>
   );
 }

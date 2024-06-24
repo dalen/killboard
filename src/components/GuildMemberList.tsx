@@ -1,11 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
-import { Progress, Table, Button } from 'react-bulma-components';
+import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { CareerIcon } from './CareerIcon';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
+import { QueryPagination } from './QueryPagination';
 
 const GUILD_MEMBERS = gql`
   query GetGuildMembers(
@@ -90,51 +91,12 @@ export function GuildMemberList({
             </tr>
           ))}
         </tbody>
-        {pageInfo && (
-          <tfoot>
-            <tr>
-              <td colSpan={5}>
-                <div className="field is-grouped is-pulled-right">
-                  {pageInfo.hasPreviousPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: undefined,
-                          after: undefined,
-                          before: pageInfo.startCursor,
-                          last: perPage,
-                        })
-                      }
-                    >
-                      {t('common:prevPage')}
-                      <i className="fas fa-circle-chevron-left ml-1" />
-                    </Button>
-                  )}
-                  {pageInfo.hasNextPage && (
-                    <Button
-                      color="info"
-                      size="small"
-                      onClick={() =>
-                        refetch({
-                          first: perPage,
-                          after: pageInfo.endCursor,
-                          before: undefined,
-                          last: undefined,
-                        })
-                      }
-                    >
-                      {t('common:nextPage')}
-                      <i className="fas fa-circle-chevron-right ml-1" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
-          </tfoot>
-        )}
       </Table>
+      <QueryPagination
+        pageInfo={pageInfo}
+        refetch={refetch}
+        perPage={perPage}
+      />
     </div>
   );
 }

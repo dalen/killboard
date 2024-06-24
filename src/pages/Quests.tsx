@@ -1,6 +1,5 @@
 import {
   Breadcrumb,
-  Button,
   Card,
   Container,
   Form,
@@ -18,6 +17,7 @@ import { SearchBox } from '../components/SearchBox';
 import { GoldPrice } from '../components/GoldPrice';
 import { ItemPopup } from '../components/ItemPopup';
 import { questTypeIcon } from '../utils';
+import { QueryPagination } from '../components/QueryPagination';
 
 const QUESTS = gql`
   query GetQuests(
@@ -267,44 +267,11 @@ export function Quests(): JSX.Element {
           </tbody>
         </Table>
       </div>
-      {pageInfo && (
-        <div className="field is-grouped is-pulled-right">
-          {pageInfo.hasPreviousPage && (
-            <Button
-              color="info"
-              size="small"
-              onClick={() => {
-                refetch({
-                  first: undefined,
-                  after: undefined,
-                  last: perPage,
-                  before: pageInfo.startCursor,
-                });
-              }}
-            >
-              {t('common:prevPage')}
-              <i className="fas fa-circle-chevron-left ml-1" />
-            </Button>
-          )}
-          {pageInfo.hasNextPage && (
-            <Button
-              color="info"
-              size="small"
-              onClick={() => {
-                refetch({
-                  first: perPage,
-                  after: pageInfo.endCursor,
-                  last: undefined,
-                  before: undefined,
-                });
-              }}
-            >
-              {t('common:nextPage')}
-              <i className="fas fa-circle-chevron-right ml-1" />
-            </Button>
-          )}
-        </div>
-      )}
+      <QueryPagination
+        pageInfo={pageInfo}
+        perPage={perPage}
+        refetch={refetch}
+      />
     </Container>
   );
 }
