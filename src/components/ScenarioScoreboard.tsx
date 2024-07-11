@@ -89,6 +89,13 @@ export function ScenarioScoreboard({
             </th>
             <th
               align="left"
+              onClick={() => requestSort('killDamage')}
+              className={`${getClassName('killDamage')} is-clickable has-text-link`}
+            >
+              {t('components:scenarioScoreboard.killDamage')}
+            </th>
+            <th
+              align="left"
               onClick={() => requestSort('healing')}
               className={`${getClassName(
                 'healing',
@@ -177,17 +184,10 @@ export function ScenarioScoreboard({
               </td>
               <td align="left">{entry.deathBlows}</td>
               <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Kill Damage: {entry.killDamage}
-                    </div>
-                  }
-                >
-                  <span>{Number(entry.damage).toLocaleString()}</span>
-                </Tippy>
+                <span>{Number(entry.damage).toLocaleString()}</span>
+              </td>
+              <td align="left">
+                <span>{Number(entry.killDamage).toLocaleString()}</span>
               </td>
               <td align="left">
                 <Tippy

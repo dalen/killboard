@@ -176,6 +176,13 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
             </th>
             <th
               align="left"
+              onClick={() => requestSort('killDamage')}
+              className={`${getClassName('killDamage')} is-clickable has-text-link`}
+            >
+              {t('components:skirmishScoreboard.killDamage')}
+            </th>
+            <th
+              align="left"
               onClick={() => requestSort('healing')}
               className={`${getClassName(
                 'healing',
@@ -255,19 +262,12 @@ export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
               </td>
               <td align="left">{entry.deathBlows}</td>
               <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Kill Damage: {entry.killDamage}
-                    </div>
-                  }
-                >
-                  <Link to={`/skirmish/${id}/damage/${entry.character.id}`}>
-                    <span>{Number(entry.damage).toLocaleString()}</span>
-                  </Link>
-                </Tippy>
+                <span>{Number(entry.damage).toLocaleString()}</span>
+              </td>
+              <td align="left">
+                <Link to={`/skirmish/${id}/damage/${entry.character.id}`}>
+                  <span>{Number(entry.killDamage).toLocaleString()}</span>
+                </Link>
               </td>
               <td align="left">
                 <Tippy

@@ -154,6 +154,7 @@
     "guild": "Guild",
     "healing": "Healing",
     "kills": "Kills",
+    "killDamage": "Kill Damage",
     "name": "Name",
     "protection": "Protection",
     "rank": "Rank"
@@ -196,6 +197,7 @@
     "guild": "Guild",
     "healing": "Healing",
     "kills": "Kills",
+    "killDamage": "Kill Damage",
     "name": "Name",
     "objectiveScore": "Objectives",
     "protection": "Protection",
