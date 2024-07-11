@@ -107,6 +107,7 @@
     "guild": "Guild",
     "healing": "Healing",
     "kills": "Kills",
+    "killDamage": "Kill Damage",
     "name": "Name",
     "objectiveScore": "Objectives",
     "protection": "Protection",
