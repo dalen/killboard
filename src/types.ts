@@ -13,6 +13,7 @@ export type Scalars = {
   Int: { input: number; output: number; }
   Float: { input: number; output: number; }
   Byte: { input: any; output: any; }
+  DateTime: { input: any; output: any; }
   Long: { input: any; output: any; }
   Short: { input: any; output: any; }
   URL: { input: any; output: any; }
@@ -250,9 +251,9 @@ export type CharactersEdge = {
 
 export type CitySiegeEvent = Event & {
   __typename?: 'CitySiegeEvent';
-  endTime?: Maybe<Scalars['Long']['output']>;
+  endTime?: Maybe<Scalars['DateTime']['output']>;
   name: Scalars['String']['output'];
-  startTime: Scalars['Long']['output'];
+  startTime: Scalars['DateTime']['output'];
 };
 
 export enum CraftingItemType {
@@ -591,9 +592,9 @@ export type EquipSlotOperationFilterInput = {
 };
 
 export type Event = {
-  endTime?: Maybe<Scalars['Long']['output']>;
+  endTime?: Maybe<Scalars['DateTime']['output']>;
   name: Scalars['String']['output'];
-  startTime: Scalars['Long']['output'];
+  startTime: Scalars['DateTime']['output'];
 };
 
 export type Guild = {
@@ -1392,9 +1393,9 @@ export type LeaderboardEdge = {
 
 export type LiveEvent = Event & {
   __typename?: 'LiveEvent';
-  endTime: Scalars['Long']['output'];
+  endTime: Scalars['DateTime']['output'];
   name: Scalars['String']['output'];
-  startTime: Scalars['Long']['output'];
+  startTime: Scalars['DateTime']['output'];
 };
 
 export type LongOperationFilterInput = {
@@ -2849,9 +2850,9 @@ export type Victim = {
 
 export type ZandriExpeditionEvent = Event & {
   __typename?: 'ZandriExpeditionEvent';
-  endTime?: Maybe<Scalars['Long']['output']>;
+  endTime?: Maybe<Scalars['DateTime']['output']>;
   name: Scalars['String']['output'];
-  startTime: Scalars['Long']['output'];
+  startTime: Scalars['DateTime']['output'];
 };
 
 export type Zone = {
