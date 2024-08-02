@@ -31,6 +31,14 @@ export type Ability = {
   name?: Maybe<Scalars['String']['output']>;
 };
 
+/** Player Archetypes */
+export enum Archetype {
+  Healer = 'HEALER',
+  MeleeDps = 'MELEE_DPS',
+  RangedDps = 'RANGED_DPS',
+  Tank = 'TANK'
+}
+
 /** Holds information about one attacker in a kill */
 export type Attacker = {
   __typename?: 'Attacker';
@@ -190,6 +198,8 @@ export type Character = {
   level: Scalars['Byte']['output'];
   /** First name */
   name: Scalars['String']['output'];
+  /** Scenario ratings for the character */
+  ratings: Array<CharacterRating>;
   /** Current Renown Rank */
   renownRank: Scalars['Byte']['output'];
 };
@@ -214,6 +224,59 @@ export type CharacterItem = {
   /** Item info */
   item: Item;
   talismans: Array<Item>;
+};
+
+/** Info about a quest objective */
+export type CharacterRating = {
+  __typename?: 'CharacterRating';
+  /** Character information */
+  character: Character;
+  /** Mu */
+  mu: Scalars['Float']['output'];
+  rating: Scalars['Float']['output'];
+  /** Rating type */
+  ratingType: Scalars['ID']['output'];
+  /** Season ID */
+  seasonId: Scalars['ID']['output'];
+  /** Sigma */
+  sigma: Scalars['Float']['output'];
+};
+
+export type CharacterRatingFilterInput = {
+  and?: InputMaybe<Array<CharacterRatingFilterInput>>;
+  characterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  mu?: InputMaybe<FloatOperationFilterInput>;
+  or?: InputMaybe<Array<CharacterRatingFilterInput>>;
+  ratingType?: InputMaybe<ByteOperationFilterInput>;
+  seasonId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  sigma?: InputMaybe<FloatOperationFilterInput>;
+};
+
+export type CharacterRatingSortInput = {
+  mu?: InputMaybe<SortEnumType>;
+  sigma?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type CharacterRatingsConnection = {
+  __typename?: 'CharacterRatingsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<CharacterRatingsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<CharacterRating>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type CharacterRatingsEdge = {
+  __typename?: 'CharacterRatingsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: CharacterRating;
 };
 
 export type CharacterSeasonStatsFilterInput = {
@@ -597,6 +660,21 @@ export type Event = {
   startTime: Scalars['DateTime']['output'];
 };
 
+export type FloatOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Float']['input']>;
+  gt?: InputMaybe<Scalars['Float']['input']>;
+  gte?: InputMaybe<Scalars['Float']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  lt?: InputMaybe<Scalars['Float']['input']>;
+  lte?: InputMaybe<Scalars['Float']['input']>;
+  neq?: InputMaybe<Scalars['Float']['input']>;
+  ngt?: InputMaybe<Scalars['Float']['input']>;
+  ngte?: InputMaybe<Scalars['Float']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
+  nlt?: InputMaybe<Scalars['Float']['input']>;
+  nlte?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type Guild = {
   __typename?: 'Guild';
   /** Recruiting brief description */
@@ -736,6 +814,8 @@ export type InstanceEncounter = {
 
 export type InstanceEncounterRun = {
   __typename?: 'InstanceEncounterRun';
+  /** If the encounter was completed */
+  completed: Scalars['Boolean']['output'];
   /** Encounter info */
   encounter?: Maybe<InstanceEncounter>;
   /** The Id of the encounter */
@@ -758,6 +838,10 @@ export type InstanceEncounterRun = {
 
 export type InstanceEncounterRunScoreboardEntry = {
   __typename?: 'InstanceEncounterRunScoreboardEntry';
+  /** Archetype at the time of the run */
+  archetype: Archetype;
+  /** Career at the time of the run */
+  career: Career;
   /** Character information */
   character: Character;
   /** Damage */
@@ -805,6 +889,8 @@ export type InstanceFilterInput = {
 
 export type InstanceRun = {
   __typename?: 'InstanceRun';
+  /** If all encounters have been completed */
+  completed: Scalars['Boolean']['output'];
   /** Encounters */
   encounters: Array<InstanceEncounterRun>;
   /** End time of the run */
@@ -825,16 +911,26 @@ export type InstanceRun = {
 
 export type InstanceRunFilterInput = {
   and?: InputMaybe<Array<InstanceRunFilterInput>>;
+  averageItemRating?: InputMaybe<FloatOperationFilterInput>;
+  completed?: InputMaybe<BooleanOperationFilterInput>;
+  completedEncounters?: InputMaybe<IntOperationFilterInput>;
   end?: InputMaybe<LongOperationFilterInput>;
   id?: InputMaybe<UuidOperationFilterInput>;
   instanceId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  maxItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  minItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
   or?: InputMaybe<Array<InstanceRunFilterInput>>;
   scoreboardEntryCount?: InputMaybe<IntOperationFilterInput>;
   start?: InputMaybe<LongOperationFilterInput>;
+  totalDeaths?: InputMaybe<LongOperationFilterInput>;
 };
 
 export type InstanceRunScoreboardEntry = {
   __typename?: 'InstanceRunScoreboardEntry';
+  /** Archetype at the time of the run */
+  archetype: Archetype;
+  /** Career at the time of the run */
+  career: Career;
   /** Character information */
   character: Character;
   /** Damage */
@@ -881,8 +977,16 @@ export type InstanceRunSortInput = {
 /** A connection to a list of items. */
 export type InstanceRunsConnection = {
   __typename?: 'InstanceRunsConnection';
+  /** Average deaths of all matching runs */
+  averageDeaths: Scalars['Float']['output'];
+  /** Average duration of all matching runs */
+  averageDuration: Scalars['Float']['output'];
   /** A list of edges. */
   edges?: Maybe<Array<InstanceRunsEdge>>;
+  /** Max duration of all matching runs */
+  maxDuration: Scalars['Float']['output'];
+  /** Min duration of all matching runs */
+  minDuration: Scalars['Float']['output'];
   /** A flattened list of the nodes. */
   nodes?: Maybe<Array<InstanceRun>>;
   /** Information to aid in pagination. */
@@ -1084,7 +1188,7 @@ export type ItemFilterInput = {
   /** Number of talisman slots */
   talismanSlots?: InputMaybe<ByteOperationFilterInput>;
   /** Type */
-  type?: InputMaybe<ItemTypesOperationFilterInput>;
+  type?: InputMaybe<ItemTypeOperationFilterInput>;
   /** Unique equipped */
   uniqueEquipped?: InputMaybe<BooleanOperationFilterInput>;
 };
@@ -1205,7 +1309,7 @@ export enum ItemType {
   Trophy = 'TROPHY'
 }
 
-export type ItemTypesOperationFilterInput = {
+export type ItemTypeOperationFilterInput = {
   eq?: InputMaybe<ItemType>;
   in?: InputMaybe<Array<ItemType>>;
   neq?: InputMaybe<ItemType>;
@@ -1494,6 +1598,8 @@ export type Query = {
   __typename?: 'Query';
   /** Get one character */
   character?: Maybe<Character>;
+  /** Query for CharacterRatings matching a filter */
+  characterRatings?: Maybe<CharacterRatingsConnection>;
   /** Query for characters matching a filter */
   characters?: Maybe<CharactersConnection>;
   /** Get one creature */
@@ -1563,6 +1669,16 @@ export type Query = {
 
 export type QueryCharacterArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryCharacterRatingsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<CharacterRatingSortInput>>;
+  where?: InputMaybe<CharacterRatingFilterInput>;
 };
 
 
@@ -1856,7 +1972,7 @@ export type Quest = {
   /** Creatures starting quest */
   starterCreatures: Array<Creature>;
   /** Quest Type */
-  type: Scalars['Byte']['output'];
+  type: QuestTypeFlags;
   /** XP Reward */
   xp: Scalars['UnsignedInt']['output'];
 };
@@ -1868,7 +1984,7 @@ export type QuestFilterInput = {
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<QuestFilterInput>>;
   raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
-  type?: InputMaybe<ByteOperationFilterInput>;
+  type?: InputMaybe<QuestTypeFlagsOperationFilterInput>;
 };
 
 /** Info about a quest objective */
@@ -1902,6 +2018,22 @@ export type QuestSortInput = {
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
   type?: InputMaybe<SortEnumType>;
+};
+
+export enum QuestTypeFlags {
+  Epic = 'EPIC',
+  Group = 'GROUP',
+  PlayerKill = 'PLAYER_KILL',
+  RvR = 'RV_R',
+  Tome = 'TOME',
+  Travel = 'TRAVEL'
+}
+
+export type QuestTypeFlagsOperationFilterInput = {
+  eq?: InputMaybe<QuestTypeFlags>;
+  in?: InputMaybe<Array<QuestTypeFlags>>;
+  neq?: InputMaybe<QuestTypeFlags>;
+  nin?: InputMaybe<Array<QuestTypeFlags>>;
 };
 
 /** A connection to a list of items. */
@@ -2593,6 +2725,21 @@ export type StringOperationFilterInput = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+export enum TomeHelpType {
+  AdvancedHelp = 'ADVANCED_HELP',
+  BeginnerHelp = 'BEGINNER_HELP',
+  GameplayHelp = 'GAMEPLAY_HELP',
+  None = 'NONE',
+  UiHelp = 'UI_HELP'
+}
+
+export type TomeHelpTypeOperationFilterInput = {
+  eq?: InputMaybe<TomeHelpType>;
+  in?: InputMaybe<Array<TomeHelpType>>;
+  neq?: InputMaybe<TomeHelpType>;
+  nin?: InputMaybe<Array<TomeHelpType>>;
+};
+
 /** A connection to a list of items. */
 export type TomeOfKnowledgeAchievementEntriesConnection = {
   __typename?: 'TomeOfKnowledgeAchievementEntriesConnection';
@@ -2717,7 +2864,7 @@ export type TomeOfKnowledgeEntryFilterInput = {
   /** Tome of Knowledge section */
   tomeSection?: InputMaybe<NullableOfTomeSectionOperationFilterInput>;
   /** Type */
-  type?: InputMaybe<ByteOperationFilterInput>;
+  type?: InputMaybe<TomeHelpTypeOperationFilterInput>;
   /** XP reward */
   xp?: InputMaybe<UnsignedIntOperationFilterInputType>;
 };

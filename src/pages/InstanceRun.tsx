@@ -16,7 +16,7 @@ import {
 } from 'date-fns';
 import { Link, useParams } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { Query } from '../types';
+import { Archetype, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { InstanceRunScoreboard } from '../components/InstanceRunScoreboard';
 
@@ -49,6 +49,7 @@ const INSTANCE_RUN = gql`
         }
         level
         renownRank
+        archetype
         itemRating
         deaths
         damage
@@ -118,33 +119,15 @@ export function InstanceRun() {
   const instanceItemRatingMax = Math.max(...instanceItemRatings);
   const instanceItemRatingAverage =
     instanceItemRatings.reduce((a, b) => a + b) / instanceItemRatings.length;
-  const instanceNumTanks = instanceRun.scoreboardEntries.filter((e) =>
-    [
-      'IRON_BREAKER',
-      'BLACK_ORC',
-      'KNIGHT_OF_THE_BLAZING_SUN',
-      'CHOSEN',
-      'SWORD_MASTER',
-      'BLACK_GUARD',
-    ].includes(e.character.career),
+  const instanceNumTanks = instanceRun.scoreboardEntries.filter(
+    (e) => e.archetype === Archetype.Tank,
   ).length;
-
   const instanceNumHealers = instanceRun.scoreboardEntries.filter(
-    (e) =>
-      [
-        'RUNE_PRIEST',
-        'SHAMAN',
-        'WARRIOR_PRIEST',
-        'ZEALOT',
-        'ARCHMAGE',
-        'DISCIPLE_OF_KHAINE',
-      ].includes(e.character.career) && e.healing > e.damage,
+    (e) => e.archetype === Archetype.Healer,
   ).length;
-
-  const instanceNumDPS =
-    instanceRun.scoreboardEntries.length -
-    instanceNumTanks -
-    instanceNumHealers;
+  const instanceNumDPS = instanceRun.scoreboardEntries.filter((e) =>
+    [Archetype.MeleeDps, Archetype.RangedDps].includes(e.archetype),
+  ).length;
 
   return (
     <Container max breakpoint="widescreen" mt={2}>

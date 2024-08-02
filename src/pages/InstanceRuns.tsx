@@ -16,7 +16,7 @@ import {
 } from 'date-fns';
 import { Link, useSearchParams } from 'react-router-dom';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { InstanceRunFilterInput, Query } from '../types';
+import { Archetype, InstanceRunFilterInput, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from '../components/QueryPagination';
 
@@ -48,9 +48,7 @@ const INSTANCE_RUNS = gql`
         scoreboardEntries {
           itemRating
           deaths
-          character {
-            career
-          }
+          archetype
           damage
           healing
         }
@@ -176,31 +174,15 @@ export function InstanceRuns() {
             const itemRatingMax = Math.max(...itemRatings);
             const itemRatingAverage =
               itemRatings.reduce((a, b) => a + b) / itemRatings.length;
-            const numTanks = instanceRun.scoreboardEntries.filter((e) =>
-              [
-                'IRON_BREAKER',
-                'BLACK_ORC',
-                'KNIGHT_OF_THE_BLAZING_SUN',
-                'CHOSEN',
-                'SWORD_MASTER',
-                'BLACK_GUARD',
-              ].includes(e.character.career),
+            const numTanks = instanceRun.scoreboardEntries.filter(
+              (e) => e.archetype === Archetype.Tank,
             ).length;
-
             const numHealers = instanceRun.scoreboardEntries.filter(
-              (e) =>
-                [
-                  'RUNE_PRIEST',
-                  'SHAMAN',
-                  'WARRIOR_PRIEST',
-                  'ZEALOT',
-                  'ARCHMAGE',
-                  'DISCIPLE_OF_KHAINE',
-                ].includes(e.character.career) && e.healing > e.damage,
+              (e) => e.archetype === Archetype.Healer,
             ).length;
-
-            const numDPS =
-              instanceRun.scoreboardEntries.length - numTanks - numHealers;
+            const numDPS = instanceRun.scoreboardEntries.filter((e) =>
+              [Archetype.MeleeDps, Archetype.RangedDps].includes(e.archetype),
+            ).length;
 
             const numEncounters = new Set(
               instanceRun.encounters.map((e) => e.encounterId),
