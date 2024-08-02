@@ -221,7 +221,6 @@ export function InstanceRunsFilters(): JSX.Element {
                 <Form.Input
                   type="number"
                   step={1}
-                  min={0}
                   placeholder="0"
                   value={completedEncounters}
                   onChange={(event) => {
