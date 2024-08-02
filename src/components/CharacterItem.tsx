@@ -71,14 +71,14 @@ export function CharacterItem({
             )}
           </Media.Item>
         )}
+        {modalOpen && (
+          <CharacterItemPopup
+            item={item}
+            talismans={talismans}
+            itemsEquipped={itemsEquipped}
+          />
+        )}
       </Media>
-      {modalOpen && (
-        <CharacterItemPopup
-          item={item}
-          talismans={talismans}
-          itemsEquipped={itemsEquipped}
-        />
-      )}
     </div>
   );
 }

@@ -99,6 +99,7 @@ function NoItem() {
         armor: 0,
         careerRestriction: [],
         buffs: [],
+        abilities: [],
       }}
       talismans={[]}
       itemsEquipped={[]}

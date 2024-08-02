@@ -24,7 +24,30 @@ $table-row-hover-background-color: rgba(0, 0, 0, 0.5);
 $table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5);
 $table-head-cell-color: $link;
 
-@import '../node_modules/bulma/bulma.sass';
+@use 'bulma/sass' with (
+  $scheme-main: rgba(20, 20, 20, 0.5),
+  $scheme-main-ter: rgba(50, 50, 50, 0.2),
+  $scheme-main-bis: rgba(50, 50, 50, 0.2),
+  $primary: $primary,
+  $dark: $dark,
+  $link: $link,
+  $info: $text-strong,
+  $text: $text,
+  $text-strong: $text-strong,
+  $family-secondary: 'Caslon Antique Regular',
+  $navbar-height: 41px,
+  $navbar-padding-vertical: 20px,
+  $navbar-item-color: rgb(255, 153, 0),
+  $table-background-color: rgba(50, 50, 50, 0.2),
+  $table-cell-border-style: none,
+  $table-row-hover-background-color: rgba(0, 0, 0, 0.5),
+  $table-striped-row-even-hover-background-color: rgba(0, 0, 0, 0.5),
+  $table-head-cell-color: $link,
+  $card-background-color: rgba(50, 50, 50, 0.2),
+  $card-shadow: none,
+  $input-s: 0,
+  $breadcrumb-item-active-color: $text-strong
+);
 
 // RoR style on navbar
 nav.navbar {
