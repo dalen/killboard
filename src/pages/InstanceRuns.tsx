@@ -41,6 +41,7 @@ const INSTANCE_RUNS = gql`
         instanceId
         start
         end
+        completed
         instance {
           id
           name

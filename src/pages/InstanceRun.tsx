@@ -3,6 +3,7 @@ import {
   Breadcrumb,
   Card,
   Container,
+  Icon,
   Media,
   Progress,
   Table,
@@ -69,14 +70,13 @@ const INSTANCE_RUN = gql`
         id
         start
         end
+        completed
         instanceId
         encounterId
         scoreboardEntries {
           itemRating
+          archetype
           deaths
-          character {
-            career
-          }
           damage
           healing
         }
@@ -233,33 +233,14 @@ export function InstanceRun() {
             const itemRatingAverage =
               itemRatings.reduce((a, b) => a + b) / itemRatings.length;
             const numTanks = instanceEncounterRun.scoreboardEntries.filter(
-              (e) =>
-                [
-                  'IRON_BREAKER',
-                  'BLACK_ORC',
-                  'KNIGHT_OF_THE_BLAZING_SUN',
-                  'CHOSEN',
-                  'SWORD_MASTER',
-                  'BLACK_GUARD',
-                ].includes(e.character.career),
+              (e) => e.archetype === Archetype.Tank,
             ).length;
-
             const numHealers = instanceEncounterRun.scoreboardEntries.filter(
-              (e) =>
-                [
-                  'RUNE_PRIEST',
-                  'SHAMAN',
-                  'WARRIOR_PRIEST',
-                  'ZEALOT',
-                  'ARCHMAGE',
-                  'DISCIPLE_OF_KHAINE',
-                ].includes(e.character.career) && e.healing > e.damage,
+              (e) => e.archetype === Archetype.Healer,
             ).length;
-
-            const numDPS =
-              instanceEncounterRun.scoreboardEntries.length -
-              numTanks -
-              numHealers;
+            const numDPS = instanceEncounterRun.scoreboardEntries.filter((e) =>
+              [Archetype.MeleeDps, Archetype.RangedDps].includes(e.archetype),
+            ).length;
 
             return (
               <tr key={instanceEncounterRun.id}>
@@ -270,8 +251,27 @@ export function InstanceRun() {
                     {format(startDate, 'HH:mm')}
                   </small>
                 </td>
-                <td>{instanceEncounterRun.encounter?.name}</td>
-                <td>{duration}</td>
+                <td>
+                  {' '}
+                  {instanceEncounterRun.completed ? (
+                    <Icon.Text>
+                      <Icon>
+                        <i className="fas fa-star mr-2 has-text-warning" />
+                      </Icon>
+                      {instanceEncounterRun.encounter?.name}
+                    </Icon.Text>
+                  ) : (
+                    <Icon.Text>
+                      <Icon>
+                        <i className="fa-solid fa-circle-exclamation  mr-2 has-text-danger" />
+                      </Icon>
+                      {instanceEncounterRun.encounter?.name}
+                    </Icon.Text>
+                  )}
+                </td>
+                <td>
+                  <small>{duration}</small>
+                </td>
                 <td>
                   {instanceEncounterRun.scoreboardEntries
                     .map((e) => e.deaths)
