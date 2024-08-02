@@ -4,6 +4,7 @@ import {
   Card,
   Columns,
   Container,
+  Icon,
   Progress,
   Table,
 } from 'react-bulma-components';
@@ -149,13 +150,53 @@ export function InstanceRuns() {
             <th>{t('pages:instanceRuns.instance')}</th>
             <th>{t('pages:instanceRuns.duration')}</th>
             <th>{t('pages:instanceRuns.encounters')}</th>
-            <th>{t('pages:instanceRuns.deaths')}</th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/deaths.png"
+                  width={36}
+                  height={32}
+                  alt={t('pages:instanceRuns.deaths') ?? ''}
+                  title={t('pages:instanceRuns.deaths') ?? ''}
+                />
+              </Icon>
+            </th>{' '}
             <th>{t('pages:instanceRuns.itemRatingMin')}</th>
             <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
             <th>{t('pages:instanceRuns.itemRatingMax')}</th>
-            <th>{t('pages:instanceRuns.numTanks')}</th>
-            <th>{t('pages:instanceRuns.numHealers')}</th>
-            <th>{t('pages:instanceRuns.numDps')}</th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/protection.png"
+                  width={28}
+                  height={33}
+                  alt={t('pages:instanceRuns.numTanks') ?? ''}
+                  title={t('pages:instanceRuns.numTanks') ?? ''}
+                />
+              </Icon>
+            </th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/healing.png"
+                  width={28}
+                  height={28}
+                  alt={t('pages:instanceRuns.numHealers') ?? ''}
+                  title={t('pages:instanceRuns.numHealers') ?? ''}
+                />
+              </Icon>
+            </th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/damage.png"
+                  width={30}
+                  height={32}
+                  alt={t('pages:instanceRuns.numDps') ?? ''}
+                  title={t('pages:instanceRuns.numDps') ?? ''}
+                />
+              </Icon>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -201,17 +242,17 @@ export function InstanceRuns() {
                 <td>{instanceRun.instance.name}</td>
                 <td>{duration}</td>
                 <td>{numEncounters}</td>
-                <td>
+                <td align="center">
                   {instanceRun.scoreboardEntries
                     .map((e) => e.deaths)
                     .reduce((a, b) => a + b, 0)}
                 </td>
-                <td>{itemRatingMin}</td>
-                <td>{itemRatingAverage.toFixed(0)}</td>
-                <td>{itemRatingMax}</td>
-                <td>{numTanks}</td>
-                <td>{numHealers}</td>
-                <td>{numDPS}</td>
+                <td align="center">{itemRatingMin}</td>
+                <td align="center">{itemRatingAverage.toFixed(0)}</td>
+                <td align="center">{itemRatingMax}</td>
+                <td align="center">{numTanks}</td>
+                <td align="center">{numHealers}</td>
+                <td align="center">{numDPS}</td>
                 <td>
                   <Link
                     to={`/instance-run/${instanceRun.id}`}

@@ -206,13 +206,53 @@ export function InstanceRun() {
             <th>{t('pages:instanceRun.startTime')}</th>
             <th>{t('pages:instanceRun.encounter')}</th>
             <th>{t('pages:instanceRun.duration')}</th>
-            <th>{t('pages:instanceRun.deaths')}</th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/deaths.png"
+                  width={36}
+                  height={32}
+                  alt={t('pages:instanceRun.deaths') ?? ''}
+                  title={t('pages:instanceRun.deaths') ?? ''}
+                />
+              </Icon>
+            </th>
             <th>{t('pages:instanceRun.itemRatingMin')}</th>
             <th>{t('pages:instanceRun.itemRatingAverage')}</th>
             <th>{t('pages:instanceRun.itemRatingMax')}</th>
-            <th>{t('pages:instanceRun.numTanks')}</th>
-            <th>{t('pages:instanceRun.numHealers')}</th>
-            <th>{t('pages:instanceRun.numDps')}</th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/protection.png"
+                  width={28}
+                  height={33}
+                  alt={t('pages:instanceRun.numTanks') ?? ''}
+                  title={t('pages:instanceRun.numTanks') ?? ''}
+                />
+              </Icon>
+            </th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/healing.png"
+                  width={28}
+                  height={28}
+                  alt={t('pages:instanceRun.numHealers') ?? ''}
+                  title={t('pages:instanceRun.numHealers') ?? ''}
+                />
+              </Icon>
+            </th>
+            <th align="center">
+              <Icon>
+                <img
+                  src="/images/icons/damage.png"
+                  width={30}
+                  height={32}
+                  alt={t('pages:instanceRun.numDps') ?? ''}
+                  title={t('pages:instanceRun.numDps') ?? ''}
+                />
+              </Icon>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -272,17 +312,17 @@ export function InstanceRun() {
                 <td>
                   <small>{duration}</small>
                 </td>
-                <td>
+                <td align="center">
                   {instanceEncounterRun.scoreboardEntries
                     .map((e) => e.deaths)
                     .reduce((a, b) => a + b, 0)}
                 </td>
-                <td>{itemRatingMin}</td>
-                <td>{itemRatingAverage.toFixed(0)}</td>
-                <td>{itemRatingMax}</td>
-                <td>{numTanks}</td>
-                <td>{numHealers}</td>
-                <td>{numDPS}</td>
+                <td align="center">{itemRatingMin}</td>
+                <td align="center">{itemRatingAverage.toFixed(0)}</td>
+                <td align="center">{itemRatingMax}</td>
+                <td align="center">{numTanks}</td>
+                <td align="center">{numHealers}</td>
+                <td align="center">{numDPS}</td>
                 <td>
                   <Link
                     to={`/instance-run/${id}/${instanceEncounterRun.id}`}
