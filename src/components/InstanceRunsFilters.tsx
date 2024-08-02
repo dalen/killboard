@@ -118,7 +118,7 @@ const getMaxItemRatingFilters = (
     maxItemRatingMax !== '0'
   ) {
     return {
-      averageItemRating: {
+      maxItemRating: {
         gte: Number(maxItemRatingMin),
         lte: Number(maxItemRatingMax),
       },
@@ -127,7 +127,7 @@ const getMaxItemRatingFilters = (
 
   if (maxItemRatingMin && maxItemRatingMin !== '0') {
     return {
-      averageItemRating: {
+      maxItemRating: {
         gte: Number(maxItemRatingMin),
       },
     };
@@ -135,7 +135,7 @@ const getMaxItemRatingFilters = (
 
   if (maxItemRatingMax && maxItemRatingMax !== '0') {
     return {
-      averageItemRating: {
+      maxItemRating: {
         lte: Number(maxItemRatingMax),
       },
     };
