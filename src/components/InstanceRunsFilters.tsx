@@ -105,6 +105,45 @@ const getAvgItemRatingFilters = (
   return {};
 };
 
+const getMaxItemRatingFilters = (
+  search: URLSearchParams,
+): InstanceRunFilterInput => {
+  const maxItemRatingMin = search.get('maxItemRatingMin');
+  const maxItemRatingMax = search.get('maxItemRatingMax');
+
+  if (
+    maxItemRatingMin &&
+    maxItemRatingMin !== '0' &&
+    maxItemRatingMax &&
+    maxItemRatingMax !== '0'
+  ) {
+    return {
+      averageItemRating: {
+        gte: Number(maxItemRatingMin),
+        lte: Number(maxItemRatingMax),
+      },
+    };
+  }
+
+  if (maxItemRatingMin && maxItemRatingMin !== '0') {
+    return {
+      averageItemRating: {
+        gte: Number(maxItemRatingMin),
+      },
+    };
+  }
+
+  if (maxItemRatingMax && maxItemRatingMax !== '0') {
+    return {
+      averageItemRating: {
+        lte: Number(maxItemRatingMax),
+      },
+    };
+  }
+
+  return {};
+};
+
 export const getInstanceRunsFilters = (search: URLSearchParams) => ({
   start: { gt: 0 },
   scoreboardEntryCount: { gte: 6 },
@@ -112,6 +151,7 @@ export const getInstanceRunsFilters = (search: URLSearchParams) => ({
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
   ...getAvgItemRatingFilters(search),
+  ...getMaxItemRatingFilters(search),
 });
 
 export function InstanceRunsFilters(): JSX.Element {
@@ -120,9 +160,21 @@ export function InstanceRunsFilters(): JSX.Element {
   const instance = search.get('instance') ?? 'all';
   const completedEncounters = Number(search.get('completedEncounters') ?? 0);
   const minItemRatingMin = Number(search.get('minItemRatingMin') ?? 0);
-  const minItemRatingMax = Number(search.get('minItemRatingMax') ?? 0);
-  const avgItemRatingMin = Number(search.get('avgItemRatingMin') ?? 0);
-  const avgItemRatingMax = Number(search.get('avgItemRatingMax') ?? 0);
+  const minItemRatingMax =
+    search.get('minItemRatingMax') &&
+    Number(search.get('minItemRatingMax') ?? 0);
+  const avgItemRatingMin =
+    search.get('minItemRatingMax') &&
+    Number(search.get('avgItemRatingMin') ?? 0);
+  const avgItemRatingMax =
+    search.get('minItemRatingMax') &&
+    Number(search.get('avgItemRatingMax') ?? 0);
+  const maxItemRatingMin =
+    search.get('minItemRatingMax') &&
+    Number(search.get('maxItemRatingMin') ?? 0);
+  const maxItemRatingMax =
+    search.get('minItemRatingMax') &&
+    Number(search.get('maxItemRatingMax') ?? 0);
 
   return (
     <Card mb={5}>
@@ -188,7 +240,6 @@ export function InstanceRunsFilters(): JSX.Element {
                 <Form.Input
                   type="number"
                   step={1}
-                  min={0}
                   placeholder="0"
                   value={minItemRatingMax}
                   onChange={(event) => {
@@ -207,7 +258,6 @@ export function InstanceRunsFilters(): JSX.Element {
                 <Form.Input
                   type="number"
                   step={1}
-                  min={0}
                   placeholder="0"
                   value={minItemRatingMin}
                   onChange={(event) => {
@@ -229,7 +279,6 @@ export function InstanceRunsFilters(): JSX.Element {
                 <Form.Input
                   type="number"
                   step={1}
-                  min={0}
                   placeholder="0"
                   value={avgItemRatingMax}
                   onChange={(event) => {
@@ -248,11 +297,49 @@ export function InstanceRunsFilters(): JSX.Element {
                 <Form.Input
                   type="number"
                   step={1}
-                  min={0}
                   placeholder="0"
                   value={avgItemRatingMin}
                   onChange={(event) => {
                     search.set('avgItemRatingMin', event.target.value);
+                    setSearch(search);
+                  }}
+                />
+                <Icon align="left">
+                  <i className="fa-solid fa-arrow-up" />
+                </Icon>
+              </Form.Control>
+            </Form.Field>
+          </Columns.Column>
+          <Columns.Column>
+            <Heading size={6}>Max item rating</Heading>
+            <Form.Field>
+              <Form.Label>Below</Form.Label>
+              <Form.Control>
+                <Form.Input
+                  type="number"
+                  step={1}
+                  placeholder="0"
+                  value={maxItemRatingMax}
+                  onChange={(event) => {
+                    search.set('maxItemRatingMax', event.target.value);
+                    setSearch(search);
+                  }}
+                />
+                <Icon align="left">
+                  <i className="fa-solid fa-arrow-down" />
+                </Icon>
+              </Form.Control>
+            </Form.Field>
+            <Form.Field>
+              <Form.Label>Above</Form.Label>
+              <Form.Control>
+                <Form.Input
+                  type="number"
+                  step={1}
+                  placeholder="0"
+                  value={maxItemRatingMin}
+                  onChange={(event) => {
+                    search.set('maxItemRatingMin', event.target.value);
                     setSearch(search);
                   }}
                 />
