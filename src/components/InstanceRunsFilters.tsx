@@ -158,8 +158,12 @@ export function InstanceRunsFilters(): JSX.Element {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
   const instance = search.get('instance') ?? 'all';
-  const completedEncounters = Number(search.get('completedEncounters') ?? 0);
-  const minItemRatingMin = Number(search.get('minItemRatingMin') ?? 0);
+  const completedEncounters =
+    search.get('completedEncounters') &&
+    Number(search.get('completedEncounters') ?? 0);
+  const minItemRatingMin =
+    search.get('minItemRatingMin') &&
+    Number(search.get('minItemRatingMin') ?? 0);
   const minItemRatingMax =
     search.get('minItemRatingMax') &&
     Number(search.get('minItemRatingMax') ?? 0);
@@ -170,10 +174,10 @@ export function InstanceRunsFilters(): JSX.Element {
     search.get('minItemRatingMax') &&
     Number(search.get('avgItemRatingMax') ?? 0);
   const maxItemRatingMin =
-    search.get('minItemRatingMax') &&
+    search.get('maxItemRatingMax') &&
     Number(search.get('maxItemRatingMin') ?? 0);
   const maxItemRatingMax =
-    search.get('minItemRatingMax') &&
+    search.get('maxItemRatingMax') &&
     Number(search.get('maxItemRatingMax') ?? 0);
 
   return (
