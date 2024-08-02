@@ -154,7 +154,7 @@ export function InstanceRun() {
             <Media.Item>
               <p>
                 <strong>{t('pages:instanceRun.startTime')}</strong>{' '}
-                {formatISO(instanceStartDate, { representation: 'date' })}
+                {formatISO(instanceStartDate, { representation: 'date' })}{' '}
                 {format(instanceStartDate, 'HH:mm')}
               </p>
               <p>
