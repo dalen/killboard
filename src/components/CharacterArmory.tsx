@@ -135,14 +135,14 @@ export function CharacterArmory({ id }: { id: number }): JSX.Element {
   const belt = items.find((item) => item.equipSlot === 'BELT');
   const gloves = items.find((item) => item.equipSlot === 'GLOVES');
 
-  const jewellery1 = items.find((item) => item.equipSlot === 'JEWELLERY_1');
-  const jewellery2 = items.find((item) => item.equipSlot === 'JEWELLERY_2');
-  const jewellery3 = items.find((item) => item.equipSlot === 'JEWELLERY_3');
-  const jewellery4 = items.find((item) => item.equipSlot === 'JEWELLERY_4');
+  const jewellery1 = items.find((item) => item.equipSlot === 'JEWELLERY1');
+  const jewellery2 = items.find((item) => item.equipSlot === 'JEWELLERY2');
+  const jewellery3 = items.find((item) => item.equipSlot === 'JEWELLERY3');
+  const jewellery4 = items.find((item) => item.equipSlot === 'JEWELLERY4');
 
   const event = items.find((item) => item.equipSlot === 'EVENT');
-  const pocket1 = items.find((item) => item.equipSlot === 'POCKET_1');
-  const pocket2 = items.find((item) => item.equipSlot === 'POCKET_2');
+  const pocket1 = items.find((item) => item.equipSlot === 'POCKET1');
+  const pocket2 = items.find((item) => item.equipSlot === 'POCKET2');
 
   return (
     <div className="columns pl-3" style={{ marginBottom: '250px' }}>

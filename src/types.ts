@@ -628,23 +628,23 @@ export enum EquipSlot {
   Event = 'EVENT',
   Gloves = 'GLOVES',
   Helm = 'HELM',
-  Jewellery_1 = 'JEWELLERY_1',
-  Jewellery_2 = 'JEWELLERY_2',
-  Jewellery_3 = 'JEWELLERY_3',
-  Jewellery_4 = 'JEWELLERY_4',
+  Jewellery1 = 'JEWELLERY1',
+  Jewellery2 = 'JEWELLERY2',
+  Jewellery3 = 'JEWELLERY3',
+  Jewellery4 = 'JEWELLERY4',
   MainHand = 'MAIN_HAND',
   None = 'NONE',
   OffHand = 'OFF_HAND',
-  Pocket_1 = 'POCKET_1',
-  Pocket_2 = 'POCKET_2',
+  Pocket1 = 'POCKET1',
+  Pocket2 = 'POCKET2',
   RangedWeapon = 'RANGED_WEAPON',
   Shoulder = 'SHOULDER',
   Standard = 'STANDARD',
-  Trophy_1 = 'TROPHY_1',
-  Trophy_2 = 'TROPHY_2',
-  Trophy_3 = 'TROPHY_3',
-  Trophy_4 = 'TROPHY_4',
-  Trophy_5 = 'TROPHY_5'
+  Trophy1 = 'TROPHY1',
+  Trophy2 = 'TROPHY2',
+  Trophy3 = 'TROPHY3',
+  Trophy4 = 'TROPHY4',
+  Trophy5 = 'TROPHY5'
 }
 
 export type EquipSlotOperationFilterInput = {
@@ -2023,6 +2023,7 @@ export type QuestSortInput = {
 export enum QuestTypeFlags {
   Epic = 'EPIC',
   Group = 'GROUP',
+  None = 'NONE',
   PlayerKill = 'PLAYER_KILL',
   RvR = 'RV_R',
   Tome = 'TOME',
