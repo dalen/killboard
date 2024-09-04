@@ -11,11 +11,13 @@ export function Attacker({
   attacker,
   killDamage,
   showKillDamage,
+  deathblow,
 }: {
   title: string;
   attacker: AttackerType;
   killDamage: KillDamage[];
   showKillDamage: boolean;
+  deathblow: boolean;
 }): JSX.Element {
   // Group killdamage by ability.name and ability.iconUrl
   const killDamageGrouped = killDamage.reduce((acc, curr) => {
@@ -46,6 +48,17 @@ export function Attacker({
             {attacker.character.name}
           </Link>
         </Card.Header.Title>
+        {deathblow && (
+          <Card.Header.Icon>
+            <img
+              src="/images/icons/kills.png"
+              alt="Deathblow"
+              title="Deathblow"
+              width={19}
+              height={31}
+            />
+          </Card.Header.Icon>
+        )}
         <div className="m-3">
           <Tag rounded size="medium" mr={2} color="info">
             {sum(killDamage.map((d) => d.damageAmount))}

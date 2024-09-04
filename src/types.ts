@@ -1344,6 +1344,8 @@ export type Kill = {
   attackers: Array<Attacker>;
   /** Damage by attacker and source */
   damage: Array<KillDamage>;
+  /** The player who landed the killing blow */
+  deathblow?: Maybe<Character>;
   /** Kill Id */
   id: Scalars['ID']['output'];
   /** Scenario instance, null if not in a scenario */
@@ -1942,13 +1944,13 @@ export type Quest = {
   /** Number of choice rewards */
   choiceCount: Scalars['Byte']['output'];
   /** Description */
-  description: Scalars['String']['output'];
+  description?: Maybe<Scalars['String']['output']>;
   /** Gold reward (in brass coins) */
   gold: Scalars['UnsignedInt']['output'];
   /** Id of the quest */
   id: Scalars['ID']['output'];
   /** Journal Entry Text */
-  journalEntry: Scalars['String']['output'];
+  journalEntry?: Maybe<Scalars['String']['output']>;
   /** Maximum level */
   maxLevel: Scalars['Byte']['output'];
   /** Maximum renown */

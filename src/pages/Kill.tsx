@@ -103,6 +103,9 @@ const KILL_DETAILS = gql`
         }
         damageAmount
       }
+      deathblow {
+        id
+      }
     }
   }
 `;
@@ -184,6 +187,7 @@ export function Kill(): JSX.Element {
               (e) => e.attacker?.id === kill.attackers[0].character.id,
             )}
             showKillDamage
+            deathblow={kill.deathblow?.id === kill.attackers[0].character.id}
           />
           {sortBy(kill.attackers.slice(1), (e) => -e.damagePercent).map(
             (attacker) => (
@@ -195,6 +199,7 @@ export function Kill(): JSX.Element {
                 )}
                 showKillDamage
                 key={`assisting_attacker_${attacker.character.id}`}
+                deathblow={kill.deathblow?.id === attacker.character.id}
               />
             ),
           )}
