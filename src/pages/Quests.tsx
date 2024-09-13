@@ -152,13 +152,12 @@ export function Quests(): JSX.Element {
                       <span className="icon has-text-info">
                         <img
                           src={`/images/icons/${questTypeIcon(
-                            quest.type,
+                            Number(quest.type),
                             quest.repeatableType,
                           )}`}
                           alt="Quest Type"
                         />
                       </span>
-                      <span>{quest.name}</span>
                     </div>
                   </Link>
                 </td>

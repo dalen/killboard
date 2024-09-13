@@ -99,7 +99,7 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                     <span className="icon has-text-info">
                       <img
                         src={`/images/icons/${questTypeIcon(
-                          quest.type,
+                          Number(quest.type),
                           quest.repeatableType,
                         )}`}
                         alt="Quest Type"

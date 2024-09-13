@@ -115,7 +115,7 @@ export function Creature(): JSX.Element {
                   <span className="icon has-text-info">
                     <img
                       src={`/images/icons/${questTypeIcon(
-                        quest.type,
+                        Number(quest.type),
                         quest.repeatableType,
                       )}`}
                       alt="Quest Type"
