@@ -104,7 +104,7 @@ export function Creature(): JSX.Element {
 
       <Card mb={5}>
         <Card.Content>
-          <p className="is-size-4 is-family-secondary  has-text-info">
+          <p className="is-size-4 is-family-secondary has-text-info">
             {entry.name}
           </p>
           <p>{t(`enums:creatureSubType.${entry.creatureSubType}`)}</p>
