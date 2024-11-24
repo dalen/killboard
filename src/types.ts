@@ -160,11 +160,38 @@ export enum CareerMask {
   Zealot = 'ZEALOT'
 }
 
+export type CareerMaskFlagsInput = {
+  isArchmage?: InputMaybe<Scalars['Boolean']['input']>;
+  isBlackOrc?: InputMaybe<Scalars['Boolean']['input']>;
+  isBlackguard?: InputMaybe<Scalars['Boolean']['input']>;
+  isBrightWizard?: InputMaybe<Scalars['Boolean']['input']>;
+  isChoppa?: InputMaybe<Scalars['Boolean']['input']>;
+  isChosen?: InputMaybe<Scalars['Boolean']['input']>;
+  isDiscipleOfKhaine?: InputMaybe<Scalars['Boolean']['input']>;
+  isEngineer?: InputMaybe<Scalars['Boolean']['input']>;
+  isIronbreaker?: InputMaybe<Scalars['Boolean']['input']>;
+  isKnight?: InputMaybe<Scalars['Boolean']['input']>;
+  isMagus?: InputMaybe<Scalars['Boolean']['input']>;
+  isMarauder?: InputMaybe<Scalars['Boolean']['input']>;
+  isRunePriest?: InputMaybe<Scalars['Boolean']['input']>;
+  isShadowWarrior?: InputMaybe<Scalars['Boolean']['input']>;
+  isShaman?: InputMaybe<Scalars['Boolean']['input']>;
+  isSlayer?: InputMaybe<Scalars['Boolean']['input']>;
+  isSorcerer?: InputMaybe<Scalars['Boolean']['input']>;
+  isSquigHerder?: InputMaybe<Scalars['Boolean']['input']>;
+  isSwordMaster?: InputMaybe<Scalars['Boolean']['input']>;
+  isWarriorPriest?: InputMaybe<Scalars['Boolean']['input']>;
+  isWhiteLion?: InputMaybe<Scalars['Boolean']['input']>;
+  isWitchElf?: InputMaybe<Scalars['Boolean']['input']>;
+  isWitchHunter?: InputMaybe<Scalars['Boolean']['input']>;
+  isZealot?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type CareerMaskOperationFilterInput = {
-  eq?: InputMaybe<CareerMask>;
-  in?: InputMaybe<Array<CareerMask>>;
-  neq?: InputMaybe<CareerMask>;
-  nin?: InputMaybe<Array<CareerMask>>;
+  eq?: InputMaybe<CareerMaskFlagsInput>;
+  in?: InputMaybe<Array<CareerMaskFlagsInput>>;
+  neq?: InputMaybe<CareerMaskFlagsInput>;
+  nin?: InputMaybe<Array<CareerMaskFlagsInput>>;
 };
 
 export type Chapter = {
@@ -235,7 +262,7 @@ export type CharacterRating = {
   mu: Scalars['Float']['output'];
   rating: Scalars['Float']['output'];
   /** Rating type */
-  ratingType: Scalars['ID']['output'];
+  ratingType: RatingType;
   /** Season ID */
   seasonId: Scalars['ID']['output'];
   /** Sigma */
@@ -247,7 +274,7 @@ export type CharacterRatingFilterInput = {
   characterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   mu?: InputMaybe<FloatOperationFilterInput>;
   or?: InputMaybe<Array<CharacterRatingFilterInput>>;
-  ratingType?: InputMaybe<ByteOperationFilterInput>;
+  ratingType?: InputMaybe<ERatingTypeOperationFilterInput>;
   seasonId?: InputMaybe<UnsignedShortOperationFilterInputType>;
   sigma?: InputMaybe<FloatOperationFilterInput>;
 };
@@ -616,6 +643,13 @@ export type CreaturesEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: Creature;
+};
+
+export type ERatingTypeOperationFilterInput = {
+  eq?: InputMaybe<RatingType>;
+  in?: InputMaybe<Array<RatingType>>;
+  neq?: InputMaybe<RatingType>;
+  nin?: InputMaybe<Array<RatingType>>;
 };
 
 /** Character equipment slots */
@@ -1048,6 +1082,7 @@ export type IntOperationFilterInput = {
 
 export type Item = {
   __typename?: 'Item';
+  abilities: Array<Ability>;
   /** Armor value, block rating on shields */
   armor: Scalars['UnsignedShort']['output'];
   buffs: Array<Ability>;
@@ -1962,19 +1997,19 @@ export type Quest = {
   /** Name */
   name: Scalars['String']['output'];
   /** Objectives */
-  objectives: Array<QuestObjective>;
+  objectives?: Maybe<Array<Maybe<QuestObjective>>>;
   /** Available to races */
   raceRestriction: Array<Race>;
   /** Repeatable Type */
   repeatableType: QuestRepeatableType;
   /** Choice rewards */
-  rewardsChoice: Array<QuestReward>;
+  rewardsChoice?: Maybe<Array<Maybe<QuestReward>>>;
   /** Given rewards */
-  rewardsGiven: Array<QuestReward>;
+  rewardsGiven?: Maybe<Array<Maybe<QuestReward>>>;
   /** Creatures starting quest */
   starterCreatures: Array<Creature>;
   /** Quest Type */
-  type: QuestTypeFlags;
+  type: QuestTypeFlagsFlags;
   /** XP Reward */
   xp: Scalars['UnsignedInt']['output'];
 };
@@ -2032,11 +2067,32 @@ export enum QuestTypeFlags {
   Travel = 'TRAVEL'
 }
 
+export type QuestTypeFlagsFlags = {
+  __typename?: 'QuestTypeFlagsFlags';
+  isEpic: Scalars['Boolean']['output'];
+  isGroup: Scalars['Boolean']['output'];
+  isNone: Scalars['Boolean']['output'];
+  isPlayerKill: Scalars['Boolean']['output'];
+  isRvR: Scalars['Boolean']['output'];
+  isTome: Scalars['Boolean']['output'];
+  isTravel: Scalars['Boolean']['output'];
+};
+
+export type QuestTypeFlagsFlagsInput = {
+  isEpic?: InputMaybe<Scalars['Boolean']['input']>;
+  isGroup?: InputMaybe<Scalars['Boolean']['input']>;
+  isNone?: InputMaybe<Scalars['Boolean']['input']>;
+  isPlayerKill?: InputMaybe<Scalars['Boolean']['input']>;
+  isRvR?: InputMaybe<Scalars['Boolean']['input']>;
+  isTome?: InputMaybe<Scalars['Boolean']['input']>;
+  isTravel?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type QuestTypeFlagsOperationFilterInput = {
-  eq?: InputMaybe<QuestTypeFlags>;
-  in?: InputMaybe<Array<QuestTypeFlags>>;
-  neq?: InputMaybe<QuestTypeFlags>;
-  nin?: InputMaybe<Array<QuestTypeFlags>>;
+  eq?: InputMaybe<QuestTypeFlagsFlagsInput>;
+  in?: InputMaybe<Array<QuestTypeFlagsFlagsInput>>;
+  neq?: InputMaybe<QuestTypeFlagsFlagsInput>;
+  nin?: InputMaybe<Array<QuestTypeFlagsFlagsInput>>;
 };
 
 /** A connection to a list of items. */
@@ -2082,11 +2138,21 @@ export enum RaceMask {
   Orc = 'ORC'
 }
 
+export type RaceMaskFlagsInput = {
+  isChaos?: InputMaybe<Scalars['Boolean']['input']>;
+  isDarkElf?: InputMaybe<Scalars['Boolean']['input']>;
+  isDwarf?: InputMaybe<Scalars['Boolean']['input']>;
+  isEmpire?: InputMaybe<Scalars['Boolean']['input']>;
+  isGoblin?: InputMaybe<Scalars['Boolean']['input']>;
+  isHighElf?: InputMaybe<Scalars['Boolean']['input']>;
+  isOrc?: InputMaybe<Scalars['Boolean']['input']>;
+};
+
 export type RaceMaskOperationFilterInput = {
-  eq?: InputMaybe<RaceMask>;
-  in?: InputMaybe<Array<RaceMask>>;
-  neq?: InputMaybe<RaceMask>;
-  nin?: InputMaybe<Array<RaceMask>>;
+  eq?: InputMaybe<RaceMaskFlagsInput>;
+  in?: InputMaybe<Array<RaceMaskFlagsInput>>;
+  neq?: InputMaybe<RaceMaskFlagsInput>;
+  nin?: InputMaybe<Array<RaceMaskFlagsInput>>;
 };
 
 export type RankedLeaderboardCharacter = {
@@ -2122,7 +2188,7 @@ export enum RankedLeaderboardRatingType {
 
 export type RankedSeason = {
   __typename?: 'RankedSeason';
-  end: Scalars['Int']['output'];
+  end: Scalars['DateTime']['output'];
   /** Season ID */
   id: Scalars['ID']['output'];
   leaderboard?: Maybe<LeaderboardConnection>;
@@ -2130,7 +2196,7 @@ export type RankedSeason = {
   mainSeason: Scalars['Boolean']['output'];
   /** Season name */
   name: Scalars['String']['output'];
-  start: Scalars['Int']['output'];
+  start: Scalars['DateTime']['output'];
 };
 
 
@@ -2142,6 +2208,13 @@ export type RankedSeasonLeaderboardArgs = {
   type: RankedLeaderboardRatingType;
   where?: InputMaybe<CharacterSeasonStatsFilterInput>;
 };
+
+export enum RatingType {
+  Casual = 'CASUAL',
+  City = 'CITY',
+  RankedGroup = 'RANKED_GROUP',
+  RankedSolo = 'RANKED_SOLO'
+}
 
 export enum Realm {
   /** Destruction */

@@ -3,6 +3,7 @@ import {
   KillDamage,
   KillDamageSourceType,
   QuestRepeatableType,
+  QuestTypeFlagsFlags,
 } from './types';
 
 export const careerIcon = (career: Career): string => {
@@ -124,6 +125,7 @@ export const killDamageText = (killDamage: KillDamage): string => {
   return killDamage.ability?.name || 'Unknown';
 };
 
+/*
 const QuestType = {
   Group: 1,
   Travel: 2,
@@ -132,28 +134,29 @@ const QuestType = {
   PlayerKill: 16,
   Epic: 32,
 } as const;
+*/
 
 export const questTypeIcon = (
-  type: number,
+  type: QuestTypeFlagsFlags,
   repeatable: QuestRepeatableType,
 ): string => {
-  if ((type & QuestType.PlayerKill) > 0) {
+  if (type.isPlayerKill) {
     return 'quest_rvr.png';
   }
 
-  if ((type & QuestType.Group) > 0 && (type & QuestType.RvR) > 0) {
+  if (type.isGroup && type.isRvR) {
     return 'quest_rvr3.png';
   }
 
-  if ((type & QuestType.RvR) > 0) {
+  if (type.isRvR) {
     return 'quest_rvr2.png';
   }
 
-  if ((type & QuestType.Travel) > 0) {
+  if (type.isTravel) {
     return 'quest_travel.png';
   }
 
-  if ((type & QuestType.Tome) > 0) {
+  if (type.isTome) {
     return 'quest_tome.png';
   }
 
