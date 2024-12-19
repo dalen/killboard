@@ -57,7 +57,8 @@
     "build": "vite build",
     "test": "tsc -p . && vite build && eslint --ext .js,.jsx,.ts,.tsx src",
     "lint": "eslint src",
-    "codegen": "graphql-codegen"
+    "codegen": "graphql-codegen",
+    "codegen-watch": "graphql-codegen -w"
   },
   "browserslist": {
     "production": [

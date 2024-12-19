@@ -6,7 +6,7 @@ export function GuildHeraldry({
   guild,
 }: {
   size: '24' | '32' | '48' | '64' | '128';
-  guild: Guild;
+  guild: Pick<Guild, 'heraldry' | 'realm'>;
 }): JSX.Element {
   const realmNum = guild.realm === 'ORDER' ? 1 : 2;
 

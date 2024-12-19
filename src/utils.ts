@@ -137,7 +137,10 @@ const QuestType = {
 */
 
 export const questTypeIcon = (
-  type: QuestTypeFlagsFlags,
+  type: Pick<
+    QuestTypeFlagsFlags,
+    'isPlayerKill' | 'isGroup' | 'isRvR' | 'isTravel' | 'isTome'
+  >,
   repeatable: QuestRepeatableType,
 ): string => {
   if (type.isPlayerKill) {

@@ -1,6 +1,8 @@
 import { Item, ItemRarity } from './types';
 
-export const itemNameClass = (item: Item): string => {
+export const itemNameClass = (
+  item: Pick<Item, 'rarity'> & { itemSet?: unknown },
+): string => {
   if (item.itemSet) return 'item-name-item-set';
 
   switch (item.rarity) {
@@ -21,7 +23,9 @@ export const itemNameClass = (item: Item): string => {
   return 'item-name-utility';
 };
 
-export const itemFigureClass = (item: Item): string => {
+export const itemFigureClass = (
+  item: Pick<Item, 'rarity'> & { itemSet?: unknown },
+): string => {
   if (item.itemSet) return 'item-figure-item-set';
 
   switch (item.rarity) {

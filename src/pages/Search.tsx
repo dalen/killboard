@@ -4,32 +4,90 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { CareerIcon } from '../components/CareerIcon';
 import { SearchBox } from '../components/SearchBox';
-import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from '../components/QueryPagination';
+import { SearchQuery } from '../__generated__/graphql';
+import { GuildHeraldry } from '../components/GuildHeraldry';
+import { itemFigureClass, itemNameClass } from '../itemUtils';
+import { questTypeIcon } from '../utils';
 
-const SEARCH_CHARACTERS = gql`
-  query SearchCharacters(
+const SEARCH = gql`
+  query Search(
     $query: String!
     $first: Int
     $last: Int
     $before: String
     $after: String
   ) {
-    characters(
-      where: { name: { contains: $query } }
+    search(
+      query: $query
       first: $first
       last: $last
       before: $before
       after: $after
     ) {
       nodes {
+        __typename
         id
         name
-        career
-        renownRank
-        level
+        ... on Character {
+          level
+          career
+          renownRank
+          guildMembership {
+            guild {
+              id
+              name
+            }
+          }
+        }
+        ... on Guild {
+          level
+          realm
+          leader {
+            id
+            name
+          }
+          heraldry {
+            emblem
+            pattern
+            color1
+            color2
+            shape
+          }
+          members {
+            totalCount
+          }
+        }
+        ... on Item {
+          iconUrl
+          description
+          type
+          slot
+          rarity
+          itemLevel
+          itemSet {
+            id
+            name
+          }
+        }
+        ... on Quest {
+          questType: type {
+            isGroup
+            isTravel
+            isTome
+            isRvR
+            isPlayerKill
+            isEpic
+          }
+          repeatableType
+          minLevel
+          xp
+          gold
+          journalEntry
+          questDescription: description
+        }
       }
       pageInfo {
         hasNextPage
@@ -46,7 +104,7 @@ export function Search(): JSX.Element {
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
-  const { loading, error, data, refetch } = useQuery<Query>(SEARCH_CHARACTERS, {
+  const { loading, error, data, refetch } = useQuery<SearchQuery>(SEARCH, {
     variables: { query, first: perPage },
   });
   const { width } = useWindowDimensions();
@@ -54,10 +112,10 @@ export function Search(): JSX.Element {
 
   if (loading) return <Progress />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.characters?.nodes == null)
+  if (data?.search?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const { pageInfo } = data.characters;
+  const { pageInfo } = data.search;
 
   const handleSubmit = (newQuery: string): void => {
     refetch({ query: newQuery, first: perPage });
@@ -78,27 +136,160 @@ export function Search(): JSX.Element {
         <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
           <thead>
             <tr>
-              <th aria-label="empty header" />
-              <th>{t('pages:searchPage.name')}</th>
-              <th>{t('pages:searchPage.level')}</th>
-              <th>{t('pages:searchPage.renownRank')}</th>
+              <th></th>
+              <th>Name</th>
+              <th>Info</th>
+              <th align="right">Type</th>
             </tr>
           </thead>
           <tbody>
-            {data.characters.nodes.map((character) => (
-              <tr key={character.id}>
-                <td aria-label="Career">
-                  <CareerIcon career={character.career} />
-                </td>
-                <td>
-                  <Link to={`/character/${character.id}`}>
-                    {character.name}
-                  </Link>
-                </td>
-                <td>{character.level}</td>
-                <td>{character.renownRank}</td>
-              </tr>
-            ))}
+            {data.search.nodes.map((searchItem) => {
+              if (searchItem.__typename === 'Character') {
+                return (
+                  <tr>
+                    <td>
+                      <CareerIcon career={searchItem.career} />
+                    </td>
+                    <td>
+                      <Link to={`/character/${searchItem.id}`}>
+                        <strong>{searchItem.name}</strong>
+                      </Link>
+                      <br />
+                      <Link
+                        to={`/guild/${searchItem.guildMembership?.guild?.id}`}
+                      >
+                        {searchItem.guildMembership?.guild?.name}
+                      </Link>
+                    </td>
+                    <td>
+                      <small>
+                        Lvl {searchItem.level}
+                        <br />
+                        RR {searchItem.renownRank}
+                      </small>
+                    </td>
+                    <td align="right">
+                      <span className="tag is-primary">
+                        {searchItem.__typename}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              }
+
+              if (searchItem.__typename === 'Guild') {
+                return (
+                  <tr>
+                    <td>
+                      <GuildHeraldry guild={searchItem} size="48" />
+                    </td>
+                    <td>
+                      <Link to={`/guild/${searchItem.id}`}>
+                        <strong>{searchItem.name}</strong>
+                      </Link>
+                      <br />
+                      Leader:{' '}
+                      <Link to={`/character/${searchItem.leader?.id}`}>
+                        {searchItem.leader?.name}
+                      </Link>
+                    </td>
+                    <td>
+                      <small>
+                        Lvl {searchItem.level}
+                        <br />
+                        Members {searchItem.members?.totalCount}
+                      </small>
+                    </td>
+                    <td align="right">
+                      <span className="tag is-primary">
+                        {searchItem.__typename}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              }
+
+              if (searchItem.__typename === 'Item') {
+                return (
+                  <tr>
+                    <td>
+                      <Link to={`/item/${searchItem.id}`}>
+                        <figure
+                          className={`${itemFigureClass(
+                            searchItem,
+                          )} [item-figure] image is-48x48 m-0`}
+                        >
+                          <img src={searchItem.iconUrl} alt={searchItem.name} />
+                        </figure>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`/item/${searchItem.id}`}>
+                        <div
+                          className={`${itemNameClass(searchItem)} has-text-weight-semi/bold`}
+                        >
+                          {searchItem.name}
+                        </div>
+                      </Link>
+                      <br />
+                      <small>
+                        {t(`enums:itemType.${searchItem.type}`)}{' '}
+                        {t(`enums:itemSlot.${searchItem.slot}`)}
+                      </small>
+                    </td>
+                    <td>
+                      <small>{searchItem.description}</small>
+                    </td>
+                    <td align="right">
+                      <span className="tag is-primary">
+                        {searchItem.__typename}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              }
+
+              if (searchItem.__typename === 'Quest') {
+                return (
+                  <tr>
+                    <td>
+                      <Link to={`/quest/${searchItem.id}`}>
+                        <div className="icon-text">
+                          <span className="icon has-text-info">
+                            <img
+                              src={`/images/icons/${questTypeIcon(
+                                searchItem.questType,
+                                searchItem.repeatableType,
+                              )}`}
+                              alt="Quest Type"
+                            />
+                          </span>
+                        </div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`/quest/${searchItem.id}`}>
+                        {searchItem.name}
+                      </Link>
+                      <br />
+                      {searchItem.minLevel > 0 && (
+                        <small>Lvl: {searchItem.minLevel}</small>
+                      )}
+                    </td>
+                    <td>
+                      <small>
+                        {searchItem.journalEntry ?? searchItem.questDescription}
+                      </small>
+                    </td>
+                    <td align="right">
+                      <span className="tag is-primary">
+                        {searchItem.__typename}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              }
+            })}
           </tbody>
         </Table>
       </div>
