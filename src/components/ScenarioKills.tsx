@@ -4,23 +4,21 @@ import { KillsList } from './KillsList';
 
 const SCENARIO_KILLS = gql`
   query GetScenarioKills(
-    $id: String
+    $id: ID!
     $first: Int
     $last: Int
     $before: String
     $after: String
-    $from: Long
-    $to: Long
+    $from: Int
+    $to: Int
     $soloOnly: Boolean
   ) {
     kills(
-      instanceId: $id
+      where: { time: { gte: $from, lte: $to }, instanceId: { eq: $id } }
       first: $first
       last: $last
       before: $before
       after: $after
-      from: $from
-      to: $to
       soloOnly: $soloOnly
     ) {
       totalCount

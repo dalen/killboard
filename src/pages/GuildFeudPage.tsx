@@ -63,16 +63,20 @@ const GUILD_FEUD_INFO = gql`
 
     guild1kills: kills(
       first: 0
-      killerGuildId: $guildId1
-      victimGuildId: $guildId2
+      where: {
+        killerGuildId: { eq: $guildId1 }
+        victimGuildId: { eq: $guildId2 }
+      }
     ) {
       totalCount
     }
 
     guild2kills: kills(
       first: 0
-      killerGuildId: $guildId2
-      victimGuildId: $guildId1
+      where: {
+        killerGuildId: { eq: $guildId2 }
+        victimGuildId: { eq: $guildId1 }
+      }
     ) {
       totalCount
     }

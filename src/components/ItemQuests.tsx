@@ -28,7 +28,14 @@ const ITEM_INFO = gql`
         nodes {
           id
           name
-          type
+          type {
+            isGroup
+            isTravel
+            isTome
+            isRvR
+            isPlayerKill
+            isEpic
+          }
           repeatableType
           rewardsChoice {
             item {
@@ -99,7 +106,7 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                     <span className="icon has-text-info">
                       <img
                         src={`/images/icons/${questTypeIcon(
-                          Number(quest.type),
+                          quest.type,
                           quest.repeatableType,
                         )}`}
                         alt="Quest Type"

@@ -41,11 +41,23 @@ const PLAYER_FEUD_INFO = gql`
       }
     }
 
-    player1kills: kills(first: 0, killerId: $playerId1, victimId: $playerId2) {
+    player1kills: kills(
+      first: 0
+      where: {
+        killerCharacterId: { eq: $playerId1 }
+        victimCharacterId: { eq: $playerId2 }
+      }
+    ) {
       totalCount
     }
 
-    player2kills: kills(first: 0, killerId: $playerId2, victimId: $playerId1) {
+    player2kills: kills(
+      first: 0
+      where: {
+        killerCharacterId: { eq: $playerId2 }
+        victimCharacterId: { eq: $playerId1 }
+      }
+    ) {
       totalCount
     }
   }

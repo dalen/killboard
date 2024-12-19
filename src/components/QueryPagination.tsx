@@ -2,9 +2,9 @@ import { ReactNode } from 'react';
 import { Button } from 'react-bulma-components';
 import { ApolloQueryResult, OperationVariables } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { PageInfo, Query } from '../types';
+import { PageInfo } from '../types';
 
-export function QueryPagination({
+export function QueryPagination<T>({
   pageInfo,
   perPage,
   refetch,
@@ -13,7 +13,7 @@ export function QueryPagination({
   perPage: number;
   refetch: (
     variables?: Partial<OperationVariables>,
-  ) => Promise<ApolloQueryResult<Query>>;
+  ) => Promise<ApolloQueryResult<T>>;
 }): ReactNode {
   const { t } = useTranslation(['common']);
 

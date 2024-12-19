@@ -14,7 +14,14 @@ const QUEST_INFO = gql`
     quest(id: $id) {
       id
       name
-      type
+      type {
+        isGroup
+        isTravel
+        isTome
+        isRvR
+        isPlayerKill
+        isEpic
+      }
       xp
       gold
       choiceCount

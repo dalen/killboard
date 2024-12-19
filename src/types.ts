@@ -23,7 +23,7 @@ export type Scalars = {
   UnsignedShort: { input: any; output: any; }
 };
 
-export type Ability = {
+export type Ability = SearchContent & {
   __typename?: 'Ability';
   description?: Maybe<Scalars['String']['output']>;
   iconUrl: Scalars['String']['output'];
@@ -194,7 +194,7 @@ export type CareerMaskOperationFilterInput = {
   nin?: InputMaybe<Array<CareerMaskFlagsInput>>;
 };
 
-export type Chapter = {
+export type Chapter = SearchContent & {
   __typename?: 'Chapter';
   id: Scalars['ID']['output'];
   influenceRewards: Array<ChapterInfluenceReward>;
@@ -211,7 +211,7 @@ export type ChapterInfluenceReward = {
 };
 
 /** Info about a character */
-export type Character = {
+export type Character = SearchContent & {
   __typename?: 'Character';
   /** Career/Class of the character */
   career: Career;
@@ -274,7 +274,7 @@ export type CharacterRatingFilterInput = {
   characterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   mu?: InputMaybe<FloatOperationFilterInput>;
   or?: InputMaybe<Array<CharacterRatingFilterInput>>;
-  ratingType?: InputMaybe<ERatingTypeOperationFilterInput>;
+  ratingType?: InputMaybe<RatingTypeOperationFilterInput>;
   seasonId?: InputMaybe<UnsignedShortOperationFilterInputType>;
   sigma?: InputMaybe<FloatOperationFilterInput>;
 };
@@ -367,7 +367,7 @@ export enum CraftingItemType {
   TalismanContainer = 'TALISMAN_CONTAINER'
 }
 
-export type Creature = {
+export type Creature = SearchContent & {
   __typename?: 'Creature';
   creatureSubType: CreatureSubType;
   creatureType: CreatureType;
@@ -645,13 +645,6 @@ export type CreaturesEdge = {
   node: Creature;
 };
 
-export type ERatingTypeOperationFilterInput = {
-  eq?: InputMaybe<RatingType>;
-  in?: InputMaybe<Array<RatingType>>;
-  neq?: InputMaybe<RatingType>;
-  nin?: InputMaybe<Array<RatingType>>;
-};
-
 /** Character equipment slots */
 export enum EquipSlot {
   Back = 'BACK',
@@ -709,7 +702,7 @@ export type FloatOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type Guild = {
+export type Guild = SearchContent & {
   __typename?: 'Guild';
   /** Recruiting brief description */
   briefDescription: Scalars['String']['output'];
@@ -826,6 +819,13 @@ export type Icon = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
+export type IdOperationFilterInput = {
+  eq?: InputMaybe<Scalars['ID']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+  neq?: InputMaybe<Scalars['ID']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
+};
+
 export type Instance = {
   __typename?: 'Instance';
   /** Encounters */
@@ -833,7 +833,7 @@ export type Instance = {
   /** Id */
   id: Scalars['ID']['output'];
   /** Name */
-  name?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   /** Zone information */
   zone: Zone;
 };
@@ -843,7 +843,7 @@ export type InstanceEncounter = {
   /** Id */
   id: Scalars['ID']['output'];
   /** Name */
-  name?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
 };
 
 export type InstanceEncounterRun = {
@@ -1080,7 +1080,7 @@ export type IntOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Int']['input']>;
 };
 
-export type Item = {
+export type Item = SearchContent & {
   __typename?: 'Item';
   abilities: Array<Ability>;
   /** Armor value, block rating on shields */
@@ -1244,7 +1244,7 @@ export type ItemRarityOperationFilterInput = {
   nin?: InputMaybe<Array<ItemRarity>>;
 };
 
-export type ItemSet = {
+export type ItemSet = SearchContent & {
   __typename?: 'ItemSet';
   bonuses: Array<ItemSetBonus>;
   id: Scalars['ID']['output'];
@@ -1435,10 +1435,10 @@ export type KillFilterInput = {
   /** Percent of the total damage done by the killer */
   damagePercent?: InputMaybe<ByteOperationFilterInput>;
   /** Specifies the instance of a scenario this kill happened in */
-  instanceId?: InputMaybe<UuidOperationFilterInput>;
+  instanceId?: InputMaybe<IdOperationFilterInput>;
   killerCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  killerCharacterId?: InputMaybe<IdOperationFilterInput>;
+  killerGuildId?: InputMaybe<IdOperationFilterInput>;
   killerLevel?: InputMaybe<ByteOperationFilterInput>;
   killerRenownRank?: InputMaybe<ByteOperationFilterInput>;
   /** Number of assists */
@@ -1447,12 +1447,12 @@ export type KillFilterInput = {
   /** ScenarioId, 0 if not in a scenario */
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   /** Id of the skirmish the kill happened in */
-  skirmishId?: InputMaybe<UuidOperationFilterInput>;
+  skirmishId?: InputMaybe<IdOperationFilterInput>;
   /** UTC Timestamp */
   time?: InputMaybe<IntOperationFilterInput>;
   victimCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  victimCharacterId?: InputMaybe<IdOperationFilterInput>;
+  victimGuildId?: InputMaybe<IdOperationFilterInput>;
   victimLevel?: InputMaybe<ByteOperationFilterInput>;
   victimRenownRank?: InputMaybe<ByteOperationFilterInput>;
   /** Zone Id */
@@ -1532,9 +1532,11 @@ export type LeaderboardEdge = {
   node: RankedLeaderboardCharacter;
 };
 
-export type LiveEvent = Event & {
+export type LiveEvent = Event & SearchContent & {
   __typename?: 'LiveEvent';
   endTime: Scalars['DateTime']['output'];
+  /** Id of the content */
+  id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   startTime: Scalars['DateTime']['output'];
 };
@@ -1559,13 +1561,13 @@ export type MapSetup = {
   /** The unique id of the map setup */
   id: Scalars['ID']['output'];
   /** The NW corner X coordinate of the map */
-  nwCornerX: Scalars['UnsignedInt']['output'];
+  nwCornerX: Scalars['Int']['output'];
   /** The NW corner Y coordinate of the map */
-  nwCornerY: Scalars['UnsignedInt']['output'];
+  nwCornerY: Scalars['Int']['output'];
   /** The SE corner X coordinate of the map */
-  seCornerX: Scalars['UnsignedInt']['output'];
+  seCornerX: Scalars['Int']['output'];
   /** The SE corner Y coordinate of the map */
-  seCornerY: Scalars['UnsignedInt']['output'];
+  seCornerY: Scalars['Int']['output'];
 };
 
 /** A connection to a list of items. */
@@ -1679,6 +1681,8 @@ export type Query = {
   scenario?: Maybe<ScenarioRecord>;
   /** Query for scenario records matching a filter */
   scenarios?: Maybe<ScenariosConnection>;
+  /** Unified search */
+  search?: Maybe<SearchConnection>;
   /** Get one skirmish */
   skirmish?: Maybe<Skirmish>;
   /** Query for skirmishes records matching a filter */
@@ -1821,21 +1825,13 @@ export type QueryKillsArgs = {
   after?: InputMaybe<Scalars['String']['input']>;
   before?: InputMaybe<Scalars['String']['input']>;
   first?: InputMaybe<Scalars['Int']['input']>;
-  from?: InputMaybe<Scalars['Long']['input']>;
   guildFeudFilter?: InputMaybe<GuildFeudFilterInput>;
   includeAssists?: InputMaybe<Scalars['Boolean']['input']>;
   instanceId?: InputMaybe<Scalars['String']['input']>;
-  killerGuildId?: InputMaybe<Scalars['ID']['input']>;
-  killerId?: InputMaybe<Scalars['ID']['input']>;
   last?: InputMaybe<Scalars['Int']['input']>;
   playerFeudFilter?: InputMaybe<PlayerFeudFilterInput>;
-  scenarioId?: InputMaybe<Scalars['ID']['input']>;
   soloOnly?: Scalars['Boolean']['input'];
-  to?: InputMaybe<Scalars['Long']['input']>;
-  victimGuildId?: InputMaybe<Scalars['ID']['input']>;
-  victimId?: InputMaybe<Scalars['ID']['input']>;
   where?: InputMaybe<KillFilterInput>;
-  zoneId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
@@ -1906,6 +1902,15 @@ export type QueryScenariosArgs = {
 };
 
 
+export type QuerySearchArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  query: Scalars['String']['input'];
+};
+
+
 export type QuerySkirmishArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1972,7 +1977,7 @@ export type QueryWeeklyKillLeaderboardArgs = {
 };
 
 /** Info about a quest */
-export type Quest = {
+export type Quest = SearchContent & {
   __typename?: 'Quest';
   /** Available to careers */
   careerRestriction: Array<Career>;
@@ -1997,15 +2002,15 @@ export type Quest = {
   /** Name */
   name: Scalars['String']['output'];
   /** Objectives */
-  objectives?: Maybe<Array<Maybe<QuestObjective>>>;
+  objectives: Array<QuestObjective>;
   /** Available to races */
   raceRestriction: Array<Race>;
   /** Repeatable Type */
   repeatableType: QuestRepeatableType;
   /** Choice rewards */
-  rewardsChoice?: Maybe<Array<Maybe<QuestReward>>>;
+  rewardsChoice: Array<QuestReward>;
   /** Given rewards */
-  rewardsGiven?: Maybe<Array<Maybe<QuestReward>>>;
+  rewardsGiven: Array<QuestReward>;
   /** Creatures starting quest */
   starterCreatures: Array<Creature>;
   /** Quest Type */
@@ -2216,6 +2221,13 @@ export enum RatingType {
   RankedSolo = 'RANKED_SOLO'
 }
 
+export type RatingTypeOperationFilterInput = {
+  eq?: InputMaybe<RatingType>;
+  in?: InputMaybe<Array<RatingType>>;
+  neq?: InputMaybe<RatingType>;
+  nin?: InputMaybe<Array<RatingType>>;
+};
+
 export enum Realm {
   /** Destruction */
   Destruction = 'DESTRUCTION',
@@ -2276,7 +2288,7 @@ export type RewardedFromQuestsEdge = {
   node: Quest;
 };
 
-export type Scenario = {
+export type Scenario = SearchContent & {
   __typename?: 'Scenario';
   /** The unique id of the scenario */
   id: Scalars['ID']['output'];
@@ -2408,6 +2420,7 @@ export enum ScenarioType {
   CaptureTheFlag = 'CAPTURE_THE_FLAG',
   CitySiege = 'CITY_SIEGE',
   DaemonBall = 'DAEMON_BALL',
+  Deathmatch = 'DEATHMATCH',
   Domination = 'DOMINATION',
   DominationDragonsBane = 'DOMINATION_DRAGONS_BANE',
   DominationEc = 'DOMINATION_EC',
@@ -2471,6 +2484,34 @@ export type ScoreboardEntriesEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: SkirmishScoreboardEntry;
+};
+
+/** A connection to a list of items. */
+export type SearchConnection = {
+  __typename?: 'SearchConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<SearchEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<SearchContent>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+export type SearchContent = {
+  /** Id of the content */
+  id: Scalars['ID']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+};
+
+/** An edge in a connection. */
+export type SearchEdge = {
+  __typename?: 'SearchEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: SearchContent;
 };
 
 export enum Sex {
@@ -2921,7 +2962,7 @@ export type TomeOfKnowledgeEntriesEdge = {
   node: TomeOfKnowledgeEntry;
 };
 
-export type TomeOfKnowledgeEntry = {
+export type TomeOfKnowledgeEntry = SearchContent & {
   __typename?: 'TomeOfKnowledgeEntry';
   description: Scalars['String']['output'];
   id: Scalars['ID']['output'];
@@ -2986,6 +3027,21 @@ export type UnsignedIntOperationFilterInputType = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedInt']['input']>>>;
   nlt?: InputMaybe<Scalars['UnsignedInt']['input']>;
   nlte?: InputMaybe<Scalars['UnsignedInt']['input']>;
+};
+
+export type UnsignedLongOperationFilterInputType = {
+  eq?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  gt?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  gte?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['UnsignedLong']['input']>>>;
+  lt?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  lte?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  neq?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  ngt?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  ngte?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedLong']['input']>>>;
+  nlt?: InputMaybe<Scalars['UnsignedLong']['input']>;
+  nlte?: InputMaybe<Scalars['UnsignedLong']['input']>;
 };
 
 export type UnsignedShortOperationFilterInputType = {
@@ -3078,7 +3134,7 @@ export type ZandriExpeditionEvent = Event & {
   startTime: Scalars['DateTime']['output'];
 };
 
-export type Zone = {
+export type Zone = SearchContent & {
   __typename?: 'Zone';
   /** The unique id of the zone */
   id: Scalars['ID']['output'];

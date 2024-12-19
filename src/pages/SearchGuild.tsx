@@ -3,10 +3,10 @@ import { Container, Progress, Table, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router-dom';
 import { SearchBox } from '../components/SearchBox';
-import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from '../components/QueryPagination';
+import { SearchGuildsQuery } from '../__generated__/graphql';
 
 const SEARCH_GUILD = gql`
   query SearchGuilds(
@@ -52,9 +52,12 @@ export function SearchGuild(): JSX.Element {
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
-  const { loading, error, data, refetch } = useQuery<Query>(SEARCH_GUILD, {
-    variables: { query, first: perPage },
-  });
+  const { loading, error, data, refetch } = useQuery<SearchGuildsQuery>(
+    SEARCH_GUILD,
+    {
+      variables: { query, first: perPage },
+    },
+  );
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 

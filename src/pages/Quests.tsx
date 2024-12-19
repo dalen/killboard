@@ -37,7 +37,14 @@ const QUESTS = gql`
       nodes {
         id
         name
-        type
+        type {
+          isGroup
+          isTravel
+          isTome
+          isRvR
+          isPlayerKill
+          isEpic
+        }
         repeatableType
         xp
         gold
@@ -152,7 +159,7 @@ export function Quests(): JSX.Element {
                       <span className="icon has-text-info">
                         <img
                           src={`/images/icons/${questTypeIcon(
-                            Number(quest.type),
+                            quest.type,
                             quest.repeatableType,
                           )}`}
                           alt="Quest Type"
