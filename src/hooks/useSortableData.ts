@@ -5,13 +5,14 @@ export enum SortConfigDirection {
   descending = 'descending',
 }
 
-export type SortConfig = {
+export interface SortConfig {
   key: number | string;
   direction: SortConfigDirection;
-};
+}
 
 export const useSortableData = (
-  items: any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  items: any[],
   config: SortConfig | null = null,
 ) => {
   const [sortConfig, setSortConfig] = React.useState(config);

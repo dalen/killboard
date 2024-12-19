@@ -1,4 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
+
 import './i18n/config';
 import React from 'react';
 import { Character } from './pages/Character';
@@ -29,8 +30,8 @@ import { InstanceEncounterRun } from './pages/InstanceEncounterRun';
 function usePageViews() {
   const location = useLocation();
   React.useEffect(() => {
-    if ((window as any).gtag == null) return;
-    (window as any).gtag('event', 'pageview', {
+    if (window.gtag == null) return;
+    window.gtag('event', 'pageview', {
       page_location: location.pathname,
     });
   }, [location]);

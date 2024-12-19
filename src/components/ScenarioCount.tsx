@@ -33,7 +33,7 @@ export function ScenarioCount({
   title,
 }: {
   characterId?: string;
-  guildId?: String;
+  guildId?: string;
   wins: boolean;
   title: string;
 }): React.ReactElement | null {

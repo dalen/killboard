@@ -72,7 +72,7 @@ export function GuildLatestSkirmishes({
   guildId,
   perPage = 15,
 }: {
-  guildId?: String;
+  guildId?: string;
   perPage?: number;
 }): JSX.Element {
   const [search] = useSearchParams();

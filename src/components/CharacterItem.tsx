@@ -12,8 +12,8 @@ export function CharacterItem({
   itemsEquipped = [],
 }: {
   item: Item;
-  talismans?: Array<Item>;
-  itemsEquipped?: Array<CharacterItemType>;
+  talismans?: Item[];
+  itemsEquipped?: CharacterItemType[];
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);

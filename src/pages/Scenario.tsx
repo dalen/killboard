@@ -81,7 +81,7 @@ const SCENARIO_INFO = gql`
   }
 `;
 
-const ScenarioQueueTypes: { [key: number]: string } = {
+const ScenarioQueueTypes: Record<number, string> = {
   0: 'Standard',
   1: 'Group Ranked',
   2: 'Discordant Skirmish',

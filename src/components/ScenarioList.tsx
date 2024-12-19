@@ -57,7 +57,7 @@ export function ScenarioList({
   perPage = 15,
 }: {
   characterId?: string;
-  guildId?: String;
+  guildId?: string;
   perPage?: number;
 }): React.ReactElement | null {
   const { t } = useTranslation(['common', 'components']);

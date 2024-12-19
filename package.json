@@ -4,16 +4,16 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@apollo/client": "^3.11.10",
+    "@apollo/client": "^3.12.3",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
     "@testing-library/user-event": "^14.5.2",
     "@tippyjs/react": "^4.2.6",
     "clsx": "^2.1.1",
-    "date-fns": "^3.6.0",
-    "graphql": "^16.9.0",
-    "i18next": "^23.14.0",
+    "date-fns": "^4.1.0",
+    "graphql": "^16.10.0",
+    "i18next": "^24.1.2",
     "lodash": "^4.17.21",
     "react": "^18.3.1",
     "react-bulma-components": "^4.1.0",
@@ -24,73 +24,39 @@
     "simpleheat": "^0.4.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
     "@graphql-codegen/cli": "^5.0.3",
     "@graphql-codegen/typescript": "^4.1.2",
+    "@types/eslint-config-prettier": "^6.11.3",
+    "@types/gtag.js": "^0.0.20",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
     "@types/node": "^22.9.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/simpleheat": "^0.4.3",
-    "@typescript-eslint/eslint-plugin": "^7.17.0",
-    "@typescript-eslint/parser": "^7.17.0",
-    "@vitejs/plugin-react": "^4.3.3",
+    "@typescript-eslint/eslint-plugin": "^8.18.1",
+    "@typescript-eslint/parser": "^8.18.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "bulma": "^1.0.2",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint": "^9.17.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jsx-a11y": "^6.10.2",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-react": "^7.37.2",
-    "eslint-plugin-react-hooks": "^4.6.2",
-    "prettier": "^3.3.3",
+    "eslint-plugin-react-hooks": "^5.1.0",
+    "prettier": "^3.4.2",
     "typescript": "^5.7.2",
-    "vite": "^5.4.11"
+    "typescript-eslint": "^8.18.1",
+    "vite": "^6.0.3"
   },
   "scripts": {
     "start": "vite",
     "build": "vite build",
     "test": "tsc -p . && vite build && eslint --ext .js,.jsx,.ts,.tsx src",
-    "lint": "eslint --ext .js,.jsx,.ts,.tsx src",
+    "lint": "eslint src",
     "codegen": "graphql-codegen"
-  },
-  "eslintConfig": {
-    "extends": [
-      "airbnb",
-      "airbnb/hooks",
-      "airbnb-typescript",
-      "prettier"
-    ],
-    "rules": {
-      "prettier/prettier": "error",
-      "linebreak-style": "off",
-      "react/react-in-jsx-scope": "off",
-      "import/prefer-default-export": "off",
-      "react/require-default-props": "off",
-      "default-case": "off",
-      "no-bitwise": "off",
-      "no-underscore-dangle": [
-        "error",
-        {
-          "allow": [
-            "__typename"
-          ]
-        }
-      ]
-    },
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-      "project": "./tsconfig.json"
-    },
-    "plugins": [
-      "@typescript-eslint",
-      "prettier"
-    ],
-    "ignorePatterns": [
-      "src/types.ts"
-    ]
   },
   "browserslist": {
     "production": [

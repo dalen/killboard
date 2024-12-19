@@ -6,7 +6,7 @@ import { itemNameClass, statMultiplier } from '../itemUtils';
 
 const numEquippedInSet = (
   itemSet: ItemSet,
-  itemsEquipped: Array<CharacterItem>,
+  itemsEquipped: CharacterItem[],
 ): number => {
   let numEquipped = 0;
 
@@ -29,8 +29,8 @@ export function CharacterItemPopup({
   itemsEquipped,
 }: {
   item: Item;
-  talismans: Array<Item>;
-  itemsEquipped: Array<CharacterItem>;
+  talismans: Item[];
+  itemsEquipped: CharacterItem[];
 }): JSX.Element {
   const { t } = useTranslation(['enums']);
 
