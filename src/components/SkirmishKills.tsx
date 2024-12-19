@@ -3,7 +3,7 @@ import { KillsList } from './KillsList';
 
 const SKIRMISH_KILLS = gql`
   query GetSkirmishKills(
-    $id: ID!
+    $id: UUID!
     $startTime: Int
     $endTime: Int
     $first: Int

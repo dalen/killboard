@@ -4,7 +4,7 @@ import { KillsList } from './KillsList';
 
 const SCENARIO_KILLS = gql`
   query GetScenarioKills(
-    $id: ID!
+    $id: UUID!
     $first: Int
     $last: Int
     $before: String

@@ -4,7 +4,7 @@ import { KillsList } from './KillsList';
 
 const RECENT_KILLS = gql`
   query GetLatestCharacterKills(
-    $id: ID!
+    $id: UnsignedInt!
     $first: Int
     $last: Int
     $before: String

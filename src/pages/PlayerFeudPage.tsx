@@ -14,7 +14,12 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { PlayerFeudCharacterInfo } from '../components/PlayerFeudCharacterInfo';
 
 const PLAYER_FEUD_INFO = gql`
-  query GetPlayerFeudInfo($playerId1: ID!, $playerId2: ID!) {
+  query GetPlayerFeudInfo(
+    $playerId1: ID!
+    $playerIntId1: UnsignedInt!
+    $playerId2: ID!
+    $playerIntId2: UnsignedInt!
+  ) {
     player1: character(id: $playerId1) {
       name
       career
@@ -44,8 +49,8 @@ const PLAYER_FEUD_INFO = gql`
     player1kills: kills(
       first: 0
       where: {
-        killerCharacterId: { eq: $playerId1 }
-        victimCharacterId: { eq: $playerId2 }
+        killerCharacterId: { eq: $playerIntId1 }
+        victimCharacterId: { eq: $playerIntId2 }
       }
     ) {
       totalCount
@@ -54,8 +59,8 @@ const PLAYER_FEUD_INFO = gql`
     player2kills: kills(
       first: 0
       where: {
-        killerCharacterId: { eq: $playerId2 }
-        victimCharacterId: { eq: $playerId1 }
+        killerCharacterId: { eq: $playerIntId2 }
+        victimCharacterId: { eq: $playerIntId1 }
       }
     ) {
       totalCount
@@ -91,7 +96,12 @@ export function PlayerFeudPage(): JSX.Element {
         </Breadcrumb.Item>
         <Breadcrumb.Item active>
           <Link to={`/character/${playerId1}/feud/${playerId2}`}>
-            {t('pages:playerFeud.playerFeudId', { playerId1, playerId2 })}
+            {t('pages:playerFeud.playerFeudId', {
+              playerId1,
+              playerId2,
+              playerIntId1: playerId1,
+              playerIntId2: playerId2,
+            })}
           </Link>
         </Breadcrumb.Item>
       </Breadcrumb>
