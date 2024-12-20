@@ -118,7 +118,11 @@ export function InstanceRunScoreboard({
               <td>
                 {entry.guild && (
                   <Link to={`/guild/${entry.guild.id}`}>
-                    <GuildHeraldry size="32" guild={entry.guild} />
+                    <GuildHeraldry
+                      size="32"
+                      heraldry={entry.guild.heraldry}
+                      realm={entry.guild.realm}
+                    />
                   </Link>
                 )}
               </td>

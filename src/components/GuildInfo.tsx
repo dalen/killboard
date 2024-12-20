@@ -4,16 +4,23 @@ import { Link } from 'react-router-dom';
 import { Guild } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 
-export function GuildInfo({ guild }: { guild: Guild }): JSX.Element {
+export function GuildInfo({ guild }: { guild: Partial<Guild> }): JSX.Element {
   const { t } = useTranslation(['components']);
 
   return (
     <Card mb={5}>
       <Card.Content>
         <Media>
-          <Media.Item align="left">
-            <GuildHeraldry size="128" guild={guild} />
-          </Media.Item>
+          {guild.heraldry && guild.realm && (
+            <Media.Item align="left">
+              <GuildHeraldry
+                size="128"
+                heraldry={guild.heraldry}
+                realm={guild.realm}
+              />
+            </Media.Item>
+          )}
+
           <Media.Item>
             <p className="is-size-4">
               <strong>{guild.name}</strong>

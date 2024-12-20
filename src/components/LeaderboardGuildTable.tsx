@@ -33,7 +33,11 @@ export function LeaderboardGuildTable({
               <td aria-labelledby="th-guildname">
                 <Media>
                   <Media.Item align="left">
-                    <GuildHeraldry size="48" guild={leaderboardEntry.guild} />
+                    <GuildHeraldry
+                      size="48"
+                      heraldry={leaderboardEntry.guild.heraldry}
+                      realm={leaderboardEntry.guild.realm}
+                    />
                   </Media.Item>
                   <Media.Item>
                     <Content>

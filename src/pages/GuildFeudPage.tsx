@@ -8,13 +8,21 @@ import {
 import { Link, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { Guild, KillsConnection } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildInfo } from '../components/GuildInfo';
 import { GuildFeud } from '../components/GuildFeud';
+import {
+  GetGuildFeudInfoQuery,
+  GetGuildFeudInfoQueryVariables,
+} from '../__generated__/graphql';
 
 const GUILD_FEUD_INFO = gql`
-  query GetGuildFeudInfo($guildId1: ID!, $guildId2: ID!) {
+  query GetGuildFeudInfo(
+    $guildId1: ID!
+    $guildInt1: UnsignedInt!
+    $guildId2: ID!
+    $guildInt2: UnsignedInt!
+  ) {
     guild1: guild(id: $guildId1) {
       name
       description
@@ -64,8 +72,8 @@ const GUILD_FEUD_INFO = gql`
     guild1kills: kills(
       first: 0
       where: {
-        killerGuildId: { eq: $guildId1 }
-        victimGuildId: { eq: $guildId2 }
+        killerGuildId: { eq: $guildInt1 }
+        victimGuildId: { eq: $guildInt2 }
       }
     ) {
       totalCount
@@ -74,8 +82,8 @@ const GUILD_FEUD_INFO = gql`
     guild2kills: kills(
       first: 0
       where: {
-        killerGuildId: { eq: $guildId2 }
-        victimGuildId: { eq: $guildId1 }
+        killerGuildId: { eq: $guildInt2 }
+        victimGuildId: { eq: $guildInt1 }
       }
     ) {
       totalCount
@@ -88,13 +96,16 @@ export function GuildFeudPage(): JSX.Element {
 
   const { guildId1, guildId2 } = useParams();
 
-  const { loading, error, data } = useQuery<{
-    guild1: Guild;
-    guild1kills: KillsConnection;
-    guild2: Guild;
-    guild2kills: KillsConnection;
-  }>(GUILD_FEUD_INFO, {
-    variables: { guildId1, guildId2 },
+  const { loading, error, data } = useQuery<
+    GetGuildFeudInfoQuery,
+    GetGuildFeudInfoQueryVariables
+  >(GUILD_FEUD_INFO, {
+    variables: {
+      guildId1,
+      guildInt1: guildId1,
+      guildId2,
+      guildInt2: guildId2,
+    },
   });
 
   if (loading) return <Progress />;
@@ -129,11 +140,11 @@ export function GuildFeudPage(): JSX.Element {
           </Container>
           <Container justifyContent="center" className="is-flex" textSize={5}>
             <span className="has-text-weight-bold has-text-info">
-              {data.guild1kills.totalCount}
+              {data.guild1kills?.totalCount}
             </span>
             <span className="mx-3">vs</span>{' '}
             <span className="has-text-weight-bold has-text-info">
-              {data.guild2kills.totalCount}
+              {data.guild2kills?.totalCount}
             </span>
           </Container>
         </Columns.Column>

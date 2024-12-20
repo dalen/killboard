@@ -135,7 +135,11 @@ export function SkirmishTopPlayer({
         {player.guild && (
           <Icon.Text>
             <Icon>
-              <GuildHeraldry size="24" guild={player.guild} />
+              <GuildHeraldry
+                size="24"
+                heraldry={player.guild.heraldry}
+                realm={player.guild.realm}
+              />
             </Icon>
             <Link to={`/guild/${player.guild?.id}`}>{player.guild?.name}</Link>
           </Icon.Text>

@@ -181,7 +181,11 @@ export function Search(): JSX.Element {
                 return (
                   <tr>
                     <td>
-                      <GuildHeraldry guild={searchItem} size="48" />
+                      <GuildHeraldry
+                        heraldry={searchItem.heraldry}
+                        realm={searchItem.realm}
+                        size="48"
+                      />
                     </td>
                     <td>
                       <Link to={`/guild/${searchItem.id}`}>

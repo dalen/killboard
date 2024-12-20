@@ -228,7 +228,11 @@ export function Kill(): JSX.Element {
                     </small>
                   </Media.Item>
                   <Media.Item align="left">
-                    <GuildHeraldry size="48" guild={kill.victim.guild} />
+                    <GuildHeraldry
+                      size="48"
+                      heraldry={kill.victim.guild.heraldry}
+                      realm={kill.victim.guild.realm}
+                    />
                   </Media.Item>
                   <Media.Item>
                     <Link to={`/guild/${kill.victim.guild?.id}`}>

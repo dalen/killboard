@@ -119,7 +119,11 @@ export function SkirmishListTable({
                     >
                       <Icon.Text>
                         <Icon>
-                          <GuildHeraldry size="24" guild={topGuild.guild} />
+                          <GuildHeraldry
+                            size="24"
+                            heraldry={topGuild.guild.heraldry}
+                            realm={topGuild.guild.realm}
+                          />
                         </Icon>
                         <Link to={`/guild/${topGuild.guild.id}`}>
                           {topGuild.guild.name}

@@ -80,7 +80,11 @@ export function Attacker({
           {attacker.guild && (
             <>
               <Media.Item align="left">
-                <GuildHeraldry size="48" guild={attacker.guild} />
+                <GuildHeraldry
+                  size="48"
+                  heraldry={attacker.guild.heraldry}
+                  realm={attacker.guild.realm}
+                />
               </Media.Item>
               <Media.Item>
                 <Link to={`/guild/${attacker.guild?.id}`}>
