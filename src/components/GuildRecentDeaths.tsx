@@ -79,7 +79,7 @@ export function GuildRecentDeaths({ id }: { id: number }): JSX.Element {
       title={t('guildRecentDeaths.title')}
       query={RECENT_DEATHS}
       queryOptions={{
-        variables: { id },
+        variables: { id, time: {} },
       }}
       perPage={10}
     />

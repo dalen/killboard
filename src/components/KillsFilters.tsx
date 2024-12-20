@@ -47,7 +47,7 @@ const getPeriodFilters = (search: URLSearchParams) => {
       };
   }
 
-  return {};
+  return { time: {} };
 };
 
 const getSoloKillsFilters = (search: URLSearchParams) => {

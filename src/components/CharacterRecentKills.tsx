@@ -69,7 +69,7 @@ export function CharacterRecentKills({ id }: { id: number }): JSX.Element {
       title={t('characterRecentKills.title')}
       query={RECENT_KILLS}
       queryOptions={{
-        variables: { id },
+        variables: { id, time: {} },
       }}
       perPage={10}
       showTime={false}
