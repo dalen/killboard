@@ -16,26 +16,34 @@ const getPeriodFilters = (search: URLSearchParams) => {
   switch (period) {
     case 'thisWeek':
       return {
-        from: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+        time: {
+          gte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+        },
       };
 
     case 'lastWeek':
       return {
-        from: getUnixTime(
-          startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }),
-        ),
-        to: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+        time: {
+          gte: getUnixTime(
+            startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }),
+          ),
+          lte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+        },
       };
 
     case 'thisMonth':
       return {
-        from: getUnixTime(startOfMonth(new Date())),
+        time: {
+          gte: getUnixTime(startOfMonth(new Date())),
+        },
       };
 
     case 'lastMonth':
       return {
-        from: getUnixTime(startOfMonth(subMonths(new Date(), 1))),
-        to: getUnixTime(startOfMonth(new Date())),
+        time: {
+          gte: getUnixTime(getUnixTime(startOfMonth(subMonths(new Date(), 1)))),
+          lte: getUnixTime(startOfMonth(new Date())),
+        },
       };
   }
 

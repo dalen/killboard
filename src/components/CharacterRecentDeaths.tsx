@@ -9,10 +9,11 @@ const RECENT_DEATHS = gql`
     $last: Int
     $before: String
     $after: String
+    $time: IntOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
-      where: { victimCharacterId: { eq: $id } }
+      where: { victimCharacterId: { eq: $id }, time: $time }
       first: $first
       last: $last
       before: $before
