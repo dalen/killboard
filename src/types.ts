@@ -819,13 +819,6 @@ export type Icon = {
   url?: Maybe<Scalars['String']['output']>;
 };
 
-export type IdOperationFilterInput = {
-  eq?: InputMaybe<Scalars['ID']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-  neq?: InputMaybe<Scalars['ID']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['ID']['input']>>>;
-};
-
 export type Instance = {
   __typename?: 'Instance';
   /** Encounters */
@@ -1435,10 +1428,10 @@ export type KillFilterInput = {
   /** Percent of the total damage done by the killer */
   damagePercent?: InputMaybe<ByteOperationFilterInput>;
   /** Specifies the instance of a scenario this kill happened in */
-  instanceId?: InputMaybe<IdOperationFilterInput>;
+  instanceId?: InputMaybe<UuidOperationFilterInput>;
   killerCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  killerCharacterId?: InputMaybe<IdOperationFilterInput>;
-  killerGuildId?: InputMaybe<IdOperationFilterInput>;
+  killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   killerLevel?: InputMaybe<ByteOperationFilterInput>;
   killerRenownRank?: InputMaybe<ByteOperationFilterInput>;
   /** Number of assists */
@@ -1447,12 +1440,12 @@ export type KillFilterInput = {
   /** ScenarioId, 0 if not in a scenario */
   scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   /** Id of the skirmish the kill happened in */
-  skirmishId?: InputMaybe<IdOperationFilterInput>;
+  skirmishId?: InputMaybe<UuidOperationFilterInput>;
   /** UTC Timestamp */
   time?: InputMaybe<IntOperationFilterInput>;
   victimCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  victimCharacterId?: InputMaybe<IdOperationFilterInput>;
-  victimGuildId?: InputMaybe<IdOperationFilterInput>;
+  victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
   victimLevel?: InputMaybe<ByteOperationFilterInput>;
   victimRenownRank?: InputMaybe<ByteOperationFilterInput>;
   /** Zone Id */
