@@ -32,7 +32,7 @@
     "@types/gtag.js": "^0.0.20",
     "@types/jest": "^29.5.14",
     "@types/lodash": "^4.17.13",
-    "@types/node": "^22.10.2",
+    "@types/node": "^22.10.3",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
     "@types/simpleheat": "^0.4.3",
