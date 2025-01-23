@@ -26,6 +26,13 @@ import { InstanceRun } from './pages/InstanceRun';
 import { Instances } from './pages/Instances';
 import { InstanceEncounterRun } from './pages/InstanceEncounterRun';
 
+// Extend the Window interface to include gtag
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+  }
+}
+
 // Send page views to google analytics
 function usePageViews() {
   const location = useLocation();

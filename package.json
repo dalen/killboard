@@ -55,7 +55,7 @@
   "scripts": {
     "start": "vite",
     "build": "vite build",
-    "test": "tsc -p . && vite build && eslint --ext .js,.jsx,.ts,.tsx src",
+    "test": "tsc -p . && vite build && eslint src",
     "lint": "eslint src",
     "codegen": "graphql-codegen",
     "codegen-watch": "graphql-codegen -w"
