@@ -101,9 +101,9 @@ export function GuildFeudPage(): JSX.Element {
     GetGuildFeudInfoQueryVariables
   >(GUILD_FEUD_INFO, {
     variables: {
-      guildId1,
+      guildId1: guildId1 ?? '',
       guildInt1: guildId1,
-      guildId2,
+      guildId2: guildId2 ?? '',
       guildInt2: guildId2,
     },
   });

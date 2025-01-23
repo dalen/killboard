@@ -50,7 +50,7 @@ const PLAYER_FEUD_INFO = gql`
       first: 0
       where: {
         killerCharacterId: { eq: $playerIntId1 }
-        victimCharacterId: { eq: $playerIntId2 }
+        victimCharacterId: { eq: $playerId2 }
       }
     ) {
       totalCount
@@ -60,7 +60,7 @@ const PLAYER_FEUD_INFO = gql`
       first: 0
       where: {
         killerCharacterId: { eq: $playerIntId2 }
-        victimCharacterId: { eq: $playerIntId1 }
+        victimCharacterId: { eq: $playerId1 }
       }
     ) {
       totalCount

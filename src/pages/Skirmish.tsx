@@ -269,7 +269,11 @@ export function Skirmish({
                 >
                   <Icon.Text>
                     <Icon>
-                      <GuildHeraldry size="24" guild={topGuild.guild} />
+                      <GuildHeraldry
+                        size="24"
+                        realm={topGuild.guild.realm}
+                        heraldry={topGuild.guild.heraldry}
+                      />
                     </Icon>
                     <Link to={`/guild/${topGuild.guild.id}`}>
                       {topGuild.guild.name}

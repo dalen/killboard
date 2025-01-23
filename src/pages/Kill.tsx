@@ -247,10 +247,10 @@ export function Kill(): JSX.Element {
                 zoneId={kill.position?.zoneId}
                 x={kill.position?.x}
                 y={kill.position?.y}
-                nwCornerX={kill.position?.mapSetup?.nwCornerX}
-                nwCornerY={kill.position?.mapSetup?.nwCornerY}
-                seCornerX={kill.position?.mapSetup?.seCornerX}
-                seCornerY={kill.position?.mapSetup?.seCornerY}
+                nwCornerX={kill.position?.mapSetup?.nwCornerX ?? 0}
+                nwCornerY={kill.position?.mapSetup?.nwCornerY ?? 0}
+                seCornerX={kill.position?.mapSetup?.seCornerX ?? 0}
+                seCornerY={kill.position?.mapSetup?.seCornerY ?? 0}
               />
             </Card.Content>
           </Card>
