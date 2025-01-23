@@ -1,10 +1,25 @@
 import { Card, Media } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
-import { Guild } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
+import {
+  GuildHeraldry as GuildHeraldryType,
+  MembersConnection,
+  Realm,
+} from '../__generated__/graphql';
 
-export function GuildInfo({ guild }: { guild: Partial<Guild> }): JSX.Element {
+export function GuildInfo({
+  guild,
+}: {
+  guild: {
+    heraldry: GuildHeraldryType;
+    name: string;
+    leader?: { id: string; name: string } | null | undefined;
+    members?: Partial<MembersConnection> | null | undefined;
+    description: string;
+    realm: Realm;
+  };
+}): JSX.Element {
   const { t } = useTranslation(['components']);
 
   return (
