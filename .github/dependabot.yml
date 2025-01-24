@@ -16,6 +16,8 @@ updates:
         - "@graphql-codegen/*"
       react:
         patterns:
+        - "@types/react"
+        - "@types/react-dom"
         - react
         - react-dom
   - package-ecosystem: github-actions
