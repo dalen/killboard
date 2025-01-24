@@ -129,7 +129,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   }
 `;function WI({id:t}){var s;const{t:e}=ke(["common","components","enums"]),{loading:r,error:n,data:i}=ct(RG,{variables:{id:t,startOfWeek:jo(Is(new Date,{weekStartsOn:1}))}});return r?o.jsx(T.Progress,{}):n?o.jsx(Le,{name:n.name,message:n.message}):(i==null?void 0:i.character)==null?o.jsx(Le,{customText:e("common:notFound")}):o.jsx(T.Card,{mb:5,children:o.jsx(T.Card.Content,{children:o.jsxs(T.Media,{children:[o.jsx(T.Media.Item,{align:"left",children:o.jsx(T.Image,{size:"128",src:"/images/corner_icons/ea_icon_corner_character.png",alt:"Character"})}),o.jsxs(T.Media.Item,{children:[o.jsx("a",{className:"is-size-4",target:"_blank",rel:"noopener noreferrer",href:`https://www.returnofreckoning.com/armory/character/${t}`,children:o.jsx("strong",{children:i.character.name})}),o.jsx("p",{children:o.jsxs(T.Icon.Text,{children:[o.jsx("strong",{children:`${e("components:characterInfo.career")} `}),o.jsx(T.Icon,{children:o.jsx("img",{src:ov(i.character.career),alt:e(`enums:career.${i.character.career}`)??""})}),o.jsx("span",{children:e(`enums:career.${i.character.career}`)})]})}),o.jsxs("p",{children:[o.jsx("strong",{children:`${e("components:characterInfo.level")} `}),i.character.level]}),o.jsxs("p",{children:[o.jsx("strong",{children:`${e("components:characterInfo.renownRank")} `}),i.character.renownRank]}),((s=i.character.guildMembership)==null?void 0:s.guild)!=null&&o.jsxs("p",{children:[o.jsx("strong",{children:`${e("components:characterInfo.guild")} `}),o.jsx(ie,{to:`/guild/${i.character.guildMembership.guild.id}`,children:i.character.guildMembership.guild.name})]})]})]})})})}const PG=t=>{switch(t.get("period")){case"thisWeek":return{time:{gte:jo(Is(new Date,{weekStartsOn:1}))}};case"lastWeek":return{time:{gte:jo(Is(jG(new Date,1),{weekStartsOn:1})),lte:jo(Is(new Date,{weekStartsOn:1}))}};case"thisMonth":return{time:{gte:jo(S_(new Date))}};case"lastMonth":return{time:{gte:jo(jo(S_(EG(new Date,1)))),lte:jo(S_(new Date))}}}return{time:{}}},CG=t=>t.has("soloOnly")?{soloOnly:!0}:{},zI=t=>({...PG(t),...CG(t)});function PS(){const{t}=ke("components"),[e,r]=Rr(),n=e.get("period")||"all";return o.jsx(T.Card,{mb:5,children:o.jsx(T.Card.Content,{children:o.jsxs(T.Columns,{children:[o.jsx(T.Columns.Column,{children:o.jsx("div",{className:"select",children:o.jsxs("select",{value:n,onChange:i=>{e.set("period",i.target.value),r(e)},children:[o.jsx("option",{value:"all",children:t("killsFilters.allTime")}),o.jsx("option",{value:"thisWeek",children:t("killsFilters.thisWeek")}),o.jsx("option",{value:"lastWeek",children:t("killsFilters.lastWeek")}),o.jsx("option",{value:"thisMonth",children:t("killsFilters.thisMonth")}),o.jsx("option",{value:"lastMonth",children:t("killsFilters.lastMonth")})]})})}),o.jsx(T.Columns.Column,{children:o.jsxs(T.Form.Label,{children:[o.jsx(T.Form.Checkbox,{checked:e.has("soloOnly"),onChange:i=>{i.target.checked?e.set("soloOnly","true"):e.delete("soloOnly"),r(e)}})," ",t("killsFilters.soloOnly")]})})]})})})}function Li({career:t}){return o.jsx("p",{className:"image is-32x32",children:o.jsx("img",{src:ov(t),alt:t})})}function D1(){const{innerWidth:t,innerHeight:e}=window;return{width:t,height:e}}function di(){const[t,e]=se.useState(D1());return se.useEffect(()=>{function r(){e(D1())}return window.addEventListener("resize",r),()=>window.removeEventListener("resize",r)},[]),t}function NG({data:t,showTime:e=!0,showVictim:r=!0,showKiller:n=!0}){const{t:i}=ke(["common","components"]),{width:s}=di(),u=s<=768;return o.jsx("div",{className:"table-container",children:o.jsxs(T.Table,{striped:!0,hoverable:!0,size:u?"narrow":"fullwidth",marginless:!0,children:[o.jsx("thead",{children:o.jsxs("tr",{children:[e&&o.jsx("th",{id:"th-time",children:i("components:killsList.time")}),n&&o.jsx("th",{id:"th-killer",children:i("components:killsList.killer")}),r&&o.jsx("th",{id:"th-victim",children:i("components:killsList.victim")}),o.jsx("th",{children:i("components:killsList.type")}),o.jsx("th",{"aria-label":"empty header"})]})}),o.jsx("tbody",{children:t.map(g=>{var b,m,p,d,f;const x=new Date(g.time*1e3);return o.jsxs("tr",{children:[e&&o.jsx("td",{children:o.jsxs("small",{children:[Ha(x,{representation:"date"}),o.jsx("br",{}),Ba(x,"HH:mm:ss")]})}),n&&o.jsx("td",{children:o.jsxs(T.Media,{children:[o.jsx(T.Media.Item,{align:"left",children:o.jsx(Li,{career:g.attackers[0].character.career})}),o.jsx(T.Media.Item,{children:o.jsxs(T.Content,{children:[o.jsx(ie,{to:`/character/${g.attackers[0].character.id}`,children:o.jsx("strong",{children:g.attackers[0].character.name})}),o.jsx("br",{}),o.jsx(ie,{to:`/guild/${(b=g.attackers[0].guild)==null?void 0:b.id}`,children:(m=g.attackers[0].guild)==null?void 0:m.name})]})}),o.jsx(T.Media.Item,{align:"right",children:o.jsxs("small",{children:["Lvl ",g.attackers[0].level,o.jsx("br",{}),"RR ",g.attackers[0].renownRank]})})]})}),r&&o.jsx("td",{children:o.jsxs(T.Media,{children:[o.jsx(T.Media.Item,{align:"left",children:o.jsx(Li,{career:g.victim.character.career})}),o.jsx(T.Media.Item,{children:o.jsxs(T.Content,{children:[o.jsx(ie,{to:`/character/${g.victim.character.id}`,children:o.jsx("strong",{children:g.victim.character.name})}),o.jsx("br",{}),o.jsx(ie,{to:`/guild/${(p=g.victim.guild)==null?void 0:p.id}`,children:(d=g.victim.guild)==null?void 0:d.name})]})}),o.jsx(T.Media.Item,{align:"right",children:o.jsxs("small",{children:["Lvl ",g.victim.level,o.jsx("br",{}),"RR ",g.victim.renownRank]})})]})}),o.jsx("td",{children:g.scenario==null?o.jsxs(T.Media,{children:[o.jsx(T.Media.Item,{align:"left",children:o.jsx(T.Image,{src:"/images/icons/rvr.png",alt:"RvR",title:"RvR"})}),o.jsxs(T.Media.Item,{children:[(f=g.position.zone)==null?void 0:f.name," ",g.attackers[0].damagePercent===100&&o.jsx("p",{children:o.jsxs(T.Icon.Text,{children:[o.jsx(T.Icon,{children:o.jsx("i",{className:"fas fa-star mr-2 has-text-warning"})}),o.jsx("strong",{children:i("components:killsList.soloKill")})]})})]})]}):o.jsxs(T.Media,{children:[o.jsx(T.Media.Item,{align:"left",children:o.jsx(T.Image,{src:"/images/icons/scenario.png",alt:"Scenario",title:"Scenario"})}),o.jsxs(T.Media.Item,{children:[g.scenario.name," ",g.attackers[0].damagePercent===100&&o.jsx("p",{children:o.jsxs(T.Icon.Text,{children:[o.jsx(T.Icon,{children:o.jsx("i",{className:"fas fa-star mr-2 has-text-warning"})}),o.jsx("strong",{children:i("components:killsList.soloKill")})]})})]})]})}),o.jsx("td",{children:o.jsx(ie,{to:`/kill/${g.id}`,className:"button is-primary p-2 is-pulled-right",children:i("components:killsList.details")})})]},g.id)})})]})})}function mn({pageInfo:t,perPage:e,refetch:r}){const{t:n}=ke(["common"]);return t?o.jsxs("div",{className:"field is-grouped is-pulled-right",children:[t.hasPreviousPage&&o.jsxs(T.Button,{color:"info",size:"small",onClick:()=>{r({first:void 0,after:void 0,last:e,before:t.startCursor})},children:[n("common:prevPage"),o.jsx("i",{className:"fas fa-circle-chevron-left ml-1"})]}),t.hasNextPage&&o.jsxs(T.Button,{color:"info",size:"small",onClick:()=>{r({first:e,after:t.endCursor,last:void 0,before:void 0})},children:[n("common:nextPage"),o.jsx("i",{className:"fas fa-circle-chevron-right ml-1"})]})]}):null}function Ka({query:t,queryOptions:e,perPage:r,title:n=void 0,showTime:i=!0,showVictim:s=!0,showKiller:u=!0}){const{t:g}=ke(["common","components"]),[x]=Rr(),{loading:b,error:m,data:p,refetch:d}=ct(t,{...e,variables:{...e==null?void 0:e.variables,first:r,...zI(x)}});if(b)return o.jsx(T.Progress,{});if(m)return o.jsx(Le,{name:m.name,message:m.message});const f=p==null?void 0:p.kills;if((f==null?void 0:f.nodes)==null)return o.jsx("p",{children:g("common:error")});if(f.nodes.length===0)return null;const{pageInfo:h}=f;return o.jsxs("div",{children:[n&&o.jsxs("div",{className:"is-size-4 is-family-secondary is-uppercase",children:[n," ",f.totalCount!=null&&f.totalCount]}),o.jsx(NG,{data:f.nodes,showTime:i,showKiller:u,showVictim:s}),o.jsx(mn,{pageInfo:h,perPage:r,refetch:d})]})}const TG=Ve`
   query GetLatestCharacterDeaths(
-    $id: UnsignedInt!
+    $id: ID!
     $first: Int
     $last: Int
     $before: String
@@ -714,7 +714,9 @@ function print() { __p += __j.call(arguments, '') }
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         victim {
           level
           renownRank
@@ -773,7 +775,9 @@ function print() { __p += __j.call(arguments, '') }
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         victim {
           level
           renownRank
@@ -1439,7 +1443,9 @@ function print() { __p += __j.call(arguments, '') }
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         victim {
           level
           renownRank
@@ -1502,7 +1508,9 @@ function print() { __p += __j.call(arguments, '') }
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         attackers {
           level
           renownRank
@@ -1804,7 +1812,9 @@ function print() { __p += __j.call(arguments, '') }
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         attackers {
           level
           renownRank
