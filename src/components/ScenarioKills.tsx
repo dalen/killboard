@@ -28,7 +28,9 @@ const SCENARIO_KILLS = gql`
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         attackers {
           level
           renownRank

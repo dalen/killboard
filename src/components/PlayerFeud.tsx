@@ -25,7 +25,9 @@ const PLAYER_FEUD = gql`
         position {
           zoneId
         }
-        scenarioId
+        scenario {
+          id
+        }
         victim {
           level
           renownRank
