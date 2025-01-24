@@ -1,5 +1,5 @@
 import { Card, Tag, Media, Table, Image } from 'react-bulma-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { sum } from 'lodash';
 import { Attacker as AttackerType, KillDamage } from '../types';
 import { CareerIcon } from './CareerIcon';

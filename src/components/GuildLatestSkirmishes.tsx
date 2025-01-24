@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { SkirmishList } from './SkirmishList';
 import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
 

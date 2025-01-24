@@ -11,7 +11,7 @@ import {
   Image,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { Attacker } from '../components/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
 import { PlayerFeud } from '../components/PlayerFeud';

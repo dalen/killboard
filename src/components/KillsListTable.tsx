@@ -2,7 +2,7 @@ import { format, formatISO } from 'date-fns';
 import React from 'react';
 import { Table, Media, Content, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Kill } from '../types';
 import { CareerIcon } from './CareerIcon';
 import useWindowDimensions from '../hooks/useWindowDimensions';

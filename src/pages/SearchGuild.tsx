@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { Container, Progress, Table, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { SearchBox } from '../components/SearchBox';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';

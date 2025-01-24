@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Card, Icon, Media, Progress } from 'react-bulma-components';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Query, SkirmishScoreboardEntry } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 import { careerIcon } from '../utils';

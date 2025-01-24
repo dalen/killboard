@@ -9,7 +9,7 @@ import {
   Form,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { SearchBox } from '../components/SearchBox';
 import { ItemFilterInput, ItemType, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';

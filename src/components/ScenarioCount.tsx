@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { getScenarioFilters } from './ScenarioFilters';

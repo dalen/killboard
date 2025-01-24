@@ -1,5 +1,5 @@
 import { Breadcrumb, Columns, Container, Tabs } from 'react-bulma-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { CharacterInfo } from '../components/CharacterInfo';
 import { CharacterRecentDeaths } from '../components/CharacterRecentDeaths';

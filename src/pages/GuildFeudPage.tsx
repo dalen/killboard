@@ -5,7 +5,7 @@ import {
   Image,
   Progress,
 } from 'react-bulma-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import { ErrorMessage } from '../components/global/ErrorMessage';

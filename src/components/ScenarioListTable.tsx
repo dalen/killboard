@@ -1,7 +1,7 @@
 import { format, formatISO, intervalToDuration } from 'date-fns';
 import { Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ScenarioRecord } from '../types';
 

@@ -1,6 +1,6 @@
 import { Breadcrumb, Container } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { InstanceRunsFilters } from '../components/InstanceRunsFilters';
 import { InstanceRunsList } from '../components/InstanceRunsList';
 

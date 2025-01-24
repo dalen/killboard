@@ -7,7 +7,7 @@ import {
   Columns,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Query } from '../types';
 import { RankedLeaderboardTable } from '../components/RankedLeaderboardTable';

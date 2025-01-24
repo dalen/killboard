@@ -7,7 +7,7 @@ import {
   formatISO,
   format,
 } from 'date-fns';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { Archetype, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ErrorMessage } from './global/ErrorMessage';

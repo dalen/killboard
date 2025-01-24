@@ -1,6 +1,6 @@
 import { Card, Columns, Form, Heading, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { InstanceRunFilterInput } from '../types';
 
 const getInstanceFilters = (

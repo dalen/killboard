@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { getUnixTime, startOfWeek } from 'date-fns';
 import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Query } from '../types';
 import { careerIcon } from '../utils';
 import { ErrorMessage } from './global/ErrorMessage';

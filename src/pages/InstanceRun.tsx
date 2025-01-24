@@ -15,7 +15,7 @@ import {
   formatISO,
   format,
 } from 'date-fns';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Archetype, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';

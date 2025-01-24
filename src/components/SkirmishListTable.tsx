@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import { Table, Media, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Skirmish, Realm } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { GuildHeraldry } from './GuildHeraldry';

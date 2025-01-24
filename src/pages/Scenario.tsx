@@ -14,7 +14,7 @@ import {
   Tabs,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ScenarioKills } from '../components/ScenarioKills';
 import { Query } from '../types';

@@ -8,7 +8,7 @@ import {
   Tabs,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { Query } from '../types';

@@ -1,6 +1,6 @@
 import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 const getQueueTypeFilters = (search: URLSearchParams) => {
   const queueType = search.get('queue_type');

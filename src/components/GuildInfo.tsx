@@ -1,6 +1,6 @@
 import { Card, Media } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { GuildHeraldry } from './GuildHeraldry';
 import {
   GuildHeraldry as GuildHeraldryType,

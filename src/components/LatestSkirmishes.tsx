@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { SkirmishList } from './SkirmishList';
 import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
 

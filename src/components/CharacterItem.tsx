@@ -1,7 +1,7 @@
 import { Media } from 'react-bulma-components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { CharacterItem as CharacterItemType, Item } from '../types';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '../itemUtils';

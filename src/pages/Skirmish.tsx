@@ -15,7 +15,7 @@ import {
   Tabs,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import _ from 'lodash';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Query, Realm } from '../types';

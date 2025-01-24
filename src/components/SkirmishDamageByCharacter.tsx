@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { Table, Image, Progress } from 'react-bulma-components';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { killDamageText } from '../utils';

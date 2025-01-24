@@ -7,7 +7,7 @@ import {
   Tabs,
 } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/GuildRecentKills';
 import { Query } from '../types';

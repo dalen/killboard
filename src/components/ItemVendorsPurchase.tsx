@@ -1,6 +1,6 @@
 import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import { GoldPrice } from './GoldPrice';
 import { Query } from '../types';

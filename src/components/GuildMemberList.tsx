@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { CareerIcon } from './CareerIcon';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';

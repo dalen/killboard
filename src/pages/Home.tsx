@@ -1,7 +1,7 @@
 import { Columns, Container, Tabs } from 'react-bulma-components';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { LatestKills } from '../components/LatestKills';
 import { WeeklyLeaderboard } from '../components/WeeklyLeaderboard';
 import { SearchBox } from '../components/SearchBox';

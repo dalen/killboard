@@ -1,6 +1,6 @@
 import { Form, Card, Columns } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { URLSearchParams } from 'url';
 import { Career } from '../types';
 
