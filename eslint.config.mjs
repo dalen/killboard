@@ -29,6 +29,6 @@ export default tseslint.config({
       },
     ],
   },
-  ignores: ['src/types.ts'],
+  ignores: ['src/types.ts', '**/__generated__/**'],
   plugins: { prettier: prettierPlugin },
 });
