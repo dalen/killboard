@@ -21,6 +21,7 @@ import { Query } from '../types';
 import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
 import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '../components/ScenarioSkirmishes';
+import { ReactElement } from 'react';
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID!) {
@@ -95,7 +96,7 @@ export function Scenario({
   tab,
 }: {
   tab: 'scoreboard' | 'kills' | 'skirmishes' | 'map';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 

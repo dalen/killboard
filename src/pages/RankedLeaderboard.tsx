@@ -11,6 +11,7 @@ import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Query } from '../types';
 import { RankedLeaderboardTable } from '../components/RankedLeaderboardTable';
+import { ReactElement } from 'react';
 
 const RANKED_LEADERBOARD_SEASONS = gql`
   query GetRankedLeaderboardSeasons {
@@ -24,7 +25,7 @@ const RANKED_LEADERBOARD_SEASONS = gql`
   }
 `;
 
-export function RankedLeaderboard(): JSX.Element {
+export function RankedLeaderboard(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
   const { loading, error, data } = useQuery<Query>(

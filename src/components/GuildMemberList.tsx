@@ -7,6 +7,7 @@ import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from './QueryPagination';
+import { ReactElement } from 'react';
 
 const GUILD_MEMBERS = gql`
   query GetGuildMembers(
@@ -45,7 +46,7 @@ export function GuildMemberList({
   id,
 }: {
   id: string | undefined;
-}): JSX.Element {
+}): ReactElement {
   const perPage = 25;
 
   const { t } = useTranslation(['common', 'pages']);

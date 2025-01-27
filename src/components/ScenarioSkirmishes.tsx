@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { SkirmishList } from './SkirmishList';
+import { ReactElement } from 'react';
 
 const SKIRMISHES = gql`
   query GetScenarioSkirmishes(
@@ -70,7 +71,7 @@ export function ScenarioSkirmishes({
 }: {
   id: string;
   perPage?: number;
-}): JSX.Element {
+}): ReactElement {
   return (
     <SkirmishList
       query={SKIRMISHES}

@@ -15,6 +15,7 @@ import {
   GetGuildFeudInfoQuery,
   GetGuildFeudInfoQueryVariables,
 } from '../__generated__/graphql';
+import { ReactElement } from 'react';
 
 const GUILD_FEUD_INFO = gql`
   query GetGuildFeudInfo(
@@ -91,7 +92,7 @@ const GUILD_FEUD_INFO = gql`
   }
 `;
 
-export function GuildFeudPage(): JSX.Element {
+export function GuildFeudPage(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
 
   const { guildId1, guildId2 } = useParams();

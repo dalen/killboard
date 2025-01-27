@@ -19,6 +19,7 @@ import { ScenarioList } from '../components/ScenarioList';
 import { ScenarioFilters } from '../components/ScenarioFilters';
 import { ScenarioCount } from '../components/ScenarioCount';
 import { GuildLatestSkirmishes } from '../components/GuildLatestSkirmishes';
+import { ReactElement } from 'react';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -67,7 +68,7 @@ export function Guild({
   tab,
 }: {
   tab: 'kills' | 'members' | 'scenarios' | 'skirmishes';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(GUILD_INFO, {

@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import { Notification } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 
@@ -9,7 +10,7 @@ export function ErrorMessage({
   message?: string;
   name?: string;
   customText?: string | null;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation('components');
 
   return (

@@ -5,6 +5,7 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
+import { ReactElement } from 'react';
 import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -61,7 +62,7 @@ export const getCurrentFilters = (search: URLSearchParams) => ({
   ...getSoloKillsFilters(search),
 });
 
-export function KillsFilters(): JSX.Element {
+export function KillsFilters(): ReactElement {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 

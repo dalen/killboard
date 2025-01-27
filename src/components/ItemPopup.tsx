@@ -3,6 +3,7 @@ import { t } from 'i18next';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ReactElement } from 'react';
 
 const ITEM_POPUP_INFO = gql`
   query GetItemPopupInfo($id: ID!) {
@@ -69,7 +70,7 @@ const ITEM_POPUP_INFO = gql`
   }
 `;
 
-export function ItemPopup({ itemId }: { itemId: string }): JSX.Element | null {
+export function ItemPopup({ itemId }: { itemId: string }): ReactElement | null {
   const { loading, error, data } = useQuery<Query>(ITEM_POPUP_INFO, {
     variables: {
       id: itemId,

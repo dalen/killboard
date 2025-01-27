@@ -5,6 +5,7 @@ import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { killDamageText } from '../utils';
 import { CharacterInfo } from './CharacterInfo';
+import { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
   query GetSkirmishDamageByCharacter($id: ID!, $characterId: ID!) {
@@ -36,7 +37,11 @@ const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
   }
 `;
 
-export function SkirmishDamageByCharacter({ id }: { id: string }): JSX.Element {
+export function SkirmishDamageByCharacter({
+  id,
+}: {
+  id: string;
+}): ReactElement {
   const { characterId } = useParams();
 
   const { loading, error, data } = useQuery<Query>(

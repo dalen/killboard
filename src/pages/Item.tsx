@@ -18,6 +18,7 @@ import { isPercentage } from '../utils';
 import { ItemQuests } from '../components/ItemQuests';
 import { ItemVendorsPurchase } from '../components/ItemVendorsPurchase';
 import { ItemVendorsSell } from '../components/ItemVendorsSell';
+import { ReactElement } from 'react';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -88,7 +89,7 @@ export function Item({
   tab,
 }: {
   tab: 'vendors' | 'quests' | 'purchase';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(ITEM_INFO, {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Progress, Table } from 'react-bulma-components';
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
@@ -78,7 +78,7 @@ const SKIRMISH_SCOREBOARD = gql`
   }
 `;
 
-export function SkirmishScoreboard({ id }: { id: string }): JSX.Element {
+export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
   const perPage = 25;
 
   const { t } = useTranslation(['components']);

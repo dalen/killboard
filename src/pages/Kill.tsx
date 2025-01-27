@@ -20,6 +20,7 @@ import { Query } from '../types';
 import { GuildFeud } from '../components/GuildFeud';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildHeraldry } from '../components/GuildHeraldry';
+import { ReactElement } from 'react';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -110,7 +111,7 @@ const KILL_DETAILS = gql`
   }
 `;
 
-export function Kill(): JSX.Element {
+export function Kill(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(KILL_DETAILS, {

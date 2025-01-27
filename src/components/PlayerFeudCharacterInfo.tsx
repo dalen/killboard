@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Character } from '../types';
 import { careerIcon } from '../utils';
+import { ReactElement } from 'react';
 
 export function PlayerFeudCharacterInfo({
   character,
@@ -10,7 +11,7 @@ export function PlayerFeudCharacterInfo({
 }: {
   character: Character;
   id: string | number;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'components', 'enums']);
 
   return (

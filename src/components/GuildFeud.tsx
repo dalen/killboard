@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsList } from './KillsList';
+import { ReactElement } from 'react';
 
 const GUILD_FEUD = gql`
   query GetGuildFeud(
@@ -72,7 +73,7 @@ export function GuildFeud({
 }: {
   guild1: string;
   guild2: string;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation('components');
 
   return (

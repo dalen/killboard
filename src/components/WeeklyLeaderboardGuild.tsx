@@ -5,6 +5,7 @@ import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardGuildTable } from './LeaderboardGuildTable';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ReactElement } from 'react';
 
 const WEEKLY_LEADERBOARD_GUILD = gql`
   query GetWeeklyGuildLeaderboard($year: Int!, $week: Int!) {
@@ -27,7 +28,7 @@ const WEEKLY_LEADERBOARD_GUILD = gql`
   }
 `;
 
-export function WeeklyLeaderboardGuild(): JSX.Element {
+export function WeeklyLeaderboardGuild(): ReactElement {
   const { t } = useTranslation(['common', 'components']);
 
   // To make sure we get the current week, even if local timezone differs.

@@ -26,6 +26,7 @@ import { SkirmishKills } from '../components/SkirmishKills';
 import { GuildHeraldry } from '../components/GuildHeraldry';
 import { SkirmishDamage } from '../components/SkirmishDamage';
 import { SkirmishDamageByCharacter } from '../components/SkirmishDamageByCharacter';
+import { ReactElement } from 'react';
 
 const SKIRMISH_INFO = gql`
   query GetSkirmishInfo($id: ID!) {
@@ -93,7 +94,7 @@ export function Skirmish({
   tab,
 }: {
   tab: 'scoreboard' | 'kills' | 'damage' | 'characterDamage';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 

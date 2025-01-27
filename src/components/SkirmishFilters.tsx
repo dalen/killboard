@@ -2,6 +2,7 @@ import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { SkirmishFilterInput } from '../types';
+import { ReactElement } from 'react';
 
 const getLocationTypeFilter = (
   search: URLSearchParams,
@@ -62,7 +63,7 @@ export const getskirmishFilters = (
   ...getMinPlayersFilter(search),
 });
 
-export function SkirmishFilters(): JSX.Element {
+export function SkirmishFilters(): ReactElement {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 

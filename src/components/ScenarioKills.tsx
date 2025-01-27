@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
+import { ReactElement } from 'react';
 
 const SCENARIO_KILLS = gql`
   query GetScenarioKills(
@@ -69,7 +70,7 @@ const SCENARIO_KILLS = gql`
   }
 `;
 
-export function ScenarioKills({ id }: { id: string }): JSX.Element {
+export function ScenarioKills({ id }: { id: string }): ReactElement {
   const { t } = useTranslation('components');
 
   return (

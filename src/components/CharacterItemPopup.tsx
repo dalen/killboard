@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import { CharacterItem, Item, ItemSet } from '../types';
 import { isPercentage } from '../utils';
 import { itemNameClass, statMultiplier } from '../itemUtils';
+import { ReactElement } from 'react';
 
 const numEquippedInSet = (
   itemSet: ItemSet,
@@ -31,7 +32,7 @@ export function CharacterItemPopup({
   item: Item;
   talismans: Item[];
   itemsEquipped: CharacterItem[];
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['enums']);
 
   const numEquipped = item.itemSet

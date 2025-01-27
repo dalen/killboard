@@ -16,6 +16,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ItemListEntry } from '../components/ItemListEntry';
 import { QueryPagination } from '../components/QueryPagination';
+import { ReactElement } from 'react';
 
 const SEARCH_ITEMS = gql`
   query SearchItems(
@@ -137,7 +138,7 @@ const hasStatsFilter = (search: URLSearchParams) => {
 
   return { hasStats: [stat] };
 };
-export function Items(): JSX.Element {
+export function Items(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);

@@ -2,6 +2,7 @@ import { Card, Columns, Form, Heading, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { InstanceRunFilterInput } from '../types';
+import { ReactElement } from 'react';
 
 const getInstanceFilters = (
   search: URLSearchParams,
@@ -154,7 +155,7 @@ export const getInstanceRunsFilters = (search: URLSearchParams) => ({
   ...getMaxItemRatingFilters(search),
 });
 
-export function InstanceRunsFilters(): JSX.Element {
+export function InstanceRunsFilters(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
   const instance = search.get('instance') ?? 'all';

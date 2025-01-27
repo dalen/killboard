@@ -14,6 +14,7 @@ import { CreatureFilterInput, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { QueryPagination } from '../components/QueryPagination';
+import { ReactElement } from 'react';
 
 const CREATURES = gql`
   query GetCreatures(
@@ -63,7 +64,7 @@ const getFilters = (search: URLSearchParams): CreatureFilterInput => ({
   ...getCreatureNameFilter(search),
 });
 
-export function Creatures(): JSX.Element {
+export function Creatures(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);

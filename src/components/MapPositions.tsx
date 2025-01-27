@@ -1,5 +1,5 @@
 import { forEach } from 'lodash';
-import { useEffect, useRef } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
 
 export function MapPositions({
   positions,
@@ -15,7 +15,7 @@ export function MapPositions({
   nwCornerY: number;
   seCornerX: number;
   seCornerY: number;
-}): JSX.Element {
+}): ReactElement {
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

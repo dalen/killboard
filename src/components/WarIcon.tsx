@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export function WarIcon({
   icon,
   size,
@@ -12,7 +14,7 @@ export function WarIcon({
   count?: number;
   frameType?: 'square' | 'circle' | 'hex';
   selected?: boolean;
-}): JSX.Element {
+}): ReactElement {
   const frame = (() => {
     switch (frameType) {
       case 'circle':

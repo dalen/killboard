@@ -11,6 +11,7 @@ import { SearchQuery } from '../__generated__/graphql';
 import { GuildHeraldry } from '../components/GuildHeraldry';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 import { questTypeIcon } from '../utils';
+import { ReactElement } from 'react';
 
 const SEARCH = gql`
   query Search(
@@ -99,7 +100,7 @@ const SEARCH = gql`
   }
 `;
 
-export function Search(): JSX.Element {
+export function Search(): ReactElement {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);

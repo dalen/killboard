@@ -12,12 +12,13 @@ import { ScenarioFilters } from '../components/ScenarioFilters';
 import { ScenarioList } from '../components/ScenarioList';
 import { LatestSkirmishes } from '../components/LatestSkirmishes';
 import { TopSkirmishes } from '../components/TopSkirmishes';
+import { ReactElement } from 'react';
 
 export function Home({
   tab,
 }: {
   tab: 'players' | 'guilds' | 'scenarios' | 'skirmishes';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation();
 
   return (

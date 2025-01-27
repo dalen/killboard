@@ -4,6 +4,7 @@ import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardGuildTable } from './LeaderboardGuildTable';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ReactElement } from 'react';
 
 const MONTHLY_GUILD_LEADERBOARD = gql`
   query GetMonthlyGuildLeaderboard($year: Int!, $month: Int!) {
@@ -26,7 +27,7 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
   }
 `;
 
-export function MonthlyGuildLeaderboard(): JSX.Element {
+export function MonthlyGuildLeaderboard(): ReactElement {
   const { t } = useTranslation(['common', 'components']);
 
   const month = new Date().getUTCMonth() + 1;

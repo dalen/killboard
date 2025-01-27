@@ -12,6 +12,7 @@ import { PlayerFeud } from '../components/PlayerFeud';
 import { Character, KillsConnection } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { PlayerFeudCharacterInfo } from '../components/PlayerFeudCharacterInfo';
+import { ReactElement } from 'react';
 
 const PLAYER_FEUD_INFO = gql`
   query GetPlayerFeudInfo(
@@ -68,7 +69,7 @@ const PLAYER_FEUD_INFO = gql`
   }
 `;
 
-export function PlayerFeudPage(): JSX.Element {
+export function PlayerFeudPage(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
 
   const { playerId1, playerId2 } = useParams();

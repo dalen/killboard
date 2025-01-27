@@ -8,6 +8,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GoldPrice } from '../components/GoldPrice';
 import { ItemPopup } from '../components/ItemPopup';
 import { WarIcon } from '../components/WarIcon';
+import { ReactElement } from 'react';
 
 const QUEST_INFO = gql`
   query GetQuestInfo($id: ID!) {
@@ -62,7 +63,7 @@ const QUEST_INFO = gql`
   }
 `;
 
-export function Quest(): JSX.Element {
+export function Quest(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<Query>(QUEST_INFO, {

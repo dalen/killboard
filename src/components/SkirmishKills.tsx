@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client';
 import { KillsList } from './KillsList';
+import { ReactElement } from 'react';
 
 const SKIRMISH_KILLS = gql`
   query GetSkirmishKills(
@@ -79,7 +80,7 @@ export function SkirmishKills({
   id: string;
   startTime: number;
   endTime: number;
-}): JSX.Element {
+}): ReactElement {
   return (
     <KillsList
       query={SKIRMISH_KILLS}

@@ -14,6 +14,7 @@ import { InstanceFilterInput, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { QueryPagination } from '../components/QueryPagination';
+import { ReactElement } from 'react';
 
 const QUERY = gql`
   query GetInstances(
@@ -63,7 +64,7 @@ const getFilters = (search: URLSearchParams): InstanceFilterInput => ({
   ...getInstanceNameFilter(search),
 });
 
-export function Instances(): JSX.Element {
+export function Instances(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);

@@ -18,6 +18,7 @@ import { GoldPrice } from '../components/GoldPrice';
 import { ItemPopup } from '../components/ItemPopup';
 import { questTypeIcon } from '../utils';
 import { QueryPagination } from '../components/QueryPagination';
+import { ReactElement } from 'react';
 
 const QUESTS = gql`
   query GetQuests(
@@ -90,7 +91,7 @@ const getFilters = (search: URLSearchParams): QuestFilterInput => ({
   ...getQuestNameFilter(search),
 });
 
-export function Quests(): JSX.Element {
+export function Quests(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);

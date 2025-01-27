@@ -5,6 +5,7 @@ import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardTable } from './LeaderboardTable';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ReactElement } from 'react';
 
 const WEEKLY_LEADERBOARD = gql`
   query GetWeeklyLeaderboard($year: Int!, $week: Int!) {
@@ -28,7 +29,7 @@ const WEEKLY_LEADERBOARD = gql`
   }
 `;
 
-export function WeeklyLeaderboard(): JSX.Element {
+export function WeeklyLeaderboard(): ReactElement {
   const { t } = useTranslation(['common', 'components']);
 
   // To make sure we get the current week, even if local timezone differs.

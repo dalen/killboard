@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { ZoneHeatmap } from './ZoneHeatmap';
+import { ReactElement } from 'react';
 
 const SCENARIO_HEATMAP = gql`
   query GetScenarioHeatmap($id: ID) {
@@ -22,7 +23,7 @@ export function ScenarioHeatmap({
 }: {
   zoneId: string;
   id: string;
-}): JSX.Element {
+}): ReactElement {
   const { loading, error, data } = useQuery<Query>(SCENARIO_HEATMAP, {
     variables: {
       id,

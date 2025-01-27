@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { SkirmishListTable } from './SkirmishListTable';
+import { ReactElement } from 'react';
 
 const TOP_SKIRMISHES = gql`
   query GetTopSkirmishes {
@@ -49,7 +50,7 @@ const TOP_SKIRMISHES = gql`
   }
 `;
 
-export function TopSkirmishes(): JSX.Element {
+export function TopSkirmishes(): ReactElement {
   const { t } = useTranslation('components');
   const { loading, error, data } = useQuery<Query>(TOP_SKIRMISHES);
 

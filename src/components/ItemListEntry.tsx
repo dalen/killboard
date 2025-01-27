@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Item } from '../types';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 
-export function ItemListEntry({ item }: { item: Item }): JSX.Element {
+export function ItemListEntry({ item }: { item: Item }): ReactElement {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 

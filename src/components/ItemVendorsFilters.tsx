@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { URLSearchParams } from 'url';
 import { Career } from '../types';
+import { ReactElement } from 'react';
 
 const getCareerFilters = (search: URLSearchParams) => {
   const career = search.get('career');
@@ -20,7 +21,7 @@ export const getCurrentFilters = (search: URLSearchParams) => ({
   ...getCareerFilters(search),
 });
 
-export function ItemVendorsFilters(): JSX.Element {
+export function ItemVendorsFilters(): ReactElement {
   const { t } = useTranslation(['components', 'enums']);
   const [search, setSearch] = useSearchParams();
 

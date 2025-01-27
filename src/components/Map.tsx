@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { ReactElement, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function Map({
@@ -17,7 +17,7 @@ export function Map({
   nwCornerY: number;
   seCornerX: number;
   seCornerY: number;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 

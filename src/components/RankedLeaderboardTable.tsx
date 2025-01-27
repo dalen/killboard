@@ -8,6 +8,7 @@ import { ErrorMessage } from './global/ErrorMessage';
 import { GuildHeraldry } from './GuildHeraldry';
 import { CareerIcon } from './CareerIcon';
 import { QueryPagination } from './QueryPagination';
+import { ReactElement } from 'react';
 
 const RANKED_LEADERBOARD = gql`
   query GetRankedLeaderboard(
@@ -73,7 +74,7 @@ export function RankedLeaderboardTable({
 }: {
   season: string;
   type: string;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['components', 'common']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;

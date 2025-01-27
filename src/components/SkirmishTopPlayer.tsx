@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { Query, SkirmishScoreboardEntry } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 import { careerIcon } from '../utils';
+import { ReactElement } from 'react';
 
 const SKIRMISH_TOP_PLAYER = gql`
   query GetSkirmishTopPlayer(
@@ -55,7 +56,7 @@ export function SkirmishTopPlayer({
   attribute: keyof SkirmishScoreboardEntry;
   title: string;
   className: string;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['pages']);
   const { loading, error, data } = useQuery<Query>(SKIRMISH_TOP_PLAYER, {
     variables: { id, order: [{ [attribute]: 'DESC' }] },

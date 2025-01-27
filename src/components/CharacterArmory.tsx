@@ -4,6 +4,7 @@ import { Progress } from 'react-bulma-components';
 import { EquipSlot, ItemRarity, ItemType, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { CharacterItem } from './CharacterItem';
+import { ReactElement } from 'react';
 
 const CHARACTER_ARMORY = gql`
   query GetCharacterArmory($id: ID!) {
@@ -107,7 +108,7 @@ function NoItem() {
   );
 }
 
-export function CharacterArmory({ id }: { id: number }): JSX.Element {
+export function CharacterArmory({ id }: { id: number }): ReactElement {
   const { t } = useTranslation('components');
   const { loading, error, data } = useQuery<Query>(CHARACTER_ARMORY, {
     variables: {

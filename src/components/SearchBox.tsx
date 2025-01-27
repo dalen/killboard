@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
@@ -10,7 +10,7 @@ export function SearchBox({
   initialQuery?: string;
   onSubmit?: (query: string) => void;
   isPlayer?: boolean;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation('components');
   const navigate = useNavigate();
   const [query, setQuery] = useState(initialQuery ?? '');

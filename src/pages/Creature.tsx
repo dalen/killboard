@@ -12,6 +12,7 @@ import { MapSetup, Query, Zone } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { MapPositions } from '../components/MapPositions';
 import { questTypeIcon } from '../utils';
+import { ReactElement } from 'react';
 
 const CREATURE_DETAILS = gql`
   query GetCreature($id: ID!) {
@@ -56,7 +57,7 @@ const CREATURE_DETAILS = gql`
   }
 `;
 
-export function Creature(): JSX.Element {
+export function Creature(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
   const { loading, error, data } = useQuery<Query>(CREATURE_DETAILS, {

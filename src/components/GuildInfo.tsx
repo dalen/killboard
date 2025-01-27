@@ -7,6 +7,7 @@ import {
   MembersConnection,
   Realm,
 } from '../__generated__/graphql';
+import { ReactElement } from 'react';
 
 export function GuildInfo({
   guild,
@@ -19,7 +20,7 @@ export function GuildInfo({
     description: string;
     realm: Realm;
   };
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['components']);
 
   return (

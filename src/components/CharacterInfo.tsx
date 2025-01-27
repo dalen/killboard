@@ -6,6 +6,7 @@ import { Link } from 'react-router';
 import { Query } from '../types';
 import { careerIcon } from '../utils';
 import { ErrorMessage } from './global/ErrorMessage';
+import { ReactElement } from 'react';
 
 const CHARACTER_INFO = gql`
   query GetCharacterInfo($id: ID!) {
@@ -24,7 +25,7 @@ const CHARACTER_INFO = gql`
   }
 `;
 
-export function CharacterInfo({ id }: { id: number }): JSX.Element {
+export function CharacterInfo({ id }: { id: number }): ReactElement {
   const { t } = useTranslation(['common', 'components', 'enums']);
   const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
     variables: {

@@ -5,6 +5,7 @@ import { Attacker as AttackerType, KillDamage } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { killDamageText } from '../utils';
+import { ReactElement, ReactNode } from 'react';
 
 export function Attacker({
   title,
@@ -18,7 +19,7 @@ export function Attacker({
   killDamage: KillDamage[];
   showKillDamage: boolean;
   deathblow: boolean;
-}): JSX.Element {
+}): ReactElement {
   // Group killdamage by ability.name and ability.iconUrl
   const killDamageGrouped = killDamage.reduce((acc, curr) => {
     const existing = acc.find(

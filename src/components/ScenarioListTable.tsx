@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ScenarioRecord } from '../types';
+import { ReactElement } from 'react';
 
 export function ScenarioListTable({
   data,
 }: {
   data: ScenarioRecord[];
-}): JSX.Element {
+}): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 

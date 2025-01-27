@@ -6,12 +6,13 @@ import { ScenarioScoreboardEntry } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
+import { ReactElement } from 'react';
 
 export function ScenarioScoreboard({
   entries,
 }: {
   entries: ScenarioScoreboardEntry[];
-}): JSX.Element {
+}): ReactElement {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
 

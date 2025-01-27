@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { SkirmishList } from './SkirmishList';
 import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
+import { ReactElement } from 'react';
 
 const LATEST_SKIRMISHES = gql`
   query GetLatestSkirmishes(
@@ -71,7 +72,7 @@ export function LatestSkirmishes({
   perPage = 10,
 }: {
   perPage?: number;
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation('components');
   const [search] = useSearchParams();
 

@@ -3,6 +3,7 @@ import { Table, Image, Progress } from 'react-bulma-components';
 import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { killDamageText } from '../utils';
+import { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE = gql`
   query GetSkirmishDamage($id: ID!) {
@@ -22,7 +23,7 @@ const SKIRMISH_DAMAGE = gql`
   }
 `;
 
-export function SkirmishDamage({ id }: { id: string }): JSX.Element {
+export function SkirmishDamage({ id }: { id: string }): ReactElement {
   const { loading, error, data } = useQuery<Query>(SKIRMISH_DAMAGE, {
     variables: { id },
   });

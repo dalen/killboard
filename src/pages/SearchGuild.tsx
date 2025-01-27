@@ -7,6 +7,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from '../components/QueryPagination';
 import { SearchGuildsQuery } from '../__generated__/graphql';
+import { ReactElement } from 'react';
 
 const SEARCH_GUILD = gql`
   query SearchGuilds(
@@ -47,7 +48,7 @@ const SEARCH_GUILD = gql`
   }
 `;
 
-export function SearchGuild(): JSX.Element {
+export function SearchGuild(): ReactElement {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);

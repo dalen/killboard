@@ -3,6 +3,7 @@ import {
   GuildHeraldry as GuildHeraldryType,
   Realm,
 } from '../__generated__/graphql';
+import { ReactElement } from 'react';
 
 export function GuildHeraldry({
   size,
@@ -12,7 +13,7 @@ export function GuildHeraldry({
   size: '24' | '32' | '48' | '64' | '128';
   heraldry: GuildHeraldryType;
   realm: Realm;
-}): JSX.Element {
+}): ReactElement {
   const realmNum = realm === 'ORDER' ? 1 : 2;
 
   return (

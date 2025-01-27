@@ -1,10 +1,11 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { KillsList } from './KillsList';
+import { ReactElement } from 'react';
 
 const RECENT_DEATHS = gql`
   query GetLatestCharacterDeaths(
-    $id: ID!
+    $id: UnsignedInt!
     $first: Int
     $last: Int
     $before: String
@@ -58,7 +59,7 @@ const RECENT_DEATHS = gql`
   }
 `;
 
-export function CharacterRecentDeaths({ id }: { id: number }): JSX.Element {
+export function CharacterRecentDeaths({ id }: { id: number }): ReactElement {
   const { t } = useTranslation('components');
 
   return (

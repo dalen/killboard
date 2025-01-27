@@ -1,5 +1,5 @@
 import { Media } from 'react-bulma-components';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { CharacterItem as CharacterItemType, Item } from '../types';
@@ -14,7 +14,7 @@ export function CharacterItem({
   item: Item;
   talismans?: Item[];
   itemsEquipped?: CharacterItemType[];
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 

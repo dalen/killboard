@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsFilters } from '../components/KillsFilters';
 import { KillsList } from '../components/KillsList';
+import { ReactElement } from 'react';
 
 const LATEST_KILLS = gql`
   query GetKills(
@@ -70,7 +71,7 @@ const LATEST_KILLS = gql`
   }
 `;
 
-export function Kills(): JSX.Element {
+export function Kills(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
 
   return (

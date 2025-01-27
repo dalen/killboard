@@ -9,12 +9,13 @@ import {
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { useSortableData } from '../hooks/useSortableData';
+import { ReactElement } from 'react';
 
 export function InstanceRunScoreboard({
   entries,
 }: {
   entries: (InstanceRunScoreboardEntry | InstanceEncounterRunScoreboardEntry)[];
-}): JSX.Element {
+}): ReactElement {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
 

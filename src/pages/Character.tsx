@@ -10,12 +10,13 @@ import { ScenarioFilters } from '../components/ScenarioFilters';
 import { CharacterArmory } from '../components/CharacterArmory';
 import { ScenarioCount } from '../components/ScenarioCount';
 import { CharacterLatestSkirmishes } from '../components/CharacterLatestSkirmishes';
+import { ReactElement } from 'react';
 
 export function Character({
   tab,
 }: {
   tab: 'kills' | 'scenarios' | 'skirmishes' | 'armory';
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
 
   const { id } = useParams();

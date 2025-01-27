@@ -6,6 +6,7 @@ import { useParams, Link } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ZoneHeatmap } from '../components/ZoneHeatmap';
 import { Query } from '../types';
+import { ReactElement } from 'react';
 
 const ZONE_HEATMAP = gql`
   query GetZoneHeatmap($id: ID, $from: Long) {
@@ -17,7 +18,7 @@ const ZONE_HEATMAP = gql`
   }
 `;
 
-export function ZoneMap(): JSX.Element {
+export function ZoneMap(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
