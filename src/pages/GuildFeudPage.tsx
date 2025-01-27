@@ -1,10 +1,3 @@
-import {
-  Breadcrumb,
-  Columns,
-  Container,
-  Image,
-  Progress,
-} from 'react-bulma-components';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
@@ -109,37 +102,40 @@ export function GuildFeudPage(): ReactElement {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.guild1 == null || data?.guild2 == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/guild/${guildId1}/feud/${guildId2}`}>
-            {t('pages:guildFeud.guildFeudId', { guildId1, guildId2 })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Columns breakpoint="desktop">
-        <Columns.Column size={5}>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/guild/${guildId1}/feud/${guildId2}`}>
+              {t('pages:guildFeud.guildFeudId', { guildId1, guildId2 })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="columns is-desktop">
+        <div className="column is-5">
           <GuildInfo guild={data.guild1} />
-        </Columns.Column>
-        <Columns.Column>
-          <Container justifyContent="center" className="is-flex">
-            <Image
-              src="/images/corner_icons/swordhammer.png"
-              size={128}
-              mt={2}
-            />
-          </Container>
-          <Container justifyContent="center" className="is-flex" textSize={5}>
+        </div>
+        <div className="column">
+          <div className="container is-flex is-justify-content-center">
+            <figure className="image is-128x128 mt-2">
+              <img
+                src="/images/corner_icons/swordhammer.png"
+                alt="Guild Feud"
+              />
+            </figure>
+          </div>
+          <div className="container is-flex is-justify-content-center">
             <span className="has-text-weight-bold has-text-info">
               {data.guild1kills?.totalCount}
             </span>
@@ -147,13 +143,13 @@ export function GuildFeudPage(): ReactElement {
             <span className="has-text-weight-bold has-text-info">
               {data.guild2kills?.totalCount}
             </span>
-          </Container>
-        </Columns.Column>
-        <Columns.Column size={5}>
+          </div>
+        </div>
+        <div className="column is-5">
           <GuildInfo guild={data.guild2} />
-        </Columns.Column>
-      </Columns>
+        </div>
+      </div>
       <GuildFeud guild1={guildId1 || ''} guild2={guildId2 || ''} />
-    </Container>
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-import { Card, Media } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { GuildHeraldry } from './GuildHeraldry';
@@ -24,20 +23,20 @@ export function GuildInfo({
   const { t } = useTranslation(['components']);
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Media>
+    <div className="card mb-5">
+      <div className="card-content">
+        <article className="media">
           {guild.heraldry && guild.realm && (
-            <Media.Item align="left">
+            <figure className="media-left">
               <GuildHeraldry
                 size="128"
                 heraldry={guild.heraldry}
                 realm={guild.realm}
               />
-            </Media.Item>
+            </figure>
           )}
 
-          <Media.Item>
+          <div className="media-content">
             <p className="is-size-4">
               <strong>{guild.name}</strong>
             </p>
@@ -58,9 +57,9 @@ export function GuildInfo({
               <br />
               <div style={{ whiteSpace: 'pre-wrap' }}>{guild.description}</div>
             </p>
-          </Media.Item>
-        </Media>
-      </Card.Content>
-    </Card>
+          </div>
+        </article>
+      </div>
+    </div>
   );
 }

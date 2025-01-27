@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Card, Icon, Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import {
   intervalToDuration,
@@ -13,6 +12,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ErrorMessage } from './global/ErrorMessage';
 import { getInstanceRunsFilters } from './InstanceRunsFilters';
 import { QueryPagination } from './QueryPagination';
+import clsx from 'clsx';
 
 const INSTANCE_RUNS = gql`
   query GetInstanceRuns(
@@ -78,7 +78,8 @@ export function InstanceRunsList() {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading || data?.instanceRuns?.nodes == null) return <Progress />;
+  if (loading || data?.instanceRuns?.nodes == null)
+    return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const { pageInfo } = data.instanceRuns;
@@ -92,19 +93,22 @@ export function InstanceRunsList() {
 
   return (
     <>
-      <Card mb={5}>
-        <Card.Content>
+      <div className="card mb-5">
+        <div className="card-content">
           <p>
             <strong>{`${t('pages:instanceRuns.averageDuration')} `}</strong>
             {averageDuration}
           </p>
-        </Card.Content>
-      </Card>
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
+        </div>
+      </div>
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
       >
         <thead>
           <tr>
@@ -113,7 +117,7 @@ export function InstanceRunsList() {
             <th>{t('pages:instanceRuns.duration')}</th>
             <th>{t('pages:instanceRuns.encounters')}</th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/deaths.png"
                   width={36}
@@ -121,13 +125,13 @@ export function InstanceRunsList() {
                   alt={t('pages:instanceRuns.deaths') ?? ''}
                   title={t('pages:instanceRuns.deaths') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>{' '}
             <th>{t('pages:instanceRuns.itemRatingMin')}</th>
             <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
             <th>{t('pages:instanceRuns.itemRatingMax')}</th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/protection.png"
                   width={28}
@@ -135,10 +139,10 @@ export function InstanceRunsList() {
                   alt={t('pages:instanceRuns.numTanks') ?? ''}
                   title={t('pages:instanceRuns.numTanks') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/healing.png"
                   width={28}
@@ -146,10 +150,10 @@ export function InstanceRunsList() {
                   alt={t('pages:instanceRuns.numHealers') ?? ''}
                   title={t('pages:instanceRuns.numHealers') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/damage.png"
                   width={30}
@@ -157,7 +161,7 @@ export function InstanceRunsList() {
                   alt={t('pages:instanceRuns.numDps') ?? ''}
                   title={t('pages:instanceRuns.numDps') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
           </tr>
         </thead>
@@ -227,7 +231,7 @@ export function InstanceRunsList() {
             );
           })}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

@@ -1,11 +1,11 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Card, Icon, Media, Progress } from 'react-bulma-components';
 import { Link } from 'react-router';
 import { Query, SkirmishScoreboardEntry } from '../types';
 import { GuildHeraldry } from './GuildHeraldry';
 import { careerIcon } from '../utils';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const SKIRMISH_TOP_PLAYER = gql`
   query GetSkirmishTopPlayer(
@@ -64,11 +64,11 @@ export function SkirmishTopPlayer({
 
   if (loading)
     return (
-      <Card>
-        <Card.Content className={className}>
-          <Progress />
-        </Card.Content>
-      </Card>
+      <div className="card">
+        <div className={clsx('card-content', className)}>
+          <progress className="progress" />
+        </div>
+      </div>
     );
 
   if (
@@ -78,47 +78,47 @@ export function SkirmishTopPlayer({
     data?.skirmish.scoreboardEntries.nodes[0][attribute] === 0
   )
     return (
-      <Card className={className}>
-        <Card.Header>
-          <Card.Header.Title>{t(title)}</Card.Header.Title>
-          <Card.Header.Title className="is-justify-content-right has-text-grey">
+      <div className={clsx('card-content', className)}>
+        <header className="card-header">
+          <p className="card-header-title">{t(title)}</p>
+          <p className="card-header-title is-justify-content-right has-text-grey">
             -
-          </Card.Header.Title>
-        </Card.Header>
-        <Card.Content>
-          <Media>
-            <Media.Item align="left">
+          </p>
+        </header>
+        <div className="card-content">
+          <article className="media">
+            <figure className="media-left">
               <div />
               <small>
                 Lvl -
                 <br />
                 RR -
               </small>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
+            </figure>
+          </article>
+        </div>
+      </div>
     );
 
   const player = data.skirmish.scoreboardEntries.nodes[0];
 
   return (
-    <Card className={`mb-1 ${className}`}>
-      <Card.Header>
-        <Card.Header.Title>{t(title)}</Card.Header.Title>
-        <Card.Header.Title className="is-justify-content-right has-text-grey">
+    <div className={clsx('card-content', 'mb-1', className)}>
+      <header className="card-header">
+        <p className="card-header-title">{t(title)}</p>
+        <p className="card-header-title is-justify-content-right has-text-grey">
           {Number(player[attribute]).toLocaleString()}
-        </Card.Header.Title>
-      </Card.Header>
-      <Card.Content style={{ padding: '1rem' }}>
+        </p>
+      </header>
+      <div className="card-content p-1">
         <div>
-          <Icon.Text>
-            <Icon>
+          <span className="icon-text">
+            <span className="icon">
               <img
                 src={careerIcon(player.character.career)}
                 alt={t(`enums:career.${player.character.career}`) ?? ''}
               />
-            </Icon>
+            </span>
             <div>
               <div>
                 <Link to={`/character/${player.character.id}`}>
@@ -130,22 +130,22 @@ export function SkirmishTopPlayer({
                 <strong>{player.renownRank}</strong>
               </small>
             </div>
-          </Icon.Text>
+          </span>
         </div>
 
         {player.guild && (
-          <Icon.Text>
-            <Icon>
+          <span className="icon-text">
+            <span className="icon">
               <GuildHeraldry
                 size="24"
                 heraldry={player.guild.heraldry}
                 realm={player.guild.realm}
               />
-            </Icon>
+            </span>
             <Link to={`/guild/${player.guild?.id}`}>{player.guild?.name}</Link>
-          </Icon.Text>
+          </span>
         )}
-      </Card.Content>
-    </Card>
+      </div>
+    </div>
   );
 }

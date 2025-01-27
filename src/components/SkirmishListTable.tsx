@@ -5,12 +5,12 @@ import {
   intervalToDuration,
 } from 'date-fns';
 import React from 'react';
-import { Table, Media, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Skirmish, Realm } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { GuildHeraldry } from './GuildHeraldry';
+import clsx from 'clsx';
 
 export function SkirmishListTable({
   data,
@@ -25,11 +25,14 @@ export function SkirmishListTable({
 
   return (
     <div className="table-container">
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
       >
         <thead>
           <tr>
@@ -74,30 +77,34 @@ export function SkirmishListTable({
                 {showZone && (
                   <td>
                     {skirmish.scenario == null ? (
-                      <Media>
-                        <Media.Item align="left">
-                          <Image
-                            src="/images/icons/rvr.png"
-                            alt="RvR"
-                            title="RvR"
-                          />
-                        </Media.Item>
-                        <Media.Item>
+                      <article className="media">
+                        <figure className="media-left">
+                          <figure className="image is-24x24">
+                            <img
+                              src="/images/icons/rvr.png"
+                              alt="RvR"
+                              title="RvR"
+                            />
+                          </figure>
+                        </figure>
+                        <div className="media-content">
                           {skirmish.primaryZone?.name}
                           <br />
                           {skirmish.primaryZoneArea?.name}
-                        </Media.Item>
-                      </Media>
+                        </div>
+                      </article>
                     ) : (
-                      <Media>
-                        <Media.Item align="left">
-                          <Image
-                            src="/images/icons/scenario.png"
-                            alt="Scenario"
-                            title="Scenario"
-                          />
-                        </Media.Item>
-                        <Media.Item>
+                      <article className="media">
+                        <figure className="media-left">
+                          <figure className="image is-24x24">
+                            <img
+                              src="/images/icons/scenario.png"
+                              alt="Scenario"
+                              title="Scenario"
+                            />
+                          </figure>
+                        </figure>
+                        <div className="media-content">
                           {skirmish.scenario.name}
                           {skirmish.primaryZoneArea?.name !==
                             skirmish.scenario.name && (
@@ -106,8 +113,8 @@ export function SkirmishListTable({
                               {skirmish.primaryZoneArea?.name}
                             </>
                           )}
-                        </Media.Item>
-                      </Media>
+                        </div>
+                      </article>
                     )}
                   </td>
                 )}
@@ -117,18 +124,18 @@ export function SkirmishListTable({
                       key={topGuild.guild.id}
                       className="is-flex is-justify-content-space-between mb-1"
                     >
-                      <Icon.Text>
-                        <Icon>
+                      <span className="icon-text">
+                        <span className="icon">
                           <GuildHeraldry
                             size="24"
                             heraldry={topGuild.guild.heraldry}
                             realm={topGuild.guild.realm}
                           />
-                        </Icon>
+                        </span>
                         <Link to={`/guild/${topGuild.guild.id}`}>
                           {topGuild.guild.name}
                         </Link>
-                      </Icon.Text>
+                      </span>
                       <div
                         className={
                           topGuild.guild.realm === Realm.Destruction
@@ -175,7 +182,7 @@ export function SkirmishListTable({
             );
           })}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '../types';
@@ -72,7 +71,7 @@ export function ScenarioList({
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.scenarios?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;

@@ -1,6 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Progress } from 'react-bulma-components';
 import { EquipSlot, ItemRarity, ItemType, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { CharacterItem } from './CharacterItem';
@@ -116,7 +115,7 @@ export function CharacterArmory({ id }: { id: number }): ReactElement {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.character === null)

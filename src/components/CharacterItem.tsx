@@ -1,4 +1,3 @@
-import { Media } from 'react-bulma-components';
 import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -38,8 +37,8 @@ export function CharacterItem({
       onFocus={showModal}
       onBlur={hideModal}
     >
-      <Media>
-        <Media.Item align="left">
+      <article className="media">
+        <figure className="media-left">
           {item.id === '0' ? (
             <figure
               className={`${itemFigureClass(
@@ -59,9 +58,9 @@ export function CharacterItem({
               </figure>
             </Link>
           )}
-        </Media.Item>
+        </figure>
         {item.name && (
-          <Media.Item>
+          <div className="media-content">
             <div className={`${itemNameClass(item)} has-text-weight-semi/bold`}>
               {item.name}
             </div>
@@ -69,7 +68,7 @@ export function CharacterItem({
             {item.itemLevel > 0 && (
               <div className="is-size-7">Level {item.itemLevel}</div>
             )}
-          </Media.Item>
+          </div>
         )}
         {modalOpen && (
           <CharacterItemPopup
@@ -78,7 +77,7 @@ export function CharacterItem({
             itemsEquipped={itemsEquipped}
           />
         )}
-      </Media>
+      </article>
     </div>
   );
 }

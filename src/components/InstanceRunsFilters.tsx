@@ -1,4 +1,3 @@
-import { Card, Columns, Form, Heading, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { InstanceRunFilterInput } from '../types';
@@ -182,15 +181,18 @@ export function InstanceRunsFilters(): ReactElement {
     Number(search.get('maxItemRatingMax') ?? 0);
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Columns>
-          <Columns.Column>
-            <Form.Field>
-              <Form.Label>Instance</Form.Label>
-              <Form.Control>
+    <div className="card mb-5">
+      <div className="card-content">
+        <div className="columns">
+          <div className="column">
+            <div className="field">
+              <label className="label" htmlFor="instance-select">
+                Instance
+              </label>
+              <div className="control">
                 <div className="select">
                   <select
+                    id="instance-select"
                     value={instance}
                     onChange={(event) => {
                       search.set('instance', event.target.value);
@@ -218,143 +220,171 @@ export function InstanceRunsFilters(): ReactElement {
                     <option value="173">Sacellum 3</option>
                   </select>
                 </div>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field>
-              <Form.Label>Min completed encounters</Form.Label>
-              <Form.Control>
-                <Form.Input
+              </div>
+            </div>
+            <div className="field">
+              <label className="label" htmlFor="completedEncounters">
+                Min completed encounters
+              </label>
+              <div className="control">
+                <input
+                  id="completedEncounters"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={completedEncounters}
+                  value={completedEncounters ?? undefined}
                   onChange={(event) => {
                     search.set('completedEncounters', event.target.value);
                     setSearch(search);
                   }}
                 />
-              </Form.Control>
-            </Form.Field>
-          </Columns.Column>
-          <Columns.Column>
-            <Heading size={6}>Min item rating</Heading>
-            <Form.Field>
-              <Form.Label>Below</Form.Label>
-              <Form.Control>
-                <Form.Input
+              </div>
+            </div>
+          </div>
+          <div className="column">
+            <h6>Min item rating</h6>
+            <div className="field">
+              <label className="label" htmlFor="minItemRatingMax">
+                Below
+              </label>
+              <div className="control">
+                <input
+                  id="minItemRatingMax"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={minItemRatingMax}
+                  value={minItemRatingMax ?? undefined}
                   onChange={(event) => {
                     search.set('minItemRatingMax', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-down" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field>
-              <Form.Label>Above</Form.Label>
-              <Form.Control>
-                <Form.Input
+                </span>
+              </div>
+            </div>
+            <div className="field">
+              <label className="label" htmlFor="minItemRatingMin">
+                Above
+              </label>
+              <div className="control">
+                <input
+                  id="minItemRatingMin"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={minItemRatingMin}
+                  value={minItemRatingMin ?? undefined}
                   onChange={(event) => {
                     search.set('minItemRatingMin', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-up" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-          </Columns.Column>
-          <Columns.Column>
-            <Heading size={6}>Average item rating</Heading>
-            <Form.Field>
-              <Form.Label>Below</Form.Label>
-              <Form.Control>
-                <Form.Input
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="column">
+            <h6>Average item rating</h6>
+            <div className="field">
+              <label className="label" htmlFor="avgItemRatingMax">
+                Below
+              </label>
+              <div className="control">
+                <input
+                  id="avgItemRatingMax"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={avgItemRatingMax}
+                  value={avgItemRatingMax ?? undefined}
                   onChange={(event) => {
                     search.set('avgItemRatingMax', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-down" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field>
-              <Form.Label>Above</Form.Label>
-              <Form.Control>
-                <Form.Input
+                </span>
+              </div>
+            </div>
+            <div className="field">
+              <label className="label" htmlFor="avgItemRatingMin">
+                Above
+              </label>
+              <div className="control">
+                <input
+                  id="avgItemRatingMin"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={avgItemRatingMin}
+                  value={avgItemRatingMin ?? undefined}
                   onChange={(event) => {
                     search.set('avgItemRatingMin', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-up" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-          </Columns.Column>
-          <Columns.Column>
-            <Heading size={6}>Max item rating</Heading>
-            <Form.Field>
-              <Form.Label>Below</Form.Label>
-              <Form.Control>
-                <Form.Input
+                </span>
+              </div>
+            </div>
+          </div>
+          <div className="column">
+            <h6>Max item rating</h6>
+            <div className="field">
+              <label className="label" htmlFor="maxItemRatingMax">
+                Below
+              </label>
+              <div className="control">
+                <input
+                  id="maxItemRatingMax"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={maxItemRatingMax}
+                  value={maxItemRatingMax ?? undefined}
                   onChange={(event) => {
                     search.set('maxItemRatingMax', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-down" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-            <Form.Field>
-              <Form.Label>Above</Form.Label>
-              <Form.Control>
-                <Form.Input
+                </span>
+              </div>
+            </div>
+            <div className="field">
+              <label className="label" htmlFor="maxItemRatingMin">
+                Above
+              </label>
+              <div className="control">
+                <input
+                  id="maxItemRatingMin"
+                  className="input"
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={maxItemRatingMin}
+                  value={maxItemRatingMin ?? undefined}
                   onChange={(event) => {
                     search.set('maxItemRatingMin', event.target.value);
                     setSearch(search);
                   }}
                 />
-                <Icon align="left">
+                <span className="icon has-text-left">
                   <i className="fa-solid fa-arrow-up" />
-                </Icon>
-              </Form.Control>
-            </Form.Field>
-          </Columns.Column>
-        </Columns>
-      </Card.Content>
-    </Card>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

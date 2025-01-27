@@ -1,6 +1,5 @@
 import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import React from 'react';
-import { Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '../types';
@@ -38,7 +37,7 @@ export function KillsList({
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const kills = data?.kills;

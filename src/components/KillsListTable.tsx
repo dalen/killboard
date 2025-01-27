@@ -1,11 +1,11 @@
 import { format, formatISO } from 'date-fns';
 import React from 'react';
-import { Table, Media, Content, Image, Icon } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Kill } from '../types';
 import { CareerIcon } from './CareerIcon';
 import useWindowDimensions from '../hooks/useWindowDimensions';
+import clsx from 'clsx';
 
 export function KillsListTable({
   data,
@@ -24,11 +24,14 @@ export function KillsListTable({
 
   return (
     <div className="table-container">
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
       >
         <thead>
           <tr>
@@ -60,14 +63,14 @@ export function KillsListTable({
                 )}
                 {showKiller && (
                   <td>
-                    <Media>
-                      <Media.Item align="left">
+                    <article className="media">
+                      <figure className="media-left">
                         <CareerIcon
                           career={kill.attackers[0].character.career}
                         />
-                      </Media.Item>
-                      <Media.Item>
-                        <Content>
+                      </figure>
+                      <div className="media-content">
+                        <div className="content">
                           <Link
                             to={`/character/${kill.attackers[0].character.id}`}
                           >
@@ -77,26 +80,26 @@ export function KillsListTable({
                           <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
                             {kill.attackers[0].guild?.name}
                           </Link>
-                        </Content>
-                      </Media.Item>
-                      <Media.Item align="right">
+                        </div>
+                      </div>
+                      <div className="media-right">
                         <small>
                           Lvl {kill.attackers[0].level}
                           <br />
                           RR {kill.attackers[0].renownRank}
                         </small>
-                      </Media.Item>
-                    </Media>
+                      </div>
+                    </article>
                   </td>
                 )}
                 {showVictim && (
                   <td>
-                    <Media>
-                      <Media.Item align="left">
+                    <article className="media">
+                      <figure className="media-left">
                         <CareerIcon career={kill.victim.character.career} />
-                      </Media.Item>
-                      <Media.Item>
-                        <Content>
+                      </figure>
+                      <div className="media-content">
+                        <div className="content">
                           <Link to={`/character/${kill.victim.character.id}`}>
                             <strong>{kill.victim.character.name}</strong>
                           </Link>
@@ -104,69 +107,73 @@ export function KillsListTable({
                           <Link to={`/guild/${kill.victim.guild?.id}`}>
                             {kill.victim.guild?.name}
                           </Link>
-                        </Content>
-                      </Media.Item>
-                      <Media.Item align="right">
+                        </div>
+                      </div>
+                      <div className="media-right">
                         <small>
                           Lvl {kill.victim.level}
                           <br />
                           RR {kill.victim.renownRank}
                         </small>
-                      </Media.Item>
-                    </Media>
+                      </div>
+                    </article>
                   </td>
                 )}
                 <td>
                   {kill.scenario == null ? (
-                    <Media>
-                      <Media.Item align="left">
-                        <Image
-                          src="/images/icons/rvr.png"
-                          alt="RvR"
-                          title="RvR"
-                        />
-                      </Media.Item>
-                      <Media.Item>
+                    <article className="media">
+                      <figure className="media-left">
+                        <figure className="image is-24x24">
+                          <img
+                            src="/images/icons/rvr.png"
+                            alt="RvR"
+                            title="RvR"
+                          />
+                        </figure>
+                      </figure>
+                      <div className="media-content">
                         {kill.position.zone?.name}{' '}
                         {kill.attackers[0].damagePercent === 100 && (
                           <p>
-                            <Icon.Text>
-                              <Icon>
+                            <span className="icon-text">
+                              <span className="icon">
                                 <i className="fas fa-star mr-2 has-text-warning" />
-                              </Icon>
+                              </span>
                               <strong>
                                 {t('components:killsList.soloKill')}
                               </strong>
-                            </Icon.Text>
+                            </span>
                           </p>
                         )}
-                      </Media.Item>
-                    </Media>
+                      </div>
+                    </article>
                   ) : (
-                    <Media>
-                      <Media.Item align="left">
-                        <Image
-                          src="/images/icons/scenario.png"
-                          alt="Scenario"
-                          title="Scenario"
-                        />
-                      </Media.Item>
-                      <Media.Item>
+                    <article className="media">
+                      <figure className="media-left">
+                        <figure className="image is-24x24">
+                          <img
+                            src="/images/icons/scenario.png"
+                            alt="Scenario"
+                            title="Scenario"
+                          />
+                        </figure>
+                      </figure>
+                      <div className="media-content">
                         {kill.scenario.name}{' '}
                         {kill.attackers[0].damagePercent === 100 && (
                           <p>
-                            <Icon.Text>
-                              <Icon>
+                            <span className="icon-text">
+                              <span className="icon">
                                 <i className="fas fa-star mr-2 has-text-warning" />
-                              </Icon>
+                              </span>
                               <strong>
                                 {t('components:killsList.soloKill')}
                               </strong>
-                            </Icon.Text>
+                            </span>
                           </p>
                         )}
-                      </Media.Item>
-                    </Media>
+                      </div>
+                    </article>
                   )}
                 </td>
                 <td>
@@ -181,7 +188,7 @@ export function KillsListTable({
             );
           })}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { CareerIcon } from './CareerIcon';
@@ -8,6 +7,7 @@ import { ErrorMessage } from './global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from './QueryPagination';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const GUILD_MEMBERS = gql`
   query GetGuildMembers(
@@ -56,7 +56,7 @@ export function GuildMemberList({
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.guild?.members?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -65,7 +65,14 @@ export function GuildMemberList({
 
   return (
     <div className="table-container">
-      <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
+      >
         <thead>
           <tr>
             <th aria-label="Career" id="th-career" />
@@ -92,7 +99,7 @@ export function GuildMemberList({
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         refetch={refetch}

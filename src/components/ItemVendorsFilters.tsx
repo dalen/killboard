@@ -1,4 +1,3 @@
-import { Form, Card, Columns } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { URLSearchParams } from 'url';
@@ -28,15 +27,15 @@ export function ItemVendorsFilters(): ReactElement {
   const career = search.get('career') || 'all';
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Columns>
-          <Columns.Column>
-            <Form.Field>
-              <Form.Label>
+    <div className="card mb-5">
+      <div className="card-content">
+        <div className="columns">
+          <div className="column">
+            <div className="field">
+              <label className="label">
                 {t('components:itemVendorsFilters.career')}
-              </Form.Label>
-              <Form.Select
+              </label>
+              <select
                 value={career}
                 onChange={(event) => {
                   search.set('career', event.target.value);
@@ -118,11 +117,11 @@ export function ItemVendorsFilters(): ReactElement {
                 <option value={Career.Sorcerer}>
                   {t(`enums:career.${Career.Sorcerer}`)}
                 </option>
-              </Form.Select>
-            </Form.Field>
-          </Columns.Column>
-        </Columns>
-      </Card.Content>
-    </Card>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

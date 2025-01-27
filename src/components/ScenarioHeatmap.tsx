@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Container, Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Query } from '../types';
@@ -34,7 +33,7 @@ export function ScenarioHeatmap({
 
   const size = 500;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -50,9 +49,9 @@ export function ScenarioHeatmap({
   const max = _.maxBy(heatmapData, (d) => d[2])?.[2] || 1;
 
   return (
-    <Container breakpoint="desktop" max>
+    <div>
       <p className="mb-2">{t('components:scenarioHeatmap.description')}</p>
       <ZoneHeatmap zoneId={zoneId} max={max} data={heatmapData} size={size} />
-    </Container>
+    </div>
   );
 }

@@ -1,12 +1,3 @@
-import {
-  Breadcrumb,
-  Card,
-  Columns,
-  Container,
-  Media,
-  Progress,
-  Tabs,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
@@ -98,7 +89,7 @@ export function Item({
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.item == null)
@@ -120,32 +111,34 @@ export function Item({
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/items">{t('common:items')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <div className="ml-2">
-            {t('pages:itemPage.itemId', { itemId: id })}
-          </div>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/items">{t('common:items')}</Link>
+          </li>
+          <li className="is-active">
+            <div className="ml-2">
+              {t('pages:itemPage.itemId', { itemId: id })}
+            </div>
+          </li>
+        </ul>
+      </nav>
 
-      <Card mb={5}>
-        <Card.Content>
-          <Media>
-            <Media.Item align="left">
+      <div className="card mb-5">
+        <div className="card-content">
+          <article className="media">
+            <figure className="media-left">
               <figure className="image is-64x64 m-0">
                 <img src={item.iconUrl} alt="Item Icon" />
               </figure>
-            </Media.Item>
-            <Media.Item>
-              <Columns breakpoint="tablet">
-                <Columns.Column>
+            </figure>
+            <div className="media-content">
+              <div className="columns">
+                <div className="column">
                   <div className="is-flex mb-4">
                     <div className="is-size-3  is-family-secondary">
                       <div className={itemNameClass(item)}>{item.name}</div>
@@ -257,9 +250,9 @@ export function Item({
                       })}
                     </div>
                   )}
-                </Columns.Column>
+                </div>
                 {item.itemSet && (
-                  <Columns.Column>
+                  <div className="column">
                     <div className="is-size-5 is-family-secondary">
                       {item.itemSet.name}
                     </div>
@@ -293,14 +286,14 @@ export function Item({
                         </span>
                       </div>
                     ))}
-                  </Columns.Column>
+                  </div>
                 )}
-              </Columns>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
-      <Tabs>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div className="tabs">
         {activeTabs.includes('vendors') && (
           <li className={activeTab === 'vendors' ? 'is-active' : ''}>
             <Link to={`/item/${id}`}>
@@ -323,10 +316,10 @@ export function Item({
             </Link>
           </li>
         )}
-      </Tabs>
+      </div>
       {activeTab === 'vendors' && <ItemVendorsSell itemId={id} />}
       {activeTab === 'purchase' && <ItemVendorsPurchase itemId={id} />}
       {activeTab === 'quests' && <ItemQuests itemId={id} />}
-    </Container>
+    </div>
   );
 }

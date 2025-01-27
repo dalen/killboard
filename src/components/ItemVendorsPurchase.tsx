@@ -1,4 +1,3 @@
-import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
@@ -80,7 +79,7 @@ export function ItemVendorsPurchase({
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const vendorItems = data?.item?.usedToPurchase;
@@ -93,7 +92,7 @@ export function ItemVendorsPurchase({
   return (
     <>
       <ItemVendorsFilters />
-      <Table striped className="is-fullwidth">
+      <table className="table is-striped is-fullwidth">
         <thead>
           <tr>
             <th>{t('components:itemVendors.item')}</th>
@@ -193,7 +192,7 @@ export function ItemVendorsPurchase({
               ));
           })}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         refetch={refetch}

@@ -1,5 +1,4 @@
 import { gql } from '@apollo/client';
-import { Breadcrumb, Container } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsFilters } from '../components/KillsFilters';
@@ -75,15 +74,17 @@ export function Kills(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/kills">{t('pages:killsPage.title')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/kills">{t('pages:killsPage.title')}</Link>
+          </li>
+        </ul>
+      </nav>
       <div>
         <KillsFilters />
         <KillsList
@@ -92,6 +93,6 @@ export function Kills(): ReactElement {
           title={t('pages:killsPage.title')}
         />
       </div>
-    </Container>
+    </div>
   );
 }

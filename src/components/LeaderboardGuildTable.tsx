@@ -1,4 +1,3 @@
-import { Table, Media, Content } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillGuildLeaderboardEntry } from '../types';
@@ -14,7 +13,7 @@ export function LeaderboardGuildTable({
 
   return (
     <div className="table-container">
-      <Table striped hoverable marginless size="fullwidth">
+      <table className="table is-striped is-hoverable is-fullwidth is-marginless">
         <thead>
           <tr>
             <th>{t('components:leaderboardGuild.rank')}</th>
@@ -31,29 +30,29 @@ export function LeaderboardGuildTable({
             <tr key={leaderboardEntry.rank}>
               <td>{leaderboardEntry.rank}</td>
               <td aria-labelledby="th-guildname">
-                <Media>
-                  <Media.Item align="left">
+                <article className="media">
+                  <figure className="media-left">
                     <GuildHeraldry
                       size="48"
                       heraldry={leaderboardEntry.guild.heraldry}
                       realm={leaderboardEntry.guild.realm}
                     />
-                  </Media.Item>
-                  <Media.Item>
-                    <Content>
+                  </figure>
+                  <div className="media-content">
+                    <div className="content">
                       <Link to={`/guild/${leaderboardEntry.guild.id}`}>
                         <strong>{leaderboardEntry.guild.name}</strong>
                       </Link>
                       <br />
-                    </Content>
-                  </Media.Item>
-                </Media>
+                    </div>
+                  </div>
+                </article>
               </td>
               <td className="has-text-right">{leaderboardEntry.kills}</td>
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

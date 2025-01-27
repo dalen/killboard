@@ -1,11 +1,3 @@
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Form,
-  Progress,
-  Table,
-} from 'react-bulma-components';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
@@ -15,6 +7,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/SearchBox';
 import { QueryPagination } from '../components/QueryPagination';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const CREATURES = gql`
   query GetCreatures(
@@ -77,7 +70,7 @@ export function Creatures(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.creatures?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -86,20 +79,22 @@ export function Creatures(): ReactElement {
   const { pageInfo } = data.creatures;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/creatures">{t('pages:creatures.title')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/creatures">{t('pages:creatures.title')}</Link>
+          </li>
+        </ul>
+      </nav>
 
-      <Card mb={5}>
-        <Card.Content>
-          <Form.Field>
-            <Form.Label>{t('pages:creatures.search')}</Form.Label>
+      <div className="card mb-5">
+        <div className="card-content">
+          <div className="field">
+            <label className="label">{t('pages:creatures.search')}</label>
             <SearchBox
               initialQuery={search.get('name') || ''}
               onSubmit={(event) => {
@@ -107,12 +102,19 @@ export function Creatures(): ReactElement {
                 setSearch(search);
               }}
             />
-          </Form.Field>
-        </Card.Content>
-      </Card>
+          </div>
+        </div>
+      </div>
 
       <div className="table-container">
-        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
           <thead>
             <tr>
               <th>{t('pages:creatures.name')}</th>
@@ -131,13 +133,13 @@ export function Creatures(): ReactElement {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
         refetch={refetch}
       />
-    </Container>
+    </div>
   );
 }

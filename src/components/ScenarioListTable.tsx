@@ -1,10 +1,10 @@
 import { format, formatISO, intervalToDuration } from 'date-fns';
-import { Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ScenarioRecord } from '../types';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 export function ScenarioListTable({
   data,
@@ -18,11 +18,14 @@ export function ScenarioListTable({
 
   return (
     <div className="table-container">
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
       >
         <thead>
           <tr>
@@ -102,7 +105,7 @@ export function ScenarioListTable({
             );
           })}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

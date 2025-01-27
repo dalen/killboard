@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
@@ -37,10 +36,10 @@ export function ScenarioFilters({
   const queueType = search.get('queue_type') || 'all';
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Columns>
-          <Columns.Column>
+    <div className="card mb-5">
+      <div className="card-content">
+        <div className="columns">
+          <div className="column">
             <div className="field is-horizontal">
               <div className="field-label is-normal">
                 <label className="label" htmlFor="queueType-select">
@@ -81,11 +80,12 @@ export function ScenarioFilters({
                 </div>
               </div>
             </div>
-          </Columns.Column>
+          </div>
           {showPremadeOnly && (
-            <Columns.Column>
-              <Form.Label title="Scenarios with 6+ guild members only">
-                <Form.Checkbox
+            <div className="column">
+              <label title="Scenarios with 6+ guild members only">
+                <input
+                  type="checkbox"
                   checked={search.has('premadeOnly')}
                   onChange={(event) => {
                     if (event.target.checked) search.set('premadeOnly', 'true');
@@ -94,11 +94,11 @@ export function ScenarioFilters({
                   }}
                 />{' '}
                 {t('scenarioFilters.premadeOnly')}
-              </Form.Label>
-            </Columns.Column>
+              </label>
+            </div>
           )}
-        </Columns>
-      </Card.Content>
-    </Card>
+        </div>
+      </div>
+    </div>
   );
 }

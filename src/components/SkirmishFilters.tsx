@@ -1,4 +1,3 @@
-import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { SkirmishFilterInput } from '../types';
@@ -70,13 +69,15 @@ export function SkirmishFilters(): ReactElement {
   const locationType = search.get('type') || 'all';
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Columns>
-          <Columns.Column>
-            <Form.Field>
-              <Form.Label>{t('skirmishFilters.locationType')}</Form.Label>
-              <Form.Select
+    <div className="card mb-5">
+      <div className="card-content">
+        <div className="columns">
+          <div className="column">
+            <div className="field">
+              <label className="label">
+                {t('skirmishFilters.locationType')}
+              </label>
+              <select
                 value={locationType}
                 onChange={(event) => {
                   search.set('type', event.target.value);
@@ -95,13 +96,13 @@ export function SkirmishFilters(): ReactElement {
                 <option value="scenario">
                   {t('skirmishFilters.locationTypeScenario')}
                 </option>
-              </Form.Select>
-            </Form.Field>
-          </Columns.Column>
-          <Columns.Column>
-            <Form.Field>
-              <Form.Label>{t('skirmishFilters.minPlayers')}</Form.Label>
-              <Form.Select
+              </select>
+            </div>
+          </div>
+          <div className="column">
+            <div className="field">
+              <label className="label">{t('skirmishFilters.minPlayers')}</label>
+              <select
                 onChange={(event) => {
                   search.set('minPlayers', event.target.value);
                   setSearch(search);
@@ -115,11 +116,11 @@ export function SkirmishFilters(): ReactElement {
                 <option value="100">
                   {t('skirmishFilters.minPlayers100')}
                 </option>
-              </Form.Select>
-            </Form.Field>
-          </Columns.Column>
-        </Columns>
-      </Card.Content>
-    </Card>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,4 +1,3 @@
-import { Progress, Table } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
@@ -75,7 +74,7 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const rewardedFromQuests = data?.item?.rewardedFromQuests;
@@ -89,7 +88,7 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
 
   return (
     <>
-      <Table striped className="is-fullwidth">
+      <table className="table is-striped is-fullwidth">
         <thead>
           <tr>
             <th>{t('components:itemQuests.questName')}</th>
@@ -211,7 +210,7 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

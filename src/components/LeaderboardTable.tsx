@@ -1,4 +1,3 @@
-import { Table, Media, Content } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillLeaderboardEntry } from '../types';
@@ -13,7 +12,7 @@ export function LeaderboardTable({
   const { t } = useTranslation(['common', 'components']);
 
   return (
-    <Table striped hoverable size="fullwidth" marginless>
+    <table className="table is-striped is-hoverable is-fullwidth is-marginless">
       <thead>
         <tr>
           <th>{t('components:leaderboard.rank')}</th>
@@ -28,12 +27,12 @@ export function LeaderboardTable({
           <tr key={leaderboardEntry.rank}>
             <td>{leaderboardEntry.rank}</td>
             <td>
-              <Media className="leaderboard-player-data">
-                <Media.Item align="left">
+              <div className="media leaderboard-player-data">
+                <div className="media-left">
                   <CareerIcon career={leaderboardEntry.character.career} />
-                </Media.Item>
-                <Media.Item>
-                  <Content>
+                </div>
+                <div className="media-content">
+                  <div className="content">
                     <Link to={`/character/${leaderboardEntry.character.id}`}>
                       <strong>{leaderboardEntry.character.name}</strong>
                     </Link>
@@ -43,18 +42,18 @@ export function LeaderboardTable({
                     >
                       {leaderboardEntry.character.guildMembership?.guild?.name}
                     </Link>
-                  </Content>
-                </Media.Item>
-                <Media.Item className="player-rr-lvl-container">
+                  </div>
+                </div>
+                <div className="media-content player-rr-lvl-container">
                   <span>Lvl {leaderboardEntry.character.level}</span>
                   <span>RR {leaderboardEntry.character.renownRank}</span>
-                </Media.Item>
-              </Media>
+                </div>
+              </div>
             </td>
             <td className="has-text-right">{leaderboardEntry.kills}</td>
           </tr>
         ))}
       </tbody>
-    </Table>
+    </table>
   );
 }

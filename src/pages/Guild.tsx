@@ -1,11 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Breadcrumb,
-  Columns,
-  Container,
-  Progress,
-  Tabs,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
@@ -75,25 +68,27 @@ export function Guild({
     variables: { id: Number(id) },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.guild == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/guild/${id}`}>
-            {t('pages:guildPage.guildId', { guildId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/guild/${id}`}>
+              {t('pages:guildPage.guildId', { guildId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <GuildInfo guild={data.guild} />
-      <Tabs>
+      <div className="tabs">
         <li className={tab === 'kills' ? 'is-active' : ''}>
           <Link to={`/guild/${id}`}>{t('pages:guildPage.kills')}</Link>
         </li>
@@ -112,7 +107,7 @@ export function Guild({
             {t('pages:guildPage.skirmishes')}
           </Link>
         </li>
-      </Tabs>
+      </div>
       {tab === 'kills' && (
         <div>
           <KillsFilters />
@@ -124,18 +119,18 @@ export function Guild({
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters showPremadeOnly />
-          <Columns breakpoint="desktop">
-            <Columns.Column>
+          <div className="columns is-desktop">
+            <div className="column">
               <ScenarioCount guildId={id} wins title="Wins" />
-            </Columns.Column>
-            <Columns.Column>
+            </div>
+            <div className="column">
               <ScenarioCount guildId={id} wins={false} title="Losses" />
-            </Columns.Column>
-          </Columns>
+            </div>
+          </div>
           <ScenarioList guildId={id} />
         </div>
       )}
       {tab === 'skirmishes' && <GuildLatestSkirmishes guildId={id} />}
-    </Container>
+    </div>
   );
 }

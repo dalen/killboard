@@ -1,6 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Progress } from 'react-bulma-components';
 import _ from 'lodash';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
@@ -60,7 +59,7 @@ export function TopSkirmishes(): ReactElement {
         <div className="is-size-4 is-family-secondary is-uppercase">
           {t('topSkirmishes.title')}
         </div>
-        <Progress />;
+        <progress className="progress" />;
       </div>
     );
 

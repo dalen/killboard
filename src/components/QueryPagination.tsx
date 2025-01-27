@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import { Button } from 'react-bulma-components';
 import { ApolloQueryResult, OperationVariables } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { PageInfo } from '../types';
@@ -24,9 +23,8 @@ export function QueryPagination<T>({
   return (
     <div className="field is-grouped is-pulled-right">
       {pageInfo.hasPreviousPage && (
-        <Button
-          color="info"
-          size="small"
+        <button
+          className="button  is-info is-small"
           onClick={() => {
             refetch({
               first: undefined,
@@ -38,12 +36,11 @@ export function QueryPagination<T>({
         >
           {t('common:prevPage')}
           <i className="fas fa-circle-chevron-left ml-1" />
-        </Button>
+        </button>
       )}
       {pageInfo.hasNextPage && (
-        <Button
-          color="info"
-          size="small"
+        <button
+          className="button  is-info is-small"
           onClick={() => {
             refetch({
               first: perPage,
@@ -55,7 +52,7 @@ export function QueryPagination<T>({
         >
           {t('common:nextPage')}
           <i className="fas fa-circle-chevron-right ml-1" />
-        </Button>
+        </button>
       )}
     </div>
   );

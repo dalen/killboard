@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Table, Image, Progress } from 'react-bulma-components';
 import { useParams } from 'react-router';
 import { KillDamage, Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
@@ -53,7 +52,7 @@ export function SkirmishDamageByCharacter({
 
   const killDamage = data?.skirmish?.killDamageByCharacter;
 
-  if (loading || killDamage == null) return <Progress />;
+  if (loading || killDamage == null) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   // Group killdamage by ability.name and ability.iconUrl
@@ -79,7 +78,7 @@ export function SkirmishDamageByCharacter({
   return (
     <div>
       <CharacterInfo id={Number(characterId)} />
-      <Table size="narrow" striped width="100%">
+      <table className="table is-striped is-narrow" width="100%">
         <tbody>
           {killDamageGrouped
             .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
@@ -87,11 +86,9 @@ export function SkirmishDamageByCharacter({
               <tr>
                 <td style={{ verticalAlign: 'middle' }}>
                   {damage.ability && (
-                    <Image
-                      size={24}
-                      src={damage.ability.iconUrl}
-                      alt="Heraldry"
-                    />
+                    <figure className="image is-24x24">
+                      <img src={damage.ability.iconUrl} alt="Ability Icon" />
+                    </figure>
                   )}
                 </td>
                 <td>{killDamageText(damage)}</td>
@@ -113,7 +110,7 @@ export function SkirmishDamageByCharacter({
             <td />
           </tr>
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

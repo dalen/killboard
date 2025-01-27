@@ -1,10 +1,3 @@
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Progress,
-  Tabs,
-} from 'react-bulma-components';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
@@ -64,7 +57,7 @@ export function Creature(): ReactElement {
     variables: { id },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const entry = data?.creature;
@@ -88,33 +81,35 @@ export function Creature(): ReactElement {
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/creatures">{t('common:creatures')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/creature/${id}`}>
-            {t('pages:creature.creatureId', { creatureId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/creatures">{t('common:creatures')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/creature/${id}`}>
+              {t('pages:creature.creatureId', { creatureId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-      <Card mb={5}>
-        <Card.Content>
+      <div className="card mb-5">
+        <div className="card-content">
           <p className="is-size-4 is-family-secondary has-text-info">
             {entry.name}
           </p>
           <p>{t(`enums:creatureSubType.${entry.creatureSubType}`)}</p>
-        </Card.Content>
-      </Card>
+        </div>
+      </div>
 
       {entry.questsStarter.length > 0 && (
-        <Card mb={5}>
-          <Card.Content>
+        <div className="card mb-5">
+          <div className="card-content">
             <p className="is-size-4 is-family-secondary has-text-info">
               {t('pages:creature.questsStarter')}
             </p>
@@ -134,11 +129,11 @@ export function Creature(): ReactElement {
                 </div>
               </Link>
             ))}
-          </Card.Content>
-        </Card>
+          </div>
+        </div>
       )}
 
-      <Tabs>
+      <div className="tabs">
         <ul>
           {zoneIds.map((z) => (
             <li key={z} className={zoneId === z ? 'is-active' : ''}>
@@ -146,10 +141,10 @@ export function Creature(): ReactElement {
             </li>
           ))}
         </ul>
-      </Tabs>
+      </div>
 
-      <Card mb={5}>
-        <Card.Content>
+      <div className="card mb-5">
+        <div className="card-content">
           <div
             style={{
               width: '640px',
@@ -170,8 +165,8 @@ export function Creature(): ReactElement {
               seCornerY={mapSetup.seCornerY}
             />
           </div>
-        </Card.Content>
-      </Card>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

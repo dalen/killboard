@@ -1,4 +1,3 @@
-import { Columns, Container, Tabs } from 'react-bulma-components';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -22,8 +21,8 @@ export function Home({
   const { t } = useTranslation();
 
   return (
-    <Container breakpoint="mobile" mt={2}>
-      <Tabs fullwidth>
+    <div className="container is-mobile mt-2">
+      <div className="tabs is-fullwidth">
         <li className={clsx({ 'is-active': tab === 'players' })}>
           <Link to="/">{t('pages:home.showPlayerLeaderboard')}</Link>
         </li>
@@ -36,7 +35,7 @@ export function Home({
         <li className={clsx({ 'is-active': tab === 'skirmishes' })}>
           <Link to="/skirmishes">{t('pages:home.showSkirmishes')}</Link>
         </li>
-      </Tabs>
+      </div>
       {tab === 'scenarios' && (
         <>
           <ScenarioFilters />
@@ -46,28 +45,28 @@ export function Home({
       {tab === 'players' && (
         <>
           <SearchBox isPlayer />
-          <Columns>
-            <Columns.Column size={6}>
+          <div className="columns">
+            <div className="column is-6">
               <MonthlyLeaderboard />
-            </Columns.Column>
-            <Columns.Column size={6}>
+            </div>
+            <div className="column is-6">
               <WeeklyLeaderboard />
-            </Columns.Column>
-          </Columns>
+            </div>
+          </div>
           <LatestKills />
         </>
       )}
       {tab === 'guilds' && (
         <>
           <SearchBox isPlayer={false} />
-          <Columns>
-            <Columns.Column size={6}>
+          <div className="columns">
+            <div className="column is-6">
               <MonthlyGuildLeaderboard />
-            </Columns.Column>
-            <Columns.Column size={6}>
+            </div>
+            <div className="column is-6">
               <WeeklyLeaderboardGuild />
-            </Columns.Column>
-          </Columns>
+            </div>
+          </div>
           <LatestKills />
         </>
       )}
@@ -77,6 +76,6 @@ export function Home({
           <LatestSkirmishes />
         </>
       )}
-    </Container>
+    </div>
   );
 }

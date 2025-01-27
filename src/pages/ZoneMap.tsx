@@ -1,6 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
 import _ from 'lodash';
-import { Progress, Container, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
@@ -34,7 +33,7 @@ export function ZoneMap(): ReactElement {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -50,23 +49,25 @@ export function ZoneMap(): ReactElement {
   const max = _.maxBy(heatmapData, (d) => d[2])?.[2] || 1;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/zone_heatmap/${id}`}>
-            {t('pages:mapPage.zoneId', { zoneId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/zone_heatmap/${id}`}>
+              {t('pages:mapPage.zoneId', { zoneId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <ZoneHeatmap
         zoneId={Number(id).toString()}
         max={max}
         data={heatmapData}
         size={size}
       />
-    </Container>
+    </div>
   );
 }

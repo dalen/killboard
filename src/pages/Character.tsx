@@ -1,4 +1,3 @@
-import { Breadcrumb, Columns, Container, Tabs } from 'react-bulma-components';
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { CharacterInfo } from '../components/CharacterInfo';
@@ -21,20 +20,22 @@ export function Character({
 
   const { id } = useParams();
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/character/${id}`}>
-            {t('pages:characterPage.characterId', { characterId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/character/${id}`}>
+              {t('pages:characterPage.characterId', { characterId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
       <CharacterInfo id={Number(id)} />
 
-      <Tabs>
+      <div className="tabs">
         <li className={tab === 'kills' ? 'is-active' : ''}>
           <Link to={`/character/${id}`}>{t('pages:characterPage.kills')}</Link>
         </li>
@@ -53,37 +54,37 @@ export function Character({
             {t('pages:characterPage.armory')}
           </Link>
         </li>
-      </Tabs>
+      </div>
 
       {tab === 'kills' && (
         <>
           <KillsFilters />
-          <Columns breakpoint="desktop">
-            <Columns.Column>
+          <div className="columns is-desktop">
+            <div className="column">
               <CharacterRecentKills id={Number(id)} />
-            </Columns.Column>
-            <Columns.Column>
+            </div>
+            <div className="column">
               <CharacterRecentDeaths id={Number(id)} />
-            </Columns.Column>
-          </Columns>
+            </div>
+          </div>
         </>
       )}
       {tab === 'scenarios' && (
         <div>
           <ScenarioFilters />
-          <Columns breakpoint="desktop">
-            <Columns.Column>
+          <div className="columns is-desktop">
+            <div className="column">
               <ScenarioCount characterId={id} wins title="Wins" />
-            </Columns.Column>
-            <Columns.Column>
+            </div>
+            <div className="column">
               <ScenarioCount characterId={id} wins={false} title="Losses" />
-            </Columns.Column>
-          </Columns>
+            </div>
+          </div>
           <ScenarioList characterId={id} />
         </div>
       )}
       {tab === 'skirmishes' && <CharacterLatestSkirmishes characterId={id} />}
       {tab === 'armory' && <CharacterArmory id={Number(id)} />}
-    </Container>
+    </div>
   );
 }

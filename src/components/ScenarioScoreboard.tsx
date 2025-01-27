@@ -1,4 +1,3 @@
-import { Table } from 'react-bulma-components';
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
@@ -25,7 +24,7 @@ export function ScenarioScoreboard({
 
   return (
     <div className="table-container">
-      <Table className="is-fullwidth">
+      <table className="table is-fullwidth">
         <thead className="is-relative">
           <tr>
             <th
@@ -232,7 +231,7 @@ export function ScenarioScoreboard({
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
     </div>
   );
 }

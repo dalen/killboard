@@ -5,15 +5,7 @@ import {
   formatDuration,
   intervalToDuration,
 } from 'date-fns';
-import {
-  Breadcrumb,
-  Card,
-  Columns,
-  Container,
-  Icon,
-  Progress,
-  Tabs,
-} from 'react-bulma-components';
+
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import _ from 'lodash';
@@ -102,7 +94,7 @@ export function Skirmish({
     variables: { id },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.skirmish == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -133,24 +125,26 @@ export function Skirmish({
   const max: number = (_.maxBy(heatmapData, (d) => d[2]) || [0, 0, 1])[2];
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/skirmishes">{t('common:skirmishes')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/skirmish/${id}`}>
-            {t('pages:skirmishPage.skirmishId', { skirmishId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Columns breakpoint="desktop">
-        <Columns.Column style={{ height: '200px' }}>
-          <Card style={{ height: '100%' }}>
-            <Card.Content style={{ height: '100%' }}>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/skirmishes">{t('common:skirmishes')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/skirmish/${id}`}>
+              {t('pages:skirmishPage.skirmishId', { skirmishId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="columns is-desktop">
+        <div className="column" style={{ height: '200px' }}>
+          <div className="card" style={{ height: '100%' }}>
+            <div className="card-content" style={{ height: '100%' }}>
               <p className="is-size-5">
                 <strong>
                   {skirmish.instance == null ? (
@@ -217,12 +211,12 @@ export function Skirmish({
                   </span>
                 </div>
               </div>
-            </Card.Content>
-          </Card>
-        </Columns.Column>
-        <Columns.Column style={{ height: '200px' }}>
-          <Card style={{ height: '100%' }}>
-            <Card.Content style={{ height: '100%' }}>
+            </div>
+          </div>
+        </div>
+        <div className="column" style={{ height: '200px' }}>
+          <div className="card" style={{ height: '100%' }}>
+            <div className="card-content" style={{ height: '100%' }}>
               <p className="is-size-5">
                 <strong>Most Players</strong>
               </p>
@@ -231,18 +225,18 @@ export function Skirmish({
                   key={topGuild.guild.id}
                   className="is-flex is-justify-content-space-between mb-1"
                 >
-                  <Icon.Text>
-                    <Icon>
+                  <span className="icon-text">
+                    <span className="icon">
                       <GuildHeraldry
                         size="24"
                         heraldry={topGuild.guild.heraldry}
                         realm={topGuild.guild.realm}
                       />
-                    </Icon>
+                    </span>
                     <Link to={`/guild/${topGuild.guild.id}`}>
                       {topGuild.guild.name}
                     </Link>
-                  </Icon.Text>
+                  </span>
                   <div
                     className={
                       topGuild.guild.realm === Realm.Destruction
@@ -254,12 +248,12 @@ export function Skirmish({
                   </div>
                 </div>
               ))}
-            </Card.Content>
-          </Card>
-        </Columns.Column>
-        <Columns.Column style={{ height: '200px' }}>
-          <Card style={{ height: '100%' }}>
-            <Card.Content style={{ height: '100%' }}>
+            </div>
+          </div>
+        </div>
+        <div className="column" style={{ height: '200px' }}>
+          <div className="card" style={{ height: '100%' }}>
+            <div className="card-content" style={{ height: '100%' }}>
               <p className="is-size-5">
                 <strong>Most Kills</strong>
               </p>
@@ -268,18 +262,18 @@ export function Skirmish({
                   key={topGuild.guild.id}
                   className="is-flex is-justify-content-space-between mb-1"
                 >
-                  <Icon.Text>
-                    <Icon>
+                  <span className="icon-text">
+                    <span className="icon">
                       <GuildHeraldry
                         size="24"
                         realm={topGuild.guild.realm}
                         heraldry={topGuild.guild.heraldry}
                       />
-                    </Icon>
+                    </span>
                     <Link to={`/guild/${topGuild.guild.id}`}>
                       {topGuild.guild.name}
                     </Link>
-                  </Icon.Text>
+                  </span>
                   <div
                     className={
                       topGuild.guild.realm === Realm.Destruction
@@ -291,12 +285,12 @@ export function Skirmish({
                   </div>
                 </div>
               ))}
-            </Card.Content>
-          </Card>
-        </Columns.Column>
-      </Columns>
-      <Columns breakpoint="desktop">
-        <Columns.Column size="one-third">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="columns is-desktop">
+        <div className="column is-4">
           <SkirmishTopPlayer
             id={id ?? ''}
             attribute="damage"
@@ -309,8 +303,8 @@ export function Skirmish({
             title="pages:skirmishPage.topHealingPlayer"
             className="skirmish-top-healing-player"
           />
-        </Columns.Column>
-        <Columns.Column size="one-third">
+        </div>
+        <div className="column is-4">
           <SkirmishTopPlayer
             id={id ?? ''}
             attribute="deathBlows"
@@ -323,8 +317,8 @@ export function Skirmish({
             title="pages:skirmishPage.topProtectionPlayer"
             className="skirmish-top-protection-player"
           />
-        </Columns.Column>
-        <Columns.Column size="one-third">
+        </div>
+        <div className="column is-4">
           <div className="mx-4">
             <ZoneHeatmap
               zoneId={skirmish.primaryZone?.id ?? ''}
@@ -333,9 +327,9 @@ export function Skirmish({
               size={mapSize}
             />
           </div>
-        </Columns.Column>
-      </Columns>
-      <Tabs>
+        </div>
+      </div>
+      <div className="tabs">
         <li className={tab === 'scoreboard' ? 'is-active' : ''}>
           <Link to={`/skirmish/${id}`}>
             {t('pages:skirmishPage.scoreboard')}
@@ -351,7 +345,7 @@ export function Skirmish({
             {t('pages:skirmishPage.damage')}
           </Link>
         </li>
-      </Tabs>
+      </div>
       {tab === 'scoreboard' && <SkirmishScoreboard id={id ?? ''} />}
       {tab === 'kills' && (
         <SkirmishKills
@@ -362,6 +356,6 @@ export function Skirmish({
       )}
       {tab === 'damage' && <SkirmishDamage id={id ?? ''} />}
       {tab === 'characterDamage' && <SkirmishDamageByCharacter id={id ?? ''} />}
-    </Container>
+    </div>
   );
 }

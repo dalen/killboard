@@ -1,13 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Container,
-  Progress,
-  Table,
-  Breadcrumb,
-  Card,
-  Columns,
-  Form,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { SearchBox } from '../components/SearchBox';
@@ -17,6 +8,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { ItemListEntry } from '../components/ItemListEntry';
 import { QueryPagination } from '../components/QueryPagination';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const SEARCH_ITEMS = gql`
   query SearchItems(
@@ -153,7 +145,7 @@ export function Items(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.items?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -162,19 +154,21 @@ export function Items(): ReactElement {
   const { pageInfo } = data.items;
 
   return (
-    <Container max breakpoint="desktop" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/items">{t('pages:items.title')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Card mb={5}>
-        <Card.Content>
-          <Form.Field>
-            <Form.Label>{t('pages:items.search')}</Form.Label>
+    <div className="container is-max-desktop mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/items">{t('pages:items.title')}</Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="card mb-5">
+        <div className="card-content">
+          <div className="field">
+            <label className="label">{t('pages:items.search')}</label>
             <SearchBox
               initialQuery={search.get('query') || ''}
               onSubmit={(event) => {
@@ -182,13 +176,16 @@ export function Items(): ReactElement {
                 setSearch(search);
               }}
             />
-          </Form.Field>
-          <Columns>
-            <Columns.Column>
-              <Form.Field>
-                <Form.Label>{t('pages:items.itemType')}</Form.Label>
-                <Form.Select
-                  value={search.get('type')}
+          </div>
+          <div className="columns">
+            <div className="column">
+              <div className="field">
+                <label className="label" htmlFor="type">
+                  {t('pages:items.itemType')}
+                </label>
+                <select
+                  id="type"
+                  value={search.get('type') ?? undefined}
                   onChange={(event) => {
                     search.set('type', event.target.value);
                     setSearch(search);
@@ -276,14 +273,17 @@ export function Items(): ReactElement {
                   <option value="REFINER_TOOL">
                     {t('enums:itemType.REFINER_TOOL')}
                   </option>
-                </Form.Select>
-              </Form.Field>
-            </Columns.Column>
-            <Columns.Column>
-              <Form.Field>
-                <Form.Label>{t('pages:items.stat')}</Form.Label>
-                <Form.Select
-                  value={search.get('stat')}
+                </select>
+              </div>
+            </div>
+            <div className="column">
+              <div className="field">
+                <label className="label" htmlFor="stat">
+                  {t('pages:items.stat')}
+                </label>
+                <select
+                  id="stat"
+                  value={search.get('stat') ?? undefined}
                   onChange={(event) => {
                     search.set('stat', event.target.value);
                     setSearch(search);
@@ -386,14 +386,17 @@ export function Items(): ReactElement {
                   <option value="HATE_RECEIVED">
                     {t('enums:stat.HATE_RECEIVED')}
                   </option>
-                </Form.Select>
-              </Form.Field>
-            </Columns.Column>
-            <Columns.Column>
-              <Form.Field>
-                <Form.Label>{t('pages:items.usableByCareer')}</Form.Label>
-                <Form.Select
-                  value={search.get('career')}
+                </select>
+              </div>
+            </div>
+            <div className="column">
+              <div className="field">
+                <label className="label" htmlFor="career">
+                  {t('pages:items.usableByCareer')}
+                </label>
+                <select
+                  id="career"
+                  value={search.get('career') ?? undefined}
                   onChange={(event) => {
                     search.set('career', event.target.value);
                     setSearch(search);
@@ -452,14 +455,21 @@ export function Items(): ReactElement {
                     {t('enums:career.WITCH_HUNTER')}
                   </option>
                   <option value="ZEALOT">{t('enums:career.ZEALOT')}</option>
-                </Form.Select>
-              </Form.Field>
-            </Columns.Column>
-          </Columns>
-        </Card.Content>
-      </Card>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div className="table-container">
-        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
           <thead>
             <tr>
               <th aria-label="empty header" />
@@ -473,13 +483,13 @@ export function Items(): ReactElement {
               <ItemListEntry key={entry.id} item={entry} />
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
         refetch={refetch}
       />
-    </Container>
+    </div>
   );
 }

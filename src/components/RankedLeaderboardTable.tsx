@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { Content, Media, Progress, Table } from 'react-bulma-components';
 import { Link } from 'react-router';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query } from '../types';
@@ -9,6 +8,7 @@ import { GuildHeraldry } from './GuildHeraldry';
 import { CareerIcon } from './CareerIcon';
 import { QueryPagination } from './QueryPagination';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const RANKED_LEADERBOARD = gql`
   query GetRankedLeaderboard(
@@ -91,7 +91,7 @@ export function RankedLeaderboardTable({
     },
   );
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.rankedSeason?.leaderboard?.nodes == null)
@@ -102,11 +102,14 @@ export function RankedLeaderboardTable({
 
   return (
     <div className="table-container">
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+        )}
       >
         <thead>
           <tr>
@@ -144,12 +147,12 @@ export function RankedLeaderboardTable({
               {isMobile ? (
                 <>
                   <td>
-                    <Media>
-                      <Media.Item align="left">
+                    <article className="media">
+                      <figure className="media-left">
                         <CareerIcon career={entry.character.career} />
-                      </Media.Item>
-                      <Media.Item>
-                        <Content>
+                      </figure>
+                      <div className="media-content">
+                        <div className="content">
                           <Link to={`/character/${entry.character.id}`}>
                             <strong>{entry.character.name}</strong>
                           </Link>
@@ -162,9 +165,9 @@ export function RankedLeaderboardTable({
                             {t('components:rankedLeaderboard.renownRank')}&nbsp;
                             {entry.renownRank}
                           </small>
-                        </Content>
-                      </Media.Item>
-                    </Media>
+                        </div>
+                      </div>
+                    </article>
                   </td>
                   <td align="right">
                     <small>
@@ -221,7 +224,7 @@ export function RankedLeaderboardTable({
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

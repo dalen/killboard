@@ -1,6 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
 import { getUnixTime, startOfWeek } from 'date-fns';
-import { Progress, Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Query } from '../types';
@@ -34,24 +33,25 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.character == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Media>
-          <Media.Item align="left">
-            <Image
-              size="128"
-              src="/images/corner_icons/ea_icon_corner_character.png"
-              alt="Character"
-            />
-          </Media.Item>
-          <Media.Item>
+    <div className="card mb-5">
+      <div className="card-content">
+        <article className="media">
+          <figure className="media-left">
+            <figure className="image is-128x128">
+              <img
+                src="/images/corner_icons/ea_icon_corner_character.png"
+                alt="Character"
+              />
+            </figure>
+          </figure>
+          <div className="media-content">
             <a
               className="is-size-4"
               target="_blank"
@@ -61,16 +61,16 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
               <strong>{data.character.name}</strong>
             </a>
             <p>
-              <Icon.Text>
+              <span className="icon-text">
                 <strong>{`${t('components:characterInfo.career')} `}</strong>
-                <Icon>
+                <span className="icon">
                   <img
                     src={careerIcon(data.character.career)}
                     alt={t(`enums:career.${data.character.career}`) ?? ''}
                   />
-                </Icon>
+                </span>
                 <span>{t(`enums:career.${data.character.career}`)}</span>
-              </Icon.Text>
+              </span>
             </p>
             <p>
               <strong>{`${t('components:characterInfo.level')} `}</strong>
@@ -89,9 +89,9 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
                 </Link>
               </p>
             )}
-          </Media.Item>
-        </Media>
-      </Card.Content>
-    </Card>
+          </div>
+        </article>
+      </div>
+    </div>
   );
 }

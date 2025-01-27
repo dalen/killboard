@@ -1,6 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Progress } from 'react-bulma-components';
 import { Query } from '../types';
 import { LeaderboardTable } from './LeaderboardTable';
 import { ErrorMessage } from './global/ErrorMessage';
@@ -38,7 +37,7 @@ export function MonthlyLeaderboard(): ReactElement {
     variables: { year, month },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.monthlyKillLeaderboard == null) return <p>{t('common:error')}</p>;
 

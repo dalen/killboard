@@ -1,15 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
-import {
-  Progress,
-  Container,
-  Breadcrumb,
-  Columns,
-  Card,
-  Media,
-  Image,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { Attacker } from '../components/Attacker';
@@ -120,34 +111,37 @@ export function Kill(): ReactElement {
 
   const kill = data?.kill;
 
-  if (loading || kill == null) return <Progress />;
+  if (loading || kill == null) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const date = new Date(kill.time * 1000);
 
   return (
-    <Container max breakpoint="desktop" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/kill/${id}`}>
-            {t('pages:killPage.killId', { killId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Card mb={5}>
-        <Card.Content>
-          <Media>
-            <Media.Item align="left">
-              <Image
-                size="128"
-                src="/images/corner_icons/ea_icon_corner_rvr.png"
-                alt="Guild"
-              />
-            </Media.Item>
-            <Media.Item>
+    <div className="container is-max-desktop mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/kill/${id}`}>
+              {t('pages:killPage.killId', { killId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="card mb-5">
+        <div className="card-content">
+          <article className="media">
+            <figure className="media-left">
+              <figure className="image is-128x128">
+                <img
+                  src="/images/corner_icons/ea_icon_corner_rvr.png"
+                  alt="Guild"
+                />
+              </figure>
+            </figure>
+            <div className="media-content">
               <p className="is-size-4">
                 <strong>
                   {kill.scenario == null
@@ -175,12 +169,12 @@ export function Kill(): ReactElement {
                   <Link to={`/skirmish/${kill.skirmish.id}`}>Skirmish</Link>
                 </p>
               )}
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
-      <Columns>
-        <Columns.Column>
+            </div>
+          </article>
+        </div>
+      </div>
+      <div className="columns">
+        <div className="column">
           <Attacker
             title={t('pages:killPage.killer')}
             attacker={kill.attackers[0]}
@@ -204,46 +198,46 @@ export function Kill(): ReactElement {
               />
             ),
           )}
-        </Columns.Column>
-        <Columns.Column>
-          <Card>
-            <Card.Header backgroundColor="info-dark">
-              <Card.Header.Icon>
+        </div>
+        <div className="column">
+          <div className="card">
+            <header className="card-header has-background-info-dark">
+              <div className="card-header-icon">
                 <CareerIcon career={kill.victim.character.career} />
-              </Card.Header.Icon>
-              <Card.Header.Title textColor="white">
+              </div>
+              <p className="card-header-title has-text-white">
                 <strong className="mr-1">Victim:</strong>
                 <Link to={`/character/${kill.victim.character.id}`}>
                   {kill.victim.character.name}
                 </Link>
-              </Card.Header.Title>
-            </Card.Header>
+              </p>
+            </header>
             {kill.victim.guild && (
-              <Card.Content py={2}>
-                <Media>
-                  <Media.Item align="left">
+              <div className="card-content py-2">
+                <article className="media">
+                  <figure className="media-left">
                     <small>
                       Lvl {kill.victim.level}
                       <br />
                       RR {kill.victim.renownRank}
                     </small>
-                  </Media.Item>
-                  <Media.Item align="left">
+                  </figure>
+                  <figure className="media-left">
                     <GuildHeraldry
                       size="48"
                       heraldry={kill.victim.guild.heraldry}
                       realm={kill.victim.guild.realm}
                     />
-                  </Media.Item>
-                  <Media.Item>
+                  </figure>
+                  <div className="media-content">
                     <Link to={`/guild/${kill.victim.guild?.id}`}>
                       {kill.victim.guild?.name}
                     </Link>
-                  </Media.Item>
-                </Media>
-              </Card.Content>
+                  </div>
+                </article>
+              </div>
             )}
-            <Card.Content>
+            <div className="card-content">
               <Map
                 zoneId={kill.position?.zoneId}
                 x={kill.position?.x}
@@ -253,10 +247,10 @@ export function Kill(): ReactElement {
                 seCornerX={kill.position?.mapSetup?.seCornerX ?? 0}
                 seCornerY={kill.position?.mapSetup?.seCornerY ?? 0}
               />
-            </Card.Content>
-          </Card>
-        </Columns.Column>
-      </Columns>
+            </div>
+          </div>
+        </div>
+      </div>
       <PlayerFeud
         player1={kill.attackers[0].character.id ?? ''}
         player2={kill.victim.character.id ?? ''}
@@ -267,6 +261,6 @@ export function Kill(): ReactElement {
           guild2={kill.victim.guild.id ?? ''}
         />
       )}
-    </Container>
+    </div>
   );
 }

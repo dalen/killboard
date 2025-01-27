@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Container, Progress, Table, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { SearchBox } from '../components/SearchBox';
@@ -8,6 +7,7 @@ import useWindowDimensions from '../hooks/useWindowDimensions';
 import { QueryPagination } from '../components/QueryPagination';
 import { SearchGuildsQuery } from '../__generated__/graphql';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const SEARCH_GUILD = gql`
   query SearchGuilds(
@@ -62,7 +62,7 @@ export function SearchGuild(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.guilds?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -74,18 +74,27 @@ export function SearchGuild(): ReactElement {
   };
 
   return (
-    <Container max breakpoint="desktop" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/search">{t('pages:searchPageGuild.search')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-desktop mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/search">{t('pages:searchPageGuild.search')}</Link>
+          </li>
+        </ul>
+      </nav>
       <SearchBox initialQuery={query} onSubmit={handleSubmit} />
       <div className="table-container">
-        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
           <thead>
             <tr>
               <th>{t('pages:searchPageGuild.guild')}</th>
@@ -110,13 +119,13 @@ export function SearchGuild(): ReactElement {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
         refetch={refetch}
       />
-    </Container>
+    </div>
   );
 }

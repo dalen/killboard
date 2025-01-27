@@ -1,5 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import { Container, Progress, Table, Breadcrumb } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { CareerIcon } from '../components/CareerIcon';
@@ -12,6 +11,7 @@ import { GuildHeraldry } from '../components/GuildHeraldry';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 import { questTypeIcon } from '../utils';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const SEARCH = gql`
   query Search(
@@ -111,7 +111,7 @@ export function Search(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.search?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -123,18 +123,27 @@ export function Search(): ReactElement {
   };
 
   return (
-    <Container max breakpoint="desktop" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/search">{t('pages:searchPage.search')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-desktop mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/search">{t('pages:searchPage.search')}</Link>
+          </li>
+        </ul>
+      </nav>
       <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
       <div className="table-container">
-        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
           <thead>
             <tr>
               <th></th>
@@ -296,13 +305,13 @@ export function Search(): ReactElement {
               }
             })}
           </tbody>
-        </Table>
+        </table>
       </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
         refetch={refetch}
       />
-    </Container>
+    </div>
   );
 }

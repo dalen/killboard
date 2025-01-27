@@ -1,5 +1,4 @@
 import React, { ReactElement } from 'react';
-import { Progress, Table } from 'react-bulma-components';
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
@@ -117,7 +116,7 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
     return sortConfig.key === name ? sortConfig.direction : '';
   };
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.skirmish?.scoreboardEntries?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -127,7 +126,7 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
 
   return (
     <div className="table-container">
-      <Table className="is-fullwidth">
+      <table className="table is-fullwidth">
         <thead className="is-relative">
           <tr>
             <th align="left" id="th-career">
@@ -308,7 +307,7 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </table>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

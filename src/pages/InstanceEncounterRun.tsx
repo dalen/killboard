@@ -1,11 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Media,
-  Progress,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import {
   intervalToDuration,
@@ -75,7 +68,8 @@ export function InstanceEncounterRun() {
     },
   });
 
-  if (loading || !data?.instanceEncounterRun) return <Progress />;
+  if (loading || !data?.instanceEncounterRun)
+    return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const { instanceEncounterRun } = data;
@@ -122,35 +116,37 @@ export function InstanceEncounterRun() {
     instanceEncounterRun.scoreboardEntries.length - numTanks - numHealers;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/instance-runs">{t('common:instanceRuns')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to={`/instance-run/${instanceRunId}`}>
-            {t('pages:instanceEncounterRun.instanceRunId', {
-              id: instanceRunId,
-            })}
-          </Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/instance-run/${instanceRunId}/${id}`}>
-            {t('pages:instanceEncounterRun.title', { id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/instance-runs">{t('common:instanceRuns')}</Link>
+          </li>
+          <li>
+            <Link to={`/instance-run/${instanceRunId}`}>
+              {t('pages:instanceEncounterRun.instanceRunId', {
+                id: instanceRunId,
+              })}
+            </Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/instance-run/${instanceRunId}/${id}`}>
+              {t('pages:instanceEncounterRun.title', { id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
       <p className="is-size-4">
         <strong>{instanceEncounterRun.encounter?.name}</strong>
       </p>
-      <Card mb={5}>
-        <Card.Content>
-          <Media>
-            <Media.Item>
+      <div className="card mb-5">
+        <div className="card-content">
+          <article className="media">
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceEncounterRun.startTime')}</strong>{' '}
                 {formatISO(startDate, { representation: 'date' })}
@@ -160,8 +156,8 @@ export function InstanceEncounterRun() {
                 <strong>{t('pages:instanceEncounterRun.duration')}</strong>{' '}
                 {duration}
               </p>
-            </Media.Item>
-            <Media.Item>
+            </div>
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceEncounterRun.itemRatingMin')}</strong>{' '}
                 {itemRatingMin}
@@ -176,8 +172,8 @@ export function InstanceEncounterRun() {
                 <strong>{t('pages:instanceEncounterRun.itemRatingMax')}</strong>{' '}
                 {itemRatingMax}
               </p>
-            </Media.Item>
-            <Media.Item>
+            </div>
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceEncounterRun.numTanks')}</strong>{' '}
                 {numTanks}
@@ -190,12 +186,12 @@ export function InstanceEncounterRun() {
                 <strong>{t('pages:instanceEncounterRun.numDps')}</strong>{' '}
                 {numDPS}
               </p>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
+            </div>
+          </article>
+        </div>
+      </div>
 
       <InstanceRunScoreboard entries={instanceEncounterRun.scoreboardEntries} />
-    </Container>
+    </div>
   );
 }

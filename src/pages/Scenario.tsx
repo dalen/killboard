@@ -5,14 +5,7 @@ import {
   formatDuration,
   intervalToDuration,
 } from 'date-fns';
-import {
-  Breadcrumb,
-  Card,
-  Columns,
-  Container,
-  Progress,
-  Tabs,
-} from 'react-bulma-components';
+
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
@@ -104,7 +97,7 @@ export function Scenario({
     variables: { id },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.scenario == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -120,21 +113,23 @@ export function Scenario({
   );
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/scenario/${id}`}>
-            {t('pages:scenarioPage.scenarioId', { scenarioId: id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
-      <Card mb={5}>
-        <Card.Content>
-          <Columns>
-            <Columns.Column size={4}>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/scenario/${id}`}>
+              {t('pages:scenarioPage.scenarioId', { scenarioId: id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="card mb-5">
+        <div className="card-content">
+          <div className="columns">
+            <div className="column is-4">
               <p className="is-size-4">
                 <strong>{scenario.scenario.name}</strong>
               </p>
@@ -154,8 +149,8 @@ export function Scenario({
                 <strong>Type: </strong>
                 {ScenarioQueueTypes[scenario.queueType]}
               </p>
-            </Columns.Column>
-            <Columns.Column size={2} className="has-text-centered">
+            </div>
+            <div className="column is-2 has-text-centered">
               <p>
                 <img
                   src="/images/icons/scenario/order.png"
@@ -170,8 +165,8 @@ export function Scenario({
               <p className="scenario-score-order">
                 {t('pages:scenarioPage.order')}
               </p>
-            </Columns.Column>
-            <Columns.Column size={2} className="has-text-centered">
+            </div>
+            <div className="column is-2 has-text-centered">
               <p>
                 <img
                   src="/images/icons/scenario/destruction.png"
@@ -186,11 +181,11 @@ export function Scenario({
               <p className="scenario-score-destruction">
                 {t('pages:scenarioPage.destruction')}
               </p>
-            </Columns.Column>
-          </Columns>
-        </Card.Content>
-      </Card>
-      <Tabs>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="tabs">
         <li className={tab === 'scoreboard' ? 'is-active' : ''}>
           <Link to={`/scenario/${id}`}>
             {t('pages:scenarioPage.scoreboard')}
@@ -209,7 +204,7 @@ export function Scenario({
         <li className={tab === 'map' ? 'is-active' : ''}>
           <Link to={`/scenario/${id}/map`}>{t('pages:scenarioPage.map')}</Link>
         </li>
-      </Tabs>
+      </div>
       {tab === 'scoreboard' && (
         <ScenarioScoreboard entries={scenario.scoreboardEntries} />
       )}
@@ -218,6 +213,6 @@ export function Scenario({
       {tab === 'map' && (
         <ScenarioHeatmap zoneId={scenario.scenario.zone.id} id={id || ''} />
       )}
-    </Container>
+    </div>
   );
 }

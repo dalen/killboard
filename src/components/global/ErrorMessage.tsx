@@ -1,5 +1,4 @@
 import { ReactElement } from 'react';
-import { Notification } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 
 export function ErrorMessage({
@@ -14,11 +13,11 @@ export function ErrorMessage({
   const { t } = useTranslation('components');
 
   return (
-    <Notification color="danger">
+    <div className="notification is-danger">
       <p>{t('global.errorMessage.errorWithSadSmiley')}</p>
       {name && <pre>{name}</pre>}
       {message && <pre>{message}</pre>}
       {customText && customText}
-    </Notification>
+    </div>
   );
 }

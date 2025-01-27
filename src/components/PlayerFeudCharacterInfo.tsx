@@ -1,4 +1,3 @@
-import { Card, Icon, Media, Image } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Character } from '../types';
@@ -15,17 +14,18 @@ export function PlayerFeudCharacterInfo({
   const { t } = useTranslation(['common', 'components', 'enums']);
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Media>
-          <Media.Item align="left">
-            <Image
-              size="128"
-              src="/images/corner_icons/ea_icon_corner_character.png"
-              alt="Character"
-            />
-          </Media.Item>
-          <Media.Item>
+    <div className="card mb-5">
+      <div className="card-content">
+        <article className="media">
+          <figure className="media-left">
+            <figure className="image is-128x128">
+              <img
+                src="/images/corner_icons/ea_icon_corner_character.png"
+                alt="Character"
+              />
+            </figure>
+          </figure>
+          <div className="media-content">
             <a
               className="is-size-4"
               target="_blank"
@@ -35,16 +35,16 @@ export function PlayerFeudCharacterInfo({
               <strong>{character.name}</strong>
             </a>
             <p>
-              <Icon.Text>
+              <span className="icon-text">
                 <strong>{`${t('components:characterInfo.career')} `}</strong>
-                <Icon>
+                <span className="icon">
                   <img
                     src={careerIcon(character.career)}
                     alt={t(`enums:career.${character.career}`) ?? ''}
                   />
-                </Icon>
+                </span>
                 <span>{t(`enums:career.${character.career}`)}</span>
-              </Icon.Text>
+              </span>
             </p>
             <p>
               <strong>{`${t('components:characterInfo.level')} `}</strong>
@@ -62,9 +62,9 @@ export function PlayerFeudCharacterInfo({
                 </Link>
               </p>
             )}
-          </Media.Item>
-        </Media>
-      </Card.Content>
-    </Card>
+          </div>
+        </article>
+      </div>
+    </div>
   );
 }

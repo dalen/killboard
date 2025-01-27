@@ -1,4 +1,3 @@
-import { Breadcrumb, Card, Container, Progress } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
@@ -72,7 +71,7 @@ export function Quest(): ReactElement {
     },
   });
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.quest == null)
@@ -81,23 +80,25 @@ export function Quest(): ReactElement {
   const { quest } = data;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/quests">{t('common:quests')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <div className="ml-2">
-            {t('pages:quest.questId', { questId: id })}
-          </div>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/quests">{t('common:quests')}</Link>
+          </li>
+          <li className="is-active">
+            <div className="ml-2">
+              {t('pages:quest.questId', { questId: id })}
+            </div>
+          </li>
+        </ul>
+      </nav>
 
-      <Card mb={5}>
-        <Card.Content>
+      <div className="card mb-5">
+        <div className="card-content">
           <div className="is-size-3 is-family-secondary has-text-info">
             {quest.name}
           </div>
@@ -106,7 +107,7 @@ export function Quest(): ReactElement {
           {quest.journalEntry && (
             <>
               <div className="columns is-centered">
-                <div className="column is-one-third">
+                <div className="column is-4">
                   <figure>
                     <hr />
                   </figure>
@@ -313,8 +314,8 @@ export function Quest(): ReactElement {
               </div>
             ))}
           </div>
-        </Card.Content>
-      </Card>
-    </Container>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,11 +1,3 @@
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Form,
-  Progress,
-  Table,
-} from 'react-bulma-components';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
@@ -19,6 +11,7 @@ import { ItemPopup } from '../components/ItemPopup';
 import { questTypeIcon } from '../utils';
 import { QueryPagination } from '../components/QueryPagination';
 import { ReactElement } from 'react';
+import clsx from 'clsx';
 
 const QUESTS = gql`
   query GetQuests(
@@ -104,7 +97,7 @@ export function Quests(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
   if (data?.quests?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
@@ -113,20 +106,22 @@ export function Quests(): ReactElement {
   const { pageInfo } = data.quests;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <div className="ml-2">{t('pages:quests.title')}</div>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <div className="ml-2">{t('pages:quests.title')}</div>
+          </li>
+        </ul>
+      </nav>
 
-      <Card mb={5}>
-        <Card.Content>
-          <Form.Field>
-            <Form.Label>{t('pages:quests.search')}</Form.Label>
+      <div className="card mb-5">
+        <div className="card-content">
+          <div className="field">
+            <label className="label">{t('pages:quests.search')}</label>
             <SearchBox
               initialQuery={search.get('name') || ''}
               onSubmit={(event) => {
@@ -134,12 +129,19 @@ export function Quests(): ReactElement {
                 setSearch(search);
               }}
             />
-          </Form.Field>
-        </Card.Content>
-      </Card>
+          </div>
+        </div>
+      </div>
 
       <div className="table-container">
-        <Table striped hoverable size={isMobile ? 'narrow' : 'fullwidth'}>
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
           <thead>
             <tr>
               <th>{t('pages:quests.name')}</th>
@@ -272,13 +274,13 @@ export function Quests(): ReactElement {
               </tr>
             ))}
           </tbody>
-        </Table>
+        </table>
       </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
         refetch={refetch}
       />
-    </Container>
+    </div>
   );
 }

@@ -6,7 +6,6 @@ import {
   subWeeks,
 } from 'date-fns';
 import { ReactElement } from 'react';
-import { Card, Columns, Form } from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { URLSearchParams } from 'url';
@@ -69,10 +68,10 @@ export function KillsFilters(): ReactElement {
   const period = search.get('period') || 'all';
 
   return (
-    <Card mb={5}>
-      <Card.Content>
-        <Columns>
-          <Columns.Column>
+    <div className="card mb-5">
+      <div className="card-content">
+        <div className="columns">
+          <div className="column">
             <div className="select">
               <select
                 value={period}
@@ -88,10 +87,11 @@ export function KillsFilters(): ReactElement {
                 <option value="lastMonth">{t('killsFilters.lastMonth')}</option>
               </select>
             </div>
-          </Columns.Column>
-          <Columns.Column>
-            <Form.Label>
-              <Form.Checkbox
+          </div>
+          <div className="column">
+            <label className="label">
+              <input
+                type="checkbox"
                 checked={search.has('soloOnly')}
                 onChange={(event) => {
                   if (event.target.checked) search.set('soloOnly', 'true');
@@ -100,10 +100,10 @@ export function KillsFilters(): ReactElement {
                 }}
               />{' '}
               {t('killsFilters.soloOnly')}
-            </Form.Label>
-          </Columns.Column>
-        </Columns>
-      </Card.Content>
-    </Card>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

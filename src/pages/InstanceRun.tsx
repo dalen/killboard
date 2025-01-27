@@ -1,13 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Breadcrumb,
-  Card,
-  Container,
-  Icon,
-  Media,
-  Progress,
-  Table,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import {
   intervalToDuration,
@@ -20,6 +11,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Archetype, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { InstanceRunScoreboard } from '../components/InstanceRunScoreboard';
+import clsx from 'clsx';
 
 const INSTANCE_RUN = gql`
   query GetInstanceRun($id: ID!) {
@@ -99,7 +91,8 @@ export function InstanceRun() {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading || !data?.instanceRun?.encounters) return <Progress />;
+  if (loading || !data?.instanceRun?.encounters)
+    return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   const { instanceRun } = data;
@@ -130,28 +123,30 @@ export function InstanceRun() {
   ).length;
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
-          <Link to="/instance-runs/">{t('common:instanceRuns')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to={`/instance-run/${id}`}>
-            {t('pages:instanceRun.title', { id })}
-          </Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li>
+            <Link to="/instance-runs/">{t('common:instanceRuns')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to={`/instance-run/${id}`}>
+              {t('pages:instanceRun.title', { id })}
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
       <p className="is-size-4">
         <strong>{instanceRun.instance?.name}</strong>
       </p>
-      <Card mb={5}>
-        <Card.Content>
-          <Media>
-            <Media.Item>
+      <div className="card mb-5">
+        <div className="card-content">
+          <article className="media">
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceRun.startTime')}</strong>{' '}
                 {formatISO(instanceStartDate, { representation: 'date' })}{' '}
@@ -161,8 +156,8 @@ export function InstanceRun() {
                 <strong>{t('pages:instanceRun.duration')}</strong>{' '}
                 {instanceDuration}
               </p>
-            </Media.Item>
-            <Media.Item>
+            </div>
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceRun.itemRatingMin')}</strong>{' '}
                 {instanceItemRatingMin}
@@ -175,8 +170,8 @@ export function InstanceRun() {
                 <strong>{t('pages:instanceRun.itemRatingMax')}</strong>{' '}
                 {instanceItemRatingMax}
               </p>
-            </Media.Item>
-            <Media.Item>
+            </div>
+            <div className="media-content">
               <p>
                 <strong>{t('pages:instanceRun.numTanks')}</strong>{' '}
                 {instanceNumTanks}
@@ -189,17 +184,20 @@ export function InstanceRun() {
                 <strong>{t('pages:instanceRun.numDps')}</strong>{' '}
                 {instanceNumDPS}
               </p>
-            </Media.Item>
-          </Media>
-        </Card.Content>
-      </Card>
+            </div>
+          </article>
+        </div>
+      </div>
 
-      <Table
-        striped
-        hoverable
-        size={isMobile ? 'narrow' : 'fullwidth'}
-        marginless
-        mb={5}
+      <table
+        className={clsx(
+          'table',
+          'is-striped',
+          'is-hoverable',
+          'is-marginless',
+          isMobile ? 'is-narrow' : 'is-fullwidth',
+          'mb-5',
+        )}
       >
         <thead>
           <tr>
@@ -207,7 +205,7 @@ export function InstanceRun() {
             <th>{t('pages:instanceRun.encounter')}</th>
             <th>{t('pages:instanceRun.duration')}</th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/deaths.png"
                   width={36}
@@ -215,13 +213,13 @@ export function InstanceRun() {
                   alt={t('pages:instanceRun.deaths') ?? ''}
                   title={t('pages:instanceRun.deaths') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
             <th>{t('pages:instanceRun.itemRatingMin')}</th>
             <th>{t('pages:instanceRun.itemRatingAverage')}</th>
             <th>{t('pages:instanceRun.itemRatingMax')}</th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/protection.png"
                   width={28}
@@ -229,10 +227,10 @@ export function InstanceRun() {
                   alt={t('pages:instanceRun.numTanks') ?? ''}
                   title={t('pages:instanceRun.numTanks') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/healing.png"
                   width={28}
@@ -240,10 +238,10 @@ export function InstanceRun() {
                   alt={t('pages:instanceRun.numHealers') ?? ''}
                   title={t('pages:instanceRun.numHealers') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
             <th align="center">
-              <Icon>
+              <span className="icon">
                 <img
                   src="/images/icons/damage.png"
                   width={30}
@@ -251,7 +249,7 @@ export function InstanceRun() {
                   alt={t('pages:instanceRun.numDps') ?? ''}
                   title={t('pages:instanceRun.numDps') ?? ''}
                 />
-              </Icon>
+              </span>
             </th>
           </tr>
         </thead>
@@ -294,19 +292,19 @@ export function InstanceRun() {
                 <td>
                   {' '}
                   {instanceEncounterRun.completed ? (
-                    <Icon.Text>
-                      <Icon>
+                    <span className="icon-text">
+                      <span className="icon">
                         <i className="fas fa-star mr-2 has-text-warning" />
-                      </Icon>
+                      </span>
                       {instanceEncounterRun.encounter?.name}
-                    </Icon.Text>
+                    </span>
                   ) : (
-                    <Icon.Text>
-                      <Icon>
+                    <span className="icon-text">
+                      <span className="icon">
                         <i className="fa-solid fa-circle-exclamation  mr-2 has-text-danger" />
-                      </Icon>
+                      </span>
                       {instanceEncounterRun.encounter?.name}
-                    </Icon.Text>
+                    </span>
                   )}
                 </td>
                 <td>
@@ -335,9 +333,9 @@ export function InstanceRun() {
             );
           })}
         </tbody>
-      </Table>
+      </table>
 
       <InstanceRunScoreboard entries={data.instanceRun.scoreboardEntries} />
-    </Container>
+    </div>
   );
 }

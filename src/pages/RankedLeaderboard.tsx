@@ -1,11 +1,4 @@
 import { gql, useQuery } from '@apollo/client';
-import {
-  Progress,
-  Container,
-  Breadcrumb,
-  Card,
-  Columns,
-} from 'react-bulma-components';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
@@ -33,7 +26,7 @@ export function RankedLeaderboard(): ReactElement {
     {},
   );
 
-  if (loading) return <Progress />;
+  if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
   if (data?.rankedSeasons == null)
@@ -47,21 +40,25 @@ export function RankedLeaderboard(): ReactElement {
   const type = search.get('type') ?? 'solo';
 
   return (
-    <Container max breakpoint="widescreen" mt={2}>
-      <Breadcrumb>
-        <Breadcrumb.Item>
-          <Link to="/">{t('common:home')}</Link>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active>
-          <Link to="/ranked-leaderboard">{t('common:rankedLeaderboard')}</Link>
-        </Breadcrumb.Item>
-      </Breadcrumb>
+    <div className="container is-max-widescreen mt-2">
+      <nav className="breadcrumb" aria-label="breadcrumbs">
+        <ul>
+          <li>
+            <Link to="/">{t('common:home')}</Link>
+          </li>
+          <li className="is-active">
+            <Link to="/ranked-leaderboard">
+              {t('common:rankedLeaderboard')}
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
       <div>
-        <Card mb={5}>
-          <Card.Content>
-            <Columns>
-              <Columns.Column>
+        <div className="card mb-5">
+          <div className="card-content">
+            <div className="columns">
+              <div className="column">
                 <div className="select">
                   <select
                     value={season}
@@ -75,8 +72,8 @@ export function RankedLeaderboard(): ReactElement {
                     ))}
                   </select>
                 </div>
-              </Columns.Column>
-              <Columns.Column>
+              </div>
+              <div className="column">
                 <div className="select">
                   <select
                     value={type}
@@ -93,12 +90,12 @@ export function RankedLeaderboard(): ReactElement {
                     </option>
                   </select>
                 </div>
-              </Columns.Column>
-            </Columns>
-          </Card.Content>
-        </Card>
+              </div>
+            </div>
+          </div>
+        </div>
         <RankedLeaderboardTable season={season} type={type} />
       </div>
-    </Container>
+    </div>
   );
 }
