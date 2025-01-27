@@ -5,7 +5,7 @@ import { Attacker as AttackerType, KillDamage } from '../types';
 import { CareerIcon } from './CareerIcon';
 import { GuildHeraldry } from './GuildHeraldry';
 import { killDamageText } from '../utils';
-import { ReactElement, ReactNode } from 'react';
+import { ReactElement } from 'react';
 
 export function Attacker({
   title,
