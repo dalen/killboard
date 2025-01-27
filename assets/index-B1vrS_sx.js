@@ -1330,7 +1330,7 @@ function print() { __p += __j.call(arguments, '') }
       first: 0
       where: {
         killerCharacterId: { eq: $playerIntId1 }
-        victimCharacterId: { eq: $playerId2 }
+        victimCharacterId: { eq: $playerIntId2 }
       }
     ) {
       totalCount
@@ -1340,7 +1340,7 @@ function print() { __p += __j.call(arguments, '') }
       first: 0
       where: {
         killerCharacterId: { eq: $playerIntId2 }
-        victimCharacterId: { eq: $playerId1 }
+        victimCharacterId: { eq: $playerIntId1 }
       }
     ) {
       totalCount
