@@ -1384,8 +1384,11 @@ export type Kill = {
   position: Position;
   /** Scenario, null if not in a scenario */
   scenario?: Maybe<Scenario>;
-  /** ScenarioId, 0 if not in a scenario */
-  scenarioId: Scalars['UnsignedInt']['output'];
+  /**
+   * ScenarioId, 0 if not in a scenario
+   * @deprecated No longer supported.
+   */
+  scenarioId?: Maybe<Scalars['ID']['output']>;
   /** Scenario information */
   scenarioRecord?: Maybe<ScenarioRecord>;
   /** Skirmish information */

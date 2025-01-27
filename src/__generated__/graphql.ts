@@ -1393,8 +1393,11 @@ export type Kill = {
   position: Position;
   /** Scenario, null if not in a scenario */
   scenario?: Maybe<Scenario>;
-  /** ScenarioId, 0 if not in a scenario */
-  scenarioId: Scalars['UnsignedInt']['output'];
+  /**
+   * ScenarioId, 0 if not in a scenario
+   * @deprecated No longer supported.
+   */
+  scenarioId?: Maybe<Scalars['ID']['output']>;
   /** Scenario information */
   scenarioRecord?: Maybe<ScenarioRecord>;
   /** Skirmish information */
@@ -3224,7 +3227,7 @@ export type GetGuildFeudQueryVariables = Exact<{
 }>;
 
 
-export type GetGuildFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId: any, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetGuildFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId?: string | null, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetGuildLatestSkirmishesQueryVariables = Exact<{
   guildId?: InputMaybe<Scalars['ID']['input']>;
@@ -3374,7 +3377,7 @@ export type GetPlayerFeudQueryVariables = Exact<{
 }>;
 
 
-export type GetPlayerFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId: any, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetPlayerFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId?: string | null, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetRankedLeaderboardQueryVariables = Exact<{
   season?: InputMaybe<Scalars['ID']['input']>;
@@ -3418,7 +3421,7 @@ export type GetScenarioKillsQueryVariables = Exact<{
 }>;
 
 
-export type GetScenarioKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId: any, position: { __typename?: 'Position', zoneId: any }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetScenarioKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId?: string | null, position: { __typename?: 'Position', zoneId: any }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetScenarioListQueryVariables = Exact<{
   characterId?: InputMaybe<Scalars['ID']['input']>;
@@ -3472,7 +3475,7 @@ export type GetSkirmishKillsQueryVariables = Exact<{
 }>;
 
 
-export type GetSkirmishKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId: any, position: { __typename?: 'Position', zoneId: any }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetSkirmishKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId?: string | null, position: { __typename?: 'Position', zoneId: any }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetSkirmishScoreboardQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3613,7 +3616,7 @@ export type GetKillsQueryVariables = Exact<{
 }>;
 
 
-export type GetKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId: any, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: number, scenarioId?: string | null, position: { __typename?: 'Position', zoneId: any }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetPlayerFeudInfoQueryVariables = Exact<{
   playerId1: Scalars['ID']['input'];
