@@ -25,11 +25,79 @@ export type Scalars = {
 
 export type Ability = SearchContent & {
   __typename?: 'Ability';
+  /** @deprecated Use 'info' field instead. */
+  abilityType: AbilityType;
+  /** @deprecated Use 'info' field instead. */
+  actionPointCost: Scalars['Byte']['output'];
+  /** @deprecated Use 'info' field instead. */
+  castTime: Scalars['UnsignedInt']['output'];
+  /** @deprecated Use 'info' field instead. */
+  cooldown: Scalars['UnsignedInt']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use 'info' field instead. */
+  iconUrl: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  info: AbilityInfo;
+  /** @deprecated Use 'info' field instead. */
+  labels: Array<Maybe<Scalars['String']['output']>>;
+  /** @deprecated Use 'info' field instead. */
+  minLevel: Scalars['Byte']['output'];
+  /** @deprecated Use 'info' field instead. */
+  minRange: Scalars['UnsignedShort']['output'];
+  /** @deprecated Use 'info' field instead. */
+  moraleCost: Scalars['UnsignedShort']['output'];
+  /** @deprecated Use 'info' field instead. */
+  moraleLevel: Scalars['Byte']['output'];
+  /** @deprecated Use 'info' field instead. */
+  name?: Maybe<Scalars['String']['output']>;
+  /** @deprecated Use 'info' field instead. */
+  range: Scalars['UnsignedShort']['output'];
+  /** @deprecated Use 'info' field instead. */
+  specialization: Scalars['Byte']['output'];
+};
+
+export type AbilityInfo = SearchContent & {
+  __typename?: 'AbilityInfo';
+  abilityType: AbilityType;
+  actionPointCost: Scalars['Byte']['output'];
+  castTime: Scalars['UnsignedInt']['output'];
+  cooldown: Scalars['UnsignedInt']['output'];
   description?: Maybe<Scalars['String']['output']>;
   iconUrl: Scalars['String']['output'];
   id: Scalars['ID']['output'];
+  labels: Array<Maybe<Scalars['String']['output']>>;
+  minLevel: Scalars['Byte']['output'];
+  minRange: Scalars['UnsignedShort']['output'];
+  moraleCost: Scalars['UnsignedShort']['output'];
+  moraleLevel: Scalars['Byte']['output'];
   name?: Maybe<Scalars['String']['output']>;
+  range: Scalars['UnsignedShort']['output'];
+  /** Mastery path */
+  specialization: Scalars['Byte']['output'];
 };
+
+
+export type AbilityInfoDescriptionArgs = {
+  stats: CharacterStatsInput;
+};
+
+export enum AbilityType {
+  /** Regular abilities */
+  Default = 'DEFAULT',
+  /** Unused */
+  First = 'FIRST',
+  /** Granted abilities */
+  Granted = 'GRANTED',
+  Guild = 'GUILD',
+  /** Morale abilities */
+  Morale = 'MORALE',
+  /** Passive buffs */
+  Passive = 'PASSIVE',
+  /** Pet abilities */
+  Pet = 'PET',
+  /** Tactics */
+  Tactic = 'TACTIC'
+}
 
 /** Player Archetypes */
 export enum Archetype {
@@ -315,6 +383,19 @@ export type CharacterSortInput = {
   level?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
   renownRank?: InputMaybe<SortEnumType>;
+};
+
+export type CharacterStatsInput = {
+  /** BallisticSkill */
+  ballisticSkill: Scalars['Int']['input'];
+  /** Intelligence */
+  intelligence: Scalars['Int']['input'];
+  /** Ability Level */
+  level: Scalars['Byte']['input'];
+  /** Strength */
+  strength: Scalars['Int']['input'];
+  /** Willpower */
+  willpower: Scalars['Int']['input'];
 };
 
 /** A connection to a list of items. */
@@ -645,6 +726,50 @@ export type CreaturesEdge = {
   node: Creature;
 };
 
+/** A connection to a list of items. */
+export type DropsFromCreaturesConnection = {
+  __typename?: 'DropsFromCreaturesConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<DropsFromCreaturesEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Creature>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type DropsFromCreaturesEdge = {
+  __typename?: 'DropsFromCreaturesEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Creature;
+};
+
+/** A connection to a list of items. */
+export type DropsFromGameObjectsConnection = {
+  __typename?: 'DropsFromGameObjectsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<DropsFromGameObjectsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<GameObjectProto>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type DropsFromGameObjectsEdge = {
+  __typename?: 'DropsFromGameObjectsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: GameObjectProto;
+};
+
 /** Character equipment slots */
 export enum EquipSlot {
   Back = 'BACK',
@@ -700,6 +825,57 @@ export type FloatOperationFilterInput = {
   nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
   nlt?: InputMaybe<Scalars['Float']['input']>;
   nlte?: InputMaybe<Scalars['Float']['input']>;
+};
+
+export type GameObjectProto = SearchContent & {
+  __typename?: 'GameObjectProto';
+  id: Scalars['ID']['output'];
+  /** The name of the Game Object */
+  name: Scalars['String']['output'];
+  spawns: Array<GameObjectSpawn>;
+};
+
+export type GameObjectProtoFilterInput = {
+  and?: InputMaybe<Array<GameObjectProtoFilterInput>>;
+  /** Name */
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<GameObjectProtoFilterInput>>;
+};
+
+export type GameObjectProtoSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+};
+
+export type GameObjectSpawn = {
+  __typename?: 'GameObjectSpawn';
+  id: Scalars['ID']['output'];
+  /** Position Info */
+  position: Position;
+  /** Zone Info */
+  zone: Zone;
+};
+
+/** A connection to a list of items. */
+export type GameObjectsConnection = {
+  __typename?: 'GameObjectsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<GameObjectsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<GameObjectProto>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type GameObjectsEdge = {
+  __typename?: 'GameObjectsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: GameObjectProto;
 };
 
 export type Guild = SearchContent & {
@@ -1084,6 +1260,10 @@ export type Item = SearchContent & {
   description: Scalars['String']['output'];
   /** Weapon DPS */
   dps: Scalars['UnsignedShort']['output'];
+  /** Creatures that drop this item */
+  dropsFromCreatures?: Maybe<DropsFromCreaturesConnection>;
+  /** Game Objects that drop this item */
+  dropsFromGameObjects?: Maybe<DropsFromGameObjectsConnection>;
   iconUrl: Scalars['URL']['output'];
   /** Id */
   id: Scalars['ID']['output'];
@@ -1118,6 +1298,22 @@ export type Item = SearchContent & {
   uniqueEquipped: Scalars['Boolean']['output'];
   /** Vendors that trade this item */
   usedToPurchase?: Maybe<UsedToPurchaseConnection>;
+};
+
+
+export type ItemDropsFromCreaturesArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type ItemDropsFromGameObjectsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -1404,7 +1600,7 @@ export type Kill = {
 export type KillDamage = {
   __typename?: 'KillDamage';
   /** Ability information */
-  ability?: Maybe<Ability>;
+  ability?: Maybe<AbilityInfo>;
   /** The character doing the damage */
   attacker?: Maybe<Character>;
   /** Type of attacker */
@@ -1631,6 +1827,8 @@ export type Position = {
 
 export type Query = {
   __typename?: 'Query';
+  /** Get an ability by its ID. */
+  ability?: Maybe<AbilityInfo>;
   /** Get one character */
   character?: Maybe<Character>;
   /** Query for CharacterRatings matching a filter */
@@ -1642,6 +1840,10 @@ export type Query = {
   /** Query for creatures matching a filter */
   creatures?: Maybe<CreaturesConnection>;
   events: Array<Event>;
+  /** Get one game object */
+  gameObject?: Maybe<GameObjectProto>;
+  /** Query for game objects matching a filter */
+  gameObjects?: Maybe<GameObjectsConnection>;
   /** Get one guild */
   guild?: Maybe<Guild>;
   /** Query for guilds matching a filter */
@@ -1704,6 +1906,11 @@ export type Query = {
 };
 
 
+export type QueryAbilityArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
 export type QueryCharacterArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1741,6 +1948,21 @@ export type QueryCreaturesArgs = {
   last?: InputMaybe<Scalars['Int']['input']>;
   order?: InputMaybe<Array<CreatureSortInput>>;
   where?: InputMaybe<CreatureFilterInput>;
+};
+
+
+export type QueryGameObjectArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryGameObjectsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<GameObjectProtoSortInput>>;
+  where?: InputMaybe<GameObjectProtoFilterInput>;
 };
 
 
@@ -2897,10 +3119,10 @@ export type TomeOfKnowledgeAchievementReward = {
   id: Scalars['ID']['output'];
 };
 
-export type TomeOfKnowledgeAchievementRewardAbilityCounter = TomeOfKnowledgeAchievementReward & {
-  __typename?: 'TomeOfKnowledgeAchievementRewardAbilityCounter';
+export type TomeOfKnowledgeAchievementRewardActionCounter = TomeOfKnowledgeAchievementReward & {
+  __typename?: 'TomeOfKnowledgeAchievementRewardActionCounter';
   /** Ability Info */
-  ability: Ability;
+  ability: AbilityInfo;
   id: Scalars['ID']['output'];
 };
 
