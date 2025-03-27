@@ -3,10 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
-import { getCurrentFilters } from '../kill/KillsFilters';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { SkirmishListTable } from './SkirmishListTable';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 
 export function SkirmishList({
   query,

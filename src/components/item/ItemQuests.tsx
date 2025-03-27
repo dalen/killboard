@@ -3,10 +3,10 @@ import { Link } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import Tippy from '@tippyjs/react';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ItemPopup } from './ItemPopup';
 import { questTypeIcon } from '../../utils';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 
 const ITEM_INFO = gql`
   query GetItemRewardedFromQuests(

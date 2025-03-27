@@ -3,10 +3,10 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from './KillsFilters';
 import { KillsListTable } from './KillsListTable';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 
 export function KillsList({
   query,

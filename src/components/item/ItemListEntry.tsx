@@ -2,7 +2,7 @@ import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Item } from '@/types';
-import { CharacterItemPopup } from '../character/CharacterItemPopup';
+import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '../../itemUtils';
 
 export function ItemListEntry({ item }: { item: Item }): ReactElement {

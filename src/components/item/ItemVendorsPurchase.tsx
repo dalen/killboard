@@ -3,9 +3,9 @@ import { Link, useSearchParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import { GoldPrice } from '../GoldPrice';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ItemVendorsFilters, getCurrentFilters } from './ItemVendorsFilters';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 
 const ITEM_INFO = gql`
   query GetItemUsedToPurchase(

@@ -9,9 +9,9 @@ import {
 import { Link, useSearchParams } from 'react-router';
 import { Archetype, Query } from '@/types';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceRunsFilters } from './InstanceRunsFilters';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 import clsx from 'clsx';
 
 const INSTANCE_RUNS = gql`

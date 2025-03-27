@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { KillsList } from '../kill/KillsList';
+import { KillsList } from '@/components/kill/KillsList';
 import { ReactElement } from 'react';
 
 const SKIRMISH_KILLS = gql`

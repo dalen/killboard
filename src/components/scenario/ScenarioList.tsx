@@ -2,10 +2,10 @@ import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getScenarioFilters } from './ScenarioFilters';
 import { ScenarioListTable } from './ScenarioListTable';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 
 const SCENARIO_LIST = gql`
   query GetScenarioList(

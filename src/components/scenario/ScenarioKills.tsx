@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { KillsList } from '../kill/KillsList';
+import { KillsList } from '@/components/kill/KillsList';
 import { ReactElement } from 'react';
 
 const SCENARIO_KILLS = gql`

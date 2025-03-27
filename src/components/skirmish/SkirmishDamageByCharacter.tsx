@@ -1,9 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { useParams } from 'react-router';
 import { KillDamage, Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '../../utils';
-import { CharacterInfo } from '../character/CharacterInfo';
+import { CharacterInfo } from '@/components/character/CharacterInfo';
 import { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE_BY_CHARACTER = gql`

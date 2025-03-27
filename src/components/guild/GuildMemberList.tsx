@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { CareerIcon } from '@/components/CareerIcon';
 import { Query } from '@/types';
-import { ErrorMessage } from '../global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { QueryPagination } from '../global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 
