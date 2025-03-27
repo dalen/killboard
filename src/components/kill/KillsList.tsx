@@ -2,7 +2,7 @@ import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Query } from '../../types';
+import { Query } from '@/types';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { getCurrentFilters } from './KillsFilters';
 import { KillsListTable } from './KillsListTable';

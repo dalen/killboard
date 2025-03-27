@@ -1,9 +1,9 @@
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
-import { ScenarioScoreboardEntry } from '../../types';
-import { CareerIcon } from '../CareerIcon';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
+import { ScenarioScoreboardEntry } from '@/types';
+import { CareerIcon } from '@/components/CareerIcon';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '../../hooks/useSortableData';
 import { ReactElement } from 'react';
 

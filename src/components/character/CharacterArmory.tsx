@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { EquipSlot, ItemRarity, ItemType, Query } from '../../types';
+import { EquipSlot, ItemRarity, ItemType, Query } from '@/types';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { CharacterItem } from '../character/CharacterItem';
 import { ReactElement } from 'react';

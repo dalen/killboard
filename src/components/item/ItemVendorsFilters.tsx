@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { URLSearchParams } from 'url';
-import { Career } from '../../types';
+import { Career } from '@/types';
 import { ReactElement } from 'react';
 
 const getCareerFilters = (search: URLSearchParams) => {

@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { KillsList } from './KillsList';
+import { KillsList } from '@/components/kill/KillsList';
 import { ReactElement } from 'react';
 
 const PLAYER_FEUD = gql`

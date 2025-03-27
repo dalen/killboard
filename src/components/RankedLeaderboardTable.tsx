@@ -1,11 +1,11 @@
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router';
-import useWindowDimensions from '../hooks/useWindowDimensions';
-import { Query } from '../types';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { Query } from '@/types';
 import { ErrorMessage } from './global/ErrorMessage';
 import { GuildHeraldry } from './guild/GuildHeraldry';
-import { CareerIcon } from './CareerIcon';
+import { CareerIcon } from '@/components/CareerIcon';
 import { QueryPagination } from './global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';

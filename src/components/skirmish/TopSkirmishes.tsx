@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { Query } from '../../types';
+import { Query } from '@/types';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { SkirmishListTable } from './SkirmishListTable';
 import { ReactElement } from 'react';

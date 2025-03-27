@@ -7,8 +7,8 @@ import {
   format,
 } from 'date-fns';
 import { Link, useSearchParams } from 'react-router';
-import { Archetype, Query } from '../../types';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { Archetype, Query } from '@/types';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { getInstanceRunsFilters } from './InstanceRunsFilters';
 import { QueryPagination } from '../global/QueryPagination';

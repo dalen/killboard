@@ -1,8 +1,8 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Query, SkirmishScoreboardEntry } from '../../types';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
+import { Query, SkirmishScoreboardEntry } from '@/types';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { careerIcon } from '../../utils';
 import { ReactElement } from 'react';
 import clsx from 'clsx';

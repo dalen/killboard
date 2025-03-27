@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { SkirmishFilterInput } from '../../types';
+import { SkirmishFilterInput } from '@/types';
 import { ReactElement } from 'react';
 
 const getLocationTypeFilter = (

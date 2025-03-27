@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { KillLeaderboardEntry } from '../../types';
-import { CareerIcon } from '../CareerIcon';
-import '../styles/table.scss';
+import { KillLeaderboardEntry } from '@/types';
+import { CareerIcon } from '@/components/CareerIcon';
+import '@/components/styles/table.scss';
 
 export function LeaderboardTable({
   data,

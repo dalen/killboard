@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { t } from 'i18next';
 import { CharacterItemPopup } from '../character/CharacterItemPopup';
-import { Query } from '../../types';
+import { Query } from '@/types';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { ReactElement } from 'react';
 

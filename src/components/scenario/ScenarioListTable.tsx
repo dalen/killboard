@@ -1,8 +1,8 @@
 import { format, formatISO, intervalToDuration } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { ScenarioRecord } from '../../types';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { ScenarioRecord } from '@/types';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

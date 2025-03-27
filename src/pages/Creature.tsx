@@ -1,7 +1,7 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { MapSetup, Query, Zone } from '../types';
+import { MapSetup, Query, Zone } from '@/types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { MapPositions } from '../components/MapPositions';
 import { questTypeIcon } from '../utils';

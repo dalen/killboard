@@ -4,7 +4,7 @@ import {
   KillDamageSourceType,
   QuestRepeatableType,
   QuestTypeFlagsFlags,
-} from './types';
+} from '@/types';
 
 export const careerIcon = (career: Career): string => {
   switch (career) {

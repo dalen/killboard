@@ -1,8 +1,8 @@
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import useWindowDimensions from '../hooks/useWindowDimensions';
-import { InstanceFilterInput, Query } from '../types';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { InstanceFilterInput, Query } from '@/types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { SearchBox } from '../components/global/SearchBox';
 import { QueryPagination } from '../components/global/QueryPagination';

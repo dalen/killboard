@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { Query } from '../types';
+import { Query } from '@/types';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { isPercentage } from '../utils';

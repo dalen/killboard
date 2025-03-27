@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { KillGuildLeaderboardEntry } from '../../types';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
-import '../styles/table.scss';
+import { KillGuildLeaderboardEntry } from '@/types';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
+import '@/components/styles/table.scss';
 
 export function LeaderboardGuildTable({
   data,

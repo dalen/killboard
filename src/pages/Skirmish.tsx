@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import _ from 'lodash';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { Query, Realm } from '../types';
+import { Query, Realm } from '@/types';
 import { SkirmishScoreboard } from '../components/skirmish/SkirmishScoreboard';
 import { SkirmishTopPlayer } from '../components/skirmish/SkirmishTopPlayer';
 import { ZoneHeatmap } from '../components/ZoneHeatmap';

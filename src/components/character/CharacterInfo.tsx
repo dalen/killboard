@@ -2,7 +2,7 @@ import { gql, useQuery } from '@apollo/client';
 import { getUnixTime, startOfWeek } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Query } from '../../types';
+import { Query } from '@/types';
 import { careerIcon } from '../../utils';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { ReactElement } from 'react';

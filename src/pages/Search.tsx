@@ -4,7 +4,7 @@ import { Link, useParams } from 'react-router';
 import { CareerIcon } from '../components/CareerIcon';
 import { SearchBox } from '../components/global/SearchBox';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import useWindowDimensions from '../hooks/useWindowDimensions';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '../components/global/QueryPagination';
 import { SearchQuery } from '../__generated__/graphql';
 import { GuildHeraldry } from '../components/guild/GuildHeraldry';

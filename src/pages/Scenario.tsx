@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { ScenarioKills } from '../components/scenario/ScenarioKills';
-import { Query } from '../types';
+import { Query } from '@/types';
 import { ScenarioScoreboard } from '../components/scenario/ScenarioScoreboard';
 import { ScenarioHeatmap } from '../components/scenario/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '../components/scenario/ScenarioSkirmishes';

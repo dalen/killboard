@@ -2,9 +2,9 @@ import { format, formatISO } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Kill } from '../../types';
-import { CareerIcon } from '../CareerIcon';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
+import { Kill } from '@/types';
+import { CareerIcon } from '@/components/CareerIcon';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 
 export function KillsListTable({

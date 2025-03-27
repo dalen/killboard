@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { GuildRecentDeaths } from '../components/guild/GuildRecentDeaths';
 import { GuildRecentKills } from '../components/guild/GuildRecentKills';
-import { Query } from '../types';
+import { Query } from '@/types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildMemberList } from '../components/guild/GuildMemberList';
 import { GuildInfo } from '../components/guild/GuildInfo';

@@ -7,7 +7,7 @@ import { Attacker } from '../components/kill/Attacker';
 import { CareerIcon } from '../components/CareerIcon';
 import { PlayerFeud } from '../components/kill/PlayerFeud';
 import { Map } from '../components/Map';
-import { Query } from '../types';
+import { Query } from '@/types';
 import { GuildFeud } from '../components/guild/GuildFeud';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GuildHeraldry } from '../components/guild/GuildHeraldry';

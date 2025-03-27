@@ -4,9 +4,9 @@ import { useTranslation } from 'react-i18next';
 import {
   InstanceEncounterRunScoreboardEntry,
   InstanceRunScoreboardEntry,
-} from '../../types';
-import { CareerIcon } from '../CareerIcon';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
+} from '@/types';
+import { CareerIcon } from '@/components/CareerIcon';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '../../hooks/useSortableData';
 import { ReactElement } from 'react';
 

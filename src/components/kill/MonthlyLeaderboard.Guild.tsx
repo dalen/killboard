@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Query } from '../../types';
+import { Query } from '@/types';
 import { LeaderboardGuildTable } from './LeaderboardGuildTable';
 import { ErrorMessage } from '../global/ErrorMessage';
 import { ReactElement } from 'react';

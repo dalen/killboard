@@ -7,9 +7,9 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Skirmish, Realm } from '../../types';
-import useWindowDimensions from '../../hooks/useWindowDimensions';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
+import { Skirmish, Realm } from '@/types';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import clsx from 'clsx';
 
 export function SkirmishListTable({

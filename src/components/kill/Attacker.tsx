@@ -1,8 +1,8 @@
 import { Link } from 'react-router';
 import { sum } from 'lodash';
-import { Attacker as AttackerType, KillDamage } from '../../types';
-import { CareerIcon } from '../CareerIcon';
-import { GuildHeraldry } from '../guild/GuildHeraldry';
+import { Attacker as AttackerType, KillDamage } from '@/types';
+import { CareerIcon } from '@/components/CareerIcon';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { killDamageText } from '../../utils';
 import { ReactElement } from 'react';
 

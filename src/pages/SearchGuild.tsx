@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { SearchBox } from '../components/global/SearchBox';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import useWindowDimensions from '../hooks/useWindowDimensions';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '../components/global/QueryPagination';
 import { SearchGuildsQuery } from '../__generated__/graphql';
 import { ReactElement } from 'react';

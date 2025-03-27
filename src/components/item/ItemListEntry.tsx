@@ -1,7 +1,7 @@
 import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Item } from '../../types';
+import { Item } from '@/types';
 import { CharacterItemPopup } from '../character/CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '../../itemUtils';
 

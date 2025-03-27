@@ -1,4 +1,4 @@
-import { Item, ItemRarity } from './types';
+import { Item, ItemRarity } from '@/types';
 
 export const itemNameClass = (
   item: Pick<Item, 'rarity'> & { itemSet?: unknown },

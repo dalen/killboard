@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import Tippy from '@tippyjs/react';
-import { Query } from '../types';
+import { Query } from '@/types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { GoldPrice } from '../components/GoldPrice';
 import { ItemPopup } from '../components/item/ItemPopup';
