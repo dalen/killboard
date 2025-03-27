@@ -119,7 +119,7 @@ tr.skirmish-scoreboard-row-realm-destruction {
 }
 
 thead .ascending::after {
-  content: url(../public/images/icons/scenario/uparrow.png);
+  content: url(/images/icons/scenario/uparrow.png);
   display: inline-block;
   position: absolute;
   top: 5px;
@@ -127,7 +127,7 @@ thead .ascending::after {
 }
 
 thead .descending::after {
-  content: url(../public/images/icons/scenario/downarrow.png);
+  content: url(/images/icons/scenario/downarrow.png);
   display: inline-block;
   position: absolute;
   top: 10px;
