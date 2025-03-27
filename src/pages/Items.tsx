@@ -1,12 +1,12 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
-import { SearchBox } from '../components/SearchBox';
+import { SearchBox } from '../components/global/SearchBox';
 import { ItemFilterInput, ItemType, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { ItemListEntry } from '../components/ItemListEntry';
-import { QueryPagination } from '../components/QueryPagination';
+import { ItemListEntry } from '../components/item/ItemListEntry';
+import { QueryPagination } from '../components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

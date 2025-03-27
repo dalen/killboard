@@ -11,13 +11,13 @@ import { Link, useParams } from 'react-router';
 import _ from 'lodash';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Query, Realm } from '../types';
-import { SkirmishScoreboard } from '../components/SkirmishScoreboard';
-import { SkirmishTopPlayer } from '../components/SkirmishTopPlayer';
+import { SkirmishScoreboard } from '../components/skirmish/SkirmishScoreboard';
+import { SkirmishTopPlayer } from '../components/skirmish/SkirmishTopPlayer';
 import { ZoneHeatmap } from '../components/ZoneHeatmap';
-import { SkirmishKills } from '../components/SkirmishKills';
-import { GuildHeraldry } from '../components/GuildHeraldry';
-import { SkirmishDamage } from '../components/SkirmishDamage';
-import { SkirmishDamageByCharacter } from '../components/SkirmishDamageByCharacter';
+import { SkirmishKills } from '../components/skirmish/SkirmishKills';
+import { GuildHeraldry } from '../components/guild/GuildHeraldry';
+import { SkirmishDamage } from '../components/skirmish/SkirmishDamage';
+import { SkirmishDamageByCharacter } from '../components/skirmish/SkirmishDamageByCharacter';
 import { ReactElement } from 'react';
 
 const SKIRMISH_INFO = gql`

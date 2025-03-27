@@ -4,9 +4,9 @@ import { Link } from 'react-router';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query } from '../types';
 import { ErrorMessage } from './global/ErrorMessage';
-import { GuildHeraldry } from './GuildHeraldry';
+import { GuildHeraldry } from './guild/GuildHeraldry';
 import { CareerIcon } from './CareerIcon';
-import { QueryPagination } from './QueryPagination';
+import { QueryPagination } from './global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

@@ -6,9 +6,9 @@ import { Query } from '../types';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { isPercentage } from '../utils';
-import { ItemQuests } from '../components/ItemQuests';
-import { ItemVendorsPurchase } from '../components/ItemVendorsPurchase';
-import { ItemVendorsSell } from '../components/ItemVendorsSell';
+import { ItemQuests } from '../components/item/ItemQuests';
+import { ItemVendorsPurchase } from '../components/item/ItemVendorsPurchase';
+import { ItemVendorsSell } from '../components/item/ItemVendorsSell';
 import { ReactElement } from 'react';
 
 const ITEM_INFO = gql`

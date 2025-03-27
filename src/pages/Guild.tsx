@@ -1,17 +1,17 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { GuildRecentDeaths } from '../components/GuildRecentDeaths';
-import { GuildRecentKills } from '../components/GuildRecentKills';
+import { GuildRecentDeaths } from '../components/guild/GuildRecentDeaths';
+import { GuildRecentKills } from '../components/guild/GuildRecentKills';
 import { Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { GuildMemberList } from '../components/GuildMemberList';
-import { GuildInfo } from '../components/GuildInfo';
-import { KillsFilters } from '../components/KillsFilters';
-import { ScenarioList } from '../components/ScenarioList';
-import { ScenarioFilters } from '../components/ScenarioFilters';
-import { ScenarioCount } from '../components/ScenarioCount';
-import { GuildLatestSkirmishes } from '../components/GuildLatestSkirmishes';
+import { GuildMemberList } from '../components/guild/GuildMemberList';
+import { GuildInfo } from '../components/guild/GuildInfo';
+import { KillsFilters } from '../components/kill/KillsFilters';
+import { ScenarioList } from '../components/scenario/ScenarioList';
+import { ScenarioFilters } from '../components/scenario/ScenarioFilters';
+import { ScenarioCount } from '../components/scenario/ScenarioCount';
+import { GuildLatestSkirmishes } from '../components/guild/GuildLatestSkirmishes';
 import { ReactElement } from 'react';
 
 const GUILD_INFO = gql`

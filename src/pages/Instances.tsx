@@ -4,8 +4,8 @@ import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { InstanceFilterInput, Query } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { SearchBox } from '../components/SearchBox';
-import { QueryPagination } from '../components/QueryPagination';
+import { SearchBox } from '../components/global/SearchBox';
+import { QueryPagination } from '../components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

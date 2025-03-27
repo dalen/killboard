@@ -5,11 +5,11 @@ import Tippy from '@tippyjs/react';
 import useWindowDimensions from '../hooks/useWindowDimensions';
 import { Query, QuestFilterInput } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { SearchBox } from '../components/SearchBox';
+import { SearchBox } from '../components/global/SearchBox';
 import { GoldPrice } from '../components/GoldPrice';
-import { ItemPopup } from '../components/ItemPopup';
+import { ItemPopup } from '../components/item/ItemPopup';
 import { questTypeIcon } from '../utils';
-import { QueryPagination } from '../components/QueryPagination';
+import { QueryPagination } from '../components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

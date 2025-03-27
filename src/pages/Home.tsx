@@ -1,16 +1,16 @@
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { LatestKills } from '../components/LatestKills';
-import { WeeklyLeaderboard } from '../components/WeeklyLeaderboard';
-import { SearchBox } from '../components/SearchBox';
-import { MonthlyLeaderboard } from '../components/MonthlyLeaderboard';
-import { MonthlyGuildLeaderboard } from '../components/MonthlyLeaderboard.Guild';
-import { WeeklyLeaderboardGuild } from '../components/WeeklyLeaderboardGuild';
-import { ScenarioFilters } from '../components/ScenarioFilters';
-import { ScenarioList } from '../components/ScenarioList';
-import { LatestSkirmishes } from '../components/LatestSkirmishes';
-import { TopSkirmishes } from '../components/TopSkirmishes';
+import { LatestKills } from '../components/kill/LatestKills';
+import { WeeklyLeaderboard } from '../components/kill/WeeklyLeaderboard';
+import { SearchBox } from '../components/global/SearchBox';
+import { MonthlyLeaderboard } from '../components/kill/MonthlyLeaderboard';
+import { MonthlyGuildLeaderboard } from '../components/kill/MonthlyLeaderboard.Guild';
+import { WeeklyLeaderboardGuild } from '../components/kill/WeeklyLeaderboardGuild';
+import { ScenarioFilters } from '../components/scenario/ScenarioFilters';
+import { ScenarioList } from '../components/scenario/ScenarioList';
+import { LatestSkirmishes } from '../components/skirmish/LatestSkirmishes';
+import { TopSkirmishes } from '../components/skirmish/TopSkirmishes';
 import { ReactElement } from 'react';
 
 export function Home({

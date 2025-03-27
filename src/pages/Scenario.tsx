@@ -9,11 +9,11 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { ScenarioKills } from '../components/ScenarioKills';
+import { ScenarioKills } from '../components/scenario/ScenarioKills';
 import { Query } from '../types';
-import { ScenarioScoreboard } from '../components/ScenarioScoreboard';
-import { ScenarioHeatmap } from '../components/ScenarioHeatmap';
-import { ScenarioSkirmishes } from '../components/ScenarioSkirmishes';
+import { ScenarioScoreboard } from '../components/scenario/ScenarioScoreboard';
+import { ScenarioHeatmap } from '../components/scenario/ScenarioHeatmap';
+import { ScenarioSkirmishes } from '../components/scenario/ScenarioSkirmishes';
 import { ReactElement } from 'react';
 
 const SCENARIO_INFO = gql`

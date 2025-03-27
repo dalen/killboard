@@ -1,10 +1,10 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { PlayerFeud } from '../components/PlayerFeud';
+import { PlayerFeud } from '../components/kill/PlayerFeud';
 import { Character, KillsConnection } from '../types';
 import { ErrorMessage } from '../components/global/ErrorMessage';
-import { PlayerFeudCharacterInfo } from '../components/PlayerFeudCharacterInfo';
+import { PlayerFeudCharacterInfo } from '../components/kill/PlayerFeudCharacterInfo';
 import { ReactElement } from 'react';
 
 const PLAYER_FEUD_INFO = gql`

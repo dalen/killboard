@@ -10,7 +10,7 @@ import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '../components/global/ErrorMessage';
 import { Archetype, Query } from '../types';
 import useWindowDimensions from '../hooks/useWindowDimensions';
-import { InstanceRunScoreboard } from '../components/InstanceRunScoreboard';
+import { InstanceRunScoreboard } from '../components/instance_run/InstanceRunScoreboard';
 import clsx from 'clsx';
 
 const INSTANCE_RUN = gql`
