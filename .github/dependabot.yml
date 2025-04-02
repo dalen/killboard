@@ -8,6 +8,7 @@ updates:
       typescript-eslint:
         patterns:
         - "@typescript-eslint/*"
+        - "typescript-eslint"
       testing-library:
         patterns:
         - "@testing-library/*"
