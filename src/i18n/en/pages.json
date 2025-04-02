@@ -112,7 +112,8 @@
   },
   "creature": {
     "creatureId": "Creature #{{creatureId}}",
-    "questsStarter": "Quests"
+    "questsStarter": "Quests",
+    "vendorItems": "Items Sold"
   },
   "quests": {
     "title": "Quests",

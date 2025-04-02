@@ -458,6 +458,16 @@ export type Creature = SearchContent & {
   questsStarter: Array<Quest>;
   realm?: Maybe<Realm>;
   spawns: Array<CreatureSpawn>;
+  /** Items sold by this creature */
+  vendorItems?: Maybe<VendorItemsConnection>;
+};
+
+
+export type CreatureVendorItemsArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
 };
 
 export type CreatureFilterInput = {
@@ -2751,7 +2761,7 @@ export type Skirmish = {
   instance?: Maybe<ScenarioRecord>;
   /** Damage leading to player kills in this skirmish */
   killDamage: Array<KillDamage>;
-  /** Damage leading to player kills in this skirmish from a spcific character */
+  /** Damage leading to player kills in this skirmish from a specific character */
   killDamageByCharacter: Array<KillDamage>;
   /** Kills that happened during this skirmish */
   kills?: Maybe<KillsConnection>;
@@ -3330,6 +3340,28 @@ export type VendorItemRequiredItem = {
   /** Amount needed */
   count: Scalars['UnsignedShort']['output'];
   item: Item;
+};
+
+/** A connection to a list of items. */
+export type VendorItemsConnection = {
+  __typename?: 'VendorItemsConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<VendorItemsEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<VendorItem>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type VendorItemsEdge = {
+  __typename?: 'VendorItemsEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: VendorItem;
 };
 
 /** Holds information about one attacker in a kill */

@@ -6,6 +6,7 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { MapPositions } from '../components/MapPositions';
 import { questTypeIcon } from '../utils';
 import { ReactElement } from 'react';
+import { VendorItems } from '@/components/creature/VendorItems';
 
 const CREATURE_DETAILS = gql`
   query GetCreature($id: ID!) {
@@ -46,11 +47,18 @@ const CREATURE_DETAILS = gql`
         }
         repeatableType
       }
+      vendorItems {
+        totalCount
+      }
     }
   }
 `;
 
-export function Creature(): ReactElement {
+export function Creature({
+  tab,
+}: {
+  tab?: undefined | 'quests' | 'vendorItems';
+}): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
   const { loading, error, data } = useQuery<Query>(CREATURE_DETAILS, {
@@ -80,6 +88,13 @@ export function Creature(): ReactElement {
   if (zone == null || mapSetup == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
+  const hasQuests = entry.questsStarter.length > 0;
+  const hasVendorItems = entry.vendorItems?.totalCount ?? 0 > 0;
+  const activeTab =
+    tab ??
+    (hasQuests ? 'quests' : undefined) ??
+    (hasVendorItems ? 'vendorItems' : undefined);
+
   return (
     <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
@@ -107,7 +122,26 @@ export function Creature(): ReactElement {
         </div>
       </div>
 
-      {entry.questsStarter.length > 0 && (
+      <div className="tabs">
+        <ul>
+          {hasQuests && (
+            <li className={tab === 'quests' ? 'is-active' : ''}>
+              <Link to={`/creature/${id}/quests`}>
+                {t('pages:creature.quests')}
+              </Link>
+            </li>
+          )}
+          {hasVendorItems && (
+            <li className={tab === 'vendorItems' ? 'is-active' : ''}>
+              <Link to={`/creature/${id}/vendorItems`}>
+                {t('pages:creature.vendorItems')}
+              </Link>
+            </li>
+          )}
+        </ul>
+      </div>
+
+      {activeTab === 'quests' && (
         <div className="card mb-5">
           <div className="card-content">
             <p className="is-size-4 is-family-secondary has-text-info">
@@ -133,11 +167,15 @@ export function Creature(): ReactElement {
         </div>
       )}
 
+      {activeTab === 'vendorItems' && <VendorItems creatureId={id} />}
+
       <div className="tabs">
         <ul>
           {zoneIds.map((z) => (
             <li key={z} className={zoneId === z ? 'is-active' : ''}>
-              <Link to={`/creature/${id}/${z}`}>{zones.get(z)?.[0].name}</Link>
+              <Link to={`/creature/${id}/zone/${z}`}>
+                {zones.get(z)?.[0].name}
+              </Link>
             </li>
           ))}
         </ul>
