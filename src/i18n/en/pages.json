@@ -115,6 +115,11 @@
     "questsStarter": "Quests",
     "vendorItems": "Items Sold"
   },
+  "gameobject": {
+    "gameobjectId": "Game Object #{{gameobjectId}}",
+    "questsStarter": "Quests",
+    "vendorItems": "Items Sold"
+  },
   "quests": {
     "title": "Quests",
     "search": "Search",

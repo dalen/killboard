@@ -89,7 +89,7 @@ export function GameObject(): ReactElement {
           </li>
           <li className="is-active">
             <Link to={`/gameobject/${id}`}>
-              {t('pages:gameobject.creatureId', { gameobjectId: id })}
+              {t('pages:gameobject.gameobjectId', { gameobjectId: id })}
             </Link>
           </li>
         </ul>
