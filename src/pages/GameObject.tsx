@@ -87,12 +87,9 @@ export function GameObject(): ReactElement {
           <li>
             <Link to="/">{t('common:home')}</Link>
           </li>
-          <li>
-            <Link to="/creatures">{t('common:creatures')}</Link>
-          </li>
           <li className="is-active">
-            <Link to={`/creature/${id}`}>
-              {t('pages:creature.creatureId', { creatureId: id })}
+            <Link to={`/gameobject/${id}`}>
+              {t('pages:gameobject.creatureId', { gameobjectId: id })}
             </Link>
           </li>
         </ul>
@@ -110,7 +107,7 @@ export function GameObject(): ReactElement {
         <ul>
           {hasQuests && (
             <li className={activeTab === 'quests' ? 'is-active' : ''}>
-              <Link to={`/creature/${id}/quests`}>
+              <Link to={`/gameobject/${id}/quests`}>
                 <img
                   src="/images/corner_icons/ea_icon_corner_quest.png"
                   alt="Quest Icon"
@@ -118,7 +115,7 @@ export function GameObject(): ReactElement {
                   height={24}
                   className="px-1"
                 />
-                {t('pages:creature.quests')}
+                {t('pages:gameobject.quests')}
               </Link>
             </li>
           )}
@@ -129,7 +126,7 @@ export function GameObject(): ReactElement {
         <div className="card mb-5">
           <div className="card-content">
             <p className="is-size-4 is-family-secondary has-text-info">
-              {t('pages:creature.questsStarter')}
+              {t('pages:gameobject.questsStarter')}
             </p>
             {entry.questsStarter.map((quest) => (
               <Link to={`/quest/${quest.id}`}>
@@ -155,7 +152,7 @@ export function GameObject(): ReactElement {
         <ul>
           {zoneIds.map((z) => (
             <li key={z} className={zoneId === z ? 'is-active' : ''}>
-              <Link to={`/creature/${id}/zone/${z}`}>
+              <Link to={`/gameobject/${id}/zone/${z}`}>
                 {zones.get(z)?.[0].name}
               </Link>
             </li>
