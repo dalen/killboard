@@ -764,7 +764,7 @@ export type DropsFromGameObjectsConnection = {
   /** A list of edges. */
   edges?: Maybe<Array<DropsFromGameObjectsEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<GameObjectProto>>;
+  nodes?: Maybe<Array<GameObject>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** Identifies the total count of items in the connection. */
@@ -777,7 +777,7 @@ export type DropsFromGameObjectsEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
-  node: GameObjectProto;
+  node: GameObject;
 };
 
 /** Character equipment slots */
@@ -837,11 +837,13 @@ export type FloatOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type GameObjectProto = SearchContent & {
-  __typename?: 'GameObjectProto';
+export type GameObject = SearchContent & {
+  __typename?: 'GameObject';
   id: Scalars['ID']['output'];
   /** The name of the Game Object */
   name: Scalars['String']['output'];
+  questsFinisher: Array<Quest>;
+  questsStarter: Array<Quest>;
   spawns: Array<GameObjectSpawn>;
 };
 
@@ -872,7 +874,7 @@ export type GameObjectsConnection = {
   /** A list of edges. */
   edges?: Maybe<Array<GameObjectsEdge>>;
   /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<GameObjectProto>>;
+  nodes?: Maybe<Array<GameObject>>;
   /** Information to aid in pagination. */
   pageInfo: PageInfo;
   /** Identifies the total count of items in the connection. */
@@ -885,7 +887,7 @@ export type GameObjectsEdge = {
   /** A cursor for use in pagination. */
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
-  node: GameObjectProto;
+  node: GameObject;
 };
 
 export type Guild = SearchContent & {
@@ -1851,7 +1853,7 @@ export type Query = {
   creatures?: Maybe<CreaturesConnection>;
   events: Array<Event>;
   /** Get one game object */
-  gameObject?: Maybe<GameObjectProto>;
+  gameObject?: Maybe<GameObject>;
   /** Query for game objects matching a filter */
   gameObjects?: Maybe<GameObjectsConnection>;
   /** Get one guild */

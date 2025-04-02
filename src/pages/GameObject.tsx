@@ -6,16 +6,12 @@ import { ErrorMessage } from '../components/global/ErrorMessage';
 import { MapPositions } from '../components/MapPositions';
 import { questTypeIcon } from '../utils';
 import { ReactElement } from 'react';
-import { VendorItems } from '@/components/creature/VendorItems';
 
-const CREATURE_DETAILS = gql`
-  query GetCreature($id: ID!) {
-    creature(id: $id) {
+const GAMEOBJECT_DETAILS = gql`
+  query GetGameObject($id: ID!) {
+    gameObject(id: $id) {
       id
       name
-      creatureType
-      creatureSubType
-      realm
       spawns {
         id
         position {
@@ -47,28 +43,21 @@ const CREATURE_DETAILS = gql`
         }
         repeatableType
       }
-      vendorItems {
-        totalCount
-      }
     }
   }
 `;
 
-export function Creature({
-  tab,
-}: {
-  tab?: undefined | 'quests' | 'vendorItems';
-}): ReactElement {
+export function GameObject(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
-  const { loading, error, data } = useQuery<Query>(CREATURE_DETAILS, {
+  const { loading, error, data } = useQuery<Query>(GAMEOBJECT_DETAILS, {
     variables: { id },
   });
 
   if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  const entry = data?.creature;
+  const entry = data?.gameObject;
   if (entry == null) return <ErrorMessage customText={t('common:notFound')} />;
 
   const zoneIds: string[] = Array.from(
@@ -89,11 +78,7 @@ export function Creature({
     return <ErrorMessage customText={t('common:notFound')} />;
 
   const hasQuests = entry.questsStarter.length > 0;
-  const hasVendorItems = entry.vendorItems?.totalCount ?? 0 > 0;
-  const activeTab =
-    tab ??
-    (hasQuests ? 'quests' : undefined) ??
-    (hasVendorItems ? 'vendorItems' : undefined);
+  const activeTab = hasQuests ? 'quests' : undefined;
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -118,7 +103,6 @@ export function Creature({
           <p className="is-size-4 is-family-secondary has-text-info">
             {entry.name}
           </p>
-          <p>{t(`enums:creatureSubType.${entry.creatureSubType}`)}</p>
         </div>
       </div>
 
@@ -135,20 +119,6 @@ export function Creature({
                   className="px-1"
                 />
                 {t('pages:creature.quests')}
-              </Link>
-            </li>
-          )}
-          {hasVendorItems && (
-            <li className={activeTab === 'vendorItems' ? 'is-active' : ''}>
-              <Link to={`/creature/${id}/vendorItems`}>
-                <img
-                  src="/images/corner_icons/ea_icon_corner_merchant.png"
-                  alt="Merchant Icon"
-                  width={24}
-                  height={24}
-                  className="px-1"
-                />
-                {t('pages:creature.vendorItems')}
               </Link>
             </li>
           )}
@@ -180,8 +150,6 @@ export function Creature({
           </div>
         </div>
       )}
-
-      {activeTab === 'vendorItems' && <VendorItems creatureId={id} />}
 
       <div className="tabs">
         <ul>
