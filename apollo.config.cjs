@@ -5,5 +5,6 @@ module.exports = {
       name: 'ror-api',
       url: 'https://production-api.waremu.com/graphql',
     },
+    excludes: ['**/__generated__/**', '**/node_modules/**'],
   },
 };
