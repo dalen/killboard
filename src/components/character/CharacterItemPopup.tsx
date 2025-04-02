@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import { CharacterItem, Item, ItemSet } from '@/types';
-import { isPercentage } from '../../utils';
-import { itemNameClass, statMultiplier } from '../../itemUtils';
+import { isPercentage } from '@/utils';
+import { itemNameClass, statMultiplier } from '@/itemUtils';
 import { ReactElement } from 'react';
 
 const numEquippedInSet = (

@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Character } from '@/types';
-import { careerIcon } from '../../utils';
+import { careerIcon } from '@/utils';
 import { ReactElement } from 'react';
 
 export function PlayerFeudCharacterInfo({

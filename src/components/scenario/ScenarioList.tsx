@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { getScenarioFilters } from './ScenarioFilters';
-import { ScenarioListTable } from './ScenarioListTable';
+import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
+import { ScenarioListTable } from '@/components/scenario/ScenarioListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
 const SCENARIO_LIST = gql`

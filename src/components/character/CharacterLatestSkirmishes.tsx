@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 import { useSearchParams } from 'react-router';
-import { SkirmishList } from '../skirmish/SkirmishList';
+import { SkirmishList } from '@/components/skirmish/SkirmishList';
 import {
   SkirmishFilters,
   getskirmishFilters,
-} from '../skirmish/SkirmishFilters';
+} from '@/components/skirmish/SkirmishFilters';
 import { ReactElement } from 'react';
 
 const LATEST_SKIRMISHES = gql`

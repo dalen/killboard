@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { GuildHeraldry } from './GuildHeraldry';
+import { GuildHeraldry } from '@/components/guildHeraldry';
 import {
   GuildHeraldry as GuildHeraldryType,
   MembersConnection,

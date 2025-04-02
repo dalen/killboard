@@ -1,5 +1,5 @@
 import { gql } from '@apollo/client';
-import { SkirmishList } from '../skirmish/SkirmishList';
+import { SkirmishList } from '@/components/skirmish/SkirmishList';
 import { ReactElement } from 'react';
 
 const SKIRMISHES = gql`

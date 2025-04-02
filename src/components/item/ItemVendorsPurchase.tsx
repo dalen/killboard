@@ -1,10 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
-import { GoldPrice } from '../GoldPrice';
+import { GoldPrice } from '@/components/GoldPrice';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ItemVendorsFilters, getCurrentFilters } from './ItemVendorsFilters';
+import {
+  ItemVendorsFilters,
+  getCurrentFilters,
+} from '@/components/item/ItemVendorsFilters';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
 const ITEM_INFO = gql`

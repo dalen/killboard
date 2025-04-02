@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { getScenarioFilters } from './ScenarioFilters';
+import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
 
 const SCENARIO_COUNT = gql`
   query GetScenarioCount(

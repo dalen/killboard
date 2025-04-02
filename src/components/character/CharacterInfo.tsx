@@ -3,7 +3,7 @@ import { getUnixTime, startOfWeek } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { Query } from '@/types';
-import { careerIcon } from '../../utils';
+import { careerIcon } from '@/utils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ReactElement } from 'react';
 

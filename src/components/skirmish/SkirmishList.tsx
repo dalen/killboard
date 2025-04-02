@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
-import { SkirmishListTable } from './SkirmishListTable';
+import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
 export function SkirmishList({

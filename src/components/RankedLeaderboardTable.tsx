@@ -3,10 +3,10 @@ import { gql, useQuery } from '@apollo/client';
 import { Link } from 'react-router';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { Query } from '@/types';
-import { ErrorMessage } from './global/ErrorMessage';
-import { GuildHeraldry } from './guild/GuildHeraldry';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { CareerIcon } from '@/components/CareerIcon';
-import { QueryPagination } from './global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

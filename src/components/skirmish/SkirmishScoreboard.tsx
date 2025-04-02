@@ -6,7 +6,7 @@ import { gql, useQuery } from '@apollo/client';
 import { Query } from '@/types';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { SortConfig, SortConfigDirection } from '../../hooks/useSortableData';
+import { SortConfig, SortConfigDirection } from '@/hooks/useSortableData';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 

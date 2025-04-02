@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ZoneHeatmap } from '../ZoneHeatmap';
+import { ZoneHeatmap } from '@/components/ZoneHeatmap';
 import { ReactElement } from 'react';
 
 const SCENARIO_HEATMAP = gql`

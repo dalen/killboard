@@ -1,7 +1,7 @@
 import { gql, useQuery } from '@apollo/client';
 import { KillDamage, Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { killDamageText } from '../../utils';
+import { killDamageText } from '@/utils';
 import { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE = gql`

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { SkirmishListTable } from './SkirmishListTable';
+import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';
 import { ReactElement } from 'react';
 
 const TOP_SKIRMISHES = gql`

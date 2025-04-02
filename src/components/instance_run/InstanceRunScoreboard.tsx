@@ -7,7 +7,7 @@ import {
 } from '@/types';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { useSortableData } from '../../hooks/useSortableData';
+import { useSortableData } from '@/hooks/useSortableData';
 import { ReactElement } from 'react';
 
 export function InstanceRunScoreboard({

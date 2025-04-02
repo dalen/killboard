@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { getCurrentFilters } from './KillsFilters';
-import { KillsListTable } from './KillsListTable';
+import { getCurrentFilters } from '@/components/kill/KillsFilters';
+import { KillsListTable } from '@/components/kill/KillsListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
 export function KillsList({

@@ -2,7 +2,7 @@ import { getISOWeek, getISOWeekYear } from 'date-fns';
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Query } from '@/types';
-import { LeaderboardGuildTable } from './LeaderboardGuildTable';
+import { LeaderboardGuildTable } from '@/components/kill/LeaderboardGuildTable';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ReactElement } from 'react';
 

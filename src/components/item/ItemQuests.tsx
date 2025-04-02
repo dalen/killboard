@@ -5,7 +5,7 @@ import Tippy from '@tippyjs/react';
 import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ItemPopup } from './ItemPopup';
-import { questTypeIcon } from '../../utils';
+import { questTypeIcon } from '@/utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
 const ITEM_INFO = gql`

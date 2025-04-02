@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { ScenarioScoreboardEntry } from '@/types';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { useSortableData } from '../../hooks/useSortableData';
+import { useSortableData } from '@/hooks/useSortableData';
 import { ReactElement } from 'react';
 
 export function ScenarioScoreboard({

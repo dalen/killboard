@@ -1,8 +1,11 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { SkirmishList } from './SkirmishList';
-import { SkirmishFilters, getskirmishFilters } from './SkirmishFilters';
+import { SkirmishList } from '@/components/skirmish/SkirmishList';
+import {
+  SkirmishFilters,
+  getskirmishFilters,
+} from '@/components/skirmish/SkirmishFilters';
 import { ReactElement } from 'react';
 
 const LATEST_SKIRMISHES = gql`

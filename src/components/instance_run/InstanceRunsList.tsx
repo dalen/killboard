@@ -10,7 +10,7 @@ import { Link, useSearchParams } from 'react-router';
 import { Archetype, Query } from '@/types';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { getInstanceRunsFilters } from './InstanceRunsFilters';
+import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import clsx from 'clsx';
 
