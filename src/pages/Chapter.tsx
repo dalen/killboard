@@ -102,6 +102,31 @@ export function Chapter(): ReactElement {
         </div>
       </div>
 
+      {entry.position.mapSetup != null && (
+        <div className="card mb-5">
+          <div className="card-content">
+            <p className="is-size-4 is-family-secondary has-text-info">
+              {entry.position.zone?.name}
+            </p>
+            <div
+              style={{
+                width: '400px',
+                height: '400px',
+              }}
+            >
+              <MapPositions
+                positions={[entry.position]}
+                zoneId={Number(entry.position.zone?.id)}
+                nwCornerX={entry.position.mapSetup.nwCornerX}
+                nwCornerY={entry.position.mapSetup.nwCornerY}
+                seCornerX={entry.position.mapSetup.seCornerX}
+                seCornerY={entry.position.mapSetup.seCornerY}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="card mb-5">
         <div className="card-content">
           <p className="is-size-4 is-family-secondary has-text-info">
@@ -142,28 +167,6 @@ export function Chapter(): ReactElement {
           </div>
         </div>
       </div>
-
-      {entry.position.mapSetup != null && (
-        <div className="card mb-5">
-          <div className="card-content">
-            <div
-              style={{
-                width: '640px',
-                height: '640px',
-              }}
-            >
-              <MapPositions
-                positions={[entry.position]}
-                zoneId={Number(entry.position.zoneId)}
-                nwCornerX={entry.position.mapSetup.nwCornerX}
-                nwCornerY={entry.position.mapSetup.nwCornerY}
-                seCornerX={entry.position.mapSetup.seCornerX}
-                seCornerY={entry.position.mapSetup.seCornerY}
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
