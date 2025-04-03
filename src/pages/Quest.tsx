@@ -102,7 +102,9 @@ export function Quest(): ReactElement {
           <div className="is-size-3 is-family-secondary has-text-info">
             {quest.name}
           </div>
-          <div className="mb-2">{quest.description}</div>
+          <div className="mb-2">
+            {quest.description?.replace('|n', 'Player').replace('|c', 'Career')}
+          </div>
 
           {quest.journalEntry && (
             <>
@@ -113,7 +115,11 @@ export function Quest(): ReactElement {
                   </figure>
                 </div>
               </div>
-              <div className="mb-2">{quest.journalEntry}</div>
+              <div className="mb-2">
+                {quest.journalEntry
+                  .replace('|n', 'Player')
+                  .replace('|c', 'Career')}
+              </div>
             </>
           )}
 
@@ -131,7 +137,9 @@ export function Quest(): ReactElement {
                   />
                 </span>
                 <span>
-                  {objective.description}
+                  {objective.description
+                    .replace('|n', 'Player')
+                    .replace('|c', 'Career')}
                   {objective.count > 1 && <span> 0 of {objective.count}</span>}
                 </span>
               </div>
