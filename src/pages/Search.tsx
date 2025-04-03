@@ -89,6 +89,9 @@ const SEARCH = gql`
           journalEntry
           questDescription: description
         }
+        ... on Creature {
+          creatureSubType
+        }
       }
       pageInfo {
         hasNextPage
@@ -328,7 +331,9 @@ export function Search(): ReactElement {
                         {searchItem.name}
                       </Link>
                     </td>
-                    <td></td>
+                    <td>
+                      {t(`enums:creatureSubType.${searchItem.creatureSubType}`)}
+                    </td>
                     <td align="right">
                       <span className="tag is-primary">
                         {searchItem.__typename}
