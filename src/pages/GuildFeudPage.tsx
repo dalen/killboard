@@ -1,9 +1,9 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { GuildInfo } from '../components/guild/GuildInfo';
-import { GuildFeud } from '../components/guild/GuildFeud';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { GuildInfo } from '@/components/guild/GuildInfo';
+import { GuildFeud } from '@/components/guild/GuildFeud';
 import {
   GetGuildFeudInfoQuery,
   GetGuildFeudInfoQueryVariables,

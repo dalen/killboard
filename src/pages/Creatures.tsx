@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { CreatureFilterInput, Query } from '@/types';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { SearchBox } from '../components/global/SearchBox';
-import { QueryPagination } from '../components/global/QueryPagination';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { SearchBox } from '@/components/global/SearchBox';
+import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 

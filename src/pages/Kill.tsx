@@ -3,14 +3,14 @@ import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { Attacker } from '../components/kill/Attacker';
-import { CareerIcon } from '../components/CareerIcon';
-import { PlayerFeud } from '../components/kill/PlayerFeud';
-import { Map } from '../components/Map';
+import { Attacker } from '@/components/kill/Attacker';
+import { CareerIcon } from '@/components/CareerIcon';
+import { PlayerFeud } from '@/components/kill/PlayerFeud';
+import { Map } from '@/components/Map';
 import { Query } from '@/types';
-import { GuildFeud } from '../components/guild/GuildFeud';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { GuildHeraldry } from '../components/guild/GuildHeraldry';
+import { GuildFeud } from '@/components/guild/GuildFeud';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { ReactElement } from 'react';
 
 const KILL_DETAILS = gql`

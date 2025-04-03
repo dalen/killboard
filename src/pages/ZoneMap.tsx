@@ -2,8 +2,8 @@ import { gql, useQuery } from '@apollo/client';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { ZoneHeatmap } from '../components/ZoneHeatmap';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { ZoneHeatmap } from '@/components/ZoneHeatmap';
 import { Query } from '@/types';
 import { ReactElement } from 'react';
 

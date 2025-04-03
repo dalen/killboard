@@ -7,9 +7,9 @@ import {
   format,
 } from 'date-fns';
 import { Link, useParams } from 'react-router';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { Query } from '@/types';
-import { InstanceRunScoreboard } from '../components/instance_run/InstanceRunScoreboard';
+import { InstanceRunScoreboard } from '@/components/instance_run/InstanceRunScoreboard';
 
 const INSTANCE_ENCOUNTER_RUN = gql`
   query GetInstanceEncounterRun($id: ID!) {

@@ -1,13 +1,13 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { CareerIcon } from '../components/CareerIcon';
-import { SearchBox } from '../components/global/SearchBox';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { CareerIcon } from '@/components/CareerIcon';
+import { SearchBox } from '@/components/global/SearchBox';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { QueryPagination } from '../components/global/QueryPagination';
+import { QueryPagination } from '@/components/global/QueryPagination';
 import { SearchQuery } from '../__generated__/graphql';
-import { GuildHeraldry } from '../components/guild/GuildHeraldry';
+import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 import { questTypeIcon } from '../utils';
 import { ReactElement } from 'react';
@@ -337,7 +337,41 @@ export function Search(): ReactElement {
                   </tr>
                 );
               }
+              if (searchItem.__typename === 'Chapter') {
+                return (
+                  <tr>
+                    <td>
+                      <Link to={`/chapter/${searchItem.id}`}>
+                        <div className="icon-text">
+                          <span className="icon has-text-info">
+                            <figure className={`image m-0`}>
+                              <img
+                                src="/images/corner_icons/ea_icon_corner_help.png"
+                                width={48}
+                                height={48}
+                                alt={searchItem.name ?? undefined}
+                              />
+                            </figure>
+                          </span>
+                        </div>
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`/chapter/${searchItem.id}`}>
+                        {searchItem.name}
+                      </Link>
+                    </td>
+                    <td></td>
+                    <td align="right">
+                      <span className="tag is-primary">
+                        {searchItem.__typename}
+                      </span>
+                    </td>
+                  </tr>
+                );
+              }
 
+              /*
               if (searchItem.__typename === 'GameObject') {
                 return (
                   <tr>
@@ -371,6 +405,7 @@ export function Search(): ReactElement {
                   </tr>
                 );
               }
+              */
             })}
           </tbody>
         </table>

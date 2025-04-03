@@ -3,10 +3,10 @@ import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import Tippy from '@tippyjs/react';
 import { Query } from '@/types';
-import { ErrorMessage } from '../components/global/ErrorMessage';
-import { GoldPrice } from '../components/GoldPrice';
-import { ItemPopup } from '../components/item/ItemPopup';
-import { WarIcon } from '../components/WarIcon';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { GoldPrice } from '@/components/GoldPrice';
+import { ItemPopup } from '@/components/item/ItemPopup';
+import { WarIcon } from '@/components/WarIcon';
 import { ReactElement } from 'react';
 
 const QUEST_INFO = gql`

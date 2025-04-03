@@ -2,22 +2,22 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { InstanceFilterInput, Query } from '@/types';
+import { ChapterFilterInput, Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
 
-const QUERY = gql`
-  query GetInstances(
+const CHAPTERS = gql`
+  query GetChapters(
     $first: Int
     $last: Int
     $before: String
     $after: String
-    $where: InstanceFilterInput
+    $where: ChapterFilterInput
   ) {
-    instances(
+    chapters(
       first: $first
       last: $last
       before: $before
@@ -27,8 +27,10 @@ const QUERY = gql`
       nodes {
         id
         name
-        encounters {
-          id
+        position {
+          zone {
+            name
+          }
         }
       }
       pageInfo {
@@ -41,9 +43,7 @@ const QUERY = gql`
   }
 `;
 
-const getInstanceNameFilter = (
-  search: URLSearchParams,
-): InstanceFilterInput => {
+const getChapterNameFilter = (search: URLSearchParams): ChapterFilterInput => {
   const name = search.get('name');
 
   if (!name) {
@@ -53,15 +53,15 @@ const getInstanceNameFilter = (
   return { name: { contains: name } };
 };
 
-const getFilters = (search: URLSearchParams): InstanceFilterInput => ({
-  ...getInstanceNameFilter(search),
+const getFilters = (search: URLSearchParams): ChapterFilterInput => ({
+  ...getChapterNameFilter(search),
 });
 
-export function Instances(): ReactElement {
+export function Chapters(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
-  const { loading, error, data, refetch } = useQuery<Query>(QUERY, {
+  const { loading, error, data, refetch } = useQuery<Query>(CHAPTERS, {
     variables: {
       where: getFilters(search),
       first: perPage,
@@ -72,11 +72,11 @@ export function Instances(): ReactElement {
 
   if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.instances?.nodes == null)
+  if (data?.chapters?.nodes == null)
     return <ErrorMessage customText={t('common:notFound')} />;
 
-  const entries = data.instances.nodes;
-  const { pageInfo } = data.instances;
+  const entries = data.chapters.nodes;
+  const { pageInfo } = data.chapters;
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -86,7 +86,7 @@ export function Instances(): ReactElement {
             <Link to="/">{t('common:home')}</Link>
           </li>
           <li className="is-active">
-            <Link to="/creatures">{t('pages:creatures.title')}</Link>
+            <Link to="/chapters">{t('pages:chapters.title')}</Link>
           </li>
         </ul>
       </nav>
@@ -94,7 +94,7 @@ export function Instances(): ReactElement {
       <div className="card mb-5">
         <div className="card-content">
           <div className="field">
-            <label className="label">{t('pages:instances.search')}</label>
+            <label className="label">{t('pages:chapters.search')}</label>
             <SearchBox
               initialQuery={search.get('name') || ''}
               onSubmit={(event) => {
@@ -117,17 +117,19 @@ export function Instances(): ReactElement {
         >
           <thead>
             <tr>
-              <th>{t('pages:instances.name')}</th>
-              <th>{t('pages:instances.encounters')}</th>
+              <th>{t('pages:chapters.name')}</th>
+              <th>{t('pages:chapters.zone')}</th>
+              <th>{t('pages:chapters.rank')}</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map((instance) => (
-              <tr key={instance.id}>
+            {entries.map((entry) => (
+              <tr key={entry.id}>
                 <td>
-                  <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
+                  <Link to={`/chapter/${entry.id}`}>{entry.name}</Link>
                 </td>
-                <td>{instance.encounters?.length || 0}</td>
+                <td>{entry.position.zone?.name}</td>
+                <td>{entry.rank}</td>
               </tr>
             ))}
           </tbody>

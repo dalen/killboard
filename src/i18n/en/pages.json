@@ -115,6 +115,20 @@
     "questsStarter": "Quests",
     "vendorItems": "Items Sold"
   },
+  "chapters": {
+    "title": "Chapters",
+    "search": "Name",
+    "name": "Name",
+    "zone": "Zone",
+    "rank": "Rank"
+  },
+  "chapter": {
+    "chapterId": "Chapter #{{chapterId}}",
+    "influenceRewards": "Influence Rewards",
+    "tier1": "Basic",
+    "tier2": "Advanced",
+    "tier3": "Elite"
+  },
   "gameobject": {
     "gameobjectId": "Game Object #{{gameobjectId}}",
     "questsStarter": "Quests",

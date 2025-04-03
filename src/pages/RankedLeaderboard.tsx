@@ -1,9 +1,9 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { Query } from '@/types';
-import { RankedLeaderboardTable } from '../components/RankedLeaderboardTable';
+import { RankedLeaderboardTable } from '@/components/RankedLeaderboardTable';
 import { ReactElement } from 'react';
 
 const RANKED_LEADERBOARD_SEASONS = gql`

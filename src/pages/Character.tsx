@@ -1,14 +1,14 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { CharacterInfo } from '../components/character/CharacterInfo';
-import { CharacterRecentDeaths } from '../components/character/CharacterRecentDeaths';
-import { CharacterRecentKills } from '../components/character/CharacterRecentKills';
-import { KillsFilters } from '../components/kill/KillsFilters';
-import { ScenarioList } from '../components/scenario/ScenarioList';
-import { ScenarioFilters } from '../components/scenario/ScenarioFilters';
-import { CharacterArmory } from '../components/character/CharacterArmory';
-import { ScenarioCount } from '../components/scenario/ScenarioCount';
-import { CharacterLatestSkirmishes } from '../components/character/CharacterLatestSkirmishes';
+import { CharacterInfo } from '@/components/character/CharacterInfo';
+import { CharacterRecentDeaths } from '@/components/character/CharacterRecentDeaths';
+import { CharacterRecentKills } from '@/components/character/CharacterRecentKills';
+import { KillsFilters } from '@/components/kill/KillsFilters';
+import { ScenarioList } from '@/components/scenario/ScenarioList';
+import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
+import { CharacterArmory } from '@/components/character/CharacterArmory';
+import { ScenarioCount } from '@/components/scenario/ScenarioCount';
+import { CharacterLatestSkirmishes } from '@/components/character/CharacterLatestSkirmishes';
 import { ReactElement } from 'react';
 
 export function Character({

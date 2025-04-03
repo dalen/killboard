@@ -268,6 +268,18 @@ export type Chapter = SearchContent & {
   influenceRewards: Array<ChapterInfluenceReward>;
   name?: Maybe<Scalars['String']['output']>;
   position: Position;
+  rank: Scalars['UnsignedInt']['output'];
+};
+
+export type ChapterFilterInput = {
+  and?: InputMaybe<Array<ChapterFilterInput>>;
+  /** Name */
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<ChapterFilterInput>>;
+  /** Zone */
+  rank?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  /** Zone */
+  zoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
 };
 
 export type ChapterInfluenceReward = {
@@ -276,6 +288,34 @@ export type ChapterInfluenceReward = {
   item: Item;
   realm: Realm;
   tier: Scalars['Byte']['output'];
+};
+
+export type ChapterSortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
+  rank?: InputMaybe<SortEnumType>;
+};
+
+/** A connection to a list of items. */
+export type ChaptersConnection = {
+  __typename?: 'ChaptersConnection';
+  /** A list of edges. */
+  edges?: Maybe<Array<ChaptersEdge>>;
+  /** A flattened list of the nodes. */
+  nodes?: Maybe<Array<Chapter>>;
+  /** Information to aid in pagination. */
+  pageInfo: PageInfo;
+  /** Identifies the total count of items in the connection. */
+  totalCount: Scalars['Int']['output'];
+};
+
+/** An edge in a connection. */
+export type ChaptersEdge = {
+  __typename?: 'ChaptersEdge';
+  /** A cursor for use in pagination. */
+  cursor: Scalars['String']['output'];
+  /** The item at the end of the edge. */
+  node: Chapter;
 };
 
 /** Info about a character */
@@ -453,6 +493,7 @@ export type Creature = SearchContent & {
   creatureSubType: CreatureSubType;
   creatureType: CreatureType;
   id: Scalars['ID']['output'];
+  modelName: Scalars['String']['output'];
   name: Scalars['String']['output'];
   questsFinisher: Array<Quest>;
   questsStarter: Array<Quest>;
@@ -837,9 +878,10 @@ export type FloatOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Float']['input']>;
 };
 
-export type GameObject = SearchContent & {
+export type GameObject = {
   __typename?: 'GameObject';
   id: Scalars['ID']['output'];
+  modelName?: Maybe<Scalars['String']['output']>;
   /** The name of the Game Object */
   name: Scalars['String']['output'];
   questsFinisher: Array<Quest>;
@@ -1841,6 +1883,10 @@ export type Query = {
   __typename?: 'Query';
   /** Get an ability by its ID. */
   ability?: Maybe<AbilityInfo>;
+  /** Get one chapter */
+  chapter?: Maybe<Chapter>;
+  /** Query for chapters matching a filter */
+  chapters?: Maybe<ChaptersConnection>;
   /** Get one character */
   character?: Maybe<Character>;
   /** Query for CharacterRatings matching a filter */
@@ -1920,6 +1966,21 @@ export type Query = {
 
 export type QueryAbilityArgs = {
   id: Scalars['ID']['input'];
+};
+
+
+export type QueryChapterArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryChaptersArgs = {
+  after?: InputMaybe<Scalars['String']['input']>;
+  before?: InputMaybe<Scalars['String']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  last?: InputMaybe<Scalars['Int']['input']>;
+  order?: InputMaybe<Array<ChapterSortInput>>;
+  where?: InputMaybe<ChapterFilterInput>;
 };
 
 

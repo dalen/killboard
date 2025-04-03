@@ -4,11 +4,11 @@ import { gql, useQuery } from '@apollo/client';
 import clsx from 'clsx';
 import { Query } from '@/types';
 import { itemNameClass, statMultiplier } from '../itemUtils';
-import { ErrorMessage } from '../components/global/ErrorMessage';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { isPercentage } from '../utils';
-import { ItemQuests } from '../components/item/ItemQuests';
-import { ItemVendorsPurchase } from '../components/item/ItemVendorsPurchase';
-import { ItemVendorsSell } from '../components/item/ItemVendorsSell';
+import { ItemQuests } from '@/components/item/ItemQuests';
+import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
+import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
 import { ReactElement } from 'react';
 
 const ITEM_INFO = gql`

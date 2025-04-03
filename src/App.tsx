@@ -26,6 +26,8 @@ import { InstanceRun } from '@/pages/InstanceRun';
 import { Instances } from '@/pages/Instances';
 import { InstanceEncounterRun } from '@/pages/InstanceEncounterRun';
 import { GameObject } from '@/pages/GameObject';
+import { Chapter } from '@/pages/Chapter';
+import { Chapters } from '@/pages/Chapters';
 
 // Extend the Window interface to include gtag
 declare global {
@@ -101,6 +103,9 @@ function App() {
 
       <Route path="/quests" element={<Quests />} />
       <Route path="/quest/:id" element={<Quest />} />
+
+      <Route path="/chapters" element={<Chapters />} />
+      <Route path="/chapter/:id" element={<Chapter />} />
 
       <Route path="/search/:query" element={<Search />} />
       <Route path="/search/guild/:query" element={<SearchGuild />} />
