@@ -89,7 +89,7 @@ export function Creature({
     return <ErrorMessage customText={t('common:notFound')} />;
 
   const hasQuests = entry.questsStarter.length > 0;
-  const hasVendorItems = entry.vendorItems?.totalCount ?? 0 > 0;
+  const hasVendorItems = (entry.vendorItems?.totalCount ?? 0) > 0;
   const activeTab =
     tab ??
     (hasQuests ? 'quests' : undefined) ??
