@@ -83,6 +83,9 @@ export function Chapter(): ReactElement {
           <li>
             <Link to="/">{t('common:home')}</Link>
           </li>
+          <li>
+            <Link to="/chapters">{t('common:chapters')}</Link>
+          </li>
           <li className="is-active">
             <Link to={`/chapter/${id}`}>
               {t('pages:chapter.chapterId', { chapterId: id })}
@@ -108,16 +111,18 @@ export function Chapter(): ReactElement {
           <p className="is-size-6 is-family-secondary has-text-info">
             {t('pages:chapter.tier1')}
           </p>
-          {entry.influenceRewards
-            .filter((reward) => reward.tier === 1)
-            .map((reward) => (
-              <ItemIconWithPopup key={reward.item.id} item={reward.item} />
-            ))}
+          <div className="is-flex is-flex-wrap-wrap is-flex-direction-row">
+            {entry.influenceRewards
+              .filter((reward) => reward.tier === 1)
+              .map((reward) => (
+                <ItemIconWithPopup key={reward.item.id} item={reward.item} />
+              ))}
+          </div>
 
           <p className="is-size-6 is-family-secondary has-text-info">
             {t('pages:chapter.tier2')}
           </p>
-          <div className="is-flex is-flex-direction-row">
+          <div className="is-flex is-flex-wrap-wrap is-flex-direction-row">
             {entry.influenceRewards
               .filter((reward) => reward.tier === 2)
               .map((reward) => (
@@ -128,7 +133,7 @@ export function Chapter(): ReactElement {
           <p className="is-size-6 is-family-secondary has-text-info">
             {t('pages:chapter.tier3')}
           </p>
-          <div className="is-flex-direction-row">
+          <div className="is-flex is-flex-wrap-wrap is-flex-direction-row">
             {entry.influenceRewards
               .filter((reward) => reward.tier === 3)
               .map((reward) => (

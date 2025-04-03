@@ -27,6 +27,7 @@ const CHAPTERS = gql`
       nodes {
         id
         name
+        rank
         position {
           zone {
             name
@@ -129,7 +130,7 @@ export function Chapters(): ReactElement {
                   <Link to={`/chapter/${entry.id}`}>{entry.name}</Link>
                 </td>
                 <td>{entry.position.zone?.name}</td>
-                <td>{entry.rank}</td>
+                <td>{entry.rank != 0 ? entry.rank : ''}</td>
               </tr>
             ))}
           </tbody>
