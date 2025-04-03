@@ -134,7 +134,8 @@ export function Creature({
                   height={24}
                   className="px-1"
                 />
-                {t('pages:creature.questsStarter')}
+                {t('pages:creature.questsStarter')} (
+                {entry.questsStarter.length})
               </Link>
             </li>
           )}
@@ -148,7 +149,8 @@ export function Creature({
                   height={24}
                   className="px-1"
                 />
-                {t('pages:creature.vendorItems')}
+                {t('pages:creature.vendorItems')} (
+                {entry.vendorItems?.totalCount})
               </Link>
             </li>
           )}
