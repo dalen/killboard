@@ -7,7 +7,7 @@
     "@apollo/client": "^3.13.5",
     "@fortawesome/fontawesome-free": "^6.7.2",
     "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.2.0",
+    "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
     "@tippyjs/react": "^4.2.6",
     "clsx": "^2.1.1",
