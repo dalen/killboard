@@ -4,14 +4,12 @@ import { ReactElement } from 'react';
 
 const SKIRMISH_KILLS = gql`
   query GetSkirmishKills(
-    $id: UUID!
-    $startTime: Int
-    $endTime: Int
     $first: Int
     $last: Int
     $before: String
     $after: String
     $soloOnly: Boolean
+    $filter: KillFilterInput
   ) {
     kills(
       first: $first
@@ -19,10 +17,7 @@ const SKIRMISH_KILLS = gql`
       before: $before
       after: $after
       soloOnly: $soloOnly
-      where: {
-        and: [{ time: { gte: $startTime } }, { time: { lte: $endTime } }]
-        skirmishId: { eq: $id }
-      }
+      where: $filter
     ) {
       totalCount
       nodes {
@@ -72,20 +67,12 @@ const SKIRMISH_KILLS = gql`
   }
 `;
 
-export function SkirmishKills({
-  id,
-  startTime,
-  endTime,
-}: {
-  id: string;
-  startTime: number;
-  endTime: number;
-}): ReactElement {
+export function SkirmishKills({ id }: { id: string }): ReactElement {
   return (
     <KillsList
       query={SKIRMISH_KILLS}
       queryOptions={{
-        variables: { id, startTime, endTime },
+        variables: { filter: { skirmishId: { eq: id } } },
       }}
       perPage={25}
     />

@@ -5,17 +5,15 @@ import { ReactElement } from 'react';
 
 const SCENARIO_KILLS = gql`
   query GetScenarioKills(
-    $id: UUID!
     $first: Int
     $last: Int
     $before: String
     $after: String
-    $from: Int
-    $to: Int
     $soloOnly: Boolean
+    $filter: KillFilterInput
   ) {
     kills(
-      where: { time: { gte: $from, lte: $to }, instanceId: { eq: $id } }
+      where: $filter
       first: $first
       last: $last
       before: $before
@@ -78,7 +76,9 @@ export function ScenarioKills({ id }: { id: string }): ReactElement {
       title={t('scenarioKills.title')}
       query={SCENARIO_KILLS}
       queryOptions={{
-        variables: { id },
+        variables: {
+          filter: { instanceId: { eq: id } },
+        },
       }}
       perPage={10}
     />

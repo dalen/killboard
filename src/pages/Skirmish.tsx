@@ -347,13 +347,7 @@ export function Skirmish({
         </li>
       </div>
       {tab === 'scoreboard' && <SkirmishScoreboard id={id ?? ''} />}
-      {tab === 'kills' && (
-        <SkirmishKills
-          id={id ?? ''}
-          startTime={skirmish.startTime}
-          endTime={skirmish.endTime}
-        />
-      )}
+      {tab === 'kills' && <SkirmishKills id={id ?? ''} />}
       {tab === 'damage' && <SkirmishDamage id={id ?? ''} />}
       {tab === 'characterDamage' && <SkirmishDamageByCharacter id={id ?? ''} />}
     </div>
