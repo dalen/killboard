@@ -96,9 +96,9 @@ export function GuildFeudPage(): ReactElement {
   >(GUILD_FEUD_INFO, {
     variables: {
       guildId1: guildId1 ?? '',
-      guildInt1: guildId1,
+      guildInt1: Number(guildId1),
       guildId2: guildId2 ?? '',
-      guildInt2: guildId2,
+      guildInt2: Number(guildId2),
     },
   });
 
@@ -117,7 +117,12 @@ export function GuildFeudPage(): ReactElement {
           </li>
           <li className="is-active">
             <Link to={`/guild/${guildId1}/feud/${guildId2}`}>
-              {t('pages:guildFeud.guildFeudId', { guildId1, guildId2 })}
+              {t('pages:guildFeud.guildFeudId', {
+                guildId1,
+                guildId2,
+                guildInt1: Number(guildId1),
+                guildInt2: Number(guildId2),
+              })}
             </Link>
           </li>
         </ul>
