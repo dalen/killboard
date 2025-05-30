@@ -73,7 +73,12 @@ export function PlayerFeudPage(): ReactElement {
     player2: Character;
     player2kills: KillsConnection;
   }>(PLAYER_FEUD_INFO, {
-    variables: { playerId1, playerId2 },
+    variables: {
+      playerId1,
+      playerId2,
+      playerIntId1: Number(playerId1),
+      playerIntId2: Number(playerId2),
+    },
   });
 
   if (loading) return <progress className="progress" />;
@@ -94,8 +99,8 @@ export function PlayerFeudPage(): ReactElement {
               {t('pages:playerFeud.playerFeudId', {
                 playerId1,
                 playerId2,
-                playerIntId1: playerId1,
-                playerIntId2: playerId2,
+                playerIntId1: Number(playerId1),
+                playerIntId2: Number(playerId2),
               })}
             </Link>
           </li>
