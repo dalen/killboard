@@ -51,7 +51,7 @@ export function Storyline(): ReactElement {
             <Link to="/storylines">{t('common:storylines')}</Link>
           </li>
           <li className="is-active">
-            <Link to={`/chapter/${id}`}>
+            <Link to={`/storylines/${id}`}>
               {t('pages:warJournalStoryline.storylineName', {
                 storylineName: entry.name,
               })}
