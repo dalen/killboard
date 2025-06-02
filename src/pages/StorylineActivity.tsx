@@ -6,13 +6,9 @@ import { ReactElement } from 'react';
 import { GetWarJournalEntryQuery } from '@/__generated__/graphql';
 import clsx from 'clsx';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import {
-  INFLUENCE_REWARDS_FRAGMENT,
-  InfluenceRewards,
-} from '@/components/storylineEntry/InfluenceRewards';
 
 const WAR_JOURNAL_ENTRY_DETAILS = gql`
-  query GetWarJournalEntry($id: ID!) {
+  query GetWarJournalActivity($id: ID!) {
     warJournalEntry(id: $id) {
       id
       name
@@ -38,12 +34,8 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
         x
         y
       }
-      influenceRewards {
-        ...ChapterInfluenceReward
-      }
     }
   }
-  ${INFLUENCE_REWARDS_FRAGMENT}
 `;
 
 export function StorylineEntry(): ReactElement {
@@ -123,27 +115,6 @@ export function StorylineEntry(): ReactElement {
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div>
-        <div className="is-size-4 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.influenceRewards')}
-        </div>
-
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.basicRewards')}
-        </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
-
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.advancedRewards')}
-        </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
-
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.eliteRewards')}
-        </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
       </div>
     </div>
   );

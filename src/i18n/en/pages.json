@@ -207,6 +207,10 @@
   "warJournalStoryline": {
     "storylineName": "{{storylineName}}",
     "entryNumber": "Entry",
-    "entryName": "Name"
+    "entryName": "Name",
+    "influenceRewards": "Influence Rewards",
+    "basicRewards": "Basic",
+    "advancedRewards": "Advanced",
+    "eliteRewards": "Elte"
   }
 }
