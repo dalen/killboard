@@ -2850,7 +2850,7 @@ function print() { __p += __j.call(arguments, '') }
   }
 
   ${Fm}
-`;function VS({rewards:t,tier:e}){return s.jsx("div",{className:"mb-2 is-flex",children:t.filter(n=>n.tier===e).map(n=>s.jsx("div",{children:s.jsx(bn,{duration:0,placement:"top",content:s.jsx(qc,{itemId:n.item.id}),children:s.jsx("div",{children:s.jsx(V,{to:`/item/${n.item.id}`,children:s.jsx("figure",{className:"image is-48x48",children:s.jsxs("div",{style:{position:"relative"},children:[s.jsx("img",{style:{position:"absolute",top:0,left:0},src:n.item.iconUrl,alt:n.item.name}),n.count>1&&s.jsx("div",{className:"has-text-white",style:{position:"absolute",top:0,right:6},children:n.count})]})})})})})},n.item.id))})}const D3=Oe`
+`;function VS({rewards:t,tier:e}){return s.jsx("div",{className:"mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap",children:t.filter(n=>n.tier===e).map(n=>s.jsx("div",{children:s.jsx(bn,{duration:0,placement:"top",content:s.jsx(qc,{itemId:n.item.id}),children:s.jsx("div",{children:s.jsx(V,{to:`/item/${n.item.id}`,children:s.jsx("figure",{className:"image is-48x48",children:s.jsxs("div",{style:{position:"relative"},children:[s.jsx("img",{style:{position:"absolute",top:0,left:0},src:n.item.iconUrl,alt:n.item.name}),n.count>1&&s.jsx("div",{className:"has-text-white",style:{position:"absolute",top:0,right:6},children:n.count})]})})})})})},n.item.id))})}const D3=Oe`
   query GetWarJournalEntry($id: ID!) {
     warJournalEntry(id: $id) {
       storyline {
