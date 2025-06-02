@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { KillGuildLeaderboardEntry } from '@/types';
+import { KillGuildLeaderboardEntry } from '@/__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import '@/components/styles/table.scss';
 

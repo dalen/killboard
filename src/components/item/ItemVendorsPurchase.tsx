@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import { GoldPrice } from '@/components/GoldPrice';
-import { Query } from '@/types';
+import { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
   ItemVendorsFilters,

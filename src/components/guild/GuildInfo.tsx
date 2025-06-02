@@ -1,24 +1,39 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import {
-  GuildHeraldry as GuildHeraldryType,
-  MembersConnection,
-  Realm,
-} from '../../__generated__/graphql';
+import { GuildInfoFragment } from '../../__generated__/graphql';
 import { ReactElement } from 'react';
+import { gql } from '@apollo/client';
+
+export const GUILD_INFO_FRAGMENT = gql`
+  fragment GuildInfo on Guild {
+    name
+    description
+    briefDescription
+    level
+    realm
+    heraldry {
+      emblem
+      pattern
+      color1
+      color2
+      shape
+    }
+    leader {
+      id
+      name
+      career
+    }
+    members {
+      totalCount
+    }
+  }
+`;
 
 export function GuildInfo({
   guild,
 }: {
-  guild: {
-    heraldry: GuildHeraldryType;
-    name: string;
-    leader?: { id: string; name: string } | null | undefined;
-    members?: Partial<MembersConnection> | null | undefined;
-    description: string;
-    realm: Realm;
-  };
+  guild: GuildInfoFragment;
 }): ReactElement {
   const { t } = useTranslation(['components']);
 

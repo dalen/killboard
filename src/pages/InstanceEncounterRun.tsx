@@ -8,8 +8,11 @@ import {
 } from 'date-fns';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { Query } from '@/types';
-import { InstanceRunScoreboard } from '@/components/instance_run/InstanceRunScoreboard';
+import {
+  INSTANCE_RUN_SCOREBOARD_FRAGMENT,
+  InstanceRunScoreboard,
+} from '@/components/instance_run/InstanceRunScoreboard';
+import { GetInstanceEncounterRunQuery } from '@/__generated__/graphql';
 
 const INSTANCE_ENCOUNTER_RUN = gql`
   query GetInstanceEncounterRun($id: ID!) {
@@ -18,38 +21,7 @@ const INSTANCE_ENCOUNTER_RUN = gql`
       start
       end
       scoreboardEntries {
-        character {
-          id
-          name
-          career
-        }
-        guild {
-          id
-          name
-          heraldry {
-            emblem
-            pattern
-            color1
-            color2
-            shape
-          }
-        }
-        level
-        renownRank
-        itemRating
-        deaths
-        damage
-        killDamage
-        healing
-        healingSelf
-        healingOthers
-        protection
-        protectionSelf
-        protectionOthers
-        damageReceived
-        resurrectionsDone
-        healingReceived
-        protectionReceived
+        ...InstanceEncounterRunScoreboardEntry
       }
       encounter {
         id
@@ -57,16 +29,21 @@ const INSTANCE_ENCOUNTER_RUN = gql`
       }
     }
   }
+
+  ${INSTANCE_RUN_SCOREBOARD_FRAGMENT}
 `;
 
 export function InstanceEncounterRun() {
   const { instanceRunId, id } = useParams();
   const { t } = useTranslation(['common', 'pages']);
-  const { data, error, loading } = useQuery<Query>(INSTANCE_ENCOUNTER_RUN, {
-    variables: {
-      id,
+  const { data, error, loading } = useQuery<GetInstanceEncounterRunQuery>(
+    INSTANCE_ENCOUNTER_RUN,
+    {
+      variables: {
+        id,
+      },
     },
-  });
+  );
 
   if (loading || !data?.instanceEncounterRun)
     return <progress className="progress" />;

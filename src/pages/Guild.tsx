@@ -3,20 +3,21 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { GuildRecentDeaths } from '@/components/guild/GuildRecentDeaths';
 import { GuildRecentKills } from '@/components/guild/GuildRecentKills';
-import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildMemberList } from '@/components/guild/GuildMemberList';
-import { GuildInfo } from '@/components/guild/GuildInfo';
+import { GUILD_INFO_FRAGMENT, GuildInfo } from '@/components/guild/GuildInfo';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { GuildLatestSkirmishes } from '@/components/guild/GuildLatestSkirmishes';
 import { ReactElement } from 'react';
+import { GetGuildInfoQuery } from '@/__generated__/graphql';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
     guild(id: $id) {
+      ...GuildInfo
       name
       description
       briefDescription
@@ -55,6 +56,8 @@ const GUILD_INFO = gql`
       }
     }
   }
+
+  ${GUILD_INFO_FRAGMENT}
 `;
 
 export function Guild({
@@ -64,7 +67,7 @@ export function Guild({
 }): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(GUILD_INFO, {
+  const { loading, error, data } = useQuery<GetGuildInfoQuery>(GUILD_INFO, {
     variables: { id: Number(id) },
   });
 

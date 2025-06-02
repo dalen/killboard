@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { Query } from '@/types';
+import { Query } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { SortConfig, SortConfigDirection } from '@/hooks/useSortableData';

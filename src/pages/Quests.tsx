@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { Query, QuestFilterInput } from '@/types';
+import { QuestFilterInput } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { GoldPrice } from '@/components/GoldPrice';
@@ -12,6 +12,7 @@ import { questTypeIcon } from '../utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
+import { GetQuestsQuery } from '@/__generated__/graphql';
 
 const QUESTS = gql`
   query GetQuests(
@@ -88,7 +89,7 @@ export function Quests(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
-  const { loading, error, data, refetch } = useQuery<Query>(QUESTS, {
+  const { loading, error, data, refetch } = useQuery<GetQuestsQuery>(QUESTS, {
     variables: {
       where: getFilters(search),
       first: perPage,

@@ -1,10 +1,52 @@
 import { Link } from 'react-router';
 import { sum } from 'lodash';
-import { Attacker as AttackerType, KillDamage } from '@/types';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { killDamageText } from '@/utils';
 import { ReactElement } from 'react';
+import { AttackerFragment, KillDamageFragment } from '@/__generated__/graphql';
+import { gql } from '@apollo/client';
+
+export const KILL_ATTACKER_FRAGMENT = gql`
+  fragment Attacker on Attacker {
+    damagePercent
+    level
+    renownRank
+    character {
+      id
+      name
+      career
+    }
+    guild {
+      id
+      name
+      realm
+      heraldry {
+        emblem
+        pattern
+        color1
+        color2
+        shape
+      }
+    }
+  }
+`;
+
+export const KILL_DAMAGE_FRAGMENT = gql`
+  fragment KillDamage on KillDamage {
+    attackerType
+    damageType
+    attacker {
+      id
+    }
+    ability {
+      id
+      name
+      iconUrl
+    }
+    damageAmount
+  }
+`;
 
 export function Attacker({
   title,
@@ -14,8 +56,8 @@ export function Attacker({
   deathblow,
 }: {
   title: string;
-  attacker: AttackerType;
-  killDamage: KillDamage[];
+  attacker: AttackerFragment;
+  killDamage: KillDamageFragment[];
   showKillDamage: boolean;
   deathblow: boolean;
 }): ReactElement {
@@ -32,7 +74,7 @@ export function Attacker({
       acc.push({ ...curr });
     }
     return acc;
-  }, [] as KillDamage[]);
+  }, [] as KillDamageFragment[]);
 
   const killDamageSum = sum(killDamage.map((d) => d.damageAmount));
 

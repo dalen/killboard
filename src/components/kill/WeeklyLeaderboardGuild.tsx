@@ -1,7 +1,7 @@
 import { getISOWeek, getISOWeekYear } from 'date-fns';
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Query } from '@/types';
+import { Query } from '@/__generated__/graphql';
 import { LeaderboardGuildTable } from '@/components/kill/LeaderboardGuildTable';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ReactElement } from 'react';

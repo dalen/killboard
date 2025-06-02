@@ -1,6 +1,6 @@
 import { gql, useQuery } from '@apollo/client';
 import { useParams } from 'react-router';
-import { KillDamage, Query } from '@/types';
+import { KillDamage, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
 import { CharacterInfo } from '@/components/character/CharacterInfo';

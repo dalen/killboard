@@ -1,5 +1,5 @@
 import { gql, useQuery } from '@apollo/client';
-import { KillDamage, Query } from '@/types';
+import { KillDamage, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
 import { ReactElement } from 'react';

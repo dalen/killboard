@@ -2,12 +2,12 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import Tippy from '@tippyjs/react';
-import { Query } from '@/types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { WarIcon } from '@/components/WarIcon';
 import { ReactElement } from 'react';
+import { GetQuestInfoQuery } from '@/__generated__/graphql';
 
 const QUEST_INFO = gql`
   query GetQuestInfo($id: ID!) {
@@ -65,7 +65,7 @@ const QUEST_INFO = gql`
 export function Quest(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(QUEST_INFO, {
+  const { loading, error, data } = useQuery<GetQuestInfoQuery>(QUEST_INFO, {
     variables: {
       id,
     },

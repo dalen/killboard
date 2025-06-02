@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { CreatureFilterInput, Query } from '@/types';
+import { CreatureFilterInput, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';

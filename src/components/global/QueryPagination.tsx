@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { ApolloQueryResult, OperationVariables } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { PageInfo } from '@/types';
+import { PageInfo } from '@/__generated__/graphql';
 
 export function QueryPagination<T>({
   pageInfo,

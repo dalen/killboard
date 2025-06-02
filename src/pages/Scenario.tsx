@@ -10,11 +10,54 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ScenarioKills } from '@/components/scenario/ScenarioKills';
-import { Query } from '@/types';
 import { ScenarioScoreboard } from '@/components/scenario/ScenarioScoreboard';
 import { ScenarioHeatmap } from '@/components/scenario/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '@/components/scenario/ScenarioSkirmishes';
 import { ReactElement } from 'react';
+import { GetScenarioInfoQuery } from '@/__generated__/graphql';
+
+export const SCENARIO_SCOREBOARD_FRAGMENT = gql`
+  fragment ScenarioScoreboardEntry on ScenarioScoreboardEntry {
+    character {
+      id
+      name
+      career
+    }
+    guild {
+      id
+      name
+      realm
+      heraldry {
+        emblem
+        pattern
+        color1
+        color2
+        shape
+      }
+    }
+    team
+    level
+    renownRank
+    quitter
+    protection
+    kills
+    deathBlows
+    deaths
+    damage
+    healing
+    objectiveScore
+    killsSolo
+    killDamage
+    healingSelf
+    healingOthers
+    protectionSelf
+    protectionOthers
+    damageReceived
+    resurrectionsDone
+    healingReceived
+    protectionReceived
+  }
+`;
 
 const SCENARIO_INFO = gql`
   query GetScenarioInfo($id: ID!) {
@@ -33,46 +76,12 @@ const SCENARIO_INFO = gql`
       points
       queueType
       scoreboardEntries {
-        character {
-          id
-          name
-          career
-        }
-        guild {
-          id
-          name
-          heraldry {
-            emblem
-            pattern
-            color1
-            color2
-            shape
-          }
-        }
-        team
-        level
-        renownRank
-        quitter
-        protection
-        kills
-        deathBlows
-        deaths
-        damage
-        healing
-        objectiveScore
-        killsSolo
-        killDamage
-        healingSelf
-        healingOthers
-        protectionSelf
-        protectionOthers
-        damageReceived
-        resurrectionsDone
-        healingReceived
-        protectionReceived
+        ...ScenarioScoreboardEntry
       }
     }
   }
+
+  ${SCENARIO_SCOREBOARD_FRAGMENT}
 `;
 
 const ScenarioQueueTypes: Record<number, string> = {
@@ -93,9 +102,12 @@ export function Scenario({
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
-  const { loading, error, data } = useQuery<Query>(SCENARIO_INFO, {
-    variables: { id },
-  });
+  const { loading, error, data } = useQuery<GetScenarioInfoQuery>(
+    SCENARIO_INFO,
+    {
+      variables: { id },
+    },
+  );
 
   if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;

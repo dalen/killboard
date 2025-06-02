@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
-import { Query } from '@/types';
+import { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { GoldPrice } from '@/components/GoldPrice';

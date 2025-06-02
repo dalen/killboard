@@ -2,7 +2,6 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { gql, useQuery } from '@apollo/client';
 import clsx from 'clsx';
-import { Query } from '@/types';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { isPercentage } from '../utils';
@@ -10,6 +9,7 @@ import { ItemQuests } from '@/components/item/ItemQuests';
 import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
 import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
 import { ReactElement } from 'react';
+import { GetItemInfoQuery } from '@/__generated__/graphql';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -83,7 +83,7 @@ export function Item({
 }): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(ITEM_INFO, {
+  const { loading, error, data } = useQuery<GetItemInfoQuery>(ITEM_INFO, {
     variables: {
       id,
     },

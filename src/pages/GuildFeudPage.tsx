@@ -2,7 +2,7 @@ import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { GuildInfo } from '@/components/guild/GuildInfo';
+import { GUILD_INFO_FRAGMENT, GuildInfo } from '@/components/guild/GuildInfo';
 import { GuildFeud } from '@/components/guild/GuildFeud';
 import {
   GetGuildFeudInfoQuery,
@@ -18,49 +18,11 @@ const GUILD_FEUD_INFO = gql`
     $guildInt2: UnsignedInt!
   ) {
     guild1: guild(id: $guildId1) {
-      name
-      description
-      briefDescription
-      level
-      realm
-      heraldry {
-        emblem
-        pattern
-        color1
-        color2
-        shape
-      }
-      leader {
-        id
-        name
-        career
-      }
-      members {
-        totalCount
-      }
+      ...GuildInfo
     }
 
     guild2: guild(id: $guildId2) {
-      name
-      description
-      briefDescription
-      level
-      realm
-      heraldry {
-        emblem
-        pattern
-        color1
-        color2
-        shape
-      }
-      leader {
-        id
-        name
-        career
-      }
-      members {
-        totalCount
-      }
+      ...GuildInfo
     }
 
     guild1kills: kills(
@@ -83,6 +45,8 @@ const GUILD_FEUD_INFO = gql`
       totalCount
     }
   }
+
+  ${GUILD_INFO_FRAGMENT}
 `;
 
 export function GuildFeudPage(): ReactElement {

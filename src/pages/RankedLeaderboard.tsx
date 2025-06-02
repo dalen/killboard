@@ -2,9 +2,9 @@ import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { Query } from '@/types';
 import { RankedLeaderboardTable } from '@/components/RankedLeaderboardTable';
 import { ReactElement } from 'react';
+import { GetRankedLeaderboardSeasonsQuery } from '@/__generated__/graphql';
 
 const RANKED_LEADERBOARD_SEASONS = gql`
   query GetRankedLeaderboardSeasons {
@@ -21,7 +21,7 @@ const RANKED_LEADERBOARD_SEASONS = gql`
 export function RankedLeaderboard(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
-  const { loading, error, data } = useQuery<Query>(
+  const { loading, error, data } = useQuery<GetRankedLeaderboardSeasonsQuery>(
     RANKED_LEADERBOARD_SEASONS,
     {},
   );

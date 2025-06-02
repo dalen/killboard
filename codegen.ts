@@ -10,10 +10,8 @@ const config: CodegenConfig = {
       plugins: [],
       presetConfig: {
         gqlTagName: 'gql',
+        fragmentMasking: false,
       },
-    },
-    'src/types.ts': {
-      plugins: ['@graphql-codegen/typescript'],
     },
   },
   ignoreNoDocuments: true,

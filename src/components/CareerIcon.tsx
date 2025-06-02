@@ -1,5 +1,5 @@
 import { ReactElement } from 'react';
-import { Career } from '@/types';
+import { Career } from '@/__generated__/graphql';
 import { careerIcon } from '@/utils';
 
 export function CareerIcon({ career }: { career: Career }): ReactElement {

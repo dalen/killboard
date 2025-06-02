@@ -199,5 +199,14 @@
     "numTanks": "Tanks",
     "numDps": "Dps",
     "numHealers": "Healers"
+  },
+  "warJournalStorylines": {
+    "title": "Storylines",
+    "name": "Name"
+  },
+  "warJournalStoryline": {
+    "storylineName": "{{storylineName}}",
+    "entryNumber": "Entry",
+    "entryName": "Name"
   }
 }

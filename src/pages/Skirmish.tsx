@@ -10,7 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import _ from 'lodash';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { Query, Realm } from '@/types';
+import { Realm } from '@/__generated__/graphql';
 import { SkirmishScoreboard } from '@/components/skirmish/SkirmishScoreboard';
 import { SkirmishTopPlayer } from '@/components/skirmish/SkirmishTopPlayer';
 import { ZoneHeatmap } from '@/components/ZoneHeatmap';
@@ -19,6 +19,7 @@ import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { SkirmishDamage } from '@/components/skirmish/SkirmishDamage';
 import { SkirmishDamageByCharacter } from '@/components/skirmish/SkirmishDamageByCharacter';
 import { ReactElement } from 'react';
+import { GetSkirmishInfoQuery } from '@/__generated__/graphql';
 
 const SKIRMISH_INFO = gql`
   query GetSkirmishInfo($id: ID!) {
@@ -90,9 +91,12 @@ export function Skirmish({
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
-  const { loading, error, data } = useQuery<Query>(SKIRMISH_INFO, {
-    variables: { id },
-  });
+  const { loading, error, data } = useQuery<GetSkirmishInfoQuery>(
+    SKIRMISH_INFO,
+    {
+      variables: { id },
+    },
+  );
 
   if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;

@@ -1,78 +1,28 @@
 import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { EquipSlot, ItemRarity, ItemType, Query } from '@/types';
+import {
+  EquipSlot,
+  GetCharacterArmoryQuery,
+  ItemRarity,
+  ItemType,
+} from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { CharacterItem } from '@/components/character/CharacterItem';
+import {
+  CharacterItem,
+  EQUIPPED_ITEM_FRAGMENT,
+} from '@/components/character/CharacterItem';
 import { ReactElement } from 'react';
 
 const CHARACTER_ARMORY = gql`
   query GetCharacterArmory($id: ID!) {
     character(id: $id) {
       items {
-        equipSlot
-        talismans {
-          name
-          rarity
-          iconUrl
-          stats {
-            stat
-            value
-          }
-          buffs {
-            id
-            description
-          }
-        }
-        item {
-          id
-          name
-          description
-          rarity
-          itemLevel
-          iconUrl
-          stats {
-            stat
-            value
-          }
-          type
-          levelRequirement
-          renownRankRequirement
-          slot
-          armor
-          careerRestriction
-          talismanSlots
-          speed
-          dps
-          itemSet {
-            id
-            name
-            items {
-              id
-            }
-            bonuses {
-              itemsRequired
-              bonus {
-                ... on Ability {
-                  description
-                  __typename
-                }
-                ... on ItemStat {
-                  stat
-                  value
-                  percentage
-                  __typename
-                }
-              }
-            }
-          }
-          buffs {
-            id
-            description
-          }
-        }
+        ...EquippedCharacterItem
       }
     }
   }
+
+  ${EQUIPPED_ITEM_FRAGMENT}
 `;
 
 function NoItem() {
@@ -108,11 +58,14 @@ function NoItem() {
 
 export function CharacterArmory({ id }: { id: number }): ReactElement {
   const { t } = useTranslation('components');
-  const { loading, error, data } = useQuery<Query>(CHARACTER_ARMORY, {
-    variables: {
-      id,
+  const { loading, error, data } = useQuery<GetCharacterArmoryQuery>(
+    CHARACTER_ARMORY,
+    {
+      variables: {
+        id,
+      },
     },
-  });
+  );
 
   if (loading) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;

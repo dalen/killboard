@@ -1,19 +1,99 @@
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
-import {
-  InstanceEncounterRunScoreboardEntry,
-  InstanceRunScoreboardEntry,
-} from '@/types';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '@/hooks/useSortableData';
 import { ReactElement } from 'react';
+import {
+  InstanceEncounterRunScoreboardEntryFragment,
+  InstanceRunScoreboardEntryFragment,
+} from '@/__generated__/graphql';
+import { gql } from '@apollo/client';
+
+export const INSTANCE_RUN_SCOREBOARD_FRAGMENT = gql`
+  fragment InstanceRunScoreboardEntry on InstanceRunScoreboardEntry {
+    character {
+      id
+      name
+      career
+    }
+    guild {
+      id
+      name
+      realm
+      heraldry {
+        emblem
+        pattern
+        color1
+        color2
+        shape
+      }
+    }
+    level
+    renownRank
+    archetype
+    itemRating
+    deaths
+    damage
+    killDamage
+    healing
+    healingSelf
+    healingOthers
+    protection
+    protectionSelf
+    protectionOthers
+    damageReceived
+    resurrectionsDone
+    healingReceived
+    protectionReceived
+  }
+
+  fragment InstanceEncounterRunScoreboardEntry on InstanceEncounterRunScoreboardEntry {
+    character {
+      id
+      name
+      career
+    }
+    guild {
+      id
+      name
+      realm
+      heraldry {
+        emblem
+        pattern
+        color1
+        color2
+        shape
+      }
+    }
+    level
+    renownRank
+    archetype
+    itemRating
+    deaths
+    damage
+    killDamage
+    healing
+    healingSelf
+    healingOthers
+    protection
+    protectionSelf
+    protectionOthers
+    damageReceived
+    resurrectionsDone
+    healingReceived
+    protectionReceived
+  }
+`;
 
 export function InstanceRunScoreboard({
   entries,
 }: {
-  entries: (InstanceRunScoreboardEntry | InstanceEncounterRunScoreboardEntry)[];
+  entries: (
+    | InstanceRunScoreboardEntryFragment
+    | InstanceEncounterRunScoreboardEntryFragment
+  )[];
 }): ReactElement {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
@@ -103,10 +183,7 @@ export function InstanceRunScoreboard({
         </thead>
         <tbody>
           {items.map((entry) => (
-            <tr
-              key={entry.character.id}
-              className={`instance-scoreboard-row-team-${entry.team}`}
-            >
+            <tr key={entry.character.id}>
               <td aria-labelledby="th-career">
                 <CareerIcon career={entry.character.career} />
               </td>

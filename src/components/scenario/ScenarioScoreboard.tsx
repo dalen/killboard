@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
-import { ScenarioScoreboardEntry } from '@/types';
+import { ScenarioScoreboardEntryFragment } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '@/hooks/useSortableData';
@@ -10,7 +10,7 @@ import { ReactElement } from 'react';
 export function ScenarioScoreboard({
   entries,
 }: {
-  entries: ScenarioScoreboardEntry[];
+  entries: ScenarioScoreboardEntryFragment[];
 }): ReactElement {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
@@ -30,14 +30,14 @@ export function ScenarioScoreboard({
             <th
               id="th-career"
               align="left"
-              onClick={() => requestSort('career')}
+              onClick={() => requestSort('character.career')}
               className={`${getClassName('career')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.career')}
             </th>
             <th
               align="left"
-              onClick={() => requestSort('name')}
+              onClick={() => requestSort('character.name')}
               className={`${getClassName('name')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.name')}
@@ -45,7 +45,7 @@ export function ScenarioScoreboard({
             <th
               colSpan={2}
               align="left"
-              onClick={() => requestSort('guild')}
+              onClick={() => requestSort('guild.name')}
               className={`${getClassName('guild')} is-clickable has-text-link`}
             >
               {t('components:scenarioScoreboard.guild')}
@@ -124,7 +124,7 @@ export function ScenarioScoreboard({
           </tr>
         </thead>
         <tbody>
-          {items.map((entry) => (
+          {items.map((entry: ScenarioScoreboardEntryFragment) => (
             <tr
               key={entry.character.id}
               className={`scenario-scoreboard-row-team-${entry.team}`}

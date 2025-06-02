@@ -8,13 +8,17 @@ import {
 } from 'date-fns';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { Archetype, Query } from '@/types';
+import { Archetype } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { InstanceRunScoreboard } from '@/components/instance_run/InstanceRunScoreboard';
+import {
+  INSTANCE_RUN_SCOREBOARD_FRAGMENT,
+  InstanceRunScoreboard,
+} from '@/components/instance_run/InstanceRunScoreboard';
 import clsx from 'clsx';
+import { InstanceRunQuery } from '@/__generated__/graphql';
 
 const INSTANCE_RUN = gql`
-  query GetInstanceRun($id: ID!) {
+  query InstanceRun($id: ID!) {
     instanceRun(id: $id) {
       id
       start
@@ -24,39 +28,7 @@ const INSTANCE_RUN = gql`
         name
       }
       scoreboardEntries {
-        character {
-          id
-          name
-          career
-        }
-        guild {
-          id
-          name
-          heraldry {
-            emblem
-            pattern
-            color1
-            color2
-            shape
-          }
-        }
-        level
-        renownRank
-        archetype
-        itemRating
-        deaths
-        damage
-        killDamage
-        healing
-        healingSelf
-        healingOthers
-        protection
-        protectionSelf
-        protectionOthers
-        damageReceived
-        resurrectionsDone
-        healingReceived
-        protectionReceived
+        ...InstanceRunScoreboardEntry
       }
       encounters {
         id
@@ -78,12 +50,14 @@ const INSTANCE_RUN = gql`
       }
     }
   }
+
+  ${INSTANCE_RUN_SCOREBOARD_FRAGMENT}
 `;
 
 export function InstanceRun() {
   const { id } = useParams();
   const { t } = useTranslation(['common', 'pages']);
-  const { data, error, loading } = useQuery<Query>(INSTANCE_RUN, {
+  const { data, error, loading } = useQuery<InstanceRunQuery>(INSTANCE_RUN, {
     variables: {
       id,
     },

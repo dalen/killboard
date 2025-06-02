@@ -1,10 +1,10 @@
 import {
   Career,
-  KillDamage,
+  KillDamageFragment,
   KillDamageSourceType,
   QuestRepeatableType,
   QuestTypeFlagsFlags,
-} from '@/types';
+} from '@/__generated__/graphql';
 
 export const careerIcon = (career: Career): string => {
   switch (career) {
@@ -115,7 +115,7 @@ export const isPercentage = (stat: string) => {
   return '';
 };
 
-export const killDamageText = (killDamage: KillDamage): string => {
+export const killDamageText = (killDamage: KillDamageFragment): string => {
   if (killDamage.damageType === KillDamageSourceType.FallDamage)
     return 'Fall Damage';
 

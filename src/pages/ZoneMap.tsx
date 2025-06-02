@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ZoneHeatmap } from '@/components/ZoneHeatmap';
-import { Query } from '@/types';
 import { ReactElement } from 'react';
+import { GetZoneHeatmapQuery } from '@/__generated__/graphql';
 
 const ZONE_HEATMAP = gql`
   query GetZoneHeatmap($id: ID, $from: Long) {
@@ -26,7 +26,7 @@ export function ZoneMap(): ReactElement {
   const date =
     Math.round(new Date().setUTCHours(0, 0, 0, 0) / 1000) - 60 * 60 * 24 * 30;
 
-  const { loading, error, data } = useQuery<Query>(ZONE_HEATMAP, {
+  const { loading, error, data } = useQuery<GetZoneHeatmapQuery>(ZONE_HEATMAP, {
     variables: {
       id,
       from: date,

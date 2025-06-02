@@ -2,12 +2,13 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { InstanceFilterInput, Query } from '@/types';
+import { InstanceFilterInput } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
+import { GetInstancesQuery } from '@/__generated__/graphql';
 
 const QUERY = gql`
   query GetInstances(
@@ -61,7 +62,7 @@ export function Instances(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
-  const { loading, error, data, refetch } = useQuery<Query>(QUERY, {
+  const { loading, error, data, refetch } = useQuery<GetInstancesQuery>(QUERY, {
     variables: {
       where: getFilters(search),
       first: perPage,

@@ -1,10 +1,71 @@
 import { ReactElement, useState } from 'react';
 import { Link } from 'react-router';
-import { Item } from '@/types';
 import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
 import { itemFigureClass } from '@/itemUtils';
+import { gql } from '@apollo/client';
+import { ItemListEntryFragment } from '@/__generated__/graphql';
 
-export function ItemIconWithPopup({ item }: { item: Item }): ReactElement {
+export const ITEM_FRAGMENT = gql`
+  fragment ItemListEntry on Item {
+    id
+    iconUrl
+    name
+    careerRestriction
+    raceRestriction
+    uniqueEquipped
+    description
+    type
+    slot
+    rarity
+    armor
+    dps
+    speed
+    levelRequirement
+    renownRankRequirement
+    itemLevel
+    talismanSlots
+    itemSet {
+      id
+      name
+      items {
+        id
+      }
+      bonuses {
+        itemsRequired
+        bonus {
+          ... on Ability {
+            description
+            __typename
+          }
+          ... on ItemStat {
+            stat
+            value
+            percentage
+            __typename
+          }
+        }
+      }
+    }
+    abilities {
+      id
+      description
+    }
+    buffs {
+      id
+      description
+    }
+    stats {
+      stat
+      value
+    }
+  }
+`;
+
+export function ItemIconWithPopup({
+  item,
+}: {
+  item: ItemListEntryFragment;
+}): ReactElement {
   const [modalOpen, setModalOpen] = useState(false);
 
   const showModal = () => {

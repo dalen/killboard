@@ -7,7 +7,7 @@ import {
   format,
 } from 'date-fns';
 import { Link, useSearchParams } from 'react-router';
-import { Archetype, Query } from '@/types';
+import { Archetype, Query } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';

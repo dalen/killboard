@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Character } from '@/types';
+import { Character } from '@/__generated__/graphql';
 import { careerIcon } from '@/utils';
 import { ReactElement } from 'react';
 

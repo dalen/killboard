@@ -2,13 +2,15 @@ import { gql, useQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { SearchBox } from '@/components/global/SearchBox';
-import { ItemFilterInput, ItemType, Query } from '@/types';
+import { ItemFilterInput, ItemType } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ItemListEntry } from '@/components/item/ItemListEntry';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ReactElement } from 'react';
 import clsx from 'clsx';
+import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+import { SearchItemsQuery } from '@/__generated__/graphql';
 
 const SEARCH_ITEMS = gql`
   query SearchItems(
@@ -30,51 +32,7 @@ const SEARCH_ITEMS = gql`
       after: $after
     ) {
       nodes {
-        id
-        iconUrl
-        name
-        careerRestriction
-        description
-        type
-        slot
-        rarity
-        armor
-        dps
-        speed
-        levelRequirement
-        renownRankRequirement
-        itemLevel
-        talismanSlots
-        itemSet {
-          id
-          name
-          items {
-            id
-          }
-          bonuses {
-            itemsRequired
-            bonus {
-              ... on Ability {
-                description
-                __typename
-              }
-              ... on ItemStat {
-                stat
-                value
-                percentage
-                __typename
-              }
-            }
-          }
-        }
-        buffs {
-          id
-          description
-        }
-        stats {
-          stat
-          value
-        }
+        ...ItemListEntry
       }
       pageInfo {
         hasNextPage
@@ -84,6 +42,8 @@ const SEARCH_ITEMS = gql`
       }
     }
   }
+
+  ${ITEM_FRAGMENT}
 `;
 
 const getSearchFilter = (search: URLSearchParams): ItemFilterInput => {
@@ -134,14 +94,17 @@ export function Items(): ReactElement {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);
-  const { loading, error, data, refetch } = useQuery<Query>(SEARCH_ITEMS, {
-    variables: {
-      query: getItemsFilters(search),
-      ...usableByCareerFilter(search),
-      ...hasStatsFilter(search),
-      first: perPage,
+  const { loading, error, data, refetch } = useQuery<SearchItemsQuery>(
+    SEARCH_ITEMS,
+    {
+      variables: {
+        query: getItemsFilters(search),
+        ...usableByCareerFilter(search),
+        ...hasStatsFilter(search),
+        first: perPage,
+      },
     },
-  });
+  );
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 

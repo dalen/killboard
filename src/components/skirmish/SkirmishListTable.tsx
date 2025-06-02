@@ -7,7 +7,7 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Skirmish, Realm } from '@/types';
+import { Skirmish, Realm } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import clsx from 'clsx';

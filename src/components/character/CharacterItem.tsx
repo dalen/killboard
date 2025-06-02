@@ -1,18 +1,55 @@
 import { ReactElement, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { CharacterItem as CharacterItemType, Item } from '@/types';
+import {
+  EquippedCharacterItemFragment,
+  ItemListEntryFragment,
+  TalismanFragment,
+} from '@/__generated__/graphql';
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '@/itemUtils';
+import { gql } from '@apollo/client';
+import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+
+export const ITEM_TALISMAN_FRAGMENT = gql`
+  fragment Talisman on Item {
+    id
+    name
+    rarity
+    iconUrl
+    stats {
+      stat
+      value
+    }
+    buffs {
+      id
+      description
+    }
+  }
+`;
+
+export const EQUIPPED_ITEM_FRAGMENT = gql`
+  fragment EquippedCharacterItem on CharacterItem {
+    equipSlot
+    talismans {
+      ...Talisman
+    }
+    item {
+      ...ItemListEntry
+    }
+  }
+  ${ITEM_TALISMAN_FRAGMENT}
+  ${ITEM_FRAGMENT}
+`;
 
 export function CharacterItem({
   item,
   talismans = [],
   itemsEquipped = [],
 }: {
-  item: Item;
-  talismans?: Item[];
-  itemsEquipped?: CharacterItemType[];
+  item: ItemListEntryFragment;
+  talismans?: TalismanFragment[];
+  itemsEquipped?: EquippedCharacterItemFragment[];
 }): ReactElement {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);

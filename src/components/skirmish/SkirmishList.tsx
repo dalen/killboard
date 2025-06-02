@@ -2,7 +2,7 @@ import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Query } from '@/types';
+import { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';

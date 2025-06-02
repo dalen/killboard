@@ -3,15 +3,19 @@ import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { Attacker } from '@/components/kill/Attacker';
+import {
+  Attacker,
+  KILL_ATTACKER_FRAGMENT,
+  KILL_DAMAGE_FRAGMENT,
+} from '@/components/kill/Attacker';
 import { CareerIcon } from '@/components/CareerIcon';
 import { PlayerFeud } from '@/components/kill/PlayerFeud';
 import { Map } from '@/components/Map';
-import { Query } from '@/types';
 import { GuildFeud } from '@/components/guild/GuildFeud';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { ReactElement } from 'react';
+import { GetKillQuery } from '@/__generated__/graphql';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -61,51 +65,25 @@ const KILL_DETAILS = gql`
         }
       }
       attackers {
-        damagePercent
-        level
-        renownRank
-        character {
-          id
-          name
-          career
-        }
-        guild {
-          id
-          name
-          realm
-          heraldry {
-            emblem
-            pattern
-            color1
-            color2
-            shape
-          }
-        }
+        ...Attacker
       }
       damage {
-        attackerType
-        damageType
-        attacker {
-          id
-        }
-        ability {
-          id
-          name
-          iconUrl
-        }
-        damageAmount
+        ...KillDamage
       }
       deathblow {
         id
       }
     }
   }
+
+  ${KILL_DAMAGE_FRAGMENT}
+  ${KILL_ATTACKER_FRAGMENT}
 `;
 
 export function Kill(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(KILL_DETAILS, {
+  const { loading, error, data } = useQuery<GetKillQuery>(KILL_DETAILS, {
     variables: { id },
   });
 

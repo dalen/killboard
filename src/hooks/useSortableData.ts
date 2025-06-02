@@ -1,4 +1,5 @@
 import React from 'react';
+import { get } from 'lodash';
 
 export enum SortConfigDirection {
   ascending = 'ascending',
@@ -10,9 +11,8 @@ export interface SortConfig {
   direction: SortConfigDirection;
 }
 
-export const useSortableData = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  items: any[],
+export const useSortableData = <T>(
+  items: T[],
   config: SortConfig | null = null,
 ) => {
   const [sortConfig, setSortConfig] = React.useState(config);
@@ -21,22 +21,18 @@ export const useSortableData = (
     const sortableItems = [...items];
     if (sortConfig !== null) {
       sortableItems.sort((a, b) => {
-        if (sortConfig.key === 'name' || sortConfig.key === 'career') {
-          if (
-            a.character[sortConfig.key].localeCompare(
-              b.character[sortConfig.key],
-            ) === -1
-          ) {
+        const valA = get(a, sortConfig.key);
+        const valB = get(b, sortConfig.key);
+
+        if (valA === null && valB === null) return 0;
+        if (typeof valA === 'string' && typeof valB === 'string') {
+          if (valA.localeCompare(valB) === -1) {
             return sortConfig.direction === SortConfigDirection.ascending
               ? -1
               : 1;
           }
 
-          if (
-            a.character[sortConfig.key].localeCompare(
-              b.character[sortConfig.key],
-            ) === 1
-          ) {
+          if (valA.localeCompare(valB) === 1) {
             return sortConfig.direction === SortConfigDirection.ascending
               ? 1
               : -1;
@@ -44,20 +40,12 @@ export const useSortableData = (
           return 0;
         }
 
-        if (sortConfig.key === 'guild') {
-          if ((a.guild?.name ?? '').localeCompare(b.guild?.name ?? '') === -1) {
-            return sortConfig.direction === SortConfigDirection.ascending
-              ? -1
-              : 1;
-          }
-        }
-
-        if (a[sortConfig.key] < b[sortConfig.key]) {
+        if (valA < valB) {
           return sortConfig.direction === SortConfigDirection.ascending
             ? -1
             : 1;
         }
-        if (a[sortConfig.key] > b[sortConfig.key]) {
+        if (valA > valB) {
           return sortConfig.direction === SortConfigDirection.ascending
             ? 1
             : -1;

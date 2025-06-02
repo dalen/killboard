@@ -1,11 +1,14 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql, useQuery } from '@apollo/client';
-import { Query } from '@/types';
+import { GetChapterQuery } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { MapPositions } from '@/components/MapPositions';
 import { ReactElement } from 'react';
-import { ItemIconWithPopup } from '@/components/item/ItemIconWithPopup';
+import {
+  ITEM_FRAGMENT,
+  ItemIconWithPopup,
+} from '@/components/item/ItemIconWithPopup';
 
 const CHAPTER_DETAILS = gql`
   query GetChapter($id: ID!) {
@@ -29,44 +32,21 @@ const CHAPTER_DETAILS = gql`
       influenceRewards {
         count
         item {
-          id
-          name
-          description
-          rarity
-          itemLevel
-          iconUrl
-          stats {
-            stat
-            value
-          }
-          type
-          levelRequirement
-          renownRankRequirement
-          slot
-          armor
-          careerRestriction
-          talismanSlots
-          speed
-          dps
-          itemSet {
-            id
-          }
-          buffs {
-            id
-            description
-          }
+          ...ItemListEntry
         }
         realm
         tier
       }
     }
   }
+
+  ${ITEM_FRAGMENT}
 `;
 
 export function Chapter(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<Query>(CHAPTER_DETAILS, {
+  const { loading, error, data } = useQuery<GetChapterQuery>(CHAPTER_DETAILS, {
     variables: { id },
   });
 
