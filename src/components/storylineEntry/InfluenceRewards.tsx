@@ -26,7 +26,7 @@ export function InfluenceRewards({
   tier: number;
 }): ReactElement {
   return (
-    <div className="mb-2 is-flex">
+    <div className="mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap">
       {rewards
         .filter((item) => item.tier === tier)
         .map((reward) => (
