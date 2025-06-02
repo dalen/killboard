@@ -14,6 +14,9 @@ import {
 const WAR_JOURNAL_ENTRY_DETAILS = gql`
   query GetWarJournalEntry($id: ID!) {
     warJournalEntry(id: $id) {
+      storyline {
+        name
+      }
       id
       name
       locationText
@@ -74,8 +77,15 @@ export function StorylineEntry(): ReactElement {
           <li>
             <Link to="/storylines">{t('common:storylines')}</Link>
           </li>
+          <li>
+            <Link to={`/storylines/${storylineId}`}>
+              {t('pages:warJournalStoryline.storylineName', {
+                storylineName: entry.storyline.name,
+              })}
+            </Link>
+          </li>
           <li className="is-active">
-            <Link to={`/chapter/${id}`}>
+            <Link to={`/storylines/${storylineId}/${id}`}>
               {t('pages:warJournalStoryline.storylineName', {
                 storylineName: entry.name,
               })}
