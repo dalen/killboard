@@ -193,7 +193,7 @@ export function StorylineEntry(): ReactElement {
         <div className="card mb-5">
           <div className="card-content">
             <p className="is-size-4 is-family-secondary has-text-info">
-              <Link to={`/zone/${entry.zone.id}`}>{entry.locationText}</Link>
+              {entry.locationText}
             </p>
             <MapPositions
               positions={[entry.position]}
