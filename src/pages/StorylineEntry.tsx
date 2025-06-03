@@ -114,6 +114,11 @@ export function StorylineEntry(): ReactElement {
           <p className="is-size-4 is-family-secondary has-text-info">
             {entry.name}
           </p>
+          {entry.npcName && (
+            <p className="is-size-5 is-family-secondary has-text-primary">
+              {entry.npcName}
+            </p>
+          )}
           {entry.text && <p dangerouslySetInnerHTML={{ __html: entry.text }} />}
         </div>
       </div>
@@ -187,8 +192,8 @@ export function StorylineEntry(): ReactElement {
       entry.position.zone?.id === entry.zone.id ? (
         <div className="card mb-5">
           <div className="card-content">
-            <p className="is-size-5 is-family-secondary has-text-info">
-              <Link to={`/zone/${entry.zone.id}`}>{entry.zone.name}</Link>
+            <p className="is-size-4 is-family-secondary has-text-info">
+              <Link to={`/zone/${entry.zone.id}`}>{entry.locationText}</Link>
             </p>
             <MapPositions
               positions={[entry.position]}
