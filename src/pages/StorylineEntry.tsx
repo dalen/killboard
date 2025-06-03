@@ -123,7 +123,7 @@ export function StorylineEntry(): ReactElement {
         </div>
       </div>
 
-      {entry.activities.length > 0 && (
+      {entry.activities.filter((activity) => activity.name).length > 0 && (
         <div className="card mb-5">
           <div className="card-content">
             <div className="table-container">
@@ -142,18 +142,20 @@ export function StorylineEntry(): ReactElement {
                   </tr>
                 </thead>
                 <tbody>
-                  {entry.activities.map((activity, index) => (
-                    <tr key={activity.id}>
-                      <td>{index + 1}</td>
-                      <td>
-                        <Link
-                          to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
-                        >
-                          {activity.name}
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                  {entry.activities
+                    .filter((activity) => activity.name)
+                    .map((activity, index) => (
+                      <tr key={activity.id}>
+                        <td>{index + 1}</td>
+                        <td>
+                          <Link
+                            to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
+                          >
+                            {activity.name}
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>
