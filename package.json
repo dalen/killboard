@@ -38,7 +38,7 @@
     "@types/simpleheat": "^0.4.3",
     "@typescript-eslint/eslint-plugin": "^8.33.0",
     "@typescript-eslint/parser": "^8.33.0",
-    "@vitejs/plugin-react": "^4.4.1",
+    "@vitejs/plugin-react": "^4.5.0",
     "bulma": "^1.0.3",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.2",
