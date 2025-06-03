@@ -119,58 +119,64 @@ export function StorylineEntry(): ReactElement {
       </div>
 
       {entry.activities.length > 0 && (
-        <div className="table-container">
-          <table
-            className={clsx(
-              'table',
-              'is-striped',
-              'is-hoverable',
-              isMobile ? 'is-narrow' : 'is-fullwidth',
-            )}
-          >
-            <thead>
-              <tr>
-                <th>{t('pages:warJournalStoryline.entryNumber')}</th>
-                <th>{t('pages:warJournalStoryline.entryName')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entry.activities.map((activity, index) => (
-                <tr key={activity.id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    <Link
-                      to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
-                    >
-                      {activity.name}
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="card mb-5">
+          <div className="card-content">
+            <div className="table-container">
+              <table
+                className={clsx(
+                  'table',
+                  'is-striped',
+                  'is-hoverable',
+                  isMobile ? 'is-narrow' : 'is-fullwidth',
+                )}
+              >
+                <thead>
+                  <tr>
+                    <th>{t('pages:warJournalStoryline.entryNumber')}</th>
+                    <th>{t('pages:warJournalStoryline.entryName')}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {entry.activities.map((activity, index) => (
+                    <tr key={activity.id}>
+                      <td>{index + 1}</td>
+                      <td>
+                        <Link
+                          to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
+                        >
+                          {activity.name}
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       )}
 
-      <div>
-        <div className="is-size-4 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.influenceRewards')}
-        </div>
+      <div className="card mb-5">
+        <div className="card-content">
+          <div className="is-size-4 is-family-secondary has-text-info">
+            {t('pages:warJournalStoryline.influenceRewards')}
+          </div>
 
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.basicRewards')}
-        </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
+          <div className="is-size-5 is-family-secondary has-text-primary">
+            {t('pages:warJournalStoryline.basicRewards')}
+          </div>
+          <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
 
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.advancedRewards')}
-        </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
+          <div className="is-size-5 is-family-secondary has-text-primary">
+            {t('pages:warJournalStoryline.advancedRewards')}
+          </div>
+          <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
 
-        <div className="is-size-5 is-family-secondary has-text-info">
-          {t('pages:warJournalStoryline.eliteRewards')}
+          <div className="is-size-5 is-family-secondary has-text-primary">
+            {t('pages:warJournalStoryline.eliteRewards')}
+          </div>
+          <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
         </div>
-        <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
       </div>
 
       {entry.zone &&
