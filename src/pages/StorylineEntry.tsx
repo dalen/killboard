@@ -156,28 +156,30 @@ export function StorylineEntry(): ReactElement {
         </div>
       )}
 
-      <div className="card mb-5">
-        <div className="card-content">
-          <div className="is-size-4 is-family-secondary has-text-info">
-            {t('pages:warJournalStoryline.influenceRewards')}
-          </div>
+      {entry.influenceRewards.length > 0 && (
+        <div className="card mb-5">
+          <div className="card-content">
+            <div className="is-size-4 is-family-secondary has-text-info">
+              {t('pages:warJournalStoryline.influenceRewards')}
+            </div>
 
-          <div className="is-size-5 is-family-secondary has-text-primary">
-            {t('pages:warJournalStoryline.basicRewards')}
-          </div>
-          <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
+            <div className="is-size-5 is-family-secondary has-text-primary">
+              {t('pages:warJournalStoryline.basicRewards')}
+            </div>
+            <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
 
-          <div className="is-size-5 is-family-secondary has-text-primary">
-            {t('pages:warJournalStoryline.advancedRewards')}
-          </div>
-          <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
+            <div className="is-size-5 is-family-secondary has-text-primary">
+              {t('pages:warJournalStoryline.advancedRewards')}
+            </div>
+            <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
 
-          <div className="is-size-5 is-family-secondary has-text-primary">
-            {t('pages:warJournalStoryline.eliteRewards')}
+            <div className="is-size-5 is-family-secondary has-text-primary">
+              {t('pages:warJournalStoryline.eliteRewards')}
+            </div>
+            <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
           </div>
-          <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
         </div>
-      </div>
+      )}
 
       {entry.zone &&
       entry.position &&
