@@ -31,6 +31,7 @@ import { Chapters } from '@/pages/Chapters';
 import { Storylines } from '@/pages/Storylines';
 import { Storyline } from '@/pages/Storyline';
 import { StorylineEntry } from '@/pages/StorylineEntry';
+import { StorylineActivity } from '@/pages/StorylineActivity';
 
 // Extend the Window interface to include gtag
 declare global {
@@ -147,6 +148,10 @@ function App() {
       <Route path="/storylines" element={<Storylines />} />
       <Route path="/storylines/:id" element={<Storyline />} />
       <Route path="/storylines/:storylineId/:id" element={<StorylineEntry />} />
+      <Route
+        path="/storylines/:storylineId/:storylineEntryId/:id"
+        element={<StorylineActivity />}
+      />
 
       <Route path="/ranked-leaderboard" element={<RankedLeaderboard />} />
     </Routes>

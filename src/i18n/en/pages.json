@@ -212,5 +212,12 @@
     "basicRewards": "Basic",
     "advancedRewards": "Advanced",
     "eliteRewards": "Elte"
+  },
+  "warJournalStorylineActivity": {
+    "storylineName": "{{storylineName}}",
+    "storylineEntryName": "{{storylineEntryName}}",
+    "storylineActivityName": "{{storylineActivityName}}",
+    "taskNumber": "#",
+    "taskName": "Task"
   }
 }
