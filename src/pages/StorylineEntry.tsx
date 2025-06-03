@@ -10,6 +10,7 @@ import {
   INFLUENCE_REWARDS_FRAGMENT,
   InfluenceRewards,
 } from '@/components/storylineEntry/InfluenceRewards';
+import { MapPositions } from '@/components/MapPositions';
 
 const WAR_JOURNAL_ENTRY_DETAILS = gql`
   query GetWarJournalEntry($id: ID!) {
@@ -28,6 +29,20 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
       area {
         id
         name
+      }
+      position {
+        x
+        y
+        zone {
+          id
+          name
+        }
+        mapSetup {
+          nwCornerX
+          nwCornerY
+          seCornerX
+          seCornerY
+        }
       }
       zone {
         id
@@ -103,37 +118,39 @@ export function StorylineEntry(): ReactElement {
         </div>
       </div>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:warJournalStoryline.entryNumber')}</th>
-              <th>{t('pages:warJournalStoryline.entryName')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entry.activities.map((activity, index) => (
-              <tr key={activity.id}>
-                <td>{index + 1}</td>
-                <td>
-                  <Link
-                    to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
-                  >
-                    {activity.name}
-                  </Link>
-                </td>
+      {entry.activities.length > 0 && (
+        <div className="table-container">
+          <table
+            className={clsx(
+              'table',
+              'is-striped',
+              'is-hoverable',
+              isMobile ? 'is-narrow' : 'is-fullwidth',
+            )}
+          >
+            <thead>
+              <tr>
+                <th>{t('pages:warJournalStoryline.entryNumber')}</th>
+                <th>{t('pages:warJournalStoryline.entryName')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {entry.activities.map((activity, index) => (
+                <tr key={activity.id}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <Link
+                      to={`/storylines/${storylineId}/${entry.id}/${activity.id}`}
+                    >
+                      {activity.name}
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       <div>
         <div className="is-size-4 is-family-secondary has-text-info">
@@ -155,6 +172,27 @@ export function StorylineEntry(): ReactElement {
         </div>
         <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
       </div>
+
+      {entry.zone &&
+      entry.position &&
+      entry.position.mapSetup &&
+      entry.position.zone?.id === entry.zone.id ? (
+        <div className="card mb-5">
+          <div className="card-content">
+            <p className="is-size-5 is-family-secondary has-text-info">
+              <Link to={`/zone/${entry.zone.id}`}>{entry.zone.name}</Link>
+            </p>
+            <MapPositions
+              positions={[entry.position]}
+              zoneId={Number(entry.position.zone?.id)}
+              nwCornerX={entry.position.mapSetup.nwCornerX}
+              nwCornerY={entry.position.mapSetup.nwCornerY}
+              seCornerX={entry.position.mapSetup.seCornerX}
+              seCornerY={entry.position.mapSetup.seCornerY}
+            />{' '}
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
