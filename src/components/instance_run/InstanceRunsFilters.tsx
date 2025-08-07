@@ -200,6 +200,7 @@ export function InstanceRunsFilters(): ReactElement {
                     }}
                   >
                     <option value="all">{t('pages:instanceRuns.all')}</option>
+                    <option value="260">Lost Vale</option>
                     <option value="176">Sigmar Crypts</option>
                     <option value="196">Bilerot</option>
                     <option value="160">Bastion Stair</option>
@@ -212,6 +213,8 @@ export function InstanceRunsFilters(): ReactElement {
                     <option value="64">Gunbad Lab</option>
                     <option value="65">Squig Boss</option>
                     <option value="66">Gunbad Baracks</option>
+                    <option value="33">Dragonback Pass (Order)</option>
+                    <option value="37">Dragonback Pass (Destruction)</option>
                     <option value="152">Altdorf Sewers 1</option>
                     <option value="153">Altdorf Sewers 2</option>
                     <option value="169">Altdorf Sewers 3</option>

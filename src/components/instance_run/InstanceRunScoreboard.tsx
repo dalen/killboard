@@ -48,7 +48,9 @@ export const INSTANCE_RUN_SCOREBOARD_FRAGMENT = gql`
     healingReceived
     protectionReceived
   }
+`;
 
+export const INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT = gql`
   fragment InstanceEncounterRunScoreboardEntry on InstanceEncounterRunScoreboardEntry {
     character {
       id

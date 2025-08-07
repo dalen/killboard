@@ -9,7 +9,7 @@ import {
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
-  INSTANCE_RUN_SCOREBOARD_FRAGMENT,
+  INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT,
   InstanceRunScoreboard,
 } from '@/components/instance_run/InstanceRunScoreboard';
 import { GetInstanceEncounterRunQuery } from '@/__generated__/graphql';
@@ -30,7 +30,7 @@ const INSTANCE_ENCOUNTER_RUN = gql`
     }
   }
 
-  ${INSTANCE_RUN_SCOREBOARD_FRAGMENT}
+  ${INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT}
 `;
 
 export function InstanceEncounterRun() {
