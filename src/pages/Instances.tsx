@@ -120,6 +120,7 @@ export function Instances(): ReactElement {
             <tr>
               <th>{t('pages:instances.name')}</th>
               <th>{t('pages:instances.encounters')}</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -129,6 +130,20 @@ export function Instances(): ReactElement {
                   <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
                 </td>
                 <td>{instance.encounters?.length || 0}</td>
+                <td>
+                  <Link
+                    to={`/instance-statistics/${instance.id}`}
+                    className="button is-primary p-2 is-pulled-right"
+                  >
+                    {t('pages:instances.statistics')}
+                  </Link>
+                  <Link
+                    to={`/instance-runs?instance=${instance.id}`}
+                    className="button is-primary p-2 is-pulled-right mr-2"
+                  >
+                    {t('pages:instances.runs')}
+                  </Link>
+                </td>
               </tr>
             ))}
           </tbody>

@@ -152,6 +152,21 @@
     "money": "Money",
     "questGivers": "Quest Givers"
   },
+  "instances": {
+    "search": "Search",
+    "name": "Name",
+    "encounters": "Encounters",
+    "runs": "Runs",
+    "statistics": "Statistics"
+  },
+  "instanceStatistics": {
+    "search": "Search",
+    "name": "Name",
+    "encounter": "Encounter",
+    "medianDuration": "Median Duration",
+    "medianDeaths": "Median Deaths",
+    "averageDeaths": "Average Deaths"
+  },
   "instanceRuns": {
     "title": "Instance Runs",
     "startTime": "Time",
