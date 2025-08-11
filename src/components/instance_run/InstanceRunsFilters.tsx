@@ -213,7 +213,7 @@ export function InstanceRunsFilters(): ReactElement {
                     <option value="64">Gunbad Lab</option>
                     <option value="65">Squig Boss</option>
                     <option value="66">Gunbad Baracks</option>
-                    <option value="33">Dragonback Pass (Order)</option>
+                    <option value="36">Dragonback Pass (Order)</option>
                     <option value="37">Dragonback Pass (Destruction)</option>
                     <option value="152">Altdorf Sewers 1</option>
                     <option value="153">Altdorf Sewers 2</option>
@@ -249,6 +249,9 @@ export function InstanceRunsFilters(): ReactElement {
             <h6>Min item rating</h6>
             <div className="field">
               <label className="label" htmlFor="minItemRatingMax">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-down" />
+                </span>
                 Below
               </label>
               <div className="control">
@@ -264,13 +267,13 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-down" />
-                </span>
               </div>
             </div>
             <div className="field">
               <label className="label" htmlFor="minItemRatingMin">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-up" />
+                </span>
                 Above
               </label>
               <div className="control">
@@ -286,9 +289,6 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-up" />
-                </span>
               </div>
             </div>
           </div>
@@ -296,6 +296,9 @@ export function InstanceRunsFilters(): ReactElement {
             <h6>Average item rating</h6>
             <div className="field">
               <label className="label" htmlFor="avgItemRatingMax">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-down" />
+                </span>
                 Below
               </label>
               <div className="control">
@@ -311,13 +314,13 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-down" />
-                </span>
               </div>
             </div>
             <div className="field">
               <label className="label" htmlFor="avgItemRatingMin">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-up" />
+                </span>
                 Above
               </label>
               <div className="control">
@@ -333,9 +336,6 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-up" />
-                </span>
               </div>
             </div>
           </div>
@@ -343,6 +343,9 @@ export function InstanceRunsFilters(): ReactElement {
             <h6>Max item rating</h6>
             <div className="field">
               <label className="label" htmlFor="maxItemRatingMax">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-down" />
+                </span>
                 Below
               </label>
               <div className="control">
@@ -358,13 +361,13 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-down" />
-                </span>
               </div>
             </div>
             <div className="field">
               <label className="label" htmlFor="maxItemRatingMin">
+                <span className="icon has-text-left">
+                  <i className="fa-solid fa-arrow-up" />
+                </span>
                 Above
               </label>
               <div className="control">
@@ -380,9 +383,6 @@ export function InstanceRunsFilters(): ReactElement {
                     setSearch(search);
                   }}
                 />
-                <span className="icon has-text-left">
-                  <i className="fa-solid fa-arrow-up" />
-                </span>
               </div>
             </div>
           </div>
