@@ -71,7 +71,7 @@ export function ScenarioListTable({
                   )}
                 </td>
                 <td align="center">
-                  {scenario.winner === 0 ? (
+                  {scenario.points[0] > scenario.points[1] ? (
                     <img
                       src="/images/icons/scenario/order.png"
                       width={40}
