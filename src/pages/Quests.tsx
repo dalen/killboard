@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QuestFilterInput } from '@/__generated__/graphql';

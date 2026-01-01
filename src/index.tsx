@@ -2,13 +2,14 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.scss';
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client';
+import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { BrowserRouter } from 'react-router';
 import App from './App';
 
 const client = new ApolloClient({
-  uri: 'https://production-api.waremu.com/graphql',
   cache: new InMemoryCache(),
+  link: new HttpLink({ uri: 'https://production-api.waremu.com/graphql' }),
 });
 
 const container = document.getElementById('root');

@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';

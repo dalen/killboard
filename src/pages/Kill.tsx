@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { format, formatISO } from 'date-fns';
 import sortBy from 'lodash/sortBy';
 import { useTranslation } from 'react-i18next';

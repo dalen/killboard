@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { getUnixTime, startOfWeek } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';

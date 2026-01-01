@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { ApolloQueryResult, OperationVariables } from '@apollo/client';
+import { ApolloClient, OperationVariables } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { PageInfo } from '@/__generated__/graphql';
 
@@ -12,7 +12,7 @@ export function QueryPagination<T>({
   perPage: number;
   refetch: (
     variables?: Partial<OperationVariables>,
-  ) => Promise<ApolloQueryResult<T>>;
+  ) => Promise<ApolloClient.QueryResult<T>>;
 }): ReactNode {
   const { t } = useTranslation(['common']);
 

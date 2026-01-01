@@ -1,6 +1,7 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ReactElement } from 'react';
 import { GetWarJournalActivityQuery } from '@/__generated__/graphql';

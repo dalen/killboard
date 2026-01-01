@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { t } from 'i18next';
 import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
 import { ErrorMessage } from '@/components/global/ErrorMessage';

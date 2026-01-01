@@ -1,4 +1,4 @@
-import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
+import { DocumentNode } from '@apollo/client';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -7,6 +7,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { useQuery } from '@apollo/client/react';
 
 export function SkirmishList({
   query,
@@ -16,7 +17,7 @@ export function SkirmishList({
   showZone = true,
 }: {
   query: DocumentNode;
-  queryOptions?: QueryHookOptions;
+  queryOptions?: useQuery.Options<Query>;
   perPage: number;
   title?: string | null;
   showZone?: boolean;

@@ -1,7 +1,8 @@
 import { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { formatDuration, intervalToDuration } from 'date-fns';
 import { useSearchParams } from 'react-router';
 

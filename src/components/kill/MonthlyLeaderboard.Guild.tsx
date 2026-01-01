@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Query } from '@/__generated__/graphql';
 import { LeaderboardGuildTable } from '@/components/kill/LeaderboardGuildTable';

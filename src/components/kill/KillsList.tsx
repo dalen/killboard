@@ -1,4 +1,5 @@
-import { DocumentNode, QueryHookOptions, useQuery } from '@apollo/client';
+import { DocumentNode } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -18,7 +19,7 @@ export function KillsList({
   showKiller = true,
 }: {
   query: DocumentNode;
-  queryOptions?: QueryHookOptions;
+  queryOptions?: useQuery.Options<Query>;
   perPage: number;
   title?: string | null;
   showTime?: boolean;

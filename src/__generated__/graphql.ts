@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
+export type InputMaybe<T> = T | null | undefined;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -107,7 +107,8 @@ export enum AbilityType {
   /** Pet abilities */
   Pet = 'PET',
   /** Tactics */
-  Tactic = 'TACTIC'
+  Tactic = 'TACTIC',
+  TauntGuard = 'TAUNT_GUARD'
 }
 
 /** Player Archetypes */
@@ -663,6 +664,10 @@ export enum CreatureSubType {
   HumanoidsOgresYhetee = 'HUMANOIDS_OGRES_YHETEE',
   HumanoidsSkavenRatOgre = 'HUMANOIDS_SKAVEN_RAT_OGRE',
   HumanoidsSkavenSkaven = 'HUMANOIDS_SKAVEN_SKAVEN',
+  LegendaryMonstersArdTaFeed = 'LEGENDARY_MONSTERS_ARD_TA_FEED',
+  LegendaryMonstersGlompDaSquigMasta = 'LEGENDARY_MONSTERS_GLOMP_DA_SQUIG_MASTA',
+  LegendaryMonstersMastaMixa = 'LEGENDARY_MONSTERS_MASTA_MIXA',
+  LegendaryMonstersWightLordSolithex = 'LEGENDARY_MONSTERS_WIGHT_LORD_SOLITHEX',
   MonstersChaosBreedsCentigor = 'MONSTERS_CHAOS_BREEDS_CENTIGOR',
   MonstersChaosBreedsChaosMutant = 'MONSTERS_CHAOS_BREEDS_CHAOS_MUTANT',
   MonstersChaosBreedsDragonOgre = 'MONSTERS_CHAOS_BREEDS_DRAGON_OGRE',
@@ -3717,7 +3722,10 @@ export type GetCharacterArmoryQueryVariables = Exact<{
 }>;
 
 
-export type GetCharacterArmoryQuery = { __typename?: 'Query', character?: { __typename?: 'Character', items: Array<{ __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetCharacterArmoryQuery = { __typename?: 'Query', character?: { __typename?: 'Character', items: Array<{ __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+              | { __typename: 'Ability', description?: string | null }
+              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
 
 export type GetCharacterInfoQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3728,7 +3736,10 @@ export type GetCharacterInfoQuery = { __typename?: 'Query', character?: { __type
 
 export type TalismanFragment = { __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> };
 
-export type EquippedCharacterItemFragment = { __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
+export type EquippedCharacterItemFragment = { __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+          | { __typename: 'Ability', description?: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
 
 export type GetCharacterLatestSkirmishesQueryVariables = Exact<{
   characterId?: InputMaybe<Scalars['ID']['input']>;
@@ -3864,14 +3875,20 @@ export type GetInstanceEncounterStatisticsQueryVariables = Exact<{
 
 export type GetInstanceEncounterStatisticsQuery = { __typename?: 'Query', instanceEncounterRuns?: { __typename?: 'InstanceEncounterRunsConnection', medianDuration: number, averageDuration: number, medianDeaths: number, averageDeaths: number } | null };
 
-export type ItemListEntryFragment = { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> };
+export type ItemListEntryFragment = { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+        | { __typename: 'Ability', description?: string | null }
+        | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+       }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> };
 
 export type GetItemPopupInfoQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetItemPopupInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } | null };
+export type GetItemPopupInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+          | { __typename: 'Ability', description?: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } | null };
 
 export type GetItemRewardedFromQuestsQueryVariables = Exact<{
   itemId: Scalars['ID']['input'];
@@ -4083,14 +4100,20 @@ export type GetTopSkirmishesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTopSkirmishesQuery = { __typename?: 'Query', topSkirmishes: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> };
 
-export type ChapterInfluenceRewardFragment = { __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
+export type ChapterInfluenceRewardFragment = { __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+          | { __typename: 'Ability', description?: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
 
 export type GetChapterQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetChapterQuery = { __typename?: 'Query', chapter?: { __typename?: 'Chapter', id: string, name?: string | null, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null }, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, realm: Realm, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetChapterQuery = { __typename?: 'Query', chapter?: { __typename?: 'Chapter', id: string, name?: string | null, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null }, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, realm: Realm, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+              | { __typename: 'Ability', description?: string | null }
+              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
 
 export type GetChaptersQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4182,7 +4205,10 @@ export type GetItemInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetItemInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string, name: string, iconUrl: any }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, soldByVendors?: { __typename?: 'SoldByVendorsConnection', totalCount: number } | null, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', totalCount: number } | null, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', totalCount: number } | null } | null };
+export type GetItemInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string, name: string, iconUrl: any }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+          | { __typename: 'Ability', description?: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, soldByVendors?: { __typename?: 'SoldByVendorsConnection', totalCount: number } | null, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', totalCount: number } | null, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', totalCount: number } | null } | null };
 
 export type SearchItemsQueryVariables = Exact<{
   query?: InputMaybe<ItemFilterInput>;
@@ -4195,7 +4221,10 @@ export type SearchItemsQueryVariables = Exact<{
 }>;
 
 
-export type SearchItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemsConnection', nodes?: Array<{ __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemsConnection', nodes?: Array<{ __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+            | { __typename: 'Ability', description?: string | null }
+            | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+           }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetKillQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -4268,7 +4297,22 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search?: { __typename?: 'SearchConnection', nodes?: Array<{ __typename: 'Ability', id: string, name?: string | null } | { __typename: 'AbilityInfo', id: string, name?: string | null } | { __typename: 'Chapter', id: string, name?: string | null } | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | { __typename: 'Creature', creatureSubType: CreatureSubType, id: string, name: string } | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader?: { __typename?: 'Character', id: string, name: string } | null, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, members?: { __typename?: 'MembersConnection', totalCount: number } | null } | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet?: { __typename?: 'ItemSet', id: string, name: string } | null } | { __typename: 'ItemSet', id: string, name: string } | { __typename: 'LiveEvent', id: string, name: string } | { __typename: 'PublicQuest', id: string, name?: string | null } | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry?: string | null, id: string, name: string, questDescription?: string | null, questType: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } } | { __typename: 'Scenario', id: string, name: string } | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string } | { __typename: 'Zone', id: string, name: string }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchQuery = { __typename?: 'Query', search?: { __typename?: 'SearchConnection', nodes?: Array<
+      | { __typename: 'Ability', id: string, name?: string | null }
+      | { __typename: 'AbilityInfo', id: string, name?: string | null }
+      | { __typename: 'Chapter', id: string, name?: string | null }
+      | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null }
+      | { __typename: 'Creature', creatureSubType: CreatureSubType, id: string, name: string }
+      | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader?: { __typename?: 'Character', id: string, name: string } | null, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, members?: { __typename?: 'MembersConnection', totalCount: number } | null }
+      | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet?: { __typename?: 'ItemSet', id: string, name: string } | null }
+      | { __typename: 'ItemSet', id: string, name: string }
+      | { __typename: 'LiveEvent', id: string, name: string }
+      | { __typename: 'PublicQuest', id: string, name?: string | null }
+      | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry?: string | null, id: string, name: string, questDescription?: string | null, questType: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } }
+      | { __typename: 'Scenario', id: string, name: string }
+      | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string }
+      | { __typename: 'Zone', id: string, name: string }
+    > | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type SearchGuildsQueryVariables = Exact<{
   query: Scalars['String']['input'];
@@ -4307,7 +4351,10 @@ export type GetWarJournalEntryQueryVariables = Exact<{
 }>;
 
 
-export type GetWarJournalEntryQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, locationText?: string | null, npcName?: string | null, text?: string | null, title?: string | null, shortTitle?: string | null, isRvR: boolean, storyline: { __typename?: 'WarJournalStoryline', name: string }, area?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, position?: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } | null, zone?: { __typename?: 'Zone', id: string, name: string } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string }>, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetWarJournalEntryQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, locationText?: string | null, npcName?: string | null, text?: string | null, title?: string | null, shortTitle?: string | null, isRvR: boolean, storyline: { __typename?: 'WarJournalStoryline', name: string }, area?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, position?: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } | null, zone?: { __typename?: 'Zone', id: string, name: string } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string }>, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
+              | { __typename: 'Ability', description?: string | null }
+              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
 
 export type GetWarJournalStorylinesQueryVariables = Exact<{ [key: string]: never; }>;
 

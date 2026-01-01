@@ -1,4 +1,5 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { useParams, Link } from 'react-router';
