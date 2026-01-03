@@ -9,7 +9,6 @@ const SCENARIO_KILLS = gql`
     $last: Int
     $before: String
     $after: String
-    $soloOnly: Boolean
     $filter: KillFilterInput
   ) {
     kills(
@@ -18,7 +17,6 @@ const SCENARIO_KILLS = gql`
       last: $last
       before: $before
       after: $after
-      soloOnly: $soloOnly
     ) {
       totalCount
       nodes {
