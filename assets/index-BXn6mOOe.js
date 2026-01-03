@@ -1467,7 +1467,6 @@ function print() { __p += __j.call(arguments, '') }
     $last: Int
     $before: String
     $after: String
-    $soloOnly: Boolean
     $filter: KillFilterInput
   ) {
     kills(
@@ -1476,7 +1475,6 @@ function print() { __p += __j.call(arguments, '') }
       last: $last
       before: $before
       after: $after
-      soloOnly: $soloOnly
     ) {
       totalCount
       nodes {
