@@ -94,7 +94,7 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
     $last: Int
     $before: String
     $after: String
-    $time: IntOperationFilterInput
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
@@ -148,7 +148,7 @@ Please change the parent <Route path="${L}"> to <Route path="${L==="/"?"*":`${L}
     $last: Int
     $before: String
     $after: String
-    $time: IntOperationFilterInput
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
@@ -894,7 +894,7 @@ function print() { __p += __j.call(arguments, '') }
     $last: Int
     $before: String
     $after: String
-    $time: IntOperationFilterInput
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
@@ -961,7 +961,7 @@ function print() { __p += __j.call(arguments, '') }
     $last: Int
     $before: String
     $after: String
-    $time: IntOperationFilterInput
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
@@ -1404,8 +1404,8 @@ function print() { __p += __j.call(arguments, '') }
     $last: Int
     $before: String
     $after: String
-    $from: Int
-    $to: Int
+    $from: DateTime
+    $to: DateTime
     $soloOnly: Boolean
   ) {
     kills(
