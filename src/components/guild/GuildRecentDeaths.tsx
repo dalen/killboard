@@ -10,7 +10,7 @@ const RECENT_DEATHS = gql`
     $last: Int
     $before: String
     $after: String
-    $time: IntOperationFilterInput
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(

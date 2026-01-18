@@ -11,8 +11,8 @@ const LATEST_KILLS = gql`
     $last: Int
     $before: String
     $after: String
-    $from: Int
-    $to: Int
+    $from: DateTime
+    $to: DateTime
     $soloOnly: Boolean
   ) {
     kills(
