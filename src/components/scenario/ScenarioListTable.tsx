@@ -40,8 +40,8 @@ export function ScenarioListTable({
         </thead>
         <tbody>
           {data.map((scenario) => {
-            const startDate = new Date(scenario.startTime * 1000);
-            const endDate = new Date(scenario.endTime * 1000);
+            const startDate = new Date(scenario.startTime);
+            const endDate = new Date(scenario.endTime);
             const duration = intervalToDuration({
               start: startDate,
               end: endDate,

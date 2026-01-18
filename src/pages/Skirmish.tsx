@@ -106,8 +106,8 @@ export function Skirmish({
 
   const { skirmish } = data;
 
-  const startDate = new Date(skirmish.startTime * 1000);
-  const endDate = new Date(skirmish.endTime * 1000);
+  const startDate = new Date(skirmish.startTime);
+  const endDate = new Date(skirmish.endTime);
   const durationObject = intervalToDuration({
     start: startDate,
     end: endDate,

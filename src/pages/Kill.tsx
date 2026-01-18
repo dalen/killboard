@@ -93,7 +93,7 @@ export function Kill(): ReactElement {
   if (loading || kill == null) return <progress className="progress" />;
   if (error) return <ErrorMessage name={error.name} message={error.message} />;
 
-  const date = new Date(kill.time * 1000);
+  const date = new Date(kill.time);
 
   return (
     <div className="container is-max-desktop mt-2">

@@ -116,8 +116,8 @@ export function Scenario({
     return <ErrorMessage customText={t('common:notFound')} />;
 
   const { scenario } = data;
-  const startDate = new Date(scenario.startTime * 1000);
-  const endDate = new Date(scenario.endTime * 1000);
+  const startDate = new Date(scenario.startTime);
+  const endDate = new Date(scenario.endTime);
   const duration = formatDuration(
     intervalToDuration({
       start: startDate,

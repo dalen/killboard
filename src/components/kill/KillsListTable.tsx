@@ -48,7 +48,7 @@ export function KillsListTable({
         </thead>
         <tbody>
           {data.map((kill) => {
-            const date = new Date(kill.time * 1000);
+            const date = new Date(kill.time);
 
             return (
               <tr key={kill.id}>
