@@ -14,6 +14,7 @@ const SCENARIO_LIST = gql`
     $guildId: ID
     $queueType: ScenarioQueueType
     $premadeOnly: Boolean
+    $where: ScenarioRecordFilterInput
     $first: Int
     $last: Int
     $before: String
@@ -24,6 +25,7 @@ const SCENARIO_LIST = gql`
       guildId: $guildId
       queueType: $queueType
       premadeOnly: $premadeOnly
+      where: $where
       first: $first
       last: $last
       before: $before

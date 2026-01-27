@@ -134,7 +134,9 @@
     "queueTypeCitySiege": "City Siege",
     "queueTypeGroupRanked": "Group Ranked",
     "queueTypeSoloRanked": "Solo Ranked",
-    "premadeOnly": "Premade Only"
+    "premadeOnly": "Premade Only",
+    "tier": "Tier",
+    "tierAll": "All"
   },
   "scenarioHeatmap": {
     "description": "Heatmap of kills in the scenario"

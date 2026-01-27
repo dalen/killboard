@@ -1,3 +1,4 @@
+import { ScenarioRecordFilterInput } from '@/__generated__/graphql';
 import { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -21,8 +22,29 @@ const getQueueTypeFilters = (search: URLSearchParams) => {
   return { premadeOnly };
 };
 
+const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
+  const tier = search.get('tier');
+
+  switch (tier) {
+    case 'all':
+      return {};
+    case '1':
+    case '2':
+    case '3':
+    case '4':
+      return {
+        tier: { eq: Number(tier) },
+      };
+  }
+
+  return {};
+};
+
 export const getScenarioFilters = (search: URLSearchParams) => ({
   ...getQueueTypeFilters(search),
+  where: {
+    ...getTierFilters(search),
+  },
 });
 
 export function ScenarioFilters({
@@ -75,6 +97,36 @@ export function ScenarioFilters({
                       <option value="solo_ranked">
                         {t('scenarioFilters.queueTypeSoloRanked')}
                       </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="column">
+            <div className="field is-horizontal">
+              <div className="field-label is-normal">
+                <label className="label" htmlFor="tier-select">
+                  {t('scenarioFilters.tier')}
+                </label>
+              </div>
+              <div className="field-body">
+                <div className="control">
+                  <div className="select">
+                    <select
+                      id="tier-select"
+                      value={search.get('tier') || 'all'}
+                      onChange={(event) => {
+                        search.set('tier', event.target.value);
+                        setSearch(search);
+                      }}
+                    >
+                      <option value="all">
+                        {t('scenarioFilters.tierAll')}
+                      </option>
+                      <option value="1">1</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
                     </select>
                   </div>
                 </div>
