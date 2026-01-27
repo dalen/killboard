@@ -40,6 +40,7 @@ const SCENARIO_LIST = gql`
         endTime
         winner
         points
+        wasSurrender
       }
       pageInfo {
         hasNextPage
