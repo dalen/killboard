@@ -16,5 +16,7 @@
   "realmNeutral": "Neutral",
   "details": "Details",
   "storylines": "Storylines",
-  "instances": "Instances"
+  "instances": "Instances",
+  "scenarios": "Scenarios",
+  "tier": "Tier"
 }

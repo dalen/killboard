@@ -134,6 +134,9 @@ export function Scenario({
           <li>
             <Link to="/">{t('common:home')}</Link>
           </li>
+          <li>
+            <Link to="/scenarios">{t('common:scenarios')}</Link>
+          </li>
           <li className="is-active">
             <Link to={`/scenario/${id}`}>
               {t('pages:scenarioPage.scenarioId', { scenarioId: id })}
