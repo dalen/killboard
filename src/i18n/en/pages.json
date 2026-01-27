@@ -64,7 +64,8 @@
     "skirmishes": "Skirmishes",
     "map": "Map",
     "order": "Order",
-    "destruction": "Destruction"
+    "destruction": "Destruction",
+    "surrender": "Surrender"
   },
   "skirmishPage": {
     "skirmishId": "Skirmish Report #{{skirmishId}}",

@@ -76,6 +76,7 @@ const SCENARIO_INFO = gql`
       winner
       points
       queueType
+      wasSurrender
       scoreboardEntries {
         ...ScenarioScoreboardEntry
       }
@@ -172,12 +173,30 @@ export function Scenario({
                   alt={t('pages:scenarioPage.order') ?? ''}
                 />
               </p>
-              <p className="is-size-4 scenario-score-order">
+              <p
+                className="is-size-4 scenario-score-order"
+                title={t('pages:scenarioPage.order') ?? ''}
+              >
                 {scenario.points?.[0]}
               </p>
-              <p className="scenario-score-order">
-                {t('pages:scenarioPage.order')}
-              </p>
+              {scenario.wasSurrender &&
+              scenario.points[1] > scenario.points[0] ? (
+                <img
+                  src="/images/icons/scenario/surrender.png"
+                  width={40}
+                  height={40}
+                  title={t('pages:scenarioPage.surrender') ?? ''}
+                  alt={t('pages:scenarioPage.surrender') ?? ''}
+                />
+              ) : (
+                <div
+                  style={{
+                    display: 'inline-block',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                />
+              )}
             </div>
             <div className="column is-2 has-text-centered">
               <p>
@@ -188,12 +207,30 @@ export function Scenario({
                   alt={t('pages:scenarioPage.destruction') ?? ''}
                 />
               </p>
-              <p className="is-size-4 scenario-score-destruction">
+              <p
+                className="is-size-4 scenario-score-destruction"
+                title={t('pages:scenarioPage.destruction') ?? ''}
+              >
                 {scenario.points?.[1]}
               </p>
-              <p className="scenario-score-destruction">
-                {t('pages:scenarioPage.destruction')}
-              </p>
+              {scenario.wasSurrender &&
+              scenario.points[0] > scenario.points[1] ? (
+                <img
+                  src="/images/icons/scenario/surrender.png"
+                  width={40}
+                  height={40}
+                  title="Surrender"
+                  alt="Surrender"
+                />
+              ) : (
+                <div
+                  style={{
+                    display: 'inline-block',
+                    width: '40px',
+                    height: '40px',
+                  }}
+                />
+              )}
             </div>
           </div>
         </div>
