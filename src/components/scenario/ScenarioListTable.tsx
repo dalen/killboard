@@ -33,8 +33,14 @@ export function ScenarioListTable({
             <th>{t('components:scenarioList.time')}</th>
             <th>{t('components:scenarioList.duration')}</th>
             <th align="center">{t('components:scenarioList.winner')}</th>
-            <th align="right">{t('components:scenarioList.order')}</th>
-            <th align="right">{t('components:scenarioList.destruction')}</th>
+            <th align="right">
+              {t('components:scenarioList.order')}
+              <div style={{ display: 'inline-block', width: '40px' }} />
+            </th>
+            <th align="right">
+              {t('components:scenarioList.destruction')}
+              <div style={{ display: 'inline-block', width: '40px' }} />
+            </th>
             <th aria-label="empty" />
           </tr>
         </thead>
@@ -88,32 +94,48 @@ export function ScenarioListTable({
                   )}
                 </td>
                 <td align="right" className="scenariolist-score-order">
-                  {scenario.wasSurrender &&
-                    scenario.points[1] > scenario.points[0] && (
-                      <img
-                        src="/images/icons/scenario/surrender.png"
-                        width={40}
-                        height={40}
-                        title="Surrender"
-                        alt="Surrender"
-                        style={{ verticalAlign: 'top', marginRight: '4px' }}
-                      />
-                    )}
                   {scenario.points[0]}
+                  {scenario.wasSurrender &&
+                  scenario.points[1] > scenario.points[0] ? (
+                    <img
+                      src="/images/icons/scenario/surrender.png"
+                      width={40}
+                      height={40}
+                      title="Surrender"
+                      alt="Surrender"
+                      style={{ verticalAlign: 'top', marginLeft: '4px' }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        display: 'inline-block',
+                        width: '40px',
+                        marginLeft: '4px',
+                      }}
+                    />
+                  )}
                 </td>
                 <td align="right" className="scenariolist-score-destruction">
-                  {scenario.wasSurrender &&
-                    scenario.points[0] > scenario.points[1] && (
-                      <img
-                        src="/images/icons/scenario/surrender.png"
-                        width={40}
-                        height={40}
-                        title="Surrender"
-                        alt="Surrender"
-                        style={{ verticalAlign: 'top', marginRight: '4px' }}
-                      />
-                    )}
                   {scenario.points[1]}
+                  {scenario.wasSurrender &&
+                  scenario.points[0] > scenario.points[1] ? (
+                    <img
+                      src="/images/icons/scenario/surrender.png"
+                      width={40}
+                      height={40}
+                      title="Surrender"
+                      alt="Surrender"
+                      style={{ verticalAlign: 'top', marginLeft: '4px' }}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        display: 'inline-block',
+                        width: '40px',
+                        marginLeft: '4px',
+                      }}
+                    />
+                  )}
                 </td>
                 <td>
                   <Link
