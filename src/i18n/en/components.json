@@ -121,6 +121,8 @@
     "winner": "Winner",
     "order": "Order",
     "destruction": "Destruction",
+    "surrender": "Surrender",
+    "tier": "Tier",
     "scenarioDuration": "{{minutes}}m {{seconds}}s",
     "scenarioDurationHour": "{{hours}}h {{minutes}}m {{seconds}}s"
   },

@@ -30,6 +30,7 @@ export function ScenarioListTable({
         <thead>
           <tr>
             <th>{t('components:scenarioList.name')}</th>
+            <th align="right">{t('components:scenarioList.tier')}</th>
             <th>{t('components:scenarioList.time')}</th>
             <th>{t('components:scenarioList.duration')}</th>
             <th align="center">{t('components:scenarioList.winner')}</th>
@@ -56,6 +57,7 @@ export function ScenarioListTable({
             return (
               <tr key={scenario.id}>
                 <td>{scenario.scenario.name}</td>
+                <td align="right">{scenario.tier}</td>
                 <td>
                   {' '}
                   <small>

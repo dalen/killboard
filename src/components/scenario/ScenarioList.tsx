@@ -41,6 +41,7 @@ const SCENARIO_LIST = gql`
         winner
         points
         wasSurrender
+        tier
       }
       pageInfo {
         hasNextPage

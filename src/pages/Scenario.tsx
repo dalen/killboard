@@ -71,6 +71,7 @@ const SCENARIO_INFO = gql`
           id
         }
       }
+      tier
       startTime
       endTime
       winner
@@ -148,20 +149,24 @@ export function Scenario({
                 <strong>{scenario.scenario.name}</strong>
               </p>
               <p>
-                <strong>Date: </strong>
+                <strong>{t('pages:scenarioPage.date')}: </strong>
                 {formatISO(startDate, { representation: 'date' })}
               </p>
               <p>
-                <strong>Time: </strong>
+                <strong>{t('pages:scenarioPage.time')}: </strong>
                 {format(startDate, 'HH:mm:ss')}
               </p>
               <p>
-                <strong>Duration: </strong>
+                <strong>{t('pages:scenarioPage.duration')}: </strong>
                 {duration}
               </p>
               <p>
-                <strong>Type: </strong>
+                <strong>{t('pages:scenarioPage.type')}: </strong>
                 {ScenarioQueueTypes[scenario.queueType]}
+              </p>
+              <p>
+                <strong>{t('pages:scenarioPage.tier')}: </strong>
+                {scenario.tier}
               </p>
             </div>
             <div className="column is-2 has-text-centered">

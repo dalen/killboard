@@ -65,7 +65,12 @@
     "map": "Map",
     "order": "Order",
     "destruction": "Destruction",
-    "surrender": "Surrender"
+    "surrender": "Surrender",
+    "date": "Date",
+    "time": "Time",
+    "duration": "Duration",
+    "type": "Type",
+    "tier": "Tier"
   },
   "skirmishPage": {
     "skirmishId": "Skirmish Report #{{skirmishId}}",
