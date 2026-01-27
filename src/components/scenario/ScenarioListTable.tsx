@@ -68,9 +68,9 @@ export function ScenarioListTable({
                 </td>
                 <td>
                   {t(
-                    duration.hours === 0
-                      ? 'components:scenarioList.scenarioDuration'
-                      : 'components:scenarioList.scenarioDurationHour',
+                    duration.hours
+                      ? 'components:scenarioList.scenarioDurationHour'
+                      : 'components:scenarioList.scenarioDuration',
                     {
                       hours: duration.hours,
                       minutes: duration.minutes,
