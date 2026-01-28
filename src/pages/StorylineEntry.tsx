@@ -1,10 +1,10 @@
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ReactElement } from 'react';
-import { GetWarJournalEntryQuery } from '@/__generated__/graphql';
+import { Career, GetWarJournalEntryQuery } from '@/__generated__/graphql';
 import clsx from 'clsx';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import {
@@ -66,7 +66,7 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
 `;
 
 export function StorylineEntry(): ReactElement {
-  const { t } = useTranslation(['common', 'pages']);
+  const { t } = useTranslation(['common', 'pages', 'enums']);
   const { id, storylineId } = useParams();
   const { loading, error, data } = useQuery<GetWarJournalEntryQuery>(
     WAR_JOURNAL_ENTRY_DETAILS,
@@ -75,6 +75,7 @@ export function StorylineEntry(): ReactElement {
     },
   );
   const { width } = useWindowDimensions();
+  const [search, setSearch] = useSearchParams();
   const isMobile = width <= 768;
 
   if (loading) return <progress className="progress" />;
@@ -167,24 +168,76 @@ export function StorylineEntry(): ReactElement {
       {entry.influenceRewards.length > 0 && (
         <div className="card mb-5">
           <div className="card-content">
-            <div className="is-size-4 is-family-secondary has-text-info">
-              {t('pages:warJournalStoryline.influenceRewards')}
+            <div className="columns">
+              <div className="column">
+                <div className="is-size-4 is-family-secondary has-text-info">
+                  {t('pages:warJournalStoryline.influenceRewards')}
+                </div>
+              </div>
+              <div className="column">
+                <div className="field is-horizontal">
+                  <div className="field-label is-normal">
+                    <label className="label" htmlFor="queueType-select">
+                      {t('pages:warJournalStoryline.careerFilter')}
+                    </label>
+                  </div>
+                  <div className="field-body">
+                    <div className="control">
+                      <div className="select">
+                        <select
+                          id="queueType-select"
+                          value={search.get('career') || 'all'}
+                          onChange={(event) => {
+                            if (event.target.value === 'all') {
+                              search.delete('career');
+                            } else {
+                              search.set('career', event.target.value);
+                            }
+                            setSearch(search);
+                          }}
+                        >
+                          <option value="all">
+                            {t('pages:warJournalStoryline.allCareers')}
+                          </option>
+                          {Object.entries(Career).map((career) => (
+                            <option key={career[1]} value={career[1]}>
+                              {t(`enums:career.${career[1]}`)}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div className="is-size-5 is-family-secondary has-text-primary">
               {t('pages:warJournalStoryline.basicRewards')}
             </div>
-            <InfluenceRewards rewards={entry.influenceRewards} tier={1} />
+            <InfluenceRewards
+              rewards={entry.influenceRewards}
+              tier={1}
+              career={search.get('career') as Career | null}
+            />
 
             <div className="is-size-5 is-family-secondary has-text-primary">
               {t('pages:warJournalStoryline.advancedRewards')}
             </div>
-            <InfluenceRewards rewards={entry.influenceRewards} tier={2} />
+            <InfluenceRewards
+              rewards={entry.influenceRewards}
+              tier={2}
+              career={search.get('career') as Career | null}
+            />
 
             <div className="is-size-5 is-family-secondary has-text-primary">
               {t('pages:warJournalStoryline.eliteRewards')}
             </div>
-            <InfluenceRewards rewards={entry.influenceRewards} tier={3} />
+            <InfluenceRewards
+              rewards={entry.influenceRewards}
+              tier={3}
+              career={search.get('career') as Career | null}
+            />
           </div>
         </div>
       )}

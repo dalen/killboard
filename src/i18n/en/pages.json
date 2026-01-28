@@ -232,7 +232,9 @@
     "influenceRewards": "Influence Rewards",
     "basicRewards": "Basic",
     "advancedRewards": "Advanced",
-    "eliteRewards": "Elite"
+    "eliteRewards": "Elite",
+    "careerFilter": "Career",
+    "allCareers": "All Careers"
   },
   "warJournalStorylineActivity": {
     "storylineName": "{{storylineName}}",

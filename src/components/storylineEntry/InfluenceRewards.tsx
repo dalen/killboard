@@ -1,6 +1,10 @@
-import { ChapterInfluenceRewardFragment } from '@/__generated__/graphql';
+import {
+  Career,
+  ChapterInfluenceRewardFragment,
+} from '@/__generated__/graphql';
 import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
 import { ItemPopup } from '@/components/item/ItemPopup';
+import { canUseItem } from '@/itemUtils';
 import { gql } from '@apollo/client';
 import Tippy from '@tippyjs/react';
 import { ReactElement } from 'react';
@@ -21,14 +25,17 @@ export const INFLUENCE_REWARDS_FRAGMENT = gql`
 export function InfluenceRewards({
   rewards,
   tier,
+  career = null,
 }: {
   rewards: ChapterInfluenceRewardFragment[];
   tier: number;
+  career?: Career | null;
 }): ReactElement {
   return (
     <div className="mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap">
       {rewards
         .filter((item) => item.tier === tier)
+        .filter((item) => career === null || canUseItem(item.item, career))
         .map((reward) => (
           <div key={reward.item.id}>
             <Tippy
