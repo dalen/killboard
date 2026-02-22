@@ -28,8 +28,6 @@ const CREATURES = gql`
       nodes {
         id
         name
-        creatureType
-        creatureSubType
         realm
       }
       pageInfo {
@@ -119,7 +117,6 @@ export function Creatures(): ReactElement {
           <thead>
             <tr>
               <th>{t('pages:creatures.name')}</th>
-              <th>{t('pages:creatures.creatureSubType')}</th>
             </tr>
           </thead>
           <tbody>
@@ -127,9 +124,6 @@ export function Creatures(): ReactElement {
               <tr key={creature.id}>
                 <td>
                   <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
-                </td>
-                <td>
-                  {t(`enums:creatureSubType.${creature.creatureSubType}`)}
                 </td>
               </tr>
             ))}

@@ -7,7 +7,6 @@ import { ReactElement } from 'react';
 import { GetWarJournalActivityQuery } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
-import { MapPositions } from '@/components/MapPositions';
 
 const WAR_JOURNAL_ENTRY_DETAILS = gql`
   query GetWarJournalActivity($id: ID!) {
@@ -17,20 +16,6 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
         name
       }
       name
-      position {
-        x
-        y
-        zone {
-          id
-          name
-        }
-        mapSetup {
-          nwCornerX
-          nwCornerY
-          seCornerX
-          seCornerY
-        }
-      }
       activities {
         id
         name
@@ -143,26 +128,6 @@ export function StorylineActivity(): ReactElement {
           </tbody>
         </table>
       </div>
-      {entry.zone &&
-      storylineEntry.position &&
-      storylineEntry.position.mapSetup &&
-      storylineEntry.position.zone?.id === entry.zone.id ? (
-        <div className="card mb-5">
-          <div className="card-content">
-            <p className="is-size-5 is-family-secondary has-text-info">
-              {entry.zone.name}
-            </p>
-            <MapPositions
-              positions={[storylineEntry.position]}
-              zoneId={Number(storylineEntry.position.zone?.id)}
-              nwCornerX={storylineEntry.position.mapSetup.nwCornerX}
-              nwCornerY={storylineEntry.position.mapSetup.nwCornerY}
-              seCornerX={storylineEntry.position.mapSetup.seCornerX}
-              seCornerY={storylineEntry.position.mapSetup.seCornerY}
-            />{' '}
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }

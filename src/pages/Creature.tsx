@@ -14,8 +14,6 @@ const CREATURE_DETAILS = gql`
     creature(id: $id) {
       id
       name
-      creatureType
-      creatureSubType
       realm
       spawns {
         id
@@ -119,7 +117,6 @@ export function Creature({
           <p className="is-size-4 is-family-secondary has-text-info">
             {entry.name}
           </p>
-          <p>{t(`enums:creatureSubType.${entry.creatureSubType}`)}</p>
         </div>
       </div>
 

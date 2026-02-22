@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
-export type InputMaybe<T> = T | null | undefined;
+export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
@@ -94,6 +94,15 @@ export type AbilityInfoDescriptionArgs = {
   stats: CharacterStatsInput;
 };
 
+/** Ability information */
+export type AbilityKillDamage = {
+  __typename?: 'AbilityKillDamage';
+  /** Ability information, if null it was auto attack damage */
+  ability?: Maybe<AbilityInfo>;
+  /** Total damage dealt by this ability */
+  damageAmount: Scalars['UnsignedInt']['output'];
+};
+
 export enum AbilityType {
   /** Regular abilities */
   Default = 'DEFAULT',
@@ -134,6 +143,14 @@ export type Attacker = {
   level: Scalars['Byte']['output'];
   /** Renown rank at the time of the kill */
   renownRank: Scalars['Byte']['output'];
+};
+
+export type BattlefieldObjective = Location & SearchContent & {
+  __typename?: 'BattlefieldObjective';
+  /** The unique identifier of the battlefield objective. */
+  id: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  position: Position;
 };
 
 export type BooleanOperationFilterInput = {
@@ -279,21 +296,8 @@ export type CareerMaskOperationFilterInput = {
 export type Chapter = SearchContent & {
   __typename?: 'Chapter';
   id: Scalars['ID']['output'];
-  influenceRewards: Array<ChapterInfluenceReward>;
   name?: Maybe<Scalars['String']['output']>;
-  position: Position;
-  rank: Scalars['UnsignedInt']['output'];
-};
-
-export type ChapterFilterInput = {
-  and?: InputMaybe<Array<ChapterFilterInput>>;
-  /** Name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<ChapterFilterInput>>;
-  /** Zone */
-  rank?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  /** Zone */
-  zoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  rewards: Array<ChapterInfluenceReward>;
 };
 
 export type ChapterInfluenceReward = {
@@ -302,34 +306,6 @@ export type ChapterInfluenceReward = {
   item: Item;
   realm: Realm;
   tier: Scalars['Byte']['output'];
-};
-
-export type ChapterSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  rank?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type ChaptersConnection = {
-  __typename?: 'ChaptersConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ChaptersEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Chapter>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type ChaptersEdge = {
-  __typename?: 'ChaptersEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Chapter;
 };
 
 /** Info about a character */
@@ -504,8 +480,6 @@ export enum CraftingItemType {
 
 export type Creature = SearchContent & {
   __typename?: 'Creature';
-  creatureSubType: CreatureSubType;
-  creatureType: CreatureType;
   id: Scalars['ID']['output'];
   modelName: Scalars['String']['output'];
   name: Scalars['String']['output'];
@@ -513,6 +487,7 @@ export type Creature = SearchContent & {
   questsStarter: Array<Quest>;
   realm?: Maybe<Realm>;
   spawns: Array<CreatureSpawn>;
+  title: CreatureTitle;
   /** Items sold by this creature */
   vendorItems?: Maybe<VendorItemsConnection>;
 };
@@ -527,24 +502,30 @@ export type CreatureVendorItemsArgs = {
 
 export type CreatureFilterInput = {
   and?: InputMaybe<Array<CreatureFilterInput>>;
-  /** Sub Type */
-  creatureSubType?: InputMaybe<CreatureSubTypesOperationFilterInput>;
-  /** Type */
-  creatureType?: InputMaybe<CreatureTypesOperationFilterInput>;
   /** Name */
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<CreatureFilterInput>>;
 };
 
+/** Damage dealt by a creature */
+export type CreatureKillDamage = KillDamageSource & {
+  __typename?: 'CreatureKillDamage';
+  /** By ability */
+  abilities: Array<AbilityKillDamage>;
+  /** The creature doing the damage */
+  attacker?: Maybe<Creature>;
+  /** Damage amount */
+  damageAmount: Scalars['UnsignedInt']['output'];
+};
+
 export type CreatureSortInput = {
-  creatureSubType?: InputMaybe<SortEnumType>;
-  creatureType?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
 };
 
 export type CreatureSpawn = {
   __typename?: 'CreatureSpawn';
+  creature: Creature;
   id: Scalars['ID']['output'];
   /** Position Info */
   position: Position;
@@ -552,227 +533,210 @@ export type CreatureSpawn = {
   zone: Zone;
 };
 
-export enum CreatureSubType {
-  AnimalsBeastsBasilisk = 'ANIMALS_BEASTS_BASILISK',
-  AnimalsBeastsBear = 'ANIMALS_BEASTS_BEAR',
-  AnimalsBeastsBoar = 'ANIMALS_BEASTS_BOAR',
-  AnimalsBeastsGiantBat = 'ANIMALS_BEASTS_GIANT_BAT',
-  AnimalsBeastsGreatCat = 'ANIMALS_BEASTS_GREAT_CAT',
-  AnimalsBeastsHound = 'ANIMALS_BEASTS_HOUND',
-  AnimalsBeastsRhinox = 'ANIMALS_BEASTS_RHINOX',
-  AnimalsBeastsWolf = 'ANIMALS_BEASTS_WOLF',
-  AnimalsBirdsGreatEagle = 'ANIMALS_BIRDS_GREAT_EAGLE',
-  AnimalsBirdsVulture = 'ANIMALS_BIRDS_VULTURE',
-  AnimalsBirdsWarhawk = 'ANIMALS_BIRDS_WARHAWK',
-  AnimalsCritterBat = 'ANIMALS_CRITTER_BAT',
-  AnimalsCritterBird = 'ANIMALS_CRITTER_BIRD',
-  AnimalsCritterCrab = 'ANIMALS_CRITTER_CRAB',
-  AnimalsCritterDeer = 'ANIMALS_CRITTER_DEER',
-  AnimalsCritterHare = 'ANIMALS_CRITTER_HARE',
-  AnimalsCritterLizard = 'ANIMALS_CRITTER_LIZARD',
-  AnimalsCritterMaggot = 'ANIMALS_CRITTER_MAGGOT',
-  AnimalsCritterRat = 'ANIMALS_CRITTER_RAT',
-  AnimalsCritterSpider = 'ANIMALS_CRITTER_SPIDER',
-  AnimalsInsectsArachnidsGiantScarab = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SCARAB',
-  AnimalsInsectsArachnidsGiantScorpion = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SCORPION',
-  AnimalsInsectsArachnidsGiantSpider = 'ANIMALS_INSECTS_ARACHNIDS_GIANT_SPIDER',
-  AnimalsInsectsArachnidsTombSwarm = 'ANIMALS_INSECTS_ARACHNIDS_TOMB_SWARM',
-  AnimalsLivestockCat = 'ANIMALS_LIVESTOCK_CAT',
-  AnimalsLivestockChicken = 'ANIMALS_LIVESTOCK_CHICKEN',
-  AnimalsLivestockCow = 'ANIMALS_LIVESTOCK_COW',
-  AnimalsLivestockDog = 'ANIMALS_LIVESTOCK_DOG',
-  AnimalsLivestockHorse = 'ANIMALS_LIVESTOCK_HORSE',
-  AnimalsLivestockPig = 'ANIMALS_LIVESTOCK_PIG',
-  AnimalsLivestockSheep = 'ANIMALS_LIVESTOCK_SHEEP',
-  AnimalsReptilesColdOne = 'ANIMALS_REPTILES_COLD_ONE',
-  AnimalsReptilesGiantLizard = 'ANIMALS_REPTILES_GIANT_LIZARD',
-  DaemonsKhorneBloodbeast = 'DAEMONS_KHORNE_BLOODBEAST',
-  DaemonsKhorneBloodletter = 'DAEMONS_KHORNE_BLOODLETTER',
-  DaemonsKhorneBloodthirster = 'DAEMONS_KHORNE_BLOODTHIRSTER',
-  DaemonsKhorneFleshHound = 'DAEMONS_KHORNE_FLESH_HOUND',
-  DaemonsKhorneJuggernautOfKhorne = 'DAEMONS_KHORNE_JUGGERNAUT_OF_KHORNE',
-  DaemonsNurgleGreatUncleanOne = 'DAEMONS_NURGLE_GREAT_UNCLEAN_ONE',
-  DaemonsNurgleNurgling = 'DAEMONS_NURGLE_NURGLING',
-  DaemonsNurglePlaguebearer = 'DAEMONS_NURGLE_PLAGUEBEARER',
-  DaemonsNurglePlaguebeast = 'DAEMONS_NURGLE_PLAGUEBEAST',
-  DaemonsNurgleSlimeHound = 'DAEMONS_NURGLE_SLIME_HOUND',
-  DaemonsSlaaneshDaemonette = 'DAEMONS_SLAANESH_DAEMONETTE',
-  DaemonsSlaaneshFiend = 'DAEMONS_SLAANESH_FIEND',
-  DaemonsSlaaneshKeeperOfSecrets = 'DAEMONS_SLAANESH_KEEPER_OF_SECRETS',
-  DaemonsTzeentchFirewyrm = 'DAEMONS_TZEENTCH_FIREWYRM',
-  DaemonsTzeentchFlamer = 'DAEMONS_TZEENTCH_FLAMER',
-  DaemonsTzeentchHorror = 'DAEMONS_TZEENTCH_HORROR',
-  DaemonsTzeentchLordOfChange = 'DAEMONS_TZEENTCH_LORD_OF_CHANGE',
-  DaemonsTzeentchScreamer = 'DAEMONS_TZEENTCH_SCREAMER',
-  DaemonsTzeentchWatcher = 'DAEMONS_TZEENTCH_WATCHER',
-  DaemonsUnmarkedDaemonsChaosFury = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_FURY',
-  DaemonsUnmarkedDaemonsChaosHound = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_HOUND',
-  DaemonsUnmarkedDaemonsChaosSpawn = 'DAEMONS_UNMARKED_DAEMONS_CHAOS_SPAWN',
-  DaemonsUnmarkedDaemonsDaemonvine = 'DAEMONS_UNMARKED_DAEMONS_DAEMONVINE',
-  DaemonsUnmarkedDaemonsDaemonPrince = 'DAEMONS_UNMARKED_DAEMONS_DAEMON_PRINCE',
-  DaemonsUnmarkedDaemonsWalker = 'DAEMONS_UNMARKED_DAEMONS_WALKER',
-  DwarvenSlayer = 'DWARVEN_SLAYER',
-  HumanoidsBeastmenBestigor = 'HUMANOIDS_BEASTMEN_BESTIGOR',
-  HumanoidsBeastmenBrayShaman = 'HUMANOIDS_BEASTMEN_BRAY_SHAMAN',
-  HumanoidsBeastmenDoombull = 'HUMANOIDS_BEASTMEN_DOOMBULL',
-  HumanoidsBeastmenGor = 'HUMANOIDS_BEASTMEN_GOR',
-  HumanoidsBeastmenUngor = 'HUMANOIDS_BEASTMEN_UNGOR',
-  HumanoidsDarkElvesBlackGuard = 'HUMANOIDS_DARK_ELVES_BLACK_GUARD',
-  HumanoidsDarkElvesDarkElf = 'HUMANOIDS_DARK_ELVES_DARK_ELF',
-  HumanoidsDarkElvesDiscipleOfKhaine = 'HUMANOIDS_DARK_ELVES_DISCIPLE_OF_KHAINE',
-  HumanoidsDarkElvesSorceress = 'HUMANOIDS_DARK_ELVES_SORCERESS',
-  HumanoidsDarkElvesWitchElves = 'HUMANOIDS_DARK_ELVES_WITCH_ELVES',
-  HumanoidsDwarfsDwarf = 'HUMANOIDS_DWARFS_DWARF',
-  HumanoidsDwarfsEngineer = 'HUMANOIDS_DWARFS_ENGINEER',
-  HumanoidsDwarfsHammerer = 'HUMANOIDS_DWARFS_HAMMERER',
-  HumanoidsDwarfsIronbreaker = 'HUMANOIDS_DWARFS_IRONBREAKER',
-  HumanoidsDwarfsRunepriest = 'HUMANOIDS_DWARFS_RUNEPRIEST',
-  HumanoidsDwarfsSlayer = 'HUMANOIDS_DWARFS_SLAYER',
-  HumanoidsElvesArchmage = 'HUMANOIDS_ELVES_ARCHMAGE',
-  HumanoidsElvesHighElf = 'HUMANOIDS_ELVES_HIGH_ELF',
-  HumanoidsElvesShadowWarrior = 'HUMANOIDS_ELVES_SHADOW_WARRIOR',
-  HumanoidsElvesSwordmaster = 'HUMANOIDS_ELVES_SWORDMASTER',
-  HumanoidsElvesWhiteLion = 'HUMANOIDS_ELVES_WHITE_LION',
-  HumanoidsGreenskinsBlackOrc = 'HUMANOIDS_GREENSKINS_BLACK_ORC',
-  HumanoidsGreenskinsChoppa = 'HUMANOIDS_GREENSKINS_CHOPPA',
-  HumanoidsGreenskinsGnoblar = 'HUMANOIDS_GREENSKINS_GNOBLAR',
-  HumanoidsGreenskinsGoblin = 'HUMANOIDS_GREENSKINS_GOBLIN',
-  HumanoidsGreenskinsNightGoblin = 'HUMANOIDS_GREENSKINS_NIGHT_GOBLIN',
-  HumanoidsGreenskinsOrc = 'HUMANOIDS_GREENSKINS_ORC',
-  HumanoidsGreenskinsSavageOrc = 'HUMANOIDS_GREENSKINS_SAVAGE_ORC',
-  HumanoidsGreenskinsShaman = 'HUMANOIDS_GREENSKINS_SHAMAN',
-  HumanoidsGreenskinsSnotling = 'HUMANOIDS_GREENSKINS_SNOTLING',
-  HumanoidsGreenskinsSquig = 'HUMANOIDS_GREENSKINS_SQUIG',
-  HumanoidsGreenskinsSquigHerder = 'HUMANOIDS_GREENSKINS_SQUIG_HERDER',
-  HumanoidsHumansBandit = 'HUMANOIDS_HUMANS_BANDIT',
-  HumanoidsHumansBrightWizard = 'HUMANOIDS_HUMANS_BRIGHT_WIZARD',
-  HumanoidsHumansChaos = 'HUMANOIDS_HUMANS_CHAOS',
-  HumanoidsHumansChosen = 'HUMANOIDS_HUMANS_CHOSEN',
-  HumanoidsHumansDrakkCultist = 'HUMANOIDS_HUMANS_DRAKK_CULTIST',
-  HumanoidsHumansEmpire = 'HUMANOIDS_HUMANS_EMPIRE',
-  HumanoidsHumansGhoul = 'HUMANOIDS_HUMANS_GHOUL',
-  HumanoidsHumansHuman = 'HUMANOIDS_HUMANS_HUMAN',
-  HumanoidsHumansKnightOfTheBlazingSun = 'HUMANOIDS_HUMANS_KNIGHT_OF_THE_BLAZING_SUN',
-  HumanoidsHumansMagus = 'HUMANOIDS_HUMANS_MAGUS',
-  HumanoidsHumansMarauder = 'HUMANOIDS_HUMANS_MARAUDER',
-  HumanoidsHumansPlagueVictim = 'HUMANOIDS_HUMANS_PLAGUE_VICTIM',
-  HumanoidsHumansWarriorPriest = 'HUMANOIDS_HUMANS_WARRIOR_PRIEST',
-  HumanoidsHumansWitchHunter = 'HUMANOIDS_HUMANS_WITCH_HUNTER',
-  HumanoidsHumansZealot = 'HUMANOIDS_HUMANS_ZEALOT',
-  HumanoidsOgresGorger = 'HUMANOIDS_OGRES_GORGER',
-  HumanoidsOgresOgre = 'HUMANOIDS_OGRES_OGRE',
-  HumanoidsOgresOgreBull = 'HUMANOIDS_OGRES_OGRE_BULL',
-  HumanoidsOgresOgreTyrant = 'HUMANOIDS_OGRES_OGRE_TYRANT',
-  HumanoidsOgresYhetee = 'HUMANOIDS_OGRES_YHETEE',
-  HumanoidsSkavenRatOgre = 'HUMANOIDS_SKAVEN_RAT_OGRE',
-  HumanoidsSkavenSkaven = 'HUMANOIDS_SKAVEN_SKAVEN',
-  LegendaryMonstersArdTaFeed = 'LEGENDARY_MONSTERS_ARD_TA_FEED',
-  LegendaryMonstersGlompDaSquigMasta = 'LEGENDARY_MONSTERS_GLOMP_DA_SQUIG_MASTA',
-  LegendaryMonstersMastaMixa = 'LEGENDARY_MONSTERS_MASTA_MIXA',
-  LegendaryMonstersWightLordSolithex = 'LEGENDARY_MONSTERS_WIGHT_LORD_SOLITHEX',
-  MonstersChaosBreedsCentigor = 'MONSTERS_CHAOS_BREEDS_CENTIGOR',
-  MonstersChaosBreedsChaosMutant = 'MONSTERS_CHAOS_BREEDS_CHAOS_MUTANT',
-  MonstersChaosBreedsDragonOgre = 'MONSTERS_CHAOS_BREEDS_DRAGON_OGRE',
-  MonstersChaosBreedsFlayerkin = 'MONSTERS_CHAOS_BREEDS_FLAYERKIN',
-  MonstersChaosBreedsHarpy = 'MONSTERS_CHAOS_BREEDS_HARPY',
-  MonstersChaosBreedsMaggot = 'MONSTERS_CHAOS_BREEDS_MAGGOT',
-  MonstersChaosBreedsMinotaur = 'MONSTERS_CHAOS_BREEDS_MINOTAUR',
-  MonstersChaosBreedsTuskgor = 'MONSTERS_CHAOS_BREEDS_TUSKGOR',
-  MonstersDragonoidsHydra = 'MONSTERS_DRAGONOIDS_HYDRA',
-  MonstersDragonoidsWyvern = 'MONSTERS_DRAGONOIDS_WYVERN',
-  MonstersDragonoidDragon = 'MONSTERS_DRAGONOID_DRAGON',
-  MonstersGiantsChaosGiant = 'MONSTERS_GIANTS_CHAOS_GIANT',
-  MonstersGiantsGiant = 'MONSTERS_GIANTS_GIANT',
-  MonstersMagicalBeastsCockatrice = 'MONSTERS_MAGICAL_BEASTS_COCKATRICE',
-  MonstersMagicalBeastsGriffon = 'MONSTERS_MAGICAL_BEASTS_GRIFFON',
-  MonstersMagicalBeastsImp = 'MONSTERS_MAGICAL_BEASTS_IMP',
-  MonstersMagicalBeastsManticore = 'MONSTERS_MAGICAL_BEASTS_MANTICORE',
-  MonstersMagicalBeastsPegasus = 'MONSTERS_MAGICAL_BEASTS_PEGASUS',
-  MonstersMagicalBeastsUnicorn = 'MONSTERS_MAGICAL_BEASTS_UNICORN',
-  MonstersTrollsChaosTroll = 'MONSTERS_TROLLS_CHAOS_TROLL',
-  MonstersTrollsRiverTroll = 'MONSTERS_TROLLS_RIVER_TROLL',
-  MonstersTrollsStoneTroll = 'MONSTERS_TROLLS_STONE_TROLL',
-  MonstersTrollsTroll = 'MONSTERS_TROLLS_TROLL',
-  PlantsForestSpiritsDryad = 'PLANTS_FOREST_SPIRITS_DRYAD',
-  PlantsForestSpiritsKurnous = 'PLANTS_FOREST_SPIRITS_KURNOUS',
-  PlantsForestSpiritsSpite = 'PLANTS_FOREST_SPIRITS_SPITE',
-  PlantsForestSpiritsTreekin = 'PLANTS_FOREST_SPIRITS_TREEKIN',
-  PlantsForestSpiritsTreeman = 'PLANTS_FOREST_SPIRITS_TREEMAN',
-  SiegeCatapult = 'SIEGE_CATAPULT',
-  SiegeGtaoe = 'SIEGE_GTAOE',
-  SiegeOil = 'SIEGE_OIL',
-  SiegeRam = 'SIEGE_RAM',
-  SiegeSingleTarget = 'SIEGE_SINGLE_TARGET',
-  Unclassified = 'UNCLASSIFIED',
-  UndeadConstructsAspBoneConstruct = 'UNDEAD_CONSTRUCTS_ASP_BONE_CONSTRUCT',
-  UndeadConstructsBoneGiant = 'UNDEAD_CONSTRUCTS_BONE_GIANT',
-  UndeadConstructsConstruct = 'UNDEAD_CONSTRUCTS_CONSTRUCT',
-  UndeadConstructsLivingArmor = 'UNDEAD_CONSTRUCTS_LIVING_ARMOR',
-  UndeadConstructsScarabBoneConstruct = 'UNDEAD_CONSTRUCTS_SCARAB_BONE_CONSTRUCT',
-  UndeadConstructsTombScorpion = 'UNDEAD_CONSTRUCTS_TOMB_SCORPION',
-  UndeadConstructsUshabti = 'UNDEAD_CONSTRUCTS_USHABTI',
-  UndeadConstructsWingedNightmare = 'UNDEAD_CONSTRUCTS_WINGED_NIGHTMARE',
-  UndeadGreaterUndeadLiche = 'UNDEAD_GREATER_UNDEAD_LICHE',
-  UndeadGreaterUndeadPreservedDead = 'UNDEAD_GREATER_UNDEAD_PRESERVED_DEAD',
-  UndeadGreaterUndeadVampire = 'UNDEAD_GREATER_UNDEAD_VAMPIRE',
-  UndeadSkeletonsCarrion = 'UNDEAD_SKELETONS_CARRION',
-  UndeadSkeletonsSkeleton = 'UNDEAD_SKELETONS_SKELETON',
-  UndeadSpiritsBanshee = 'UNDEAD_SPIRITS_BANSHEE',
-  UndeadSpiritsSpiritHost = 'UNDEAD_SPIRITS_SPIRIT_HOST',
-  UndeadSpiritsWraith = 'UNDEAD_SPIRITS_WRAITH',
-  UndeadWightsWight = 'UNDEAD_WIGHTS_WIGHT',
-  UndeadZombiesZombie = 'UNDEAD_ZOMBIES_ZOMBIE'
+export enum CreatureTitle {
+  AdvancedRenownGearMerchant = 'ADVANCED_RENOWN_GEAR_MERCHANT',
+  AlcadizaarsGuard = 'ALCADIZAARS_GUARD',
+  AltarofKhaineGuard = 'ALTAROF_KHAINE_GUARD',
+  AnnihilatorArmorQuartermaster = 'ANNIHILATOR_ARMOR_QUARTERMASTER',
+  Apothecary = 'APOTHECARY',
+  ApprenticeCareerTrainer = 'APPRENTICE_CAREER_TRAINER',
+  ApprenticeRenownTrainer = 'APPRENTICE_RENOWN_TRAINER',
+  ArmorMerchant = 'ARMOR_MERCHANT',
+  ArtilleryRangeGuard = 'ARTILLERY_RANGE_GUARD',
+  Auctioneer = 'AUCTIONEER',
+  Banker = 'BANKER',
+  BarberSurgeon = 'BARBER_SURGEON',
+  BarracksGuard = 'BARRACKS_GUARD',
+  BasicRenownGearMerchant = 'BASIC_RENOWN_GEAR_MERCHANT',
+  BeastPensGuard = 'BEAST_PENS_GUARD',
+  BelKorhadrisGuard = 'BEL_KORHADRIS_GUARD',
+  Blacksmith = 'BLACKSMITH',
+  BlackMarketMerchant = 'BLACK_MARKET_MERCHANT',
+  Bodyguard = 'BODYGUARD',
+  BraggartArmorQuartermaster = 'BRAGGART_ARMOR_QUARTERMASTER',
+  BreweryGuard = 'BREWERY_GUARD',
+  Butcher = 'BUTCHER',
+  CampMerchant = 'CAMP_MERCHANT',
+  CannonBatteryGuard = 'CANNON_BATTERY_GUARD',
+  CareerTrainer = 'CAREER_TRAINER',
+  CarnageArmorQuartermaster = 'CARNAGE_ARMOR_QUARTERMASTER',
+  ChallengerArmorQuartermaster = 'CHALLENGER_ARMOR_QUARTERMASTER',
+  ChillwindGuard = 'CHILLWIND_GUARD',
+  ChokethornGuard = 'CHOKETHORN_GUARD',
+  CommoditiesQuartermaster = 'COMMODITIES_QUARTERMASTER',
+  CompanionKeeper = 'COMPANION_KEEPER',
+  ConquererMedallionQuartermaster = 'CONQUERER_MEDALLION_QUARTERMASTER',
+  ConquerorArmorQuartermaster = 'CONQUEROR_ARMOR_QUARTERMASTER',
+  ConquerorEmblemQuartermaster = 'CONQUEROR_EMBLEM_QUARTERMASTER',
+  ConquerorShrineGuard = 'CONQUEROR_SHRINE_GUARD',
+  CraftSupplyMerchant = 'CRAFT_SUPPLY_MERCHANT',
+  CrusaderQuartermaster = 'CRUSADER_QUARTERMASTER',
+  CryptGuard = 'CRYPT_GUARD',
+  Cultivator = 'CULTIVATOR',
+  DecimatorArmorQuartermaster = 'DECIMATOR_ARMOR_QUARTERMASTER',
+  DevastatorArmorQuartermaster = 'DEVASTATOR_ARMOR_QUARTERMASTER',
+  DogofWar = 'DOGOF_WAR',
+  DolgrundsGuard = 'DOLGRUNDS_GUARD',
+  DominatorArmorQuartermaster = 'DOMINATOR_ARMOR_QUARTERMASTER',
+  DominatorEmblemQuartermaster = 'DOMINATOR_EMBLEM_QUARTERMASTER',
+  DoomstrikerGuard = 'DOOMSTRIKER_GUARD',
+  DoorRepairMerchant = 'DOOR_REPAIR_MERCHANT',
+  DuelistArmorQuartermaster = 'DUELIST_ARMOR_QUARTERMASTER',
+  DungeonWeaponsMerchant = 'DUNGEON_WEAPONS_MERCHANT',
+  EliteRenownGearMerchant = 'ELITE_RENOWN_GEAR_MERCHANT',
+  EverchosenGuard = 'EVERCHOSEN_GUARD',
+  ExpeditionQuartermaster = 'EXPEDITION_QUARTERMASTER',
+  FeitensGuard = 'FEITENS_GUARD',
+  FestenplatzGuard = 'FESTENPLATZ_GUARD',
+  FireguardSpireGuard = 'FIREGUARD_SPIRE_GUARD',
+  FlightMaster = 'FLIGHT_MASTER',
+  FortressGeneral = 'FORTRESS_GENERAL',
+  FortressLord = 'FORTRESS_LORD',
+  FurrigsFallGuard = 'FURRIGS_FALL_GUARD',
+  General = 'GENERAL',
+  GoblinArmoryGuard = 'GOBLIN_ARMORY_GUARD',
+  GraveyardGuard = 'GRAVEYARD_GUARD',
+  GreaterTalismanMerchant = 'GREATER_TALISMAN_MERCHANT',
+  GreystoneGuard = 'GREYSTONE_GUARD',
+  GromrilJunctionGuard = 'GROMRIL_JUNCTION_GUARD',
+  GromrilKrukGuard = 'GROMRIL_KRUK_GUARD',
+  Guard = 'GUARD',
+  GuildRegistrar = 'GUILD_REGISTRAR',
+  HallenfurtGuard = 'HALLENFURT_GUARD',
+  HardwaterGuard = 'HARDWATER_GUARD',
+  HarvestShrineGuard = 'HARVEST_SHRINE_GUARD',
+  HavocArmorQuartermaster = 'HAVOC_ARMOR_QUARTERMASTER',
+  HeadwallGuard = 'HEADWALL_GUARD',
+  Healer = 'HEALER',
+  HealingRitualist = 'HEALING_RITUALIST',
+  HeavyMountVendor = 'HEAVY_MOUNT_VENDOR',
+  HedgeWizard = 'HEDGE_WIZARD',
+  Herald = 'HERALD',
+  IcehearthGuard = 'ICEHEARTH_GUARD',
+  InvaderArmorQuartermaster = 'INVADER_ARMOR_QUARTERMASTER',
+  InvaderMedallionQuartermaster = 'INVADER_MEDALLION_QUARTERMASTER',
+  IroncladGuard = 'IRONCLAD_GUARD',
+  KaragazGuard = 'KARAGAZ_GUARD',
+  KarakPalikGuard = 'KARAK_PALIK_GUARD',
+  KeepFlightMaster = 'KEEP_FLIGHT_MASTER',
+  KeepLord = 'KEEP_LORD',
+  KillCollector = 'KILL_COLLECTOR',
+  KinshelsGuard = 'KINSHELS_GUARD',
+  KurlovArmoryGuard = 'KURLOV_ARMORY_GUARD',
+  Librarian = 'LIBRARIAN',
+  LifetapRitualist = 'LIFETAP_RITUALIST',
+  LighthouseGuard = 'LIGHTHOUSE_GUARD',
+  LightMountVendor = 'LIGHT_MOUNT_VENDOR',
+  LiveEventMaster = 'LIVE_EVENT_MASTER',
+  LobbaMillGuard = 'LOBBA_MILL_GUARD',
+  LookoutGuard = 'LOOKOUT_GUARD',
+  LorendythGuard = 'LORENDYTH_GUARD',
+  LostLagoonGuard = 'LOST_LAGOON_GUARD',
+  MadcapGuard = 'MADCAP_GUARD',
+  MaidensLandingGuard = 'MAIDENS_LANDING_GUARD',
+  MajorTalismanMerchant = 'MAJOR_TALISMAN_MERCHANT',
+  MartyrsSquareGuard = 'MARTYRS_SQUARE_GUARD',
+  MayhemArmorQuartermaster = 'MAYHEM_ARMOR_QUARTERMASTER',
+  MercenaryArmorQuartermaster = 'MERCENARY_ARMOR_QUARTERMASTER',
+  Merchant = 'MERCHANT',
+  MilaithsMemoryGuard = 'MILAITHS_MEMORY_GUARD',
+  MonasteryGuard = 'MONASTERY_GUARD',
+  MountVendor = 'MOUNT_VENDOR',
+  MournfireGuard = 'MOURNFIRE_GUARD',
+  NameRegistrar = 'NAME_REGISTRAR',
+  NeedleofEllyrionGuard = 'NEEDLEOF_ELLYRION_GUARD',
+  NightflameGuard = 'NIGHTFLAME_GUARD',
+  None = 'NONE',
+  NordlandXiGuard = 'NORDLAND_XI_GUARD',
+  NoveltyVendor = 'NOVELTY_VENDOR',
+  ObliteratorArmorQuartermaster = 'OBLITERATOR_ARMOR_QUARTERMASTER',
+  OfficerCoinQuartermaster = 'OFFICER_COIN_QUARTERMASTER',
+  OfficerEmblemQuartermaster = 'OFFICER_EMBLEM_QUARTERMASTER',
+  OfficerMedallionQuartermaster = 'OFFICER_MEDALLION_QUARTERMASTER',
+  OppressorArmorQuartermaster = 'OPPRESSOR_ARMOR_QUARTERMASTER',
+  OppressorEmblemQuartermaster = 'OPPRESSOR_EMBLEM_QUARTERMASTER',
+  OrtelvonZarisGuard = 'ORTELVON_ZARIS_GUARD',
+  OutpostGuard = 'OUTPOST_GUARD',
+  PelgorathGuard = 'PELGORATH_GUARD',
+  Postmaster = 'POSTMASTER',
+  PotentTalismanMerchant = 'POTENT_TALISMAN_MERCHANT',
+  QuarryGuard = 'QUARRY_GUARD',
+  Quartermaster = 'QUARTERMASTER',
+  RallyMaster = 'RALLY_MASTER',
+  RankedQuartermaster = 'RANKED_QUARTERMASTER',
+  Realtor = 'REALTOR',
+  ReaverStablesGuard = 'REAVER_STABLES_GUARD',
+  RecordsKeeper = 'RECORDS_KEEPER',
+  RecruitCoinQuartermaster = 'RECRUIT_COIN_QUARTERMASTER',
+  RecruitEmblemQuartermaster = 'RECRUIT_EMBLEM_QUARTERMASTER',
+  RecruitMedallionQuartermaster = 'RECRUIT_MEDALLION_QUARTERMASTER',
+  ReikwatchGuard = 'REIKWATCH_GUARD',
+  RelicGuardian = 'RELIC_GUARDIAN',
+  RenownArmorQuartermaster = 'RENOWN_ARMOR_QUARTERMASTER',
+  RenownGearMerchant = 'RENOWN_GEAR_MERCHANT',
+  RenownTrainer = 'RENOWN_TRAINER',
+  RenownWeaponQuartermaster = 'RENOWN_WEAPON_QUARTERMASTER',
+  RottenpikeGuard = 'ROTTENPIKE_GUARD',
+  RoyalQuartermaster = 'ROYAL_QUARTERMASTER',
+  RuinArmorQuartermaster = 'RUIN_ARMOR_QUARTERMASTER',
+  RunehammerGuard = 'RUNEHAMMER_GUARD',
+  Salvager = 'SALVAGER',
+  SanctuaryGuard = 'SANCTUARY_GUARD',
+  SarathananValeGuard = 'SARATHANAN_VALE_GUARD',
+  SariDaroirGuard = 'SARI_DAROIR_GUARD',
+  Scavenger = 'SCAVENGER',
+  SchwenderhalleGuard = 'SCHWENDERHALLE_GUARD',
+  ScoutCoinQuartermaster = 'SCOUT_COIN_QUARTERMASTER',
+  ScoutEmblemQuartermaster = 'SCOUT_EMBLEM_QUARTERMASTER',
+  ScoutMedallionQuartermaster = 'SCOUT_MEDALLION_QUARTERMASTER',
+  SenlathianStandGuard = 'SENLATHIAN_STAND_GUARD',
+  Sergeant = 'SERGEANT',
+  ShadowSpireGuard = 'SHADOW_SPIRE_GUARD',
+  ShardofGriefGuard = 'SHARDOF_GRIEF_GUARD',
+  ShrineofTimeGuard = 'SHRINEOF_TIME_GUARD',
+  SiegeCamp2Guard = 'SIEGE_CAMP2_GUARD',
+  SiegeCampGuard = 'SIEGE_CAMP_GUARD',
+  SiegeQuartermaster = 'SIEGE_QUARTERMASTER',
+  SiegeWeaponMerchant = 'SIEGE_WEAPON_MERCHANT',
+  SoldierCoinQuartermaster = 'SOLDIER_COIN_QUARTERMASTER',
+  SoldierEmblemQuartermaster = 'SOLDIER_EMBLEM_QUARTERMASTER',
+  SoldierMedallionQuartermaster = 'SOLDIER_MEDALLION_QUARTERMASTER',
+  SovereignArmorQuartermaster = 'SOVEREIGN_ARMOR_QUARTERMASTER',
+  SpecializationsTrainer = 'SPECIALIZATIONS_TRAINER',
+  SpecializedArmorsmith = 'SPECIALIZED_ARMORSMITH',
+  SpecialtyMountWrangler = 'SPECIALTY_MOUNT_WRANGLER',
+  SpireofTeclisGuard = 'SPIREOF_TECLIS_GUARD',
+  StableMaster = 'STABLE_MASTER',
+  StandardMerchant = 'STANDARD_MERCHANT',
+  StonemineGuard = 'STONEMINE_GUARD',
+  SundriesQuartermaster = 'SUNDRIES_QUARTERMASTER',
+  SuperiorTalismanMerchant = 'SUPERIOR_TALISMAN_MERCHANT',
+  TacticalAdvisor = 'TACTICAL_ADVISOR',
+  TalismanMerchant = 'TALISMAN_MERCHANT',
+  TavernGuard = 'TAVERN_GUARD',
+  ThaugamondGuard = 'THAUGAMOND_GUARD',
+  TheForcesOfDestruction = 'THE_FORCES_OF_DESTRUCTION',
+  TheForcesOfOrder = 'THE_FORCES_OF_ORDER',
+  TomeAccessoryLibrarian = 'TOME_ACCESSORY_LIBRARIAN',
+  TomeTacticLibrarian = 'TOME_TACTIC_LIBRARIAN',
+  TomeTokenLibrarian = 'TOME_TOKEN_LIBRARIAN',
+  TomeTrophyLibrarian = 'TOME_TROPHY_LIBRARIAN',
+  Trainer = 'TRAINER',
+  TriumphantEmblemQuartermaster = 'TRIUMPHANT_EMBLEM_QUARTERMASTER',
+  UpgradeMerchant = 'UPGRADE_MERCHANT',
+  VanquisherArmorQuartermaster = 'VANQUISHER_ARMOR_QUARTERMASTER',
+  VanquisherQuartermaster = 'VANQUISHER_QUARTERMASTER',
+  VaultKeeper = 'VAULT_KEEPER',
+  VerentanesGuard = 'VERENTANES_GUARD',
+  VerySpecialDyeVendor = 'VERY_SPECIAL_DYE_VENDOR',
+  VeteranRenownGearMerchant = 'VETERAN_RENOWN_GEAR_MERCHANT',
+  VictoriousQuartermaster = 'VICTORIOUS_QUARTERMASTER',
+  WarlordArmorQuartermaster = 'WARLORD_ARMOR_QUARTERMASTER',
+  WarCrestVaultKeeper = 'WAR_CREST_VAULT_KEEPER',
+  WarGuard = 'WAR_GUARD',
+  WeaponMerchant = 'WEAPON_MERCHANT',
+  WoodChoppazGuard = 'WOOD_CHOPPAZ_GUARD'
 }
-
-export type CreatureSubTypesOperationFilterInput = {
-  eq?: InputMaybe<CreatureSubType>;
-  in?: InputMaybe<Array<CreatureSubType>>;
-  neq?: InputMaybe<CreatureSubType>;
-  nin?: InputMaybe<Array<CreatureSubType>>;
-};
-
-export enum CreatureType {
-  AnimalsBeasts = 'ANIMALS_BEASTS',
-  AnimalsBirds = 'ANIMALS_BIRDS',
-  AnimalsCritter = 'ANIMALS_CRITTER',
-  AnimalsInsectsArachnids = 'ANIMALS_INSECTS_ARACHNIDS',
-  AnimalsLivestock = 'ANIMALS_LIVESTOCK',
-  AnimalsReptiles = 'ANIMALS_REPTILES',
-  DaemonsKhorne = 'DAEMONS_KHORNE',
-  DaemonsNurgle = 'DAEMONS_NURGLE',
-  DaemonsSlaanesh = 'DAEMONS_SLAANESH',
-  DaemonsTzeentch = 'DAEMONS_TZEENTCH',
-  DaemonsUnmarked = 'DAEMONS_UNMARKED',
-  HumanoidsBeastmen = 'HUMANOIDS_BEASTMEN',
-  HumanoidsDarkElves = 'HUMANOIDS_DARK_ELVES',
-  HumanoidsDwarfs = 'HUMANOIDS_DWARFS',
-  HumanoidsElves = 'HUMANOIDS_ELVES',
-  HumanoidsGreenskins = 'HUMANOIDS_GREENSKINS',
-  HumanoidsHumans = 'HUMANOIDS_HUMANS',
-  HumanoidsOgres = 'HUMANOIDS_OGRES',
-  HumanoidsSkaven = 'HUMANOIDS_SKAVEN',
-  MonstersChaosBreeds = 'MONSTERS_CHAOS_BREEDS',
-  MonstersDragonoids = 'MONSTERS_DRAGONOIDS',
-  MonstersGiants = 'MONSTERS_GIANTS',
-  MonstersMagicalBeasts = 'MONSTERS_MAGICAL_BEASTS',
-  MonstersTrolls = 'MONSTERS_TROLLS',
-  PlantsForestSpirits = 'PLANTS_FOREST_SPIRITS',
-  Siege = 'SIEGE',
-  Unclassified = 'UNCLASSIFIED',
-  UndeadConstructs = 'UNDEAD_CONSTRUCTS',
-  UndeadGreaterUndead = 'UNDEAD_GREATER_UNDEAD',
-  UndeadSkeletons = 'UNDEAD_SKELETONS',
-  UndeadSpirits = 'UNDEAD_SPIRITS',
-  UndeadWights = 'UNDEAD_WIGHTS',
-  UndeadZombies = 'UNDEAD_ZOMBIES'
-}
-
-export type CreatureTypesOperationFilterInput = {
-  eq?: InputMaybe<CreatureType>;
-  in?: InputMaybe<Array<CreatureType>>;
-  neq?: InputMaybe<CreatureType>;
-  nin?: InputMaybe<Array<CreatureType>>;
-};
 
 /** A connection to a list of items. */
 export type CreaturesConnection = {
@@ -895,6 +859,14 @@ export type Event = {
   endTime?: Maybe<Scalars['DateTime']['output']>;
   name: Scalars['String']['output'];
   startTime: Scalars['DateTime']['output'];
+};
+
+export type FallKillDamage = KillDamageSource & {
+  __typename?: 'FallKillDamage';
+  /** Ability information */
+  ability?: Maybe<AbilityInfo>;
+  /** Damage amount */
+  damageAmount: Scalars['UnsignedInt']['output'];
 };
 
 export type FloatOperationFilterInput = {
@@ -1081,6 +1053,18 @@ export type Icon = {
   name: Scalars['String']['output'];
   /** URL to image file */
   url?: Maybe<Scalars['String']['output']>;
+};
+
+export type InfluenceEntryFilterInput = {
+  and?: InputMaybe<Array<InfluenceEntryFilterInput>>;
+  /** Name */
+  name?: InputMaybe<StringOperationFilterInput>;
+  or?: InputMaybe<Array<InfluenceEntryFilterInput>>;
+};
+
+export type InfluenceEntrySortInput = {
+  id?: InputMaybe<SortEnumType>;
+  name?: InputMaybe<SortEnumType>;
 };
 
 export type Instance = {
@@ -1431,6 +1415,8 @@ export type Item = SearchContent & {
   itemSet?: Maybe<ItemSet>;
   /** Level requirement */
   levelRequirement: Scalars['Byte']['output'];
+  /** Model ID */
+  modelId?: Maybe<Scalars['UnsignedShort']['output']>;
   /** Name */
   name: Scalars['String']['output'];
   raceRestriction: Array<Race>;
@@ -1721,12 +1707,26 @@ export type ItemsEdge = {
   node: Item;
 };
 
+export type Keep = Location & SearchContent & {
+  __typename?: 'Keep';
+  /** The unique identifier of the keep. */
+  id: Scalars['ID']['output'];
+  /** The name of the keep. */
+  name: Scalars['String']['output'];
+  position: Position;
+};
+
 export type Kill = {
   __typename?: 'Kill';
   /** List of all enemy players contributing to the kill */
   attackers: Array<Attacker>;
-  /** Damage by attacker and source */
+  /**
+   * Damage by attacker and source
+   * @deprecated Use 'damageSources' instead
+   */
   damage: Array<KillDamage>;
+  /** Damage by attacker and source */
+  damageSources: Array<KillDamageSource>;
   /** The player who landed the killing blow */
   deathblow?: Maybe<Character>;
   /** Kill Id */
@@ -1774,6 +1774,11 @@ export enum KillDamageAttackerType {
   Other = 'OTHER',
   Player = 'PLAYER'
 }
+
+export type KillDamageSource = {
+  /** Damage amount */
+  damageAmount: Scalars['UnsignedInt']['output'];
+};
 
 export enum KillDamageSourceType {
   Ability = 'ABILITY',
@@ -1892,6 +1897,13 @@ export type LiveEvent = Event & SearchContent & {
   startTime: Scalars['DateTime']['output'];
 };
 
+export type Location = {
+  /** Name */
+  name: Scalars['String']['output'];
+  /** Position */
+  position: Position;
+};
+
 export type LongOperationFilterInput = {
   eq?: InputMaybe<Scalars['Long']['input']>;
   gt?: InputMaybe<Scalars['Long']['input']>;
@@ -1968,6 +1980,17 @@ export type PlayerFeudFilterInput = {
   player2Id: Scalars['ID']['input'];
 };
 
+/** Damage dealt by a player */
+export type PlayerKillDamage = KillDamageSource & {
+  __typename?: 'PlayerKillDamage';
+  /** By ability */
+  abilities: Array<AbilityKillDamage>;
+  /** The character doing the damage */
+  attacker?: Maybe<Character>;
+  /** Amount of damage dealt */
+  damageAmount: Scalars['UnsignedInt']['output'];
+};
+
 export type Position = {
   __typename?: 'Position';
   /** The map setup of the zone */
@@ -1984,11 +2007,11 @@ export type Position = {
   zoneId: Scalars['UnsignedShort']['output'];
 };
 
-export type PublicQuest = SearchContent & {
+export type PublicQuest = Location & SearchContent & {
   __typename?: 'PublicQuest';
   difficulty: PublicQuestDifficulty;
   id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   position: Position;
   type: PublicQuestType;
 };
@@ -2015,10 +2038,6 @@ export type Query = {
   ability?: Maybe<AbilityInfo>;
   /** Number of characters participating in one or more kills during the period */
   activeCharactersStats?: Maybe<Scalars['NonNegativeInt']['output']>;
-  /** Get one chapter */
-  chapter?: Maybe<Chapter>;
-  /** Query for chapters matching a filter */
-  chapters?: Maybe<ChaptersConnection>;
   /** Get one character */
   character?: Maybe<Character>;
   /** Query for CharacterRatings matching a filter */
@@ -2103,6 +2122,8 @@ export type Query = {
   warJournalStorylines: Array<WarJournalStoryline>;
   weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
   weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
+  /** Get one Zone by Id */
+  zone?: Maybe<Zone>;
 };
 
 
@@ -2117,21 +2138,6 @@ export type QueryActiveCharactersStatsArgs = {
   maxLevel?: InputMaybe<Scalars['Byte']['input']>;
   minLevel?: InputMaybe<Scalars['Byte']['input']>;
   to: Scalars['DateTime']['input'];
-};
-
-
-export type QueryChapterArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryChaptersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<ChapterSortInput>>;
-  where?: InputMaybe<ChapterFilterInput>;
 };
 
 
@@ -2446,6 +2452,11 @@ export type QueryWeeklyGuildKillLeaderboardArgs = {
 export type QueryWeeklyKillLeaderboardArgs = {
   week: Scalars['Int']['input'];
   year: Scalars['Int']['input'];
+};
+
+
+export type QueryZoneArgs = {
+  id: Scalars['ID']['input'];
 };
 
 /** Info about a quest */
@@ -2836,6 +2847,8 @@ export type ScenarioRecordFilterInput = {
   startTime?: InputMaybe<DateTimeOperationFilterInput>;
   /** Scenario tier */
   tier?: InputMaybe<ByteOperationFilterInput>;
+  /** If scenario ended by surrender */
+  wasSurrender?: InputMaybe<BooleanOperationFilterInput>;
   /** Winning team, 0 is order, 1 is destruction */
   winner?: InputMaybe<ByteOperationFilterInput>;
 };
@@ -2844,6 +2857,8 @@ export type ScenarioScoreboardEntry = {
   __typename?: 'ScenarioScoreboardEntry';
   /** Character information */
   character: Character;
+  /** Damage contributing to kills of creatures */
+  creatureKillDamage: Scalars['UnsignedInt']['output'];
   /** Damage */
   damage: Scalars['UnsignedInt']['output'];
   /** Damage Received */
@@ -3096,6 +3111,8 @@ export type SkirmishScoreboardEntry = {
   career: Career;
   /** Character information */
   character: Character;
+  /** Damage contributing to kills of creatures */
+  creatureKillDamage: Scalars['UnsignedInt']['output'];
   /** Damage */
   damage: Scalars['UnsignedInt']['output'];
   /** Damage Received */
@@ -3139,6 +3156,7 @@ export type SkirmishScoreboardEntry = {
 };
 
 export type SkirmishScoreboardEntrySortInput = {
+  creatureKillDamage?: InputMaybe<SortEnumType>;
   damage?: InputMaybe<SortEnumType>;
   deathBlows?: InputMaybe<SortEnumType>;
   deaths?: InputMaybe<SortEnumType>;
@@ -3653,7 +3671,6 @@ export type WarJournalEntry = {
   locationText?: Maybe<Scalars['String']['output']>;
   name: Scalars['String']['output'];
   npcName?: Maybe<Scalars['String']['output']>;
-  position?: Maybe<Position>;
   shortTitle?: Maybe<Scalars['String']['output']>;
   storyline: WarJournalStoryline;
   text?: Maybe<Scalars['String']['output']>;
@@ -3698,12 +3715,20 @@ export type ZandriExpeditionEvent = Event & {
 
 export type Zone = SearchContent & {
   __typename?: 'Zone';
+  /** The areas of the zone */
+  areas: Array<ZoneArea>;
+  /** Creatures in the zone */
+  creatureSpawns: Array<CreatureSpawn>;
   /** The unique id of the zone */
   id: Scalars['ID']['output'];
+  /** Locations in the zone */
+  locations: Array<Location>;
   /** The map setup of the zone */
   mapSetup?: Maybe<MapSetup>;
   /** The name of the zone */
   name: Scalars['String']['output'];
+  /** War journal entries in the zone */
+  warJournalEntries: Array<WarJournalEntry>;
 };
 
 export type ZoneArea = {
@@ -3741,10 +3766,7 @@ export type GetCharacterArmoryQueryVariables = Exact<{
 }>;
 
 
-export type GetCharacterArmoryQuery = { __typename?: 'Query', character?: { __typename?: 'Character', items: Array<{ __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-              | { __typename: 'Ability', description?: string | null }
-              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetCharacterArmoryQuery = { __typename?: 'Query', character?: { __typename?: 'Character', items: Array<{ __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
 
 export type GetCharacterInfoQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -3755,10 +3777,7 @@ export type GetCharacterInfoQuery = { __typename?: 'Query', character?: { __type
 
 export type TalismanFragment = { __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> };
 
-export type EquippedCharacterItemFragment = { __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-          | { __typename: 'Ability', description?: string | null }
-          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
+export type EquippedCharacterItemFragment = { __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
 
 export type GetCharacterLatestSkirmishesQueryVariables = Exact<{
   characterId?: InputMaybe<Scalars['ID']['input']>;
@@ -3894,20 +3913,14 @@ export type GetInstanceEncounterStatisticsQueryVariables = Exact<{
 
 export type GetInstanceEncounterStatisticsQuery = { __typename?: 'Query', instanceEncounterRuns?: { __typename?: 'InstanceEncounterRunsConnection', medianDuration: number, averageDuration: number, medianDeaths: number, averageDeaths: number } | null };
 
-export type ItemListEntryFragment = { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-        | { __typename: 'Ability', description?: string | null }
-        | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-       }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> };
+export type ItemListEntryFragment = { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> };
 
 export type GetItemPopupInfoQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetItemPopupInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-          | { __typename: 'Ability', description?: string | null }
-          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } | null };
+export type GetItemPopupInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } | null };
 
 export type GetItemRewardedFromQuestsQueryVariables = Exact<{
   itemId: Scalars['ID']['input'];
@@ -4119,38 +4132,14 @@ export type GetTopSkirmishesQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetTopSkirmishesQuery = { __typename?: 'Query', topSkirmishes: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> };
 
-export type ChapterInfluenceRewardFragment = { __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-          | { __typename: 'Ability', description?: string | null }
-          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-         }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
-
-export type GetChapterQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-}>;
-
-
-export type GetChapterQuery = { __typename?: 'Query', chapter?: { __typename?: 'Chapter', id: string, name?: string | null, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null }, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, realm: Realm, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-              | { __typename: 'Ability', description?: string | null }
-              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
-
-export type GetChaptersQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<ChapterFilterInput>;
-}>;
-
-
-export type GetChaptersQuery = { __typename?: 'Query', chapters?: { __typename?: 'ChaptersConnection', nodes?: Array<{ __typename?: 'Chapter', id: string, name?: string | null, rank: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type ChapterInfluenceRewardFragment = { __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
 
 export type GetCreatureQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetCreatureQuery = { __typename?: 'Query', creature?: { __typename?: 'Creature', id: string, name: string, creatureType: CreatureType, creatureSubType: CreatureSubType, realm?: Realm | null, spawns: Array<{ __typename?: 'CreatureSpawn', id: string, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, type: { __typename?: 'QuestTypeFlagsFlags', isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }>, vendorItems?: { __typename?: 'VendorItemsConnection', totalCount: number } | null } | null };
+export type GetCreatureQuery = { __typename?: 'Query', creature?: { __typename?: 'Creature', id: string, name: string, realm?: Realm | null, spawns: Array<{ __typename?: 'CreatureSpawn', id: string, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, type: { __typename?: 'QuestTypeFlagsFlags', isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }>, vendorItems?: { __typename?: 'VendorItemsConnection', totalCount: number } | null } | null };
 
 export type GetCreaturesQueryVariables = Exact<{
   first?: InputMaybe<Scalars['Int']['input']>;
@@ -4161,7 +4150,7 @@ export type GetCreaturesQueryVariables = Exact<{
 }>;
 
 
-export type GetCreaturesQuery = { __typename?: 'Query', creatures?: { __typename?: 'CreaturesConnection', nodes?: Array<{ __typename?: 'Creature', id: string, name: string, creatureType: CreatureType, creatureSubType: CreatureSubType, realm?: Realm | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetCreaturesQuery = { __typename?: 'Query', creatures?: { __typename?: 'CreaturesConnection', nodes?: Array<{ __typename?: 'Creature', id: string, name: string, realm?: Realm | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetGameObjectQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -4224,10 +4213,7 @@ export type GetItemInfoQueryVariables = Exact<{
 }>;
 
 
-export type GetItemInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string, name: string, iconUrl: any }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-          | { __typename: 'Ability', description?: string | null }
-          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-         }> } | null, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, soldByVendors?: { __typename?: 'SoldByVendorsConnection', totalCount: number } | null, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', totalCount: number } | null, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', totalCount: number } | null } | null };
+export type GetItemInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string, name: string, iconUrl: any }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, soldByVendors?: { __typename?: 'SoldByVendorsConnection', totalCount: number } | null, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', totalCount: number } | null, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', totalCount: number } | null } | null };
 
 export type SearchItemsQueryVariables = Exact<{
   query?: InputMaybe<ItemFilterInput>;
@@ -4240,10 +4226,7 @@ export type SearchItemsQueryVariables = Exact<{
 }>;
 
 
-export type SearchItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemsConnection', nodes?: Array<{ __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-            | { __typename: 'Ability', description?: string | null }
-            | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-           }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemsConnection', nodes?: Array<{ __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type GetKillQueryVariables = Exact<{
   id: Scalars['ID']['input'];
@@ -4316,22 +4299,7 @@ export type SearchQueryVariables = Exact<{
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search?: { __typename?: 'SearchConnection', nodes?: Array<
-      | { __typename: 'Ability', id: string, name?: string | null }
-      | { __typename: 'AbilityInfo', id: string, name?: string | null }
-      | { __typename: 'Chapter', id: string, name?: string | null }
-      | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null }
-      | { __typename: 'Creature', creatureSubType: CreatureSubType, id: string, name: string }
-      | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader?: { __typename?: 'Character', id: string, name: string } | null, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, members?: { __typename?: 'MembersConnection', totalCount: number } | null }
-      | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet?: { __typename?: 'ItemSet', id: string, name: string } | null }
-      | { __typename: 'ItemSet', id: string, name: string }
-      | { __typename: 'LiveEvent', id: string, name: string }
-      | { __typename: 'PublicQuest', id: string, name?: string | null }
-      | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry?: string | null, id: string, name: string, questDescription?: string | null, questType: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } }
-      | { __typename: 'Scenario', id: string, name: string }
-      | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string }
-      | { __typename: 'Zone', id: string, name: string }
-    > | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchQuery = { __typename?: 'Query', search?: { __typename?: 'SearchConnection', nodes?: Array<{ __typename: 'Ability', id: string, name?: string | null } | { __typename: 'AbilityInfo', id: string, name?: string | null } | { __typename: 'BattlefieldObjective', id: string, name: string } | { __typename: 'Chapter', id: string, name?: string | null } | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | { __typename: 'Creature', id: string, name: string } | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader?: { __typename?: 'Character', id: string, name: string } | null, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, members?: { __typename?: 'MembersConnection', totalCount: number } | null } | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet?: { __typename?: 'ItemSet', id: string, name: string } | null } | { __typename: 'ItemSet', id: string, name: string } | { __typename: 'Keep', id: string, name: string } | { __typename: 'LiveEvent', id: string, name: string } | { __typename: 'PublicQuest', id: string, name: string } | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry?: string | null, id: string, name: string, questDescription?: string | null, questType: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } } | { __typename: 'Scenario', id: string, name: string } | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string } | { __typename: 'Zone', id: string, name: string }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
 
 export type SearchGuildsQueryVariables = Exact<{
   query: Scalars['String']['input'];
@@ -4363,17 +4331,14 @@ export type GetWarJournalActivityQueryVariables = Exact<{
 }>;
 
 
-export type GetWarJournalActivityQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, storyline: { __typename?: 'WarJournalStoryline', name: string }, position?: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string, text: string, activityType: string, zone?: { __typename?: 'Zone', id: string, name: string } | null, tasks: Array<{ __typename?: 'WarJournalActivityTask', name: string }> }> } | null };
+export type GetWarJournalActivityQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, storyline: { __typename?: 'WarJournalStoryline', name: string }, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string, text: string, activityType: string, zone?: { __typename?: 'Zone', id: string, name: string } | null, tasks: Array<{ __typename?: 'WarJournalActivityTask', name: string }> }> } | null };
 
 export type GetWarJournalEntryQueryVariables = Exact<{
   id: Scalars['ID']['input'];
 }>;
 
 
-export type GetWarJournalEntryQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, locationText?: string | null, npcName?: string | null, text?: string | null, title?: string | null, shortTitle?: string | null, isRvR: boolean, storyline: { __typename?: 'WarJournalStoryline', name: string }, area?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, position?: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } | null, zone?: { __typename?: 'Zone', id: string, name: string } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string }>, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus:
-              | { __typename: 'Ability', description?: string | null }
-              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-             }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetWarJournalEntryQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, locationText?: string | null, npcName?: string | null, text?: string | null, title?: string | null, shortTitle?: string | null, isRvR: boolean, storyline: { __typename?: 'WarJournalStoryline', name: string }, area?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, zone?: { __typename?: 'Zone', id: string, name: string } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string }>, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
 
 export type GetWarJournalStorylinesQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -4434,10 +4399,8 @@ export const GetSkirmishKillsDocument = {"kind":"Document","definitions":[{"kind
 export const GetSkirmishScoreboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSkirmishScoreboard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"order"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SkirmishScoreboardEntrySortInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"Variable","name":{"kind":"Name","value":"order"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"kills"}},{"kind":"Field","name":{"kind":"Name","value":"killsSolo"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"deathBlows"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"damageReceived"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}},{"kind":"Field","name":{"kind":"Name","value":"healingReceived"}},{"kind":"Field","name":{"kind":"Name","value":"protection"}},{"kind":"Field","name":{"kind":"Name","value":"protectionReceived"}},{"kind":"Field","name":{"kind":"Name","value":"killDamage"}},{"kind":"Field","name":{"kind":"Name","value":"healingSelf"}},{"kind":"Field","name":{"kind":"Name","value":"healingOthers"}},{"kind":"Field","name":{"kind":"Name","value":"protectionSelf"}},{"kind":"Field","name":{"kind":"Name","value":"protectionOthers"}},{"kind":"Field","name":{"kind":"Name","value":"resurrectionsDone"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetSkirmishScoreboardQuery, GetSkirmishScoreboardQueryVariables>;
 export const GetSkirmishTopPlayerDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSkirmishTopPlayer"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"order"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SkirmishScoreboardEntrySortInput"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"1"}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"Variable","name":{"kind":"Name","value":"order"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}},{"kind":"Field","name":{"kind":"Name","value":"protection"}},{"kind":"Field","name":{"kind":"Name","value":"deathBlows"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetSkirmishTopPlayerQuery, GetSkirmishTopPlayerQueryVariables>;
 export const GetTopSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetTopSkirmishes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"topSkirmishes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}}]}}]} as unknown as DocumentNode<GetTopSkirmishesQuery, GetTopSkirmishesQueryVariables>;
-export const GetChapterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChapter"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chapter"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"influenceRewards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<GetChapterQuery, GetChapterQueryVariables>;
-export const GetChaptersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetChapters"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ChapterFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"chapters"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rank"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetChaptersQuery, GetChaptersQueryVariables>;
-export const GetCreatureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCreature"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creature"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"creatureType"}},{"kind":"Field","name":{"kind":"Name","value":"creatureSubType"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"spawns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"questsStarter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isEpic"}},{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isNone"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vendorItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetCreatureQuery, GetCreatureQueryVariables>;
-export const GetCreaturesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCreatures"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatureFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creatures"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"creatureType"}},{"kind":"Field","name":{"kind":"Name","value":"creatureSubType"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetCreaturesQuery, GetCreaturesQueryVariables>;
+export const GetCreatureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCreature"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creature"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"spawns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"questsStarter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isEpic"}},{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isNone"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}}]}},{"kind":"Field","name":{"kind":"Name","value":"vendorItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]}}]} as unknown as DocumentNode<GetCreatureQuery, GetCreatureQueryVariables>;
+export const GetCreaturesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCreatures"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatureFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creatures"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetCreaturesQuery, GetCreaturesQueryVariables>;
 export const GetGameObjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGameObject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameObject"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"modelName"}},{"kind":"Field","name":{"kind":"Name","value":"spawns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"questsStarter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isEpic"}},{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isNone"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}}]}}]}}]}}]} as unknown as DocumentNode<GetGameObjectQuery, GetGameObjectQueryVariables>;
 export const GetGuildInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rank"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GuildInfo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetGuildInfoQuery, GetGuildInfoQueryVariables>;
 export const GetGuildFeudInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildFeudInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"guild1"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild1kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GuildInfo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetGuildFeudInfoQuery, GetGuildFeudInfoQueryVariables>;
@@ -4454,11 +4417,11 @@ export const GetQuestInfoDocument = {"kind":"Document","definitions":[{"kind":"O
 export const GetQuestsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuests"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"QuestFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quests"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isEpic"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}},{"kind":"Field","name":{"kind":"Name","value":"xp"}},{"kind":"Field","name":{"kind":"Name","value":"gold"}},{"kind":"Field","name":{"kind":"Name","value":"choiceCount"}},{"kind":"Field","name":{"kind":"Name","value":"rewardsChoice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rewardsGiven"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetQuestsQuery, GetQuestsQueryVariables>;
 export const GetRankedLeaderboardSeasonsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRankedLeaderboardSeasons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rankedSeasons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"mainSeason"}}]}}]}}]} as unknown as DocumentNode<GetRankedLeaderboardSeasonsQuery, GetRankedLeaderboardSeasonsQueryVariables>;
 export const GetScenarioInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenario"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"winner"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"queueType"}},{"kind":"Field","name":{"kind":"Name","value":"wasSurrender"}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ScenarioScoreboardEntry"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ScenarioScoreboardEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioScoreboardEntry"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"team"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"quitter"}},{"kind":"Field","name":{"kind":"Name","value":"protection"}},{"kind":"Field","name":{"kind":"Name","value":"kills"}},{"kind":"Field","name":{"kind":"Name","value":"deathBlows"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}},{"kind":"Field","name":{"kind":"Name","value":"objectiveScore"}},{"kind":"Field","name":{"kind":"Name","value":"killsSolo"}},{"kind":"Field","name":{"kind":"Name","value":"killDamage"}},{"kind":"Field","name":{"kind":"Name","value":"healingSelf"}},{"kind":"Field","name":{"kind":"Name","value":"healingOthers"}},{"kind":"Field","name":{"kind":"Name","value":"protectionSelf"}},{"kind":"Field","name":{"kind":"Name","value":"protectionOthers"}},{"kind":"Field","name":{"kind":"Name","value":"damageReceived"}},{"kind":"Field","name":{"kind":"Name","value":"resurrectionsDone"}},{"kind":"Field","name":{"kind":"Name","value":"healingReceived"}},{"kind":"Field","name":{"kind":"Name","value":"protectionReceived"}}]}}]} as unknown as DocumentNode<GetScenarioInfoQuery, GetScenarioInfoQueryVariables>;
-export const SearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Search"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"search"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Character"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Quest"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"questType"},"name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isEpic"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}},{"kind":"Field","name":{"kind":"Name","value":"minLevel"}},{"kind":"Field","name":{"kind":"Name","value":"xp"}},{"kind":"Field","name":{"kind":"Name","value":"gold"}},{"kind":"Field","name":{"kind":"Name","value":"journalEntry"}},{"kind":"Field","alias":{"kind":"Name","value":"questDescription"},"name":{"kind":"Name","value":"description"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Creature"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creatureSubType"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<SearchQuery, SearchQueryVariables>;
+export const SearchDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Search"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"search"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"query"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Character"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Quest"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"questType"},"name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isEpic"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}},{"kind":"Field","name":{"kind":"Name","value":"minLevel"}},{"kind":"Field","name":{"kind":"Name","value":"xp"}},{"kind":"Field","name":{"kind":"Name","value":"gold"}},{"kind":"Field","name":{"kind":"Name","value":"journalEntry"}},{"kind":"Field","alias":{"kind":"Name","value":"questDescription"},"name":{"kind":"Name","value":"description"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<SearchQuery, SearchQueryVariables>;
 export const SearchGuildsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchGuilds"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guilds"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"name"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"contains"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<SearchGuildsQuery, SearchGuildsQueryVariables>;
 export const GetSkirmishInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSkirmishInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"instance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"heatmap"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByKills"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]}}]} as unknown as DocumentNode<GetSkirmishInfoQuery, GetSkirmishInfoQueryVariables>;
 export const GetWarJournalStorylineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalStoryline"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalStoryline"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"summary"}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}}]}}]}}]}}]} as unknown as DocumentNode<GetWarJournalStorylineQuery, GetWarJournalStorylineQueryVariables>;
-export const GetWarJournalActivityDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalActivity"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalEntry"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"storyline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"activities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"activityType"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetWarJournalActivityQuery, GetWarJournalActivityQueryVariables>;
-export const GetWarJournalEntryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalEntry"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalEntry"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"storyline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"locationText"}},{"kind":"Field","name":{"kind":"Name","value":"npcName"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"shortTitle"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"area"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"activities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}}]}},{"kind":"Field","name":{"kind":"Name","value":"influenceRewards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ChapterInfluenceReward"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChapterInfluenceReward"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChapterInfluenceReward"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}}]}}]} as unknown as DocumentNode<GetWarJournalEntryQuery, GetWarJournalEntryQueryVariables>;
+export const GetWarJournalActivityDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalActivity"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalEntry"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"storyline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"activities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"activityType"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"tasks"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetWarJournalActivityQuery, GetWarJournalActivityQueryVariables>;
+export const GetWarJournalEntryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalEntry"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalEntry"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"storyline"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"locationText"}},{"kind":"Field","name":{"kind":"Name","value":"npcName"}},{"kind":"Field","name":{"kind":"Name","value":"text"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"shortTitle"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"area"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"activities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"influenceRewards"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ChapterInfluenceReward"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChapterInfluenceReward"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChapterInfluenceReward"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}}]}}]} as unknown as DocumentNode<GetWarJournalEntryQuery, GetWarJournalEntryQueryVariables>;
 export const GetWarJournalStorylinesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWarJournalStorylines"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"warJournalStorylines"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetWarJournalStorylinesQuery, GetWarJournalStorylinesQueryVariables>;
 export const GetZoneHeatmapDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetZoneHeatmap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Long"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"killsHeatmap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"zoneId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"from"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<GetZoneHeatmapQuery, GetZoneHeatmapQueryVariables>;

@@ -11,7 +11,6 @@ import {
   INFLUENCE_REWARDS_FRAGMENT,
   InfluenceRewards,
 } from '@/components/storylineEntry/InfluenceRewards';
-import { MapPositions } from '@/components/MapPositions';
 
 const WAR_JOURNAL_ENTRY_DETAILS = gql`
   query GetWarJournalEntry($id: ID!) {
@@ -31,20 +30,6 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
         id
         name
       }
-      position {
-        x
-        y
-        zone {
-          id
-          name
-        }
-        mapSetup {
-          nwCornerX
-          nwCornerY
-          seCornerX
-          seCornerY
-        }
-      }
       zone {
         id
         name
@@ -52,10 +37,6 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
       activities {
         id
         name
-      }
-      position {
-        x
-        y
       }
       influenceRewards {
         ...ChapterInfluenceReward
@@ -241,27 +222,6 @@ export function StorylineEntry(): ReactElement {
           </div>
         </div>
       )}
-
-      {entry.zone &&
-      entry.position &&
-      entry.position.mapSetup &&
-      entry.position.zone?.id === entry.zone.id ? (
-        <div className="card mb-5">
-          <div className="card-content">
-            <p className="is-size-4 is-family-secondary has-text-info">
-              {entry.locationText}
-            </p>
-            <MapPositions
-              positions={[entry.position]}
-              zoneId={Number(entry.position.zone?.id)}
-              nwCornerX={entry.position.mapSetup.nwCornerX}
-              nwCornerY={entry.position.mapSetup.nwCornerY}
-              seCornerX={entry.position.mapSetup.seCornerX}
-              seCornerY={entry.position.mapSetup.seCornerY}
-            />{' '}
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 }
