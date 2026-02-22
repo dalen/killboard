@@ -7,7 +7,7 @@ import { Link, useParams } from 'react-router';
 import {
   Attacker,
   KILL_ATTACKER_FRAGMENT,
-  KILL_DAMAGE_FRAGMENT,
+  KILL_DAMAGE_SOURCE_FRAGMENT,
 } from '@/components/kill/Attacker';
 import { CareerIcon } from '@/components/CareerIcon';
 import { PlayerFeud } from '@/components/kill/PlayerFeud';
@@ -68,8 +68,8 @@ const KILL_DETAILS = gql`
       attackers {
         ...Attacker
       }
-      damage {
-        ...KillDamage
+      damageSources {
+        ...KillDamageSource
       }
       deathblow {
         id
@@ -77,7 +77,7 @@ const KILL_DETAILS = gql`
     }
   }
 
-  ${KILL_DAMAGE_FRAGMENT}
+  ${KILL_DAMAGE_SOURCE_FRAGMENT}
   ${KILL_ATTACKER_FRAGMENT}
 `;
 

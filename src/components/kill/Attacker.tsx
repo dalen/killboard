@@ -48,6 +48,58 @@ export const KILL_DAMAGE_FRAGMENT = gql`
   }
 `;
 
+export const KILL_DAMAGE_SOURCE_FRAGMENT = gql`
+  fragment KillDamageSource on KillDamageSource {
+    damageAmount
+    ... on PlayerKillDamage {
+      attacker {
+        level
+        renownRank
+        id
+        name
+        career
+        guildMembership {
+          guild {
+            id
+            name
+            realm
+            heraldry {
+              emblem
+              pattern
+              color1
+              color2
+              shape
+            }
+          }
+        }
+      }
+      abilities {
+        damageAmount
+        ability {
+          id
+          name
+          iconUrl
+        }
+      }
+    }
+
+    ... on CreatureKillDamage {
+      attacker {
+        id
+        name
+      }
+      abilities {
+        damageAmount
+        ability {
+          id
+          name
+          iconUrl
+        }
+      }
+    }
+  }
+`;
+
 export function Attacker({
   title,
   attacker,
