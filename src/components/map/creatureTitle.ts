@@ -1,0 +1,84 @@
+import { CreatureTitle } from '@/__generated__/graphql';
+
+export const isVendor = (creatureTitle: CreatureTitle): boolean => {
+  switch (creatureTitle) {
+    case CreatureTitle.Merchant:
+    case CreatureTitle.ArmorMerchant:
+    case CreatureTitle.WeaponMerchant:
+    case CreatureTitle.CampMerchant:
+    case CreatureTitle.SiegeWeaponMerchant:
+    case CreatureTitle.CraftSupplyMerchant:
+    case CreatureTitle.RenownGearMerchant:
+    case CreatureTitle.Quartermaster:
+    case CreatureTitle.BasicRenownGearMerchant:
+    case CreatureTitle.VeteranRenownGearMerchant:
+    case CreatureTitle.AdvancedRenownGearMerchant:
+    case CreatureTitle.RecruitMedallionQuartermaster:
+    case CreatureTitle.ScoutMedallionQuartermaster:
+    case CreatureTitle.SoldierMedallionQuartermaster:
+    case CreatureTitle.OfficerMedallionQuartermaster:
+    case CreatureTitle.RoyalQuartermaster:
+    case CreatureTitle.RecruitEmblemQuartermaster:
+    case CreatureTitle.ScoutEmblemQuartermaster:
+    case CreatureTitle.SoldierEmblemQuartermaster:
+    case CreatureTitle.OfficerEmblemQuartermaster:
+    case CreatureTitle.VanquisherQuartermaster:
+    case CreatureTitle.VerySpecialDyeVendor:
+    case CreatureTitle.SpecializedArmorsmith:
+    case CreatureTitle.RenownArmorQuartermaster:
+    case CreatureTitle.RenownWeaponQuartermaster:
+    case CreatureTitle.CommoditiesQuartermaster:
+    case CreatureTitle.TomeTacticLibrarian:
+    case CreatureTitle.TomeTrophyLibrarian:
+    case CreatureTitle.EliteRenownGearMerchant:
+    case CreatureTitle.DoorRepairMerchant:
+    case CreatureTitle.StandardMerchant:
+    case CreatureTitle.TomeAccessoryLibrarian:
+    case CreatureTitle.TomeTokenLibrarian:
+    case CreatureTitle.TalismanMerchant:
+    case CreatureTitle.MountVendor:
+    case CreatureTitle.SpecialtyMountWrangler:
+    case CreatureTitle.CompanionKeeper:
+    case CreatureTitle.NoveltyVendor:
+    case CreatureTitle.Librarian:
+    case CreatureTitle.RecordsKeeper:
+    case CreatureTitle.BlackMarketMerchant:
+    case CreatureTitle.OppressorEmblemQuartermaster:
+    case CreatureTitle.ConquerorEmblemQuartermaster:
+    case CreatureTitle.DominatorEmblemQuartermaster:
+    case CreatureTitle.ConquererMedallionQuartermaster:
+    case CreatureTitle.TriumphantEmblemQuartermaster:
+    case CreatureTitle.VictoriousQuartermaster:
+    case CreatureTitle.InvaderMedallionQuartermaster:
+    case CreatureTitle.RecruitCoinQuartermaster:
+    case CreatureTitle.ScoutCoinQuartermaster:
+    case CreatureTitle.SoldierCoinQuartermaster:
+    case CreatureTitle.OfficerCoinQuartermaster:
+    case CreatureTitle.DungeonWeaponsMerchant:
+    case CreatureTitle.RankedQuartermaster:
+    case CreatureTitle.CarnageArmorQuartermaster:
+    case CreatureTitle.HavocArmorQuartermaster:
+    case CreatureTitle.MayhemArmorQuartermaster:
+    case CreatureTitle.RuinArmorQuartermaster:
+    case CreatureTitle.BraggartArmorQuartermaster:
+    case CreatureTitle.ChallengerArmorQuartermaster:
+    case CreatureTitle.DuelistArmorQuartermaster:
+    case CreatureTitle.MercenaryArmorQuartermaster:
+    case CreatureTitle.DominatorArmorQuartermaster:
+    case CreatureTitle.OppressorArmorQuartermaster:
+    case CreatureTitle.DecimatorArmorQuartermaster:
+    case CreatureTitle.ObliteratorArmorQuartermaster:
+    case CreatureTitle.DevastatorArmorQuartermaster:
+    case CreatureTitle.AnnihilatorArmorQuartermaster:
+    case CreatureTitle.ConquerorArmorQuartermaster:
+    case CreatureTitle.VanquisherArmorQuartermaster:
+    case CreatureTitle.InvaderArmorQuartermaster:
+    case CreatureTitle.WarlordArmorQuartermaster:
+    case CreatureTitle.SovereignArmorQuartermaster:
+    case CreatureTitle.LightMountVendor:
+    case CreatureTitle.HeavyMountVendor:
+      return true;
+  }
+
+  return false;
+};

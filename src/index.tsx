@@ -9,7 +9,7 @@ import App from './App';
 
 const client = new ApolloClient({
   cache: new InMemoryCache(),
-  link: new HttpLink({ uri: 'https://production-api.waremu.com/graphql' }),
+  link: new HttpLink({ uri: 'http://localhost:5156/graphql' }),
 });
 
 const container = document.getElementById('root');

@@ -12,7 +12,7 @@ import { PlayerFeudPage } from '@/pages/PlayerFeudPage';
 import { GuildFeudPage } from '@/pages/GuildFeudPage';
 import { Kills } from '@/pages/Kills';
 import { Scenario } from '@/pages/Scenario';
-import { ZoneMap } from '@/pages/ZoneMap';
+import { ZoneHeatMap } from '@/pages/ZoneHeatMap';
 import { Skirmish } from '@/pages/Skirmish';
 import { Item } from '@/pages/Item';
 import { RankedLeaderboard } from '@/pages/RankedLeaderboard';
@@ -33,6 +33,7 @@ import { Storyline } from '@/pages/Storyline';
 import { StorylineEntry } from '@/pages/StorylineEntry';
 import { StorylineActivity } from '@/pages/StorylineActivity';
 import { InstanceStatistics } from '@/pages/InstanceStatistics';
+import { ZoneMap } from '@/pages/ZoneMap';
 
 // Extend the Window interface to include gtag
 declare global {
@@ -130,7 +131,8 @@ function App() {
         element={<Skirmish tab="characterDamage" />}
       />
       <Route path="/skirmish/:id/damage" element={<Skirmish tab="damage" />} />
-      <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
+      <Route path="/zone_heatmap/:id" element={<ZoneHeatMap />} />
+      <Route path="/zone/:id" element={<ZoneMap />} />
 
       <Route path="/items" element={<Items />} />
       <Route path="/item/:id" element={<Item tab="vendors" />} />
