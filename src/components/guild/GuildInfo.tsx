@@ -30,11 +30,11 @@ export const GUILD_INFO_FRAGMENT = gql`
   }
 `;
 
-export function GuildInfo({
+export const GuildInfo = ({
   guild,
 }: {
   guild: GuildInfoFragment;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['components']);
 
   return (
@@ -77,4 +77,4 @@ export function GuildInfo({
       </div>
     </div>
   );
-}
+};

@@ -65,18 +65,16 @@ const SKIRMISHES = gql`
   }
 `;
 
-export function ScenarioSkirmishes({
+export const ScenarioSkirmishes = ({
   id,
   perPage = 15,
 }: {
   id: string;
   perPage?: number;
-}): ReactElement {
-  return (
-    <SkirmishList
-      query={SKIRMISHES}
-      queryOptions={{ variables: { instanceId: id } }}
-      perPage={perPage}
-    />
-  );
-}
+}): ReactElement => (
+  <SkirmishList
+    query={SKIRMISHES}
+    queryOptions={{ variables: { instanceId: id } }}
+    perPage={perPage}
+  />
+);

@@ -62,7 +62,7 @@ const RECENT_KILLS = gql`
   }
 `;
 
-export function CharacterRecentKills({ id }: { id: number }): ReactElement {
+export const CharacterRecentKills = ({ id }: { id: number }): ReactElement => {
   const { t } = useTranslation('components');
 
   return (
@@ -77,4 +77,4 @@ export function CharacterRecentKills({ id }: { id: number }): ReactElement {
       showKiller={false}
     />
   );
-}
+};

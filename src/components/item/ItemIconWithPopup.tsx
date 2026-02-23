@@ -1,4 +1,4 @@
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
@@ -62,11 +62,11 @@ export const ITEM_FRAGMENT = gql`
   }
 `;
 
-export function ItemIconWithPopup({
+export const ItemIconWithPopup = ({
   item,
 }: {
   item: ItemListEntryFragment;
-}): ReactElement {
+}): ReactElement => {
   const [modalOpen, setModalOpen] = useState(false);
 
   const showModal = () => {
@@ -103,4 +103,4 @@ export function ItemIconWithPopup({
       )}
     </div>
   );
-}
+};

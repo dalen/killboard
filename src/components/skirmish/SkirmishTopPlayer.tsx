@@ -47,7 +47,7 @@ const SKIRMISH_TOP_PLAYER = gql`
   }
 `;
 
-export function SkirmishTopPlayer({
+export const SkirmishTopPlayer = ({
   id,
   attribute,
   title,
@@ -57,28 +57,29 @@ export function SkirmishTopPlayer({
   attribute: keyof SkirmishScoreboardEntry;
   title: string;
   className: string;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['pages']);
   const { loading, error, data } = useQuery<Query>(SKIRMISH_TOP_PLAYER, {
     variables: { id, order: [{ [attribute]: 'DESC' }] },
   });
 
-  if (loading)
-    {return (
+  if (loading) {
+    return (
       <div className="card">
         <div className={clsx('card-content', className)}>
           <progress className="progress" />
         </div>
       </div>
-    );}
+    );
+  }
 
   if (
     error ||
     data?.skirmish?.scoreboardEntries?.nodes == null ||
     data?.skirmish.scoreboardEntries.nodes.length === 0 ||
     data?.skirmish.scoreboardEntries.nodes[0][attribute] === 0
-  )
-    {return (
+  ) {
+    return (
       <div className={clsx('card-content', className)}>
         <header className="card-header">
           <p className="card-header-title">{t(title)}</p>
@@ -99,7 +100,8 @@ export function SkirmishTopPlayer({
           </article>
         </div>
       </div>
-    );}
+    );
+  }
 
   const player = data.skirmish.scoreboardEntries.nodes[0];
 
@@ -149,4 +151,4 @@ export function SkirmishTopPlayer({
       </div>
     </div>
   );
-}
+};

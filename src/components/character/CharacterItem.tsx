@@ -1,4 +1,4 @@
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -43,7 +43,7 @@ export const EQUIPPED_ITEM_FRAGMENT = gql`
   ${ITEM_FRAGMENT}
 `;
 
-export function CharacterItem({
+export const CharacterItem = ({
   item,
   talismans = [],
   itemsEquipped = [],
@@ -51,7 +51,7 @@ export function CharacterItem({
   item: ItemListEntryFragment;
   talismans?: TalismanFragment[];
   itemsEquipped?: EquippedCharacterItemFragment[];
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -118,4 +118,4 @@ export function CharacterItem({
       </article>
     </div>
   );
-}
+};

@@ -29,7 +29,7 @@ const WEEKLY_LEADERBOARD = gql`
   }
 `;
 
-export function WeeklyLeaderboard(): ReactElement {
+export const WeeklyLeaderboard = (): ReactElement => {
   const { t } = useTranslation(['common', 'components']);
 
   // To make sure we get the current week, even if local timezone differs.
@@ -47,9 +47,15 @@ export function WeeklyLeaderboard(): ReactElement {
     variables: { week, year },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.weeklyKillLeaderboard == null) {return <p>{t('common:error')}</p>;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.weeklyKillLeaderboard == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
   return (
     <div>
@@ -59,4 +65,4 @@ export function WeeklyLeaderboard(): ReactElement {
       <LeaderboardTable data={data.weeklyKillLeaderboard.slice(0, 10)} />
     </div>
   );
-}
+};

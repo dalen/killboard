@@ -49,7 +49,7 @@ const SEARCH_GUILD = gql`
   }
 `;
 
-export function SearchGuild(): ReactElement {
+export const SearchGuild = (): ReactElement => {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
@@ -63,10 +63,15 @@ export function SearchGuild(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.guilds?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.guilds?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { pageInfo } = data.guilds;
 
@@ -129,4 +134,4 @@ export function SearchGuild(): ReactElement {
       />
     </div>
   );
-}
+};

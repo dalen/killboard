@@ -46,11 +46,11 @@ const VENDOR_ITEMS = gql`
   }
 `;
 
-export function VendorItems({
+export const VendorItems = ({
   creatureId,
 }: {
   creatureId: string | undefined;
-}) {
+}) => {
   const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(VENDOR_ITEMS, {
@@ -60,15 +60,22 @@ export function VendorItems({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const vendorItems = data?.creature?.vendorItems;
 
-  if (vendorItems?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (vendorItems?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
-  if (vendorItems?.nodes == null) {return null;}
+  if (vendorItems?.nodes == null) {
+    return null;
+  }
 
   const { pageInfo } = vendorItems;
 
@@ -120,4 +127,4 @@ export function VendorItems({
       />
     </>
   );
-}
+};

@@ -1,8 +1,8 @@
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useEffect, useRef } from 'react';
 import simpleheat from 'simpleheat';
 
-export function ZoneHeatmap({
+export const ZoneHeatmap = ({
   zoneId,
   max,
   data,
@@ -12,12 +12,14 @@ export function ZoneHeatmap({
   max: number;
   data: [number, number, number][];
   size: number;
-}): ReactElement {
+}): ReactElement => {
   const divElement = useRef<HTMLDivElement>(null);
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (canvasElement.current == null || divElement.current == null) {return;}
+    if (canvasElement.current == null || divElement.current == null) {
+      return;
+    }
     const heat = simpleheat(canvasElement.current);
     heat
       .data(data)
@@ -40,4 +42,4 @@ export function ZoneHeatmap({
       />
     </div>
   );
-}
+};

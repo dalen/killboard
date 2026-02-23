@@ -66,7 +66,7 @@ const SCENARIO_KILLS = gql`
   }
 `;
 
-export function ScenarioKills({ id }: { id: string }): ReactElement {
+export const ScenarioKills = ({ id }: { id: string }): ReactElement => {
   const { t } = useTranslation('components');
 
   return (

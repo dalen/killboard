@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 
-export function WarIcon({
+export const WarIcon = ({
   icon,
   size,
   alt,
@@ -14,7 +14,7 @@ export function WarIcon({
   count?: number;
   frameType?: 'square' | 'circle' | 'hex';
   selected?: boolean;
-}): ReactElement {
+}): ReactElement => {
   const frame = (() => {
     switch (frameType) {
       case 'circle': {
@@ -75,4 +75,4 @@ export function WarIcon({
       )}
     </div>
   );
-}
+};

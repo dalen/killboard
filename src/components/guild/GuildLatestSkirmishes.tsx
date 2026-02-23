@@ -72,13 +72,13 @@ const LATEST_SKIRMISHES = gql`
   }
 `;
 
-export function GuildLatestSkirmishes({
+export const GuildLatestSkirmishes = ({
   guildId,
   perPage = 15,
 }: {
   guildId?: string;
   perPage?: number;
-}): ReactElement {
+}): ReactElement => {
   const [search] = useSearchParams();
 
   return (
@@ -93,4 +93,4 @@ export function GuildLatestSkirmishes({
       />
     </>
   );
-}
+};

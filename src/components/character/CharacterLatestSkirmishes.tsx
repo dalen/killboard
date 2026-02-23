@@ -72,13 +72,13 @@ const LATEST_SKIRMISHES = gql`
   }
 `;
 
-export function CharacterLatestSkirmishes({
+export const CharacterLatestSkirmishes = ({
   characterId,
   perPage = 15,
 }: {
   characterId?: string;
   perPage?: number;
-}): ReactElement {
+}): ReactElement => {
   const [search] = useSearchParams();
 
   return (
@@ -93,4 +93,4 @@ export function CharacterLatestSkirmishes({
       />
     </>
   );
-}
+};

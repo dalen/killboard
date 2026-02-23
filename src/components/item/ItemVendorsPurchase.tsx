@@ -67,11 +67,11 @@ const ITEM_INFO = gql`
   }
 `;
 
-export function ItemVendorsPurchase({
+export const ItemVendorsPurchase = ({
   itemId,
 }: {
   itemId: string | undefined;
-}) {
+}) => {
   const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
@@ -83,13 +83,18 @@ export function ItemVendorsPurchase({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const vendorItems = data?.item?.usedToPurchase;
 
-  if (vendorItems?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (vendorItems?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { pageInfo } = vendorItems;
 
@@ -204,4 +209,4 @@ export function ItemVendorsPurchase({
       />
     </>
   );
-}
+};

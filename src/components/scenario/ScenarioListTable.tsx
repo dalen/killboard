@@ -6,11 +6,11 @@ import type { ScenarioRecord } from '@/__generated__/graphql';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
-export function ScenarioListTable({
+export const ScenarioListTable = ({
   data,
 }: {
   data: ScenarioRecord[];
-}): ReactElement {
+}): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
@@ -154,4 +154,4 @@ export function ScenarioListTable({
       </table>
     </div>
   );
-}
+};

@@ -7,19 +7,19 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import type { Skirmish} from '@/__generated__/graphql';
+import type { Skirmish } from '@/__generated__/graphql';
 import { Realm } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import clsx from 'clsx';
 
-export function SkirmishListTable({
+export const SkirmishListTable = ({
   data,
   showZone = true,
 }: {
   data: Skirmish[];
   showZone?: boolean;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -186,4 +186,4 @@ export function SkirmishListTable({
       </table>
     </div>
   );
-}
+};

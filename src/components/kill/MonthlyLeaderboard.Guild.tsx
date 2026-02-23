@@ -27,7 +27,7 @@ const MONTHLY_GUILD_LEADERBOARD = gql`
   }
 `;
 
-export function MonthlyGuildLeaderboard(): ReactElement {
+export const MonthlyGuildLeaderboard = (): ReactElement => {
   const { t } = useTranslation(['common', 'components']);
 
   const month = new Date().getUTCMonth() + 1;
@@ -37,10 +37,15 @@ export function MonthlyGuildLeaderboard(): ReactElement {
     variables: { month, year },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.monthlyGuildKillLeaderboard == null)
-    {return <p>{t('common:error')}</p>;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.monthlyGuildKillLeaderboard == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
   return (
     <div>
@@ -52,4 +57,4 @@ export function MonthlyGuildLeaderboard(): ReactElement {
       />
     </div>
   );
-}
+};

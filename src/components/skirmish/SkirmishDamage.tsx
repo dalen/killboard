@@ -23,18 +23,22 @@ const SKIRMISH_DAMAGE = gql`
   }
 `;
 
-export function SkirmishDamage({ id }: { id: string }): ReactElement {
+export const SkirmishDamage = ({ id }: { id: string }): ReactElement => {
   const { loading, error, data } = useQuery<Query>(SKIRMISH_DAMAGE, {
     variables: { id },
   });
 
   const killDamage = data?.skirmish?.killDamage;
 
-  if (loading || killDamage == null) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || killDamage == null) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce< KillDamage[]>((acc, curr) => {
+  const killDamageGrouped = killDamage.reduce<KillDamage[]>((acc, curr) => {
     const existing = acc.find(
       (e) =>
         killDamageText(e) === killDamageText(curr) &&
@@ -57,7 +61,7 @@ export function SkirmishDamage({ id }: { id: string }): ReactElement {
     <table className="table is-striped is-narrow" width="100%">
       <tbody>
         {killDamageGrouped
-          .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
+          .toSorted((e1, e2) => e2.damageAmount - e1.damageAmount)
           .map((damage) => (
             <tr>
               <td style={{ verticalAlign: 'middle' }}>
@@ -88,4 +92,4 @@ export function SkirmishDamage({ id }: { id: string }): ReactElement {
       </tbody>
     </table>
   );
-}
+};

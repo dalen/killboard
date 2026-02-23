@@ -67,13 +67,13 @@ const PLAYER_FEUD = gql`
   }
 `;
 
-export function PlayerFeud({
+export const PlayerFeud = ({
   player1,
   player2,
 }: {
   player1: string;
   player2: string;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
 
   return (
@@ -92,4 +92,4 @@ export function PlayerFeud({
       />
     </div>
   );
-}
+};

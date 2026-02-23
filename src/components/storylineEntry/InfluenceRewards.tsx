@@ -22,7 +22,7 @@ export const INFLUENCE_REWARDS_FRAGMENT = gql`
   ${ITEM_FRAGMENT}
 `;
 
-export function InfluenceRewards({
+export const InfluenceRewards = ({
   rewards,
   tier,
   career = null,
@@ -30,51 +30,49 @@ export function InfluenceRewards({
   rewards: ChapterInfluenceRewardFragment[];
   tier: number;
   career?: Career | null;
-}): ReactElement {
-  return (
-    <div className="mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap">
-      {rewards
-        .filter((item) => item.tier === tier)
-        .filter((item) => career === null || canUseItem(item.item, career))
-        .map((reward) => (
-          <div key={reward.item.id}>
-            <Tippy
-              duration={0}
-              placement="top"
-              content={<ItemPopup itemId={reward.item.id} />}
-            >
-              <div>
-                <Link to={`/item/${reward.item.id}`}>
-                  <figure className="image is-48x48">
-                    <div style={{ position: 'relative' }}>
-                      <img
+}): ReactElement => (
+  <div className="mb-2 is-flex is-flex-direction-row is-flex-wrap-wrap">
+    {rewards
+      .filter((item) => item.tier === tier)
+      .filter((item) => career === null || canUseItem(item.item, career))
+      .map((reward) => (
+        <div key={reward.item.id}>
+          <Tippy
+            duration={0}
+            placement="top"
+            content={<ItemPopup itemId={reward.item.id} />}
+          >
+            <div>
+              <Link to={`/item/${reward.item.id}`}>
+                <figure className="image is-48x48">
+                  <div style={{ position: 'relative' }}>
+                    <img
+                      style={{
+                        left: 0,
+                        position: 'absolute',
+                        top: 0,
+                      }}
+                      src={reward.item.iconUrl}
+                      alt={reward.item.name}
+                    />
+                    {reward.count > 1 && (
+                      <div
+                        className="has-text-white"
                         style={{
-                          left: 0,
                           position: 'absolute',
+                          right: 6,
                           top: 0,
                         }}
-                        src={reward.item.iconUrl}
-                        alt={reward.item.name}
-                      />
-                      {reward.count > 1 && (
-                        <div
-                          className="has-text-white"
-                          style={{
-                            position: 'absolute',
-                            right: 6,
-                            top: 0,
-                          }}
-                        >
-                          {reward.count}
-                        </div>
-                      )}
-                    </div>
-                  </figure>
-                </Link>
-              </div>
-            </Tippy>
-          </div>
-        ))}
-    </div>
-  );
-}
+                      >
+                        {reward.count}
+                      </div>
+                    )}
+                  </div>
+                </figure>
+              </Link>
+            </div>
+          </Tippy>
+        </div>
+      ))}
+  </div>
+);

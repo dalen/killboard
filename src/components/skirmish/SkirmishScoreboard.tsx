@@ -8,7 +8,7 @@ import { useQuery } from '@apollo/client/react';
 import type { Query } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import type { SortConfig} from '@/hooks/useSortableData';
+import type { SortConfig } from '@/hooks/useSortableData';
 import { SortConfigDirection } from '@/hooks/useSortableData';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
@@ -80,7 +80,7 @@ const SKIRMISH_SCOREBOARD = gql`
   }
 `;
 
-export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
+export const SkirmishScoreboard = ({ id }: { id: string }): ReactElement => {
   const perPage = 25;
 
   const { t } = useTranslation(['components']);
@@ -119,10 +119,15 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
     return sortConfig.key === name ? sortConfig.direction : '';
   };
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.skirmish?.scoreboardEntries?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.skirmish?.scoreboardEntries?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const scoreboardEntries = data.skirmish.scoreboardEntries.nodes;
   const { pageInfo } = data.skirmish.scoreboardEntries;
@@ -318,4 +323,4 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
       />
     </div>
   );
-}
+};

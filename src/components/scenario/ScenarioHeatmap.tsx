@@ -17,13 +17,13 @@ const SCENARIO_HEATMAP = gql`
   }
 `;
 
-export function ScenarioHeatmap({
+export const ScenarioHeatmap = ({
   zoneId,
   id,
 }: {
   zoneId: string;
   id: string;
-}): ReactElement {
+}): ReactElement => {
   const { loading, error, data } = useQuery<Query>(SCENARIO_HEATMAP, {
     variables: {
       id,
@@ -34,10 +34,15 @@ export function ScenarioHeatmap({
 
   const size = 500;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.killsHeatmap == null || data.killsHeatmap.length === 0) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [
@@ -55,4 +60,4 @@ export function ScenarioHeatmap({
       <ZoneHeatmap zoneId={zoneId} max={max} data={heatmapData} size={size} />
     </div>
   );
-}
+};

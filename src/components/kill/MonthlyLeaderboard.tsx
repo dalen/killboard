@@ -28,7 +28,7 @@ const MONTHLY_LEADERBOARD = gql`
   }
 `;
 
-export function MonthlyLeaderboard(): ReactElement {
+export const MonthlyLeaderboard = (): ReactElement => {
   const { t } = useTranslation(['common', 'components']);
 
   const month = new Date().getUTCMonth() + 1;
@@ -38,9 +38,15 @@ export function MonthlyLeaderboard(): ReactElement {
     variables: { month, year },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.monthlyKillLeaderboard == null) {return <p>{t('common:error')}</p>;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.monthlyKillLeaderboard == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
   return (
     <div>
@@ -50,4 +56,4 @@ export function MonthlyLeaderboard(): ReactElement {
       <LeaderboardTable data={data.monthlyKillLeaderboard.slice(0, 10)} />
     </div>
   );
-}
+};

@@ -4,7 +4,10 @@ import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { killDamageText } from '@/utils';
 import type { ReactElement } from 'react';
-import type { AttackerFragment, KillDamageFragment } from '@/__generated__/graphql';
+import type {
+  AttackerFragment,
+  KillDamageFragment,
+} from '@/__generated__/graphql';
 import { gql } from '@apollo/client';
 
 export const KILL_ATTACKER_FRAGMENT = gql`
@@ -48,7 +51,7 @@ export const KILL_DAMAGE_FRAGMENT = gql`
   }
 `;
 
-export function Attacker({
+export const Attacker = ({
   title,
   attacker,
   killDamage,
@@ -60,21 +63,24 @@ export function Attacker({
   killDamage: KillDamageFragment[];
   showKillDamage: boolean;
   deathblow: boolean;
-}): ReactElement {
+}): ReactElement => {
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce< KillDamageFragment[]>((acc, curr) => {
-    const existing = acc.find(
-      (e) =>
-        killDamageText(e) === killDamageText(curr) &&
-        e.ability?.iconUrl === curr.ability?.iconUrl,
-    );
-    if (existing) {
-      existing.damageAmount += curr.damageAmount;
-    } else {
-      acc.push({ ...curr });
-    }
-    return acc;
-  }, []);
+  const killDamageGrouped = killDamage.reduce<KillDamageFragment[]>(
+    (acc, curr) => {
+      const existing = acc.find(
+        (e) =>
+          killDamageText(e) === killDamageText(curr) &&
+          e.ability?.iconUrl === curr.ability?.iconUrl,
+      );
+      if (existing) {
+        existing.damageAmount += curr.damageAmount;
+      } else {
+        acc.push({ ...curr });
+      }
+      return acc;
+    },
+    [],
+  );
 
   const killDamageSum = sum(killDamage.map((d) => d.damageAmount));
 
@@ -140,7 +146,7 @@ export function Attacker({
           <table className="table is-striped is-narrow" width="100%">
             <tbody>
               {killDamageGrouped
-                .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
+                .toSorted((e1, e2) => e2.damageAmount - e1.damageAmount)
                 .map((damage) => (
                   <tr>
                     <td style={{ verticalAlign: 'middle' }}>
@@ -164,4 +170,4 @@ export function Attacker({
       </div>
     </div>
   );
-}
+};

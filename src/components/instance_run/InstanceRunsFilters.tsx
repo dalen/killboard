@@ -154,7 +154,7 @@ export const getInstanceRunsFilters = (search: URLSearchParams) => ({
   ...getMaxItemRatingFilters(search),
 });
 
-export function InstanceRunsFilters(): ReactElement {
+export const InstanceRunsFilters = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
   const instance = search.get('instance') ?? 'all';
@@ -390,4 +390,4 @@ export function InstanceRunsFilters(): ReactElement {
       </div>
     </div>
   );
-}
+};

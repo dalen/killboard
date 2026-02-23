@@ -25,7 +25,7 @@ const CHARACTER_INFO = gql`
   }
 `;
 
-export function CharacterInfo({ id }: { id: number }): ReactElement {
+export const CharacterInfo = ({ id }: { id: number }): ReactElement => {
   const { t } = useTranslation(['common', 'components', 'enums']);
   const { loading, error, data } = useQuery<Query>(CHARACTER_INFO, {
     variables: {
@@ -34,11 +34,16 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.character == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.character == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="card mb-5">
@@ -95,4 +100,4 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
       </div>
     </div>
   );
-}
+};

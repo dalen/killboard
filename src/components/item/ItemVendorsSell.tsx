@@ -55,7 +55,7 @@ const ITEM_INFO = gql`
   }
 `;
 
-export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
+export const ItemVendorsSell = ({ itemId }: { itemId: string | undefined }) => {
   const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
@@ -65,13 +65,18 @@ export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const vendorItems = data?.item?.soldByVendors;
 
-  if (vendorItems?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (vendorItems?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { pageInfo } = vendorItems;
 
@@ -162,4 +167,4 @@ export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
       />
     </>
   );
-}
+};

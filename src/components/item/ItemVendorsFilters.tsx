@@ -20,7 +20,7 @@ export const getCurrentFilters = (search: URLSearchParams) => ({
   ...getCareerFilters(search),
 });
 
-export function ItemVendorsFilters(): ReactElement {
+export const ItemVendorsFilters = (): ReactElement => {
   const { t } = useTranslation(['components', 'enums']);
   const [search, setSearch] = useSearchParams();
 
@@ -124,4 +124,4 @@ export function ItemVendorsFilters(): ReactElement {
       </div>
     </div>
   );
-}
+};

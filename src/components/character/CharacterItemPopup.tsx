@@ -15,7 +15,9 @@ const numEquippedInSet = (
 ): number => {
   let numEquipped = 0;
 
-  if (!itemSet) {return 0;}
+  if (!itemSet) {
+    return 0;
+  }
 
   itemsEquipped.forEach((item) => {
     if (
@@ -30,7 +32,7 @@ const numEquippedInSet = (
   return numEquipped;
 };
 
-export function CharacterItemPopup({
+export const CharacterItemPopup = ({
   item,
   talismans,
   itemsEquipped,
@@ -38,7 +40,7 @@ export function CharacterItemPopup({
   item: ItemListEntryFragment;
   talismans: TalismanFragment[];
   itemsEquipped: EquippedCharacterItemFragment[];
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['enums']);
 
   const numEquipped = item.itemSet
@@ -176,4 +178,4 @@ export function CharacterItemPopup({
       )}
     </div>
   );
-}
+};

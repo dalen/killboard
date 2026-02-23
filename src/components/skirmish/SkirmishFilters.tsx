@@ -62,7 +62,7 @@ export const getskirmishFilters = (
   ...getMinPlayersFilter(search),
 });
 
-export function SkirmishFilters(): ReactElement {
+export const SkirmishFilters = (): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -123,4 +123,4 @@ export function SkirmishFilters(): ReactElement {
       </div>
     </div>
   );
-}
+};

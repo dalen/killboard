@@ -9,7 +9,7 @@ import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { KillsListTable } from '@/components/kill/KillsListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
-export function KillsList({
+export const KillsList = ({
   query,
   queryOptions,
   perPage,
@@ -25,7 +25,7 @@ export function KillsList({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -38,14 +38,22 @@ export function KillsList({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const kills = data?.kills;
 
-  if (kills?.nodes == null) {return <p>{t('common:error')}</p>;}
+  if (kills?.nodes == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
-  if (kills.nodes.length === 0) {return null;}
+  if (kills.nodes.length === 0) {
+    return null;
+  }
 
   const { pageInfo } = kills;
 
@@ -69,4 +77,4 @@ export function KillsList({
       />
     </div>
   );
-}
+};

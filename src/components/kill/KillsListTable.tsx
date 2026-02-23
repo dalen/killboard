@@ -7,7 +7,7 @@ import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 
-export function KillsListTable({
+export const KillsListTable = ({
   data,
   showTime = true,
   showVictim = true,
@@ -17,7 +17,7 @@ export function KillsListTable({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -191,4 +191,4 @@ export function KillsListTable({
       </table>
     </div>
   );
-}
+};

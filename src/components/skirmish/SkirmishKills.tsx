@@ -67,14 +67,12 @@ const SKIRMISH_KILLS = gql`
   }
 `;
 
-export function SkirmishKills({ id }: { id: string }): ReactElement {
-  return (
-    <KillsList
-      query={SKIRMISH_KILLS}
-      queryOptions={{
-        variables: { filter: { skirmishId: { eq: id } } },
-      }}
-      perPage={25}
-    />
-  );
-}
+export const SkirmishKills = ({ id }: { id: string }): ReactElement => (
+  <KillsList
+    query={SKIRMISH_KILLS}
+    queryOptions={{
+      variables: { filter: { skirmishId: { eq: id } } },
+    }}
+    perPage={25}
+  />
+);

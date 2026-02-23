@@ -71,11 +71,11 @@ const LATEST_SKIRMISHES = gql`
   }
 `;
 
-export function LatestSkirmishes({
+export const LatestSkirmishes = ({
   perPage = 10,
 }: {
   perPage?: number;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
   const [search] = useSearchParams();
 
@@ -92,4 +92,4 @@ export function LatestSkirmishes({
       />
     </div>
   );
-}
+};

@@ -43,11 +43,11 @@ const GUILD_MEMBERS = gql`
   }
 `;
 
-export function GuildMemberList({
+export const GuildMemberList = ({
   id,
 }: {
   id: string | undefined;
-}): ReactElement {
+}): ReactElement => {
   const perPage = 25;
 
   const { t } = useTranslation(['common', 'pages']);
@@ -57,10 +57,15 @@ export function GuildMemberList({
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.guild?.members?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.guild?.members?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { pageInfo } = data.guild.members;
 
@@ -108,4 +113,4 @@ export function GuildMemberList({
       />
     </div>
   );
-}
+};

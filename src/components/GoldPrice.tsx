@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 
-export function GoldPrice({ price }: { price: number }): ReactNode {
+export const GoldPrice = ({ price }: { price: number }): ReactNode => {
   if (price === 0) {
     return null;
   }
@@ -46,4 +46,4 @@ export function GoldPrice({ price }: { price: number }): ReactNode {
       )}
     </span>
   );
-}
+};

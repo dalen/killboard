@@ -50,11 +50,11 @@ export const getScenarioFilters = (search: URLSearchParams) => ({
   },
 });
 
-export function ScenarioFilters({
+export const ScenarioFilters = ({
   showPremadeOnly = false,
 }: {
   showPremadeOnly?: boolean;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -143,8 +143,11 @@ export function ScenarioFilters({
                   type="checkbox"
                   checked={search.has('premadeOnly')}
                   onChange={(event) => {
-                    if (event.target.checked) {search.set('premadeOnly', 'true');}
-                    else {search.delete('premadeOnly');}
+                    if (event.target.checked) {
+                      search.set('premadeOnly', 'true');
+                    } else {
+                      search.delete('premadeOnly');
+                    }
                     setSearch(search);
                   }}
                 />{' '}
@@ -156,4 +159,4 @@ export function ScenarioFilters({
       </div>
     </div>
   );
-}
+};

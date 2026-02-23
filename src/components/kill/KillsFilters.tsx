@@ -55,7 +55,9 @@ const getPeriodFilters = (search: URLSearchParams) => {
 };
 
 const getSoloKillsFilters = (search: URLSearchParams) => {
-  if (search.has('soloOnly')) {return { soloOnly: true };}
+  if (search.has('soloOnly')) {
+    return { soloOnly: true };
+  }
 
   return {};
 };
@@ -65,7 +67,7 @@ export const getCurrentFilters = (search: URLSearchParams) => ({
   ...getSoloKillsFilters(search),
 });
 
-export function KillsFilters(): ReactElement {
+export const KillsFilters = (): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -98,8 +100,11 @@ export function KillsFilters(): ReactElement {
                 type="checkbox"
                 checked={search.has('soloOnly')}
                 onChange={(event) => {
-                  if (event.target.checked) {search.set('soloOnly', 'true');}
-                  else {search.delete('soloOnly');}
+                  if (event.target.checked) {
+                    search.set('soloOnly', 'true');
+                  } else {
+                    search.delete('soloOnly');
+                  }
                   setSearch(search);
                 }}
               />{' '}
@@ -110,4 +115,4 @@ export function KillsFilters(): ReactElement {
       </div>
     </div>
   );
-}
+};

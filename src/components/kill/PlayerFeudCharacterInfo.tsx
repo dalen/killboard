@@ -4,13 +4,13 @@ import type { Character } from '@/__generated__/graphql';
 import { careerIcon } from '@/utils';
 import type { ReactElement } from 'react';
 
-export function PlayerFeudCharacterInfo({
+export const PlayerFeudCharacterInfo = ({
   character,
   id,
 }: {
   character: Character;
   id: string | number;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'components', 'enums']);
 
   return (
@@ -67,4 +67,4 @@ export function PlayerFeudCharacterInfo({
       </div>
     </div>
   );
-}
+};

@@ -37,11 +37,11 @@ const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
   }
 `;
 
-export function SkirmishDamageByCharacter({
+export const SkirmishDamageByCharacter = ({
   id,
 }: {
   id: string;
-}): ReactElement {
+}): ReactElement => {
   const { characterId } = useParams();
 
   const { loading, error, data } = useQuery<Query>(
@@ -118,4 +118,4 @@ export function SkirmishDamageByCharacter({
       </table>
     </div>
   );
-}
+};

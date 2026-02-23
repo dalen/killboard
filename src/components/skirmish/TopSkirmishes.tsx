@@ -50,36 +50,40 @@ const TOP_SKIRMISHES = gql`
   }
 `;
 
-export function TopSkirmishes(): ReactElement {
+export const TopSkirmishes = (): ReactElement => {
   const { t } = useTranslation('components');
   const { loading, error, data } = useQuery<Query>(TOP_SKIRMISHES);
 
-  if (loading)
-    {return (
+  if (loading) {
+    return (
       <div className="mb-3">
         <div className="is-size-4 is-family-secondary is-uppercase">
           {t('topSkirmishes.title')}
         </div>
         <progress className="progress" />;
       </div>
-    );}
+    );
+  }
 
-  if (error)
-    {return (
+  if (error) {
+    return (
       <div className="mb-3">
         <div className="is-size-4 is-family-secondary is-uppercase">
           {t('topSkirmishes.title')}
         </div>
         <ErrorMessage name={error.name} message={error.message} />{' '}
       </div>
-    );}
+    );
+  }
 
   const skirmishes = _.uniqBy(
     _.orderBy(data?.topSkirmishes, (s) => s.kills?.totalCount, 'desc'),
     (s) => s.id,
   );
 
-  if (skirmishes == null) {return <p>{t('common:error')}</p>;}
+  if (skirmishes == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
   return (
     <div className="mb-3">
@@ -89,4 +93,4 @@ export function TopSkirmishes(): ReactElement {
       <SkirmishListTable data={skirmishes} />
     </div>
   );
-}
+};

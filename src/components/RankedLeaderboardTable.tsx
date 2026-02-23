@@ -69,13 +69,13 @@ const RANKED_LEADERBOARD = gql`
   }
 `;
 
-export function RankedLeaderboardTable({
+export const RankedLeaderboardTable = ({
   season,
   type,
 }: {
   season: string;
   type: string;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['components', 'common']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -92,11 +92,16 @@ export function RankedLeaderboardTable({
     },
   );
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.rankedSeason?.leaderboard?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.rankedSeason?.leaderboard?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entries = data.rankedSeason.leaderboard.nodes;
   const { pageInfo } = data.rankedSeason.leaderboard;
@@ -233,4 +238,4 @@ export function RankedLeaderboardTable({
       />
     </div>
   );
-}
+};

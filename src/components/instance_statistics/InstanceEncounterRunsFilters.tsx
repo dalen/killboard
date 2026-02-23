@@ -140,7 +140,7 @@ export const getInstanceEncounterRunsFilters = (search: URLSearchParams) => ({
   ...getMaxItemRatingFilters(search),
 });
 
-export function InstanceEncounterRunsFilters(): ReactElement {
+export const InstanceEncounterRunsFilters = (): ReactElement => {
   const [search, setSearch] = useSearchParams();
   const completed =
     search.get('completed') && Number(search.get('completed') ?? 0);
@@ -330,4 +330,4 @@ export function InstanceEncounterRunsFilters(): ReactElement {
       </div>
     </div>
   );
-}
+};

@@ -101,7 +101,7 @@ const SEARCH = gql`
   }
 `;
 
-export function Search(): ReactElement {
+export const Search = (): ReactElement => {
   const perPage = 15;
 
   const { t } = useTranslation(['common', 'pages']);
@@ -112,10 +112,15 @@ export function Search(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.search?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.search?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { pageInfo } = data.search;
 
@@ -418,4 +423,4 @@ export function Search(): ReactElement {
       />
     </div>
   );
-}
+};

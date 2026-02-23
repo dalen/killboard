@@ -72,7 +72,7 @@ const RECENT_DEATHS = gql`
   }
 `;
 
-export function GuildRecentDeaths({ id }: { id: number }): ReactElement {
+export const GuildRecentDeaths = ({ id }: { id: number }): ReactElement => {
   const { t } = useTranslation('components');
 
   return (
@@ -85,4 +85,4 @@ export function GuildRecentDeaths({ id }: { id: number }): ReactElement {
       perPage={10}
     />
   );
-}
+};

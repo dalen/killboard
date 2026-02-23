@@ -65,7 +65,7 @@ const ITEM_INFO = gql`
   }
 `;
 
-export function ItemQuests({ itemId }: { itemId: string | undefined }) {
+export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
   const perPage = 10;
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
@@ -75,15 +75,22 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const rewardedFromQuests = data?.item?.rewardedFromQuests;
 
-  if (rewardedFromQuests?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (rewardedFromQuests?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
-  if (rewardedFromQuests?.nodes == null) {return null;}
+  if (rewardedFromQuests?.nodes == null) {
+    return null;
+  }
 
   const { pageInfo } = rewardedFromQuests;
 
@@ -219,4 +226,4 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
       />
     </>
   );
-}
+};

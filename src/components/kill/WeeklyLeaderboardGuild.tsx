@@ -28,7 +28,7 @@ const WEEKLY_LEADERBOARD_GUILD = gql`
   }
 `;
 
-export function WeeklyLeaderboardGuild(): ReactElement {
+export const WeeklyLeaderboardGuild = (): ReactElement => {
   const { t } = useTranslation(['common', 'components']);
 
   // To make sure we get the current week, even if local timezone differs.
@@ -46,10 +46,15 @@ export function WeeklyLeaderboardGuild(): ReactElement {
     variables: { week, year },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.weeklyGuildKillLeaderboard == null)
-    {return <p>{t('common:error')}</p>;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.weeklyGuildKillLeaderboard == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
   return (
     <div>
@@ -61,4 +66,4 @@ export function WeeklyLeaderboardGuild(): ReactElement {
       />
     </div>
   );
-}
+};

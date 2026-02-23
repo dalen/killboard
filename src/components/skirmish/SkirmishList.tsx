@@ -9,7 +9,7 @@ import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { useQuery } from '@apollo/client/react';
 
-export function SkirmishList({
+export const SkirmishList = ({
   query,
   queryOptions,
   perPage,
@@ -21,7 +21,7 @@ export function SkirmishList({
   perPage: number;
   title?: string | null;
   showZone?: boolean;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -34,14 +34,22 @@ export function SkirmishList({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const skirmishes = data?.skirmishes;
 
-  if (skirmishes?.nodes == null) {return <p>{t('common:error')}</p>;}
+  if (skirmishes?.nodes == null) {
+    return <p>{t('common:error')}</p>;
+  }
 
-  if (skirmishes.nodes.length === 0) {return null;}
+  if (skirmishes.nodes.length === 0) {
+    return null;
+  }
 
   const { pageInfo } = skirmishes;
 
@@ -60,4 +68,4 @@ export function SkirmishList({
       />
     </div>
   );
-}
+};

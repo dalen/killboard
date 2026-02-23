@@ -1,8 +1,8 @@
-import type { ReactElement} from 'react';
+import type { ReactElement } from 'react';
 import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export function Map({
+export const Map = ({
   x,
   y,
   zoneId,
@@ -18,7 +18,7 @@ export function Map({
   nwCornerY: number;
   seCornerX: number;
   seCornerY: number;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
@@ -83,4 +83,4 @@ export function Map({
       <canvas ref={canvasElement} style={{ width: '100%' }} />
     </>
   );
-}
+};

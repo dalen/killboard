@@ -4,11 +4,11 @@ import type { KillGuildLeaderboardEntry } from '@/__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import '@/components/styles/table.scss';
 
-export function LeaderboardGuildTable({
+export const LeaderboardGuildTable = ({
   data,
 }: {
   data: KillGuildLeaderboardEntry[];
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
 
   return (
@@ -55,4 +55,4 @@ export function LeaderboardGuildTable({
       </table>
     </div>
   );
-}
+};

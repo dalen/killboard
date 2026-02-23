@@ -62,7 +62,7 @@ const LATEST_KILLS = gql`
   }
 `;
 
-export function LatestKills(): ReactElement {
+export const LatestKills = (): ReactElement => {
   const { t } = useTranslation('components');
 
   return (
@@ -73,4 +73,4 @@ export function LatestKills(): ReactElement {
       <KillsList query={LATEST_KILLS} perPage={10} />
     </div>
   );
-}
+};

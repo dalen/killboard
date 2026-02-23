@@ -1,7 +1,7 @@
 import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
-export function ErrorMessage({
+export const ErrorMessage = ({
   message,
   name,
   customText,
@@ -9,7 +9,7 @@ export function ErrorMessage({
   message?: string;
   name?: string;
   customText?: string | null;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
 
   return (
@@ -20,4 +20,4 @@ export function ErrorMessage({
       {customText}
     </div>
   );
-}
+};

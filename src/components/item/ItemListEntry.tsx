@@ -5,11 +5,11 @@ import { ItemIconWithPopup } from '@/components/item/ItemIconWithPopup';
 import { itemNameClass } from '@/itemUtils';
 import type { ItemListEntryFragment } from '@/__generated__/graphql';
 
-export function ItemListEntry({
+export const ItemListEntry = ({
   item,
 }: {
   item: ItemListEntryFragment;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['enums']);
 
   return (
@@ -28,4 +28,4 @@ export function ItemListEntry({
       <td>{t(`enums:itemSlot.${item.slot}`)}</td>
     </tr>
   );
-}
+};

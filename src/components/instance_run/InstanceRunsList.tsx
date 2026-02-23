@@ -66,7 +66,7 @@ const INSTANCE_RUNS = gql`
   }
 `;
 
-export function InstanceRunsList() {
+export const InstanceRunsList = () => {
   const perPage = 25;
 
   const [search] = useSearchParams();
@@ -80,9 +80,12 @@ export function InstanceRunsList() {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading || data?.instanceRuns?.nodes == null)
-    {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || data?.instanceRuns?.nodes == null) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const { pageInfo } = data.instanceRuns;
 
@@ -241,4 +244,4 @@ export function InstanceRunsList() {
       />
     </>
   );
-}
+};

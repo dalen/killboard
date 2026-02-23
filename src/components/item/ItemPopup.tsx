@@ -17,7 +17,11 @@ const ITEM_POPUP_INFO = gql`
   ${ITEM_FRAGMENT}
 `;
 
-export function ItemPopup({ itemId }: { itemId: string }): ReactElement | null {
+export const ItemPopup = ({
+  itemId,
+}: {
+  itemId: string;
+}): ReactElement | null => {
   const { loading, error, data } = useQuery<GetItemPopupInfoQuery>(
     ITEM_POPUP_INFO,
     {
@@ -27,13 +31,18 @@ export function ItemPopup({ itemId }: { itemId: string }): ReactElement | null {
     },
   );
 
-  if (loading) {return null;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return null;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.item == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.item == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <CharacterItemPopup item={data.item} talismans={[]} itemsEquipped={[]} />
   );
-}
+};

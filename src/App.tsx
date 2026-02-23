@@ -41,17 +41,19 @@ declare global {
 }
 
 // Send page views to google analytics
-function usePageViews() {
+const usePageViews = () => {
   const location = useLocation();
   React.useEffect(() => {
-    if (window.gtag == null) {return;}
+    if (window.gtag == null) {
+      return;
+    }
     window.gtag('event', 'pageview', {
       page_location: location.pathname,
     });
   }, [location]);
-}
+};
 
-function App() {
+const App = () => {
   usePageViews();
 
   return (
@@ -153,6 +155,6 @@ function App() {
       <Route path="/ranked-leaderboard" element={<RankedLeaderboard />} />
     </Routes>
   );
-}
+};
 
 export default App;

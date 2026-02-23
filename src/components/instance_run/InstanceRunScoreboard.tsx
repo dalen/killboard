@@ -89,14 +89,14 @@ export const INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT = gql`
   }
 `;
 
-export function InstanceRunScoreboard({
+export const InstanceRunScoreboard = ({
   entries,
 }: {
   entries: (
     | InstanceRunScoreboardEntryFragment
     | InstanceEncounterRunScoreboardEntryFragment
   )[];
-}): ReactElement {
+}): ReactElement => {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
 
@@ -283,4 +283,4 @@ export function InstanceRunScoreboard({
       </table>
     </div>
   );
-}
+};

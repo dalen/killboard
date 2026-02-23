@@ -19,7 +19,7 @@ const INSTANCE_ENCOUNTER_STATISTICS = gql`
   }
 `;
 
-export function InstanceEncounterStatistics({
+export const InstanceEncounterStatistics = ({
   name,
   instanceId,
   encounterId,
@@ -27,7 +27,7 @@ export function InstanceEncounterStatistics({
   name: string;
   instanceId: number;
   encounterId: number;
-}) {
+}) => {
   const [search] = useSearchParams();
   const filters = getInstanceEncounterRunsFilters(search);
   const { data, error, loading } = useQuery<Query>(
@@ -43,16 +43,19 @@ export function InstanceEncounterStatistics({
     },
   );
 
-  if (loading || !data?.instanceEncounterRuns)
-    {return (
+  if (loading || !data?.instanceEncounterRuns) {
+    return (
       <tr>
         <td>{name}</td>
         <td colSpan={3}>
           <progress className="progress" />
         </td>
       </tr>
-    );}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+    );
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   if (data.instanceEncounterRuns.medianDuration === 0) {
     return null;
@@ -77,4 +80,4 @@ export function InstanceEncounterStatistics({
       </td>
     </tr>
   );
-}
+};

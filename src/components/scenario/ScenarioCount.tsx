@@ -26,7 +26,7 @@ const SCENARIO_COUNT = gql`
   }
 `;
 
-export function ScenarioCount({
+export const ScenarioCount = ({
   characterId,
   guildId,
   wins,
@@ -36,7 +36,7 @@ export function ScenarioCount({
   guildId?: string;
   wins: boolean;
   title: string;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -49,14 +49,19 @@ export function ScenarioCount({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.scenarios?.totalCount == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.scenarios?.totalCount == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="is-size-4 is-family-secondary is-uppercase">
       {title} {data.scenarios.totalCount != null && data.scenarios.totalCount}
     </div>
   );
-}
+};

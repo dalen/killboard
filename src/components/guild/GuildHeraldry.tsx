@@ -5,7 +5,7 @@ import type {
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
-export function GuildHeraldry({
+export const GuildHeraldry = ({
   size,
   heraldry,
   realm,
@@ -13,7 +13,7 @@ export function GuildHeraldry({
   size: '24' | '32' | '48' | '64' | '128';
   heraldry: GuildHeraldryType;
   realm: Realm;
-}): ReactElement {
+}): ReactElement => {
   const realmNum = realm === 'ORDER' ? 1 : 2;
 
   return (
@@ -24,4 +24,4 @@ export function GuildHeraldry({
       />
     </figure>
   );
-}
+};

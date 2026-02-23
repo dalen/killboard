@@ -55,7 +55,7 @@ const SCENARIO_LIST = gql`
   }
 `;
 
-export function ScenarioList({
+export const ScenarioList = ({
   characterId,
   guildId,
   perPage = 15,
@@ -63,7 +63,7 @@ export function ScenarioList({
   characterId?: string;
   guildId?: string;
   perPage?: number;
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -76,10 +76,15 @@ export function ScenarioList({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.scenarios?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.scenarios?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const pageInfo = data?.scenarios?.pageInfo;
 
@@ -93,4 +98,4 @@ export function ScenarioList({
       />
     </>
   );
-}
+};

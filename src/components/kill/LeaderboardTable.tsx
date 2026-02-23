@@ -4,11 +4,11 @@ import type { KillLeaderboardEntry } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import '@/components/styles/table.scss';
 
-export function LeaderboardTable({
+export const LeaderboardTable = ({
   data,
 }: {
   data: KillLeaderboardEntry[];
-}): React.ReactElement | null {
+}): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
 
   return (
@@ -56,4 +56,4 @@ export function LeaderboardTable({
       </tbody>
     </table>
   );
-}
+};

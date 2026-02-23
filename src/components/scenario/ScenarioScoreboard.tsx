@@ -7,11 +7,11 @@ import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '@/hooks/useSortableData';
 import type { ReactElement } from 'react';
 
-export function ScenarioScoreboard({
+export const ScenarioScoreboard = ({
   entries,
 }: {
   entries: ScenarioScoreboardEntryFragment[];
-}): ReactElement {
+}): ReactElement => {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
 
@@ -234,4 +234,4 @@ export function ScenarioScoreboard({
       </table>
     </div>
   );
-}
+};
