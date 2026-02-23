@@ -1,8 +1,10 @@
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import type {
-  EquippedCharacterItemFragment,
-  TalismanFragment,
+import {
+  EquipSlot,
+  type EquippedCharacterItemFragment,
+  ItemType,
+  type TalismanFragment,
 } from '@/__generated__/graphql';
 import { isPercentage } from '@/utils';
 import { itemNameClass, statMultiplier } from '@/itemUtils';
@@ -23,7 +25,7 @@ const numEquippedInSet = (
     if (
       item.item.itemSet &&
       item.item.itemSet.id === itemSet.id &&
-      item.equipSlot !== 'NONE'
+      item.equipSlot !== EquipSlot.None
     ) {
       numEquipped += 1;
     }
@@ -63,16 +65,16 @@ export const CharacterItemPopup = ({
         </div>
       </div>
       <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>
-      {item.type !== 'NONE' && (
+      {item.type !== ItemType.None && (
         <div className="is-size-7">{t(`enums:itemType.${item.type}`)}</div>
       )}
       {item.itemLevel > 0 && (
         <div className="is-size-7">Item Level {item.itemLevel}</div>
       )}
-      {item.armor > 0 && item.type !== 'SHIELD' && (
+      {item.armor > 0 && item.type !== ItemType.Shield && (
         <div className="is-size-7 stats-text-highlight">{item.armor} Armor</div>
       )}
-      {item.dps > 0 && item.type !== 'SHIELD' && (
+      {item.dps > 0 && item.type !== ItemType.Shield && (
         <div className="is-size-7 stats-text-highlight">
           {(item.dps / 10).toFixed(1)} DPS
         </div>
@@ -82,7 +84,7 @@ export const CharacterItemPopup = ({
           {(item.speed / 100).toFixed(1)} Speed
         </div>
       )}
-      {item.type === 'SHIELD' && (
+      {item.type === ItemType.Shield && (
         <div className="is-size-7 stats-text-highlight">
           {item.armor} Block Rating
         </div>

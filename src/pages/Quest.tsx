@@ -8,7 +8,7 @@ import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { WarIcon } from '@/components/WarIcon';
 import type { ReactElement } from 'react';
-import type { GetQuestInfoQuery } from '@/__generated__/graphql';
+import { type GetQuestInfoQuery, Realm } from '@/__generated__/graphql';
 
 const QUEST_INFO = gql`
   query GetQuestInfo($id: ID!) {
@@ -297,7 +297,7 @@ export const Quest = (): ReactElement => {
             {quest.starterCreatures.map((creature) => (
               <div className="icon-text">
                 <span className="icon has-text-info">
-                  {creature.realm === 'ORDER' && (
+                  {creature.realm === Realm.Order && (
                     <img
                       src="/images/icons/scenario/order.png"
                       width={24}
@@ -305,7 +305,7 @@ export const Quest = (): ReactElement => {
                       alt={t('comon:realmOrder')}
                     />
                   )}
-                  {creature.realm === 'DESTRUCTION' && (
+                  {creature.realm === Realm.Destruction && (
                     <img
                       src="/images/icons/scenario/destruction.png"
                       width={24}
@@ -313,7 +313,7 @@ export const Quest = (): ReactElement => {
                       alt={t('components:realmDestruction')}
                     />
                   )}
-                  {creature.realm === 'NEUTRAL' && (
+                  {creature.realm === Realm.Neutral && (
                     <img
                       src="/images/icons/quest_green.png"
                       width={24}

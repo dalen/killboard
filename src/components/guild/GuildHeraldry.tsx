@@ -1,7 +1,5 @@
-import type {
-  GuildHeraldry as GuildHeraldryType,
-  Realm,
-} from '../../__generated__/graphql';
+import type { GuildHeraldry as GuildHeraldryType } from '../../__generated__/graphql';
+import { Realm } from '../../__generated__/graphql';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
@@ -14,7 +12,7 @@ export const GuildHeraldry = ({
   heraldry: GuildHeraldryType;
   realm: Realm;
 }): ReactElement => {
-  const realmNum = realm === 'ORDER' ? 1 : 2;
+  const realmNum = realm === Realm.Order ? 1 : 2;
 
   return (
     <figure className={clsx('image', `is-${size}x${size}`)}>

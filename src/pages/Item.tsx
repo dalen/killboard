@@ -10,7 +10,11 @@ import { ItemQuests } from '@/components/item/ItemQuests';
 import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
 import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
 import type { ReactElement } from 'react';
-import type { GetItemInfoQuery } from '@/__generated__/graphql';
+import {
+  EquipSlot,
+  type GetItemInfoQuery,
+  ItemType,
+} from '@/__generated__/graphql';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -151,19 +155,19 @@ export const Item = ({
                     </div>
                   </div>
                   <div className="mb-1">{item.description}</div>
-                  {item.slot !== 'NONE' && (
+                  {item.slot !== EquipSlot.None && (
                     <div>{t(`enums:itemSlot.${item.slot}`)}</div>
                   )}
-                  {item.type !== 'NONE' && (
+                  {item.type !== ItemType.None && (
                     <div>{t(`enums:itemType.${item.type}`)}</div>
                   )}
                   {item.itemLevel > 0 && <div>Item Level {item.itemLevel}</div>}
-                  {item.armor > 0 && item.type !== 'SHIELD' && (
+                  {item.armor > 0 && item.type !== ItemType.Shield && (
                     <div className="stats-text-highlight">
                       {item.armor} Armor
                     </div>
                   )}
-                  {item.dps > 0 && item.type !== 'SHIELD' && (
+                  {item.dps > 0 && item.type !== ItemType.Shield && (
                     <div className="stats-text-highlight">
                       {(item.dps / 10).toFixed(1)} DPS
                     </div>
@@ -173,7 +177,7 @@ export const Item = ({
                       {(item.speed / 100).toFixed(1)} Speed
                     </div>
                   )}
-                  {item.type === 'SHIELD' && (
+                  {item.type === ItemType.Shield && (
                     <div className=" stats-text-highlight">
                       {item.armor} Block Rating
                     </div>

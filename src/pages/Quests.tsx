@@ -4,7 +4,7 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import type { QuestFilterInput } from '@/__generated__/graphql';
+import type { GetQuestsQuery, QuestFilterInput } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { GoldPrice } from '@/components/GoldPrice';
@@ -13,7 +13,6 @@ import { questTypeIcon } from '../utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
-import type { GetQuestsQuery } from '@/__generated__/graphql';
 
 const QUESTS = gql`
   query GetQuests(

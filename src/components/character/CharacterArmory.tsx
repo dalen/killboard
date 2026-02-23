@@ -76,26 +76,36 @@ export const CharacterArmory = ({ id }: { id: number }): ReactElement => {
   const character = data && data.character;
   const items = character ? character.items : [];
 
-  const mainHand = items.find((item) => item.equipSlot === 'MAIN_HAND');
-  const offHand = items.find((item) => item.equipSlot === 'OFF_HAND');
-  const ranged = items.find((item) => item.equipSlot === 'RANGED_WEAPON');
+  const mainHand = items.find((item) => item.equipSlot === EquipSlot.MainHand);
+  const offHand = items.find((item) => item.equipSlot === EquipSlot.OffHand);
+  const ranged = items.find(
+    (item) => item.equipSlot === EquipSlot.RangedWeapon,
+  );
 
-  const helm = items.find((item) => item.equipSlot === 'HELM');
-  const shoulder = items.find((item) => item.equipSlot === 'SHOULDER');
-  const boots = items.find((item) => item.equipSlot === 'BOOTS');
-  const body = items.find((item) => item.equipSlot === 'BODY');
-  const back = items.find((item) => item.equipSlot === 'BACK');
-  const belt = items.find((item) => item.equipSlot === 'BELT');
-  const gloves = items.find((item) => item.equipSlot === 'GLOVES');
+  const helm = items.find((item) => item.equipSlot === EquipSlot.Helm);
+  const shoulder = items.find((item) => item.equipSlot === EquipSlot.Shoulder);
+  const boots = items.find((item) => item.equipSlot === EquipSlot.Boots);
+  const body = items.find((item) => item.equipSlot === EquipSlot.Body);
+  const back = items.find((item) => item.equipSlot === EquipSlot.Back);
+  const belt = items.find((item) => item.equipSlot === EquipSlot.Belt);
+  const gloves = items.find((item) => item.equipSlot === EquipSlot.Gloves);
 
-  const jewellery1 = items.find((item) => item.equipSlot === 'JEWELLERY1');
-  const jewellery2 = items.find((item) => item.equipSlot === 'JEWELLERY2');
-  const jewellery3 = items.find((item) => item.equipSlot === 'JEWELLERY3');
-  const jewellery4 = items.find((item) => item.equipSlot === 'JEWELLERY4');
+  const jewellery1 = items.find(
+    (item) => item.equipSlot === EquipSlot.Jewellery1,
+  );
+  const jewellery2 = items.find(
+    (item) => item.equipSlot === EquipSlot.Jewellery2,
+  );
+  const jewellery3 = items.find(
+    (item) => item.equipSlot === EquipSlot.Jewellery3,
+  );
+  const jewellery4 = items.find(
+    (item) => item.equipSlot === EquipSlot.Jewellery4,
+  );
 
-  const event = items.find((item) => item.equipSlot === 'EVENT');
-  const pocket1 = items.find((item) => item.equipSlot === 'POCKET1');
-  const pocket2 = items.find((item) => item.equipSlot === 'POCKET2');
+  const event = items.find((item) => item.equipSlot === EquipSlot.Event);
+  const pocket1 = items.find((item) => item.equipSlot === EquipSlot.Pocket1);
+  const pocket2 = items.find((item) => item.equipSlot === EquipSlot.Pocket2);
 
   return (
     <div className="columns pl-3" style={{ marginBottom: '250px' }}>
