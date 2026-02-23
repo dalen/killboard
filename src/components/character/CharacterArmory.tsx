@@ -1,18 +1,14 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import {
-  EquipSlot,
-  GetCharacterArmoryQuery,
-  ItemRarity,
-  ItemType,
-} from '@/__generated__/graphql';
+import type { GetCharacterArmoryQuery } from '@/__generated__/graphql';
+import { EquipSlot, ItemRarity, ItemType } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
   CharacterItem,
   EQUIPPED_ITEM_FRAGMENT,
 } from '@/components/character/CharacterItem';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const CHARACTER_ARMORY = gql`
   query GetCharacterArmory($id: ID!) {
@@ -26,38 +22,36 @@ const CHARACTER_ARMORY = gql`
   ${EQUIPPED_ITEM_FRAGMENT}
 `;
 
-function NoItem() {
-  return (
-    <CharacterItem
-      item={{
-        name: '',
-        description: '',
-        dps: 0,
-        id: '0',
-        raceRestriction: [],
-        uniqueEquipped: false,
-        speed: 0,
-        talismanSlots: 0,
-        itemLevel: 1,
-        iconUrl: 'https://armory.returnofreckoning.com/icon/1',
-        rarity: ItemRarity.Utility,
-        slot: EquipSlot.None,
-        type: ItemType.None,
-        stats: [],
-        renownRankRequirement: 0,
-        levelRequirement: 0,
-        armor: 0,
-        careerRestriction: [],
-        buffs: [],
-        abilities: [],
-      }}
-      talismans={[]}
-      itemsEquipped={[]}
-    />
-  );
-}
+const NoItem = () => (
+  <CharacterItem
+    item={{
+      abilities: [],
+      armor: 0,
+      buffs: [],
+      careerRestriction: [],
+      description: '',
+      dps: 0,
+      iconUrl: 'https://armory.returnofreckoning.com/icon/1',
+      id: '0',
+      itemLevel: 1,
+      levelRequirement: 0,
+      name: '',
+      raceRestriction: [],
+      rarity: ItemRarity.Utility,
+      renownRankRequirement: 0,
+      slot: EquipSlot.None,
+      speed: 0,
+      stats: [],
+      talismanSlots: 0,
+      type: ItemType.None,
+      uniqueEquipped: false,
+    }}
+    talismans={[]}
+    itemsEquipped={[]}
+  />
+);
 
-export function CharacterArmory({ id }: { id: number }): ReactElement {
+export const CharacterArmory = ({ id }: { id: number }): ReactElement => {
   const { t } = useTranslation('components');
   const { loading, error, data } = useQuery<GetCharacterArmoryQuery>(
     CHARACTER_ARMORY,
@@ -68,11 +62,16 @@ export function CharacterArmory({ id }: { id: number }): ReactElement {
     },
   );
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.character === null)
+  if (data?.character === null) {
     return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const character = data && data.character;
   const items = character ? character.items : [];
@@ -270,4 +269,4 @@ export function CharacterArmory({ id }: { id: number }): ReactElement {
       </div>
     </div>
   );
-}
+};

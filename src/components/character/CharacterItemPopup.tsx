@@ -1,13 +1,13 @@
 import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
-import {
+import type {
   EquippedCharacterItemFragment,
   TalismanFragment,
 } from '@/__generated__/graphql';
 import { isPercentage } from '@/utils';
 import { itemNameClass, statMultiplier } from '@/itemUtils';
-import { ReactElement } from 'react';
-import { ItemListEntryFragment } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { ItemListEntryFragment } from '@/__generated__/graphql';
 
 const numEquippedInSet = (
   itemSet: ItemListEntryFragment['itemSet'],
@@ -15,7 +15,7 @@ const numEquippedInSet = (
 ): number => {
   let numEquipped = 0;
 
-  if (!itemSet) return 0;
+  if (!itemSet) {return 0;}
 
   itemsEquipped.forEach((item) => {
     if (
@@ -126,10 +126,10 @@ export function CharacterItemPopup({
           {item.itemSet.bonuses.map((bonus) => (
             <div
               className={clsx('ml-2', {
-                'item-text-set-bonus-enabled':
-                  numEquipped >= bonus.itemsRequired,
                 'item-text-set-bonus-disabled':
                   numEquipped < bonus.itemsRequired,
+                'item-text-set-bonus-enabled':
+                  numEquipped >= bonus.itemsRequired,
               })}
             >
               ({bonus.itemsRequired} piece bonus):{' '}

@@ -3,10 +3,10 @@ import { useQuery } from '@apollo/client/react';
 import { getUnixTime, startOfWeek } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { careerIcon } from '@/utils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const CHARACTER_INFO = gql`
   query GetCharacterInfo($id: ID!) {
@@ -34,11 +34,11 @@ export function CharacterInfo({ id }: { id: number }): ReactElement {
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.character == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   return (
     <div className="card mb-5">

@@ -3,11 +3,11 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { CareerIcon } from '@/components/CareerIcon';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const GUILD_MEMBERS = gql`
@@ -52,15 +52,15 @@ export function GuildMemberList({
 
   const { t } = useTranslation(['common', 'pages']);
   const { loading, error, data, refetch } = useQuery<Query>(GUILD_MEMBERS, {
-    variables: { id, first: perPage },
+    variables: { first: perPage, id },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.guild?.members?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { pageInfo } = data.guild.members;
 

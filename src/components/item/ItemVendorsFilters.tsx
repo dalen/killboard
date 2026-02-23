@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { URLSearchParams } from 'url';
+import type { URLSearchParams } from 'url';
 import { Career } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const getCareerFilters = (search: URLSearchParams) => {
   const career = search.get('career');

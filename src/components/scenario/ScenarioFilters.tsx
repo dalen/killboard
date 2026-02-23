@@ -1,5 +1,5 @@
-import { ScenarioRecordFilterInput } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { ScenarioRecordFilterInput } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
@@ -12,11 +12,12 @@ const getQueueTypeFilters = (search: URLSearchParams) => {
     case 'solo':
     case 'city_siege':
     case 'group_ranked':
-    case 'solo_ranked':
+    case 'solo_ranked': {
       return {
-        queueType: queueType?.toUpperCase(),
         premadeOnly,
+        queueType: queueType?.toUpperCase(),
       };
+    }
   }
 
   return { premadeOnly };
@@ -26,15 +27,17 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   const tier = search.get('tier');
 
   switch (tier) {
-    case 'all':
+    case 'all': {
       return {};
+    }
     case '1':
     case '2':
     case '3':
-    case '4':
+    case '4': {
       return {
         tier: { eq: Number(tier) },
       };
+    }
   }
 
   return {};
@@ -140,8 +143,8 @@ export function ScenarioFilters({
                   type="checkbox"
                   checked={search.has('premadeOnly')}
                   onChange={(event) => {
-                    if (event.target.checked) search.set('premadeOnly', 'true');
-                    else search.delete('premadeOnly');
+                    if (event.target.checked) {search.set('premadeOnly', 'true');}
+                    else {search.delete('premadeOnly');}
                     setSearch(search);
                   }}
                 />{' '}

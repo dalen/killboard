@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioListTable } from '@/components/scenario/ScenarioListTable';
@@ -70,16 +70,16 @@ export function ScenarioList({
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
     variables: {
       characterId,
-      guildId,
       first: perPage,
+      guildId,
       ...getScenarioFilters(search),
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.scenarios?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const pageInfo = data?.scenarios?.pageInfo;
 

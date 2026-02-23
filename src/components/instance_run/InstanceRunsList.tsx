@@ -2,13 +2,14 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import {
-  intervalToDuration,
+  format,
   formatDuration,
   formatISO,
-  format,
+  intervalToDuration,
 } from 'date-fns';
 import { Link, useSearchParams } from 'react-router';
-import { Archetype, Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
+import { Archetype } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
@@ -80,14 +81,14 @@ export function InstanceRunsList() {
   const isMobile = width <= 768;
 
   if (loading || data?.instanceRuns?.nodes == null)
-    return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+    {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const { pageInfo } = data.instanceRuns;
 
   const averageDurationObject = intervalToDuration({
-    start: new Date(0),
     end: new Date(Math.round(data.instanceRuns.averageDuration)),
+    start: new Date(0),
   });
 
   const averageDuration = formatDuration(averageDurationObject);
@@ -171,8 +172,8 @@ export function InstanceRunsList() {
             const startDate = new Date(instanceRun.start);
             const endDate = new Date(instanceRun.end);
             const durationObject = intervalToDuration({
-              start: startDate,
               end: endDate,
+              start: startDate,
             });
 
             const duration = formatDuration(durationObject);

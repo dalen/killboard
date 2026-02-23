@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import {
   format,
-  formatISO,
   formatDuration,
+  formatISO,
   intervalToDuration,
 } from 'date-fns';
 
@@ -14,8 +14,8 @@ import { ScenarioKills } from '@/components/scenario/ScenarioKills';
 import { ScenarioScoreboard } from '@/components/scenario/ScenarioScoreboard';
 import { ScenarioHeatmap } from '@/components/scenario/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '@/components/scenario/ScenarioSkirmishes';
-import { ReactElement } from 'react';
-import { GetScenarioInfoQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetScenarioInfoQuery } from '@/__generated__/graphql';
 
 export const SCENARIO_SCOREBOARD_FRAGMENT = gql`
   fragment ScenarioScoreboardEntry on ScenarioScoreboardEntry {
@@ -112,18 +112,18 @@ export function Scenario({
     },
   );
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.scenario == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { scenario } = data;
   const startDate = new Date(scenario.startTime);
   const endDate = new Date(scenario.endTime);
   const duration = formatDuration(
     intervalToDuration({
-      start: startDate,
       end: endDate,
+      start: startDate,
     }),
   );
 
@@ -200,8 +200,8 @@ export function Scenario({
                 <div
                   style={{
                     display: 'inline-block',
-                    width: '40px',
                     height: '40px',
+                    width: '40px',
                   }}
                 />
               )}
@@ -234,8 +234,8 @@ export function Scenario({
                 <div
                   style={{
                     display: 'inline-block',
-                    width: '40px',
                     height: '40px',
+                    width: '40px',
                   }}
                 />
               )}

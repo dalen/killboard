@@ -1,9 +1,10 @@
-import { ReactElement, useState } from 'react';
+import type { ReactElement} from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router';
 import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
 import { itemFigureClass } from '@/itemUtils';
 import { gql } from '@apollo/client';
-import { ItemListEntryFragment } from '@/__generated__/graphql';
+import type { ItemListEntryFragment } from '@/__generated__/graphql';
 
 export const ITEM_FRAGMENT = gql`
   fragment ItemListEntry on Item {
@@ -92,7 +93,7 @@ export function ItemIconWithPopup({
         <figure
           className={`${itemFigureClass(
             item,
-          )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+          )} [item-figure] image is-64x64 m-0`} // Remove [...] from item-figure to add coloured borders
         >
           <img src={item.iconUrl} alt={item.name} />
         </figure>

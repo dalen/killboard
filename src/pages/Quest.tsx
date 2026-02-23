@@ -7,8 +7,8 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { WarIcon } from '@/components/WarIcon';
-import { ReactElement } from 'react';
-import { GetQuestInfoQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetQuestInfoQuery } from '@/__generated__/graphql';
 
 const QUEST_INFO = gql`
   query GetQuestInfo($id: ID!) {
@@ -72,11 +72,11 @@ export function Quest(): ReactElement {
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.quest == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { quest } = data;
 
@@ -207,9 +207,9 @@ export function Quest(): ReactElement {
                         <div style={{ position: 'relative' }}>
                           <img
                             style={{
+                              left: 0,
                               position: 'absolute',
                               top: 0,
-                              left: 0,
                             }}
                             src={reward.item.iconUrl}
                             alt={reward.item.name}
@@ -219,8 +219,8 @@ export function Quest(): ReactElement {
                               className="has-text-white"
                               style={{
                                 position: 'absolute',
-                                top: 0,
                                 right: 6,
+                                top: 0,
                               }}
                             >
                               {reward.count}
@@ -255,9 +255,9 @@ export function Quest(): ReactElement {
                             <div style={{ position: 'relative' }}>
                               <img
                                 style={{
+                                  left: 0,
                                   position: 'absolute',
                                   top: 0,
-                                  left: 0,
                                 }}
                                 src={reward.item.iconUrl}
                                 alt={reward.item.name}
@@ -267,8 +267,8 @@ export function Quest(): ReactElement {
                                   className="has-text-white"
                                   style={{
                                     position: 'absolute',
-                                    top: 0,
                                     right: 6,
+                                    top: 0,
                                   }}
                                 >
                                   {reward.count}

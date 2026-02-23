@@ -3,12 +3,12 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { Link } from 'react-router';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { CareerIcon } from '@/components/CareerIcon';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const RANKED_LEADERBOARD = gql`
@@ -85,18 +85,18 @@ export function RankedLeaderboardTable({
     RANKED_LEADERBOARD,
     {
       variables: {
+        first: perPage,
         season,
         type: type === 'solo' ? 'RANKED_SOLO' : 'RANKED_GROUP',
-        first: perPage,
       },
     },
   );
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.rankedSeason?.leaderboard?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const entries = data.rankedSeason.leaderboard.nodes;
   const { pageInfo } = data.rankedSeason.leaderboard;

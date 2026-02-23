@@ -14,13 +14,13 @@ export const resources = {
   },
 } as const;
 
-i18n.use(initReactI18next).init({
-  lng: 'en',
-  ns: ['common', 'components', 'enums', 'pages'],
+void i18n.use(initReactI18next).init({
   defaultNS: 'common',
-  nsSeparator: ':',
   interpolation: {
     escapeValue: false,
   },
+  lng: 'en',
+  ns: ['common', 'components', 'enums', 'pages'],
+  nsSeparator: ':',
   resources,
 });

@@ -5,11 +5,11 @@ import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GUILD_INFO_FRAGMENT, GuildInfo } from '@/components/guild/GuildInfo';
 import { GuildFeud } from '@/components/guild/GuildFeud';
-import {
+import type {
   GetGuildFeudInfoQuery,
   GetGuildFeudInfoQueryVariables,
 } from '../__generated__/graphql';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const GUILD_FEUD_INFO = gql`
   query GetGuildFeudInfo(
@@ -61,17 +61,17 @@ export function GuildFeudPage(): ReactElement {
   >(GUILD_FEUD_INFO, {
     variables: {
       guildId1: guildId1 ?? '',
-      guildInt1: Number(guildId1),
       guildId2: guildId2 ?? '',
+      guildInt1: Number(guildId1),
       guildInt2: Number(guildId2),
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.guild1 == null || data?.guild2 == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   return (
     <div className="container is-max-widescreen mt-2">

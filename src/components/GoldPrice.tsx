@@ -1,12 +1,12 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 
 export function GoldPrice({ price }: { price: number }): ReactNode {
   if (price === 0) {
     return null;
   }
 
-  const gold = Math.floor(price / 10000);
-  const silver = Math.floor((price % 10000) / 100);
+  const gold = Math.floor(price / 10_000);
+  const silver = Math.floor((price % 10_000) / 100);
   const copper = price % 100;
 
   return (

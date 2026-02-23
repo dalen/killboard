@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation } from 'react-router';
+import { Route, Routes, useLocation } from 'react-router';
 
 import './i18n/config';
 import React from 'react';
@@ -44,7 +44,7 @@ declare global {
 function usePageViews() {
   const location = useLocation();
   React.useEffect(() => {
-    if (window.gtag == null) return;
+    if (window.gtag == null) {return;}
     window.gtag('event', 'pageview', {
       page_location: location.pathname,
     });

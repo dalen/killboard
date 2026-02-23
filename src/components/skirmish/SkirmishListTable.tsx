@@ -7,7 +7,8 @@ import {
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Skirmish, Realm } from '@/__generated__/graphql';
+import type { Skirmish} from '@/__generated__/graphql';
+import { Realm } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import clsx from 'clsx';
@@ -50,8 +51,8 @@ export function SkirmishListTable({
             const startDate = new Date(skirmish.startTime);
             const endDate = new Date(skirmish.endTime);
             const durationObject = intervalToDuration({
-              start: startDate,
               end: endDate,
+              start: startDate,
             });
             // Skip seconds in the duration
             if (

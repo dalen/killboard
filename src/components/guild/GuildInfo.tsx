@@ -1,8 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { GuildInfoFragment } from '../../__generated__/graphql';
-import { ReactElement } from 'react';
+import type { GuildInfoFragment } from '../../__generated__/graphql';
+import type { ReactElement } from 'react';
 import { gql } from '@apollo/client';
 
 export const GUILD_INFO_FRAGMENT = gql`

@@ -9,7 +9,7 @@ import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { CharacterArmory } from '@/components/character/CharacterArmory';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { CharacterLatestSkirmishes } from '@/components/character/CharacterLatestSkirmishes';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 export function Character({
   tab,

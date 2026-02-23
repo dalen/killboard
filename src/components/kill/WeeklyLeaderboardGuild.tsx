@@ -2,10 +2,10 @@ import { getISOWeek, getISOWeekYear } from 'date-fns';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { LeaderboardGuildTable } from '@/components/kill/LeaderboardGuildTable';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const WEEKLY_LEADERBOARD_GUILD = gql`
   query GetWeeklyGuildLeaderboard($year: Int!, $week: Int!) {
@@ -43,13 +43,13 @@ export function WeeklyLeaderboardGuild(): ReactElement {
   const year = getISOWeekYear(utcDate);
 
   const { loading, error, data } = useQuery<Query>(WEEKLY_LEADERBOARD_GUILD, {
-    variables: { year, week },
+    variables: { week, year },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.weeklyGuildKillLeaderboard == null)
-    return <p>{t('common:error')}</p>;
+    {return <p>{t('common:error')}</p>;}
 
   return (
     <div>

@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { GoldPrice } from '@/components/GoldPrice';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
   ItemVendorsFilters,
@@ -78,18 +78,18 @@ export function ItemVendorsPurchase({
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
       ...getCurrentFilters(search),
-      itemId,
       first: perPage,
+      itemId,
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const vendorItems = data?.item?.usedToPurchase;
 
   if (vendorItems?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { pageInfo } = vendorItems;
 

@@ -1,6 +1,6 @@
 import { useSearchParams } from 'react-router';
-import { InstanceEncounterRunFilterInput } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { InstanceEncounterRunFilterInput } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 
 const getCompletedEncountersFilters = (
   search: URLSearchParams,
@@ -132,8 +132,8 @@ const getMaxItemRatingFilters = (
 };
 
 export const getInstanceEncounterRunsFilters = (search: URLSearchParams) => ({
-  start: { gt: 0 },
   scoreboardEntryCount: { gte: 6 },
+  start: { gt: 0 },
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
   ...getAvgItemRatingFilters(search),

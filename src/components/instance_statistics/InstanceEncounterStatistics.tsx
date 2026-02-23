@@ -1,4 +1,4 @@
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
 import { gql } from '@apollo/client';
@@ -35,8 +35,8 @@ export function InstanceEncounterStatistics({
     {
       variables: {
         where: {
-          instanceId: { eq: instanceId },
           encounterId: { eq: encounterId },
+          instanceId: { eq: instanceId },
           ...filters,
         },
       },
@@ -44,15 +44,15 @@ export function InstanceEncounterStatistics({
   );
 
   if (loading || !data?.instanceEncounterRuns)
-    return (
+    {return (
       <tr>
         <td>{name}</td>
         <td colSpan={3}>
           <progress className="progress" />
         </td>
       </tr>
-    );
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+    );}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data.instanceEncounterRuns.medianDuration === 0) {
     return null;
@@ -64,8 +64,8 @@ export function InstanceEncounterStatistics({
       <td>
         {formatDuration(
           intervalToDuration({
-            start: new Date(0),
             end: new Date(data.instanceEncounterRuns.medianDuration),
+            start: new Date(0),
           }),
         )}
       </td>

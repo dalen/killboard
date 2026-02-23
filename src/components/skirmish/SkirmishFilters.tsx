@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { SkirmishFilterInput } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { SkirmishFilterInput } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 
 const getLocationTypeFilter = (
   search: URLSearchParams,
@@ -10,7 +10,6 @@ const getLocationTypeFilter = (
 
   if (locationType === 'rvr') {
     return {
-      scenarioId: { eq: 0 },
       and: [
         { primaryZoneId: { neq: 6 } },
         { primaryZoneId: { neq: 11 } },
@@ -19,12 +18,12 @@ const getLocationTypeFilter = (
         { primaryZoneId: { neq: 200 } },
         { primaryZoneId: { neq: 206 } },
       ],
+      scenarioId: { eq: 0 },
     };
   }
 
   if (locationType === 'rvrt1') {
     return {
-      scenarioId: { eq: 0 },
       or: [
         { primaryZoneId: { eq: 6 } },
         { primaryZoneId: { eq: 11 } },
@@ -33,6 +32,7 @@ const getLocationTypeFilter = (
         { primaryZoneId: { eq: 200 } },
         { primaryZoneId: { eq: 206 } },
       ],
+      scenarioId: { eq: 0 },
     };
   }
 

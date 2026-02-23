@@ -1,8 +1,9 @@
-import { ReactElement, useState } from 'react';
+import type { ReactElement } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 
-export function SearchBox({
+export const SearchBox = ({
   initialQuery,
   onSubmit,
   isPlayer,
@@ -10,7 +11,7 @@ export function SearchBox({
   initialQuery?: string;
   onSubmit?: (query: string) => void;
   isPlayer?: boolean;
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation('components');
   const navigate = useNavigate();
   const [query, setQuery] = useState(initialQuery ?? '');
@@ -19,7 +20,7 @@ export function SearchBox({
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        navigate(isPlayer ? `/search/${query}` : `/search/guild/${query}`);
+        void navigate(isPlayer ? `/search/${query}` : `/search/guild/${query}`);
         if (onSubmit) {
           onSubmit(query);
         }
@@ -41,4 +42,4 @@ export function SearchBox({
       </div>
     </form>
   );
-}
+};

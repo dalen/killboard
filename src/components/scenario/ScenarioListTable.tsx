@@ -2,8 +2,8 @@ import { format, formatISO, intervalToDuration } from 'date-fns';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { ScenarioRecord } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { ScenarioRecord } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 export function ScenarioListTable({
@@ -50,8 +50,8 @@ export function ScenarioListTable({
             const startDate = new Date(scenario.startTime);
             const endDate = new Date(scenario.endTime);
             const duration = intervalToDuration({
-              start: startDate,
               end: endDate,
+              start: startDate,
             });
 
             return (
@@ -105,14 +105,14 @@ export function ScenarioListTable({
                       height={40}
                       title="Surrender"
                       alt="Surrender"
-                      style={{ verticalAlign: 'top', marginLeft: '4px' }}
+                      style={{ marginLeft: '4px', verticalAlign: 'top' }}
                     />
                   ) : (
                     <div
                       style={{
                         display: 'inline-block',
-                        width: '40px',
                         marginLeft: '4px',
+                        width: '40px',
                       }}
                     />
                   )}
@@ -127,14 +127,14 @@ export function ScenarioListTable({
                       height={40}
                       title="Surrender"
                       alt="Surrender"
-                      style={{ verticalAlign: 'top', marginLeft: '4px' }}
+                      style={{ marginLeft: '4px', verticalAlign: 'top' }}
                     />
                   ) : (
                     <div
                       style={{
                         display: 'inline-block',
-                        width: '40px',
                         marginLeft: '4px',
+                        width: '40px',
                       }}
                     />
                   )}

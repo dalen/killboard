@@ -1,4 +1,4 @@
-import {
+import type {
   Career,
   ChapterInfluenceRewardFragment,
 } from '@/__generated__/graphql';
@@ -7,7 +7,7 @@ import { ItemPopup } from '@/components/item/ItemPopup';
 import { canUseItem } from '@/itemUtils';
 import { gql } from '@apollo/client';
 import Tippy from '@tippyjs/react';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { Link } from 'react-router';
 
 export const INFLUENCE_REWARDS_FRAGMENT = gql`
@@ -49,9 +49,9 @@ export function InfluenceRewards({
                     <div style={{ position: 'relative' }}>
                       <img
                         style={{
+                          left: 0,
                           position: 'absolute',
                           top: 0,
-                          left: 0,
                         }}
                         src={reward.item.iconUrl}
                         alt={reward.item.name}
@@ -61,8 +61,8 @@ export function InfluenceRewards({
                           className="has-text-white"
                           style={{
                             position: 'absolute',
-                            top: 0,
                             right: 6,
+                            top: 0,
                           }}
                         >
                           {reward.count}

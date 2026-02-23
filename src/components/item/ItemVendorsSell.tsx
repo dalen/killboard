@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { GoldPrice } from '@/components/GoldPrice';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
@@ -60,18 +60,18 @@ export function ItemVendorsSell({ itemId }: { itemId: string | undefined }) {
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
-      itemId,
       first: perPage,
+      itemId,
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const vendorItems = data?.item?.soldByVendors;
 
   if (vendorItems?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { pageInfo } = vendorItems;
 

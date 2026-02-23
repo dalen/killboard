@@ -3,15 +3,18 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { SearchBox } from '@/components/global/SearchBox';
-import { ItemFilterInput, ItemType } from '@/__generated__/graphql';
+import type {
+  ItemFilterInput,
+  ItemType,
+  SearchItemsQuery,
+} from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ItemListEntry } from '@/components/item/ItemListEntry';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
-import { SearchItemsQuery } from '@/__generated__/graphql';
 
 const SEARCH_ITEMS = gql`
   query SearchItems(
@@ -109,10 +112,15 @@ export function Items(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.items?.nodes == null)
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.items?.nodes == null) {
     return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entries = data.items.nodes;
   const { pageInfo } = data.items;

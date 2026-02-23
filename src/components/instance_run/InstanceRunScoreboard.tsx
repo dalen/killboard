@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { useSortableData } from '@/hooks/useSortableData';
-import { ReactElement } from 'react';
-import {
+import type { ReactElement } from 'react';
+import type {
   InstanceEncounterRunScoreboardEntryFragment,
   InstanceRunScoreboardEntryFragment,
 } from '@/__generated__/graphql';

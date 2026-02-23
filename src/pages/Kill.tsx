@@ -15,8 +15,8 @@ import { Map } from '@/components/Map';
 import { GuildFeud } from '@/components/guild/GuildFeud';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { ReactElement } from 'react';
-import { GetKillQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetKillQuery } from '@/__generated__/graphql';
 
 const KILL_DETAILS = gql`
   query GetKill($id: ID!) {
@@ -90,8 +90,8 @@ export function Kill(): ReactElement {
 
   const kill = data?.kill;
 
-  if (loading || kill == null) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading || kill == null) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const date = new Date(kill.time);
 

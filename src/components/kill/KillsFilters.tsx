@@ -5,23 +5,24 @@ import {
   subMonths,
   subWeeks,
 } from 'date-fns';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { URLSearchParams } from 'url';
+import type { URLSearchParams } from 'url';
 
 const getPeriodFilters = (search: URLSearchParams) => {
   const period = search.get('period');
 
   switch (period) {
-    case 'thisWeek':
+    case 'thisWeek': {
       return {
         time: {
           gte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
         },
       };
+    }
 
-    case 'lastWeek':
+    case 'lastWeek': {
       return {
         time: {
           gte: getUnixTime(
@@ -30,28 +31,31 @@ const getPeriodFilters = (search: URLSearchParams) => {
           lte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
         },
       };
+    }
 
-    case 'thisMonth':
+    case 'thisMonth': {
       return {
         time: {
           gte: getUnixTime(startOfMonth(new Date())),
         },
       };
+    }
 
-    case 'lastMonth':
+    case 'lastMonth': {
       return {
         time: {
           gte: getUnixTime(getUnixTime(startOfMonth(subMonths(new Date(), 1)))),
           lte: getUnixTime(startOfMonth(new Date())),
         },
       };
+    }
   }
 
   return { time: {} };
 };
 
 const getSoloKillsFilters = (search: URLSearchParams) => {
-  if (search.has('soloOnly')) return { soloOnly: true };
+  if (search.has('soloOnly')) {return { soloOnly: true };}
 
   return {};
 };
@@ -94,8 +98,8 @@ export function KillsFilters(): ReactElement {
                 type="checkbox"
                 checked={search.has('soloOnly')}
                 onChange={(event) => {
-                  if (event.target.checked) search.set('soloOnly', 'true');
-                  else search.delete('soloOnly');
+                  if (event.target.checked) {search.set('soloOnly', 'true');}
+                  else {search.delete('soloOnly');}
                   setSearch(search);
                 }}
               />{' '}

@@ -2,11 +2,11 @@ import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { MapSetup, Query, Zone } from '@/__generated__/graphql';
+import type { MapSetup, Query, Zone } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { MapPositions } from '@/components/MapPositions';
 import { questTypeIcon } from '../utils';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { VendorItems } from '@/components/creature/VendorItems';
 
 const CREATURE_DETAILS = gql`
@@ -64,15 +64,13 @@ export function Creature({
     variables: { id },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const entry = data?.creature;
-  if (entry == null) return <ErrorMessage customText={t('common:notFound')} />;
+  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
 
-  const zoneIds: string[] = Array.from(
-    new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string)),
-  );
+  const zoneIds: string[] = [...new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string))];
 
   const zones = new Map<string, [Zone, MapSetup]>(
     entry.spawns.map((spawn): [string, [Zone, MapSetup]] => [
@@ -85,7 +83,7 @@ export function Creature({
   const mapSetup = zoneId ? zones.get(zoneId)?.[1] : zones.get(zoneIds[0])?.[1];
 
   if (zone == null || mapSetup == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const hasQuests = entry.questsStarter.length > 0;
   const hasVendorItems = (entry.vendorItems?.totalCount ?? 0) > 0;
@@ -199,8 +197,8 @@ export function Creature({
         <div className="card-content">
           <div
             style={{
-              width: '640px',
               height: '640px',
+              width: '640px',
             }}
           >
             <MapPositions

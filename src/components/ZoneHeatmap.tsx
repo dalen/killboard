@@ -1,4 +1,5 @@
-import { ReactElement, useEffect, useRef } from 'react';
+import type { ReactElement} from 'react';
+import { useEffect, useRef } from 'react';
 import simpleheat from 'simpleheat';
 
 export function ZoneHeatmap({
@@ -16,7 +17,7 @@ export function ZoneHeatmap({
   const canvasElement = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    if (canvasElement.current == null || divElement.current == null) return;
+    if (canvasElement.current == null || divElement.current == null) {return;}
     const heat = simpleheat(canvasElement.current);
     heat
       .data(data)
@@ -28,14 +29,14 @@ export function ZoneHeatmap({
   return (
     <div
       ref={divElement}
-      style={{ width: `${size}px`, height: `${size}px`, position: 'relative' }}
+      style={{ height: `${size}px`, position: 'relative', width: `${size}px` }}
     >
       <img src={`/images/maps/${zoneId}.webp`} alt="Zone kills heatmap" />
       <canvas
         ref={canvasElement}
         width={size}
         height={size}
-        style={{ position: 'absolute', left: '0px', top: '0px' }}
+        style={{ left: '0px', position: 'absolute', top: '0px' }}
       />
     </div>
   );

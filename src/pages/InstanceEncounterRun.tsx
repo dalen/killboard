@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import {
-  intervalToDuration,
+  format,
   formatDuration,
   formatISO,
-  format,
+  intervalToDuration,
 } from 'date-fns';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
@@ -13,7 +13,7 @@ import {
   INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT,
   InstanceRunScoreboard,
 } from '@/components/instance_run/InstanceRunScoreboard';
-import { GetInstanceEncounterRunQuery } from '@/__generated__/graphql';
+import type { GetInstanceEncounterRunQuery } from '@/__generated__/graphql';
 
 const INSTANCE_ENCOUNTER_RUN = gql`
   query GetInstanceEncounterRun($id: ID!) {
@@ -47,16 +47,16 @@ export function InstanceEncounterRun() {
   );
 
   if (loading || !data?.instanceEncounterRun)
-    return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+    {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const { instanceEncounterRun } = data;
 
   const startDate = new Date(instanceEncounterRun.start);
   const endDate = new Date(instanceEncounterRun.end);
   const durationObject = intervalToDuration({
-    start: startDate,
     end: endDate,
+    start: startDate,
   });
 
   const duration = formatDuration(durationObject);

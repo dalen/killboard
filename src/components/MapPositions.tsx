@@ -1,5 +1,6 @@
 import { forEach } from 'lodash';
-import { ReactElement, useEffect, useRef } from 'react';
+import type { ReactElement} from 'react';
+import { useEffect, useRef } from 'react';
 
 export function MapPositions({
   positions,
@@ -20,7 +21,7 @@ export function MapPositions({
 
   useEffect(() => {
     if (canvasElement.current) {
-      // or 1 here to avoid any div by zero errors
+      // Or 1 here to avoid any div by zero errors
       const zoneWidth = seCornerX - nwCornerX || 1;
       const zoneHeight = seCornerY - nwCornerY || 1;
       const iconSize = 16;
@@ -44,7 +45,7 @@ export function MapPositions({
             canvasWidth,
             canvasWidth,
           );
-          // load the indicator image after the map, so it is drawn on top
+          // Load the indicator image after the map, so it is drawn on top
           skullImage.src = '/images/icons/map_marker_white.png';
         };
         skullImage.onload = () => {

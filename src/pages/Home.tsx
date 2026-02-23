@@ -11,7 +11,7 @@ import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { LatestSkirmishes } from '@/components/skirmish/LatestSkirmishes';
 import { TopSkirmishes } from '@/components/skirmish/TopSkirmishes';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 export function Home({
   tab,

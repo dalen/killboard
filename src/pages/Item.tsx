@@ -9,8 +9,8 @@ import { isPercentage } from '../utils';
 import { ItemQuests } from '@/components/item/ItemQuests';
 import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
 import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
-import { ReactElement } from 'react';
-import { GetItemInfoQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetItemInfoQuery } from '@/__generated__/graphql';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -90,11 +90,11 @@ export function Item({
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.item == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { item } = data;
 

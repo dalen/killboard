@@ -3,8 +3,8 @@ import { sum } from 'lodash';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { killDamageText } from '@/utils';
-import { ReactElement } from 'react';
-import { AttackerFragment, KillDamageFragment } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { AttackerFragment, KillDamageFragment } from '@/__generated__/graphql';
 import { gql } from '@apollo/client';
 
 export const KILL_ATTACKER_FRAGMENT = gql`
@@ -62,7 +62,7 @@ export function Attacker({
   deathblow: boolean;
 }): ReactElement {
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce((acc, curr) => {
+  const killDamageGrouped = killDamage.reduce< KillDamageFragment[]>((acc, curr) => {
     const existing = acc.find(
       (e) =>
         killDamageText(e) === killDamageText(curr) &&
@@ -74,7 +74,7 @@ export function Attacker({
       acc.push({ ...curr });
     }
     return acc;
-  }, [] as KillDamageFragment[]);
+  }, []);
 
   const killDamageSum = sum(killDamage.map((d) => d.damageAmount));
 

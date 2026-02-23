@@ -6,8 +6,8 @@ import { SearchBox } from '@/components/global/SearchBox';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { SearchGuildsQuery } from '../__generated__/graphql';
-import { ReactElement } from 'react';
+import type { SearchGuildsQuery } from '../__generated__/graphql';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const SEARCH_GUILD = gql`
@@ -57,21 +57,21 @@ export function SearchGuild(): ReactElement {
   const { loading, error, data, refetch } = useQuery<SearchGuildsQuery>(
     SEARCH_GUILD,
     {
-      variables: { query, first: perPage },
+      variables: { first: perPage, query },
     },
   );
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.guilds?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { pageInfo } = data.guilds;
 
   const handleSubmit = (newQuery: string): void => {
-    refetch({ query: newQuery, first: perPage });
+    void refetch({ first: perPage, query: newQuery });
   };
 
   return (

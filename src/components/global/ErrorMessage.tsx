@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export function ErrorMessage({
@@ -17,7 +17,7 @@ export function ErrorMessage({
       <p>{t('global.errorMessage.errorWithSadSmiley')}</p>
       {name && <pre>{name}</pre>}
       {message && <pre>{message}</pre>}
-      {customText && customText}
+      {customText}
     </div>
   );
 }

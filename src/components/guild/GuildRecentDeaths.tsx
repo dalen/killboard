@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { KillsList } from '@/components/kill/KillsList';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const RECENT_DEATHS = gql`
   query GetLatestGuildDeaths(

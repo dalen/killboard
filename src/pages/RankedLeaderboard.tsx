@@ -4,8 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { RankedLeaderboardTable } from '@/components/RankedLeaderboardTable';
-import { ReactElement } from 'react';
-import { GetRankedLeaderboardSeasonsQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetRankedLeaderboardSeasonsQuery } from '@/__generated__/graphql';
 
 const RANKED_LEADERBOARD_SEASONS = gql`
   query GetRankedLeaderboardSeasons {
@@ -27,11 +27,11 @@ export function RankedLeaderboard(): ReactElement {
     {},
   );
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.rankedSeasons == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const latestSeason = data.rankedSeasons
     .filter((s) => s.mainSeason)

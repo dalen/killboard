@@ -1,7 +1,7 @@
-import { ReactNode } from 'react';
-import { ApolloClient, OperationVariables } from '@apollo/client';
+import type { ReactNode } from 'react';
+import type { ApolloClient, OperationVariables } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { PageInfo } from '@/__generated__/graphql';
+import type { PageInfo } from '@/__generated__/graphql';
 
 export function QueryPagination<T>({
   pageInfo,
@@ -26,11 +26,11 @@ export function QueryPagination<T>({
         <button
           className="button  is-info is-small"
           onClick={() => {
-            refetch({
-              first: undefined,
+            void refetch({
               after: undefined,
-              last: perPage,
               before: pageInfo.startCursor,
+              first: undefined,
+              last: perPage,
             });
           }}
         >
@@ -42,11 +42,11 @@ export function QueryPagination<T>({
         <button
           className="button  is-info is-small"
           onClick={() => {
-            refetch({
-              first: perPage,
+            void refetch({
               after: pageInfo.endCursor,
-              last: undefined,
               before: undefined,
+              first: perPage,
+              last: undefined,
             });
           }}
         >

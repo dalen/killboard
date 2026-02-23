@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { SkirmishList } from '@/components/skirmish/SkirmishList';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const SKIRMISHES = gql`
   query GetScenarioSkirmishes(

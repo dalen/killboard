@@ -2,7 +2,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.scss';
-import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client';
+import { ApolloClient, HttpLink, InMemoryCache } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { BrowserRouter } from 'react-router';
 import App from './App';
@@ -13,7 +13,7 @@ const client = new ApolloClient({
 });
 
 const container = document.getElementById('root');
-if (container == null) throw new Error('Root element not found');
+if (container == null) {throw new Error('Root element not found');}
 const root = createRoot(container);
 root.render(
   <React.StrictMode>

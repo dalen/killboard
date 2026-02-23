@@ -1,8 +1,8 @@
-import {
+import type {
   GuildHeraldry as GuildHeraldryType,
   Realm,
 } from '../../__generated__/graphql';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 export function GuildHeraldry({

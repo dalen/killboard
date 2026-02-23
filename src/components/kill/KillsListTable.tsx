@@ -2,7 +2,7 @@ import { format, formatISO } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Kill } from '@/__generated__/graphql';
+import type { Kill } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';

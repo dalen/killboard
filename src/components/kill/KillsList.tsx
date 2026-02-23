@@ -1,9 +1,9 @@
-import { DocumentNode } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { KillsListTable } from '@/components/kill/KillsListTable';
@@ -38,14 +38,14 @@ export function KillsList({
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const kills = data?.kills;
 
-  if (kills?.nodes == null) return <p>{t('common:error')}</p>;
+  if (kills?.nodes == null) {return <p>{t('common:error')}</p>;}
 
-  if (kills.nodes.length === 0) return null;
+  if (kills.nodes.length === 0) {return null;}
 
   const { pageInfo } = kills;
 

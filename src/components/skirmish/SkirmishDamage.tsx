@@ -1,9 +1,9 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { KillDamage, Query } from '@/__generated__/graphql';
+import type { KillDamage, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE = gql`
   query GetSkirmishDamage($id: ID!) {
@@ -30,11 +30,11 @@ export function SkirmishDamage({ id }: { id: string }): ReactElement {
 
   const killDamage = data?.skirmish?.killDamage;
 
-  if (loading || killDamage == null) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading || killDamage == null) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce((acc, curr) => {
+  const killDamageGrouped = killDamage.reduce< KillDamage[]>((acc, curr) => {
     const existing = acc.find(
       (e) =>
         killDamageText(e) === killDamageText(curr) &&
@@ -46,7 +46,7 @@ export function SkirmishDamage({ id }: { id: string }): ReactElement {
       acc.push({ ...curr });
     }
     return acc;
-  }, [] as KillDamage[]);
+  }, []);
 
   const totalDamage = killDamage.reduce(
     (acc, cur) => acc + cur.damageAmount,

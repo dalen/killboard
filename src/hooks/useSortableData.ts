@@ -24,7 +24,7 @@ export const useSortableData = <T>(
         const valA = get(a, sortConfig.key);
         const valB = get(b, sortConfig.key);
 
-        if (valA === null && valB === null) return 0;
+        if (valA === null && valB === null) {return 0;}
         if (typeof valA === 'string' && typeof valB === 'string') {
           if (valA.localeCompare(valB) === -1) {
             return sortConfig.direction === SortConfigDirection.ascending
@@ -65,7 +65,7 @@ export const useSortableData = <T>(
     ) {
       direction = SortConfigDirection.ascending;
     }
-    setSortConfig({ key, direction });
+    setSortConfig({ direction, key });
   };
 
   return { items: sortedItems, requestSort, sortConfig };

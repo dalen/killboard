@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import _ from 'lodash';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ZoneHeatmap } from '@/components/ZoneHeatmap';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const SCENARIO_HEATMAP = gql`
   query GetScenarioHeatmap($id: ID) {
@@ -34,10 +34,10 @@ export function ScenarioHeatmap({
 
   const size = 500;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [

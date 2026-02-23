@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { Query, SkirmishScoreboardEntry } from '@/__generated__/graphql';
+import type { Query, SkirmishScoreboardEntry } from '@/__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { careerIcon } from '@/utils';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const SKIRMISH_TOP_PLAYER = gql`
@@ -64,13 +64,13 @@ export function SkirmishTopPlayer({
   });
 
   if (loading)
-    return (
+    {return (
       <div className="card">
         <div className={clsx('card-content', className)}>
           <progress className="progress" />
         </div>
       </div>
-    );
+    );}
 
   if (
     error ||
@@ -78,7 +78,7 @@ export function SkirmishTopPlayer({
     data?.skirmish.scoreboardEntries.nodes.length === 0 ||
     data?.skirmish.scoreboardEntries.nodes[0][attribute] === 0
   )
-    return (
+    {return (
       <div className={clsx('card-content', className)}>
         <header className="card-header">
           <p className="card-header-title">{t(title)}</p>
@@ -99,7 +99,7 @@ export function SkirmishTopPlayer({
           </article>
         </div>
       </div>
-    );
+    );}
 
   const player = data.skirmish.scoreboardEntries.nodes[0];
 

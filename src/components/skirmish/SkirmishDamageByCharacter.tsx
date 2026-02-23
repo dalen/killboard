@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useParams } from 'react-router';
-import { KillDamage, Query } from '@/__generated__/graphql';
+import type { KillDamage, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
 import { CharacterInfo } from '@/components/character/CharacterInfo';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
   query GetSkirmishDamageByCharacter($id: ID!, $characterId: ID!) {
@@ -47,17 +47,21 @@ export function SkirmishDamageByCharacter({
   const { loading, error, data } = useQuery<Query>(
     SKIRMISH_DAMAGE_BY_CHARACTER,
     {
-      variables: { id, characterId },
+      variables: { characterId, id },
     },
   );
 
   const killDamage = data?.skirmish?.killDamageByCharacter;
 
-  if (loading || killDamage == null) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading || killDamage == null) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce((acc, curr) => {
+  const killDamageGrouped = killDamage.reduce<KillDamage[]>((acc, curr) => {
     const existing = acc.find(
       (e) =>
         killDamageText(e) === killDamageText(curr) &&
@@ -69,7 +73,7 @@ export function SkirmishDamageByCharacter({
       acc.push({ ...curr });
     }
     return acc;
-  }, [] as KillDamage[]);
+  }, []);
 
   const totalDamage = killDamage.reduce(
     (acc, cur) => acc + cur.damageAmount,
@@ -82,7 +86,7 @@ export function SkirmishDamageByCharacter({
       <table className="table is-striped is-narrow" width="100%">
         <tbody>
           {killDamageGrouped
-            .sort((e1, e2) => e2.damageAmount - e1.damageAmount)
+            .toSorted((e1, e2) => e2.damageAmount - e1.damageAmount)
             .map((damage) => (
               <tr>
                 <td style={{ verticalAlign: 'middle' }}>

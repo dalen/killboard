@@ -12,8 +12,8 @@ import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { GuildLatestSkirmishes } from '@/components/guild/GuildLatestSkirmishes';
-import { ReactElement } from 'react';
-import { GetGuildInfoQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetGuildInfoQuery } from '@/__generated__/graphql';
 
 const GUILD_INFO = gql`
   query GetGuildInfo($id: ID!) {
@@ -72,10 +72,10 @@ export function Guild({
     variables: { id: Number(id) },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.guild == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   return (
     <div className="container is-max-widescreen mt-2">

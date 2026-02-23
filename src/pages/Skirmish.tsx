@@ -2,8 +2,8 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import {
   format,
-  formatISO,
   formatDuration,
+  formatISO,
   intervalToDuration,
 } from 'date-fns';
 
@@ -19,8 +19,8 @@ import { SkirmishKills } from '@/components/skirmish/SkirmishKills';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { SkirmishDamage } from '@/components/skirmish/SkirmishDamage';
 import { SkirmishDamageByCharacter } from '@/components/skirmish/SkirmishDamageByCharacter';
-import { ReactElement } from 'react';
-import { GetSkirmishInfoQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetSkirmishInfoQuery } from '@/__generated__/graphql';
 
 const SKIRMISH_INFO = gql`
   query GetSkirmishInfo($id: ID!) {
@@ -99,18 +99,18 @@ export function Skirmish({
     },
   );
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.skirmish == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { skirmish } = data;
 
   const startDate = new Date(skirmish.startTime);
   const endDate = new Date(skirmish.endTime);
   const durationObject = intervalToDuration({
-    start: startDate,
     end: endDate,
+    start: startDate,
   });
   // Skip seconds in the duration
   if (durationObject.days || durationObject.hours || durationObject.minutes) {

@@ -4,9 +4,9 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
-import { GetWarJournalStorylinesQuery } from '@/__generated__/graphql';
+import type { GetWarJournalStorylinesQuery } from '@/__generated__/graphql';
 
 const WAR_JOURNAL_STORYLINES = gql`
   query GetWarJournalStorylines {
@@ -25,10 +25,10 @@ export function Storylines(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.warJournalStorylines == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const entries = data.warJournalStorylines;
 

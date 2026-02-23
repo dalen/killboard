@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsList } from '@/components/kill/KillsList';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const GUILD_FEUD = gql`
   query GetGuildFeud(

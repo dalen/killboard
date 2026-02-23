@@ -1,9 +1,9 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { ItemIconWithPopup } from '@/components/item/ItemIconWithPopup';
 import { itemNameClass } from '@/itemUtils';
-import { ItemListEntryFragment } from '@/__generated__/graphql';
+import type { ItemListEntryFragment } from '@/__generated__/graphql';
 
 export function ItemListEntry({
   item,

@@ -3,11 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { CreatureFilterInput, Query } from '@/__generated__/graphql';
+import type { CreatureFilterInput, Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const CREATURES = gql`
@@ -62,17 +62,17 @@ export function Creatures(): ReactElement {
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { loading, error, data, refetch } = useQuery<Query>(CREATURES, {
     variables: {
-      where: getFilters(search),
       first: perPage,
+      where: getFilters(search),
     },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.creatures?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const entries = data.creatures.nodes;
   const { pageInfo } = data.creatures;

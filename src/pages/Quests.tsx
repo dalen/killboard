@@ -4,16 +4,16 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { QuestFilterInput } from '@/__generated__/graphql';
+import type { QuestFilterInput } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { questTypeIcon } from '../utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
-import { GetQuestsQuery } from '@/__generated__/graphql';
+import type { GetQuestsQuery } from '@/__generated__/graphql';
 
 const QUESTS = gql`
   query GetQuests(
@@ -92,17 +92,17 @@ export function Quests(): ReactElement {
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { loading, error, data, refetch } = useQuery<GetQuestsQuery>(QUESTS, {
     variables: {
-      where: getFilters(search),
       first: perPage,
+      where: getFilters(search),
     },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.quests?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const entries = data.quests.nodes;
   const { pageInfo } = data.quests;
@@ -192,9 +192,9 @@ export function Quests(): ReactElement {
                                 <div style={{ position: 'relative' }}>
                                   <img
                                     style={{
+                                      left: 0,
                                       position: 'absolute',
                                       top: 0,
-                                      left: 0,
                                     }}
                                     src={reward.item.iconUrl}
                                     alt={reward.item.name}
@@ -204,8 +204,8 @@ export function Quests(): ReactElement {
                                       className="has-text-white"
                                       style={{
                                         position: 'absolute',
-                                        top: 0,
                                         right: 4,
+                                        top: 0,
                                       }}
                                     >
                                       {reward.count}
@@ -242,9 +242,9 @@ export function Quests(): ReactElement {
                                 <div style={{ position: 'relative' }}>
                                   <img
                                     style={{
+                                      left: 0,
                                       position: 'absolute',
                                       top: 0,
-                                      left: 0,
                                     }}
                                     src={reward.item.iconUrl}
                                     alt={reward.item.name}
@@ -254,8 +254,8 @@ export function Quests(): ReactElement {
                                       className="has-text-white"
                                       style={{
                                         position: 'absolute',
-                                        top: 0,
                                         right: 4,
+                                        top: 0,
                                       }}
                                     >
                                       {reward.count}

@@ -7,11 +7,11 @@ import { SearchBox } from '@/components/global/SearchBox';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { SearchQuery } from '../__generated__/graphql';
+import type { SearchQuery } from '../__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 import { questTypeIcon } from '../utils';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
 
 const SEARCH = gql`
@@ -107,20 +107,20 @@ export function Search(): ReactElement {
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
   const { loading, error, data, refetch } = useQuery<SearchQuery>(SEARCH, {
-    variables: { query, first: perPage },
+    variables: { first: perPage, query },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.search?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const { pageInfo } = data.search;
 
   const handleSubmit = (newQuery: string): void => {
-    refetch({ query: newQuery, first: perPage });
+    void refetch({ first: perPage, query: newQuery });
   };
 
   return (
@@ -373,7 +373,7 @@ export function Search(): ReactElement {
               }
 
               /*
-              if (searchItem.__typename === 'GameObject') {
+              If (searchItem.__typename === 'GameObject') {
                 return (
                   <tr>
                     <td>

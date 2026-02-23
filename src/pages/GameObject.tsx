@@ -2,11 +2,11 @@ import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { MapSetup, Query, Zone } from '@/__generated__/graphql';
+import type { MapSetup, Query, Zone } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { MapPositions } from '@/components/MapPositions';
 import { questTypeIcon } from '../utils';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const GAMEOBJECT_DETAILS = gql`
   query GetGameObject($id: ID!) {
@@ -49,22 +49,28 @@ const GAMEOBJECT_DETAILS = gql`
   }
 `;
 
-export function GameObject(): ReactElement {
+export const GameObject = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
   const { loading, error, data } = useQuery<Query>(GAMEOBJECT_DETAILS, {
     variables: { id },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const entry = data?.gameObject;
-  if (entry == null) return <ErrorMessage customText={t('common:notFound')} />;
+  if (entry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
-  const zoneIds: string[] = Array.from(
-    new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string)),
-  );
+  const zoneIds: string[] = [
+    ...new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string)),
+  ];
 
   const zones = new Map<string, [Zone, MapSetup]>(
     entry.spawns.map((spawn): [string, [Zone, MapSetup]] => [
@@ -76,8 +82,9 @@ export function GameObject(): ReactElement {
   const zone = zoneId ? zones.get(zoneId)?.[0] : zones.get(zoneIds[0])?.[0];
   const mapSetup = zoneId ? zones.get(zoneId)?.[1] : zones.get(zoneIds[0])?.[1];
 
-  if (zone == null || mapSetup == null)
+  if (zone == null || mapSetup == null) {
     return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const hasQuests = entry.questsStarter.length > 0;
   const activeTab = hasQuests ? 'quests' : undefined;
@@ -167,8 +174,8 @@ export function GameObject(): ReactElement {
         <div className="card-content">
           <div
             style={{
-              width: '640px',
               height: '640px',
+              width: '640px',
             }}
           >
             <MapPositions
@@ -189,4 +196,4 @@ export function GameObject(): ReactElement {
       </div>
     </div>
   );
-}
+};

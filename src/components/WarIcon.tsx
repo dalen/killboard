@@ -1,4 +1,4 @@
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 export function WarIcon({
   icon,
@@ -17,30 +17,33 @@ export function WarIcon({
 }): ReactElement {
   const frame = (() => {
     switch (frameType) {
-      case 'circle':
+      case 'circle': {
         return selected
           ? '/images/icons/round_frame_press.png'
           : '/images/icons/round_frame.png';
-      case 'hex':
+      }
+      case 'hex': {
         return selected
           ? '/images/icons/hex_frame_press.png'
           : '/images/icons/hex_frame.png';
-      default:
+      }
+      default: {
         return selected
           ? '/images/icons/square_frame_press.png'
           : '/images/icons/square_frame.png';
+      }
     }
   })();
 
   return (
     <div
-      style={{ position: 'relative', width: `${size}px`, height: `${size}px` }}
+      style={{ height: `${size}px`, position: 'relative', width: `${size}px` }}
     >
       <img
         style={{
+          left: 0,
           position: 'absolute',
           top: 0,
-          left: 0,
         }}
         src={`https://armory.returnofreckoning.com/icon/${icon}`}
         alt={alt || `Icon ${icon}`}
@@ -49,9 +52,9 @@ export function WarIcon({
       />
       <img
         style={{
+          left: 0,
           position: 'absolute',
           top: 0,
-          left: 0,
         }}
         src={frame}
         alt="Icon frame"
@@ -63,8 +66,8 @@ export function WarIcon({
           className="has-text-weight-bold s-1"
           style={{
             position: 'absolute',
-            top: 0,
             right: 0,
+            top: 0,
           }}
         >
           {count}

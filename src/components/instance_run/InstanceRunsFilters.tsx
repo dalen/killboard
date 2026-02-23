@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { InstanceRunFilterInput } from '@/__generated__/graphql';
-import { ReactElement } from 'react';
+import type { InstanceRunFilterInput } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 
 const getInstanceFilters = (
   search: URLSearchParams,
@@ -145,8 +145,8 @@ const getMaxItemRatingFilters = (
 };
 
 export const getInstanceRunsFilters = (search: URLSearchParams) => ({
-  start: { gt: 0 },
   scoreboardEntryCount: { gte: 6 },
+  start: { gt: 0 },
   ...getInstanceFilters(search),
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),

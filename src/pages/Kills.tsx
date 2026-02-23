@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { KillsList } from '@/components/kill/KillsList';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const LATEST_KILLS = gql`
   query GetKills(

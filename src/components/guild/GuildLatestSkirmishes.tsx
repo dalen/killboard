@@ -5,7 +5,7 @@ import {
   SkirmishFilters,
   getskirmishFilters,
 } from '@/components/skirmish/SkirmishFilters';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const LATEST_SKIRMISHES = gql`
   query GetGuildLatestSkirmishes(

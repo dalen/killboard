@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 import { InstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
@@ -34,8 +34,8 @@ export function InstanceStatistics() {
   const isMobile = width <= 768;
 
   if (loading || !data?.instance?.encounters)
-    return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+    {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const { instance } = data;
 

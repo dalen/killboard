@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ItemPopup } from './ItemPopup';
 import { questTypeIcon } from '@/utils';
@@ -70,20 +70,20 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
-      itemId,
       first: perPage,
+      itemId,
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const rewardedFromQuests = data?.item?.rewardedFromQuests;
 
   if (rewardedFromQuests?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
-  if (rewardedFromQuests?.nodes == null) return null;
+  if (rewardedFromQuests?.nodes == null) {return null;}
 
   const { pageInfo } = rewardedFromQuests;
 
@@ -131,9 +131,9 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                               <div style={{ position: 'relative' }}>
                                 <img
                                   style={{
+                                    left: 0,
                                     position: 'absolute',
                                     top: 0,
-                                    left: 0,
                                   }}
                                   src={reward.item.iconUrl}
                                   alt={reward.item.name}
@@ -143,8 +143,8 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                                     className="has-text-white"
                                     style={{
                                       position: 'absolute',
-                                      top: 0,
                                       right: 4,
+                                      top: 0,
                                     }}
                                   >
                                     {reward.count}
@@ -177,9 +177,9 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                               <div style={{ position: 'relative' }}>
                                 <img
                                   style={{
+                                    left: 0,
                                     position: 'absolute',
                                     top: 0,
-                                    left: 0,
                                   }}
                                   src={reward.item.iconUrl}
                                   alt={reward.item.name}
@@ -189,8 +189,8 @@ export function ItemQuests({ itemId }: { itemId: string | undefined }) {
                                     className="has-text-white"
                                     style={{
                                       position: 'absolute',
-                                      top: 0,
                                       right: 4,
+                                      top: 0,
                                     }}
                                   >
                                     {reward.count}

@@ -3,10 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { PlayerFeud } from '@/components/kill/PlayerFeud';
-import { Character, KillsConnection } from '@/__generated__/graphql';
+import type { Character, KillsConnection } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { PlayerFeudCharacterInfo } from '@/components/kill/PlayerFeudCharacterInfo';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const PLAYER_FEUD_INFO = gql`
   query GetPlayerFeudInfo(
@@ -82,11 +82,11 @@ export function PlayerFeudPage(): ReactElement {
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   if (data?.player1 == null || data?.player2 == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   return (
     <div className="container is-max-widescreen mt-2">

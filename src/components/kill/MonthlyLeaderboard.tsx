@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { LeaderboardTable } from '@/components/kill/LeaderboardTable';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const MONTHLY_LEADERBOARD = gql`
   query GetMonthlyLeaderboard($year: Int!, $month: Int!) {
@@ -35,12 +35,12 @@ export function MonthlyLeaderboard(): ReactElement {
   const year = new Date().getUTCFullYear();
 
   const { loading, error, data } = useQuery<Query>(MONTHLY_LEADERBOARD, {
-    variables: { year, month },
+    variables: { month, year },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
-  if (data?.monthlyKillLeaderboard == null) return <p>{t('common:error')}</p>;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (data?.monthlyKillLeaderboard == null) {return <p>{t('common:error')}</p>;}
 
   return (
     <div>

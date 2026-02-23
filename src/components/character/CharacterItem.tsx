@@ -1,7 +1,8 @@
-import { ReactElement, useState } from 'react';
+import type { ReactElement} from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import {
+import type {
   EquippedCharacterItemFragment,
   ItemListEntryFragment,
   TalismanFragment,
@@ -80,7 +81,7 @@ export function CharacterItem({
             <figure
               className={`${itemFigureClass(
                 item,
-              )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+              )} [item-figure] image is-64x64 m-0`} // Remove [...] from item-figure to add coloured borders
             >
               <img src={item.iconUrl} alt={item.name} />
             </figure>
@@ -89,7 +90,7 @@ export function CharacterItem({
               <figure
                 className={`${itemFigureClass(
                   item,
-                )} [item-figure] image is-64x64 m-0`} // remove [...] from item-figure to add coloured borders
+                )} [item-figure] image is-64x64 m-0`} // Remove [...] from item-figure to add coloured borders
               >
                 <img src={item.iconUrl} alt={item.name} />
               </figure>

@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { KillsList } from '@/components/kill/KillsList';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 
 const SKIRMISH_KILLS = gql`
   query GetSkirmishKills(

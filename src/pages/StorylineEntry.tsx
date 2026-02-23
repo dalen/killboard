@@ -3,8 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ReactElement } from 'react';
-import { Career, GetWarJournalEntryQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetWarJournalEntryQuery } from '@/__generated__/graphql';
+import { Career } from '@/__generated__/graphql';
 import clsx from 'clsx';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import {
@@ -59,11 +60,11 @@ export function StorylineEntry(): ReactElement {
   const [search, setSearch] = useSearchParams();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const entry = data?.warJournalEntry;
-  if (entry == null) return <ErrorMessage customText={t('common:notFound')} />;
+  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
 
   return (
     <div className="container is-max-widescreen mt-2">

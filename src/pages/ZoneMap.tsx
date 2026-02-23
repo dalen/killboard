@@ -2,11 +2,11 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import _ from 'lodash';
 import { useTranslation } from 'react-i18next';
-import { useParams, Link } from 'react-router';
+import { Link, useParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { ZoneHeatmap } from '@/components/ZoneHeatmap';
-import { ReactElement } from 'react';
-import { GetZoneHeatmapQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
+import type { GetZoneHeatmapQuery } from '@/__generated__/graphql';
 
 const ZONE_HEATMAP = gql`
   query GetZoneHeatmap($id: ID, $from: Long) {
@@ -29,15 +29,15 @@ export function ZoneMap(): ReactElement {
 
   const { loading, error, data } = useQuery<GetZoneHeatmapQuery>(ZONE_HEATMAP, {
     variables: {
-      id,
       from: date,
+      id,
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [

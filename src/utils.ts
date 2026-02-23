@@ -1,63 +1,89 @@
+import type {
+  KillDamageFragment,
+  QuestTypeFlagsFlags} from '@/__generated__/graphql';
 import {
   Career,
-  KillDamageFragment,
   KillDamageSourceType,
-  QuestRepeatableType,
-  QuestTypeFlagsFlags,
+  QuestRepeatableType
 } from '@/__generated__/graphql';
 
 export const careerIcon = (career: Career): string => {
   switch (career) {
-    case Career.Archmage:
+    case Career.Archmage: {
       return '/images/icons/archmage.png';
-    case Career.BlackGuard:
+    }
+    case Career.BlackGuard: {
       return '/images/icons/black-guard.png';
-    case Career.BlackOrc:
+    }
+    case Career.BlackOrc: {
       return '/images/icons/black-orc.png';
-    case Career.BrightWizard:
+    }
+    case Career.BrightWizard: {
       return '/images/icons/bright-wizard.png';
-    case Career.Choppa:
+    }
+    case Career.Choppa: {
       return '/images/icons/choppa.png';
-    case Career.Chosen:
+    }
+    case Career.Chosen: {
       return '/images/icons/chosen.png';
-    case Career.DiscipleOfKhaine:
+    }
+    case Career.DiscipleOfKhaine: {
       return '/images/icons/disciple-of-khaine.png';
-    case Career.Engineer:
+    }
+    case Career.Engineer: {
       return '/images/icons/engineer.png';
-    case Career.IronBreaker:
+    }
+    case Career.IronBreaker: {
       return '/images/icons/ironbreaker.png';
-    case Career.KnightOfTheBlazingSun:
+    }
+    case Career.KnightOfTheBlazingSun: {
       return '/images/icons/knight-of-the-blazing-sun.png';
-    case Career.Magus:
+    }
+    case Career.Magus: {
       return '/images/icons/magus.png';
-    case Career.Marauder:
+    }
+    case Career.Marauder: {
       return '/images/icons/marauder.png';
-    case Career.RunePriest:
+    }
+    case Career.RunePriest: {
       return '/images/icons/rune-priest.png';
-    case Career.ShadowWarrior:
+    }
+    case Career.ShadowWarrior: {
       return '/images/icons/shadow-warrior.png';
-    case Career.Shaman:
+    }
+    case Career.Shaman: {
       return '/images/icons/shaman.png';
-    case Career.Slayer:
+    }
+    case Career.Slayer: {
       return '/images/icons/slayer.png';
-    case Career.Sorcerer:
+    }
+    case Career.Sorcerer: {
       return '/images/icons/sorcerer.png';
-    case Career.SquigHerder:
+    }
+    case Career.SquigHerder: {
       return '/images/icons/squig-herder.png';
-    case Career.SwordMaster:
+    }
+    case Career.SwordMaster: {
       return '/images/icons/sword-master.png';
-    case Career.WarriorPriest:
+    }
+    case Career.WarriorPriest: {
       return '/images/icons/warrior-priest.png';
-    case Career.WhiteLion:
+    }
+    case Career.WhiteLion: {
       return '/images/icons/white-lion.png';
-    case Career.WitchElf:
+    }
+    case Career.WitchElf: {
       return '/images/icons/witch-elf.png';
-    case Career.WitchHunter:
+    }
+    case Career.WitchHunter: {
       return '/images/icons/witch-hunter.png';
-    case Career.Zealot:
+    }
+    case Career.Zealot: {
       return '/images/icons/zealot.png';
-    default:
+    }
+    default: {
       return '/images/icons/hidden.png';
+    }
   }
 };
 
@@ -72,12 +98,12 @@ export const variablesFromCursor = (
   last: number | undefined;
 } => {
   if (type === 'after')
-    return {
+    {return {
       after: cursor,
       before: undefined,
       first: perPage,
       last: undefined,
-    };
+    };}
 
   return {
     after: undefined,
@@ -117,16 +143,16 @@ export const isPercentage = (stat: string) => {
 
 export const killDamageText = (killDamage: KillDamageFragment): string => {
   if (killDamage.damageType === KillDamageSourceType.FallDamage)
-    return 'Fall Damage';
+    {return 'Fall Damage';}
 
   if (killDamage.damageType === KillDamageSourceType.Other)
-    return 'Auto Attack';
+    {return 'Auto Attack';}
 
   return killDamage.ability?.name || 'Unknown';
 };
 
 /*
-const QuestType = {
+Const QuestType = {
   Group: 1,
   Travel: 2,
   Tome: 4,

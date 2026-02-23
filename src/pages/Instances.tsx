@@ -3,13 +3,13 @@ import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { InstanceFilterInput } from '@/__generated__/graphql';
+import type { InstanceFilterInput } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { ReactElement } from 'react';
+import type { ReactElement } from 'react';
 import clsx from 'clsx';
-import { GetInstancesQuery } from '@/__generated__/graphql';
+import type { GetInstancesQuery } from '@/__generated__/graphql';
 
 const QUERY = gql`
   query GetInstances(
@@ -65,17 +65,17 @@ export function Instances(): ReactElement {
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { loading, error, data, refetch } = useQuery<GetInstancesQuery>(QUERY, {
     variables: {
-      where: getFilters(search),
       first: perPage,
+      where: getFilters(search),
     },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.instances?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const entries = data.instances.nodes;
   const { pageInfo } = data.instances;

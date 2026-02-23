@@ -1,13 +1,15 @@
-import React, { ReactElement } from 'react';
+import type { ReactElement } from 'react';
+import React from 'react';
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { SortConfig, SortConfigDirection } from '@/hooks/useSortableData';
+import type { SortConfig} from '@/hooks/useSortableData';
+import { SortConfigDirection } from '@/hooks/useSortableData';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
@@ -85,12 +87,12 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
   const { loading, error, data, refetch } = useQuery<Query>(
     SKIRMISH_SCOREBOARD,
     {
-      variables: { id, first: perPage, order: [{ deathBlows: 'DESC' }] },
+      variables: { first: perPage, id, order: [{ deathBlows: 'DESC' }] },
     },
   );
   const [sortConfig, setSortConfig] = React.useState<SortConfig>({
-    key: 'deathBlows',
     direction: SortConfigDirection.descending,
+    key: 'deathBlows',
   });
 
   const requestSort = (key: string) => {
@@ -102,8 +104,8 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
     ) {
       direction = SortConfigDirection.ascending;
     }
-    setSortConfig({ key, direction });
-    refetch({
+    setSortConfig({ direction, key });
+    void refetch({
       order: {
         [key]: direction === SortConfigDirection.ascending ? 'ASC' : 'DESC',
       },
@@ -117,10 +119,10 @@ export function SkirmishScoreboard({ id }: { id: string }): ReactElement {
     return sortConfig.key === name ? sortConfig.direction : '';
   };
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
   if (data?.skirmish?.scoreboardEntries?.nodes == null)
-    return <ErrorMessage customText={t('common:notFound')} />;
+    {return <ErrorMessage customText={t('common:notFound')} />;}
 
   const scoreboardEntries = data.skirmish.scoreboardEntries.nodes;
   const { pageInfo } = data.skirmish.scoreboardEntries;

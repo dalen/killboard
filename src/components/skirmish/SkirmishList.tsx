@@ -1,8 +1,8 @@
-import { DocumentNode } from '@apollo/client';
+import type { DocumentNode } from '@apollo/client';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import { Query } from '@/__generated__/graphql';
+import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { SkirmishListTable } from '@/components/skirmish/SkirmishListTable';
@@ -34,14 +34,14 @@ export function SkirmishList({
     },
   });
 
-  if (loading) return <progress className="progress" />;
-  if (error) return <ErrorMessage name={error.name} message={error.message} />;
+  if (loading) {return <progress className="progress" />;}
+  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
 
   const skirmishes = data?.skirmishes;
 
-  if (skirmishes?.nodes == null) return <p>{t('common:error')}</p>;
+  if (skirmishes?.nodes == null) {return <p>{t('common:error')}</p>;}
 
-  if (skirmishes.nodes.length === 0) return null;
+  if (skirmishes.nodes.length === 0) {return null;}
 
   const { pageInfo } = skirmishes;
 
