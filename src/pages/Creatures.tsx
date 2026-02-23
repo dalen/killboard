@@ -56,7 +56,7 @@ const getFilters = (search: URLSearchParams): CreatureFilterInput => ({
   ...getCreatureNameFilter(search),
 });
 
-export function Creatures(): ReactElement {
+export const Creatures = (): ReactElement => {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
@@ -69,10 +69,15 @@ export function Creatures(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.creatures?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.creatures?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entries = data.creatures.nodes;
   const { pageInfo } = data.creatures;
@@ -137,4 +142,4 @@ export function Creatures(): ReactElement {
       />
     </div>
   );
-}
+};

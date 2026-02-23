@@ -97,11 +97,11 @@ const ScenarioQueueTypes: Record<number, string> = {
   6: 'Group Challenge',
 };
 
-export function Scenario({
+export const Scenario = ({
   tab,
 }: {
   tab: 'scoreboard' | 'kills' | 'skirmishes' | 'map';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
@@ -112,10 +112,15 @@ export function Scenario({
     },
   );
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.scenario == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.scenario == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { scenario } = data;
   const startDate = new Date(scenario.startTime);
@@ -273,4 +278,4 @@ export function Scenario({
       )}
     </div>
   );
-}
+};

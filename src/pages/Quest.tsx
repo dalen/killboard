@@ -63,7 +63,7 @@ const QUEST_INFO = gql`
   }
 `;
 
-export function Quest(): ReactElement {
+export const Quest = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<GetQuestInfoQuery>(QUEST_INFO, {
@@ -72,11 +72,16 @@ export function Quest(): ReactElement {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.quest == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.quest == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { quest } = data;
 
@@ -327,4 +332,4 @@ export function Quest(): ReactElement {
       </div>
     </div>
   );
-}
+};

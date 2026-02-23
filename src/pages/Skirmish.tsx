@@ -84,11 +84,11 @@ const SKIRMISH_INFO = gql`
   }
 `;
 
-export function Skirmish({
+export const Skirmish = ({
   tab,
 }: {
   tab: 'scoreboard' | 'kills' | 'damage' | 'characterDamage';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
@@ -99,10 +99,15 @@ export function Skirmish({
     },
   );
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.skirmish == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.skirmish == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { skirmish } = data;
 
@@ -357,4 +362,4 @@ export function Skirmish({
       {tab === 'characterDamage' && <SkirmishDamageByCharacter id={id ?? ''} />}
     </div>
   );
-}
+};

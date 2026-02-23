@@ -77,11 +77,11 @@ const ITEM_INFO = gql`
   }
 `;
 
-export function Item({
+export const Item = ({
   tab,
 }: {
   tab: 'vendors' | 'quests' | 'purchase';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<GetItemInfoQuery>(ITEM_INFO, {
@@ -90,11 +90,16 @@ export function Item({
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.item == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.item == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const { item } = data;
 
@@ -323,4 +328,4 @@ export function Item({
       {activeTab === 'quests' && <ItemQuests itemId={id} />}
     </div>
   );
-}
+};

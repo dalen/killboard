@@ -23,7 +23,7 @@ const WAR_JOURNAL_STORYLINE_DETAILS = gql`
   }
 `;
 
-export function Storyline(): ReactElement {
+export const Storyline = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<GetWarJournalStorylineQuery>(
@@ -35,11 +35,17 @@ export function Storyline(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const entry = data?.warJournalStoryline;
-  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (entry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -106,4 +112,4 @@ export function Storyline(): ReactElement {
       </div>
     </div>
   );
-}
+};

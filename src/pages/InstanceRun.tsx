@@ -17,6 +17,7 @@ import {
 } from '@/components/instance_run/InstanceRunScoreboard';
 import clsx from 'clsx';
 import type { InstanceRunQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 
 const INSTANCE_RUN = gql`
   query InstanceRun($id: ID!) {
@@ -55,7 +56,7 @@ const INSTANCE_RUN = gql`
   ${INSTANCE_RUN_SCOREBOARD_FRAGMENT}
 `;
 
-export function InstanceRun() {
+export const InstanceRun = (): ReactElement => {
   const { id } = useParams();
   const { t } = useTranslation(['common', 'pages']);
   const { data, error, loading } = useQuery<InstanceRunQuery>(INSTANCE_RUN, {
@@ -66,9 +67,12 @@ export function InstanceRun() {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading || !data?.instanceRun?.encounters)
-    {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || !data?.instanceRun?.encounters) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const { instanceRun } = data;
 
@@ -313,4 +317,4 @@ export function InstanceRun() {
       <InstanceRunScoreboard entries={data.instanceRun.scoreboardEntries} />
     </div>
   );
-}
+};

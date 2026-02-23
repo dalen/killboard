@@ -18,7 +18,7 @@ const ZONE_HEATMAP = gql`
   }
 `;
 
-export function ZoneMap(): ReactElement {
+export const ZoneMap = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
 
@@ -34,10 +34,15 @@ export function ZoneMap(): ReactElement {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.killsHeatmap == null || data.killsHeatmap.length === 0)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.killsHeatmap == null || data.killsHeatmap.length === 0) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const heatmapData = data.killsHeatmap.map(
     (point): [number, number, number] => [
@@ -71,4 +76,4 @@ export function ZoneMap(): ReactElement {
       />
     </div>
   );
-}
+};

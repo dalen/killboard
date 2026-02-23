@@ -61,21 +61,26 @@ const GUILD_INFO = gql`
   ${GUILD_INFO_FRAGMENT}
 `;
 
-export function Guild({
+export const Guild = ({
   tab,
 }: {
   tab: 'kills' | 'members' | 'scenarios' | 'skirmishes';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<GetGuildInfoQuery>(GUILD_INFO, {
     variables: { id: Number(id) },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.guild == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.guild == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -137,4 +142,4 @@ export function Guild({
       {tab === 'skirmishes' && <GuildLatestSkirmishes guildId={id} />}
     </div>
   );
-}
+};

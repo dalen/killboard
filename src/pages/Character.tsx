@@ -11,11 +11,11 @@ import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { CharacterLatestSkirmishes } from '@/components/character/CharacterLatestSkirmishes';
 import type { ReactElement } from 'react';
 
-export function Character({
+export const Character = ({
   tab,
 }: {
   tab: 'kills' | 'scenarios' | 'skirmishes' | 'armory';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
 
   const { id } = useParams();
@@ -87,4 +87,4 @@ export function Character({
       {tab === 'armory' && <CharacterArmory id={Number(id)} />}
     </div>
   );
-}
+};

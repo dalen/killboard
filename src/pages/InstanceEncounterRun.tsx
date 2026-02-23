@@ -14,6 +14,7 @@ import {
   InstanceRunScoreboard,
 } from '@/components/instance_run/InstanceRunScoreboard';
 import type { GetInstanceEncounterRunQuery } from '@/__generated__/graphql';
+import type { ReactElement } from 'react';
 
 const INSTANCE_ENCOUNTER_RUN = gql`
   query GetInstanceEncounterRun($id: ID!) {
@@ -34,7 +35,7 @@ const INSTANCE_ENCOUNTER_RUN = gql`
   ${INSTANCE_ENCOUNTER_RUN_SCOREBOARD_FRAGMENT}
 `;
 
-export function InstanceEncounterRun() {
+export const InstanceEncounterRun = (): ReactElement => {
   const { instanceRunId, id } = useParams();
   const { t } = useTranslation(['common', 'pages']);
   const { data, error, loading } = useQuery<GetInstanceEncounterRunQuery>(
@@ -46,9 +47,12 @@ export function InstanceEncounterRun() {
     },
   );
 
-  if (loading || !data?.instanceEncounterRun)
-    {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || !data?.instanceEncounterRun) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const { instanceEncounterRun } = data;
 
@@ -172,4 +176,4 @@ export function InstanceEncounterRun() {
       <InstanceRunScoreboard entries={instanceEncounterRun.scoreboardEntries} />
     </div>
   );
-}
+};

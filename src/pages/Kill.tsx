@@ -81,7 +81,7 @@ const KILL_DETAILS = gql`
   ${KILL_ATTACKER_FRAGMENT}
 `;
 
-export function Kill(): ReactElement {
+export const Kill = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
   const { loading, error, data } = useQuery<GetKillQuery>(KILL_DETAILS, {
@@ -90,8 +90,12 @@ export function Kill(): ReactElement {
 
   const kill = data?.kill;
 
-  if (loading || kill == null) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || kill == null) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const date = new Date(kill.time);
 
@@ -242,4 +246,4 @@ export function Kill(): ReactElement {
       )}
     </div>
   );
-}
+};

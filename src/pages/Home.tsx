@@ -13,11 +13,11 @@ import { LatestSkirmishes } from '@/components/skirmish/LatestSkirmishes';
 import { TopSkirmishes } from '@/components/skirmish/TopSkirmishes';
 import type { ReactElement } from 'react';
 
-export function Home({
+export const Home = ({
   tab,
 }: {
   tab: 'players' | 'guilds' | 'scenarios' | 'skirmishes';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation();
 
   return (
@@ -78,4 +78,4 @@ export function Home({
       )}
     </div>
   );
-}
+};

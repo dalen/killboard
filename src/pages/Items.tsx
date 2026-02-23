@@ -94,7 +94,8 @@ const hasStatsFilter = (search: URLSearchParams) => {
 
   return { hasStats: [stat] };
 };
-export function Items(): ReactElement {
+
+export const Items = (): ReactElement => {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);
@@ -464,4 +465,4 @@ export function Items(): ReactElement {
       />
     </div>
   );
-}
+};

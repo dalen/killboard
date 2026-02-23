@@ -19,7 +19,7 @@ const RANKED_LEADERBOARD_SEASONS = gql`
   }
 `;
 
-export function RankedLeaderboard(): ReactElement {
+export const RankedLeaderboard = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
   const { loading, error, data } = useQuery<GetRankedLeaderboardSeasonsQuery>(
@@ -27,11 +27,16 @@ export function RankedLeaderboard(): ReactElement {
     {},
   );
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.rankedSeasons == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.rankedSeasons == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const latestSeason = data.rankedSeasons
     .filter((s) => s.mainSeason)
@@ -99,4 +104,4 @@ export function RankedLeaderboard(): ReactElement {
       </div>
     </div>
   );
-}
+};

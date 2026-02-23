@@ -70,7 +70,7 @@ const LATEST_KILLS = gql`
   }
 `;
 
-export function Kills(): ReactElement {
+export const Kills = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
 
   return (
@@ -95,4 +95,4 @@ export function Kills(): ReactElement {
       </div>
     </div>
   );
-}
+};

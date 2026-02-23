@@ -50,7 +50,7 @@ const GUILD_FEUD_INFO = gql`
   ${GUILD_INFO_FRAGMENT}
 `;
 
-export function GuildFeudPage(): ReactElement {
+export const GuildFeudPage = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
 
   const { guildId1, guildId2 } = useParams();
@@ -67,11 +67,16 @@ export function GuildFeudPage(): ReactElement {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.guild1 == null || data?.guild2 == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.guild1 == null || data?.guild2 == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -122,4 +127,4 @@ export function GuildFeudPage(): ReactElement {
       <GuildFeud guild1={guildId1 || ''} guild2={guildId2 || ''} />
     </div>
   );
-}
+};

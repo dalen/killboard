@@ -2,8 +2,9 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { InstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
 import { InstanceRunsList } from '@/components/instance_run/InstanceRunsList';
+import type { ReactElement } from 'react';
 
-export function InstanceRuns() {
+export const InstanceRuns = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
 
   return (
@@ -22,4 +23,4 @@ export function InstanceRuns() {
       <InstanceRunsList />
     </div>
   );
-}
+};

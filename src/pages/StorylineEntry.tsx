@@ -47,7 +47,7 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
   ${INFLUENCE_REWARDS_FRAGMENT}
 `;
 
-export function StorylineEntry(): ReactElement {
+export const StorylineEntry = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { id, storylineId } = useParams();
   const { loading, error, data } = useQuery<GetWarJournalEntryQuery>(
@@ -60,11 +60,17 @@ export function StorylineEntry(): ReactElement {
   const [search, setSearch] = useSearchParams();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const entry = data?.warJournalEntry;
-  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (entry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -225,4 +231,4 @@ export function StorylineEntry(): ReactElement {
       )}
     </div>
   );
-}
+};

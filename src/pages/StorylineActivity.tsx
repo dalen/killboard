@@ -33,7 +33,7 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
   }
 `;
 
-export function StorylineActivity(): ReactElement {
+export const StorylineActivity = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id, storylineId, storylineEntryId } = useParams();
   const { loading, error, data } = useQuery<GetWarJournalActivityQuery>(
@@ -45,17 +45,24 @@ export function StorylineActivity(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const storylineEntry = data?.warJournalEntry;
-  if (storylineEntry == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (storylineEntry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entry = storylineEntry.activities.find(
     (activity) => activity.id === id,
   );
-  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (entry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -130,4 +137,4 @@ export function StorylineActivity(): ReactElement {
       </div>
     </div>
   );
-}
+};

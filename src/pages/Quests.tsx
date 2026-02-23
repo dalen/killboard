@@ -86,7 +86,7 @@ const getFilters = (search: URLSearchParams): QuestFilterInput => ({
   ...getQuestNameFilter(search),
 });
 
-export function Quests(): ReactElement {
+export const Quests = (): ReactElement => {
   const perPage = 15;
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
@@ -99,10 +99,15 @@ export function Quests(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.quests?.nodes == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.quests?.nodes == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entries = data.quests.nodes;
   const { pageInfo } = data.quests;
@@ -285,4 +290,4 @@ export function Quests(): ReactElement {
       />
     </div>
   );
-}
+};

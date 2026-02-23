@@ -17,7 +17,7 @@ const WAR_JOURNAL_STORYLINES = gql`
   }
 `;
 
-export function Storylines(): ReactElement {
+export const Storylines = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { loading, error, data } = useQuery<GetWarJournalStorylinesQuery>(
     WAR_JOURNAL_STORYLINES,
@@ -25,10 +25,15 @@ export function Storylines(): ReactElement {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
-  if (data?.warJournalStorylines == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
+  if (data?.warJournalStorylines == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const entries = data.warJournalStorylines;
 
@@ -74,4 +79,4 @@ export function Storylines(): ReactElement {
       </div>
     </div>
   );
-}
+};

@@ -63,7 +63,7 @@ const PLAYER_FEUD_INFO = gql`
   }
 `;
 
-export function PlayerFeudPage(): ReactElement {
+export const PlayerFeudPage = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
 
   const { playerId1, playerId2 } = useParams();
@@ -82,11 +82,16 @@ export function PlayerFeudPage(): ReactElement {
     },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
-  if (data?.player1 == null || data?.player2 == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (data?.player1 == null || data?.player2 == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -143,4 +148,4 @@ export function PlayerFeudPage(): ReactElement {
       <PlayerFeud player1={playerId1 || ''} player2={playerId2 || ''} />
     </div>
   );
-}
+};

@@ -8,6 +8,7 @@ import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 import { InstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
 import { InstanceEncounterStatistics } from '@/components/instance_statistics/InstanceEncounterStatistics';
+import type { ReactElement } from 'react';
 
 const INSTANCE_STATISTICS = gql`
   query InstanceEncounters($id: ID!) {
@@ -22,7 +23,7 @@ const INSTANCE_STATISTICS = gql`
   }
 `;
 
-export function InstanceStatistics() {
+export const InstanceStatistics = (): ReactElement => {
   const { id } = useParams();
   const { t } = useTranslation(['common', 'pages']);
   const { data, error, loading } = useQuery<Query>(INSTANCE_STATISTICS, {
@@ -33,9 +34,12 @@ export function InstanceStatistics() {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading || !data?.instance?.encounters)
-    {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading || !data?.instance?.encounters) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const { instance } = data;
 
@@ -115,4 +119,4 @@ export function InstanceStatistics() {
       </table>
     </div>
   );
-}
+};

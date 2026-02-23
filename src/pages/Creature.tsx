@@ -53,24 +53,32 @@ const CREATURE_DETAILS = gql`
   }
 `;
 
-export function Creature({
+export const Creature = ({
   tab,
 }: {
   tab?: undefined | 'quests' | 'vendorItems';
-}): ReactElement {
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
   const { loading, error, data } = useQuery<Query>(CREATURE_DETAILS, {
     variables: { id },
   });
 
-  if (loading) {return <progress className="progress" />;}
-  if (error) {return <ErrorMessage name={error.name} message={error.message} />;}
+  if (loading) {
+    return <progress className="progress" />;
+  }
+  if (error) {
+    return <ErrorMessage name={error.name} message={error.message} />;
+  }
 
   const entry = data?.creature;
-  if (entry == null) {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (entry == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
-  const zoneIds: string[] = [...new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string))];
+  const zoneIds: string[] = [
+    ...new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string)),
+  ];
 
   const zones = new Map<string, [Zone, MapSetup]>(
     entry.spawns.map((spawn): [string, [Zone, MapSetup]] => [
@@ -82,8 +90,9 @@ export function Creature({
   const zone = zoneId ? zones.get(zoneId)?.[0] : zones.get(zoneIds[0])?.[0];
   const mapSetup = zoneId ? zones.get(zoneId)?.[1] : zones.get(zoneIds[0])?.[1];
 
-  if (zone == null || mapSetup == null)
-    {return <ErrorMessage customText={t('common:notFound')} />;}
+  if (zone == null || mapSetup == null) {
+    return <ErrorMessage customText={t('common:notFound')} />;
+  }
 
   const hasQuests = entry.questsStarter.length > 0;
   const hasVendorItems = (entry.vendorItems?.totalCount ?? 0) > 0;
@@ -219,4 +228,4 @@ export function Creature({
       </div>
     </div>
   );
-}
+};
