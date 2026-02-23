@@ -38,9 +38,9 @@ export const RankedLeaderboard = (): ReactElement => {
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
-  const latestSeason = data.rankedSeasons
+  const [latestSeason] = data.rankedSeasons
     .filter((s) => s.mainSeason)
-    .slice(-1)[0];
+    .slice(-1);
 
   const season = search.get('season') ?? latestSeason.id;
   const type = search.get('type') ?? 'solo';

@@ -132,7 +132,7 @@ export const Skirmish = ({
     ],
   );
 
-  const max: number = (_.maxBy(heatmapData, (d) => d[2]) || [0, 0, 1])[2];
+  const [, , max] = _.maxBy(heatmapData, (d) => d[2]) || [0, 0, 1];
 
   return (
     <div className="container is-max-widescreen mt-2">

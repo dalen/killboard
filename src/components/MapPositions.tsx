@@ -33,7 +33,7 @@ export const MapPositions = ({
         const image = new Image();
         const skullImage = new Image();
         image.src = `/images/maps/${zoneId}.webp`;
-        image.onload = () => {
+        image.addEventListener('load', () => {
           ctx.drawImage(
             image,
             0,
@@ -47,8 +47,8 @@ export const MapPositions = ({
           );
           // Load the indicator image after the map, so it is drawn on top
           skullImage.src = '/images/icons/map_marker_white.png';
-        };
-        skullImage.onload = () => {
+        });
+        skullImage.addEventListener('load', () => {
           forEach(positions, (position) => {
             const xTranslated =
               position.x != null
@@ -71,7 +71,7 @@ export const MapPositions = ({
               );
             }
           });
-        };
+        });
       }
     }
   }, [positions, zoneId, nwCornerX, nwCornerY, seCornerX, seCornerY]);

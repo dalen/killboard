@@ -44,10 +44,10 @@ declare global {
 const usePageViews = () => {
   const location = useLocation();
   React.useEffect(() => {
-    if (window.gtag == null) {
+    if (globalThis.gtag == null) {
       return;
     }
-    window.gtag('event', 'pageview', {
+    globalThis.gtag('event', 'pageview', {
       page_location: location.pathname,
     });
   }, [location]);

@@ -103,7 +103,7 @@ export const SkirmishTopPlayer = ({
     );
   }
 
-  const player = data.skirmish.scoreboardEntries.nodes[0];
+  const [player] = data.skirmish.scoreboardEntries.nodes;
 
   return (
     <div className={clsx('card-content', 'mb-1', className)}>

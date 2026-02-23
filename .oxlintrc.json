@@ -8,9 +8,11 @@
     "style": "warn"
   },
   "rules": {
+    "unicorn/no-unreadable-array-destructuring": "off",
+    "typescript/no-unsafe-type-assertion": "off",
     "unicorn/no-null": "off",
     "id-length": "off",
-    "no-ternary": "allow",
+    "no-ternary": "off",
     "max-statements": "off",
     "func-style": ["warn", "expression"],
     "unicorn/filename-case": "off",

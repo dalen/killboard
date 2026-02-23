@@ -45,7 +45,7 @@ export const Map = ({
         const image = new Image();
         const skullImage = new Image();
         image.src = `/images/maps/${zoneId}.webp`;
-        image.onload = () => {
+        image.addEventListener('load', () => {
           ctx.drawImage(
             image,
             0,
@@ -59,8 +59,8 @@ export const Map = ({
           );
           // Load the indicator image after the map, so it is drawn on top
           skullImage.src = '/images/maps/icons/skull_red.png';
-        };
-        skullImage.onload = () => {
+        });
+        skullImage.addEventListener('load', () => {
           if (xTranslated && yTranslated) {
             ctx.drawImage(
               skullImage,
@@ -70,7 +70,7 @@ export const Map = ({
               iconSize,
             );
           }
-        };
+        });
       }
     }
   }, [x, y, zoneId, nwCornerX, nwCornerY, seCornerX, seCornerY]);

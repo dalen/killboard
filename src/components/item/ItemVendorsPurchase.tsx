@@ -3,7 +3,7 @@ import { Link, useSearchParams } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { GoldPrice } from '@/components/GoldPrice';
-import type { Query } from '@/__generated__/graphql';
+import { type Query, Realm } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
   ItemVendorsFilters,
@@ -171,7 +171,7 @@ export const ItemVendorsPurchase = ({
                     </Link>
                   </td>
                   <td>
-                    {creature.realm === 'ORDER' && (
+                    {creature.realm === Realm.Order && (
                       <figure className="image is-24x24 m-0">
                         <img
                           src="/images/icons/scenario/order.png"
@@ -181,7 +181,7 @@ export const ItemVendorsPurchase = ({
                         />
                       </figure>
                     )}
-                    {creature.realm === 'DESTRUCTION' && (
+                    {creature.realm === Realm.Destruction && (
                       <figure className="image is-24x24 m-0">
                         <img
                           src="/images/icons/scenario/destruction.png"

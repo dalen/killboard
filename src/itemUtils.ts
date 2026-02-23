@@ -1,16 +1,12 @@
-import type {
-  Career,
-  Item} from '@/__generated__/graphql';
-import {
-  ItemRarity,
-  ItemType,
-  Race,
-} from '@/__generated__/graphql';
+import type { Career, Item } from '@/__generated__/graphql';
+import { ItemRarity, ItemType, Race } from '@/__generated__/graphql';
 
 export const itemNameClass = (
   item: Pick<Item, 'rarity'> & { itemSet?: unknown },
 ): string => {
-  if (item.itemSet) {return 'item-name-item-set';}
+  if (item.itemSet) {
+    return 'item-name-item-set';
+  }
 
   switch (item.rarity) {
     case ItemRarity.Utility: {
@@ -39,7 +35,9 @@ export const itemNameClass = (
 export const itemFigureClass = (
   item: Pick<Item, 'rarity'> & { itemSet?: unknown },
 ): string => {
-  if (item.itemSet) {return 'item-figure-item-set';}
+  if (item.itemSet) {
+    return 'item-figure-item-set';
+  }
 
   switch (item.rarity) {
     case ItemRarity.Utility: {
@@ -123,7 +121,7 @@ const careerSkills: Record<Career, ItemType[]> = {
   ZEALOT: [ItemType.Robe, ItemType.Dagger, ItemType.Charm],
 };
 
-const allCareerSkills: ItemType[] = [
+const allCareerSkills = new Set<ItemType>([
   ItemType.Accessory,
   ItemType.AdvancedMount,
   ItemType.BasicMount,
@@ -143,7 +141,7 @@ const allCareerSkills: ItemType[] = [
   ItemType.TreasureChest,
   ItemType.TreasureKey,
   ItemType.Trophy,
-];
+]);
 
 const careerRace: Record<Career, Race> = {
   ARCHMAGE: Race.HighElf,
@@ -177,7 +175,7 @@ export const canUseItem = (
   career: Career,
 ): boolean => {
   if (
-    !allCareerSkills.includes(item.type) &&
+    !allCareerSkills.has(item.type) &&
     !careerSkills[career].includes(item.type)
   ) {
     return false;
