@@ -34,10 +34,7 @@ import { InstanceStatistics } from '@/pages/InstanceStatistics';
 
 // Extend the Window interface to include gtag
 declare global {
-  interface Window {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    gtag?: (...args: any[]) => void;
-  }
+  var gtag: (...args: any[]) => void;
 }
 
 // Send page views to google analytics
