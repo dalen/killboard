@@ -80,6 +80,10 @@ export const InstanceRunsList = () => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
+  if (data?.instanceRuns?.nodes?.length === 0) {
+    return <p>{t('common:noResults')}</p>;
+  }
+
   if (loading || data?.instanceRuns?.nodes == null) {
     return <progress className="progress" />;
   }

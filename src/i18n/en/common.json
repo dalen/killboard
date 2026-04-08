@@ -18,5 +18,6 @@
   "storylines": "Storylines",
   "instances": "Instances",
   "scenarios": "Scenarios",
-  "tier": "Tier"
+  "tier": "Tier",
+  "noResults": "No results found"
 }

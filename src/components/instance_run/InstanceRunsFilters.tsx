@@ -145,8 +145,6 @@ const getMaxItemRatingFilters = (
 };
 
 export const getInstanceRunsFilters = (search: URLSearchParams) => ({
-  scoreboardEntryCount: { gte: 6 },
-  start: { gt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 90).toISOString() },
   ...getInstanceFilters(search),
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
