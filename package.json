@@ -41,7 +41,7 @@
     "oxlint-tsgolint": "^0.20.0",
     "prettier": "^3.8.1",
     "typescript": "^6.0.2",
-    "vite": "^8.0.7",
+    "vite": "^8.0.8",
     "vite-tsconfig-paths": "^6.1.1"
   },
   "scripts": {
