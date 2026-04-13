@@ -31,7 +31,7 @@
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/jest": "^30.0.0",
     "@types/lodash": "^4.17.24",
-    "@types/node": "^25.5.2",
+    "@types/node": "^25.6.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/simpleheat": "^0.4.3",
