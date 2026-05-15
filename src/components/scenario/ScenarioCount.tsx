@@ -7,20 +7,8 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
 
 const SCENARIO_COUNT = gql`
-  query GetScenarioCount(
-    $characterId: ID
-    $guildId: ID
-    $queueType: ScenarioQueueType
-    $premadeOnly: Boolean
-    $wins: Boolean
-  ) {
-    scenarios(
-      characterId: $characterId
-      guildId: $guildId
-      queueType: $queueType
-      premadeOnly: $premadeOnly
-      wins: $wins
-    ) {
+  query GetScenarioCount($where: ScenarioRecordFilterInput) {
+    scenarios(where: $where) {
       totalCount
     }
   }
@@ -42,10 +30,7 @@ export const ScenarioCount = ({
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_COUNT, {
     variables: {
-      characterId,
-      guildId,
-      wins,
-      ...getScenarioFilters(search),
+      where: getScenarioFilters(search, { characterId, guildId, wins }),
     },
   });
 

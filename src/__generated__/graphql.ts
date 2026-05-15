@@ -1,4357 +1,1132 @@
 /* eslint-disable */
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type Maybe<T> = T | null;
-export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-/** All built-in and custom scalars, mapped to their actual values */
-export type Scalars = {
-  ID: { input: string; output: string; }
-  String: { input: string; output: string; }
-  Boolean: { input: boolean; output: boolean; }
-  Int: { input: number; output: number; }
-  Float: { input: number; output: number; }
-  /** The `Byte` scalar type represents non-fractional whole numeric values. Byte can represent values between 0 and 255. */
-  Byte: { input: any; output: any; }
-  /** The `DateTime` scalar represents an ISO-8601 compliant date time type. */
-  DateTime: { input: any; output: any; }
-  /** The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1. */
-  Long: { input: any; output: any; }
-  /** The NonNegativeInt scalar type represents a unsigned 32-bit numeric non-fractional value equal to or greater than 0. */
-  NonNegativeInt: { input: any; output: any; }
-  /** The `Short` scalar type represents non-fractional signed whole 16-bit numeric values. Short can represent values between -(2^15) and 2^15 - 1. */
-  Short: { input: any; output: any; }
-  /** The `TimeSpan` scalar represents an ISO-8601 compliant duration type. */
-  TimeSpan: { input: any; output: any; }
-  URL: { input: any; output: any; }
-  UUID: { input: any; output: any; }
-  /** The UnsignedInt scalar type represents a unsigned 32-bit numeric non-fractional value greater than or equal to 0. */
-  UnsignedInt: { input: any; output: any; }
-  /** The UnsignedLong scalar type represents a unsigned 64-bit numeric non-fractional value greater than or equal to 0. */
-  UnsignedLong: { input: any; output: any; }
-  /** The UnsignedShort scalar type represents a unsigned 16-bit numeric non-fractional value greater than or equal to 0. */
-  UnsignedShort: { input: any; output: any; }
-};
-
-export type Ability = SearchContent & {
-  __typename?: 'Ability';
-  /** @deprecated Use 'info' field instead. */
-  abilityType: AbilityType;
-  /** @deprecated Use 'info' field instead. */
-  actionPointCost: Scalars['Byte']['output'];
-  /** @deprecated Use 'info' field instead. */
-  castTime: Scalars['UnsignedInt']['output'];
-  /** @deprecated Use 'info' field instead. */
-  cooldown: Scalars['UnsignedInt']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Use 'info' field instead. */
-  iconUrl: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  info: AbilityInfo;
-  /** @deprecated Use 'info' field instead. */
-  labels: Array<Maybe<Scalars['String']['output']>>;
-  /** @deprecated Use 'info' field instead. */
-  minLevel: Scalars['Byte']['output'];
-  /** @deprecated Use 'info' field instead. */
-  minRange: Scalars['UnsignedShort']['output'];
-  /** @deprecated Use 'info' field instead. */
-  moraleCost: Scalars['UnsignedShort']['output'];
-  /** @deprecated Use 'info' field instead. */
-  moraleLevel: Scalars['Byte']['output'];
-  /** @deprecated Use 'info' field instead. */
-  name?: Maybe<Scalars['String']['output']>;
-  /** @deprecated Use 'info' field instead. */
-  range: Scalars['UnsignedShort']['output'];
-  /** @deprecated Use 'info' field instead. */
-  specialization: Scalars['Byte']['output'];
-};
-
-export type AbilityInfo = SearchContent & {
-  __typename?: 'AbilityInfo';
-  abilityType: AbilityType;
-  actionPointCost: Scalars['Byte']['output'];
-  castTime: Scalars['UnsignedInt']['output'];
-  cooldown: Scalars['UnsignedInt']['output'];
-  description?: Maybe<Scalars['String']['output']>;
-  iconUrl: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  labels: Array<Maybe<Scalars['String']['output']>>;
-  minLevel: Scalars['Byte']['output'];
-  minRange: Scalars['UnsignedShort']['output'];
-  moraleCost: Scalars['UnsignedShort']['output'];
-  moraleLevel: Scalars['Byte']['output'];
-  name?: Maybe<Scalars['String']['output']>;
-  range: Scalars['UnsignedShort']['output'];
-  /** Mastery path */
-  specialization: Scalars['Byte']['output'];
-};
-
-
-export type AbilityInfoDescriptionArgs = {
-  stats: CharacterStatsInput;
-};
-
-/** Ability information */
-export type AbilityKillDamage = {
-  __typename?: 'AbilityKillDamage';
-  /** Ability information, if null it was auto attack damage */
-  ability?: Maybe<AbilityInfo>;
-  /** Total damage dealt by this ability */
-  damageAmount: Scalars['UnsignedInt']['output'];
-};
-
-export enum AbilityType {
-  /** Regular abilities */
-  Default = 'DEFAULT',
-  /** Unused */
-  First = 'FIRST',
-  /** Granted abilities */
-  Granted = 'GRANTED',
-  Guild = 'GUILD',
-  /** Morale abilities */
-  Morale = 'MORALE',
-  /** Passive buffs */
-  Passive = 'PASSIVE',
-  /** Pet abilities */
-  Pet = 'PET',
-  /** Tactics */
-  Tactic = 'TACTIC',
-  TauntGuard = 'TAUNT_GUARD'
-}
-
-/** Player Archetypes */
-export enum Archetype {
-  Healer = 'HEALER',
-  MeleeDps = 'MELEE_DPS',
-  RangedDps = 'RANGED_DPS',
-  Tank = 'TANK'
-}
-
-/** Holds information about one attacker in a kill */
-export type Attacker = {
-  __typename?: 'Attacker';
-  /** Character information */
-  character: Character;
-  /** Amount of the total damage done by this attacker */
-  damagePercent: Scalars['Byte']['output'];
-  /** Guild at the time of the kill */
-  guild?: Maybe<Guild>;
-  /** Level at the time of the kill */
-  level: Scalars['Byte']['output'];
-  /** Renown rank at the time of the kill */
-  renownRank: Scalars['Byte']['output'];
-};
-
-export type BattlefieldObjective = Location & SearchContent & {
-  __typename?: 'BattlefieldObjective';
-  /** The unique identifier of the battlefield objective. */
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  position: Position;
-};
+import { Archetype } from './schema-types';
+import { Career } from './schema-types';
+import { EquipSlot } from './schema-types';
+import { ItemRarity } from './schema-types';
+import { ItemType } from './schema-types';
+import { KillDamageAttackerType } from './schema-types';
+import { KillDamageSourceType } from './schema-types';
+import { QuestRepeatableType } from './schema-types';
+import { Race } from './schema-types';
+import { RankedLeaderboardRatingType } from './schema-types';
+import { Realm } from './schema-types';
+import { SortEnumType } from './schema-types';
+import { Stat } from './schema-types';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+export * from './schema-types';
+export { Archetype };
 
 export type BooleanOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Boolean']['input']>;
-  neq?: InputMaybe<Scalars['Boolean']['input']>;
+  eq?: boolean | null | undefined;
+  neq?: boolean | null | undefined;
 };
 
-export type ByteOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Byte']['input']>;
-  gt?: InputMaybe<Scalars['Byte']['input']>;
-  gte?: InputMaybe<Scalars['Byte']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Byte']['input']>>>;
-  lt?: InputMaybe<Scalars['Byte']['input']>;
-  lte?: InputMaybe<Scalars['Byte']['input']>;
-  neq?: InputMaybe<Scalars['Byte']['input']>;
-  ngt?: InputMaybe<Scalars['Byte']['input']>;
-  ngte?: InputMaybe<Scalars['Byte']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Byte']['input']>>>;
-  nlt?: InputMaybe<Scalars['Byte']['input']>;
-  nlte?: InputMaybe<Scalars['Byte']['input']>;
-};
-
-/** Player Careers */
-export enum Career {
-  /** Archmage */
-  Archmage = 'ARCHMAGE',
-  /** Black Guard */
-  BlackGuard = 'BLACK_GUARD',
-  /** Black Orc */
-  BlackOrc = 'BLACK_ORC',
-  /** Bright Wizard */
-  BrightWizard = 'BRIGHT_WIZARD',
-  /** Choppa */
-  Choppa = 'CHOPPA',
-  /** Chosen */
-  Chosen = 'CHOSEN',
-  /** Disciple of Khaine */
-  DiscipleOfKhaine = 'DISCIPLE_OF_KHAINE',
-  /** Engineer */
-  Engineer = 'ENGINEER',
-  /** Iron Breaker */
-  IronBreaker = 'IRON_BREAKER',
-  /** Knight of the Blazing Sun */
-  KnightOfTheBlazingSun = 'KNIGHT_OF_THE_BLAZING_SUN',
-  /** Magus */
-  Magus = 'MAGUS',
-  /** Marauder */
-  Marauder = 'MARAUDER',
-  /** Rune Priest */
-  RunePriest = 'RUNE_PRIEST',
-  /** Shadow Warrior */
-  ShadowWarrior = 'SHADOW_WARRIOR',
-  /** Shaman */
-  Shaman = 'SHAMAN',
-  /** Slayer */
-  Slayer = 'SLAYER',
-  /** Sorceress */
-  Sorcerer = 'SORCERER',
-  /** Squig Herder */
-  SquigHerder = 'SQUIG_HERDER',
-  /** Sword Master */
-  SwordMaster = 'SWORD_MASTER',
-  /** Warrior Priest */
-  WarriorPriest = 'WARRIOR_PRIEST',
-  /** White Lion */
-  WhiteLion = 'WHITE_LION',
-  /** Witch Elf */
-  WitchElf = 'WITCH_ELF',
-  /** Witch Hunter */
-  WitchHunter = 'WITCH_HUNTER',
-  /** Zealot */
-  Zealot = 'ZEALOT'
-}
+export { Career };
 
 export type CareerLineOperationFilterInput = {
-  eq?: InputMaybe<Career>;
-  in?: InputMaybe<Array<Career>>;
-  neq?: InputMaybe<Career>;
-  nin?: InputMaybe<Array<Career>>;
+  eq?: Career | null | undefined;
+  in?: Array<Career> | null | undefined;
+  neq?: Career | null | undefined;
+  nin?: Array<Career> | null | undefined;
 };
 
-export enum CareerMask {
-  Archmage = 'ARCHMAGE',
-  Blackguard = 'BLACKGUARD',
-  BlackOrc = 'BLACK_ORC',
-  BrightWizard = 'BRIGHT_WIZARD',
-  Choppa = 'CHOPPA',
-  Chosen = 'CHOSEN',
-  DiscipleOfKhaine = 'DISCIPLE_OF_KHAINE',
-  Engineer = 'ENGINEER',
-  Ironbreaker = 'IRONBREAKER',
-  Knight = 'KNIGHT',
-  Magus = 'MAGUS',
-  Marauder = 'MARAUDER',
-  RunePriest = 'RUNE_PRIEST',
-  ShadowWarrior = 'SHADOW_WARRIOR',
-  Shaman = 'SHAMAN',
-  Slayer = 'SLAYER',
-  Sorcerer = 'SORCERER',
-  SquigHerder = 'SQUIG_HERDER',
-  SwordMaster = 'SWORD_MASTER',
-  WarriorPriest = 'WARRIOR_PRIEST',
-  WhiteLion = 'WHITE_LION',
-  WitchElf = 'WITCH_ELF',
-  WitchHunter = 'WITCH_HUNTER',
-  Zealot = 'ZEALOT'
-}
-
 export type CareerMaskFlagsInput = {
-  isArchmage?: InputMaybe<Scalars['Boolean']['input']>;
-  isBlackOrc?: InputMaybe<Scalars['Boolean']['input']>;
-  isBlackguard?: InputMaybe<Scalars['Boolean']['input']>;
-  isBrightWizard?: InputMaybe<Scalars['Boolean']['input']>;
-  isChoppa?: InputMaybe<Scalars['Boolean']['input']>;
-  isChosen?: InputMaybe<Scalars['Boolean']['input']>;
-  isDiscipleOfKhaine?: InputMaybe<Scalars['Boolean']['input']>;
-  isEngineer?: InputMaybe<Scalars['Boolean']['input']>;
-  isIronbreaker?: InputMaybe<Scalars['Boolean']['input']>;
-  isKnight?: InputMaybe<Scalars['Boolean']['input']>;
-  isMagus?: InputMaybe<Scalars['Boolean']['input']>;
-  isMarauder?: InputMaybe<Scalars['Boolean']['input']>;
-  isRunePriest?: InputMaybe<Scalars['Boolean']['input']>;
-  isShadowWarrior?: InputMaybe<Scalars['Boolean']['input']>;
-  isShaman?: InputMaybe<Scalars['Boolean']['input']>;
-  isSlayer?: InputMaybe<Scalars['Boolean']['input']>;
-  isSorcerer?: InputMaybe<Scalars['Boolean']['input']>;
-  isSquigHerder?: InputMaybe<Scalars['Boolean']['input']>;
-  isSwordMaster?: InputMaybe<Scalars['Boolean']['input']>;
-  isWarriorPriest?: InputMaybe<Scalars['Boolean']['input']>;
-  isWhiteLion?: InputMaybe<Scalars['Boolean']['input']>;
-  isWitchElf?: InputMaybe<Scalars['Boolean']['input']>;
-  isWitchHunter?: InputMaybe<Scalars['Boolean']['input']>;
-  isZealot?: InputMaybe<Scalars['Boolean']['input']>;
+  isArchmage?: boolean | null | undefined;
+  isBlackOrc?: boolean | null | undefined;
+  isBlackguard?: boolean | null | undefined;
+  isBrightWizard?: boolean | null | undefined;
+  isChoppa?: boolean | null | undefined;
+  isChosen?: boolean | null | undefined;
+  isDiscipleOfKhaine?: boolean | null | undefined;
+  isEngineer?: boolean | null | undefined;
+  isIronbreaker?: boolean | null | undefined;
+  isKnight?: boolean | null | undefined;
+  isMagus?: boolean | null | undefined;
+  isMarauder?: boolean | null | undefined;
+  isRunePriest?: boolean | null | undefined;
+  isShadowWarrior?: boolean | null | undefined;
+  isShaman?: boolean | null | undefined;
+  isSlayer?: boolean | null | undefined;
+  isSorcerer?: boolean | null | undefined;
+  isSquigHerder?: boolean | null | undefined;
+  isSwordMaster?: boolean | null | undefined;
+  isWarriorPriest?: boolean | null | undefined;
+  isWhiteLion?: boolean | null | undefined;
+  isWitchElf?: boolean | null | undefined;
+  isWitchHunter?: boolean | null | undefined;
+  isZealot?: boolean | null | undefined;
 };
 
 export type CareerMaskOperationFilterInput = {
-  eq?: InputMaybe<CareerMaskFlagsInput>;
-  in?: InputMaybe<Array<CareerMaskFlagsInput>>;
-  neq?: InputMaybe<CareerMaskFlagsInput>;
-  nin?: InputMaybe<Array<CareerMaskFlagsInput>>;
-};
-
-export type Chapter = SearchContent & {
-  __typename?: 'Chapter';
-  id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
-  rewards: Array<ChapterInfluenceReward>;
-};
-
-export type ChapterInfluenceReward = {
-  __typename?: 'ChapterInfluenceReward';
-  count: Scalars['UnsignedShort']['output'];
-  item: Item;
-  realm: Realm;
-  tier: Scalars['Byte']['output'];
-};
-
-/** Info about a character */
-export type Character = SearchContent & {
-  __typename?: 'Character';
-  /** Career/Class of the character */
-  career: Career;
-  /** Current Guild membership */
-  guildMembership?: Maybe<GuildMember>;
-  /** Character Id */
-  id: Scalars['ID']['output'];
-  /** Items equipped by the character */
-  items: Array<CharacterItem>;
-  /** Current Level */
-  level: Scalars['Byte']['output'];
-  /** First name */
-  name: Scalars['String']['output'];
-  /** Scenario ratings for the character */
-  ratings: Array<CharacterRating>;
-  /** Current Renown Rank */
-  renownRank: Scalars['Byte']['output'];
-};
-
-export type CharacterFilterInput = {
-  and?: InputMaybe<Array<CharacterFilterInput>>;
-  /** Character career */
-  careerLine?: InputMaybe<CareerLineOperationFilterInput>;
-  /** Character level */
-  level?: InputMaybe<ByteOperationFilterInput>;
-  /** Character name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<CharacterFilterInput>>;
-  /** Character renown rank */
-  renownRank?: InputMaybe<ByteOperationFilterInput>;
-};
-
-export type CharacterItem = {
-  __typename?: 'CharacterItem';
-  /** Slot where the item is equipped */
-  equipSlot: EquipSlot;
-  /** Item info */
-  item: Item;
-  talismans: Array<Item>;
-};
-
-/** Info about a quest objective */
-export type CharacterRating = {
-  __typename?: 'CharacterRating';
-  /** Character information */
-  character: Character;
-  /** Mu */
-  mu: Scalars['Float']['output'];
-  rating: Scalars['Float']['output'];
-  /** Rating type */
-  ratingType: RatingType;
-  /** Season ID */
-  seasonId: Scalars['ID']['output'];
-  /** Sigma */
-  sigma: Scalars['Float']['output'];
-};
-
-export type CharacterRatingFilterInput = {
-  and?: InputMaybe<Array<CharacterRatingFilterInput>>;
-  characterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  mu?: InputMaybe<FloatOperationFilterInput>;
-  or?: InputMaybe<Array<CharacterRatingFilterInput>>;
-  ratingType?: InputMaybe<RatingTypeOperationFilterInput>;
-  seasonId?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  sigma?: InputMaybe<FloatOperationFilterInput>;
-};
-
-export type CharacterRatingSortInput = {
-  mu?: InputMaybe<SortEnumType>;
-  sigma?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type CharacterRatingsConnection = {
-  __typename?: 'CharacterRatingsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<CharacterRatingsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<CharacterRating>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type CharacterRatingsEdge = {
-  __typename?: 'CharacterRatingsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: CharacterRating;
-};
-
-export type CharacterSeasonStatsFilterInput = {
-  and?: InputMaybe<Array<CharacterSeasonStatsFilterInput>>;
-  or?: InputMaybe<Array<CharacterSeasonStatsFilterInput>>;
-};
-
-export type CharacterSortInput = {
-  level?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  renownRank?: InputMaybe<SortEnumType>;
-};
-
-export type CharacterStatsInput = {
-  /** BallisticSkill */
-  ballisticSkill: Scalars['Int']['input'];
-  /** Intelligence */
-  intelligence: Scalars['Int']['input'];
-  /** Ability Level */
-  level: Scalars['Byte']['input'];
-  /** Strength */
-  strength: Scalars['Int']['input'];
-  /** Willpower */
-  willpower: Scalars['Int']['input'];
-};
-
-/** A connection to a list of items. */
-export type CharactersConnection = {
-  __typename?: 'CharactersConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<CharactersEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Character>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type CharactersEdge = {
-  __typename?: 'CharactersEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Character;
-};
-
-export type CitySiegeEvent = Event & {
-  __typename?: 'CitySiegeEvent';
-  endTime?: Maybe<Scalars['DateTime']['output']>;
-  name: Scalars['String']['output'];
-  startTime: Scalars['DateTime']['output'];
-};
-
-export enum CraftingItemType {
-  Container = 'CONTAINER',
-  ContainerDye = 'CONTAINER_DYE',
-  ContainerEssence = 'CONTAINER_ESSENCE',
-  Curio = 'CURIO',
-  Extender = 'EXTENDER',
-  Fixer = 'FIXER',
-  Fragment = 'FRAGMENT',
-  Golddust = 'GOLDDUST',
-  Goldweed = 'GOLDWEED',
-  GoldEssence = 'GOLD_ESSENCE',
-  MagicEssence = 'MAGIC_ESSENCE',
-  MainIngredient = 'MAIN_INGREDIENT',
-  Multiplier = 'MULTIPLIER',
-  Pigment = 'PIGMENT',
-  Quicksilver = 'QUICKSILVER',
-  Stabilizer = 'STABILIZER',
-  Stimulant = 'STIMULANT',
-  TalismanContainer = 'TALISMAN_CONTAINER'
-}
-
-export type Creature = SearchContent & {
-  __typename?: 'Creature';
-  id: Scalars['ID']['output'];
-  modelName: Scalars['String']['output'];
-  name: Scalars['String']['output'];
-  questsFinisher: Array<Quest>;
-  questsStarter: Array<Quest>;
-  realm?: Maybe<Realm>;
-  spawns: Array<CreatureSpawn>;
-  title: CreatureTitle;
-  /** Items sold by this creature */
-  vendorItems?: Maybe<VendorItemsConnection>;
-};
-
-
-export type CreatureVendorItemsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
+  eq?: CareerMaskFlagsInput | null | undefined;
+  in?: Array<CareerMaskFlagsInput> | null | undefined;
+  neq?: CareerMaskFlagsInput | null | undefined;
+  nin?: Array<CareerMaskFlagsInput> | null | undefined;
 };
 
 export type CreatureFilterInput = {
-  and?: InputMaybe<Array<CreatureFilterInput>>;
+  and?: Array<CreatureFilterInput> | null | undefined;
   /** Name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<CreatureFilterInput>>;
-};
-
-/** Damage dealt by a creature */
-export type CreatureKillDamage = KillDamageSource & {
-  __typename?: 'CreatureKillDamage';
-  /** By ability */
-  abilities: Array<AbilityKillDamage>;
-  /** The creature doing the damage */
-  attacker?: Maybe<Creature>;
-  /** Damage amount */
-  damageAmount: Scalars['UnsignedInt']['output'];
-};
-
-export type CreatureSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-};
-
-export type CreatureSpawn = {
-  __typename?: 'CreatureSpawn';
-  creature: Creature;
-  id: Scalars['ID']['output'];
-  /** Position Info */
-  position: Position;
-  /** Zone Info */
-  zone: Zone;
-};
-
-export enum CreatureTitle {
-  AdvancedRenownGearMerchant = 'ADVANCED_RENOWN_GEAR_MERCHANT',
-  AlcadizaarsGuard = 'ALCADIZAARS_GUARD',
-  AltarofKhaineGuard = 'ALTAROF_KHAINE_GUARD',
-  AnnihilatorArmorQuartermaster = 'ANNIHILATOR_ARMOR_QUARTERMASTER',
-  Apothecary = 'APOTHECARY',
-  ApprenticeCareerTrainer = 'APPRENTICE_CAREER_TRAINER',
-  ApprenticeRenownTrainer = 'APPRENTICE_RENOWN_TRAINER',
-  ArmorMerchant = 'ARMOR_MERCHANT',
-  ArtilleryRangeGuard = 'ARTILLERY_RANGE_GUARD',
-  Auctioneer = 'AUCTIONEER',
-  Banker = 'BANKER',
-  BarberSurgeon = 'BARBER_SURGEON',
-  BarracksGuard = 'BARRACKS_GUARD',
-  BasicRenownGearMerchant = 'BASIC_RENOWN_GEAR_MERCHANT',
-  BeastPensGuard = 'BEAST_PENS_GUARD',
-  BelKorhadrisGuard = 'BEL_KORHADRIS_GUARD',
-  Blacksmith = 'BLACKSMITH',
-  BlackMarketMerchant = 'BLACK_MARKET_MERCHANT',
-  Bodyguard = 'BODYGUARD',
-  BraggartArmorQuartermaster = 'BRAGGART_ARMOR_QUARTERMASTER',
-  BreweryGuard = 'BREWERY_GUARD',
-  Butcher = 'BUTCHER',
-  CampMerchant = 'CAMP_MERCHANT',
-  CannonBatteryGuard = 'CANNON_BATTERY_GUARD',
-  CareerTrainer = 'CAREER_TRAINER',
-  CarnageArmorQuartermaster = 'CARNAGE_ARMOR_QUARTERMASTER',
-  ChallengerArmorQuartermaster = 'CHALLENGER_ARMOR_QUARTERMASTER',
-  ChillwindGuard = 'CHILLWIND_GUARD',
-  ChokethornGuard = 'CHOKETHORN_GUARD',
-  CommoditiesQuartermaster = 'COMMODITIES_QUARTERMASTER',
-  CompanionKeeper = 'COMPANION_KEEPER',
-  ConquererMedallionQuartermaster = 'CONQUERER_MEDALLION_QUARTERMASTER',
-  ConquerorArmorQuartermaster = 'CONQUEROR_ARMOR_QUARTERMASTER',
-  ConquerorEmblemQuartermaster = 'CONQUEROR_EMBLEM_QUARTERMASTER',
-  ConquerorShrineGuard = 'CONQUEROR_SHRINE_GUARD',
-  CraftSupplyMerchant = 'CRAFT_SUPPLY_MERCHANT',
-  CrusaderQuartermaster = 'CRUSADER_QUARTERMASTER',
-  CryptGuard = 'CRYPT_GUARD',
-  Cultivator = 'CULTIVATOR',
-  DecimatorArmorQuartermaster = 'DECIMATOR_ARMOR_QUARTERMASTER',
-  DevastatorArmorQuartermaster = 'DEVASTATOR_ARMOR_QUARTERMASTER',
-  DogofWar = 'DOGOF_WAR',
-  DolgrundsGuard = 'DOLGRUNDS_GUARD',
-  DominatorArmorQuartermaster = 'DOMINATOR_ARMOR_QUARTERMASTER',
-  DominatorEmblemQuartermaster = 'DOMINATOR_EMBLEM_QUARTERMASTER',
-  DoomstrikerGuard = 'DOOMSTRIKER_GUARD',
-  DoorRepairMerchant = 'DOOR_REPAIR_MERCHANT',
-  DuelistArmorQuartermaster = 'DUELIST_ARMOR_QUARTERMASTER',
-  DungeonWeaponsMerchant = 'DUNGEON_WEAPONS_MERCHANT',
-  EliteRenownGearMerchant = 'ELITE_RENOWN_GEAR_MERCHANT',
-  EverchosenGuard = 'EVERCHOSEN_GUARD',
-  ExpeditionQuartermaster = 'EXPEDITION_QUARTERMASTER',
-  FeitensGuard = 'FEITENS_GUARD',
-  FestenplatzGuard = 'FESTENPLATZ_GUARD',
-  FireguardSpireGuard = 'FIREGUARD_SPIRE_GUARD',
-  FlightMaster = 'FLIGHT_MASTER',
-  FortressGeneral = 'FORTRESS_GENERAL',
-  FortressLord = 'FORTRESS_LORD',
-  FurrigsFallGuard = 'FURRIGS_FALL_GUARD',
-  General = 'GENERAL',
-  GoblinArmoryGuard = 'GOBLIN_ARMORY_GUARD',
-  GraveyardGuard = 'GRAVEYARD_GUARD',
-  GreaterTalismanMerchant = 'GREATER_TALISMAN_MERCHANT',
-  GreystoneGuard = 'GREYSTONE_GUARD',
-  GromrilJunctionGuard = 'GROMRIL_JUNCTION_GUARD',
-  GromrilKrukGuard = 'GROMRIL_KRUK_GUARD',
-  Guard = 'GUARD',
-  GuildRegistrar = 'GUILD_REGISTRAR',
-  HallenfurtGuard = 'HALLENFURT_GUARD',
-  HardwaterGuard = 'HARDWATER_GUARD',
-  HarvestShrineGuard = 'HARVEST_SHRINE_GUARD',
-  HavocArmorQuartermaster = 'HAVOC_ARMOR_QUARTERMASTER',
-  HeadwallGuard = 'HEADWALL_GUARD',
-  Healer = 'HEALER',
-  HealingRitualist = 'HEALING_RITUALIST',
-  HeavyMountVendor = 'HEAVY_MOUNT_VENDOR',
-  HedgeWizard = 'HEDGE_WIZARD',
-  Herald = 'HERALD',
-  IcehearthGuard = 'ICEHEARTH_GUARD',
-  InvaderArmorQuartermaster = 'INVADER_ARMOR_QUARTERMASTER',
-  InvaderMedallionQuartermaster = 'INVADER_MEDALLION_QUARTERMASTER',
-  IroncladGuard = 'IRONCLAD_GUARD',
-  KaragazGuard = 'KARAGAZ_GUARD',
-  KarakPalikGuard = 'KARAK_PALIK_GUARD',
-  KeepFlightMaster = 'KEEP_FLIGHT_MASTER',
-  KeepLord = 'KEEP_LORD',
-  KillCollector = 'KILL_COLLECTOR',
-  KinshelsGuard = 'KINSHELS_GUARD',
-  KurlovArmoryGuard = 'KURLOV_ARMORY_GUARD',
-  Librarian = 'LIBRARIAN',
-  LifetapRitualist = 'LIFETAP_RITUALIST',
-  LighthouseGuard = 'LIGHTHOUSE_GUARD',
-  LightMountVendor = 'LIGHT_MOUNT_VENDOR',
-  LiveEventMaster = 'LIVE_EVENT_MASTER',
-  LobbaMillGuard = 'LOBBA_MILL_GUARD',
-  LookoutGuard = 'LOOKOUT_GUARD',
-  LorendythGuard = 'LORENDYTH_GUARD',
-  LostLagoonGuard = 'LOST_LAGOON_GUARD',
-  MadcapGuard = 'MADCAP_GUARD',
-  MaidensLandingGuard = 'MAIDENS_LANDING_GUARD',
-  MajorTalismanMerchant = 'MAJOR_TALISMAN_MERCHANT',
-  MartyrsSquareGuard = 'MARTYRS_SQUARE_GUARD',
-  MayhemArmorQuartermaster = 'MAYHEM_ARMOR_QUARTERMASTER',
-  MercenaryArmorQuartermaster = 'MERCENARY_ARMOR_QUARTERMASTER',
-  Merchant = 'MERCHANT',
-  MilaithsMemoryGuard = 'MILAITHS_MEMORY_GUARD',
-  MonasteryGuard = 'MONASTERY_GUARD',
-  MountVendor = 'MOUNT_VENDOR',
-  MournfireGuard = 'MOURNFIRE_GUARD',
-  NameRegistrar = 'NAME_REGISTRAR',
-  NeedleofEllyrionGuard = 'NEEDLEOF_ELLYRION_GUARD',
-  NightflameGuard = 'NIGHTFLAME_GUARD',
-  None = 'NONE',
-  NordlandXiGuard = 'NORDLAND_XI_GUARD',
-  NoveltyVendor = 'NOVELTY_VENDOR',
-  ObliteratorArmorQuartermaster = 'OBLITERATOR_ARMOR_QUARTERMASTER',
-  OfficerCoinQuartermaster = 'OFFICER_COIN_QUARTERMASTER',
-  OfficerEmblemQuartermaster = 'OFFICER_EMBLEM_QUARTERMASTER',
-  OfficerMedallionQuartermaster = 'OFFICER_MEDALLION_QUARTERMASTER',
-  OppressorArmorQuartermaster = 'OPPRESSOR_ARMOR_QUARTERMASTER',
-  OppressorEmblemQuartermaster = 'OPPRESSOR_EMBLEM_QUARTERMASTER',
-  OrtelvonZarisGuard = 'ORTELVON_ZARIS_GUARD',
-  OutpostGuard = 'OUTPOST_GUARD',
-  PelgorathGuard = 'PELGORATH_GUARD',
-  Postmaster = 'POSTMASTER',
-  PotentTalismanMerchant = 'POTENT_TALISMAN_MERCHANT',
-  QuarryGuard = 'QUARRY_GUARD',
-  Quartermaster = 'QUARTERMASTER',
-  RallyMaster = 'RALLY_MASTER',
-  RankedQuartermaster = 'RANKED_QUARTERMASTER',
-  Realtor = 'REALTOR',
-  ReaverStablesGuard = 'REAVER_STABLES_GUARD',
-  RecordsKeeper = 'RECORDS_KEEPER',
-  RecruitCoinQuartermaster = 'RECRUIT_COIN_QUARTERMASTER',
-  RecruitEmblemQuartermaster = 'RECRUIT_EMBLEM_QUARTERMASTER',
-  RecruitMedallionQuartermaster = 'RECRUIT_MEDALLION_QUARTERMASTER',
-  ReikwatchGuard = 'REIKWATCH_GUARD',
-  RelicGuardian = 'RELIC_GUARDIAN',
-  RenownArmorQuartermaster = 'RENOWN_ARMOR_QUARTERMASTER',
-  RenownGearMerchant = 'RENOWN_GEAR_MERCHANT',
-  RenownTrainer = 'RENOWN_TRAINER',
-  RenownWeaponQuartermaster = 'RENOWN_WEAPON_QUARTERMASTER',
-  RottenpikeGuard = 'ROTTENPIKE_GUARD',
-  RoyalQuartermaster = 'ROYAL_QUARTERMASTER',
-  RuinArmorQuartermaster = 'RUIN_ARMOR_QUARTERMASTER',
-  RunehammerGuard = 'RUNEHAMMER_GUARD',
-  Salvager = 'SALVAGER',
-  SanctuaryGuard = 'SANCTUARY_GUARD',
-  SarathananValeGuard = 'SARATHANAN_VALE_GUARD',
-  SariDaroirGuard = 'SARI_DAROIR_GUARD',
-  Scavenger = 'SCAVENGER',
-  SchwenderhalleGuard = 'SCHWENDERHALLE_GUARD',
-  ScoutCoinQuartermaster = 'SCOUT_COIN_QUARTERMASTER',
-  ScoutEmblemQuartermaster = 'SCOUT_EMBLEM_QUARTERMASTER',
-  ScoutMedallionQuartermaster = 'SCOUT_MEDALLION_QUARTERMASTER',
-  SenlathianStandGuard = 'SENLATHIAN_STAND_GUARD',
-  Sergeant = 'SERGEANT',
-  ShadowSpireGuard = 'SHADOW_SPIRE_GUARD',
-  ShardofGriefGuard = 'SHARDOF_GRIEF_GUARD',
-  ShrineofTimeGuard = 'SHRINEOF_TIME_GUARD',
-  SiegeCamp2Guard = 'SIEGE_CAMP2_GUARD',
-  SiegeCampGuard = 'SIEGE_CAMP_GUARD',
-  SiegeQuartermaster = 'SIEGE_QUARTERMASTER',
-  SiegeWeaponMerchant = 'SIEGE_WEAPON_MERCHANT',
-  SoldierCoinQuartermaster = 'SOLDIER_COIN_QUARTERMASTER',
-  SoldierEmblemQuartermaster = 'SOLDIER_EMBLEM_QUARTERMASTER',
-  SoldierMedallionQuartermaster = 'SOLDIER_MEDALLION_QUARTERMASTER',
-  SovereignArmorQuartermaster = 'SOVEREIGN_ARMOR_QUARTERMASTER',
-  SpecializationsTrainer = 'SPECIALIZATIONS_TRAINER',
-  SpecializedArmorsmith = 'SPECIALIZED_ARMORSMITH',
-  SpecialtyMountWrangler = 'SPECIALTY_MOUNT_WRANGLER',
-  SpireofTeclisGuard = 'SPIREOF_TECLIS_GUARD',
-  StableMaster = 'STABLE_MASTER',
-  StandardMerchant = 'STANDARD_MERCHANT',
-  StonemineGuard = 'STONEMINE_GUARD',
-  SundriesQuartermaster = 'SUNDRIES_QUARTERMASTER',
-  SuperiorTalismanMerchant = 'SUPERIOR_TALISMAN_MERCHANT',
-  TacticalAdvisor = 'TACTICAL_ADVISOR',
-  TalismanMerchant = 'TALISMAN_MERCHANT',
-  TavernGuard = 'TAVERN_GUARD',
-  ThaugamondGuard = 'THAUGAMOND_GUARD',
-  TheForcesOfDestruction = 'THE_FORCES_OF_DESTRUCTION',
-  TheForcesOfOrder = 'THE_FORCES_OF_ORDER',
-  TomeAccessoryLibrarian = 'TOME_ACCESSORY_LIBRARIAN',
-  TomeTacticLibrarian = 'TOME_TACTIC_LIBRARIAN',
-  TomeTokenLibrarian = 'TOME_TOKEN_LIBRARIAN',
-  TomeTrophyLibrarian = 'TOME_TROPHY_LIBRARIAN',
-  Trainer = 'TRAINER',
-  TriumphantEmblemQuartermaster = 'TRIUMPHANT_EMBLEM_QUARTERMASTER',
-  UpgradeMerchant = 'UPGRADE_MERCHANT',
-  VanquisherArmorQuartermaster = 'VANQUISHER_ARMOR_QUARTERMASTER',
-  VanquisherQuartermaster = 'VANQUISHER_QUARTERMASTER',
-  VaultKeeper = 'VAULT_KEEPER',
-  VerentanesGuard = 'VERENTANES_GUARD',
-  VerySpecialDyeVendor = 'VERY_SPECIAL_DYE_VENDOR',
-  VeteranRenownGearMerchant = 'VETERAN_RENOWN_GEAR_MERCHANT',
-  VictoriousQuartermaster = 'VICTORIOUS_QUARTERMASTER',
-  WarlordArmorQuartermaster = 'WARLORD_ARMOR_QUARTERMASTER',
-  WarCrestVaultKeeper = 'WAR_CREST_VAULT_KEEPER',
-  WarGuard = 'WAR_GUARD',
-  WeaponMerchant = 'WEAPON_MERCHANT',
-  WoodChoppazGuard = 'WOOD_CHOPPAZ_GUARD'
-}
-
-/** A connection to a list of items. */
-export type CreaturesConnection = {
-  __typename?: 'CreaturesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<CreaturesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Creature>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type CreaturesEdge = {
-  __typename?: 'CreaturesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Creature;
+  name?: StringOperationFilterInput | null | undefined;
+  or?: Array<CreatureFilterInput> | null | undefined;
 };
 
 export type DateTimeOperationFilterInput = {
-  eq?: InputMaybe<Scalars['DateTime']['input']>;
-  gt?: InputMaybe<Scalars['DateTime']['input']>;
-  gte?: InputMaybe<Scalars['DateTime']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
-  lt?: InputMaybe<Scalars['DateTime']['input']>;
-  lte?: InputMaybe<Scalars['DateTime']['input']>;
-  neq?: InputMaybe<Scalars['DateTime']['input']>;
-  ngt?: InputMaybe<Scalars['DateTime']['input']>;
-  ngte?: InputMaybe<Scalars['DateTime']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['DateTime']['input']>>>;
-  nlt?: InputMaybe<Scalars['DateTime']['input']>;
-  nlte?: InputMaybe<Scalars['DateTime']['input']>;
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
 
-/** A connection to a list of items. */
-export type DropsFromCreaturesConnection = {
-  __typename?: 'DropsFromCreaturesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<DropsFromCreaturesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Creature>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type DropsFromCreaturesEdge = {
-  __typename?: 'DropsFromCreaturesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Creature;
-};
-
-/** A connection to a list of items. */
-export type DropsFromGameObjectsConnection = {
-  __typename?: 'DropsFromGameObjectsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<DropsFromGameObjectsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<GameObject>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type DropsFromGameObjectsEdge = {
-  __typename?: 'DropsFromGameObjectsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: GameObject;
-};
-
-/** Character equipment slots */
-export enum EquipSlot {
-  Back = 'BACK',
-  Belt = 'BELT',
-  Body = 'BODY',
-  Boots = 'BOOTS',
-  EitherHand = 'EITHER_HAND',
-  Event = 'EVENT',
-  Gloves = 'GLOVES',
-  Helm = 'HELM',
-  Jewellery1 = 'JEWELLERY1',
-  Jewellery2 = 'JEWELLERY2',
-  Jewellery3 = 'JEWELLERY3',
-  Jewellery4 = 'JEWELLERY4',
-  MainHand = 'MAIN_HAND',
-  None = 'NONE',
-  OffHand = 'OFF_HAND',
-  Pocket1 = 'POCKET1',
-  Pocket2 = 'POCKET2',
-  RangedWeapon = 'RANGED_WEAPON',
-  Shoulder = 'SHOULDER',
-  Standard = 'STANDARD',
-  Trophy1 = 'TROPHY1',
-  Trophy2 = 'TROPHY2',
-  Trophy3 = 'TROPHY3',
-  Trophy4 = 'TROPHY4',
-  Trophy5 = 'TROPHY5'
-}
+export { EquipSlot };
 
 export type EquipSlotOperationFilterInput = {
-  eq?: InputMaybe<EquipSlot>;
-  in?: InputMaybe<Array<EquipSlot>>;
-  neq?: InputMaybe<EquipSlot>;
-  nin?: InputMaybe<Array<EquipSlot>>;
-};
-
-export type Event = {
-  endTime?: Maybe<Scalars['DateTime']['output']>;
-  name: Scalars['String']['output'];
-  startTime: Scalars['DateTime']['output'];
-};
-
-export type FallKillDamage = KillDamageSource & {
-  __typename?: 'FallKillDamage';
-  /** Ability information */
-  ability?: Maybe<AbilityInfo>;
-  /** Damage amount */
-  damageAmount: Scalars['UnsignedInt']['output'];
+  eq?: EquipSlot | null | undefined;
+  in?: Array<EquipSlot> | null | undefined;
+  neq?: EquipSlot | null | undefined;
+  nin?: Array<EquipSlot> | null | undefined;
 };
 
 export type FloatOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Float']['input']>;
-  gt?: InputMaybe<Scalars['Float']['input']>;
-  gte?: InputMaybe<Scalars['Float']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
-  lt?: InputMaybe<Scalars['Float']['input']>;
-  lte?: InputMaybe<Scalars['Float']['input']>;
-  neq?: InputMaybe<Scalars['Float']['input']>;
-  ngt?: InputMaybe<Scalars['Float']['input']>;
-  ngte?: InputMaybe<Scalars['Float']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Float']['input']>>>;
-  nlt?: InputMaybe<Scalars['Float']['input']>;
-  nlte?: InputMaybe<Scalars['Float']['input']>;
+  eq?: number | null | undefined;
+  gt?: number | null | undefined;
+  gte?: number | null | undefined;
+  in?: Array<number | null | undefined> | null | undefined;
+  lt?: number | null | undefined;
+  lte?: number | null | undefined;
+  neq?: number | null | undefined;
+  ngt?: number | null | undefined;
+  ngte?: number | null | undefined;
+  nin?: Array<number | null | undefined> | null | undefined;
+  nlt?: number | null | undefined;
+  nlte?: number | null | undefined;
 };
 
-export type GameObject = {
-  __typename?: 'GameObject';
-  id: Scalars['ID']['output'];
-  modelName?: Maybe<Scalars['String']['output']>;
-  /** The name of the Game Object */
-  name: Scalars['String']['output'];
-  questsFinisher: Array<Quest>;
-  questsStarter: Array<Quest>;
-  spawns: Array<GameObjectSpawn>;
-};
-
-export type GameObjectProtoFilterInput = {
-  and?: InputMaybe<Array<GameObjectProtoFilterInput>>;
-  /** Name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<GameObjectProtoFilterInput>>;
-};
-
-export type GameObjectProtoSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-};
-
-export type GameObjectSpawn = {
-  __typename?: 'GameObjectSpawn';
-  id: Scalars['ID']['output'];
-  /** Position Info */
-  position: Position;
-  /** Zone Info */
-  zone: Zone;
-};
-
-/** A connection to a list of items. */
-export type GameObjectsConnection = {
-  __typename?: 'GameObjectsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<GameObjectsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<GameObject>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type GameObjectsEdge = {
-  __typename?: 'GameObjectsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: GameObject;
-};
-
-export type Guild = SearchContent & {
-  __typename?: 'Guild';
-  /** Recruiting brief description */
-  briefDescription: Scalars['String']['output'];
-  /** Recruiting description */
-  description: Scalars['String']['output'];
-  /** Guild heraldry */
-  heraldry: GuildHeraldry;
-  /** Guild Id */
-  id: Scalars['ID']['output'];
-  /** Guild leader */
-  leader?: Maybe<Character>;
-  /** Guild level */
-  level: Scalars['Byte']['output'];
-  /** Guild members */
-  members?: Maybe<MembersConnection>;
-  /** Guild name */
-  name: Scalars['String']['output'];
-  /** Guild ranks */
-  ranks: Array<GuildRank>;
-  /** Guild realm */
-  realm: Realm;
-};
-
-
-export type GuildMembersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-export type GuildFeudFilterInput = {
-  guild1Id: Scalars['ID']['input'];
-  guild2Id: Scalars['ID']['input'];
-};
-
-export type GuildFilterInput = {
-  and?: InputMaybe<Array<GuildFilterInput>>;
-  /** Guild level */
-  level?: InputMaybe<ByteOperationFilterInput>;
-  /** Guild name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<GuildFilterInput>>;
-  /** Guild realm */
-  realm?: InputMaybe<RealmsOperationFilterInput>;
-};
-
-export type GuildHeraldry = {
-  __typename?: 'GuildHeraldry';
-  /** Primary Color */
-  color1: Scalars['Int']['output'];
-  /** Secondary Color */
-  color2: Scalars['Int']['output'];
-  /** Emblem */
-  emblem: Scalars['Int']['output'];
-  /** Pattern */
-  pattern: Scalars['Int']['output'];
-  /** Shape */
-  shape: Scalars['Int']['output'];
-};
-
-export type GuildInfoSortInput = {
-  level?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-};
-
-export type GuildMember = {
-  __typename?: 'GuildMember';
-  /** Character info */
-  character: Character;
-  /** Guild */
-  guild: Guild;
-  /** Guild rank */
-  rank: GuildRank;
-};
-
-export type GuildRank = {
-  __typename?: 'GuildRank';
-  /** Rank name */
-  name: Scalars['String']['output'];
-  /** Rank id */
-  rank: Scalars['Byte']['output'];
-};
-
-/** A connection to a list of items. */
-export type GuildsConnection = {
-  __typename?: 'GuildsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<GuildsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Guild>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type GuildsEdge = {
-  __typename?: 'GuildsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Guild;
-};
-
-export type Icon = {
-  __typename?: 'Icon';
-  /** Icon Id */
-  id: Scalars['ID']['output'];
-  /** Name */
-  name: Scalars['String']['output'];
-  /** URL to image file */
-  url?: Maybe<Scalars['String']['output']>;
-};
-
-export type InfluenceEntryFilterInput = {
-  and?: InputMaybe<Array<InfluenceEntryFilterInput>>;
-  /** Name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<InfluenceEntryFilterInput>>;
-};
-
-export type InfluenceEntrySortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-};
-
-export type Instance = {
-  __typename?: 'Instance';
-  /** Encounters */
-  encounters?: Maybe<Array<Maybe<InstanceEncounter>>>;
-  /** Id */
-  id: Scalars['ID']['output'];
-  /** Name */
-  name: Scalars['String']['output'];
-  /** Zone information */
-  zone: Zone;
-};
-
-export type InstanceEncounter = {
-  __typename?: 'InstanceEncounter';
-  /** Id */
-  id: Scalars['ID']['output'];
-  /** Name */
-  name: Scalars['String']['output'];
-};
-
-export type InstanceEncounterRun = {
-  __typename?: 'InstanceEncounterRun';
-  /** If the encounter was completed */
-  completed: Scalars['Boolean']['output'];
-  /** Total deaths during the run */
-  deaths: Scalars['Int']['output'];
-  /** Duration of the run in seconds */
-  duration: Scalars['TimeSpan']['output'];
-  /** Encounter info */
-  encounter?: Maybe<InstanceEncounter>;
-  /** The Id of the encounter */
-  encounterId: Scalars['ID']['output'];
-  /** End time of the run */
-  end: Scalars['DateTime']['output'];
-  /** The unique id of the run */
-  id: Scalars['ID']['output'];
-  /** Instance information */
-  instance: Instance;
-  /** The Id of the instance */
-  instanceId: Scalars['ID']['output'];
-  /** The Id of the instance run */
-  instanceRunId: Scalars['ID']['output'];
-  /** Scoreboard entries */
-  scoreboardEntries: Array<InstanceEncounterRunScoreboardEntry>;
-  /** Start time of the run */
-  start: Scalars['DateTime']['output'];
+export type IdOperationFilterInput = {
+  eq?: string | number | null | undefined;
+  in?: Array<string | number | null | undefined> | null | undefined;
+  neq?: string | number | null | undefined;
+  nin?: Array<string | number | null | undefined> | null | undefined;
 };
 
 export type InstanceEncounterRunFilterInput = {
-  and?: InputMaybe<Array<InstanceEncounterRunFilterInput>>;
-  averageItemRating?: InputMaybe<FloatOperationFilterInput>;
-  completed?: InputMaybe<BooleanOperationFilterInput>;
-  encounterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  end?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UnsignedLongOperationFilterInputType>;
-  instanceId?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  maxItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  minItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  or?: InputMaybe<Array<InstanceEncounterRunFilterInput>>;
-  scoreboardEntryCount?: InputMaybe<IntOperationFilterInput>;
-  start?: InputMaybe<DateTimeOperationFilterInput>;
-  totalDeaths?: InputMaybe<LongOperationFilterInput>;
-};
-
-export type InstanceEncounterRunScoreboardEntry = {
-  __typename?: 'InstanceEncounterRunScoreboardEntry';
-  /** Archetype at the time of the run */
-  archetype: Archetype;
-  /** Career at the time of the run */
-  career: Career;
-  /** Character information */
-  character: Character;
-  /** Damage */
-  damage: Scalars['UnsignedInt']['output'];
-  /** Damage Received */
-  damageReceived: Scalars['UnsignedInt']['output'];
-  /** Deaths */
-  deaths: Scalars['UnsignedInt']['output'];
-  /** Guild at the time of the run */
-  guild?: Maybe<Guild>;
-  /** Healing */
-  healing: Scalars['UnsignedInt']['output'];
-  /** Healing of others */
-  healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingReceived: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingSelf: Scalars['UnsignedInt']['output'];
-  /** Total item rating */
-  itemRating: Scalars['UnsignedInt']['output'];
-  /** Damage contributing to kills */
-  killDamage: Scalars['UnsignedInt']['output'];
-  /** Level at the time of the run */
-  level: Scalars['Byte']['output'];
-  /** Damage Prevented */
-  protection: Scalars['UnsignedInt']['output'];
-  /** Protection of others */
-  protectionOthers: Scalars['UnsignedInt']['output'];
-  /** Protection Received */
-  protectionReceived: Scalars['UnsignedInt']['output'];
-  /** Protection of self */
-  protectionSelf: Scalars['UnsignedInt']['output'];
-  /** Renown rank at the time of the run */
-  renownRank: Scalars['Byte']['output'];
-  /** Resurrections */
-  resurrectionsDone: Scalars['UnsignedInt']['output'];
-};
-
-export type InstanceEncounterRunSortInput = {
-  end?: InputMaybe<SortEnumType>;
-  start?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type InstanceEncounterRunsConnection = {
-  __typename?: 'InstanceEncounterRunsConnection';
-  /** Average deaths of all matching runs */
-  averageDeaths: Scalars['Float']['output'];
-  /** Average duration of all matching runs */
-  averageDuration: Scalars['Float']['output'];
-  /** Number of completed runs of all matching runs */
-  completedCount: Scalars['Int']['output'];
-  /** A list of edges. */
-  edges?: Maybe<Array<InstanceEncounterRunsEdge>>;
-  /** Max duration of all matching runs */
-  maxDuration: Scalars['Float']['output'];
-  /** Median deaths of all matching runs */
-  medianDeaths: Scalars['Int']['output'];
-  /** Median duration of all matching runs */
-  medianDuration: Scalars['Float']['output'];
-  /** Min duration of all matching runs */
-  minDuration: Scalars['Float']['output'];
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<InstanceEncounterRun>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type InstanceEncounterRunsEdge = {
-  __typename?: 'InstanceEncounterRunsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: InstanceEncounterRun;
+  and?: Array<InstanceEncounterRunFilterInput> | null | undefined;
+  averageItemRating?: FloatOperationFilterInput | null | undefined;
+  completed?: BooleanOperationFilterInput | null | undefined;
+  encounterId?: IdOperationFilterInput | null | undefined;
+  end?: DateTimeOperationFilterInput | null | undefined;
+  id?: IdOperationFilterInput | null | undefined;
+  instanceId?: IdOperationFilterInput | null | undefined;
+  maxItemRating?: UnsignedIntOperationFilterInput | null | undefined;
+  minItemRating?: UnsignedIntOperationFilterInput | null | undefined;
+  or?: Array<InstanceEncounterRunFilterInput> | null | undefined;
+  scoreboardEntryCount?: IntOperationFilterInput | null | undefined;
+  start?: DateTimeOperationFilterInput | null | undefined;
+  totalDeaths?: LongOperationFilterInput | null | undefined;
 };
 
 export type InstanceFilterInput = {
-  and?: InputMaybe<Array<InstanceFilterInput>>;
-  id?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<InstanceFilterInput>>;
-};
-
-export type InstanceRun = {
-  __typename?: 'InstanceRun';
-  /** If all encounters have been completed */
-  completed: Scalars['Boolean']['output'];
-  /** Total deaths during the run */
-  deaths: Scalars['Int']['output'];
-  /** Duration of the run in seconds */
-  duration: Scalars['TimeSpan']['output'];
-  /** Encounters */
-  encounters: Array<InstanceEncounterRun>;
-  /** End time of the run */
-  end: Scalars['DateTime']['output'];
-  /** The unique id of the run */
-  id: Scalars['ID']['output'];
-  /** Instance information */
-  instance: Instance;
-  /** The id of the instance */
-  instanceId: Scalars['ID']['output'];
-  /** Scoreboard entries */
-  scoreboardEntries: Array<InstanceRunScoreboardEntry>;
-  /** Start time of the run */
-  start: Scalars['DateTime']['output'];
-  /** Zone information */
-  zone: Zone;
+  and?: Array<InstanceFilterInput> | null | undefined;
+  id?: IdOperationFilterInput | null | undefined;
+  name?: StringOperationFilterInput | null | undefined;
+  or?: Array<InstanceFilterInput> | null | undefined;
 };
 
 export type InstanceRunFilterInput = {
-  and?: InputMaybe<Array<InstanceRunFilterInput>>;
-  averageItemRating?: InputMaybe<FloatOperationFilterInput>;
-  completed?: InputMaybe<BooleanOperationFilterInput>;
-  completedEncounters?: InputMaybe<IntOperationFilterInput>;
-  end?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  instanceId?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  maxItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  minItemRating?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  or?: InputMaybe<Array<InstanceRunFilterInput>>;
-  scoreboardEntryCount?: InputMaybe<IntOperationFilterInput>;
-  start?: InputMaybe<DateTimeOperationFilterInput>;
-  totalDeaths?: InputMaybe<LongOperationFilterInput>;
-};
-
-export type InstanceRunScoreboardEntry = {
-  __typename?: 'InstanceRunScoreboardEntry';
-  /** Archetype at the time of the run */
-  archetype: Archetype;
-  /** Career at the time of the run */
-  career: Career;
-  /** Character information */
-  character: Character;
-  /** Damage */
-  damage: Scalars['UnsignedInt']['output'];
-  /** Damage Received */
-  damageReceived: Scalars['UnsignedInt']['output'];
-  /** Deaths */
-  deaths: Scalars['UnsignedInt']['output'];
-  /** Guild at the time of the run */
-  guild?: Maybe<Guild>;
-  /** Healing */
-  healing: Scalars['UnsignedInt']['output'];
-  /** Healing of others */
-  healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingReceived: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingSelf: Scalars['UnsignedInt']['output'];
-  /** Total item rating */
-  itemRating: Scalars['UnsignedInt']['output'];
-  /** Damage contributing to kills */
-  killDamage: Scalars['UnsignedInt']['output'];
-  /** Level at the time of the run */
-  level: Scalars['Byte']['output'];
-  /** Damage Prevented */
-  protection: Scalars['UnsignedInt']['output'];
-  /** Protection of others */
-  protectionOthers: Scalars['UnsignedInt']['output'];
-  /** Protection Received */
-  protectionReceived: Scalars['UnsignedInt']['output'];
-  /** Protection of self */
-  protectionSelf: Scalars['UnsignedInt']['output'];
-  /** Renown rank at the time of the run */
-  renownRank: Scalars['Byte']['output'];
-  /** Resurrections */
-  resurrectionsDone: Scalars['UnsignedInt']['output'];
-};
-
-export type InstanceRunSortInput = {
-  end?: InputMaybe<SortEnumType>;
-  start?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type InstanceRunsConnection = {
-  __typename?: 'InstanceRunsConnection';
-  /** Average deaths of all matching runs */
-  averageDeaths: Scalars['Float']['output'];
-  /** Average duration of all matching runs */
-  averageDuration: Scalars['Float']['output'];
-  /** Number of completed runs of all matching runs */
-  completedCount: Scalars['Int']['output'];
-  /** A list of edges. */
-  edges?: Maybe<Array<InstanceRunsEdge>>;
-  /** Max duration of all matching runs */
-  maxDuration: Scalars['Float']['output'];
-  /** Median deaths of all matching runs */
-  medianDeaths: Scalars['Int']['output'];
-  /** Median duration of all matching runs */
-  medianDuration: Scalars['Float']['output'];
-  /** Min duration of all matching runs */
-  minDuration: Scalars['Float']['output'];
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<InstanceRun>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type InstanceRunsEdge = {
-  __typename?: 'InstanceRunsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: InstanceRun;
-};
-
-export type InstanceSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-};
-
-/** A connection to a list of items. */
-export type InstancesConnection = {
-  __typename?: 'InstancesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<InstancesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Instance>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type InstancesEdge = {
-  __typename?: 'InstancesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Instance;
+  and?: Array<InstanceRunFilterInput> | null | undefined;
+  averageItemRating?: FloatOperationFilterInput | null | undefined;
+  completed?: BooleanOperationFilterInput | null | undefined;
+  completedEncounters?: IntOperationFilterInput | null | undefined;
+  end?: DateTimeOperationFilterInput | null | undefined;
+  id?: UuidOperationFilterInput | null | undefined;
+  instanceId?: UnsignedShortOperationFilterInput | null | undefined;
+  maxItemRating?: UnsignedIntOperationFilterInput | null | undefined;
+  minItemRating?: UnsignedIntOperationFilterInput | null | undefined;
+  or?: Array<InstanceRunFilterInput> | null | undefined;
+  scoreboardEntryCount?: IntOperationFilterInput | null | undefined;
+  start?: DateTimeOperationFilterInput | null | undefined;
+  totalDeaths?: LongOperationFilterInput | null | undefined;
 };
 
 export type IntOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Int']['input']>;
-  gt?: InputMaybe<Scalars['Int']['input']>;
-  gte?: InputMaybe<Scalars['Int']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  lt?: InputMaybe<Scalars['Int']['input']>;
-  lte?: InputMaybe<Scalars['Int']['input']>;
-  neq?: InputMaybe<Scalars['Int']['input']>;
-  ngt?: InputMaybe<Scalars['Int']['input']>;
-  ngte?: InputMaybe<Scalars['Int']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
-  nlt?: InputMaybe<Scalars['Int']['input']>;
-  nlte?: InputMaybe<Scalars['Int']['input']>;
+  eq?: number | null | undefined;
+  gt?: number | null | undefined;
+  gte?: number | null | undefined;
+  in?: Array<number | null | undefined> | null | undefined;
+  lt?: number | null | undefined;
+  lte?: number | null | undefined;
+  neq?: number | null | undefined;
+  ngt?: number | null | undefined;
+  ngte?: number | null | undefined;
+  nin?: Array<number | null | undefined> | null | undefined;
+  nlt?: number | null | undefined;
+  nlte?: number | null | undefined;
 };
-
-export type Item = SearchContent & {
-  __typename?: 'Item';
-  abilities: Array<Ability>;
-  /** Armor value, block rating on shields */
-  armor: Scalars['UnsignedShort']['output'];
-  buffs: Array<Ability>;
-  careerRestriction: Array<Career>;
-  /** Description */
-  description: Scalars['String']['output'];
-  /** Weapon DPS */
-  dps: Scalars['UnsignedShort']['output'];
-  /** Creatures that drop this item */
-  dropsFromCreatures?: Maybe<DropsFromCreaturesConnection>;
-  /** Game Objects that drop this item */
-  dropsFromGameObjects?: Maybe<DropsFromGameObjectsConnection>;
-  iconUrl: Scalars['URL']['output'];
-  /** Id */
-  id: Scalars['ID']['output'];
-  /** Item level */
-  itemLevel: Scalars['Byte']['output'];
-  itemSet?: Maybe<ItemSet>;
-  /** Level requirement */
-  levelRequirement: Scalars['Byte']['output'];
-  /** Model ID */
-  modelId?: Maybe<Scalars['UnsignedShort']['output']>;
-  /** Name */
-  name: Scalars['String']['output'];
-  raceRestriction: Array<Race>;
-  /** Rarity level */
-  rarity: ItemRarity;
-  /** Renown rank requirement */
-  renownRankRequirement: Scalars['Byte']['output'];
-  /** Chapters that reward this item */
-  rewardedFromChapters?: Maybe<RewardedFromChaptersConnection>;
-  /** Quests that reward this item */
-  rewardedFromQuests?: Maybe<RewardedFromQuestsConnection>;
-  /** Character equipment slot */
-  slot: EquipSlot;
-  /** Vendors that sell this item */
-  soldByVendors?: Maybe<SoldByVendorsConnection>;
-  /** Weapon speed */
-  speed: Scalars['UnsignedShort']['output'];
-  stats: Array<ItemStat>;
-  /** Number of talisman slots */
-  talismanSlots: Scalars['Byte']['output'];
-  /** Type */
-  type: ItemType;
-  /** Unique equipped */
-  uniqueEquipped: Scalars['Boolean']['output'];
-  /** Vendors that trade this item */
-  usedToPurchase?: Maybe<UsedToPurchaseConnection>;
-};
-
-
-export type ItemDropsFromCreaturesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type ItemDropsFromGameObjectsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type ItemRewardedFromChaptersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type ItemRewardedFromQuestsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type ItemSoldByVendorsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type ItemUsedToPurchaseArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  slot?: InputMaybe<EquipSlot>;
-  usableByCareer?: InputMaybe<Career>;
-};
-
-export enum ItemBindType {
-  /** Bound to account on equip */
-  AccountBindOnEquip = 'ACCOUNT_BIND_ON_EQUIP',
-  /** Bound to account on pickup */
-  AccountBindOnPickup = 'ACCOUNT_BIND_ON_PICKUP',
-  /** Bound to character on equip */
-  BindOnEquip = 'BIND_ON_EQUIP',
-  /** Bound to character on pickup */
-  BindOnPickup = 'BIND_ON_PICKUP',
-  /** Not Bound */
-  None = 'NONE'
-}
-
-export enum ItemExpirationTimeType {
-  /** Time offset is absolute (i.e. unix timestamp) */
-  Absolute = 'ABSOLUTE',
-  /** Time offset is when a live event ends. */
-  LiveEvent = 'LIVE_EVENT',
-  /** Time offset is relative to current time */
-  Relative = 'RELATIVE',
-  /** This will expire on a hardcoded time (after next zandri expedition) */
-  ZandriExpedition = 'ZANDRI_EXPEDITION'
-}
-
-export enum ItemExpirationType {
-  /** Normal non expiring items */
-  NonExpiring = 'NON_EXPIRING',
-  /** Expire stats on equip */
-  OnEquip = 'ON_EQUIP',
-  /** Expire starts on pickup */
-  OnPickup = 'ON_PICKUP'
-}
 
 /** Item filtering options */
 export type ItemFilterInput = {
-  and?: InputMaybe<Array<ItemFilterInput>>;
+  and?: Array<ItemFilterInput> | null | undefined;
   /** Armor value, block rating on shields */
-  armor?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  armor?: UnsignedShortOperationFilterInput | null | undefined;
   /** Description */
-  description?: InputMaybe<StringOperationFilterInput>;
+  description?: StringOperationFilterInput | null | undefined;
   /** Weapon DPS */
-  dps?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  dps?: UnsignedShortOperationFilterInput | null | undefined;
   /** Item Id */
-  id?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  id?: IdOperationFilterInput | null | undefined;
   /** Item level */
-  itemLevel?: InputMaybe<ByteOperationFilterInput>;
+  itemLevel?: UnsignedByteOperationFilterInput | null | undefined;
   /** Level requirement */
-  levelRequirement?: InputMaybe<ByteOperationFilterInput>;
+  levelRequirement?: UnsignedByteOperationFilterInput | null | undefined;
   /** Name */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<ItemFilterInput>>;
+  name?: StringOperationFilterInput | null | undefined;
+  or?: Array<ItemFilterInput> | null | undefined;
   /** Rarity level */
-  rarity?: InputMaybe<ItemRarityOperationFilterInput>;
+  rarity?: ItemRarityOperationFilterInput | null | undefined;
   /** Renown rank requirement */
-  renownRankRequirement?: InputMaybe<ByteOperationFilterInput>;
+  renownRankRequirement?: UnsignedByteOperationFilterInput | null | undefined;
   /** Character equipment slot */
-  slot?: InputMaybe<EquipSlotOperationFilterInput>;
+  slot?: EquipSlotOperationFilterInput | null | undefined;
   /** Weapon speed */
-  speed?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  speed?: UnsignedShortOperationFilterInput | null | undefined;
   /** Number of talisman slots */
-  talismanSlots?: InputMaybe<ByteOperationFilterInput>;
+  talismanSlots?: UnsignedByteOperationFilterInput | null | undefined;
   /** Type */
-  type?: InputMaybe<ItemTypeOperationFilterInput>;
+  type?: ItemTypeOperationFilterInput | null | undefined;
   /** Unique equipped */
-  uniqueEquipped?: InputMaybe<BooleanOperationFilterInput>;
+  uniqueEquipped?: BooleanOperationFilterInput | null | undefined;
 };
 
-export enum ItemRarity {
-  Common = 'COMMON',
-  Mythic = 'MYTHIC',
-  Rare = 'RARE',
-  Uncommon = 'UNCOMMON',
-  Utility = 'UTILITY',
-  VeryRare = 'VERY_RARE'
-}
+export { ItemRarity };
 
 export type ItemRarityOperationFilterInput = {
-  eq?: InputMaybe<ItemRarity>;
-  in?: InputMaybe<Array<ItemRarity>>;
-  neq?: InputMaybe<ItemRarity>;
-  nin?: InputMaybe<Array<ItemRarity>>;
+  eq?: ItemRarity | null | undefined;
+  in?: Array<ItemRarity> | null | undefined;
+  neq?: ItemRarity | null | undefined;
+  nin?: Array<ItemRarity> | null | undefined;
 };
 
-export type ItemSet = SearchContent & {
-  __typename?: 'ItemSet';
-  bonuses: Array<ItemSetBonus>;
-  id: Scalars['ID']['output'];
-  items: Array<Item>;
-  level: Scalars['Byte']['output'];
-  name: Scalars['String']['output'];
-};
-
-export type ItemSetBonus = {
-  __typename?: 'ItemSetBonus';
-  bonus: ItemSetBonusValue;
-  itemsRequired: Scalars['Byte']['output'];
-};
-
-export type ItemSetBonusValue = Ability | ItemStat;
-
-/** Item sorting options */
-export type ItemSortInput = {
-  /** Armor value, block rating on shields */
-  armor?: InputMaybe<SortEnumType>;
-  /** Description */
-  description?: InputMaybe<SortEnumType>;
-  /** Weapon DPS */
-  dps?: InputMaybe<SortEnumType>;
-  /** Item Id */
-  id?: InputMaybe<SortEnumType>;
-  /** Item level */
-  itemLevel?: InputMaybe<SortEnumType>;
-  /** Level requirement */
-  levelRequirement?: InputMaybe<SortEnumType>;
-  /** Name */
-  name?: InputMaybe<SortEnumType>;
-  /** Rarity level */
-  rarity?: InputMaybe<SortEnumType>;
-  /** Renown rank requirement */
-  renownRankRequirement?: InputMaybe<SortEnumType>;
-  /** Character equipment slot */
-  slot?: InputMaybe<SortEnumType>;
-  /** Weapon speed */
-  speed?: InputMaybe<SortEnumType>;
-  /** Number of talisman slots */
-  talismanSlots?: InputMaybe<SortEnumType>;
-  /** Type */
-  type?: InputMaybe<SortEnumType>;
-};
-
-export type ItemStat = {
-  __typename?: 'ItemStat';
-  /** Percentage */
-  percentage: Scalars['Boolean']['output'];
-  /** Stat */
-  stat: Stat;
-  /** Value */
-  value: Scalars['Short']['output'];
-};
-
-export enum ItemType {
-  Accessory = 'ACCESSORY',
-  AdvancedMount = 'ADVANCED_MOUNT',
-  Axe = 'AXE',
-  BasicMount = 'BASIC_MOUNT',
-  BasicShield = 'BASIC_SHIELD',
-  Bow = 'BOW',
-  Charm = 'CHARM',
-  Crafting = 'CRAFTING',
-  Crossbow = 'CROSSBOW',
-  Currency = 'CURRENCY',
-  Dagger = 'DAGGER',
-  Dye = 'DYE',
-  Enhancement = 'ENHANCEMENT',
-  ExpertShield = 'EXPERT_SHIELD',
-  Gun = 'GUN',
-  Hammer = 'HAMMER',
-  HeavyArmor = 'HEAVY_ARMOR',
-  Lance = 'LANCE',
-  LightArmor = 'LIGHT_ARMOR',
-  Marketing = 'MARKETING',
-  MediumArmor = 'MEDIUM_ARMOR',
-  MediumRobe = 'MEDIUM_ROBE',
-  None = 'NONE',
-  Pistol = 'PISTOL',
-  Potion = 'POTION',
-  Quest = 'QUEST',
-  RefinerTool = 'REFINER_TOOL',
-  RepeatingCrossbow = 'REPEATING_CROSSBOW',
-  Robe = 'ROBE',
-  Salvaging = 'SALVAGING',
-  Shield = 'SHIELD',
-  Siege = 'SIEGE',
-  Spear = 'SPEAR',
-  Staff = 'STAFF',
-  Sword = 'SWORD',
-  Teleport = 'TELEPORT',
-  TeleportGroup = 'TELEPORT_GROUP',
-  TreasureChest = 'TREASURE_CHEST',
-  TreasureKey = 'TREASURE_KEY',
-  Trophy = 'TROPHY'
-}
+export { ItemType };
 
 export type ItemTypeOperationFilterInput = {
-  eq?: InputMaybe<ItemType>;
-  in?: InputMaybe<Array<ItemType>>;
-  neq?: InputMaybe<ItemType>;
-  nin?: InputMaybe<Array<ItemType>>;
+  eq?: ItemType | null | undefined;
+  in?: Array<ItemType> | null | undefined;
+  neq?: ItemType | null | undefined;
+  nin?: Array<ItemType> | null | undefined;
 };
 
-/** A connection to a list of items. */
-export type ItemsConnection = {
-  __typename?: 'ItemsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ItemsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Item>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
+export { KillDamageAttackerType };
 
-/** An edge in a connection. */
-export type ItemsEdge = {
-  __typename?: 'ItemsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Item;
-};
-
-export type Keep = Location & SearchContent & {
-  __typename?: 'Keep';
-  /** The unique identifier of the keep. */
-  id: Scalars['ID']['output'];
-  /** The name of the keep. */
-  name: Scalars['String']['output'];
-  position: Position;
-};
-
-export type Kill = {
-  __typename?: 'Kill';
-  /** List of all enemy players contributing to the kill */
-  attackers: Array<Attacker>;
-  /**
-   * Damage by attacker and source
-   * @deprecated Use 'damageSources' instead
-   */
-  damage: Array<KillDamage>;
-  /** Damage by attacker and source */
-  damageSources: Array<KillDamageSource>;
-  /** The player who landed the killing blow */
-  deathblow?: Maybe<Character>;
-  /** Kill Id */
-  id: Scalars['ID']['output'];
-  /** Scenario instance, null if not in a scenario */
-  instance?: Maybe<ScenarioRecord>;
-  /** Specifies the instance of a scenario this kill happened in */
-  instanceId?: Maybe<Scalars['ID']['output']>;
-  /** Position of the victim at the time of the kill */
-  position: Position;
-  /** Scenario, null if not in a scenario */
-  scenario?: Maybe<Scenario>;
-  /**
-   * ScenarioId, 0 if not in a scenario
-   * @deprecated No longer supported.
-   */
-  scenarioId?: Maybe<Scalars['ID']['output']>;
-  /** Scenario information */
-  scenarioRecord?: Maybe<ScenarioRecord>;
-  /** Skirmish information */
-  skirmish?: Maybe<Skirmish>;
-  /** UTC Timestamp */
-  time: Scalars['DateTime']['output'];
-  /** The total renown generated from the kill, including AAO modifiers */
-  totalRenown: Scalars['UnsignedInt']['output'];
-  /** The victim */
-  victim: Victim;
-};
-
-export type KillDamage = {
-  __typename?: 'KillDamage';
-  /** Ability information */
-  ability?: Maybe<AbilityInfo>;
-  /** The character doing the damage */
-  attacker?: Maybe<Character>;
-  /** Type of attacker */
-  attackerType: KillDamageAttackerType;
-  /** Damage amount */
-  damageAmount: Scalars['UnsignedInt']['output'];
-  /** Type of damage source */
-  damageType: KillDamageSourceType;
-};
-
-export enum KillDamageAttackerType {
-  Other = 'OTHER',
-  Player = 'PLAYER'
-}
-
-export type KillDamageSource = {
-  /** Damage amount */
-  damageAmount: Scalars['UnsignedInt']['output'];
-};
-
-export enum KillDamageSourceType {
-  Ability = 'ABILITY',
-  FallDamage = 'FALL_DAMAGE',
-  Other = 'OTHER'
-}
+export { KillDamageSourceType };
 
 export type KillFilterInput = {
-  and?: InputMaybe<Array<KillFilterInput>>;
+  and?: Array<KillFilterInput> | null | undefined;
   /** Percent of the total damage done by the killer */
-  damagePercent?: InputMaybe<ByteOperationFilterInput>;
+  damagePercent?: UnsignedByteOperationFilterInput | null | undefined;
   /** Specifies the instance of a scenario this kill happened in */
-  instanceId?: InputMaybe<UuidOperationFilterInput>;
-  killerCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  killerCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  killerGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  killerLevel?: InputMaybe<ByteOperationFilterInput>;
-  killerRenownRank?: InputMaybe<ByteOperationFilterInput>;
+  instanceId?: IdOperationFilterInput | null | undefined;
+  killerCareer?: CareerLineOperationFilterInput | null | undefined;
+  killerCharacterId?: IdOperationFilterInput | null | undefined;
+  killerGuildId?: IdOperationFilterInput | null | undefined;
+  killerLevel?: UnsignedByteOperationFilterInput | null | undefined;
+  killerRenownRank?: UnsignedByteOperationFilterInput | null | undefined;
   /** Number of assists */
-  numAssists?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  or?: InputMaybe<Array<KillFilterInput>>;
+  numAssists?: UnsignedIntOperationFilterInput | null | undefined;
+  or?: Array<KillFilterInput> | null | undefined;
   /** ScenarioId, 0 if not in a scenario */
-  scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
+  scenarioId?: IdOperationFilterInput | null | undefined;
   /** Id of the skirmish the kill happened in */
-  skirmishId?: InputMaybe<UuidOperationFilterInput>;
+  skirmishId?: IdOperationFilterInput | null | undefined;
   /** UTC Timestamp */
-  time?: InputMaybe<DateTimeOperationFilterInput>;
-  victimCareer?: InputMaybe<CareerLineOperationFilterInput>;
-  victimCharacterId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  victimGuildId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  victimLevel?: InputMaybe<ByteOperationFilterInput>;
-  victimRenownRank?: InputMaybe<ByteOperationFilterInput>;
+  time?: DateTimeOperationFilterInput | null | undefined;
+  victimCareer?: CareerLineOperationFilterInput | null | undefined;
+  victimCharacterId?: IdOperationFilterInput | null | undefined;
+  victimGuildId?: IdOperationFilterInput | null | undefined;
+  victimLevel?: UnsignedByteOperationFilterInput | null | undefined;
+  victimRenownRank?: UnsignedByteOperationFilterInput | null | undefined;
   /** Zone Id */
-  zoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  zoneId?: IdOperationFilterInput | null | undefined;
 };
 
-export type KillGuildLeaderboardEntry = {
-  __typename?: 'KillGuildLeaderboardEntry';
-  /** Number of deaths */
-  deaths: Scalars['Int']['output'];
-  /** Guild information */
-  guild: Guild;
-  /** Number of kills */
-  kills: Scalars['Int']['output'];
-  /** Rank */
-  rank: Scalars['Int']['output'];
-};
-
-export type KillLeaderboardEntry = {
-  __typename?: 'KillLeaderboardEntry';
-  /** Character information */
-  character: Character;
-  /** Number of deaths */
-  deaths: Scalars['Int']['output'];
-  /** Number of kills */
-  kills: Scalars['Int']['output'];
-  /** Rank */
-  rank: Scalars['Int']['output'];
-};
-
-/** A connection to a list of items. */
-export type KillsConnection = {
-  __typename?: 'KillsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<KillsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Kill>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type KillsEdge = {
-  __typename?: 'KillsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Kill;
-};
-
-export type KillsHeatmapPoint = {
-  __typename?: 'KillsHeatmapPoint';
-  count: Scalars['UnsignedInt']['output'];
-  x: Scalars['UnsignedInt']['output'];
-  y: Scalars['UnsignedInt']['output'];
-};
-
-/** A connection to a list of items. */
-export type LeaderboardConnection = {
-  __typename?: 'LeaderboardConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<LeaderboardEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<RankedLeaderboardCharacter>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-};
-
-/** An edge in a connection. */
-export type LeaderboardEdge = {
-  __typename?: 'LeaderboardEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: RankedLeaderboardCharacter;
-};
-
-export type LiveEvent = Event & SearchContent & {
-  __typename?: 'LiveEvent';
-  endTime: Scalars['DateTime']['output'];
-  /** Id of the content */
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  startTime: Scalars['DateTime']['output'];
-};
-
-export type Location = {
-  /** Name */
-  name: Scalars['String']['output'];
-  /** Position */
-  position: Position;
+export type ListFilterInputTypeOfScenarioScoreboardEntryFilterInput = {
+  all?: ScenarioScoreboardEntryFilterInput | null | undefined;
+  any?: boolean | null | undefined;
+  none?: ScenarioScoreboardEntryFilterInput | null | undefined;
+  some?: ScenarioScoreboardEntryFilterInput | null | undefined;
 };
 
 export type LongOperationFilterInput = {
-  eq?: InputMaybe<Scalars['Long']['input']>;
-  gt?: InputMaybe<Scalars['Long']['input']>;
-  gte?: InputMaybe<Scalars['Long']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['Long']['input']>>>;
-  lt?: InputMaybe<Scalars['Long']['input']>;
-  lte?: InputMaybe<Scalars['Long']['input']>;
-  neq?: InputMaybe<Scalars['Long']['input']>;
-  ngt?: InputMaybe<Scalars['Long']['input']>;
-  ngte?: InputMaybe<Scalars['Long']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['Long']['input']>>>;
-  nlt?: InputMaybe<Scalars['Long']['input']>;
-  nlte?: InputMaybe<Scalars['Long']['input']>;
-};
-
-export type MapSetup = {
-  __typename?: 'MapSetup';
-  /** The unique id of the map setup */
-  id: Scalars['ID']['output'];
-  /** The NW corner X coordinate of the map */
-  nwCornerX: Scalars['Int']['output'];
-  /** The NW corner Y coordinate of the map */
-  nwCornerY: Scalars['Int']['output'];
-  /** The SE corner X coordinate of the map */
-  seCornerX: Scalars['Int']['output'];
-  /** The SE corner Y coordinate of the map */
-  seCornerY: Scalars['Int']['output'];
-};
-
-/** A connection to a list of items. */
-export type MembersConnection = {
-  __typename?: 'MembersConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<MembersEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<GuildMember>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type MembersEdge = {
-  __typename?: 'MembersEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: GuildMember;
-};
-
-export type NullableOfTomeSectionOperationFilterInput = {
-  eq?: InputMaybe<TomeOfKnowledgeSection>;
-  in?: InputMaybe<Array<InputMaybe<TomeOfKnowledgeSection>>>;
-  neq?: InputMaybe<TomeOfKnowledgeSection>;
-  nin?: InputMaybe<Array<InputMaybe<TomeOfKnowledgeSection>>>;
-};
-
-/** Information about pagination in a connection. */
-export type PageInfo = {
-  __typename?: 'PageInfo';
-  /** When paginating forwards, the cursor to continue. */
-  endCursor?: Maybe<Scalars['String']['output']>;
-  /** Indicates whether more edges exist following the set defined by the clients arguments. */
-  hasNextPage: Scalars['Boolean']['output'];
-  /** Indicates whether more edges exist prior the set defined by the clients arguments. */
-  hasPreviousPage: Scalars['Boolean']['output'];
-  /** When paginating backwards, the cursor to continue. */
-  startCursor?: Maybe<Scalars['String']['output']>;
-};
-
-export type PlayerFeudFilterInput = {
-  player1Id: Scalars['ID']['input'];
-  player2Id: Scalars['ID']['input'];
-};
-
-/** Damage dealt by a player */
-export type PlayerKillDamage = KillDamageSource & {
-  __typename?: 'PlayerKillDamage';
-  /** By ability */
-  abilities: Array<AbilityKillDamage>;
-  /** The character doing the damage */
-  attacker?: Maybe<Character>;
-  /** Amount of damage dealt */
-  damageAmount: Scalars['UnsignedInt']['output'];
-};
-
-export type Position = {
-  __typename?: 'Position';
-  /** The map setup of the zone */
-  mapSetup?: Maybe<MapSetup>;
-  /** Zone X position */
-  x: Scalars['UnsignedShort']['output'];
-  /** Zone Y position */
-  y: Scalars['UnsignedShort']['output'];
-  /** Z position */
-  z: Scalars['UnsignedShort']['output'];
-  /** Zone Info */
-  zone?: Maybe<Zone>;
-  /** ZoneId */
-  zoneId: Scalars['UnsignedShort']['output'];
-};
-
-export type PublicQuest = Location & SearchContent & {
-  __typename?: 'PublicQuest';
-  difficulty: PublicQuestDifficulty;
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  position: Position;
-  type: PublicQuestType;
-};
-
-export enum PublicQuestDifficulty {
-  Easy = 'EASY',
-  Hard = 'HARD',
-  Medium = 'MEDIUM',
-  VeryHard = 'VERY_HARD'
-}
-
-export enum PublicQuestType {
-  CitySiege = 'CITY_SIEGE',
-  Fortress = 'FORTRESS',
-  Keep = 'KEEP',
-  LiveEvent = 'LIVE_EVENT',
-  None = 'NONE',
-  PublicQuest = 'PUBLIC_QUEST'
-}
-
-export type Query = {
-  __typename?: 'Query';
-  /** Get an ability by its ID. */
-  ability?: Maybe<AbilityInfo>;
-  /** Number of characters participating in one or more kills during the period */
-  activeCharactersStats?: Maybe<Scalars['NonNegativeInt']['output']>;
-  /** Get one character */
-  character?: Maybe<Character>;
-  /** Query for CharacterRatings matching a filter */
-  characterRatings?: Maybe<CharacterRatingsConnection>;
-  /** Query for characters matching a filter */
-  characters?: Maybe<CharactersConnection>;
-  /** Get one creature */
-  creature?: Maybe<Creature>;
-  /** Query for creatures matching a filter */
-  creatures?: Maybe<CreaturesConnection>;
-  events: Array<Event>;
-  /** Get one game object */
-  gameObject?: Maybe<GameObject>;
-  /** Query for game objects matching a filter */
-  gameObjects?: Maybe<GameObjectsConnection>;
-  /** Get one guild */
-  guild?: Maybe<Guild>;
-  /** Query for guilds matching a filter */
-  guilds?: Maybe<GuildsConnection>;
-  /** Get information on an instance */
-  instance?: Maybe<Instance>;
-  /** Get information on an instance encounter run */
-  instanceEncounterRun?: Maybe<InstanceEncounterRun>;
-  /** Query for instance encounter runs matching a filter */
-  instanceEncounterRuns?: Maybe<InstanceEncounterRunsConnection>;
-  /** Get information on an instance run */
-  instanceRun?: Maybe<InstanceRun>;
-  /** Query for instance runs matching a filter */
-  instanceRuns?: Maybe<InstanceRunsConnection>;
-  /** Query for instances matching a filter */
-  instances?: Maybe<InstancesConnection>;
-  /** Get one item by Id */
-  item?: Maybe<Item>;
-  /** Query for items matching a filter */
-  items?: Maybe<ItemsConnection>;
-  /** Get one kill */
-  kill?: Maybe<Kill>;
-  /** Query for kills matching a filter */
-  kills?: Maybe<KillsConnection>;
-  killsHeatmap: Array<KillsHeatmapPoint>;
-  monthlyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
-  monthlyKillLeaderboard: Array<KillLeaderboardEntry>;
-  /** Get one guild */
-  quest?: Maybe<Quest>;
-  /** Query for quests matching a filter */
-  quests?: Maybe<QuestsConnection>;
-  rankedSeason?: Maybe<RankedSeason>;
-  rankedSeasons: Array<RankedSeason>;
-  /** Get scenario result from instance id */
-  scenario?: Maybe<ScenarioRecord>;
-  /** Query for scenario records matching a filter */
-  scenarios?: Maybe<ScenariosConnection>;
-  /** Unified search */
-  search?: Maybe<SearchConnection>;
-  /** Get one skirmish */
-  skirmish?: Maybe<Skirmish>;
-  /** Query for skirmishes records matching a filter */
-  skirmishes?: Maybe<SkirmishesConnection>;
-  /** Query for Tome of Knowledge Achievement entries matching a filter */
-  tomeOfKnowledgeAchievementEntries?: Maybe<TomeOfKnowledgeAchievementEntriesConnection>;
-  /** Get one Tome of Knowledge Achievement entry by Id */
-  tomeOfKnowledgeAchievementEntry?: Maybe<TomeOfKnowledgeAchievementEntry>;
-  /** Get one Tome of Knowledge Achievement subtype by Id */
-  tomeOfKnowledgeAchievementSubType?: Maybe<TomeOfKnowledgeAchievementType>;
-  /** Get one Tome of Knowledge Achievement type by Id */
-  tomeOfKnowledgeAchievementType?: Maybe<TomeOfKnowledgeAchievementType>;
-  /** Query for Tome of Knowledge Achievement subtypes matching a filter */
-  tomeOfKnowledgeAchievementTypes: Array<TomeOfKnowledgeAchievementType>;
-  /** Query for Tome of Knowledge entries matching a filter */
-  tomeOfKnowledgeEntries?: Maybe<TomeOfKnowledgeEntriesConnection>;
-  /** Get one Tome of Knowledge entry by Id */
-  tomeOfKnowledgeEntry?: Maybe<TomeOfKnowledgeEntry>;
-  /** Get top skirmishes in last seven days */
-  topSkirmishes: Array<Skirmish>;
-  /** Query for War Journal entries matching a filter */
-  warJournalEntries?: Maybe<Array<Maybe<WarJournalEntry>>>;
-  /** Get one War Journal Entry by Id */
-  warJournalEntry?: Maybe<WarJournalEntry>;
-  /** Get one War Journal Storyline by Id */
-  warJournalStoryline?: Maybe<WarJournalStoryline>;
-  /** Query for War Journal Storylines matching a filter */
-  warJournalStorylines: Array<WarJournalStoryline>;
-  weeklyGuildKillLeaderboard: Array<KillGuildLeaderboardEntry>;
-  weeklyKillLeaderboard: Array<KillLeaderboardEntry>;
-  /** Get one Zone by Id */
-  zone?: Maybe<Zone>;
-};
-
-
-export type QueryAbilityArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryActiveCharactersStatsArgs = {
-  career?: InputMaybe<Career>;
-  from: Scalars['DateTime']['input'];
-  maxLevel?: InputMaybe<Scalars['Byte']['input']>;
-  minLevel?: InputMaybe<Scalars['Byte']['input']>;
-  to: Scalars['DateTime']['input'];
-};
-
-
-export type QueryCharacterArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryCharacterRatingsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<CharacterRatingSortInput>>;
-  where?: InputMaybe<CharacterRatingFilterInput>;
-};
-
-
-export type QueryCharactersArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<CharacterSortInput>>;
-  where?: InputMaybe<CharacterFilterInput>;
-};
-
-
-export type QueryCreatureArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryCreaturesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<CreatureSortInput>>;
-  where?: InputMaybe<CreatureFilterInput>;
-};
-
-
-export type QueryGameObjectArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGameObjectsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<GameObjectProtoSortInput>>;
-  where?: InputMaybe<GameObjectProtoFilterInput>;
-};
-
-
-export type QueryGuildArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryGuildsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<GuildInfoSortInput>>;
-  where?: InputMaybe<GuildFilterInput>;
-};
-
-
-export type QueryInstanceArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryInstanceEncounterRunArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryInstanceEncounterRunsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InstanceEncounterRunSortInput>>;
-  where?: InputMaybe<InstanceEncounterRunFilterInput>;
-};
-
-
-export type QueryInstanceRunArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryInstanceRunsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InstanceRunSortInput>>;
-  where?: InputMaybe<InstanceRunFilterInput>;
-};
-
-
-export type QueryInstancesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<InstanceSortInput>>;
-  where?: InputMaybe<InstanceFilterInput>;
-};
-
-
-export type QueryItemArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryItemsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  hasStats?: InputMaybe<Array<Stat>>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<ItemSortInput>>;
-  usableByCareer?: InputMaybe<Career>;
-  where?: InputMaybe<ItemFilterInput>;
-};
-
-
-export type QueryKillArgs = {
-  id: Scalars['ID']['input'];
-  includeAssists?: Scalars['Boolean']['input'];
-};
-
-
-export type QueryKillsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  guildFeudFilter?: InputMaybe<GuildFeudFilterInput>;
-  includeAssists?: InputMaybe<Scalars['Boolean']['input']>;
-  instanceId?: InputMaybe<Scalars['String']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  playerFeudFilter?: InputMaybe<PlayerFeudFilterInput>;
-  soloOnly?: Scalars['Boolean']['input'];
-  where?: InputMaybe<KillFilterInput>;
-};
-
-
-export type QueryKillsHeatmapArgs = {
-  from?: InputMaybe<Scalars['Long']['input']>;
-  instanceId?: InputMaybe<Scalars['ID']['input']>;
-  killerGuildId?: InputMaybe<Scalars['ID']['input']>;
-  killerId?: InputMaybe<Scalars['ID']['input']>;
-  soloOnly?: Scalars['Boolean']['input'];
-  to?: InputMaybe<Scalars['Long']['input']>;
-  victimGuildId?: InputMaybe<Scalars['ID']['input']>;
-  victimId?: InputMaybe<Scalars['ID']['input']>;
-  zoneId?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
-export type QueryMonthlyGuildKillLeaderboardArgs = {
-  month: Scalars['Int']['input'];
-  year: Scalars['Int']['input'];
-};
-
-
-export type QueryMonthlyKillLeaderboardArgs = {
-  month: Scalars['Int']['input'];
-  year: Scalars['Int']['input'];
-};
-
-
-export type QueryQuestArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryQuestsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<QuestSortInput>>;
-  where?: InputMaybe<QuestFilterInput>;
-};
-
-
-export type QueryRankedSeasonArgs = {
-  id?: InputMaybe<Scalars['ID']['input']>;
-};
-
-
-export type QueryScenarioArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryScenariosArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  characterId?: InputMaybe<Scalars['ID']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  from?: InputMaybe<Scalars['Long']['input']>;
-  guildId?: InputMaybe<Scalars['ID']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  premadeOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  queueType?: InputMaybe<ScenarioQueueType>;
-  scenarioId?: InputMaybe<Scalars['ID']['input']>;
-  to?: InputMaybe<Scalars['Long']['input']>;
-  where?: InputMaybe<ScenarioRecordFilterInput>;
-  wins?: InputMaybe<Scalars['Boolean']['input']>;
-};
-
-
-export type QuerySearchArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  query: Scalars['String']['input'];
-};
-
-
-export type QuerySkirmishArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QuerySkirmishesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  characterId?: InputMaybe<Scalars['ID']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  guildId?: InputMaybe<Scalars['ID']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<SkirmishFilterInput>;
-};
-
-
-export type QueryTomeOfKnowledgeAchievementEntriesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<TomeOfKnowledgeAchievementEntryFilterInput>;
-};
-
-
-export type QueryTomeOfKnowledgeAchievementEntryArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTomeOfKnowledgeAchievementSubTypeArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTomeOfKnowledgeAchievementTypeArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryTomeOfKnowledgeEntriesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  where?: InputMaybe<TomeOfKnowledgeEntryFilterInput>;
-};
-
-
-export type QueryTomeOfKnowledgeEntryArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryWarJournalEntriesArgs = {
-  where?: InputMaybe<WarJournalEntryFilterInput>;
-};
-
-
-export type QueryWarJournalEntryArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryWarJournalStorylineArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type QueryWarJournalStorylinesArgs = {
-  where?: InputMaybe<WarJournalStorylineFilterInput>;
-};
-
-
-export type QueryWeeklyGuildKillLeaderboardArgs = {
-  week: Scalars['Int']['input'];
-  year: Scalars['Int']['input'];
-};
-
-
-export type QueryWeeklyKillLeaderboardArgs = {
-  week: Scalars['Int']['input'];
-  year: Scalars['Int']['input'];
-};
-
-
-export type QueryZoneArgs = {
-  id: Scalars['ID']['input'];
-};
-
-/** Info about a quest */
-export type Quest = SearchContent & {
-  __typename?: 'Quest';
-  /** Available to careers */
-  careerRestriction: Array<Career>;
-  /** Number of choice rewards */
-  choiceCount: Scalars['Byte']['output'];
-  /** Description */
-  description?: Maybe<Scalars['String']['output']>;
-  /** Gold reward (in brass coins) */
-  gold: Scalars['UnsignedInt']['output'];
-  /** Id of the quest */
-  id: Scalars['ID']['output'];
-  /** Journal Entry Text */
-  journalEntry?: Maybe<Scalars['String']['output']>;
-  /** Maximum level */
-  maxLevel: Scalars['Byte']['output'];
-  /** Maximum renown */
-  maxRenown: Scalars['Byte']['output'];
-  /** Minimum level */
-  minLevel: Scalars['Byte']['output'];
-  /** Minimum renown */
-  minRenown: Scalars['Byte']['output'];
-  /** Name */
-  name: Scalars['String']['output'];
-  /** Objectives */
-  objectives: Array<QuestObjective>;
-  /** Available to races */
-  raceRestriction: Array<Race>;
-  /** Repeatable Type */
-  repeatableType: QuestRepeatableType;
-  /** Choice rewards */
-  rewardsChoice: Array<QuestReward>;
-  /** Given rewards */
-  rewardsGiven: Array<QuestReward>;
-  /** Creatures starting quest */
-  starterCreatures: Array<Creature>;
-  /** Quest Type */
-  type: QuestTypeFlagsFlags;
-  /** XP Reward */
-  xp: Scalars['UnsignedInt']['output'];
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
 
 export type QuestFilterInput = {
-  and?: InputMaybe<Array<QuestFilterInput>>;
-  careerRestriction?: InputMaybe<CareerMaskOperationFilterInput>;
-  id?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<QuestFilterInput>>;
-  raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
-  type?: InputMaybe<QuestTypeFlagsOperationFilterInput>;
+  and?: Array<QuestFilterInput> | null | undefined;
+  careerRestriction?: CareerMaskOperationFilterInput | null | undefined;
+  id?: IdOperationFilterInput | null | undefined;
+  name?: StringOperationFilterInput | null | undefined;
+  or?: Array<QuestFilterInput> | null | undefined;
+  raceRestriction?: RaceMaskOperationFilterInput | null | undefined;
+  type?: QuestTypeFlagsOperationFilterInput | null | undefined;
 };
 
-/** Info about a quest objective */
-export type QuestObjective = {
-  __typename?: 'QuestObjective';
-  /** Number of times the objective needs to be done */
-  count: Scalars['UnsignedInt']['output'];
-  /** Objective description */
-  description: Scalars['String']['output'];
-};
-
-export enum QuestRepeatableType {
-  /** Repeatable */
-  Done = 'DONE',
-  /** Not repeatable */
-  None = 'NONE',
-  /** Each Week */
-  Weekly = 'WEEKLY'
-}
-
-/** Info about a quest reward */
-export type QuestReward = {
-  __typename?: 'QuestReward';
-  /** Number of items rewarded */
-  count: Scalars['UnsignedShort']['output'];
-  /** Item rewarded */
-  item: Item;
-};
-
-export type QuestSortInput = {
-  id?: InputMaybe<SortEnumType>;
-  name?: InputMaybe<SortEnumType>;
-  type?: InputMaybe<SortEnumType>;
-};
-
-export enum QuestTypeFlags {
-  Epic = 'EPIC',
-  Group = 'GROUP',
-  None = 'NONE',
-  PlayerKill = 'PLAYER_KILL',
-  RvR = 'RV_R',
-  Tome = 'TOME',
-  Travel = 'TRAVEL'
-}
-
-export type QuestTypeFlagsFlags = {
-  __typename?: 'QuestTypeFlagsFlags';
-  isEpic: Scalars['Boolean']['output'];
-  isGroup: Scalars['Boolean']['output'];
-  isNone: Scalars['Boolean']['output'];
-  isPlayerKill: Scalars['Boolean']['output'];
-  isRvR: Scalars['Boolean']['output'];
-  isTome: Scalars['Boolean']['output'];
-  isTravel: Scalars['Boolean']['output'];
-};
+export { QuestRepeatableType };
 
 export type QuestTypeFlagsFlagsInput = {
-  isEpic?: InputMaybe<Scalars['Boolean']['input']>;
-  isGroup?: InputMaybe<Scalars['Boolean']['input']>;
-  isNone?: InputMaybe<Scalars['Boolean']['input']>;
-  isPlayerKill?: InputMaybe<Scalars['Boolean']['input']>;
-  isRvR?: InputMaybe<Scalars['Boolean']['input']>;
-  isTome?: InputMaybe<Scalars['Boolean']['input']>;
-  isTravel?: InputMaybe<Scalars['Boolean']['input']>;
+  isEpic?: boolean | null | undefined;
+  isGroup?: boolean | null | undefined;
+  isNone?: boolean | null | undefined;
+  isPlayerKill?: boolean | null | undefined;
+  isRvR?: boolean | null | undefined;
+  isTome?: boolean | null | undefined;
+  isTravel?: boolean | null | undefined;
 };
 
 export type QuestTypeFlagsOperationFilterInput = {
-  eq?: InputMaybe<QuestTypeFlagsFlagsInput>;
-  in?: InputMaybe<Array<QuestTypeFlagsFlagsInput>>;
-  neq?: InputMaybe<QuestTypeFlagsFlagsInput>;
-  nin?: InputMaybe<Array<QuestTypeFlagsFlagsInput>>;
+  eq?: QuestTypeFlagsFlagsInput | null | undefined;
+  in?: Array<QuestTypeFlagsFlagsInput> | null | undefined;
+  neq?: QuestTypeFlagsFlagsInput | null | undefined;
+  nin?: Array<QuestTypeFlagsFlagsInput> | null | undefined;
 };
 
-/** A connection to a list of items. */
-export type QuestsConnection = {
-  __typename?: 'QuestsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<QuestsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Quest>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type QuestsEdge = {
-  __typename?: 'QuestsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Quest;
-};
-
-/** Player Races */
-export enum Race {
-  Chaos = 'CHAOS',
-  DarkElf = 'DARK_ELF',
-  Dwarf = 'DWARF',
-  Empire = 'EMPIRE',
-  Goblin = 'GOBLIN',
-  HighElf = 'HIGH_ELF',
-  Orc = 'ORC'
-}
-
-export enum RaceMask {
-  Chaos = 'CHAOS',
-  DarkElf = 'DARK_ELF',
-  Dwarf = 'DWARF',
-  Empire = 'EMPIRE',
-  Goblin = 'GOBLIN',
-  HighElf = 'HIGH_ELF',
-  Orc = 'ORC'
-}
+export { Race };
 
 export type RaceMaskFlagsInput = {
-  isChaos?: InputMaybe<Scalars['Boolean']['input']>;
-  isDarkElf?: InputMaybe<Scalars['Boolean']['input']>;
-  isDwarf?: InputMaybe<Scalars['Boolean']['input']>;
-  isEmpire?: InputMaybe<Scalars['Boolean']['input']>;
-  isGoblin?: InputMaybe<Scalars['Boolean']['input']>;
-  isHighElf?: InputMaybe<Scalars['Boolean']['input']>;
-  isOrc?: InputMaybe<Scalars['Boolean']['input']>;
+  isChaos?: boolean | null | undefined;
+  isDarkElf?: boolean | null | undefined;
+  isDwarf?: boolean | null | undefined;
+  isEmpire?: boolean | null | undefined;
+  isGoblin?: boolean | null | undefined;
+  isHighElf?: boolean | null | undefined;
+  isOrc?: boolean | null | undefined;
 };
 
 export type RaceMaskOperationFilterInput = {
-  eq?: InputMaybe<RaceMaskFlagsInput>;
-  in?: InputMaybe<Array<RaceMaskFlagsInput>>;
-  neq?: InputMaybe<RaceMaskFlagsInput>;
-  nin?: InputMaybe<Array<RaceMaskFlagsInput>>;
+  eq?: RaceMaskFlagsInput | null | undefined;
+  in?: Array<RaceMaskFlagsInput> | null | undefined;
+  neq?: RaceMaskFlagsInput | null | undefined;
+  nin?: Array<RaceMaskFlagsInput> | null | undefined;
 };
 
-export type RankedLeaderboardCharacter = {
-  __typename?: 'RankedLeaderboardCharacter';
-  /** Rank within career */
-  careerRank: Scalars['UnsignedInt']['output'];
-  character: Character;
-  /** Draws */
-  draws: Scalars['UnsignedInt']['output'];
-  guild?: Maybe<Guild>;
-  /** Losses */
-  losses: Scalars['UnsignedInt']['output'];
-  /** Matches needed */
-  matchesNeeded: Scalars['UnsignedInt']['output'];
-  /** Rank */
-  rank: Scalars['UnsignedInt']['output'];
-  /** Rating */
-  rating: Scalars['UnsignedInt']['output'];
-  /** Rating type */
-  ratingType: RankedLeaderboardRatingType;
-  /** Renown rank after last match in season */
-  renownRank: Scalars['Byte']['output'];
-  /** Season ID */
-  seasonId: Scalars['UnsignedShort']['output'];
-  /** Wins */
-  wins: Scalars['UnsignedInt']['output'];
-};
+export { RankedLeaderboardRatingType };
 
-export enum RankedLeaderboardRatingType {
-  RankedGroup = 'RANKED_GROUP',
-  RankedSolo = 'RANKED_SOLO'
-}
-
-export type RankedSeason = {
-  __typename?: 'RankedSeason';
-  end: Scalars['DateTime']['output'];
-  /** Season ID */
-  id: Scalars['ID']['output'];
-  leaderboard?: Maybe<LeaderboardConnection>;
-  /** Is main season or off season */
-  mainSeason: Scalars['Boolean']['output'];
-  /** Season name */
-  name: Scalars['String']['output'];
-  start: Scalars['DateTime']['output'];
-};
-
-
-export type RankedSeasonLeaderboardArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  type: RankedLeaderboardRatingType;
-  where?: InputMaybe<CharacterSeasonStatsFilterInput>;
-};
-
-export enum RatingType {
-  Casual = 'CASUAL',
-  City = 'CITY',
-  RankedGroup = 'RANKED_GROUP',
-  RankedSolo = 'RANKED_SOLO'
-}
-
-export type RatingTypeOperationFilterInput = {
-  eq?: InputMaybe<RatingType>;
-  in?: InputMaybe<Array<RatingType>>;
-  neq?: InputMaybe<RatingType>;
-  nin?: InputMaybe<Array<RatingType>>;
-};
-
-export enum Realm {
-  /** Destruction */
-  Destruction = 'DESTRUCTION',
-  /** No realm */
-  Neutral = 'NEUTRAL',
-  /** Order */
-  Order = 'ORDER'
-}
-
-export type RealmsOperationFilterInput = {
-  eq?: InputMaybe<Realm>;
-  in?: InputMaybe<Array<Realm>>;
-  neq?: InputMaybe<Realm>;
-  nin?: InputMaybe<Array<Realm>>;
-};
-
-/** A connection to a list of items. */
-export type RewardedFromChaptersConnection = {
-  __typename?: 'RewardedFromChaptersConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<RewardedFromChaptersEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Chapter>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type RewardedFromChaptersEdge = {
-  __typename?: 'RewardedFromChaptersEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Chapter;
-};
-
-/** A connection to a list of items. */
-export type RewardedFromQuestsConnection = {
-  __typename?: 'RewardedFromQuestsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<RewardedFromQuestsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Quest>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type RewardedFromQuestsEdge = {
-  __typename?: 'RewardedFromQuestsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Quest;
-};
-
-export type Scenario = SearchContent & {
-  __typename?: 'Scenario';
-  /** The unique id of the scenario */
-  id: Scalars['ID']['output'];
-  /** The name of the scenario */
-  name: Scalars['String']['output'];
-  /** Zone information */
-  zone: Zone;
-};
-
-export enum ScenarioEnabledType {
-  AlwaysEnabled = 'ALWAYS_ENABLED',
-  ByCommand = 'BY_COMMAND',
-  Developer = 'DEVELOPER',
-  Disabled = 'DISABLED',
-  Normal = 'NORMAL'
-}
-
-export enum ScenarioQueueType {
-  /** City Sieges */
-  CitySiege = 'CITY_SIEGE',
-  /** Group Ranked scenarios */
-  GroupRanked = 'GROUP_RANKED',
-  /** Discordant scenarios */
-  Solo = 'SOLO',
-  /** Solo Ranked scenarios */
-  SoloRanked = 'SOLO_RANKED',
-  /** Normal scenarios */
-  Standard = 'STANDARD'
-}
-
-export type ScenarioRecord = {
-  __typename?: 'ScenarioRecord';
-  /** The end time of the scenario */
-  endTime: Scalars['DateTime']['output'];
-  /** Scenario instance Id */
-  id: Scalars['ID']['output'];
-  /** The kills that occurred in the scenario */
-  kills: Array<Kill>;
-  /** Points for each team, 0 is order, 1 is destruction */
-  points: Array<Maybe<Scalars['UnsignedInt']['output']>>;
-  /** Queue type */
-  queueType: Scalars['Byte']['output'];
-  /** Scenario information */
-  scenario: Scenario;
-  /** Scenario Id */
-  scenarioId: Scalars['ID']['output'];
-  /** Scoreboard entries */
-  scoreboardEntries: Array<ScenarioScoreboardEntry>;
-  /** The skirmishes that occurred in the scenario */
-  skirmishes: Array<Skirmish>;
-  /** The start time of the scenario */
-  startTime: Scalars['DateTime']['output'];
-  /** Scenario tier */
-  tier: Scalars['Byte']['output'];
-  /** If the scenario was ended by surrender */
-  wasSurrender: Scalars['Boolean']['output'];
-  /** Winning team, 0 is order, 1 is destruction */
-  winner?: Maybe<Scalars['Byte']['output']>;
-};
+export { Realm };
 
 export type ScenarioRecordFilterInput = {
-  and?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  and?: Array<ScenarioRecordFilterInput> | null | undefined;
   /** The end time of the scenario */
-  endTime?: InputMaybe<DateTimeOperationFilterInput>;
+  endTime?: DateTimeOperationFilterInput | null | undefined;
   /** Scenario instance Id */
-  id?: InputMaybe<UuidOperationFilterInput>;
-  or?: InputMaybe<Array<ScenarioRecordFilterInput>>;
+  id?: IdOperationFilterInput | null | undefined;
+  /** Total number of deaths in the scenario */
+  numDeaths?: LongOperationFilterInput | null | undefined;
+  /** Total number of players in the scenario */
+  numPlayers?: IntOperationFilterInput | null | undefined;
+  or?: Array<ScenarioRecordFilterInput> | null | undefined;
   /** Queue type */
-  queueType?: InputMaybe<ByteOperationFilterInput>;
+  queueType?: UnsignedByteOperationFilterInput | null | undefined;
   /** Scenario Id */
-  scenarioId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  /** The start time of the scenario */
-  startTime?: InputMaybe<DateTimeOperationFilterInput>;
-  /** Scenario tier */
-  tier?: InputMaybe<ByteOperationFilterInput>;
-  /** If scenario ended by surrender */
-  wasSurrender?: InputMaybe<BooleanOperationFilterInput>;
-  /** Winning team, 0 is order, 1 is destruction */
-  winner?: InputMaybe<ByteOperationFilterInput>;
-};
-
-export type ScenarioScoreboardEntry = {
-  __typename?: 'ScenarioScoreboardEntry';
-  /** Character information */
-  character: Character;
-  /** Damage contributing to kills of creatures */
-  creatureKillDamage: Scalars['UnsignedInt']['output'];
-  /** Damage */
-  damage: Scalars['UnsignedInt']['output'];
-  /** Damage Received */
-  damageReceived: Scalars['UnsignedInt']['output'];
-  /** Death blows */
-  deathBlows: Scalars['UnsignedInt']['output'];
-  /** Deaths */
-  deaths: Scalars['UnsignedInt']['output'];
-  /** Guild at the time of the scenario */
-  guild?: Maybe<Guild>;
-  /** Healing */
-  healing: Scalars['UnsignedInt']['output'];
-  /** Healing of others */
-  healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingReceived: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingSelf: Scalars['UnsignedInt']['output'];
-  /** Damage contributing to kills */
-  killDamage: Scalars['UnsignedInt']['output'];
-  /** Kills */
-  kills: Scalars['UnsignedInt']['output'];
-  /** Solo Kills */
-  killsSolo: Scalars['UnsignedInt']['output'];
-  /** Level at the time of the scenario */
-  level: Scalars['Byte']['output'];
-  /** Objective Score */
-  objectiveScore: Scalars['UnsignedInt']['output'];
-  /** Damage Prevented */
-  protection: Scalars['UnsignedInt']['output'];
-  /** Protection of others */
-  protectionOthers: Scalars['UnsignedInt']['output'];
-  /** Protection Received */
-  protectionReceived: Scalars['UnsignedInt']['output'];
-  /** Protection of self */
-  protectionSelf: Scalars['UnsignedInt']['output'];
-  /** If true the player left the scenario before it ended */
-  quitter: Scalars['Boolean']['output'];
-  /** Renown rank at the time of the scenario */
-  renownRank: Scalars['Byte']['output'];
-  /** Resurrections */
-  resurrectionsDone: Scalars['UnsignedInt']['output'];
-  /** The team of the player. Normally Order=0, Destruction=1. */
-  team: Scalars['Byte']['output'];
-};
-
-export enum ScenarioType {
-  CaptureTheFlag = 'CAPTURE_THE_FLAG',
-  CitySiege = 'CITY_SIEGE',
-  DaemonBall = 'DAEMON_BALL',
-  Deathmatch = 'DEATHMATCH',
-  Domination = 'DOMINATION',
-  DominationDragonsBane = 'DOMINATION_DRAGONS_BANE',
-  DominationEc = 'DOMINATION_EC',
-  DominationForge = 'DOMINATION_FORGE',
-  DominationKhaine = 'DOMINATION_KHAINE',
-  DominationPush = 'DOMINATION_PUSH',
-  DominationPushCenter = 'DOMINATION_PUSH_CENTER',
-  DominationTwistingTower = 'DOMINATION_TWISTING_TOWER',
-  DoubleDomination = 'DOUBLE_DOMINATION',
-  DropBomb = 'DROP_BOMB',
-  DropPart = 'DROP_PART',
-  FlagDomination = 'FLAG_DOMINATION',
-  FlagDominationCreatureBoss = 'FLAG_DOMINATION_CREATURE_BOSS',
-  MonsterDefend = 'MONSTER_DEFEND',
-  Murderball = 'MURDERBALL',
-  PickUpGroupRandom = 'PICK_UP_GROUP_RANDOM',
-  Random6V6 = 'RANDOM6V6',
-  ReverseDaemonBall = 'REVERSE_DAEMON_BALL',
-  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL'
-}
-
-/** A connection to a list of items. */
-export type ScenariosConnection = {
-  __typename?: 'ScenariosConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ScenariosEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<ScenarioRecord>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type ScenariosEdge = {
-  __typename?: 'ScenariosEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: ScenarioRecord;
-};
-
-/** A connection to a list of items. */
-export type ScoreboardEntriesConnection = {
-  __typename?: 'ScoreboardEntriesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<ScoreboardEntriesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<SkirmishScoreboardEntry>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type ScoreboardEntriesEdge = {
-  __typename?: 'ScoreboardEntriesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: SkirmishScoreboardEntry;
-};
-
-/** A connection to a list of items. */
-export type SearchConnection = {
-  __typename?: 'SearchConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<SearchEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<SearchContent>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-export type SearchContent = {
-  /** Id of the content */
-  id: Scalars['ID']['output'];
-  name?: Maybe<Scalars['String']['output']>;
-};
-
-/** An edge in a connection. */
-export type SearchEdge = {
-  __typename?: 'SearchEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: SearchContent;
-};
-
-export enum Sex {
-  /** Female */
-  Female = 'FEMALE',
-  /** Male */
-  Male = 'MALE'
-}
-
-export type Skirmish = {
-  __typename?: 'Skirmish';
-  /** UTC Timestamp of Skirmish end */
-  endTime: Scalars['DateTime']['output'];
-  /** Heatmap of kills that happened during this skirmish primary zone */
-  heatmap: Array<KillsHeatmapPoint>;
-  /** Skirmish Id */
-  id: Scalars['ID']['output'];
-  /** Scenario instance, null if not in a scenario */
-  instance?: Maybe<ScenarioRecord>;
-  /** Damage leading to player kills in this skirmish */
-  killDamage: Array<KillDamage>;
-  /** Damage leading to player kills in this skirmish from a specific character */
-  killDamageByCharacter: Array<KillDamage>;
-  /** Kills that happened during this skirmish */
-  kills?: Maybe<KillsConnection>;
-  /** Total number of kills that happened during this skirmish */
-  numberOfKills: Scalars['Int']['output'];
-  /** Total number of kills that happened during this skirmish for Destruction */
-  numberOfKillsDestruction: Scalars['Int']['output'];
-  /** Total number of kills that happened during this skirmish for Order */
-  numberOfKillsOrder: Scalars['Int']['output'];
-  /** Total number of players that participated in this skirmish */
-  numberOfPlayers: Scalars['Int']['output'];
-  /** Total number of destruction players that participated in this skirmish */
-  numberOfPlayersDestruction: Scalars['Int']['output'];
-  /** Total number of order players that participated in this skirmish */
-  numberOfPlayersOrder: Scalars['Int']['output'];
-  /** Primary Zone Info */
-  primaryZone?: Maybe<Zone>;
-  /** Primary Zone Area Info */
-  primaryZoneArea?: Maybe<ZoneArea>;
-  /** Scenario, null if not in a scenario */
-  scenario?: Maybe<Scenario>;
+  scenarioId?: IdOperationFilterInput | null | undefined;
   /** Scoreboard entries */
-  scoreboardEntries?: Maybe<ScoreboardEntriesConnection>;
-  /** UTC Timestamp of Skirmish start */
-  startTime: Scalars['DateTime']['output'];
-  /** Top guilds by kills */
-  topGuildsByKills: Array<SkirmishTopGuild>;
-  /** Top guilds by players */
-  topGuildsByPlayers: Array<SkirmishTopGuild>;
+  scoreboardEntries?: ListFilterInputTypeOfScenarioScoreboardEntryFilterInput | null | undefined;
+  /** The start time of the scenario */
+  startTime?: DateTimeOperationFilterInput | null | undefined;
+  /** Scenario tier */
+  tier?: UnsignedByteOperationFilterInput | null | undefined;
+  /** If scenario ended by surrender */
+  wasSurrender?: BooleanOperationFilterInput | null | undefined;
+  /** Winning team, 0 is order, 1 is destruction */
+  winner?: UnsignedByteOperationFilterInput | null | undefined;
 };
 
-
-export type SkirmishKillDamageByCharacterArgs = {
-  id: Scalars['ID']['input'];
-};
-
-
-export type SkirmishKillsArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-};
-
-
-export type SkirmishScoreboardEntriesArgs = {
-  after?: InputMaybe<Scalars['String']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  order?: InputMaybe<Array<SkirmishScoreboardEntrySortInput>>;
+export type ScenarioScoreboardEntryFilterInput = {
+  and?: Array<ScenarioScoreboardEntryFilterInput> | null | undefined;
+  /** Character Id */
+  characterId?: IdOperationFilterInput | null | undefined;
+  /** Guild Id */
+  guildId?: IdOperationFilterInput | null | undefined;
+  /** If there's at least 6 or more players from the same guild in the scenario */
+  isGuildPremade?: BooleanOperationFilterInput | null | undefined;
+  /** If the entry is on the winning team */
+  isWinner?: BooleanOperationFilterInput | null | undefined;
+  or?: Array<ScenarioScoreboardEntryFilterInput> | null | undefined;
 };
 
 export type SkirmishFilterInput = {
-  and?: InputMaybe<Array<SkirmishFilterInput>>;
+  and?: Array<SkirmishFilterInput> | null | undefined;
   /** End time */
-  endTime?: InputMaybe<DateTimeOperationFilterInput>;
+  endTime?: DateTimeOperationFilterInput | null | undefined;
   /** Scenario instance */
-  instanceId?: InputMaybe<UuidOperationFilterInput>;
+  instanceId?: IdOperationFilterInput | null | undefined;
   /** Total number of kills */
-  numberOfKills?: InputMaybe<IntOperationFilterInput>;
+  numberOfKills?: IntOperationFilterInput | null | undefined;
   /** Total number of kills for destruction */
-  numberOfKillsDestruction?: InputMaybe<IntOperationFilterInput>;
+  numberOfKillsDestruction?: IntOperationFilterInput | null | undefined;
   /** Total number of kills for order */
-  numberOfKillsOrder?: InputMaybe<IntOperationFilterInput>;
+  numberOfKillsOrder?: IntOperationFilterInput | null | undefined;
   /** Total number of players */
-  numberOfPlayers?: InputMaybe<IntOperationFilterInput>;
+  numberOfPlayers?: IntOperationFilterInput | null | undefined;
   /** Total number of players destruction */
-  numberOfPlayersDestruction?: InputMaybe<IntOperationFilterInput>;
+  numberOfPlayersDestruction?: IntOperationFilterInput | null | undefined;
   /** Total number of players order */
-  numberOfPlayersOrder?: InputMaybe<IntOperationFilterInput>;
-  or?: InputMaybe<Array<SkirmishFilterInput>>;
+  numberOfPlayersOrder?: IntOperationFilterInput | null | undefined;
+  or?: Array<SkirmishFilterInput> | null | undefined;
   /** Primary Area */
-  primaryAreaId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  primaryAreaId?: IdOperationFilterInput | null | undefined;
   /** Primary Zone */
-  primaryZoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  primaryZoneId?: IdOperationFilterInput | null | undefined;
   /** Scenario Id */
-  scenarioId?: InputMaybe<UnsignedShortOperationFilterInputType>;
+  scenarioId?: IdOperationFilterInput | null | undefined;
   /** Start time */
-  startTime?: InputMaybe<DateTimeOperationFilterInput>;
-};
-
-export type SkirmishScoreboardEntry = {
-  __typename?: 'SkirmishScoreboardEntry';
-  /** If true the player left the scenario before it ended */
-  career: Career;
-  /** Character information */
-  character: Character;
-  /** Damage contributing to kills of creatures */
-  creatureKillDamage: Scalars['UnsignedInt']['output'];
-  /** Damage */
-  damage: Scalars['UnsignedInt']['output'];
-  /** Damage Received */
-  damageReceived: Scalars['UnsignedInt']['output'];
-  /** Death blows */
-  deathBlows: Scalars['UnsignedInt']['output'];
-  /** Deaths */
-  deaths: Scalars['UnsignedInt']['output'];
-  /** Guild at the time of the scenario */
-  guild?: Maybe<Guild>;
-  /** Healing */
-  healing: Scalars['UnsignedInt']['output'];
-  /** Healing of others */
-  healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingReceived: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
-  healingSelf: Scalars['UnsignedInt']['output'];
-  /** Damage contributing to kills */
-  killDamage: Scalars['UnsignedInt']['output'];
-  /** Kills */
-  kills: Scalars['UnsignedInt']['output'];
-  /** Solo Kills */
-  killsSolo: Scalars['UnsignedInt']['output'];
-  /** Level at the time of the scenario */
-  level: Scalars['Byte']['output'];
-  /** Damage Prevented */
-  protection: Scalars['UnsignedInt']['output'];
-  /** Protection of others */
-  protectionOthers: Scalars['UnsignedInt']['output'];
-  /** Protection Received */
-  protectionReceived: Scalars['UnsignedInt']['output'];
-  /** Protection of self */
-  protectionSelf: Scalars['UnsignedInt']['output'];
-  /** The realm of the player */
-  realm: Realm;
-  /** Renown rank at the time of the scenario */
-  renownRank: Scalars['Byte']['output'];
-  /** Resurrections */
-  resurrectionsDone: Scalars['UnsignedInt']['output'];
+  startTime?: DateTimeOperationFilterInput | null | undefined;
 };
 
 export type SkirmishScoreboardEntrySortInput = {
-  creatureKillDamage?: InputMaybe<SortEnumType>;
-  damage?: InputMaybe<SortEnumType>;
-  deathBlows?: InputMaybe<SortEnumType>;
-  deaths?: InputMaybe<SortEnumType>;
-  healing?: InputMaybe<SortEnumType>;
-  killDamage?: InputMaybe<SortEnumType>;
-  kills?: InputMaybe<SortEnumType>;
-  level?: InputMaybe<SortEnumType>;
-  protection?: InputMaybe<SortEnumType>;
-  renownRank?: InputMaybe<SortEnumType>;
+  creatureKillDamage?: SortEnumType | null | undefined;
+  damage?: SortEnumType | null | undefined;
+  deathBlows?: SortEnumType | null | undefined;
+  deaths?: SortEnumType | null | undefined;
+  healing?: SortEnumType | null | undefined;
+  killDamage?: SortEnumType | null | undefined;
+  kills?: SortEnumType | null | undefined;
+  level?: SortEnumType | null | undefined;
+  protection?: SortEnumType | null | undefined;
+  renownRank?: SortEnumType | null | undefined;
 };
 
-export type SkirmishTopGuild = {
-  __typename?: 'SkirmishTopGuild';
-  /** Value */
-  count: Scalars['Int']['output'];
-  /** Guild information */
-  guild: Guild;
-};
+export { SortEnumType };
 
-/** A connection to a list of items. */
-export type SkirmishesConnection = {
-  __typename?: 'SkirmishesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<SkirmishesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<Skirmish>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type SkirmishesEdge = {
-  __typename?: 'SkirmishesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: Skirmish;
-};
-
-/** A connection to a list of items. */
-export type SoldByVendorsConnection = {
-  __typename?: 'SoldByVendorsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<SoldByVendorsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<VendorItem>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type SoldByVendorsEdge = {
-  __typename?: 'SoldByVendorsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: VendorItem;
-};
-
-export enum SortEnumType {
-  Asc = 'ASC',
-  Desc = 'DESC'
-}
-
-export enum Stat {
-  ActionPointCost = 'ACTION_POINT_COST',
-  ActionPointRegen = 'ACTION_POINT_REGEN',
-  AggroRadius = 'AGGRO_RADIUS',
-  Agility = 'AGILITY',
-  Apothecary = 'APOTHECARY',
-  Armor = 'ARMOR',
-  ArmorPenetration = 'ARMOR_PENETRATION',
-  ArmorPenetrationReduction = 'ARMOR_PENETRATION_REDUCTION',
-  AutoAttackDamage = 'AUTO_ATTACK_DAMAGE',
-  AutoAttackSpeed = 'AUTO_ATTACK_SPEED',
-  BallisticSkill = 'BALLISTIC_SKILL',
-  Block = 'BLOCK',
-  BlockStrikethrough = 'BLOCK_STRIKETHROUGH',
-  BuildTime = 'BUILD_TIME',
-  Butchering = 'BUTCHERING',
-  Cooldown = 'COOLDOWN',
-  CorporealResistance = 'CORPOREAL_RESISTANCE',
-  CriticalDamage = 'CRITICAL_DAMAGE',
-  CriticalDamageTakenReduction = 'CRITICAL_DAMAGE_TAKEN_REDUCTION',
-  CriticalHitRate = 'CRITICAL_HIT_RATE',
-  CriticalHitRateReduction = 'CRITICAL_HIT_RATE_REDUCTION',
-  Cultivation = 'CULTIVATION',
-  DamageAbsorb = 'DAMAGE_ABSORB',
-  DismountChance = 'DISMOUNT_CHANCE',
-  Disrupt = 'DISRUPT',
-  DisruptStrikethrough = 'DISRUPT_STRIKETHROUGH',
-  EffectBuff = 'EFFECT_BUFF',
-  EffectResist = 'EFFECT_RESIST',
-  ElementalResistance = 'ELEMENTAL_RESISTANCE',
-  Evade = 'EVADE',
-  EvadeStrikethrough = 'EVADE_STRIKETHROUGH',
-  Fortitude = 'FORTITUDE',
-  GoldLooted = 'GOLD_LOOTED',
-  Gravity = 'GRAVITY',
-  HateCaused = 'HATE_CAUSED',
-  HateReceived = 'HATE_RECEIVED',
-  HealingPower = 'HEALING_POWER',
-  HealthRegen = 'HEALTH_REGEN',
-  HealCritRate = 'HEAL_CRIT_RATE',
-  IncomingDamage = 'INCOMING_DAMAGE',
-  IncomingDamagePercent = 'INCOMING_DAMAGE_PERCENT',
-  IncomingHealPercent = 'INCOMING_HEAL_PERCENT',
-  InfluenceReceived = 'INFLUENCE_RECEIVED',
-  InfluenceWorth = 'INFLUENCE_WORTH',
-  Initiative = 'INITIATIVE',
-  Intelligence = 'INTELLIGENCE',
-  InteractTime = 'INTERACT_TIME',
-  LevitationHeight = 'LEVITATION_HEIGHT',
-  LootChance = 'LOOT_CHANCE',
-  MagicCritRate = 'MAGIC_CRIT_RATE',
-  MagicPower = 'MAGIC_POWER',
-  Mastery_1Bonus = 'MASTERY_1_BONUS',
-  Mastery_2Bonus = 'MASTERY_2_BONUS',
-  Mastery_3Bonus = 'MASTERY_3_BONUS',
-  MaxActionPoints = 'MAX_ACTION_POINTS',
-  MeleeCritRate = 'MELEE_CRIT_RATE',
-  MeleePower = 'MELEE_POWER',
-  MinimumRange = 'MINIMUM_RANGE',
-  MonetaryWorth = 'MONETARY_WORTH',
-  MoraleRegen = 'MORALE_REGEN',
-  OffhandDamage = 'OFFHAND_DAMAGE',
-  OffhandProcChance = 'OFFHAND_PROC_CHANCE',
-  OutgoingDamage = 'OUTGOING_DAMAGE',
-  OutgoingDamagePercent = 'OUTGOING_DAMAGE_PERCENT',
-  OutgoingHealPercent = 'OUTGOING_HEAL_PERCENT',
-  Parry = 'PARRY',
-  ParryStrikethrough = 'PARRY_STRIKETHROUGH',
-  Radius = 'RADIUS',
-  Range = 'RANGE',
-  RangedCritRate = 'RANGED_CRIT_RATE',
-  RangedPower = 'RANGED_POWER',
-  RenownReceived = 'RENOWN_RECEIVED',
-  RenownWorth = 'RENOWN_WORTH',
-  Salvaging = 'SALVAGING',
-  Scavenging = 'SCAVENGING',
-  SetbackChance = 'SETBACK_CHANCE',
-  SetbackValue = 'SETBACK_VALUE',
-  Specialization = 'SPECIALIZATION',
-  SpiritResistance = 'SPIRIT_RESISTANCE',
-  Stealth = 'STEALTH',
-  StealthDetection = 'STEALTH_DETECTION',
-  Strength = 'STRENGTH',
-  TalismanMaking = 'TALISMAN_MAKING',
-  TargetDuration = 'TARGET_DURATION',
-  Toughness = 'TOUGHNESS',
-  Velocity = 'VELOCITY',
-  WeaponSkill = 'WEAPON_SKILL',
-  Willpower = 'WILLPOWER',
-  Wounds = 'WOUNDS',
-  XpReceived = 'XP_RECEIVED',
-  XpWorth = 'XP_WORTH'
-}
+export { Stat };
 
 export type StringOperationFilterInput = {
-  and?: InputMaybe<Array<StringOperationFilterInput>>;
-  contains?: InputMaybe<Scalars['String']['input']>;
-  endsWith?: InputMaybe<Scalars['String']['input']>;
-  eq?: InputMaybe<Scalars['String']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  ncontains?: InputMaybe<Scalars['String']['input']>;
-  nendsWith?: InputMaybe<Scalars['String']['input']>;
-  neq?: InputMaybe<Scalars['String']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['String']['input']>>>;
-  nstartsWith?: InputMaybe<Scalars['String']['input']>;
-  or?: InputMaybe<Array<StringOperationFilterInput>>;
-  startsWith?: InputMaybe<Scalars['String']['input']>;
+  and?: Array<StringOperationFilterInput> | null | undefined;
+  contains?: string | null | undefined;
+  endsWith?: string | null | undefined;
+  eq?: string | null | undefined;
+  in?: Array<string | null | undefined> | null | undefined;
+  ncontains?: string | null | undefined;
+  nendsWith?: string | null | undefined;
+  neq?: string | null | undefined;
+  nin?: Array<string | null | undefined> | null | undefined;
+  nstartsWith?: string | null | undefined;
+  or?: Array<StringOperationFilterInput> | null | undefined;
+  startsWith?: string | null | undefined;
 };
 
-export enum TomeHelpType {
-  AdvancedHelp = 'ADVANCED_HELP',
-  BeginnerHelp = 'BEGINNER_HELP',
-  GameplayHelp = 'GAMEPLAY_HELP',
-  None = 'NONE',
-  UiHelp = 'UI_HELP'
-}
-
-export type TomeHelpTypeOperationFilterInput = {
-  eq?: InputMaybe<TomeHelpType>;
-  in?: InputMaybe<Array<TomeHelpType>>;
-  neq?: InputMaybe<TomeHelpType>;
-  nin?: InputMaybe<Array<TomeHelpType>>;
+export type UnsignedByteOperationFilterInput = {
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
 
-/** A connection to a list of items. */
-export type TomeOfKnowledgeAchievementEntriesConnection = {
-  __typename?: 'TomeOfKnowledgeAchievementEntriesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<TomeOfKnowledgeAchievementEntriesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<TomeOfKnowledgeAchievementEntry>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
+export type UnsignedIntOperationFilterInput = {
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
 
-/** An edge in a connection. */
-export type TomeOfKnowledgeAchievementEntriesEdge = {
-  __typename?: 'TomeOfKnowledgeAchievementEntriesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: TomeOfKnowledgeAchievementEntry;
-};
-
-export type TomeOfKnowledgeAchievementEntry = {
-  __typename?: 'TomeOfKnowledgeAchievementEntry';
-  description: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  rewards: Array<TomeOfKnowledgeAchievementReward>;
-  subType: TomeOfKnowledgeAchievementSubType;
-};
-
-export type TomeOfKnowledgeAchievementEntryFilterInput = {
-  and?: InputMaybe<Array<TomeOfKnowledgeAchievementEntryFilterInput>>;
-  /** Name */
-  description?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<TomeOfKnowledgeAchievementEntryFilterInput>>;
-  /** SubType */
-  tomeAchievementSubTypeId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-};
-
-export type TomeOfKnowledgeAchievementReward = {
-  id: Scalars['ID']['output'];
-};
-
-export type TomeOfKnowledgeAchievementRewardActionCounter = TomeOfKnowledgeAchievementReward & {
-  __typename?: 'TomeOfKnowledgeAchievementRewardActionCounter';
-  /** Ability Info */
-  ability: AbilityInfo;
-  id: Scalars['ID']['output'];
-};
-
-export type TomeOfKnowledgeAchievementRewardItem = TomeOfKnowledgeAchievementReward & {
-  __typename?: 'TomeOfKnowledgeAchievementRewardItem';
-  /** Item is automatically added to player inventory */
-  autoCreate: Scalars['Boolean']['output'];
-  id: Scalars['ID']['output'];
-  /** Item info */
-  item: Item;
-};
-
-export type TomeOfKnowledgeAchievementRewardTitle = TomeOfKnowledgeAchievementReward & {
-  __typename?: 'TomeOfKnowledgeAchievementRewardTitle';
-  id: Scalars['ID']['output'];
-  /** Tome of Knowledge entry */
-  title: TomeOfKnowledgeEntry;
-};
-
-export type TomeOfKnowledgeAchievementSubType = {
-  __typename?: 'TomeOfKnowledgeAchievementSubType';
-  description: Scalars['String']['output'];
-  entries: Array<TomeOfKnowledgeAchievementEntry>;
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  type: TomeOfKnowledgeAchievementType;
-};
-
-export type TomeOfKnowledgeAchievementType = {
-  __typename?: 'TomeOfKnowledgeAchievementType';
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  subTypes: Array<TomeOfKnowledgeAchievementSubType>;
-};
-
-/** A connection to a list of items. */
-export type TomeOfKnowledgeEntriesConnection = {
-  __typename?: 'TomeOfKnowledgeEntriesConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<TomeOfKnowledgeEntriesEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<TomeOfKnowledgeEntry>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type TomeOfKnowledgeEntriesEdge = {
-  __typename?: 'TomeOfKnowledgeEntriesEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: TomeOfKnowledgeEntry;
-};
-
-export type TomeOfKnowledgeEntry = SearchContent & {
-  __typename?: 'TomeOfKnowledgeEntry';
-  description: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  name: Scalars['String']['output'];
-  realm: Realm;
-  xp: Scalars['UnsignedInt']['output'];
-};
-
-export type TomeOfKnowledgeEntryFilterInput = {
-  and?: InputMaybe<Array<TomeOfKnowledgeEntryFilterInput>>;
-  /** Description */
-  description?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<TomeOfKnowledgeEntryFilterInput>>;
-  /** Realm */
-  realm?: InputMaybe<RealmsOperationFilterInput>;
-  /** Tome of Knowledge section */
-  tomeSection?: InputMaybe<NullableOfTomeSectionOperationFilterInput>;
-  /** Type */
-  type?: InputMaybe<TomeHelpTypeOperationFilterInput>;
-  /** XP reward */
-  xp?: InputMaybe<UnsignedIntOperationFilterInputType>;
-};
-
-/** Tome Of Knowledge sections */
-export enum TomeOfKnowledgeSection {
-  Achievements = 'ACHIEVEMENTS',
-  Bestiary = 'BESTIARY',
-  GameFaq = 'GAME_FAQ',
-  GameManual = 'GAME_MANUAL',
-  Help = 'HELP',
-  HistoryAndLore = 'HISTORY_AND_LORE',
-  LiveEvent = 'LIVE_EVENT',
-  NoteworthyPersons = 'NOTEWORTHY_PERSONS',
-  OldWorldArmory = 'OLD_WORLD_ARMORY',
-  PlayerTitles = 'PLAYER_TITLES',
-  Tactics = 'TACTICS',
-  Ward = 'WARD',
-  WarJournal = 'WAR_JOURNAL',
-  ZoneMaps = 'ZONE_MAPS'
-}
-
-export enum TradeSkill {
-  Apothecary = 'APOTHECARY',
-  Butchering = 'BUTCHERING',
-  Cultivation = 'CULTIVATION',
-  None = 'NONE',
-  Salvaging = 'SALVAGING',
-  Scavenging = 'SCAVENGING',
-  TalismanMaking = 'TALISMAN_MAKING'
-}
-
-export type UnsignedIntOperationFilterInputType = {
-  eq?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  gt?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  gte?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UnsignedInt']['input']>>>;
-  lt?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  lte?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  neq?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  ngt?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  ngte?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedInt']['input']>>>;
-  nlt?: InputMaybe<Scalars['UnsignedInt']['input']>;
-  nlte?: InputMaybe<Scalars['UnsignedInt']['input']>;
-};
-
-export type UnsignedLongOperationFilterInputType = {
-  eq?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  gt?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  gte?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UnsignedLong']['input']>>>;
-  lt?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  lte?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  neq?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  ngt?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  ngte?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedLong']['input']>>>;
-  nlt?: InputMaybe<Scalars['UnsignedLong']['input']>;
-  nlte?: InputMaybe<Scalars['UnsignedLong']['input']>;
-};
-
-export type UnsignedShortOperationFilterInputType = {
-  eq?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  gt?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  gte?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UnsignedShort']['input']>>>;
-  lt?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  lte?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  neq?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  ngt?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  ngte?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UnsignedShort']['input']>>>;
-  nlt?: InputMaybe<Scalars['UnsignedShort']['input']>;
-  nlte?: InputMaybe<Scalars['UnsignedShort']['input']>;
-};
-
-/** A connection to a list of items. */
-export type UsedToPurchaseConnection = {
-  __typename?: 'UsedToPurchaseConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<UsedToPurchaseEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<VendorItem>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type UsedToPurchaseEdge = {
-  __typename?: 'UsedToPurchaseEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: VendorItem;
+export type UnsignedShortOperationFilterInput = {
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
 
 export type UuidOperationFilterInput = {
-  eq?: InputMaybe<Scalars['UUID']['input']>;
-  gt?: InputMaybe<Scalars['UUID']['input']>;
-  gte?: InputMaybe<Scalars['UUID']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  lt?: InputMaybe<Scalars['UUID']['input']>;
-  lte?: InputMaybe<Scalars['UUID']['input']>;
-  neq?: InputMaybe<Scalars['UUID']['input']>;
-  ngt?: InputMaybe<Scalars['UUID']['input']>;
-  ngte?: InputMaybe<Scalars['UUID']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  nlt?: InputMaybe<Scalars['UUID']['input']>;
-  nlte?: InputMaybe<Scalars['UUID']['input']>;
+  eq?: any;
+  gt?: any;
+  gte?: any;
+  in?: Array<any> | null | undefined;
+  lt?: any;
+  lte?: any;
+  neq?: any;
+  ngt?: any;
+  ngte?: any;
+  nin?: Array<any> | null | undefined;
+  nlt?: any;
+  nlte?: any;
 };
-
-export type VendorItem = {
-  __typename?: 'VendorItem';
-  count: Scalars['UnsignedShort']['output'];
-  creatures: Array<Creature>;
-  item: Item;
-  /** Cost in copper coins */
-  price: Scalars['UnsignedInt']['output'];
-  requiredItems: Array<VendorItemRequiredItem>;
-  soldBy: Array<Creature>;
-};
-
-export type VendorItemRequiredItem = {
-  __typename?: 'VendorItemRequiredItem';
-  /** Amount needed */
-  count: Scalars['UnsignedShort']['output'];
-  item: Item;
-};
-
-/** A connection to a list of items. */
-export type VendorItemsConnection = {
-  __typename?: 'VendorItemsConnection';
-  /** A list of edges. */
-  edges?: Maybe<Array<VendorItemsEdge>>;
-  /** A flattened list of the nodes. */
-  nodes?: Maybe<Array<VendorItem>>;
-  /** Information to aid in pagination. */
-  pageInfo: PageInfo;
-  /** Identifies the total count of items in the connection. */
-  totalCount: Scalars['Int']['output'];
-};
-
-/** An edge in a connection. */
-export type VendorItemsEdge = {
-  __typename?: 'VendorItemsEdge';
-  /** A cursor for use in pagination. */
-  cursor: Scalars['String']['output'];
-  /** The item at the end of the edge. */
-  node: VendorItem;
-};
-
-/** Holds information about one attacker in a kill */
-export type Victim = {
-  __typename?: 'Victim';
-  /** Character information */
-  character: Character;
-  /** Guild at the time of the kill */
-  guild?: Maybe<Guild>;
-  /** Level at the time of the kill */
-  level: Scalars['Byte']['output'];
-  /** Renown rank at the time of the kill */
-  renownRank: Scalars['Byte']['output'];
-};
-
-/** Activities in a War Journal entry */
-export type WarJournalActivity = {
-  __typename?: 'WarJournalActivity';
-  activityType: Scalars['String']['output'];
-  id: Scalars['ID']['output'];
-  /** Name of the activity */
-  name: Scalars['String']['output'];
-  tasks: Array<WarJournalActivityTask>;
-  text: Scalars['String']['output'];
-  zone?: Maybe<Zone>;
-};
-
-/** Tasks in a War Journal activity */
-export type WarJournalActivityTask = {
-  __typename?: 'WarJournalActivityTask';
-  name: Scalars['String']['output'];
-  text: Scalars['String']['output'];
-};
-
-/** Entries in the War Journal */
-export type WarJournalEntry = {
-  __typename?: 'WarJournalEntry';
-  activities: Array<WarJournalActivity>;
-  area?: Maybe<ZoneArea>;
-  id: Scalars['ID']['output'];
-  influenceRewards: Array<ChapterInfluenceReward>;
-  isRvR: Scalars['Boolean']['output'];
-  locationText?: Maybe<Scalars['String']['output']>;
-  name: Scalars['String']['output'];
-  npcName?: Maybe<Scalars['String']['output']>;
-  shortTitle?: Maybe<Scalars['String']['output']>;
-  storyline: WarJournalStoryline;
-  text?: Maybe<Scalars['String']['output']>;
-  title?: Maybe<Scalars['String']['output']>;
-  zone?: Maybe<Zone>;
-};
-
-export type WarJournalEntryFilterInput = {
-  and?: InputMaybe<Array<WarJournalEntryFilterInput>>;
-  areaId?: InputMaybe<UnsignedShortOperationFilterInputType>;
-  isRvR?: InputMaybe<BooleanOperationFilterInput>;
-  /** Name of the entry */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<WarJournalEntryFilterInput>>;
-  storylineId?: InputMaybe<UnsignedIntOperationFilterInputType>;
-  zoneId?: InputMaybe<UnsignedShortOperationFilterInputType>;
-};
-
-/** Storylines in the War Journal */
-export type WarJournalStoryline = {
-  __typename?: 'WarJournalStoryline';
-  entries: Array<WarJournalEntry>;
-  id: Scalars['ID']['output'];
-  /** Name of the storyline */
-  name: Scalars['String']['output'];
-  summary: Scalars['String']['output'];
-};
-
-export type WarJournalStorylineFilterInput = {
-  and?: InputMaybe<Array<WarJournalStorylineFilterInput>>;
-  /** Name of the storyline */
-  name?: InputMaybe<StringOperationFilterInput>;
-  or?: InputMaybe<Array<WarJournalStorylineFilterInput>>;
-};
-
-export type ZandriExpeditionEvent = Event & {
-  __typename?: 'ZandriExpeditionEvent';
-  endTime?: Maybe<Scalars['DateTime']['output']>;
-  name: Scalars['String']['output'];
-  startTime: Scalars['DateTime']['output'];
-};
-
-export type Zone = SearchContent & {
-  __typename?: 'Zone';
-  /** The areas of the zone */
-  areas: Array<ZoneArea>;
-  /** Creatures in the zone */
-  creatureSpawns: Array<CreatureSpawn>;
-  /** The unique id of the zone */
-  id: Scalars['ID']['output'];
-  /** Locations in the zone */
-  locations: Array<Location>;
-  /** The map setup of the zone */
-  mapSetup?: Maybe<MapSetup>;
-  /** The name of the zone */
-  name: Scalars['String']['output'];
-  /** War journal entries in the zone */
-  warJournalEntries: Array<WarJournalEntry>;
-};
-
-export type ZoneArea = {
-  __typename?: 'ZoneArea';
-  /** Id of the zone area in the zone */
-  id: Scalars['ID']['output'];
-  /** The map setup of the zone area */
-  mapSetup?: Maybe<MapSetup>;
-  /** The name of the zone area */
-  name?: Maybe<Scalars['String']['output']>;
-  /** Zone information */
-  zone: Zone;
-};
-
-export enum ZoneType {
-  Instance = 'INSTANCE',
-  Normal = 'NORMAL',
-  Scenario = 'SCENARIO'
-}
 
 export type GetRankedLeaderboardQueryVariables = Exact<{
-  season?: InputMaybe<Scalars['ID']['input']>;
+  season?: string | number | null | undefined;
   type: RankedLeaderboardRatingType;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetRankedLeaderboardQuery = { __typename?: 'Query', rankedSeason?: { __typename?: 'RankedSeason', id: string, mainSeason: boolean, name: string, start: any, end: any, leaderboard?: { __typename?: 'LeaderboardConnection', nodes?: Array<{ __typename?: 'RankedLeaderboardCharacter', careerRank: any, rank: any, rating: any, wins: any, losses: any, draws: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetRankedLeaderboardQuery = { rankedSeason: { id: string, mainSeason: boolean, name: string, start: any, end: any, leaderboard: { nodes: Array<{ careerRank: any, rank: any, rating: any, wins: any, losses: any, draws: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetCharacterArmoryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetCharacterArmoryQuery = { __typename?: 'Query', character?: { __typename?: 'Character', items: Array<{ __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetCharacterArmoryQuery = { character: { items: Array<{ equipSlot: EquipSlot, talismans: Array<{ id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ stat: Stat, value: any }>, buffs: Array<{ id: string, description: string | null }> }>, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+              | { __typename: 'Ability', description: string | null }
+              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+             }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } }> } | null };
 
 export type GetCharacterInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetCharacterInfoQuery = { __typename?: 'Query', character?: { __typename?: 'Character', name: string, career: Career, level: any, renownRank: any, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | null };
+export type GetCharacterInfoQuery = { character: { name: string, career: Career, level: any, renownRank: any, guildMembership: { guild: { id: string, name: string } } | null } | null };
 
-export type TalismanFragment = { __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> };
+export type TalismanFragment = { id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ stat: Stat, value: any }>, buffs: Array<{ id: string, description: string | null }> };
 
-export type EquippedCharacterItemFragment = { __typename?: 'CharacterItem', equipSlot: EquipSlot, talismans: Array<{ __typename?: 'Item', id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }> }>, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
+export type EquippedCharacterItemFragment = { equipSlot: EquipSlot, talismans: Array<{ id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ stat: Stat, value: any }>, buffs: Array<{ id: string, description: string | null }> }>, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+          | { __typename: 'Ability', description: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } };
 
 export type GetCharacterLatestSkirmishesQueryVariables = Exact<{
-  characterId?: InputMaybe<Scalars['ID']['input']>;
-  where?: InputMaybe<SkirmishFilterInput>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  characterId?: string | number | null | undefined;
+  where?: SkirmishFilterInput | null | undefined;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetCharacterLatestSkirmishesQuery = { __typename?: 'Query', skirmishes?: { __typename?: 'SkirmishesConnection', nodes?: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetCharacterLatestSkirmishesQuery = { skirmishes: { nodes: Array<{ id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario: { id: string, name: string } | null, primaryZone: { id: string, name: string } | null, primaryZoneArea: { id: string, name: string | null } | null, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetLatestCharacterDeathsQueryVariables = Exact<{
-  id: Scalars['UnsignedInt']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  time?: InputMaybe<DateTimeOperationFilterInput>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  time?: DateTimeOperationFilterInput | null | undefined;
+  soloOnly?: boolean | null | undefined;
 }>;
 
 
-export type GetLatestCharacterDeathsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', id: string, name: string } | null }, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestCharacterDeathsQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zone: { id: string, name: string } | null }, scenario: { id: string, name: string } | null, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetLatestCharacterKillsQueryVariables = Exact<{
-  id: Scalars['UnsignedInt']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  time?: InputMaybe<DateTimeOperationFilterInput>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  time?: DateTimeOperationFilterInput | null | undefined;
+  soloOnly?: boolean | null | undefined;
 }>;
 
 
-export type GetLatestCharacterKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', id: string, name: string } | null }, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, attackers: Array<{ __typename?: 'Attacker', damagePercent: any }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestCharacterKillsQuery = { kills: { totalCount: number, nodes: Array<{ id: string, time: any, position: { zone: { id: string, name: string } | null }, scenario: { id: string, name: string } | null, attackers: Array<{ damagePercent: any }>, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetVendorItemsFromCreatureQueryVariables = Exact<{
-  creatureId: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  creatureId: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetVendorItemsFromCreatureQuery = { __typename?: 'Query', creature?: { __typename?: 'Creature', id: string, vendorItems?: { __typename?: 'VendorItemsConnection', nodes?: Array<{ __typename?: 'VendorItem', count: any, price: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any }, requiredItems: Array<{ __typename?: 'VendorItemRequiredItem', count: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetVendorItemsFromCreatureQuery = { creature: { id: string, vendorItems: { nodes: Array<{ count: any, price: any, item: { id: string, name: string, iconUrl: any }, requiredItems: Array<{ count: any, item: { id: string, name: string, iconUrl: any } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetGuildFeudQueryVariables = Exact<{
-  guild1Id: Scalars['ID']['input'];
-  guild2Id: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  guild1Id: string | number;
+  guild2Id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetGuildFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zoneId: any }, scenario?: { __typename?: 'Scenario', id: string } | null, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetGuildFeudQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zoneId: any }, scenario: { id: string } | null, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
-export type GuildInfoFragment = { __typename?: 'Guild', name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader?: { __typename?: 'Character', id: string, name: string, career: Career } | null, members?: { __typename?: 'MembersConnection', totalCount: number } | null };
+export type GuildInfoFragment = { name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader: { id: string, name: string, career: Career } | null, members: { totalCount: number } | null };
 
 export type GetGuildLatestSkirmishesQueryVariables = Exact<{
-  guildId?: InputMaybe<Scalars['ID']['input']>;
-  where?: InputMaybe<SkirmishFilterInput>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  guildId?: string | number | null | undefined;
+  where?: SkirmishFilterInput | null | undefined;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetGuildLatestSkirmishesQuery = { __typename?: 'Query', skirmishes?: { __typename?: 'SkirmishesConnection', nodes?: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetGuildLatestSkirmishesQuery = { skirmishes: { nodes: Array<{ id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario: { id: string, name: string } | null, primaryZone: { id: string, name: string } | null, primaryZoneArea: { id: string, name: string | null } | null, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetGuildMembersQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetGuildMembersQuery = { __typename?: 'Query', guild?: { __typename?: 'Guild', members?: { __typename?: 'MembersConnection', nodes?: Array<{ __typename?: 'GuildMember', rank: { __typename?: 'GuildRank', name: string }, character: { __typename?: 'Character', id: string, name: string, career: Career, level: any, renownRank: any } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetGuildMembersQuery = { guild: { members: { nodes: Array<{ rank: { name: string }, character: { id: string, name: string, career: Career, level: any, renownRank: any } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetLatestGuildDeathsQueryVariables = Exact<{
-  id: Scalars['UnsignedInt']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  time?: InputMaybe<DateTimeOperationFilterInput>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  time?: DateTimeOperationFilterInput | null | undefined;
+  soloOnly?: boolean | null | undefined;
 }>;
 
 
-export type GetLatestGuildDeathsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', id: string, name: string } | null }, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestGuildDeathsQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zone: { id: string, name: string } | null }, scenario: { id: string, name: string } | null, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }>, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetLatestGuildKillsQueryVariables = Exact<{
-  id: Scalars['UnsignedInt']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  time?: InputMaybe<DateTimeOperationFilterInput>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  time?: DateTimeOperationFilterInput | null | undefined;
+  soloOnly?: boolean | null | undefined;
 }>;
 
 
-export type GetLatestGuildKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', id: string, name: string } | null }, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestGuildKillsQuery = { kills: { totalCount: number, nodes: Array<{ id: string, time: any, position: { zone: { id: string, name: string } | null }, scenario: { id: string, name: string } | null, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }>, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
-export type InstanceRunScoreboardEntryFragment = { __typename?: 'InstanceRunScoreboardEntry', level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
+export type InstanceRunScoreboardEntryFragment = { level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
 
-export type InstanceEncounterRunScoreboardEntryFragment = { __typename?: 'InstanceEncounterRunScoreboardEntry', level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
+export type InstanceEncounterRunScoreboardEntryFragment = { level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
 
 export type GetInstanceRunsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<InstanceRunFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  where?: InstanceRunFilterInput | null | undefined;
 }>;
 
 
-export type GetInstanceRunsQuery = { __typename?: 'Query', instanceRuns?: { __typename?: 'InstanceRunsConnection', totalCount: number, averageDuration: number, averageDeaths: number, nodes?: Array<{ __typename?: 'InstanceRun', id: string, instanceId: string, start: any, end: any, completed: boolean, instance: { __typename?: 'Instance', id: string, name: string }, scoreboardEntries: Array<{ __typename?: 'InstanceRunScoreboardEntry', itemRating: any, deaths: any, archetype: Archetype, damage: any, healing: any }>, encounters: Array<{ __typename?: 'InstanceEncounterRun', encounterId: string }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetInstanceRunsQuery = { instanceRuns: { totalCount: number, averageDuration: any, averageDeaths: number, nodes: Array<{ id: string, instanceId: string, start: any, end: any, completed: boolean, instance: { id: string, name: string }, scoreboardEntries: Array<{ itemRating: any, deaths: any, archetype: Archetype, damage: any, healing: any }>, encounters: Array<{ encounterId: string }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetInstanceEncounterStatisticsQueryVariables = Exact<{
-  where?: InputMaybe<InstanceEncounterRunFilterInput>;
+  where?: InstanceEncounterRunFilterInput | null | undefined;
 }>;
 
 
-export type GetInstanceEncounterStatisticsQuery = { __typename?: 'Query', instanceEncounterRuns?: { __typename?: 'InstanceEncounterRunsConnection', medianDuration: number, averageDuration: number, medianDeaths: number, averageDeaths: number } | null };
+export type GetInstanceEncounterStatisticsQuery = { instanceEncounterRuns: { medianDuration: any, averageDuration: any, medianDeaths: number, averageDeaths: number } | null };
 
-export type ItemListEntryFragment = { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> };
+export type ItemListEntryFragment = { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+        | { __typename: 'Ability', description: string | null }
+        | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+       }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> };
 
 export type GetItemPopupInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetItemPopupInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } | null };
+export type GetItemPopupInfoQuery = { item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+          | { __typename: 'Ability', description: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } | null };
 
 export type GetItemRewardedFromQuestsQueryVariables = Exact<{
-  itemId: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  itemId: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetItemRewardedFromQuestsQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', nodes?: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, type: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any } }>, rewardsGiven: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetItemRewardedFromQuestsQuery = { item: { id: string, rewardedFromQuests: { nodes: Array<{ id: string, name: string, repeatableType: QuestRepeatableType, type: { isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ count: any, item: { id: string, name: string, iconUrl: any } }>, rewardsGiven: Array<{ count: any, item: { id: string, name: string, iconUrl: any } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetItemUsedToPurchaseQueryVariables = Exact<{
-  itemId: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  usableByCareer?: InputMaybe<Career>;
+  itemId: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  usableByCareer?: Career | null | undefined;
 }>;
 
 
-export type GetItemUsedToPurchaseQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', nodes?: Array<{ __typename?: 'VendorItem', count: any, price: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any }, requiredItems: Array<{ __typename?: 'VendorItemRequiredItem', count: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any } }>, creatures: Array<{ __typename?: 'Creature', id: string, name: string, realm?: Realm | null, spawns: Array<{ __typename?: 'CreatureSpawn', zone: { __typename?: 'Zone', name: string } }> }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetItemUsedToPurchaseQuery = { item: { id: string, usedToPurchase: { nodes: Array<{ count: any, price: any, item: { id: string, name: string, iconUrl: any }, requiredItems: Array<{ count: any, item: { id: string, name: string, iconUrl: any } }>, creatures: Array<{ id: string, name: string, realm: Realm | null, spawns: Array<{ zone: { name: string } }> }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetItemSoldByVendorsQueryVariables = Exact<{
-  itemId: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  itemId: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetItemSoldByVendorsQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, soldByVendors?: { __typename?: 'SoldByVendorsConnection', nodes?: Array<{ __typename?: 'VendorItem', price: any, requiredItems: Array<{ __typename?: 'VendorItemRequiredItem', count: any, item: { __typename?: 'Item', id: string, name: string, iconUrl: any } }>, creatures: Array<{ __typename?: 'Creature', id: string, name: string, realm?: Realm | null, spawns: Array<{ __typename?: 'CreatureSpawn', zone: { __typename?: 'Zone', name: string } }> }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetItemSoldByVendorsQuery = { item: { id: string, soldByVendors: { nodes: Array<{ price: any, requiredItems: Array<{ count: any, item: { id: string, name: string, iconUrl: any } }>, creatures: Array<{ id: string, name: string, realm: Realm | null, spawns: Array<{ zone: { name: string } }> }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
-export type AttackerFragment = { __typename?: 'Attacker', damagePercent: any, level: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
+export type AttackerFragment = { damagePercent: any, level: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
 
-export type KillDamageFragment = { __typename?: 'KillDamage', attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, attacker?: { __typename?: 'Character', id: string } | null, ability?: { __typename?: 'AbilityInfo', id: string, name?: string | null, iconUrl: string } | null };
+export type KillDamageFragment = { attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, attacker: { id: string } | null, ability: { id: string, name: string | null, iconUrl: string } | null };
 
 export type GetLatestKillsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetLatestKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zone?: { __typename?: 'Zone', id: string, name: string } | null }, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestKillsQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zone: { id: string, name: string } | null }, scenario: { id: string, name: string } | null, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetMonthlyGuildLeaderboardQueryVariables = Exact<{
-  year: Scalars['Int']['input'];
-  month: Scalars['Int']['input'];
+  year: number;
+  month: number;
 }>;
 
 
-export type GetMonthlyGuildLeaderboardQuery = { __typename?: 'Query', monthlyGuildKillLeaderboard: Array<{ __typename?: 'KillGuildLeaderboardEntry', rank: number, kills: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> };
+export type GetMonthlyGuildLeaderboardQuery = { monthlyGuildKillLeaderboard: Array<{ rank: number, kills: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> };
 
 export type GetMonthlyLeaderboardQueryVariables = Exact<{
-  year: Scalars['Int']['input'];
-  month: Scalars['Int']['input'];
+  year: number;
+  month: number;
 }>;
 
 
-export type GetMonthlyLeaderboardQuery = { __typename?: 'Query', monthlyKillLeaderboard: Array<{ __typename?: 'KillLeaderboardEntry', rank: number, kills: number, character: { __typename?: 'Character', id: string, name: string, career: Career, level: any, renownRank: any, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } }> };
+export type GetMonthlyLeaderboardQuery = { monthlyKillLeaderboard: Array<{ rank: number, kills: number, character: { id: string, name: string, career: Career, level: any, renownRank: any, guildMembership: { guild: { id: string, name: string } } | null } }> };
 
 export type GetPlayerFeudQueryVariables = Exact<{
-  player1Id: Scalars['ID']['input'];
-  player2Id: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  player1Id: string | number;
+  player2Id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetPlayerFeudQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zoneId: any }, scenario?: { __typename?: 'Scenario', id: string } | null, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetPlayerFeudQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zoneId: any }, scenario: { id: string } | null, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetWeeklyLeaderboardQueryVariables = Exact<{
-  year: Scalars['Int']['input'];
-  week: Scalars['Int']['input'];
+  year: number;
+  week: number;
 }>;
 
 
-export type GetWeeklyLeaderboardQuery = { __typename?: 'Query', weeklyKillLeaderboard: Array<{ __typename?: 'KillLeaderboardEntry', rank: number, kills: number, character: { __typename?: 'Character', id: string, name: string, career: Career, level: any, renownRank: any, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } }> };
+export type GetWeeklyLeaderboardQuery = { weeklyKillLeaderboard: Array<{ rank: number, kills: number, character: { id: string, name: string, career: Career, level: any, renownRank: any, guildMembership: { guild: { id: string, name: string } } | null } }> };
 
 export type GetWeeklyGuildLeaderboardQueryVariables = Exact<{
-  year: Scalars['Int']['input'];
-  week: Scalars['Int']['input'];
+  year: number;
+  week: number;
 }>;
 
 
-export type GetWeeklyGuildLeaderboardQuery = { __typename?: 'Query', weeklyGuildKillLeaderboard: Array<{ __typename?: 'KillGuildLeaderboardEntry', rank: number, kills: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> };
+export type GetWeeklyGuildLeaderboardQuery = { weeklyGuildKillLeaderboard: Array<{ rank: number, kills: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> };
 
 export type GetScenarioCountQueryVariables = Exact<{
-  characterId?: InputMaybe<Scalars['ID']['input']>;
-  guildId?: InputMaybe<Scalars['ID']['input']>;
-  queueType?: InputMaybe<ScenarioQueueType>;
-  premadeOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  wins?: InputMaybe<Scalars['Boolean']['input']>;
+  where?: ScenarioRecordFilterInput | null | undefined;
 }>;
 
 
-export type GetScenarioCountQuery = { __typename?: 'Query', scenarios?: { __typename?: 'ScenariosConnection', totalCount: number } | null };
+export type GetScenarioCountQuery = { scenarios: { totalCount: number } | null };
 
 export type GetScenarioHeatmapQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']['input']>;
+  id?: string | number | null | undefined;
 }>;
 
 
-export type GetScenarioHeatmapQuery = { __typename?: 'Query', killsHeatmap: Array<{ __typename?: 'KillsHeatmapPoint', x: any, y: any, count: any }> };
+export type GetScenarioHeatmapQuery = { killsHeatmap: Array<{ x: any, y: any, count: any }> };
 
 export type GetScenarioKillsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  filter?: InputMaybe<KillFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  filter?: KillFilterInput | null | undefined;
 }>;
 
 
-export type GetScenarioKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zoneId: any }, scenario?: { __typename?: 'Scenario', id: string } | null, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetScenarioKillsQuery = { kills: { totalCount: number, nodes: Array<{ id: string, time: any, position: { zoneId: any }, scenario: { id: string } | null, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }>, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetScenarioListQueryVariables = Exact<{
-  characterId?: InputMaybe<Scalars['ID']['input']>;
-  guildId?: InputMaybe<Scalars['ID']['input']>;
-  queueType?: InputMaybe<ScenarioQueueType>;
-  premadeOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  where?: InputMaybe<ScenarioRecordFilterInput>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  where?: ScenarioRecordFilterInput | null | undefined;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetScenarioListQuery = { __typename?: 'Query', scenarios?: { __typename?: 'ScenariosConnection', totalCount: number, nodes?: Array<{ __typename?: 'ScenarioRecord', id: string, startTime: any, endTime: any, winner?: any | null, points: Array<any | null>, wasSurrender: boolean, tier: any, scenario: { __typename?: 'Scenario', id: string, name: string } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetScenarioListQuery = { scenarios: { totalCount: number, nodes: Array<{ id: string, startTime: any, endTime: any, winner: any, points: Array<any>, wasSurrender: boolean, tier: any, scenario: { id: string, name: string } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetScenarioSkirmishesQueryVariables = Exact<{
-  instanceId?: InputMaybe<Scalars['UUID']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  instanceId?: string | number | null | undefined;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type GetScenarioSkirmishesQuery = { __typename?: 'Query', skirmishes?: { __typename?: 'SkirmishesConnection', nodes?: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetScenarioSkirmishesQuery = { skirmishes: { nodes: Array<{ id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario: { id: string, name: string } | null, primaryZone: { id: string, name: string } | null, primaryZoneArea: { id: string, name: string | null } | null, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetLatestSkirmishesQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<SkirmishFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  where?: SkirmishFilterInput | null | undefined;
 }>;
 
 
-export type GetLatestSkirmishesQuery = { __typename?: 'Query', skirmishes?: { __typename?: 'SkirmishesConnection', nodes?: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetLatestSkirmishesQuery = { skirmishes: { nodes: Array<{ id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario: { id: string, name: string } | null, primaryZone: { id: string, name: string } | null, primaryZoneArea: { id: string, name: string | null } | null, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetSkirmishDamageQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetSkirmishDamageQuery = { __typename?: 'Query', skirmish?: { __typename?: 'Skirmish', id: string, killDamage: Array<{ __typename?: 'KillDamage', attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, ability?: { __typename?: 'AbilityInfo', id: string, name?: string | null, iconUrl: string } | null }> } | null };
+export type GetSkirmishDamageQuery = { skirmish: { id: string, killDamage: Array<{ attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, ability: { id: string, name: string | null, iconUrl: string } | null }> } | null };
 
 export type GetSkirmishDamageByCharacterQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  characterId: Scalars['ID']['input'];
+  id: string | number;
+  characterId: string | number;
 }>;
 
 
-export type GetSkirmishDamageByCharacterQuery = { __typename?: 'Query', character?: { __typename?: 'Character', name: string, renownRank: any, level: any, career: Career, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | null, skirmish?: { __typename?: 'Skirmish', id: string, killDamageByCharacter: Array<{ __typename?: 'KillDamage', attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, ability?: { __typename?: 'AbilityInfo', id: string, name?: string | null, iconUrl: string } | null }> } | null };
+export type GetSkirmishDamageByCharacterQuery = { character: { name: string, renownRank: any, level: any, career: Career, guildMembership: { guild: { id: string, name: string } } | null } | null, skirmish: { id: string, killDamageByCharacter: Array<{ attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, ability: { id: string, name: string | null, iconUrl: string } | null }> } | null };
 
 export type GetSkirmishKillsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
-  filter?: InputMaybe<KillFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  soloOnly?: boolean | null | undefined;
+  filter?: KillFilterInput | null | undefined;
 }>;
 
 
-export type GetSkirmishKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', totalCount: number, nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zoneId: any }, scenario?: { __typename?: 'Scenario', id: string } | null, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }>, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetSkirmishKillsQuery = { kills: { totalCount: number, nodes: Array<{ id: string, time: any, position: { zoneId: any }, scenario: { id: string } | null, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }>, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetSkirmishScoreboardQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  order?: InputMaybe<Array<SkirmishScoreboardEntrySortInput> | SkirmishScoreboardEntrySortInput>;
+  id: string | number;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  order?: Array<SkirmishScoreboardEntrySortInput> | SkirmishScoreboardEntrySortInput | null | undefined;
 }>;
 
 
-export type GetSkirmishScoreboardQuery = { __typename?: 'Query', skirmish?: { __typename?: 'Skirmish', id: string, scoreboardEntries?: { __typename?: 'ScoreboardEntriesConnection', nodes?: Array<{ __typename?: 'SkirmishScoreboardEntry', realm: Realm, kills: any, killsSolo: any, deaths: any, deathBlows: any, damage: any, damageReceived: any, healing: any, healingReceived: any, protection: any, protectionReceived: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, resurrectionsDone: any, level: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetSkirmishScoreboardQuery = { skirmish: { id: string, scoreboardEntries: { nodes: Array<{ realm: Realm, kills: any, killsSolo: any, deaths: any, deathBlows: any, damage: any, damageReceived: any, healing: any, healingReceived: any, protection: any, protectionReceived: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, resurrectionsDone: any, level: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetSkirmishTopPlayerQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
-  order?: InputMaybe<Array<SkirmishScoreboardEntrySortInput> | SkirmishScoreboardEntrySortInput>;
+  id: string | number;
+  order?: Array<SkirmishScoreboardEntrySortInput> | SkirmishScoreboardEntrySortInput | null | undefined;
 }>;
 
 
-export type GetSkirmishTopPlayerQuery = { __typename?: 'Query', skirmish?: { __typename?: 'Skirmish', id: string, scoreboardEntries?: { __typename?: 'ScoreboardEntriesConnection', nodes?: Array<{ __typename?: 'SkirmishScoreboardEntry', realm: Realm, damage: any, healing: any, protection: any, deathBlows: any, level: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null } | null } | null };
+export type GetSkirmishTopPlayerQuery = { skirmish: { id: string, scoreboardEntries: { nodes: Array<{ realm: Realm, damage: any, healing: any, protection: any, deathBlows: any, level: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> | null } | null } | null };
 
 export type GetTopSkirmishesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetTopSkirmishesQuery = { __typename?: 'Query', topSkirmishes: Array<{ __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, primaryZoneArea?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> };
+export type GetTopSkirmishesQuery = { topSkirmishes: Array<{ id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, scenario: { id: string, name: string } | null, primaryZone: { id: string, name: string } | null, primaryZoneArea: { id: string, name: string | null } | null, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> }> };
 
-export type ChapterInfluenceRewardFragment = { __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } };
+export type ChapterInfluenceRewardFragment = { count: any, tier: any, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+          | { __typename: 'Ability', description: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } };
 
 export type GetCreatureQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetCreatureQuery = { __typename?: 'Query', creature?: { __typename?: 'Creature', id: string, name: string, realm?: Realm | null, spawns: Array<{ __typename?: 'CreatureSpawn', id: string, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, type: { __typename?: 'QuestTypeFlagsFlags', isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }>, vendorItems?: { __typename?: 'VendorItemsConnection', totalCount: number } | null } | null };
+export type GetCreatureQuery = { creature: { id: string, name: string, realm: Realm | null, spawns: Array<{ id: string, position: { x: any, y: any, zone: { id: string, name: string } | null, mapSetup: { nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ id: string, name: string, repeatableType: QuestRepeatableType, type: { isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }>, vendorItems: { totalCount: number } | null } | null };
 
 export type GetCreaturesQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<CreatureFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  where?: CreatureFilterInput | null | undefined;
 }>;
 
 
-export type GetCreaturesQuery = { __typename?: 'Query', creatures?: { __typename?: 'CreaturesConnection', nodes?: Array<{ __typename?: 'Creature', id: string, name: string, realm?: Realm | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetCreaturesQuery = { creatures: { nodes: Array<{ id: string, name: string, realm: Realm | null }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetGameObjectQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetGameObjectQuery = { __typename?: 'Query', gameObject?: { __typename?: 'GameObject', id: string, name: string, modelName?: string | null, spawns: Array<{ __typename?: 'GameObjectSpawn', id: string, position: { __typename?: 'Position', x: any, y: any, zone?: { __typename?: 'Zone', id: string, name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, type: { __typename?: 'QuestTypeFlagsFlags', isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }> } | null };
+export type GetGameObjectQuery = { gameObject: { id: string, name: string, modelName: string | null, spawns: Array<{ id: string, position: { x: any, y: any, zone: { id: string, name: string } | null, mapSetup: { nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null } }>, questsStarter: Array<{ id: string, name: string, repeatableType: QuestRepeatableType, type: { isEpic: boolean, isGroup: boolean, isNone: boolean, isPlayerKill: boolean, isRvR: boolean, isTome: boolean, isTravel: boolean } }> } | null };
 
 export type GetGuildInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetGuildInfoQuery = { __typename?: 'Query', guild?: { __typename?: 'Guild', name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader?: { __typename?: 'Character', id: string, name: string, career: Career } | null, members?: { __typename?: 'MembersConnection', totalCount: number, nodes?: Array<{ __typename?: 'GuildMember', rank: { __typename?: 'GuildRank', name: string }, character: { __typename?: 'Character', id: string, name: string, career: Career } }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null } | null };
+export type GetGuildInfoQuery = { guild: { name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader: { id: string, name: string, career: Career } | null, members: { totalCount: number, nodes: Array<{ rank: { name: string }, character: { id: string, name: string, career: Career } }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null } | null };
 
 export type GetGuildFeudInfoQueryVariables = Exact<{
-  guildId1: Scalars['ID']['input'];
-  guildInt1: Scalars['UnsignedInt']['input'];
-  guildId2: Scalars['ID']['input'];
-  guildInt2: Scalars['UnsignedInt']['input'];
+  guildId1: string | number;
+  guildId2: string | number;
 }>;
 
 
-export type GetGuildFeudInfoQuery = { __typename?: 'Query', guild1?: { __typename?: 'Guild', name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader?: { __typename?: 'Character', id: string, name: string, career: Career } | null, members?: { __typename?: 'MembersConnection', totalCount: number } | null } | null, guild2?: { __typename?: 'Guild', name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader?: { __typename?: 'Character', id: string, name: string, career: Career } | null, members?: { __typename?: 'MembersConnection', totalCount: number } | null } | null, guild1kills?: { __typename?: 'KillsConnection', totalCount: number } | null, guild2kills?: { __typename?: 'KillsConnection', totalCount: number } | null };
+export type GetGuildFeudInfoQuery = { guild1: { name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader: { id: string, name: string, career: Career } | null, members: { totalCount: number } | null } | null, guild2: { name: string, description: string, briefDescription: string, level: any, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number }, leader: { id: string, name: string, career: Career } | null, members: { totalCount: number } | null } | null, guild1kills: { totalCount: number } | null, guild2kills: { totalCount: number } | null };
 
 export type GetInstanceEncounterRunQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetInstanceEncounterRunQuery = { __typename?: 'Query', instanceEncounterRun?: { __typename?: 'InstanceEncounterRun', id: string, start: any, end: any, scoreboardEntries: Array<{ __typename?: 'InstanceEncounterRunScoreboardEntry', level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, encounter?: { __typename?: 'InstanceEncounter', id: string, name: string } | null } | null };
+export type GetInstanceEncounterRunQuery = { instanceEncounterRun: { id: string, start: any, end: any, scoreboardEntries: Array<{ level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, encounter: { id: string, name: string } | null } | null };
 
 export type InstanceRunQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type InstanceRunQuery = { __typename?: 'Query', instanceRun?: { __typename?: 'InstanceRun', id: string, start: any, end: any, instance: { __typename?: 'Instance', id: string, name: string }, scoreboardEntries: Array<{ __typename?: 'InstanceRunScoreboardEntry', level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, encounters: Array<{ __typename?: 'InstanceEncounterRun', id: string, start: any, end: any, completed: boolean, instanceId: string, encounterId: string, scoreboardEntries: Array<{ __typename?: 'InstanceEncounterRunScoreboardEntry', itemRating: any, archetype: Archetype, deaths: any, damage: any, healing: any }>, encounter?: { __typename?: 'InstanceEncounter', name: string } | null }> } | null };
+export type InstanceRunQuery = { instanceRun: { id: string, start: any, end: any, instance: { id: string, name: string }, scoreboardEntries: Array<{ level: any, renownRank: any, archetype: Archetype, itemRating: any, deaths: any, damage: any, killDamage: any, healing: any, healingSelf: any, healingOthers: any, protection: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, encounters: Array<{ id: string, start: any, end: any, completed: boolean, instanceId: string, encounterId: string, scoreboardEntries: Array<{ itemRating: any, archetype: Archetype, deaths: any, damage: any, healing: any }>, encounter: { name: string } | null }> } | null };
 
 export type InstanceEncountersQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type InstanceEncountersQuery = { __typename?: 'Query', instance?: { __typename?: 'Instance', id: string, name: string, encounters?: Array<{ __typename?: 'InstanceEncounter', id: string, name: string } | null> | null } | null };
+export type InstanceEncountersQuery = { instance: { id: string, name: string, encounters: Array<{ id: string, name: string } | null> | null } | null };
 
 export type GetInstancesQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<InstanceFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  where?: InstanceFilterInput | null | undefined;
 }>;
 
 
-export type GetInstancesQuery = { __typename?: 'Query', instances?: { __typename?: 'InstancesConnection', nodes?: Array<{ __typename?: 'Instance', id: string, name: string, encounters?: Array<{ __typename?: 'InstanceEncounter', id: string } | null> | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetInstancesQuery = { instances: { nodes: Array<{ id: string, name: string, encounters: Array<{ id: string } | null> | null }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetItemInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetItemInfoQuery = { __typename?: 'Query', item?: { __typename?: 'Item', id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }>, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string, name: string, iconUrl: any }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, soldByVendors?: { __typename?: 'SoldByVendorsConnection', totalCount: number } | null, usedToPurchase?: { __typename?: 'UsedToPurchaseConnection', totalCount: number } | null, rewardedFromQuests?: { __typename?: 'RewardedFromQuestsConnection', totalCount: number } | null } | null };
+export type GetItemInfoQuery = { item: { id: string, name: string, description: string, careerRestriction: Array<Career>, rarity: ItemRarity, itemLevel: any, iconUrl: any, type: ItemType, levelRequirement: any, renownRankRequirement: any, slot: EquipSlot, armor: any, talismanSlots: any, speed: any, dps: any, stats: Array<{ stat: Stat, value: any }>, itemSet: { id: string, name: string, items: Array<{ id: string, name: string, iconUrl: any }>, bonuses: Array<{ itemsRequired: any, bonus:
+          | { __typename: 'Ability', description: string | null }
+          | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+         }> } | null, buffs: Array<{ id: string, description: string | null }>, soldByVendors: { totalCount: number } | null, usedToPurchase: { totalCount: number } | null, rewardedFromQuests: { totalCount: number } | null } | null };
 
 export type SearchItemsQueryVariables = Exact<{
-  query?: InputMaybe<ItemFilterInput>;
-  usableByCareer?: InputMaybe<Career>;
-  hasStats?: InputMaybe<Array<Stat> | Stat>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  query?: ItemFilterInput | null | undefined;
+  usableByCareer?: Career | null | undefined;
+  hasStats?: Array<Stat> | Stat | null | undefined;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type SearchItemsQuery = { __typename?: 'Query', items?: { __typename?: 'ItemsConnection', nodes?: Array<{ __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchItemsQuery = { items: { nodes: Array<{ id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+            | { __typename: 'Ability', description: string | null }
+            | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+           }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetKillQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetKillQuery = { __typename?: 'Query', kill?: { __typename?: 'Kill', instanceId?: string | null, time: any, scenario?: { __typename?: 'Scenario', id: string, name: string } | null, skirmish?: { __typename?: 'Skirmish', id: string } | null, position: { __typename?: 'Position', zoneId: any, x: any, y: any, zone?: { __typename?: 'Zone', name: string } | null, mapSetup?: { __typename?: 'MapSetup', nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null }, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }, attackers: Array<{ __typename?: 'Attacker', damagePercent: any, level: any, renownRank: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, damage: Array<{ __typename?: 'KillDamage', attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, attacker?: { __typename?: 'Character', id: string } | null, ability?: { __typename?: 'AbilityInfo', id: string, name?: string | null, iconUrl: string } | null }>, deathblow?: { __typename?: 'Character', id: string } | null } | null };
+export type GetKillQuery = { kill: { instanceId: string | null, time: any, scenario: { id: string, name: string } | null, skirmish: { id: string } | null, position: { zoneId: any, x: any, y: any, zone: { name: string } | null, mapSetup: { nwCornerX: number, nwCornerY: number, seCornerX: number, seCornerY: number } | null }, victim: { level: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }, attackers: Array<{ damagePercent: any, level: any, renownRank: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }>, damage: Array<{ attackerType: KillDamageAttackerType, damageType: KillDamageSourceType, damageAmount: any, attacker: { id: string } | null, ability: { id: string, name: string | null, iconUrl: string } | null }>, deathblow: { id: string } | null } | null };
 
 export type GetKillsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  from?: InputMaybe<Scalars['DateTime']['input']>;
-  to?: InputMaybe<Scalars['DateTime']['input']>;
-  soloOnly?: InputMaybe<Scalars['Boolean']['input']>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  from?: any;
+  to?: any;
+  soloOnly?: boolean | null | undefined;
 }>;
 
 
-export type GetKillsQuery = { __typename?: 'Query', kills?: { __typename?: 'KillsConnection', nodes?: Array<{ __typename?: 'Kill', id: string, time: any, position: { __typename?: 'Position', zoneId: any }, scenario?: { __typename?: 'Scenario', id: string } | null, victim: { __typename?: 'Victim', level: any, renownRank: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }, attackers: Array<{ __typename?: 'Attacker', level: any, renownRank: any, damagePercent: any, character: { __typename?: 'Character', id: string, career: Career, name: string }, guild?: { __typename?: 'Guild', id: string, name: string } | null }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetKillsQuery = { kills: { nodes: Array<{ id: string, time: any, position: { zoneId: any }, scenario: { id: string } | null, victim: { level: any, renownRank: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }, attackers: Array<{ level: any, renownRank: any, damagePercent: any, character: { id: string, career: Career, name: string }, guild: { id: string, name: string } | null }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetPlayerFeudInfoQueryVariables = Exact<{
-  playerId1: Scalars['ID']['input'];
-  playerIntId1: Scalars['UnsignedInt']['input'];
-  playerId2: Scalars['ID']['input'];
-  playerIntId2: Scalars['UnsignedInt']['input'];
+  playerId1: string | number;
+  playerId2: string | number;
 }>;
 
 
-export type GetPlayerFeudInfoQuery = { __typename?: 'Query', player1?: { __typename?: 'Character', name: string, career: Career, level: any, renownRank: any, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | null, player2?: { __typename?: 'Character', name: string, career: Career, level: any, renownRank: any, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | null, player1kills?: { __typename?: 'KillsConnection', totalCount: number } | null, player2kills?: { __typename?: 'KillsConnection', totalCount: number } | null };
+export type GetPlayerFeudInfoQuery = { player1: { name: string, career: Career, level: any, renownRank: any, guildMembership: { guild: { id: string, name: string } } | null } | null, player2: { name: string, career: Career, level: any, renownRank: any, guildMembership: { guild: { id: string, name: string } } | null } | null, player1kills: { totalCount: number } | null, player2kills: { totalCount: number } | null };
 
 export type GetQuestInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetQuestInfoQuery = { __typename?: 'Query', quest?: { __typename?: 'Quest', id: string, name: string, xp: any, gold: any, choiceCount: any, description?: string | null, journalEntry?: string | null, raceRestriction: Array<Race>, careerRestriction: Array<Career>, minLevel: any, maxLevel: any, minRenown: any, maxRenown: any, type: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string } }>, rewardsGiven: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string } }>, objectives: Array<{ __typename?: 'QuestObjective', description: string, count: any }>, starterCreatures: Array<{ __typename?: 'Creature', id: string, name: string, realm?: Realm | null }> } | null };
+export type GetQuestInfoQuery = { quest: { id: string, name: string, xp: any, gold: any, choiceCount: any, description: string | null, journalEntry: string | null, raceRestriction: Array<Race>, careerRestriction: Array<Career>, minLevel: any, maxLevel: any, minRenown: any, maxRenown: any, type: { isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ count: any, item: { id: string, iconUrl: any, name: string } }>, rewardsGiven: Array<{ count: any, item: { id: string, iconUrl: any, name: string } }>, objectives: Array<{ description: string, count: any }>, starterCreatures: Array<{ id: string, name: string, realm: Realm | null }> } | null };
 
 export type GetQuestsQueryVariables = Exact<{
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
-  where?: InputMaybe<QuestFilterInput>;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
+  where?: QuestFilterInput | null | undefined;
 }>;
 
 
-export type GetQuestsQuery = { __typename?: 'Query', quests?: { __typename?: 'QuestsConnection', nodes?: Array<{ __typename?: 'Quest', id: string, name: string, repeatableType: QuestRepeatableType, xp: any, gold: any, choiceCount: any, type: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string } }>, rewardsGiven: Array<{ __typename?: 'QuestReward', count: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string } }> }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type GetQuestsQuery = { quests: { nodes: Array<{ id: string, name: string, repeatableType: QuestRepeatableType, xp: any, gold: any, choiceCount: any, type: { isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean }, rewardsChoice: Array<{ count: any, item: { id: string, iconUrl: any, name: string } }>, rewardsGiven: Array<{ count: any, item: { id: string, iconUrl: any, name: string } }> }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetRankedLeaderboardSeasonsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetRankedLeaderboardSeasonsQuery = { __typename?: 'Query', rankedSeasons: Array<{ __typename?: 'RankedSeason', id: string, name: string, start: any, end: any, mainSeason: boolean }> };
+export type GetRankedLeaderboardSeasonsQuery = { rankedSeasons: Array<{ id: string, name: string, start: any, end: any, mainSeason: boolean }> };
 
-export type ScenarioScoreboardEntryFragment = { __typename?: 'ScenarioScoreboardEntry', team: any, level: any, renownRank: any, quitter: boolean, protection: any, kills: any, deathBlows: any, deaths: any, damage: any, healing: any, objectiveScore: any, killsSolo: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
+export type ScenarioScoreboardEntryFragment = { team: any, level: any, renownRank: any, quitter: boolean, protection: any, kills: any, deathBlows: any, deaths: any, damage: any, healing: any, objectiveScore: any, killsSolo: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null };
 
 export type GetScenarioInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetScenarioInfoQuery = { __typename?: 'Query', scenario?: { __typename?: 'ScenarioRecord', id: string, tier: any, startTime: any, endTime: any, winner?: any | null, points: Array<any | null>, queueType: any, wasSurrender: boolean, scenario: { __typename?: 'Scenario', id: string, name: string, zone: { __typename?: 'Zone', id: string } }, scoreboardEntries: Array<{ __typename?: 'ScenarioScoreboardEntry', team: any, level: any, renownRank: any, quitter: boolean, protection: any, kills: any, deathBlows: any, deaths: any, damage: any, healing: any, objectiveScore: any, killsSolo: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { __typename?: 'Character', id: string, name: string, career: Career }, guild?: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> } | null };
+export type GetScenarioInfoQuery = { scenario: { id: string, tier: any, startTime: any, endTime: any, winner: any, points: Array<any>, queueType: any, wasSurrender: boolean, scenario: { id: string, name: string, zone: { id: string } }, scoreboardEntries: Array<{ team: any, level: any, renownRank: any, quitter: boolean, protection: any, kills: any, deathBlows: any, deaths: any, damage: any, healing: any, objectiveScore: any, killsSolo: any, killDamage: any, healingSelf: any, healingOthers: any, protectionSelf: any, protectionOthers: any, damageReceived: any, resurrectionsDone: any, healingReceived: any, protectionReceived: any, character: { id: string, name: string, career: Career }, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } | null }> } | null };
 
 export type SearchQueryVariables = Exact<{
-  query: Scalars['String']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  query: string;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type SearchQuery = { __typename?: 'Query', search?: { __typename?: 'SearchConnection', nodes?: Array<{ __typename: 'Ability', id: string, name?: string | null } | { __typename: 'AbilityInfo', id: string, name?: string | null } | { __typename: 'BattlefieldObjective', id: string, name: string } | { __typename: 'Chapter', id: string, name?: string | null } | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership?: { __typename?: 'GuildMember', guild: { __typename?: 'Guild', id: string, name: string } } | null } | { __typename: 'Creature', id: string, name: string } | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader?: { __typename?: 'Character', id: string, name: string } | null, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number }, members?: { __typename?: 'MembersConnection', totalCount: number } | null } | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet?: { __typename?: 'ItemSet', id: string, name: string } | null } | { __typename: 'ItemSet', id: string, name: string } | { __typename: 'Keep', id: string, name: string } | { __typename: 'LiveEvent', id: string, name: string } | { __typename: 'PublicQuest', id: string, name: string } | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry?: string | null, id: string, name: string, questDescription?: string | null, questType: { __typename?: 'QuestTypeFlagsFlags', isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } } | { __typename: 'Scenario', id: string, name: string } | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string } | { __typename: 'Zone', id: string, name: string }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchQuery = { search: { nodes: Array<
+      | { __typename: 'Ability', id: string, name: string | null }
+      | { __typename: 'AbilityInfo', id: string, name: string | null }
+      | { __typename: 'BattlefieldObjective', id: string, name: string }
+      | { __typename: 'Chapter', id: string, name: string | null }
+      | { __typename: 'Character', level: any, career: Career, renownRank: any, id: string, name: string, guildMembership: { guild: { id: string, name: string } } | null }
+      | { __typename: 'Creature', id: string, name: string }
+      | { __typename: 'Guild', level: any, realm: Realm, id: string, name: string, leader: { id: string, name: string } | null, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number }, members: { totalCount: number } | null }
+      | { __typename: 'Item', iconUrl: any, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, itemLevel: any, id: string, name: string, itemSet: { id: string, name: string } | null }
+      | { __typename: 'ItemSet', id: string, name: string }
+      | { __typename: 'Keep', id: string, name: string }
+      | { __typename: 'LiveEvent', id: string, name: string }
+      | { __typename: 'PublicQuest', id: string, name: string }
+      | { __typename: 'Quest', repeatableType: QuestRepeatableType, minLevel: any, xp: any, gold: any, journalEntry: string | null, id: string, name: string, questDescription: string | null, questType: { isGroup: boolean, isTravel: boolean, isTome: boolean, isRvR: boolean, isPlayerKill: boolean, isEpic: boolean } }
+      | { __typename: 'Scenario', id: string, name: string }
+      | { __typename: 'TomeOfKnowledgeEntry', id: string, name: string }
+      | { __typename: 'Zone', id: string, name: string }
+    > | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type SearchGuildsQueryVariables = Exact<{
-  query: Scalars['String']['input'];
-  first?: InputMaybe<Scalars['Int']['input']>;
-  last?: InputMaybe<Scalars['Int']['input']>;
-  before?: InputMaybe<Scalars['String']['input']>;
-  after?: InputMaybe<Scalars['String']['input']>;
+  query: string;
+  first?: number | null | undefined;
+  last?: number | null | undefined;
+  before?: string | null | undefined;
+  after?: string | null | undefined;
 }>;
 
 
-export type SearchGuildsQuery = { __typename?: 'Query', guilds?: { __typename?: 'GuildsConnection', nodes?: Array<{ __typename?: 'Guild', id: string, name: string, level: any, leader?: { __typename?: 'Character', id: string, level: any, name: string, renownRank: any } | null, members?: { __typename?: 'MembersConnection', totalCount: number } | null }> | null, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null, hasPreviousPage: boolean, startCursor?: string | null } } | null };
+export type SearchGuildsQuery = { guilds: { nodes: Array<{ id: string, name: string, level: any, leader: { id: string, level: any, name: string, renownRank: any } | null, members: { totalCount: number } | null }> | null, pageInfo: { hasNextPage: boolean, endCursor: string | null, hasPreviousPage: boolean, startCursor: string | null } } | null };
 
 export type GetSkirmishInfoQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetSkirmishInfoQuery = { __typename?: 'Query', skirmish?: { __typename?: 'Skirmish', id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, instance?: { __typename?: 'ScenarioRecord', id: string, scenario: { __typename?: 'Scenario', id: string, name: string } } | null, primaryZone?: { __typename?: 'Zone', id: string, name: string } | null, heatmap: Array<{ __typename?: 'KillsHeatmapPoint', x: any, y: any, count: any }>, topGuildsByPlayers: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }>, topGuildsByKills: Array<{ __typename?: 'SkirmishTopGuild', count: number, guild: { __typename?: 'Guild', id: string, name: string, realm: Realm, heraldry: { __typename?: 'GuildHeraldry', emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> } | null };
+export type GetSkirmishInfoQuery = { skirmish: { id: string, startTime: any, endTime: any, numberOfKills: number, numberOfKillsOrder: number, numberOfKillsDestruction: number, numberOfPlayers: number, numberOfPlayersOrder: number, numberOfPlayersDestruction: number, instance: { id: string, scenario: { id: string, name: string } } | null, primaryZone: { id: string, name: string } | null, heatmap: Array<{ x: any, y: any, count: any }>, topGuildsByPlayers: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }>, topGuildsByKills: Array<{ count: number, guild: { id: string, name: string, realm: Realm, heraldry: { emblem: number, pattern: number, color1: number, color2: number, shape: number } } }> } | null };
 
 export type GetWarJournalStorylineQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetWarJournalStorylineQuery = { __typename?: 'Query', warJournalStoryline?: { __typename?: 'WarJournalStoryline', id: string, name: string, summary: string, entries: Array<{ __typename?: 'WarJournalEntry', id: string, name: string, isRvR: boolean }> } | null };
+export type GetWarJournalStorylineQuery = { warJournalStoryline: { id: string, name: string, summary: string, entries: Array<{ id: string, name: string, isRvR: boolean }> } | null };
 
 export type GetWarJournalActivityQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetWarJournalActivityQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, storyline: { __typename?: 'WarJournalStoryline', name: string }, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string, text: string, activityType: string, zone?: { __typename?: 'Zone', id: string, name: string } | null, tasks: Array<{ __typename?: 'WarJournalActivityTask', name: string }> }> } | null };
+export type GetWarJournalActivityQuery = { warJournalEntry: { id: string, name: string, storyline: { name: string }, activities: Array<{ id: string, name: string, text: string, activityType: string, zone: { id: string, name: string } | null, tasks: Array<{ name: string }> }> } | null };
 
 export type GetWarJournalEntryQueryVariables = Exact<{
-  id: Scalars['ID']['input'];
+  id: string | number;
 }>;
 
 
-export type GetWarJournalEntryQuery = { __typename?: 'Query', warJournalEntry?: { __typename?: 'WarJournalEntry', id: string, name: string, locationText?: string | null, npcName?: string | null, text?: string | null, title?: string | null, shortTitle?: string | null, isRvR: boolean, storyline: { __typename?: 'WarJournalStoryline', name: string }, area?: { __typename?: 'ZoneArea', id: string, name?: string | null } | null, zone?: { __typename?: 'Zone', id: string, name: string } | null, activities: Array<{ __typename?: 'WarJournalActivity', id: string, name: string }>, influenceRewards: Array<{ __typename?: 'ChapterInfluenceReward', count: any, tier: any, item: { __typename?: 'Item', id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet?: { __typename?: 'ItemSet', id: string, name: string, items: Array<{ __typename?: 'Item', id: string }>, bonuses: Array<{ __typename?: 'ItemSetBonus', itemsRequired: any, bonus: { __typename: 'Ability', description?: string | null } | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean } }> } | null, abilities: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, buffs: Array<{ __typename?: 'Ability', id: string, description?: string | null }>, stats: Array<{ __typename?: 'ItemStat', stat: Stat, value: any }> } }> } | null };
+export type GetWarJournalEntryQuery = { warJournalEntry: { id: string, name: string, locationText: string | null, npcName: string | null, text: string | null, title: string | null, shortTitle: string | null, isRvR: boolean, storyline: { name: string }, area: { id: string, name: string | null } | null, zone: { id: string, name: string } | null, activities: Array<{ id: string, name: string }>, influenceRewards: Array<{ count: any, tier: any, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+              | { __typename: 'Ability', description: string | null }
+              | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
+             }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } }> } | null };
 
 export type GetWarJournalStorylinesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetWarJournalStorylinesQuery = { __typename?: 'Query', warJournalStorylines: Array<{ __typename?: 'WarJournalStoryline', id: string, name: string }> };
+export type GetWarJournalStorylinesQuery = { warJournalStorylines: Array<{ id: string, name: string }> };
 
 export type GetZoneHeatmapQueryVariables = Exact<{
-  id?: InputMaybe<Scalars['ID']['input']>;
-  from?: InputMaybe<Scalars['Long']['input']>;
+  id?: string | number | null | undefined;
+  from?: any;
 }>;
 
 
-export type GetZoneHeatmapQuery = { __typename?: 'Query', killsHeatmap: Array<{ __typename?: 'KillsHeatmapPoint', x: any, y: any, count: any }> };
+export type GetZoneHeatmapQuery = { killsHeatmap: Array<{ x: any, y: any, count: any }> };
 
 export const TalismanFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Talisman"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<TalismanFragment, unknown>;
 export const ItemListEntryFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<ItemListEntryFragment, unknown>;
@@ -4367,14 +1142,14 @@ export const GetRankedLeaderboardDocument = {"kind":"Document","definitions":[{"
 export const GetCharacterArmoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCharacterArmory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"EquippedCharacterItem"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Talisman"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EquippedCharacterItem"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CharacterItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"equipSlot"}},{"kind":"Field","name":{"kind":"Name","value":"talismans"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Talisman"}}]}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}}]}}]} as unknown as DocumentNode<GetCharacterArmoryQuery, GetCharacterArmoryQueryVariables>;
 export const GetCharacterInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCharacterInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetCharacterInfoQuery, GetCharacterInfoQueryVariables>;
 export const GetCharacterLatestSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCharacterLatestSkirmishes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SkirmishFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmishes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"characterId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetCharacterLatestSkirmishesQuery, GetCharacterLatestSkirmishesQueryVariables>;
-export const GetLatestCharacterDeathsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestCharacterDeaths"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestCharacterDeathsQuery, GetLatestCharacterDeathsQueryVariables>;
-export const GetLatestCharacterKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestCharacterKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestCharacterKillsQuery, GetLatestCharacterKillsQueryVariables>;
+export const GetLatestCharacterDeathsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestCharacterDeaths"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestCharacterDeathsQuery, GetLatestCharacterDeathsQueryVariables>;
+export const GetLatestCharacterKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestCharacterKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestCharacterKillsQuery, GetLatestCharacterKillsQueryVariables>;
 export const GetVendorItemsFromCreatureDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVendorItemsFromCreature"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"creatureId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creature"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"creatureId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"vendorItems"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"price"}},{"kind":"Field","name":{"kind":"Name","value":"requiredItems"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetVendorItemsFromCreatureQuery, GetVendorItemsFromCreatureQueryVariables>;
 export const GetGuildFeudDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildFeud"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guild1Id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guild2Id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"guildFeudFilter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"guild1Id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guild1Id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"guild2Id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guild2Id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zoneId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetGuildFeudQuery, GetGuildFeudQueryVariables>;
 export const GetGuildLatestSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildLatestSkirmishes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SkirmishFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmishes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"guildId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetGuildLatestSkirmishesQuery, GetGuildLatestSkirmishesQueryVariables>;
 export const GetGuildMembersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildMembers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"members"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rank"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetGuildMembersQuery, GetGuildMembersQueryVariables>;
-export const GetLatestGuildDeathsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestGuildDeaths"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestGuildDeathsQuery, GetLatestGuildDeathsQueryVariables>;
-export const GetLatestGuildKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestGuildKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestGuildKillsQuery, GetLatestGuildKillsQueryVariables>;
+export const GetLatestGuildDeathsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestGuildDeaths"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestGuildDeathsQuery, GetLatestGuildDeathsQueryVariables>;
+export const GetLatestGuildKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestGuildKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"time"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTimeOperationFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"Variable","name":{"kind":"Name","value":"time"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestGuildKillsQuery, GetLatestGuildKillsQueryVariables>;
 export const GetInstanceRunsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInstanceRuns"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"InstanceRunFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instanceRuns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"start"},"value":{"kind":"EnumValue","value":"DESC"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"instanceId"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"completed"}},{"kind":"Field","name":{"kind":"Name","value":"instance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemRating"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"archetype"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}}]}},{"kind":"Field","name":{"kind":"Name","value":"encounters"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"encounterId"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"averageDuration"}},{"kind":"Field","name":{"kind":"Name","value":"averageDeaths"}}]}}]}}]} as unknown as DocumentNode<GetInstanceRunsQuery, GetInstanceRunsQueryVariables>;
 export const GetInstanceEncounterStatisticsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInstanceEncounterStatistics"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"InstanceEncounterRunFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instanceEncounterRuns"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"order"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"start"},"value":{"kind":"EnumValue","value":"DESC"}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"medianDuration"}},{"kind":"Field","name":{"kind":"Name","value":"averageDuration"}},{"kind":"Field","name":{"kind":"Name","value":"medianDeaths"}},{"kind":"Field","name":{"kind":"Name","value":"averageDeaths"}}]}}]}}]} as unknown as DocumentNode<GetInstanceEncounterStatisticsQuery, GetInstanceEncounterStatisticsQueryVariables>;
 export const GetItemPopupInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetItemPopupInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"item"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<GetItemPopupInfoQuery, GetItemPopupInfoQueryVariables>;
@@ -4387,11 +1162,11 @@ export const GetMonthlyLeaderboardDocument = {"kind":"Document","definitions":[{
 export const GetPlayerFeudDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlayerFeud"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"player1Id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"player2Id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"playerFeudFilter"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"player1Id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"player1Id"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"player2Id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"player2Id"}}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zoneId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetPlayerFeudQuery, GetPlayerFeudQueryVariables>;
 export const GetWeeklyLeaderboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWeeklyLeaderboard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"year"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"week"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"weeklyKillLeaderboard"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"year"},"value":{"kind":"Variable","name":{"kind":"Name","value":"year"}}},{"kind":"Argument","name":{"kind":"Name","value":"week"},"value":{"kind":"Variable","name":{"kind":"Name","value":"week"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rank"}},{"kind":"Field","name":{"kind":"Name","value":"kills"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetWeeklyLeaderboardQuery, GetWeeklyLeaderboardQueryVariables>;
 export const GetWeeklyGuildLeaderboardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWeeklyGuildLeaderboard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"year"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"week"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"weeklyGuildKillLeaderboard"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"year"},"value":{"kind":"Variable","name":{"kind":"Name","value":"year"}}},{"kind":"Argument","name":{"kind":"Name","value":"week"},"value":{"kind":"Variable","name":{"kind":"Name","value":"week"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rank"}},{"kind":"Field","name":{"kind":"Name","value":"kills"}}]}}]}}]} as unknown as DocumentNode<GetWeeklyGuildLeaderboardQuery, GetWeeklyGuildLeaderboardQueryVariables>;
-export const GetScenarioCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioCount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioQueueType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"premadeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"wins"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenarios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"characterId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}}},{"kind":"Argument","name":{"kind":"Name","value":"guildId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueType"}}},{"kind":"Argument","name":{"kind":"Name","value":"premadeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"premadeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"wins"},"value":{"kind":"Variable","name":{"kind":"Name","value":"wins"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetScenarioCountQuery, GetScenarioCountQueryVariables>;
+export const GetScenarioCountDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioCount"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioRecordFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenarios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetScenarioCountQuery, GetScenarioCountQueryVariables>;
 export const GetScenarioHeatmapDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioHeatmap"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"killsHeatmap"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"instanceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<GetScenarioHeatmapQuery, GetScenarioHeatmapQueryVariables>;
 export const GetScenarioKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filter"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"KillFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filter"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zoneId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetScenarioKillsQuery, GetScenarioKillsQueryVariables>;
-export const GetScenarioListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"queueType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioQueueType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"premadeOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioRecordFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenarios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"characterId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}}},{"kind":"Argument","name":{"kind":"Name","value":"guildId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId"}}},{"kind":"Argument","name":{"kind":"Name","value":"queueType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"queueType"}}},{"kind":"Argument","name":{"kind":"Name","value":"premadeOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"premadeOnly"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"winner"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"wasSurrender"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetScenarioListQuery, GetScenarioListQueryVariables>;
-export const GetScenarioSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioSkirmishes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"instanceId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"UUID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmishes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"instanceId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"instanceId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetScenarioSkirmishesQuery, GetScenarioSkirmishesQueryVariables>;
+export const GetScenarioListDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioList"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ScenarioRecordFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenarios"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"winner"}},{"kind":"Field","name":{"kind":"Name","value":"points"}},{"kind":"Field","name":{"kind":"Name","value":"wasSurrender"}},{"kind":"Field","name":{"kind":"Name","value":"tier"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetScenarioListQuery, GetScenarioListQueryVariables>;
+export const GetScenarioSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetScenarioSkirmishes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"instanceId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmishes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"instanceId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"instanceId"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetScenarioSkirmishesQuery, GetScenarioSkirmishesQueryVariables>;
 export const GetLatestSkirmishesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetLatestSkirmishes"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SkirmishFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmishes"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"primaryZoneArea"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"startTime"}},{"kind":"Field","name":{"kind":"Name","value":"endTime"}},{"kind":"Field","name":{"kind":"Name","value":"topGuildsByPlayers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKills"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfKillsDestruction"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayers"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersOrder"}},{"kind":"Field","name":{"kind":"Name","value":"numberOfPlayersDestruction"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetLatestSkirmishesQuery, GetLatestSkirmishesQueryVariables>;
 export const GetSkirmishDamageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSkirmishDamage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"killDamage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attackerType"}},{"kind":"Field","name":{"kind":"Name","value":"damageType"}},{"kind":"Field","name":{"kind":"Name","value":"ability"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"damageAmount"}}]}}]}}]}}]} as unknown as DocumentNode<GetSkirmishDamageQuery, GetSkirmishDamageQueryVariables>;
 export const GetSkirmishDamageByCharacterDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetSkirmishDamageByCharacter"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"killDamageByCharacter"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"characterId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attackerType"}},{"kind":"Field","name":{"kind":"Name","value":"damageType"}},{"kind":"Field","name":{"kind":"Name","value":"ability"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"damageAmount"}}]}}]}}]}}]} as unknown as DocumentNode<GetSkirmishDamageByCharacterQuery, GetSkirmishDamageByCharacterQueryVariables>;
@@ -4403,7 +1178,7 @@ export const GetCreatureDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const GetCreaturesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetCreatures"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatureFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"creatures"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetCreaturesQuery, GetCreaturesQueryVariables>;
 export const GetGameObjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGameObject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"gameObject"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"modelName"}},{"kind":"Field","name":{"kind":"Name","value":"spawns"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"questsStarter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isEpic"}},{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isNone"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}}]}}]}}]}}]} as unknown as DocumentNode<GetGameObjectQuery, GetGameObjectQueryVariables>;
 export const GetGuildInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}},{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rank"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GuildInfo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetGuildInfoQuery, GetGuildInfoQueryVariables>;
-export const GetGuildFeudInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildFeudInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"guild1"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild1kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt2"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildInt1"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GuildInfo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetGuildFeudInfoQuery, GetGuildFeudInfoQueryVariables>;
+export const GetGuildFeudInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetGuildFeudInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"guild1"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2"},"name":{"kind":"Name","value":"guild"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"GuildInfo"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild1kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"guild2kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId2"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimGuildId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"guildId1"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"GuildInfo"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Guild"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"briefDescription"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}},{"kind":"Field","name":{"kind":"Name","value":"leader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetGuildFeudInfoQuery, GetGuildFeudInfoQueryVariables>;
 export const GetInstanceEncounterRunDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetInstanceEncounterRun"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instanceEncounterRun"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"InstanceEncounterRunScoreboardEntry"}}]}},{"kind":"Field","name":{"kind":"Name","value":"encounter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"InstanceEncounterRunScoreboardEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"InstanceEncounterRunScoreboardEntry"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"archetype"}},{"kind":"Field","name":{"kind":"Name","value":"itemRating"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"killDamage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}},{"kind":"Field","name":{"kind":"Name","value":"healingSelf"}},{"kind":"Field","name":{"kind":"Name","value":"healingOthers"}},{"kind":"Field","name":{"kind":"Name","value":"protection"}},{"kind":"Field","name":{"kind":"Name","value":"protectionSelf"}},{"kind":"Field","name":{"kind":"Name","value":"protectionOthers"}},{"kind":"Field","name":{"kind":"Name","value":"damageReceived"}},{"kind":"Field","name":{"kind":"Name","value":"resurrectionsDone"}},{"kind":"Field","name":{"kind":"Name","value":"healingReceived"}},{"kind":"Field","name":{"kind":"Name","value":"protectionReceived"}}]}}]} as unknown as DocumentNode<GetInstanceEncounterRunQuery, GetInstanceEncounterRunQueryVariables>;
 export const InstanceRunDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"InstanceRun"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instanceRun"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"instance"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"InstanceRunScoreboardEntry"}}]}},{"kind":"Field","name":{"kind":"Name","value":"encounters"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"completed"}},{"kind":"Field","name":{"kind":"Name","value":"instanceId"}},{"kind":"Field","name":{"kind":"Name","value":"encounterId"}},{"kind":"Field","name":{"kind":"Name","value":"scoreboardEntries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemRating"}},{"kind":"Field","name":{"kind":"Name","value":"archetype"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}}]}},{"kind":"Field","name":{"kind":"Name","value":"encounter"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"InstanceRunScoreboardEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"InstanceRunScoreboardEntry"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"archetype"}},{"kind":"Field","name":{"kind":"Name","value":"itemRating"}},{"kind":"Field","name":{"kind":"Name","value":"deaths"}},{"kind":"Field","name":{"kind":"Name","value":"damage"}},{"kind":"Field","name":{"kind":"Name","value":"killDamage"}},{"kind":"Field","name":{"kind":"Name","value":"healing"}},{"kind":"Field","name":{"kind":"Name","value":"healingSelf"}},{"kind":"Field","name":{"kind":"Name","value":"healingOthers"}},{"kind":"Field","name":{"kind":"Name","value":"protection"}},{"kind":"Field","name":{"kind":"Name","value":"protectionSelf"}},{"kind":"Field","name":{"kind":"Name","value":"protectionOthers"}},{"kind":"Field","name":{"kind":"Name","value":"damageReceived"}},{"kind":"Field","name":{"kind":"Name","value":"resurrectionsDone"}},{"kind":"Field","name":{"kind":"Name","value":"healingReceived"}},{"kind":"Field","name":{"kind":"Name","value":"protectionReceived"}}]}}]} as unknown as DocumentNode<InstanceRunQuery, InstanceRunQueryVariables>;
 export const InstanceEncountersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"InstanceEncounters"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"instance"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"encounters"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<InstanceEncountersQuery, InstanceEncountersQueryVariables>;
@@ -4412,7 +1187,7 @@ export const GetItemInfoDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const SearchItemsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"SearchItems"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"query"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ItemFilterInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"usableByCareer"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Career"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"hasStats"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Stat"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"items"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"query"}}},{"kind":"Argument","name":{"kind":"Name","value":"usableByCareer"},"value":{"kind":"Variable","name":{"kind":"Name","value":"usableByCareer"}}},{"kind":"Argument","name":{"kind":"Name","value":"hasStats"},"value":{"kind":"Variable","name":{"kind":"Name","value":"hasStats"}}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ItemListEntry"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ItemListEntry"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Item"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"uniqueEquipped"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"slot"}},{"kind":"Field","name":{"kind":"Name","value":"rarity"}},{"kind":"Field","name":{"kind":"Name","value":"armor"}},{"kind":"Field","name":{"kind":"Name","value":"dps"}},{"kind":"Field","name":{"kind":"Name","value":"speed"}},{"kind":"Field","name":{"kind":"Name","value":"levelRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"renownRankRequirement"}},{"kind":"Field","name":{"kind":"Name","value":"itemLevel"}},{"kind":"Field","name":{"kind":"Name","value":"talismanSlots"}},{"kind":"Field","name":{"kind":"Name","value":"itemSet"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"bonuses"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"itemsRequired"}},{"kind":"Field","name":{"kind":"Name","value":"bonus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Ability"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ItemStat"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}},{"kind":"Field","name":{"kind":"Name","value":"percentage"}},{"kind":"Field","name":{"kind":"Name","value":"__typename"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"abilities"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"buffs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}},{"kind":"Field","name":{"kind":"Name","value":"stats"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"stat"}},{"kind":"Field","name":{"kind":"Name","value":"value"}}]}}]}}]} as unknown as DocumentNode<SearchItemsQuery, SearchItemsQueryVariables>;
 export const GetKillDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetKill"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kill"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"includeAssists"},"value":{"kind":"BooleanValue","value":true}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"instanceId"}},{"kind":"Field","name":{"kind":"Name","value":"skirmish"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zoneId"}},{"kind":"Field","name":{"kind":"Name","value":"zone"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"x"}},{"kind":"Field","name":{"kind":"Name","value":"y"}},{"kind":"Field","name":{"kind":"Name","value":"mapSetup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nwCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"nwCornerY"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerX"}},{"kind":"Field","name":{"kind":"Name","value":"seCornerY"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"Attacker"}}]}},{"kind":"Field","name":{"kind":"Name","value":"damage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"KillDamage"}}]}},{"kind":"Field","name":{"kind":"Name","value":"deathblow"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"Attacker"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Attacker"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}},{"kind":"Field","name":{"kind":"Name","value":"heraldry"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emblem"}},{"kind":"Field","name":{"kind":"Name","value":"pattern"}},{"kind":"Field","name":{"kind":"Name","value":"color1"}},{"kind":"Field","name":{"kind":"Name","value":"color2"}},{"kind":"Field","name":{"kind":"Name","value":"shape"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"KillDamage"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"KillDamage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"attackerType"}},{"kind":"Field","name":{"kind":"Name","value":"damageType"}},{"kind":"Field","name":{"kind":"Name","value":"attacker"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"ability"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"damageAmount"}}]}}]} as unknown as DocumentNode<GetKillQuery, GetKillQueryVariables>;
 export const GetKillsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetKills"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"from"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTime"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"to"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"DateTime"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"time"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"gte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"from"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"lte"},"value":{"kind":"Variable","name":{"kind":"Name","value":"to"}}}]}}]}},{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"soloOnly"},"value":{"kind":"Variable","name":{"kind":"Name","value":"soloOnly"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"time"}},{"kind":"Field","name":{"kind":"Name","value":"position"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"zoneId"}}]}},{"kind":"Field","name":{"kind":"Name","value":"scenario"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"victim"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"attackers"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"damagePercent"}},{"kind":"Field","name":{"kind":"Name","value":"character"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetKillsQuery, GetKillsQueryVariables>;
-export const GetPlayerFeudInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlayerFeudInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnsignedInt"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"player1"},"name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player2"},"name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player1kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId1"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId2"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player2kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId2"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerIntId1"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetPlayerFeudInfoQuery, GetPlayerFeudInfoQueryVariables>;
+export const GetPlayerFeudInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPlayerFeudInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"player1"},"name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player2"},"name":{"kind":"Name","value":"character"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"career"}},{"kind":"Field","name":{"kind":"Name","value":"level"}},{"kind":"Field","name":{"kind":"Name","value":"renownRank"}},{"kind":"Field","name":{"kind":"Name","value":"guildMembership"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"guild"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player1kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"player2kills"},"name":{"kind":"Name","value":"kills"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"IntValue","value":"0"}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"killerCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId2"}}}]}},{"kind":"ObjectField","name":{"kind":"Name","value":"victimCharacterId"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"eq"},"value":{"kind":"Variable","name":{"kind":"Name","value":"playerId1"}}}]}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"totalCount"}}]}}]}}]} as unknown as DocumentNode<GetPlayerFeudInfoQuery, GetPlayerFeudInfoQueryVariables>;
 export const GetQuestInfoDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuestInfo"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quest"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isEpic"}}]}},{"kind":"Field","name":{"kind":"Name","value":"xp"}},{"kind":"Field","name":{"kind":"Name","value":"gold"}},{"kind":"Field","name":{"kind":"Name","value":"choiceCount"}},{"kind":"Field","name":{"kind":"Name","value":"rewardsChoice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rewardsGiven"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"objectives"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"count"}}]}},{"kind":"Field","name":{"kind":"Name","value":"journalEntry"}},{"kind":"Field","name":{"kind":"Name","value":"raceRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"careerRestriction"}},{"kind":"Field","name":{"kind":"Name","value":"minLevel"}},{"kind":"Field","name":{"kind":"Name","value":"maxLevel"}},{"kind":"Field","name":{"kind":"Name","value":"minRenown"}},{"kind":"Field","name":{"kind":"Name","value":"maxRenown"}},{"kind":"Field","name":{"kind":"Name","value":"starterCreatures"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"realm"}}]}}]}}]}}]} as unknown as DocumentNode<GetQuestInfoQuery, GetQuestInfoQueryVariables>;
 export const GetQuestsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetQuests"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"first"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"last"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"before"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"after"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"where"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"QuestFilterInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"quests"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"first"},"value":{"kind":"Variable","name":{"kind":"Name","value":"first"}}},{"kind":"Argument","name":{"kind":"Name","value":"last"},"value":{"kind":"Variable","name":{"kind":"Name","value":"last"}}},{"kind":"Argument","name":{"kind":"Name","value":"before"},"value":{"kind":"Variable","name":{"kind":"Name","value":"before"}}},{"kind":"Argument","name":{"kind":"Name","value":"after"},"value":{"kind":"Variable","name":{"kind":"Name","value":"after"}}},{"kind":"Argument","name":{"kind":"Name","value":"where"},"value":{"kind":"Variable","name":{"kind":"Name","value":"where"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"nodes"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"isGroup"}},{"kind":"Field","name":{"kind":"Name","value":"isTravel"}},{"kind":"Field","name":{"kind":"Name","value":"isTome"}},{"kind":"Field","name":{"kind":"Name","value":"isRvR"}},{"kind":"Field","name":{"kind":"Name","value":"isPlayerKill"}},{"kind":"Field","name":{"kind":"Name","value":"isEpic"}}]}},{"kind":"Field","name":{"kind":"Name","value":"repeatableType"}},{"kind":"Field","name":{"kind":"Name","value":"xp"}},{"kind":"Field","name":{"kind":"Name","value":"gold"}},{"kind":"Field","name":{"kind":"Name","value":"choiceCount"}},{"kind":"Field","name":{"kind":"Name","value":"rewardsChoice"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rewardsGiven"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"item"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"iconUrl"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}},{"kind":"Field","name":{"kind":"Name","value":"hasPreviousPage"}},{"kind":"Field","name":{"kind":"Name","value":"startCursor"}}]}}]}}]}}]} as unknown as DocumentNode<GetQuestsQuery, GetQuestsQueryVariables>;
 export const GetRankedLeaderboardSeasonsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetRankedLeaderboardSeasons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"rankedSeasons"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"end"}},{"kind":"Field","name":{"kind":"Name","value":"mainSeason"}}]}}]}}]} as unknown as DocumentNode<GetRankedLeaderboardSeasonsQuery, GetRankedLeaderboardSeasonsQueryVariables>;

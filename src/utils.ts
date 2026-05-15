@@ -1,6 +1,4 @@
-import type {
-  KillDamageFragment,
-  QuestTypeFlagsFlags} from '@/__generated__/graphql';
+import type { QuestTypeFlagsFlags } from '@/__generated__/graphql';
 import {
   Career,
   KillDamageSourceType,
@@ -141,7 +139,10 @@ export const isPercentage = (stat: string) => {
   return '';
 };
 
-export const killDamageText = (killDamage: KillDamageFragment): string => {
+export const killDamageText = (killDamage: {
+  damageType: KillDamageSourceType;
+  ability?: { name?: string | null } | null;
+}): string => {
   if (killDamage.damageType === KillDamageSourceType.FallDamage)
     {return 'Fall Damage';}
 

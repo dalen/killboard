@@ -5,7 +5,7 @@ import type { ReactElement } from 'react';
 
 const RECENT_KILLS = gql`
   query GetLatestCharacterKills(
-    $id: UnsignedInt!
+    $id: ID!
     $first: Int
     $last: Int
     $before: String

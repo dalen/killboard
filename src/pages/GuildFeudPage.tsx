@@ -14,9 +14,7 @@ import type { ReactElement } from 'react';
 const GUILD_FEUD_INFO = gql`
   query GetGuildFeudInfo(
     $guildId1: ID!
-    $guildInt1: UnsignedInt!
     $guildId2: ID!
-    $guildInt2: UnsignedInt!
   ) {
     guild1: guild(id: $guildId1) {
       ...GuildInfo
@@ -29,8 +27,8 @@ const GUILD_FEUD_INFO = gql`
     guild1kills: kills(
       first: 0
       where: {
-        killerGuildId: { eq: $guildInt1 }
-        victimGuildId: { eq: $guildInt2 }
+        killerGuildId: { eq: $guildId1 }
+        victimGuildId: { eq: $guildId2 }
       }
     ) {
       totalCount
@@ -39,8 +37,8 @@ const GUILD_FEUD_INFO = gql`
     guild2kills: kills(
       first: 0
       where: {
-        killerGuildId: { eq: $guildInt2 }
-        victimGuildId: { eq: $guildInt1 }
+        killerGuildId: { eq: $guildId2 }
+        victimGuildId: { eq: $guildId1 }
       }
     ) {
       totalCount
@@ -62,8 +60,6 @@ export const GuildFeudPage = (): ReactElement => {
     variables: {
       guildId1: guildId1 ?? '',
       guildId2: guildId2 ?? '',
-      guildInt1: Number(guildId1),
-      guildInt2: Number(guildId2),
     },
   });
 
@@ -90,8 +86,6 @@ export const GuildFeudPage = (): ReactElement => {
               {t('pages:guildFeud.guildFeudId', {
                 guildId1,
                 guildId2,
-                guildInt1: Number(guildId1),
-                guildInt2: Number(guildId2),
               })}
             </Link>
           </li>

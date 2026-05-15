@@ -3,21 +3,23 @@ import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
-const getQueueTypeFilters = (search: URLSearchParams) => {
+const getQueueTypeFilters = (
+  search: URLSearchParams,
+): { queueType?: number; premadeOnly: boolean } => {
   const queueType = search.get('queue_type');
-  const premadeOnly = search.get('premadeOnly') === 'true' ? true : undefined;
+  const premadeOnly = search.get('premadeOnly') === 'true';
 
   switch (queueType) {
     case 'standard':
-    case 'solo':
-    case 'city_siege':
+      return { queueType: 0, premadeOnly };
     case 'group_ranked':
-    case 'solo_ranked': {
-      return {
-        premadeOnly,
-        queueType: queueType?.toUpperCase(),
-      };
-    }
+      return { queueType: 1, premadeOnly };
+    case 'solo':
+      return { queueType: 2, premadeOnly };
+    case 'city_siege':
+      return { queueType: 3, premadeOnly };
+    case 'solo_ranked':
+      return { queueType: 4, premadeOnly };
   }
 
   return { premadeOnly };
@@ -43,12 +45,35 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   return {};
 };
 
-export const getScenarioFilters = (search: URLSearchParams) => ({
-  ...getQueueTypeFilters(search),
-  where: {
+export const getScenarioFilters = (
+  search: URLSearchParams,
+  {
+    characterId,
+    guildId,
+    wins,
+  }: { characterId?: string; guildId?: string; wins?: boolean } = {},
+): ScenarioRecordFilterInput => {
+  const { queueType, premadeOnly } = getQueueTypeFilters(search);
+  const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
-  },
-});
+  };
+
+  if (queueType !== undefined) {
+    where.queueType = { eq: queueType };
+  }
+
+  const scoreboardEntry: Record<string, unknown> = {};
+  if (characterId) scoreboardEntry.characterId = { eq: characterId };
+  if (guildId) scoreboardEntry.guildId = { eq: guildId };
+  if (wins !== undefined) scoreboardEntry.isWinner = { eq: wins };
+  if (premadeOnly) scoreboardEntry.isGuildPremade = { eq: true };
+
+  if (Object.keys(scoreboardEntry).length > 0) {
+    where.scoreboardEntries = { some: scoreboardEntry };
+  }
+
+  return where;
+};
 
 export const ScenarioFilters = ({
   showPremadeOnly = false,

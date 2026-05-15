@@ -8,7 +8,6 @@ import {
 import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
-import type { URLSearchParams } from 'url';
 
 const getPeriodFilters = (search: URLSearchParams) => {
   const period = search.get('period');

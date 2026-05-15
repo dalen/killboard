@@ -9,12 +9,7 @@ import { PlayerFeudCharacterInfo } from '@/components/kill/PlayerFeudCharacterIn
 import type { ReactElement } from 'react';
 
 const PLAYER_FEUD_INFO = gql`
-  query GetPlayerFeudInfo(
-    $playerId1: ID!
-    $playerIntId1: UnsignedInt!
-    $playerId2: ID!
-    $playerIntId2: UnsignedInt!
-  ) {
+  query GetPlayerFeudInfo($playerId1: ID!, $playerId2: ID!) {
     player1: character(id: $playerId1) {
       name
       career
@@ -44,8 +39,8 @@ const PLAYER_FEUD_INFO = gql`
     player1kills: kills(
       first: 0
       where: {
-        killerCharacterId: { eq: $playerIntId1 }
-        victimCharacterId: { eq: $playerIntId2 }
+        killerCharacterId: { eq: $playerId1 }
+        victimCharacterId: { eq: $playerId2 }
       }
     ) {
       totalCount
@@ -54,8 +49,8 @@ const PLAYER_FEUD_INFO = gql`
     player2kills: kills(
       first: 0
       where: {
-        killerCharacterId: { eq: $playerIntId2 }
-        victimCharacterId: { eq: $playerIntId1 }
+        killerCharacterId: { eq: $playerId2 }
+        victimCharacterId: { eq: $playerId1 }
       }
     ) {
       totalCount
@@ -77,8 +72,6 @@ export const PlayerFeudPage = (): ReactElement => {
     variables: {
       playerId1,
       playerId2,
-      playerIntId1: Number(playerId1),
-      playerIntId2: Number(playerId2),
     },
   });
 
@@ -105,8 +98,6 @@ export const PlayerFeudPage = (): ReactElement => {
               {t('pages:playerFeud.playerFeudId', {
                 playerId1,
                 playerId2,
-                playerIntId1: Number(playerId1),
-                playerIntId2: Number(playerId2),
               })}
             </Link>
           </li>

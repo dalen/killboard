@@ -10,10 +10,6 @@ import { QueryPagination } from '@/components/global/QueryPagination';
 
 const SCENARIO_LIST = gql`
   query GetScenarioList(
-    $characterId: ID
-    $guildId: ID
-    $queueType: ScenarioQueueType
-    $premadeOnly: Boolean
     $where: ScenarioRecordFilterInput
     $first: Int
     $last: Int
@@ -21,10 +17,6 @@ const SCENARIO_LIST = gql`
     $after: String
   ) {
     scenarios(
-      characterId: $characterId
-      guildId: $guildId
-      queueType: $queueType
-      premadeOnly: $premadeOnly
       where: $where
       first: $first
       last: $last
@@ -69,10 +61,8 @@ export const ScenarioList = ({
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
     variables: {
-      characterId,
       first: perPage,
-      guildId,
-      ...getScenarioFilters(search),
+      where: getScenarioFilters(search, { characterId, guildId }),
     },
   });
 

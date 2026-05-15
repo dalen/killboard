@@ -4,7 +4,7 @@ import type { ReactElement } from 'react';
 
 const SKIRMISHES = gql`
   query GetScenarioSkirmishes(
-    $instanceId: UUID
+    $instanceId: ID
     $first: Int
     $last: Int
     $before: String

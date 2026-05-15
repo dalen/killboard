@@ -34,6 +34,7 @@ const NoItem = () => (
       iconUrl: 'https://armory.returnofreckoning.com/icon/1',
       id: '0',
       itemLevel: 1,
+      itemSet: null,
       levelRequirement: 0,
       name: '',
       raceRestriction: [],

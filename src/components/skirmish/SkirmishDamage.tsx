@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import type { KillDamage, Query } from '@/__generated__/graphql';
+import type { Query, SkirmishKillDamage } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
 import type { ReactElement } from 'react';
@@ -38,7 +38,7 @@ export const SkirmishDamage = ({ id }: { id: string }): ReactElement => {
   }
 
   // Group killdamage by ability.name and ability.iconUrl
-  const killDamageGrouped = killDamage.reduce<KillDamage[]>((acc, curr) => {
+  const killDamageGrouped = killDamage.reduce<SkirmishKillDamage[]>((acc, curr) => {
     const existing = acc.find(
       (e) =>
         killDamageText(e) === killDamageText(curr) &&
