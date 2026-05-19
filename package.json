@@ -12,7 +12,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@tippyjs/react": "^4.2.6",
     "clsx": "^2.1.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^4.2.1",
     "graphql": "^16.14.0",
     "i18next": "^26.2.0",
     "lodash": "^4.18.1",
