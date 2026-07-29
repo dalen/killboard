@@ -7,7 +7,6 @@ import { SearchBox } from '@/components/global/SearchBox';
 import { MonthlyLeaderboard } from '@/components/kill/MonthlyLeaderboard';
 import { MonthlyGuildLeaderboard } from '@/components/kill/MonthlyLeaderboard.Guild';
 import { WeeklyLeaderboardGuild } from '@/components/kill/WeeklyLeaderboardGuild';
-import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { LatestSkirmishes } from '@/components/skirmish/LatestSkirmishes';
 import { TopSkirmishes } from '@/components/skirmish/TopSkirmishes';
@@ -37,10 +36,7 @@ export const Home = ({
         </li>
       </div>
       {tab === 'scenarios' && (
-        <>
-          <ScenarioFilters />
-          <ScenarioList loadMore perPage={10} />
-        </>
+        <ScenarioList loadMore perPage={10} />
       )}
       {tab === 'players' && (
         <>

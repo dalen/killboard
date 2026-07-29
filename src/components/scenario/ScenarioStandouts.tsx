@@ -80,6 +80,13 @@ const compactNumber = (value: number): string =>
     notation: 'compact',
   }).format(value);
 
+const dateInputValue = (date: Date): string => {
+  const offsetDate = new Date(
+    date.getTime() - date.getTimezoneOffset() * 60 * 1000,
+  );
+  return offsetDate.toISOString().slice(0, 10);
+};
+
 const getStandouts = ({
   career,
   limit,
@@ -437,6 +444,9 @@ export const ScenarioStandouts = ({
   const limitParam = Number(searchParams.get('lbLimit'));
   const minimumScenariosParam = Number(searchParams.get('lbMin'));
   const modeParam = searchParams.get('lbMode') as RankingMode;
+  const queueType = searchParams.get('queue_type') ?? 'all';
+  const tier = searchParams.get('tier') ?? 'all';
+  const range = searchParams.get('range') ?? 'recent';
   const realm = realmFilters.includes(realmParam) ? realmParam : 'both';
   const role = roleFilters.includes(roleParam) ? roleParam : 'all';
   const career =
@@ -489,6 +499,103 @@ export const ScenarioStandouts = ({
   return (
     <>
       <div className="scenario-standout-filters mb-3">
+        <label>
+          <span>Type</span>
+          <select
+            value={queueType}
+            onChange={(event) => {
+              updateParams({
+                queue_type:
+                  event.target.value === 'all'
+                    ? undefined
+                    : event.target.value,
+              });
+            }}
+          >
+            <option value="all">All types</option>
+            <option value="standard">Standard</option>
+            <option value="solo">Random Scenario</option>
+            <option value="city_siege">City Siege</option>
+            <option value="group_challenge">Group Challenge</option>
+          </select>
+        </label>
+        <label>
+          <span>Tier</span>
+          <select
+            value={tier}
+            onChange={(event) => {
+              updateParams({
+                tier:
+                  event.target.value === 'all'
+                    ? undefined
+                    : event.target.value,
+              });
+            }}
+          >
+            <option value="all">All tiers</option>
+            <option value="1">Tier 1</option>
+            <option value="3">Tier 2–3</option>
+            <option value="4">Tier 4</option>
+          </select>
+        </label>
+        <label>
+          <span>Time</span>
+          <select
+            value={range}
+            onChange={(event) => {
+              const nextRange = event.target.value;
+              if (nextRange === 'custom') {
+                const today = new Date();
+                const sevenDaysAgo = new Date(
+                  today.getTime() - 7 * 24 * 60 * 60 * 1000,
+                );
+                updateParams({
+                  from: searchParams.get('from') ?? dateInputValue(sevenDaysAgo),
+                  range: 'custom',
+                  to: searchParams.get('to') ?? dateInputValue(today),
+                });
+              } else {
+                updateParams({
+                  from: undefined,
+                  range: nextRange === 'recent' ? undefined : nextRange,
+                  to: undefined,
+                });
+              }
+            }}
+          >
+            <option value="recent">Most recent</option>
+            <option value="24h">Last 24 hours</option>
+            <option value="7d">Last 7 days</option>
+            <option value="30d">Last 30 days</option>
+            <option value="90d">Last 90 days</option>
+            <option value="ytd">Year to date</option>
+            <option value="custom">Custom dates</option>
+          </select>
+        </label>
+        {range === 'custom' && (
+          <>
+            <label>
+              <span>Start</span>
+              <input
+                type="date"
+                value={searchParams.get('from') ?? ''}
+                onChange={(event) => {
+                  updateParams({ from: event.target.value || undefined });
+                }}
+              />
+            </label>
+            <label>
+              <span>End</span>
+              <input
+                type="date"
+                value={searchParams.get('to') ?? ''}
+                onChange={(event) => {
+                  updateParams({ to: event.target.value || undefined });
+                }}
+              />
+            </label>
+          </>
+        )}
         <label>
           <span>Realm</span>
           <select
@@ -610,9 +717,11 @@ export const ScenarioStandouts = ({
       </div>
       <div className="scenario-ranking-note mb-3">
         <strong>How rankings work:</strong> totals cover the scenarios currently
-        loaded above. Overall contribution combines a character&apos;s strongest
+        loaded on this page. Overall contribution combines a character&apos;s strongest
         combat or objective stat (65%), win rate (20%), and participation (15%).
-        Open a player for averages and full-profile access.
+        Open a player for averages and full-profile access. Longer time windows
+        remain responsive by loading matches in batches; use Show more scenarios
+        to expand the analysis.
       </div>
       <div className="scenario-standouts-grid mb-4">
         {realm !== 'destruction' && (

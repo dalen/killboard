@@ -1,7 +1,4 @@
 import type { ScenarioRecordFilterInput } from '@/__generated__/graphql';
-import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
 
 const getQueueTypeFilters = (
   search: URLSearchParams,
@@ -46,6 +43,64 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   return {};
 };
 
+const getTimeFilters = (
+  search: URLSearchParams,
+): ScenarioRecordFilterInput => {
+  const range = search.get('range') ?? 'recent';
+  const now = new Date();
+  let start: Date | undefined;
+  let end: Date | undefined;
+
+  switch (range) {
+    case '24h': {
+      start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '7d': {
+      start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '30d': {
+      start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '90d': {
+      start = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case 'ytd': {
+      start = new Date(now.getFullYear(), 0, 1);
+      break;
+    }
+    case 'custom': {
+      const startValue = search.get('from');
+      const endValue = search.get('to');
+      if (startValue) {
+        start = new Date(`${startValue}T00:00:00`);
+      }
+      if (endValue) {
+        end = new Date(`${endValue}T23:59:59.999`);
+      }
+      break;
+    }
+  }
+
+  if (!start && !end) {
+    return {};
+  }
+
+  return {
+    startTime: {
+      ...(start && !Number.isNaN(start.getTime())
+        ? { gte: start.toISOString() }
+        : {}),
+      ...(end && !Number.isNaN(end.getTime())
+        ? { lte: end.toISOString() }
+        : {}),
+    },
+  };
+};
+
 export const getScenarioFilters = (
   search: URLSearchParams,
   {
@@ -57,6 +112,7 @@ export const getScenarioFilters = (
   const { queueType } = getQueueTypeFilters(search);
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
+    ...getTimeFilters(search),
   };
 
   if (queueType !== undefined) {
@@ -78,89 +134,4 @@ export const getScenarioFilters = (
   }
 
   return where;
-};
-
-export const ScenarioFilters = (): ReactElement => {
-  const { t } = useTranslation('components');
-  const [search, setSearch] = useSearchParams();
-
-  const queueType = search.get('queue_type') || 'all';
-
-  return (
-    <div className="card mb-5">
-      <div className="card-content">
-        <div className="columns">
-          <div className="column">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="queueType-select">
-                  {t('scenarioFilters.queueType')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="queueType-select"
-                      value={queueType}
-                      onChange={(event) => {
-                        search.set('queue_type', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.queueTypeAll')}
-                      </option>
-                      <option value="standard">
-                        {t('scenarioFilters.queueTypeStandard')}
-                      </option>
-                      <option value="solo">
-                        {t('scenarioFilters.queueTypeDiscordant')}
-                      </option>
-                      <option value="city_siege">
-                        {t('scenarioFilters.queueTypeCitySiege')}
-                      </option>
-                      <option value="group_challenge">
-                        {t('scenarioFilters.queueTypeGroupChallenge')}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="tier-select">
-                  {t('scenarioFilters.tier')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="tier-select"
-                      value={search.get('tier') || 'all'}
-                      onChange={(event) => {
-                        search.set('tier', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.tierAll')}
-                      </option>
-                      <option value="1">Tier 1</option>
-                      <option value="3">Tier 2–3</option>
-                      <option value="4">Tier 4</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
 };

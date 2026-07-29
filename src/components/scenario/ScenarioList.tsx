@@ -3,7 +3,7 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
@@ -90,6 +90,11 @@ export const ScenarioList = ({
   const [search] = useSearchParams();
   const [resultLimit, setResultLimit] = useState(perPage);
   const [loadingMore, setLoadingMore] = useState(false);
+  const filterKey = search.toString();
+
+  useEffect(() => {
+    setResultLimit(perPage);
+  }, [filterKey, perPage]);
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
     variables: {
@@ -111,7 +116,12 @@ export const ScenarioList = ({
   const pageInfo = data?.scenarios?.pageInfo;
   const scenarios = data.scenarios.nodes;
   if (scenarios.length === 0) {
-    return <ErrorMessage customText={t('common:notFound')} />;
+    return (
+      <>
+        <ScenarioStandouts scenarios={[]} />
+        <ErrorMessage customText={t('common:notFound')} />
+      </>
+    );
   }
   const scenarioDates = scenarios.flatMap((scenario) => [
     new Date(scenario.startTime),

@@ -246,6 +246,15 @@ td.scenariolist-score-destruction {
   width: 100%;
 }
 
+.scenario-standout-filters input[type='date'] {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  min-height: 34px;
+  padding: 0.35rem;
+  width: 100%;
+}
+
 .scenario-modal-filters {
   background: rgba(20, 20, 20, 0.8);
   display: grid;
