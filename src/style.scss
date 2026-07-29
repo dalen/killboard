@@ -108,6 +108,462 @@ td.scenariolist-score-destruction {
   font-weight: bold;
 }
 
+.scenario-list-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.scenario-win-balance {
+  background: rgba(20, 20, 20, 0.45);
+  padding: 0.65rem 0.85rem;
+}
+
+.scenario-win-balance > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.scenario-win-balance strong {
+  color: $text-strong;
+}
+
+.scenario-win-balance-bar {
+  background: rgb(158, 12, 13);
+  height: 6px;
+  overflow: hidden;
+}
+
+.scenario-win-balance-bar span {
+  background: rgb(12, 47, 158);
+  display: block;
+  height: 100%;
+}
+
+.scenario-feed-toolbar {
+  align-items: center;
+  background: rgba(20, 20, 20, 0.45);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.65rem 0.85rem;
+}
+
+.scenario-feed-toolbar strong,
+.scenario-feed-toolbar span {
+  display: block;
+}
+
+.scenario-feed-toolbar span {
+  font-size: 0.78rem;
+}
+
+.scenario-list-summary > div {
+  background: rgba(50, 50, 50, 0.35);
+  border-top: 2px solid $primary;
+  padding: 0.75rem 1rem;
+  text-align: center;
+}
+
+.scenario-list-summary strong,
+.scenario-list-summary span {
+  display: block;
+}
+
+.scenario-list-summary strong {
+  color: $text-strong;
+  font-size: 1.35rem;
+}
+
+@media (max-width: 768px) {
+  .scenario-list-summary {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-roster-cell {
+  padding: 1rem !important;
+}
+
+.scenario-standouts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.scenario-standout-filters {
+  background: rgba(20, 20, 20, 0.55);
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  padding: 0.75rem;
+}
+
+.scenario-standout-filters label > span {
+  display: block;
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.scenario-standout-filters select {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  padding: 0.4rem;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .scenario-standout-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 520px) {
+  .scenario-standout-filters {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-standouts {
+  background: rgba(20, 20, 20, 0.55);
+  border-top: 3px solid;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.scenario-standouts-team-0 {
+  border-color: rgb(12, 47, 158);
+}
+
+.scenario-standouts-team-1 {
+  border-color: rgb(158, 12, 13);
+}
+
+.scenario-standouts > header {
+  align-items: center;
+  display: flex;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.scenario-standouts-expand {
+  margin-left: auto;
+}
+
+.scenario-standouts-modal .modal-card {
+  height: min(88vh, 900px);
+  position: relative;
+  width: min(94vw, 1500px);
+}
+
+.scenario-standouts-modal-close {
+  position: absolute;
+  right: 0.75rem;
+  top: 0.75rem;
+  z-index: 2;
+}
+
+.scenario-standouts-modal .modal-card-head {
+  background: #220606;
+  border-bottom-color: #7e0505;
+  padding-right: 3.25rem;
+}
+
+.scenario-standouts-modal .modal-card-head > div {
+  min-width: 0;
+}
+
+.scenario-standouts-modal .modal-card-title {
+  color: $text-strong;
+}
+
+.scenario-standouts-modal .modal-card-head p:not(.modal-card-title) {
+  font-size: 0.8rem;
+}
+
+.scenario-standouts-modal .modal-card-body {
+  background: #111;
+  padding: 1rem;
+}
+
+.scenario-standouts-modal .scenario-standouts {
+  min-width: 900px;
+}
+
+.scenario-standouts-sort {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: inherit;
+  gap: 0.3rem;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.scenario-standouts-sort:hover,
+.scenario-standouts-sort:focus-visible {
+  color: $primary;
+}
+
+.scenario-standouts-sort .fa-caret-up,
+.scenario-standouts-sort .fa-caret-down {
+  color: $primary;
+}
+
+.scenario-standouts > header strong,
+.scenario-standouts > header span {
+  display: block;
+}
+
+.scenario-standouts > header strong {
+  color: $text-strong;
+  font-size: 1.1rem;
+}
+
+.scenario-standouts > header span {
+  font-size: 0.8rem;
+}
+
+@media (max-width: 1200px) {
+  .scenario-standouts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.scenario-roster-preview {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.scenario-roster {
+  background: rgba(0, 0, 0, 0.25);
+  border-top: 3px solid;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.scenario-card-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.scenario-match-card {
+  background: rgba(20, 20, 20, 0.62);
+  border: 1px solid rgba(135, 123, 105, 0.3);
+  border-left: 3px solid $primary;
+}
+
+.scenario-match-header {
+  align-items: center;
+  display: grid;
+  gap: 1rem;
+  grid-template-columns:
+    minmax(180px, 1.2fr) minmax(220px, 1.4fr)
+    minmax(260px, 1fr) auto;
+  padding: 1rem;
+}
+
+.scenario-match-title strong,
+.scenario-match-title span {
+  display: block;
+}
+
+.scenario-match-title strong {
+  color: $text-strong;
+  font-size: 1.15rem;
+}
+
+.scenario-match-title span {
+  font-size: 0.8rem;
+}
+
+.scenario-match-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.scenario-match-tags span {
+  background: rgba(50, 50, 50, 0.6);
+  border: 1px solid rgba(135, 123, 105, 0.25);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.scenario-match-score {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(2, minmax(120px, 1fr));
+}
+
+.scenario-card-score {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-bottom: 2px solid transparent;
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.35rem 0.5rem;
+}
+
+.scenario-card-score-order {
+  border-color: rgba(12, 47, 158, 0.75);
+}
+
+.scenario-card-score-destruction {
+  border-color: rgba(158, 12, 13, 0.75);
+}
+
+.scenario-card-score.is-winner {
+  background: rgba(240, 190, 40, 0.09);
+}
+
+.scenario-card-score span,
+.scenario-card-score strong {
+  display: block;
+}
+
+.scenario-card-score span {
+  font-size: 0.68rem;
+}
+
+.scenario-card-score strong {
+  color: $text-strong;
+  font-size: 1.15rem;
+}
+
+.scenario-match-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.scenario-match-rosters {
+  border-top: 1px solid rgba(135, 123, 105, 0.25);
+  padding: 1rem;
+}
+
+@media (max-width: 1100px) {
+  .scenario-match-header {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .scenario-match-header {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-match-actions .button {
+    flex: 1;
+  }
+}
+
+.scenario-roster-order {
+  border-color: rgb(12, 47, 158);
+}
+
+.scenario-roster-destruction {
+  border-color: rgb(158, 12, 13);
+}
+
+.scenario-roster summary {
+  align-items: center;
+  cursor: pointer;
+  display: flex;
+  gap: 0.6rem;
+  list-style: none;
+  padding: 0.2rem;
+}
+
+.scenario-roster summary::-webkit-details-marker {
+  display: none;
+}
+
+.scenario-roster summary::after {
+  content: '▾';
+  margin-left: auto;
+}
+
+.scenario-roster:not([open]) summary::after {
+  content: '▸';
+}
+
+.scenario-roster summary strong,
+.scenario-roster summary span,
+.scenario-roster td small {
+  display: block;
+}
+
+.scenario-roster summary span,
+.scenario-roster td small {
+  font-size: 0.75rem;
+}
+
+.scenario-roster-content {
+  margin-top: 0.75rem;
+}
+
+.scenario-roster-totals {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.scenario-role-composition {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.4rem;
+  margin-bottom: 0.5rem;
+}
+
+.scenario-role-composition span {
+  border: 1px solid rgba(135, 123, 105, 0.35);
+  font-size: 0.72rem;
+  padding: 0.35rem;
+  text-align: center;
+}
+
+.scenario-role-composition strong {
+  color: $text-strong;
+}
+
+.scenario-role-heading th {
+  background: rgba(0, 0, 0, 0.45);
+  color: $text-strong;
+  padding-bottom: 0.45rem !important;
+  padding-top: 0.45rem !important;
+}
+
+.scenario-role-heading small {
+  color: $text;
+  display: block;
+  font-weight: normal;
+}
+
+.scenario-roster-totals span {
+  background: rgba(50, 50, 50, 0.35);
+  font-size: 0.75rem;
+  padding: 0.4rem;
+  text-align: center;
+}
+
+.scenario-roster-totals strong {
+  color: $text-strong;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .scenario-roster-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
 tr.skirmish-scoreboard-row-realm-order {
   background-color: rgba(12, 47, 158, 0.2);
   border-bottom: 2px solid #000000;

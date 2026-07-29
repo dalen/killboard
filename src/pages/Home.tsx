@@ -38,8 +38,8 @@ export const Home = ({
       </div>
       {tab === 'scenarios' && (
         <>
-          <ScenarioFilters />
-          <ScenarioList perPage={10} />
+          <ScenarioFilters showPremadeOnly />
+          <ScenarioList loadMore perPage={10} />
         </>
       )}
       {tab === 'players' && (

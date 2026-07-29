@@ -5,82 +5,85 @@ import {
   QuestRepeatableType
 } from '@/__generated__/graphql';
 
+export const assetUrl = (path: string): string =>
+  `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
+
 export const careerIcon = (career: Career): string => {
   switch (career) {
     case Career.Archmage: {
-      return '/images/icons/archmage.png';
+      return assetUrl('/images/icons/archmage.png');
     }
     case Career.BlackGuard: {
-      return '/images/icons/black-guard.png';
+      return assetUrl('/images/icons/black-guard.png');
     }
     case Career.BlackOrc: {
-      return '/images/icons/black-orc.png';
+      return assetUrl('/images/icons/black-orc.png');
     }
     case Career.BrightWizard: {
-      return '/images/icons/bright-wizard.png';
+      return assetUrl('/images/icons/bright-wizard.png');
     }
     case Career.Choppa: {
-      return '/images/icons/choppa.png';
+      return assetUrl('/images/icons/choppa.png');
     }
     case Career.Chosen: {
-      return '/images/icons/chosen.png';
+      return assetUrl('/images/icons/chosen.png');
     }
     case Career.DiscipleOfKhaine: {
-      return '/images/icons/disciple-of-khaine.png';
+      return assetUrl('/images/icons/disciple-of-khaine.png');
     }
     case Career.Engineer: {
-      return '/images/icons/engineer.png';
+      return assetUrl('/images/icons/engineer.png');
     }
     case Career.IronBreaker: {
-      return '/images/icons/ironbreaker.png';
+      return assetUrl('/images/icons/ironbreaker.png');
     }
     case Career.KnightOfTheBlazingSun: {
-      return '/images/icons/knight-of-the-blazing-sun.png';
+      return assetUrl('/images/icons/knight-of-the-blazing-sun.png');
     }
     case Career.Magus: {
-      return '/images/icons/magus.png';
+      return assetUrl('/images/icons/magus.png');
     }
     case Career.Marauder: {
-      return '/images/icons/marauder.png';
+      return assetUrl('/images/icons/marauder.png');
     }
     case Career.RunePriest: {
-      return '/images/icons/rune-priest.png';
+      return assetUrl('/images/icons/rune-priest.png');
     }
     case Career.ShadowWarrior: {
-      return '/images/icons/shadow-warrior.png';
+      return assetUrl('/images/icons/shadow-warrior.png');
     }
     case Career.Shaman: {
-      return '/images/icons/shaman.png';
+      return assetUrl('/images/icons/shaman.png');
     }
     case Career.Slayer: {
-      return '/images/icons/slayer.png';
+      return assetUrl('/images/icons/slayer.png');
     }
     case Career.Sorcerer: {
-      return '/images/icons/sorcerer.png';
+      return assetUrl('/images/icons/sorcerer.png');
     }
     case Career.SquigHerder: {
-      return '/images/icons/squig-herder.png';
+      return assetUrl('/images/icons/squig-herder.png');
     }
     case Career.SwordMaster: {
-      return '/images/icons/sword-master.png';
+      return assetUrl('/images/icons/sword-master.png');
     }
     case Career.WarriorPriest: {
-      return '/images/icons/warrior-priest.png';
+      return assetUrl('/images/icons/warrior-priest.png');
     }
     case Career.WhiteLion: {
-      return '/images/icons/white-lion.png';
+      return assetUrl('/images/icons/white-lion.png');
     }
     case Career.WitchElf: {
-      return '/images/icons/witch-elf.png';
+      return assetUrl('/images/icons/witch-elf.png');
     }
     case Career.WitchHunter: {
-      return '/images/icons/witch-hunter.png';
+      return assetUrl('/images/icons/witch-hunter.png');
     }
     case Career.Zealot: {
-      return '/images/icons/zealot.png';
+      return assetUrl('/images/icons/zealot.png');
     }
     default: {
-      return '/images/icons/hidden.png';
+      return assetUrl('/images/icons/hidden.png');
     }
   }
 };

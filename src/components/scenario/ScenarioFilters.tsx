@@ -10,16 +10,24 @@ const getQueueTypeFilters = (
   const premadeOnly = search.get('premadeOnly') === 'true';
 
   switch (queueType) {
-    case 'standard':
+    case 'standard': {
       return { queueType: 0, premadeOnly };
-    case 'group_ranked':
+    }
+    case 'group_ranked': {
       return { queueType: 1, premadeOnly };
-    case 'solo':
+    }
+    case 'solo': {
       return { queueType: 2, premadeOnly };
-    case 'city_siege':
-      return { queueType: 3, premadeOnly };
-    case 'solo_ranked':
+    }
+    case 'city_siege': {
       return { queueType: 4, premadeOnly };
+    }
+    case 'solo_ranked': {
+      return { queueType: 5, premadeOnly };
+    }
+    case 'group_challenge': {
+      return { queueType: 6, premadeOnly };
+    }
   }
 
   return { premadeOnly };
@@ -63,10 +71,18 @@ export const getScenarioFilters = (
   }
 
   const scoreboardEntry: Record<string, unknown> = {};
-  if (characterId) scoreboardEntry.characterId = { eq: characterId };
-  if (guildId) scoreboardEntry.guildId = { eq: guildId };
-  if (wins !== undefined) scoreboardEntry.isWinner = { eq: wins };
-  if (premadeOnly) scoreboardEntry.isGuildPremade = { eq: true };
+  if (characterId) {
+    scoreboardEntry.characterId = { eq: characterId };
+  }
+  if (guildId) {
+    scoreboardEntry.guildId = { eq: guildId };
+  }
+  if (wins !== undefined) {
+    scoreboardEntry.isWinner = { eq: wins };
+  }
+  if (premadeOnly) {
+    scoreboardEntry.isGuildPremade = { eq: true };
+  }
 
   if (Object.keys(scoreboardEntry).length > 0) {
     where.scoreboardEntries = { some: scoreboardEntry };
@@ -114,7 +130,7 @@ export const ScenarioFilters = ({
                         {t('scenarioFilters.queueTypeStandard')}
                       </option>
                       <option value="solo">
-                        {t('scenarioFilters.queueTypeSolo')}
+                        {t('scenarioFilters.queueTypeDiscordant')}
                       </option>
                       <option value="city_siege">
                         {t('scenarioFilters.queueTypeCitySiege')}
@@ -124,6 +140,9 @@ export const ScenarioFilters = ({
                       </option>
                       <option value="solo_ranked">
                         {t('scenarioFilters.queueTypeSoloRanked')}
+                      </option>
+                      <option value="group_challenge">
+                        {t('scenarioFilters.queueTypeGroupChallenge')}
                       </option>
                     </select>
                   </div>
@@ -152,9 +171,9 @@ export const ScenarioFilters = ({
                       <option value="all">
                         {t('scenarioFilters.tierAll')}
                       </option>
-                      <option value="1">1</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
+                      <option value="1">Tier 1</option>
+                      <option value="3">Tier 2–3</option>
+                      <option value="4">Tier 4</option>
                     </select>
                   </div>
                 </div>
