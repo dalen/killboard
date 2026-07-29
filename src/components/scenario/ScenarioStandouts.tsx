@@ -13,6 +13,7 @@ import { assetUrl } from '@/utils';
 type RealmFilter = 'both' | 'order' | 'destruction';
 type RoleFilter = 'all' | ScenarioRole;
 type CareerFilter = 'all' | Career;
+type RankingMode = 'totals' | 'average';
 type TableSortKey =
   | 'overall'
   | 'career'
@@ -83,6 +84,8 @@ const getStandouts = ({
   career,
   limit,
   metric,
+  minimumScenarios,
+  mode,
   role,
   scenarios,
   team,
@@ -90,6 +93,8 @@ const getStandouts = ({
   career: CareerFilter;
   limit: number;
   metric: RankingMetric;
+  minimumScenarios: number;
+  mode: RankingMode;
   role: RoleFilter;
   scenarios: ScenarioRecord[];
   team: number;
@@ -130,6 +135,7 @@ const getStandouts = ({
 
   const values = [...characters.values()].filter(
     (value) =>
+      value.scenarios >= minimumScenarios &&
       (role === 'all' || scenarioCareerRoles[value.career] === role) &&
       (career === 'all' || value.career === career),
   );
@@ -161,10 +167,23 @@ const getStandouts = ({
       });
     })
     .toSorted(
-      (left, right) =>
-        right[metric] - left[metric] ||
+      (left, right) => {
+        const metricValue = (standout: Standout): number => {
+          if (
+            mode === 'average' &&
+            !['overall', 'scenarios', 'wins', 'winRate'].includes(metric)
+          ) {
+            return standout[metric] / standout.scenarios;
+          }
+          return standout[metric];
+        };
+
+        return (
+          metricValue(right) - metricValue(left) ||
         right.scenarios - left.scenarios ||
-        right.kills - left.kills,
+          right.kills - left.kills
+        );
+      },
     )
     .slice(0, limit);
 };
@@ -173,6 +192,8 @@ const StandoutTable = ({
   career,
   limit,
   metric,
+  minimumScenarios,
+  mode,
   realm,
   role,
   scenarios,
@@ -184,6 +205,8 @@ const StandoutTable = ({
   career: CareerFilter;
   limit: number;
   metric: RankingMetric;
+  minimumScenarios: number;
+  mode: RankingMode;
   realm: 'Order' | 'Destruction';
   role: RoleFilter;
   scenarios: ScenarioRecord[];
@@ -198,10 +221,23 @@ const StandoutTable = ({
     career,
     limit,
     metric,
+    minimumScenarios,
+    mode,
     role,
     scenarios,
     team,
   });
+  const sortableValue = (standout: Standout, key: TableSortKey): number => {
+    const value = standout[key];
+    if (
+      typeof value === 'number' &&
+      mode === 'average' &&
+      !['overall', 'scenarios', 'wins', 'winRate'].includes(key)
+    ) {
+      return value / standout.scenarios;
+    }
+    return typeof value === 'number' ? value : 0;
+  };
   const sortedStandouts = sortable
     ? standouts.toSorted((left, right) => {
         let result = 0;
@@ -212,7 +248,8 @@ const StandoutTable = ({
             scenarioCareerName(right.career),
           );
         } else {
-          result = left[sortKey] - right[sortKey];
+          result =
+            sortableValue(left, sortKey) - sortableValue(right, sortKey);
         }
 
         return (
@@ -222,6 +259,8 @@ const StandoutTable = ({
       })
     : standouts;
   const wins = scenarios.filter((scenario) => scenario.winner === team).length;
+  const contributionValue = (value: number, standout: Standout): number =>
+    mode === 'average' ? value / standout.scenarios : value;
   const sortBy = (key: TableSortKey): void => {
     if (key === sortKey) {
       setSortDirection((current) => (current === 'desc' ? 'asc' : 'desc'));
@@ -274,6 +313,7 @@ const StandoutTable = ({
           <span>
             {scenarios.length} scenarios · {wins} wins ·{' '}
             {scenarios.length - wins} losses · ranked by {metricLabels[metric]}
+            {mode === 'average' ? ' per scenario' : ''}
           </span>
         </div>
         {onExpand && (
@@ -341,14 +381,38 @@ const StandoutTable = ({
                   <td align="right">{standout.scenarios}</td>
                   <td align="right">{standout.wins}</td>
                   <td align="right">{Math.round(standout.winRate * 100)}%</td>
-                  <td align="right">{standout.kills}</td>
-                  <td align="right">{compactNumber(standout.killDamage)}</td>
-                  <td align="right">{compactNumber(standout.damage)}</td>
-                  <td align="right">{standout.deathBlows}</td>
-                  <td align="right">{compactNumber(standout.healing)}</td>
-                  <td align="right">{compactNumber(standout.protection)}</td>
                   <td align="right">
-                    {compactNumber(standout.objectiveScore)}
+                    {compactNumber(contributionValue(standout.kills, standout))}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.killDamage, standout),
+                    )}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.damage, standout),
+                    )}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.deathBlows, standout),
+                    )}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.healing, standout),
+                    )}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.protection, standout),
+                    )}
+                  </td>
+                  <td align="right">
+                    {compactNumber(
+                      contributionValue(standout.objectiveScore, standout),
+                    )}
                   </td>
                 </tr>
               ))}
@@ -371,6 +435,8 @@ export const ScenarioStandouts = ({
   const careerParam = searchParams.get('lbCareer') as CareerFilter;
   const metricParam = searchParams.get('lbMetric') as RankingMetric;
   const limitParam = Number(searchParams.get('lbLimit'));
+  const minimumScenariosParam = Number(searchParams.get('lbMin'));
+  const modeParam = searchParams.get('lbMode') as RankingMode;
   const realm = realmFilters.includes(realmParam) ? realmParam : 'both';
   const role = roleFilters.includes(roleParam) ? roleParam : 'all';
   const career =
@@ -379,6 +445,10 @@ export const ScenarioStandouts = ({
       : 'all';
   const metric = rankingMetrics.includes(metricParam) ? metricParam : 'overall';
   const limit = [5, 10, 25].includes(limitParam) ? limitParam : 5;
+  const minimumScenarios = [1, 2, 3, 5].includes(minimumScenariosParam)
+    ? minimumScenariosParam
+    : 1;
+  const mode: RankingMode = modeParam === 'average' ? 'average' : 'totals';
   const [expandedTeam, setExpandedTeam] = useState<number>();
   const [selectedPlayer, setSelectedPlayer] = useState<{
     realm: 'Order' | 'Destruction';
@@ -550,6 +620,8 @@ export const ScenarioStandouts = ({
             career={career}
             limit={limit}
             metric={metric}
+            minimumScenarios={minimumScenarios}
+            mode={mode}
             realm="Order"
             role={role}
             scenarios={scenarios}
@@ -567,6 +639,8 @@ export const ScenarioStandouts = ({
             career={career}
             limit={limit}
             metric={metric}
+            minimumScenarios={minimumScenarios}
+            mode={mode}
             realm="Destruction"
             role={role}
             scenarios={scenarios}
@@ -621,10 +695,113 @@ export const ScenarioStandouts = ({
               </div>
             </header>
             <section className="modal-card-body">
+              <div className="scenario-modal-filters mb-3">
+                <label>
+                  <span>Role</span>
+                  <select
+                    value={role}
+                    onChange={(event) => {
+                      updateParams({
+                        lbCareer: undefined,
+                        lbRole:
+                          event.target.value === 'all'
+                            ? undefined
+                            : event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="all">All roles</option>
+                    {scenarioRoleOrder.map((roleOption) => (
+                      <option key={roleOption} value={roleOption}>
+                        {roleOption}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>Career</span>
+                  <select
+                    value={career}
+                    onChange={(event) => {
+                      updateParams({
+                        lbCareer:
+                          event.target.value === 'all'
+                            ? undefined
+                            : event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="all">All careers</option>
+                    {careerOptions.map((careerOption) => (
+                      <option key={careerOption} value={careerOption}>
+                        {scenarioCareerName(careerOption)}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>Rank by</span>
+                  <select
+                    value={metric}
+                    onChange={(event) => {
+                      updateParams({
+                        lbMetric:
+                          event.target.value === 'overall'
+                            ? undefined
+                            : event.target.value,
+                      });
+                    }}
+                  >
+                    {Object.entries(metricLabels).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label>
+                  <span>Minimum scenarios</span>
+                  <select
+                    value={minimumScenarios}
+                    onChange={(event) => {
+                      updateParams({
+                        lbMin:
+                          event.target.value === '1'
+                            ? undefined
+                            : event.target.value,
+                      });
+                    }}
+                  >
+                    <option value={1}>1+</option>
+                    <option value={2}>2+</option>
+                    <option value={3}>3+</option>
+                    <option value={5}>5+</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Numbers shown</span>
+                  <select
+                    value={mode}
+                    onChange={(event) => {
+                      updateParams({
+                        lbMode:
+                          event.target.value === 'totals'
+                            ? undefined
+                            : event.target.value,
+                      });
+                    }}
+                  >
+                    <option value="totals">Totals</option>
+                    <option value="average">Per scenario</option>
+                  </select>
+                </label>
+              </div>
               <StandoutTable
                 career={career}
                 limit={100}
                 metric={metric}
+                minimumScenarios={minimumScenarios}
+                mode={mode}
                 realm={expandedTeam === 0 ? 'Order' : 'Destruction'}
                 role={role}
                 scenarios={scenarios}

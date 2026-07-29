@@ -38,7 +38,7 @@ export const Home = ({
       </div>
       {tab === 'scenarios' && (
         <>
-          <ScenarioFilters showPremadeOnly />
+          <ScenarioFilters />
           <ScenarioList loadMore perPage={10} />
         </>
       )}

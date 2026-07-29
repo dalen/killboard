@@ -5,32 +5,25 @@ import { useSearchParams } from 'react-router';
 
 const getQueueTypeFilters = (
   search: URLSearchParams,
-): { queueType?: number; premadeOnly: boolean } => {
+): { queueType?: number } => {
   const queueType = search.get('queue_type');
-  const premadeOnly = search.get('premadeOnly') === 'true';
 
   switch (queueType) {
     case 'standard': {
-      return { queueType: 0, premadeOnly };
-    }
-    case 'group_ranked': {
-      return { queueType: 1, premadeOnly };
+      return { queueType: 0 };
     }
     case 'solo': {
-      return { queueType: 2, premadeOnly };
+      return { queueType: 2 };
     }
     case 'city_siege': {
-      return { queueType: 4, premadeOnly };
-    }
-    case 'solo_ranked': {
-      return { queueType: 5, premadeOnly };
+      return { queueType: 4 };
     }
     case 'group_challenge': {
-      return { queueType: 6, premadeOnly };
+      return { queueType: 6 };
     }
   }
 
-  return { premadeOnly };
+  return {};
 };
 
 const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
@@ -61,7 +54,7 @@ export const getScenarioFilters = (
     wins,
   }: { characterId?: string; guildId?: string; wins?: boolean } = {},
 ): ScenarioRecordFilterInput => {
-  const { queueType, premadeOnly } = getQueueTypeFilters(search);
+  const { queueType } = getQueueTypeFilters(search);
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
   };
@@ -80,10 +73,6 @@ export const getScenarioFilters = (
   if (wins !== undefined) {
     scoreboardEntry.isWinner = { eq: wins };
   }
-  if (premadeOnly) {
-    scoreboardEntry.isGuildPremade = { eq: true };
-  }
-
   if (Object.keys(scoreboardEntry).length > 0) {
     where.scoreboardEntries = { some: scoreboardEntry };
   }
@@ -91,11 +80,7 @@ export const getScenarioFilters = (
   return where;
 };
 
-export const ScenarioFilters = ({
-  showPremadeOnly = false,
-}: {
-  showPremadeOnly?: boolean;
-}): ReactElement => {
+export const ScenarioFilters = (): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
@@ -134,12 +119,6 @@ export const ScenarioFilters = ({
                       </option>
                       <option value="city_siege">
                         {t('scenarioFilters.queueTypeCitySiege')}
-                      </option>
-                      <option value="group_ranked">
-                        {t('scenarioFilters.queueTypeGroupRanked')}
-                      </option>
-                      <option value="solo_ranked">
-                        {t('scenarioFilters.queueTypeSoloRanked')}
                       </option>
                       <option value="group_challenge">
                         {t('scenarioFilters.queueTypeGroupChallenge')}
@@ -180,25 +159,6 @@ export const ScenarioFilters = ({
               </div>
             </div>
           </div>
-          {showPremadeOnly && (
-            <div className="column">
-              <label title="Scenarios with 6+ guild members only">
-                <input
-                  type="checkbox"
-                  checked={search.has('premadeOnly')}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      search.set('premadeOnly', 'true');
-                    } else {
-                      search.delete('premadeOnly');
-                    }
-                    setSearch(search);
-                  }}
-                />{' '}
-                {t('scenarioFilters.premadeOnly')}
-              </label>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -127,7 +127,7 @@ export const Guild = ({
       {tab === 'members' && <GuildMemberList id={id} />}
       {tab === 'scenarios' && (
         <div>
-          <ScenarioFilters showPremadeOnly />
+          <ScenarioFilters />
           <div className="columns is-desktop">
             <div className="column">
               <ScenarioCount guildId={id} wins title="Wins" />

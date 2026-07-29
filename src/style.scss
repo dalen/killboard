@@ -246,14 +246,44 @@ td.scenariolist-score-destruction {
   width: 100%;
 }
 
+.scenario-modal-filters {
+  background: rgba(20, 20, 20, 0.8);
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(5, minmax(130px, 1fr));
+  padding: 0.75rem;
+}
+
+.scenario-modal-filters label > span {
+  display: block;
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.scenario-modal-filters select {
+  background: #171717;
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  padding: 0.4rem;
+  width: 100%;
+}
+
 @media (max-width: 900px) {
   .scenario-standout-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scenario-modal-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 520px) {
   .scenario-standout-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-modal-filters {
     grid-template-columns: 1fr;
   }
 }

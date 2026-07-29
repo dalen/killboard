@@ -5,22 +5,6 @@ import type { ScenarioRecord } from '@/__generated__/graphql';
 import { ScenarioRosterPreview } from '@/components/scenario/ScenarioRosterPreview';
 import { assetUrl } from '@/utils';
 
-const scenarioQueueTypes: Record<number, string> = {
-  0: 'Standard',
-  1: 'Group Ranked',
-  2: 'Random Scenario',
-  3: 'Unused',
-  4: 'City Siege',
-  5: 'Solo Ranked',
-  6: 'Group Challenge',
-};
-
-const scenarioTierNames: Record<number, string> = {
-  1: 'Tier 1',
-  3: 'Tier 2–3',
-  4: 'Tier 4',
-};
-
 const RealmScore = ({
   isWinner,
   name,
@@ -90,12 +74,6 @@ export const ScenarioListTable = ({
                 </span>
               </div>
               <div className="scenario-match-tags">
-                <span>
-                  {scenarioTierNames[scenario.tier] ?? `Tier ${scenario.tier}`}
-                </span>
-                <span>
-                  {scenarioQueueTypes[scenario.queueType] ?? 'Unknown'}
-                </span>
                 <span>{scenario.numPlayers} players</span>
                 <span>{Number(scenario.numDeaths)} deaths</span>
               </div>
