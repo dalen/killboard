@@ -1,5 +1,5 @@
 import { type ReactElement, useEffect, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { Career, type ScenarioRecord } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import {
@@ -68,6 +68,10 @@ const metricLabels: Record<RankingMetric, string> = {
   protection: 'Protection',
   objectiveScore: 'Objective score',
 };
+
+const rankingMetrics = Object.keys(metricLabels) as RankingMetric[];
+const realmFilters: RealmFilter[] = ['both', 'order', 'destruction'];
+const roleFilters: RoleFilter[] = ['all', ...scenarioRoleOrder];
 
 const compactNumber = (value: number): string =>
   new Intl.NumberFormat('en', {
@@ -175,6 +179,7 @@ const StandoutTable = ({
   sortable = false,
   team,
   onExpand,
+  onSelectPlayer,
 }: {
   career: CareerFilter;
   limit: number;
@@ -185,6 +190,7 @@ const StandoutTable = ({
   sortable?: boolean;
   team: number;
   onExpand?: () => void;
+  onSelectPlayer?: (standout: Standout, realm: 'Order' | 'Destruction') => void;
 }): ReactElement => {
   const [sortKey, setSortKey] = useState<TableSortKey>(metric);
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
@@ -322,9 +328,15 @@ const StandoutTable = ({
                     <CareerIcon career={standout.career} />
                   </td>
                   <td>
-                    <Link to={`/character/${standout.characterId}`}>
+                    <button
+                      type="button"
+                      className="scenario-player-link"
+                      onClick={() => {
+                        onSelectPlayer?.(standout, realm);
+                      }}
+                    >
                       {standout.name}
-                    </Link>
+                    </button>
                   </td>
                   <td align="right">{standout.scenarios}</td>
                   <td align="right">{standout.wins}</td>
@@ -353,17 +365,44 @@ export const ScenarioStandouts = ({
 }: {
   scenarios: ScenarioRecord[];
 }): ReactElement => {
-  const [realm, setRealm] = useState<RealmFilter>('both');
-  const [role, setRole] = useState<RoleFilter>('all');
-  const [career, setCareer] = useState<CareerFilter>('all');
-  const [metric, setMetric] = useState<RankingMetric>('overall');
-  const [limit, setLimit] = useState(5);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const realmParam = searchParams.get('lbRealm') as RealmFilter;
+  const roleParam = searchParams.get('lbRole') as RoleFilter;
+  const careerParam = searchParams.get('lbCareer') as CareerFilter;
+  const metricParam = searchParams.get('lbMetric') as RankingMetric;
+  const limitParam = Number(searchParams.get('lbLimit'));
+  const realm = realmFilters.includes(realmParam) ? realmParam : 'both';
+  const role = roleFilters.includes(roleParam) ? roleParam : 'all';
+  const career =
+    careerParam === 'all' || Object.values(Career).includes(careerParam)
+      ? careerParam
+      : 'all';
+  const metric = rankingMetrics.includes(metricParam) ? metricParam : 'overall';
+  const limit = [5, 10, 25].includes(limitParam) ? limitParam : 5;
   const [expandedTeam, setExpandedTeam] = useState<number>();
+  const [selectedPlayer, setSelectedPlayer] = useState<{
+    realm: 'Order' | 'Destruction';
+    standout: Standout;
+  }>();
+  const [shareStatus, setShareStatus] = useState('');
+
+  const updateParams = (updates: Record<string, string | undefined>): void => {
+    const next = new URLSearchParams(searchParams);
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === undefined) {
+        next.delete(key);
+      } else {
+        next.set(key, value);
+      }
+    }
+    setSearchParams(next, { replace: true });
+  };
 
   useEffect(() => {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setExpandedTeam(undefined);
+        setSelectedPlayer(undefined);
       }
     };
     document.addEventListener('keydown', closeOnEscape);
@@ -385,7 +424,12 @@ export const ScenarioStandouts = ({
           <select
             value={realm}
             onChange={(event) => {
-              setRealm(event.target.value as RealmFilter);
+              updateParams({
+                lbRealm:
+                  event.target.value === 'both'
+                    ? undefined
+                    : event.target.value,
+              });
             }}
           >
             <option value="both">Both realms</option>
@@ -398,8 +442,11 @@ export const ScenarioStandouts = ({
           <select
             value={role}
             onChange={(event) => {
-              setRole(event.target.value as RoleFilter);
-              setCareer('all');
+              updateParams({
+                lbCareer: undefined,
+                lbRole:
+                  event.target.value === 'all' ? undefined : event.target.value,
+              });
             }}
           >
             <option value="all">All roles</option>
@@ -415,7 +462,10 @@ export const ScenarioStandouts = ({
           <select
             value={career}
             onChange={(event) => {
-              setCareer(event.target.value as CareerFilter);
+              updateParams({
+                lbCareer:
+                  event.target.value === 'all' ? undefined : event.target.value,
+              });
             }}
           >
             <option value="all">All careers</option>
@@ -431,7 +481,12 @@ export const ScenarioStandouts = ({
           <select
             value={metric}
             onChange={(event) => {
-              setMetric(event.target.value as RankingMetric);
+              updateParams({
+                lbMetric:
+                  event.target.value === 'overall'
+                    ? undefined
+                    : event.target.value,
+              });
             }}
           >
             {Object.entries(metricLabels).map(([value, label]) => (
@@ -446,7 +501,10 @@ export const ScenarioStandouts = ({
           <select
             value={limit}
             onChange={(event) => {
-              setLimit(Number(event.target.value));
+              updateParams({
+                lbLimit:
+                  event.target.value === '5' ? undefined : event.target.value,
+              });
             }}
           >
             <option value={5}>Top 5</option>
@@ -454,6 +512,37 @@ export const ScenarioStandouts = ({
             <option value={25}>Top 25</option>
           </select>
         </label>
+        <div className="scenario-standout-actions">
+          <span>Share view</span>
+          <button
+            type="button"
+            className="button is-small"
+            onClick={() => {
+              void navigator.clipboard
+                .writeText(window.location.href)
+                .then(() => {
+                  setShareStatus('Link copied');
+                  window.setTimeout(() => {
+                    setShareStatus('');
+                  }, 1800);
+                })
+                .catch(() => {
+                  setShareStatus('Copy failed');
+                });
+            }}
+          >
+            <span className="icon">
+              <i className="fas fa-link" />
+            </span>
+            <span>{shareStatus || 'Copy link'}</span>
+          </button>
+        </div>
+      </div>
+      <div className="scenario-ranking-note mb-3">
+        <strong>How rankings work:</strong> totals cover the scenarios currently
+        loaded above. Overall contribution combines a character&apos;s strongest
+        combat or objective stat (65%), win rate (20%), and participation (15%).
+        Open a player for averages and full-profile access.
       </div>
       <div className="scenario-standouts-grid mb-4">
         {realm !== 'destruction' && (
@@ -468,6 +557,9 @@ export const ScenarioStandouts = ({
             onExpand={() => {
               setExpandedTeam(0);
             }}
+            onSelectPlayer={(standout, selectedRealm) => {
+              setSelectedPlayer({ realm: selectedRealm, standout });
+            }}
           />
         )}
         {realm !== 'order' && (
@@ -481,6 +573,9 @@ export const ScenarioStandouts = ({
             team={1}
             onExpand={() => {
               setExpandedTeam(1);
+            }}
+            onSelectPlayer={(standout, selectedRealm) => {
+              setSelectedPlayer({ realm: selectedRealm, standout });
             }}
           />
         )}
@@ -535,7 +630,112 @@ export const ScenarioStandouts = ({
                 scenarios={scenarios}
                 sortable
                 team={expandedTeam}
+                onSelectPlayer={(standout, selectedRealm) => {
+                  setSelectedPlayer({ realm: selectedRealm, standout });
+                }}
               />
+            </section>
+          </div>
+        </div>
+      )}
+      {selectedPlayer && (
+        <div className="modal is-active scenario-player-modal">
+          <button
+            type="button"
+            className="modal-background"
+            aria-label="Close player summary"
+            onClick={() => {
+              setSelectedPlayer(undefined);
+            }}
+          />
+          <div className="modal-card" role="dialog" aria-modal="true">
+            <button
+              type="button"
+              className="delete scenario-standouts-modal-close"
+              aria-label="Close"
+              onClick={() => {
+                setSelectedPlayer(undefined);
+              }}
+            />
+            <header className="modal-card-head">
+              <div className="scenario-player-heading">
+                <CareerIcon career={selectedPlayer.standout.career} />
+                <div>
+                  <p className="modal-card-title">
+                    {selectedPlayer.standout.name}
+                  </p>
+                  <p>
+                    {selectedPlayer.realm} ·{' '}
+                    {scenarioCareerName(selectedPlayer.standout.career)} ·
+                    current activity window
+                  </p>
+                </div>
+              </div>
+            </header>
+            <section className="modal-card-body">
+              <div className="scenario-player-stats">
+                <div>
+                  <strong>{selectedPlayer.standout.scenarios}</strong>
+                  <span>Scenarios</span>
+                </div>
+                <div>
+                  <strong>
+                    {Math.round(selectedPlayer.standout.winRate * 100)}%
+                  </strong>
+                  <span>Win rate</span>
+                </div>
+                <div>
+                  <strong>{selectedPlayer.standout.kills}</strong>
+                  <span>Kills</span>
+                </div>
+                <div>
+                  <strong>{selectedPlayer.standout.deathBlows}</strong>
+                  <span>Death blows</span>
+                </div>
+                <div>
+                  <strong>{compactNumber(selectedPlayer.standout.damage)}</strong>
+                  <span>Total damage</span>
+                </div>
+                <div>
+                  <strong>{compactNumber(selectedPlayer.standout.healing)}</strong>
+                  <span>Total healing</span>
+                </div>
+                <div>
+                  <strong>
+                    {compactNumber(selectedPlayer.standout.protection)}
+                  </strong>
+                  <span>Total protection</span>
+                </div>
+                <div>
+                  <strong>
+                    {compactNumber(selectedPlayer.standout.objectiveScore)}
+                  </strong>
+                  <span>Objective score</span>
+                </div>
+              </div>
+              <div className="scenario-player-averages">
+                Per scenario: {compactNumber(
+                  selectedPlayer.standout.damage /
+                    selectedPlayer.standout.scenarios,
+                )}{' '}
+                damage ·{' '}
+                {compactNumber(
+                  selectedPlayer.standout.healing /
+                    selectedPlayer.standout.scenarios,
+                )}{' '}
+                healing ·{' '}
+                {compactNumber(
+                  selectedPlayer.standout.protection /
+                    selectedPlayer.standout.scenarios,
+                )}{' '}
+                protection
+              </div>
+              <Link
+                className="button is-primary mt-4"
+                to={`/character/${selectedPlayer.standout.characterId}`}
+              >
+                Open full character profile
+              </Link>
             </section>
           </div>
         </div>

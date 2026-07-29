@@ -195,8 +195,41 @@ td.scenariolist-score-destruction {
   background: rgba(20, 20, 20, 0.55);
   display: grid;
   gap: 0.65rem;
-  grid-template-columns: repeat(5, minmax(120px, 1fr));
+  grid-template-columns: repeat(6, minmax(120px, 1fr));
   padding: 0.75rem;
+}
+
+.scenario-standout-actions {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+}
+
+.scenario-standout-actions > span {
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.scenario-ranking-note {
+  background: rgba(20, 20, 20, 0.45);
+  border-left: 3px solid $primary;
+  font-size: 0.82rem;
+  padding: 0.65rem 0.85rem;
+}
+
+.scenario-player-link {
+  background: none;
+  border: 0;
+  color: $link;
+  cursor: pointer;
+  font: inherit;
+  padding: 0;
+}
+
+.scenario-player-link:hover,
+.scenario-player-link:focus-visible {
+  color: $primary;
+  text-decoration: underline;
 }
 
 .scenario-standout-filters label > span {
@@ -291,6 +324,80 @@ td.scenariolist-score-destruction {
   min-width: 900px;
 }
 
+.scenario-player-modal .modal-card {
+  position: relative;
+  width: min(92vw, 720px);
+}
+
+.scenario-player-modal .modal-card-head {
+  background: #220606;
+  padding-right: 3.25rem;
+}
+
+.scenario-player-modal .modal-card-body {
+  background: #111;
+}
+
+.scenario-player-heading {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.scenario-player-heading p {
+  margin: 0;
+}
+
+.scenario-player-heading p:last-child {
+  font-size: 0.82rem;
+}
+
+.scenario-player-stats {
+  display: grid;
+  gap: 0.6rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.scenario-player-stats > div,
+.scenario-detail-highlights > div {
+  background: rgba(50, 50, 50, 0.35);
+  border-top: 2px solid $primary;
+  padding: 0.7rem;
+}
+
+.scenario-player-stats strong,
+.scenario-player-stats span,
+.scenario-detail-highlights strong,
+.scenario-detail-highlights span {
+  display: block;
+}
+
+.scenario-player-stats strong,
+.scenario-detail-highlights strong {
+  color: $text-strong;
+}
+
+.scenario-player-stats span,
+.scenario-detail-highlights span {
+  font-size: 0.75rem;
+}
+
+.scenario-player-averages {
+  background: rgba(20, 20, 20, 0.55);
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+}
+
+.scenario-detail-hero {
+  border-top: 3px solid $primary;
+}
+
+.scenario-detail-highlights {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
 .scenario-standouts-sort {
   align-items: center;
   background: none;
@@ -331,6 +438,25 @@ td.scenariolist-score-destruction {
 
 @media (max-width: 1200px) {
   .scenario-standouts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .scenario-detail-highlights,
+  .scenario-player-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .scenario-standouts-modal .modal-card {
+    height: 94vh;
+    width: 98vw;
+  }
+}
+
+@media (max-width: 420px) {
+  .scenario-detail-highlights,
+  .scenario-player-stats {
     grid-template-columns: 1fr;
   }
 }

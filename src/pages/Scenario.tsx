@@ -16,6 +16,7 @@ import { ScenarioHeatmap } from '@/components/scenario/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '@/components/scenario/ScenarioSkirmishes';
 import type { ReactElement } from 'react';
 import type { GetScenarioInfoQuery } from '@/__generated__/graphql';
+import { assetUrl } from '@/utils';
 
 export const SCENARIO_SCOREBOARD_FRAGMENT = gql`
   fragment ScenarioScoreboardEntry on ScenarioScoreboardEntry {
@@ -90,7 +91,7 @@ const SCENARIO_INFO = gql`
 const ScenarioQueueTypes: Record<number, string> = {
   0: 'Standard',
   1: 'Group Ranked',
-  2: 'Discordant Skirmish',
+  2: 'Random Scenario',
   3: 'Unused',
   4: 'City Siege',
   5: 'Solo Ranked',
@@ -131,6 +132,21 @@ export const Scenario = ({
       start: startDate,
     }),
   );
+  const orderEntries = scenario.scoreboardEntries.filter(
+    (entry) => entry.team === 0,
+  );
+  const destructionEntries = scenario.scoreboardEntries.filter(
+    (entry) => entry.team === 1,
+  );
+  const topDamage = scenario.scoreboardEntries.toSorted(
+    (left, right) => right.damage - left.damage,
+  )[0];
+  const topHealing = scenario.scoreboardEntries.toSorted(
+    (left, right) => right.healing - left.healing,
+  )[0];
+  const topProtection = scenario.scoreboardEntries.toSorted(
+    (left, right) => right.protection - left.protection,
+  )[0];
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -149,7 +165,7 @@ export const Scenario = ({
           </li>
         </ul>
       </nav>
-      <div className="card mb-5">
+      <div className="card mb-4 scenario-detail-hero">
         <div className="card-content">
           <div className="columns">
             <div className="column is-4">
@@ -180,7 +196,7 @@ export const Scenario = ({
             <div className="column is-2 has-text-centered">
               <p>
                 <img
-                  src="/images/icons/scenario/order.png"
+                  src={assetUrl('/images/icons/scenario/order.png')}
                   width={55}
                   height={55}
                   alt={t('pages:scenarioPage.order') ?? ''}
@@ -195,7 +211,7 @@ export const Scenario = ({
               {scenario.wasSurrender &&
               scenario.points[1] > scenario.points[0] ? (
                 <img
-                  src="/images/icons/scenario/surrender.png"
+                  src={assetUrl('/images/icons/scenario/surrender.png')}
                   width={40}
                   height={40}
                   title={t('pages:scenarioPage.surrender') ?? ''}
@@ -214,7 +230,7 @@ export const Scenario = ({
             <div className="column is-2 has-text-centered">
               <p>
                 <img
-                  src="/images/icons/scenario/destruction.png"
+                  src={assetUrl('/images/icons/scenario/destruction.png')}
                   width={55}
                   height={55}
                   alt={t('pages:scenarioPage.destruction') ?? ''}
@@ -229,7 +245,7 @@ export const Scenario = ({
               {scenario.wasSurrender &&
               scenario.points[0] > scenario.points[1] ? (
                 <img
-                  src="/images/icons/scenario/surrender.png"
+                  src={assetUrl('/images/icons/scenario/surrender.png')}
                   width={40}
                   height={40}
                   title="Surrender"
@@ -246,6 +262,36 @@ export const Scenario = ({
               )}
             </div>
           </div>
+        </div>
+      </div>
+      <div className="scenario-detail-highlights mb-4">
+        <div>
+          <span>Players</span>
+          <strong>
+            {orderEntries.length} Order · {destructionEntries.length}{' '}
+            Destruction
+          </strong>
+        </div>
+        <div>
+          <span>Top damage</span>
+          <strong>
+            {topDamage?.character.name ?? '—'} ·{' '}
+            {Number(topDamage?.damage ?? 0).toLocaleString()}
+          </strong>
+        </div>
+        <div>
+          <span>Top healing</span>
+          <strong>
+            {topHealing?.character.name ?? '—'} ·{' '}
+            {Number(topHealing?.healing ?? 0).toLocaleString()}
+          </strong>
+        </div>
+        <div>
+          <span>Top protection</span>
+          <strong>
+            {topProtection?.character.name ?? '—'} ·{' '}
+            {Number(topProtection?.protection ?? 0).toLocaleString()}
+          </strong>
         </div>
       </div>
       <div className="tabs">
