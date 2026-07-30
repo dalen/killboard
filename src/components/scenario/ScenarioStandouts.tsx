@@ -1,4 +1,4 @@
-import { type ReactElement, useEffect, useState } from 'react';
+import { type ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { Career, type ScenarioRecord } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
@@ -193,6 +193,268 @@ const getStandouts = ({
       },
     )
     .slice(0, limit);
+};
+
+interface ScenarioBreakdownEntry {
+  averageDurationSeconds: number;
+  averagePlayers: number;
+  destructionWins: number;
+  id: string;
+  matches: ScenarioRecord[];
+  name: string;
+  orderWins: number;
+  topPlayer?: Standout;
+}
+
+const ScenarioBreakdown = ({
+  scenarios,
+}: {
+  scenarios: ScenarioRecord[];
+}): ReactElement => {
+  const [expandedScenarioId, setExpandedScenarioId] = useState<string>();
+  const breakdown = useMemo(() => {
+    const grouped = new Map<
+      string,
+      {
+        durationSeconds: number;
+        id: string;
+        matches: ScenarioRecord[];
+        name: string;
+        orderWins: number;
+        destructionWins: number;
+        players: number;
+      }
+    >();
+
+    for (const scenario of scenarios) {
+      const key = scenario.scenario.id;
+      const current = grouped.get(key) ?? {
+        destructionWins: 0,
+        durationSeconds: 0,
+        id: key,
+        matches: [],
+        name: scenario.scenario.name,
+        orderWins: 0,
+        players: 0,
+      };
+      current.matches.push(scenario);
+      current.players += scenario.numPlayers;
+      current.durationSeconds += Math.max(
+        0,
+        (new Date(scenario.endTime).getTime() -
+          new Date(scenario.startTime).getTime()) /
+          1000,
+      );
+      if (scenario.winner === 0) {
+        current.orderWins += 1;
+      } else if (scenario.winner === 1) {
+        current.destructionWins += 1;
+      }
+      grouped.set(key, current);
+    }
+
+    return [...grouped.values()]
+      .map((group): ScenarioBreakdownEntry => {
+        const topPlayers = [
+          ...getStandouts({
+            career: 'all',
+            limit: 1,
+            metric: 'overall',
+            minimumScenarios: 1,
+            mode: 'totals',
+            role: 'all',
+            scenarios: group.matches,
+            team: 0,
+          }),
+          ...getStandouts({
+            career: 'all',
+            limit: 1,
+            metric: 'overall',
+            minimumScenarios: 1,
+            mode: 'totals',
+            role: 'all',
+            scenarios: group.matches,
+            team: 1,
+          }),
+        ].toSorted(
+          (left, right) =>
+            right.overall - left.overall ||
+            right.scenarios - left.scenarios ||
+            right.kills - left.kills,
+        );
+
+        return {
+          averageDurationSeconds:
+            group.durationSeconds / Math.max(group.matches.length, 1),
+          averagePlayers: group.players / Math.max(group.matches.length, 1),
+          destructionWins: group.destructionWins,
+          id: group.id,
+          matches: group.matches.toSorted(
+            (left, right) =>
+              new Date(right.startTime).getTime() -
+              new Date(left.startTime).getTime(),
+          ),
+          name: group.name,
+          orderWins: group.orderWins,
+          topPlayer: topPlayers[0],
+        };
+      })
+      .toSorted(
+        (left, right) =>
+          right.matches.length - left.matches.length ||
+          left.name.localeCompare(right.name),
+      );
+  }, [scenarios]);
+
+  if (breakdown.length === 0) {
+    return <></>;
+  }
+
+  return (
+    <section className="scenario-breakdown mb-4">
+      <header>
+        <div>
+          <h2>Scenario Breakdown</h2>
+          <p>Activity and realm balance for the selected time window.</p>
+        </div>
+        <span>{breakdown.length} scenarios played</span>
+      </header>
+      <div className="scenario-breakdown-table-wrap">
+        <table className="table is-fullwidth scenario-breakdown-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Matches</th>
+              <th>Order</th>
+              <th>Destruction</th>
+              <th>Avg. players</th>
+              <th>Avg. duration</th>
+              <th>Top contributor</th>
+            </tr>
+          </thead>
+          <tbody>
+            {breakdown.map((entry) => {
+              const completedMatches =
+                entry.orderWins + entry.destructionWins;
+              const orderRate =
+                completedMatches > 0
+                  ? Math.round((entry.orderWins / completedMatches) * 100)
+                  : 0;
+              const destructionRate =
+                completedMatches > 0
+                  ? Math.round((entry.destructionWins / completedMatches) * 100)
+                  : 0;
+              const isExpanded = expandedScenarioId === entry.id;
+
+              return (
+                <ScenarioBreakdownRows
+                  key={entry.id}
+                  destructionRate={destructionRate}
+                  entry={entry}
+                  isExpanded={isExpanded}
+                  orderRate={orderRate}
+                  onToggle={() => {
+                    setExpandedScenarioId(isExpanded ? undefined : entry.id);
+                  }}
+                />
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+};
+
+const ScenarioBreakdownRows = ({
+  destructionRate,
+  entry,
+  isExpanded,
+  onToggle,
+  orderRate,
+}: {
+  destructionRate: number;
+  entry: ScenarioBreakdownEntry;
+  isExpanded: boolean;
+  onToggle: () => void;
+  orderRate: number;
+}): ReactElement => {
+  const durationMinutes = Math.floor(entry.averageDurationSeconds / 60);
+  const durationSeconds = Math.round(entry.averageDurationSeconds % 60);
+
+  return (
+    <>
+      <tr>
+        <td>
+          <button
+            type="button"
+            className="scenario-breakdown-toggle"
+            aria-expanded={isExpanded}
+            onClick={onToggle}
+          >
+            <i
+              className={`fas fa-chevron-${isExpanded ? 'down' : 'right'}`}
+              aria-hidden="true"
+            />
+            {entry.name}
+          </button>
+        </td>
+        <td>{entry.matches.length}</td>
+        <td className="scenario-breakdown-order">
+          {orderRate}% <small>({entry.orderWins})</small>
+        </td>
+        <td className="scenario-breakdown-destruction">
+          {destructionRate}% <small>({entry.destructionWins})</small>
+        </td>
+        <td>{entry.averagePlayers.toFixed(1)}</td>
+        <td>
+          {durationMinutes}m {durationSeconds}s
+        </td>
+        <td>
+          {entry.topPlayer ? (
+            <Link to={`/character/${entry.topPlayer.characterId}`}>
+              {entry.topPlayer.name}
+            </Link>
+          ) : (
+            '—'
+          )}
+        </td>
+      </tr>
+      {isExpanded && (
+        <tr className="scenario-breakdown-matches">
+          <td colSpan={7}>
+            <div>
+              {entry.matches.slice(0, 50).map((match) => (
+                <Link key={match.id} to={`/scenario/${match.id}`}>
+                  <span>
+                    {new Date(match.startTime).toLocaleString(undefined, {
+                      month: 'short',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                    })}
+                  </span>
+                  <strong>
+                    {match.winner === 0
+                      ? 'Order'
+                      : match.winner === 1
+                        ? 'Destruction'
+                        : 'Draw'}
+                  </strong>
+                  <span>{match.numPlayers} players</span>
+                </Link>
+              ))}
+              {entry.matches.length > 50 && (
+                <p>
+                  Showing the 50 most recent of {entry.matches.length} matches.
+                </p>
+              )}
+            </div>
+          </td>
+        </tr>
+      )}
+    </>
+  );
 };
 
 const StandoutTable = ({
@@ -842,6 +1104,7 @@ export const ScenarioStandouts = ({
           />
         )}
       </div>
+      <ScenarioBreakdown scenarios={scenarios} />
       {expandedTeam !== undefined && (
         <div className="modal is-active scenario-standouts-modal">
           <button

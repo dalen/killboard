@@ -242,6 +242,123 @@ td.scenariolist-score-destruction {
   gap: 1rem;
 }
 
+.scenario-breakdown {
+  background: rgba(20, 20, 20, 0.55);
+  border-top: 3px solid $primary;
+  padding: 0.75rem;
+}
+
+.scenario-breakdown > header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.scenario-breakdown h2 {
+  color: $text-strong;
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.scenario-breakdown header p,
+.scenario-breakdown header > span {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.78rem;
+  margin: 0;
+}
+
+.scenario-breakdown-table-wrap {
+  overflow-x: auto;
+}
+
+.scenario-breakdown-table {
+  background: transparent;
+  min-width: 850px;
+}
+
+.scenario-breakdown-table th {
+  color: $primary;
+  white-space: nowrap;
+}
+
+.scenario-breakdown-table td {
+  vertical-align: middle;
+}
+
+.scenario-breakdown-toggle {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: $link;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  gap: 0.5rem;
+  padding: 0;
+  text-align: left;
+}
+
+.scenario-breakdown-toggle:hover,
+.scenario-breakdown-toggle:focus-visible {
+  color: $primary;
+  text-decoration: underline;
+}
+
+.scenario-breakdown-toggle i {
+  font-size: 0.7rem;
+  width: 0.75rem;
+}
+
+.scenario-breakdown-order {
+  color: rgb(72, 128, 255);
+}
+
+.scenario-breakdown-destruction {
+  color: rgb(235, 70, 70);
+}
+
+.scenario-breakdown-table small {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.scenario-breakdown-matches > td {
+  background: rgba(0, 0, 0, 0.28);
+  padding: 0.75rem !important;
+}
+
+.scenario-breakdown-matches > td > div {
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
+}
+
+.scenario-breakdown-matches a {
+  background: rgba(20, 20, 20, 0.75);
+  border-left: 2px solid rgba(135, 123, 105, 0.55);
+  display: grid;
+  gap: 0.15rem;
+  padding: 0.5rem 0.65rem;
+}
+
+.scenario-breakdown-matches a:hover {
+  border-left-color: $primary;
+  background: rgba(35, 35, 35, 0.9);
+}
+
+.scenario-breakdown-matches a span {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.72rem;
+}
+
+.scenario-breakdown-matches p {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.75rem;
+  margin: 0;
+  padding: 0.5rem;
+}
+
 .scenario-standout-filters {
   background: rgba(20, 20, 20, 0.55);
   display: grid;
@@ -346,6 +463,10 @@ td.scenariolist-score-destruction {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .scenario-breakdown-matches > td > div {
+    grid-template-columns: repeat(2, minmax(220px, 1fr));
+  }
+
   .scenario-modal-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
@@ -357,6 +478,16 @@ td.scenariolist-score-destruction {
   }
 
   .scenario-modal-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .scenario-breakdown > header {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .scenario-breakdown-matches > td > div {
     grid-template-columns: 1fr;
   }
 
