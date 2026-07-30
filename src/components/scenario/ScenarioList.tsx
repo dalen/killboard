@@ -88,13 +88,24 @@ export const ScenarioList = ({
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
-  const [resultLimit, setResultLimit] = useState(perPage);
+  const range = search.get('range') ?? 'recent';
+  const rangeLimit: Record<string, number> = {
+    recent: perPage,
+    '24h': 50,
+    '7d': 100,
+    '30d': 150,
+    '90d': 200,
+    ytd: 250,
+    custom: 100,
+  };
+  const initialLimit = loadMore ? (rangeLimit[range] ?? perPage) : perPage;
+  const [resultLimit, setResultLimit] = useState(initialLimit);
   const [loadingMore, setLoadingMore] = useState(false);
   const filterKey = search.toString();
 
   useEffect(() => {
-    setResultLimit(perPage);
-  }, [filterKey, perPage]);
+    setResultLimit(initialLimit);
+  }, [filterKey, initialLimit]);
 
   const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
     variables: {
@@ -154,6 +165,15 @@ export const ScenarioList = ({
           1000,
       0,
     ) / scenarios.length;
+  const rangeLabels: Record<string, string> = {
+    recent: 'most recent matches',
+    '24h': 'matches loaded · last 24 hours',
+    '7d': 'matches loaded · last 7 days',
+    '30d': 'matches loaded · last 30 days',
+    '90d': 'matches loaded · last 90 days',
+    ytd: 'matches loaded · year to date',
+    custom: 'matches loaded · custom dates',
+  };
 
   return (
     <>
@@ -179,7 +199,7 @@ export const ScenarioList = ({
       <div className="scenario-list-summary">
         <div>
           <strong>{scenarios.length}</strong>
-          <span>{t('components:scenarioList.recentScenarios')}</span>
+          <span>{rangeLabels[range] ?? 'matches loaded'}</span>
         </div>
         <div>
           <strong>{averagePlayers.toFixed(1)}</strong>
@@ -216,7 +236,8 @@ export const ScenarioList = ({
               className={`button is-primary ${loadingMore ? 'is-loading' : ''}`}
               disabled={loadingMore}
               onClick={async () => {
-                const nextLimit = resultLimit + perPage;
+                const nextLimit =
+                  resultLimit + (range === 'recent' ? perPage : 50);
                 setLoadingMore(true);
                 try {
                   await refetch({
