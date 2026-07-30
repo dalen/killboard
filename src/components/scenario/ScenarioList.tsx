@@ -88,7 +88,7 @@ export const ScenarioList = ({
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
-  const range = search.get('range') ?? 'recent';
+  const range = search.get('range') ?? '1h';
   const isFullWindow = range !== 'recent';
   const [resultLimit, setResultLimit] = useState(perPage);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -276,6 +276,7 @@ export const ScenarioList = ({
     ) / scenarios.length;
   const rangeLabels: Record<string, string> = {
     recent: 'most recent matches',
+    '1h': 'matches · complete last hour',
     '24h': 'matches · complete last 24 hours',
     '7d': 'matches · complete last 7 days',
     '30d': 'matches · complete last 30 days',

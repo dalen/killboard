@@ -446,7 +446,7 @@ export const ScenarioStandouts = ({
   const modeParam = searchParams.get('lbMode') as RankingMode;
   const queueType = searchParams.get('queue_type') ?? 'all';
   const tier = searchParams.get('tier') ?? 'all';
-  const range = searchParams.get('range') ?? 'recent';
+  const range = searchParams.get('range') ?? '1h';
   const realm = realmFilters.includes(realmParam) ? realmParam : 'both';
   const role = roleFilters.includes(roleParam) ? roleParam : 'all';
   const career =
@@ -510,6 +510,7 @@ export const ScenarioStandouts = ({
   };
   const rangeLabels: Record<string, string> = {
     recent: 'Most recent',
+    '1h': 'Last hour',
     '24h': 'Last 24 hours',
     '7d': 'Last 7 days',
     '30d': 'Last 30 days',
@@ -579,13 +580,13 @@ export const ScenarioStandouts = ({
               } else {
                 updateParams({
                   from: undefined,
-                  range: nextRange === 'recent' ? undefined : nextRange,
+                  range: nextRange === '1h' ? undefined : nextRange,
                   to: undefined,
                 });
               }
             }}
           >
-            <option value="recent">Most recent</option>
+            <option value="1h">Last hour</option>
             <option value="24h">Last 24 hours</option>
             <option value="7d">Last 7 days</option>
             <option value="30d">Last 30 days</option>

@@ -46,13 +46,17 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
 const getTimeFilters = (
   search: URLSearchParams,
 ): ScenarioRecordFilterInput => {
-  const range = search.get('range') ?? 'recent';
+  const range = search.get('range') ?? '1h';
   const now = new Date();
   now.setSeconds(0, 0);
   let start: Date | undefined;
   let end: Date | undefined;
 
   switch (range) {
+    case '1h': {
+      start = new Date(now.getTime() - 60 * 60 * 1000);
+      break;
+    }
     case '24h': {
       start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
       break;
