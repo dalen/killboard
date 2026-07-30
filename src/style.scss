@@ -758,3 +758,186 @@ td.scenariolist-score-destruction {
 
 .scenario-role-heading small {
   color: $text;
+  display: block;
+  font-weight: normal;
+}
+
+.scenario-roster-totals span {
+  background: rgba(50, 50, 50, 0.35);
+  font-size: 0.75rem;
+  padding: 0.4rem;
+  text-align: center;
+}
+
+.scenario-roster-totals strong {
+  color: $text-strong;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  .scenario-roster-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+tr.skirmish-scoreboard-row-realm-order {
+  background-color: rgba(12, 47, 158, 0.2);
+  border-bottom: 2px solid #000000;
+}
+
+tr.skirmish-scoreboard-row-realm-destruction {
+  background-color: rgba(158, 12, 13, 0.2);
+  border-bottom: 2px solid #000000;
+}
+
+thead .ascending::after {
+  content: url(/images/icons/scenario/uparrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 5px;
+  transform: scale(0.5);
+}
+
+thead .descending::after {
+  content: url(/images/icons/scenario/downarrow.png);
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  transform: scale(0.5);
+}
+
+div.scoreboard-tooltip {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: rgb(227, 214, 196);
+  padding: 10px;
+}
+
+.tooltip {
+  cursor: help;
+}
+
+// From defaultcolor.lua
+$rarity-utility: rgb(150, 150, 150);
+$rarity-common: rgb(255, 255, 255);
+$rarity-uncommon: rgb(24, 240, 0);
+$rarity-rare: rgb(0, 100, 195);
+$rarity-very-rare: rgb(146, 56, 208);
+$rarity-mythic: rgb(200, 60, 0);
+$rarity-item-set: rgb(240, 190, 40);
+$tooltip-item-set-enabled: rgb(0, 255, 0);
+$tooltip-item-set-disabled: rgb(175, 175, 175);
+$tooltip-item-bonus: rgb(255, 255, 0);
+
+.item-name-utility {
+  color: $rarity-utility;
+}
+.item-name-common {
+  color: $rarity-common;
+}
+.item-name-uncommon {
+  color: $rarity-uncommon;
+}
+.item-name-rare {
+  color: $rarity-rare;
+}
+.item-name-very-rare {
+  color: $rarity-very-rare;
+}
+.item-name-mythic {
+  color: $rarity-mythic;
+}
+.item-name-item-set {
+  color: $rarity-item-set;
+}
+
+.item-figure {
+  border: 1px solid;
+  border-radius: 2px;
+}
+
+.item-figure-utility {
+  border-color: $rarity-utility;
+}
+.item-figure-common {
+  border-color: $rarity-common;
+}
+.item-figure-uncommon {
+  border-color: $rarity-uncommon;
+}
+.item-figure-rare {
+  border-color: $rarity-rare;
+}
+.item-figure-very-rare {
+  border-color: $rarity-very-rare;
+}
+.item-figure-mythic {
+  border-color: $rarity-mythic;
+}
+.item-figure-item-set {
+  border-color: $rarity-item-set;
+}
+
+.item-text-set-bonus-enabled {
+  color: $tooltip-item-set-enabled;
+}
+
+.item-text-set-bonus-disabled {
+  color: $tooltip-item-set-disabled;
+}
+
+.item-text-buff {
+  color: $tooltip-item-set-enabled;
+}
+
+.stats-text-highlight {
+  color: $tooltip-item-bonus;
+}
+
+.skirmish-top-damage-player {
+  height: 148px;
+  border-left: solid 3px rgb(220, 43, 25);
+}
+
+.skirmish-top-deathblows-player {
+  height: 148px;
+  border-left: solid 3px rgb(186, 42, 26);
+}
+
+.skirmish-top-healing-player {
+  height: 148px;
+  border-left: solid 3px rgb(0, 146, 81);
+}
+
+.skirmish-top-protection-player {
+  height: 148px;
+  border-left: solid 3px rgb(1, 78, 154);
+}
+
+.text-color-order {
+  color: rgb(0, 148, 225);
+}
+
+.text-color-destruction {
+  color: rgb(255, 5, 5);
+}
+
+.tooltip-popup {
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px 10px 10px 10px;
+  border-radius: 5px;
+  border: 1px solid rgb(83, 66, 53);
+  pointer-events: none;
+}
+
+.popup {
+  position: absolute;
+  top: 0px;
+  left: 64px;
+  background: rgba(0, 0, 0, 0.9);
+  padding: 10px 10px 30px 10px;
+  min-width: 300px;
+  border-radius: 5px;
+  border: 1px solid rgb(83, 66, 53);
+  z-index: 5;
+  pointer-events: none;
+}
