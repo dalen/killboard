@@ -143,7 +143,7 @@ export const ScenarioList = ({
             query: SCENARIO_LIST,
             variables: {
               after,
-              first: 100,
+              first: 50,
               where,
             },
           });
