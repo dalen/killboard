@@ -88,7 +88,8 @@ export const ScenarioList = ({
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
-  const range = search.get('range') ?? '1h';
+  const isProfileHistory = Boolean(characterId || guildId);
+  const range = search.get('range') ?? (isProfileHistory ? 'recent' : '1h');
   const isFullWindow = range !== 'recent';
   const [resultLimit, setResultLimit] = useState(perPage);
   const [loadingMore, setLoadingMore] = useState(false);
@@ -213,7 +214,10 @@ export const ScenarioList = ({
   if (loading && scenarios.length === 0) {
     return (
       <>
-        <ScenarioStandouts scenarios={[]} />
+        <ScenarioStandouts
+          defaultRange={isProfileHistory ? 'recent' : '1h'}
+          scenarios={[]}
+        />
         <div className="scenario-window-loading">
           <progress className="progress is-small is-primary" />
           <strong>Gathering the complete selected time window…</strong>
@@ -238,7 +242,10 @@ export const ScenarioList = ({
   if (scenarios.length === 0) {
     return (
       <>
-        <ScenarioStandouts scenarios={[]} />
+        <ScenarioStandouts
+          defaultRange={isProfileHistory ? 'recent' : '1h'}
+          scenarios={[]}
+        />
         <ErrorMessage customText={t('common:notFound')} />
       </>
     );
@@ -372,7 +379,10 @@ export const ScenarioList = ({
           {windowTotal ? ` of ${windowTotal}` : ''} matches gathered.
         </div>
       )}
-      <ScenarioStandouts scenarios={scenarios} />
+      <ScenarioStandouts
+        defaultRange={isProfileHistory ? 'recent' : '1h'}
+        scenarios={scenarios}
+      />
       <ScenarioListTable data={visibleScenarios} />
       {loadMore ? (
         ((isFullWindow && resultLimit < scenarios.length) ||

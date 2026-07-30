@@ -824,8 +824,10 @@ const StandoutTable = ({
 };
 
 export const ScenarioStandouts = ({
+  defaultRange = '1h',
   scenarios,
 }: {
+  defaultRange?: '1h' | 'recent';
   scenarios: ScenarioRecord[];
 }): ReactElement => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -838,7 +840,7 @@ export const ScenarioStandouts = ({
   const modeParam = searchParams.get('lbMode') as RankingMode;
   const queueType = searchParams.get('queue_type') ?? 'all';
   const tier = searchParams.get('tier') ?? 'all';
-  const range = searchParams.get('range') ?? '1h';
+  const range = searchParams.get('range') ?? defaultRange;
   const realm = realmFilters.includes(realmParam) ? realmParam : 'both';
   const role = roleFilters.includes(roleParam) ? roleParam : 'all';
   const career =
@@ -972,12 +974,15 @@ export const ScenarioStandouts = ({
               } else {
                 updateParams({
                   from: undefined,
-                  range: nextRange === '1h' ? undefined : nextRange,
+                  range: nextRange === defaultRange ? undefined : nextRange,
                   to: undefined,
                 });
               }
             }}
           >
+            {defaultRange === 'recent' && (
+              <option value="recent">Most recent</option>
+            )}
             <option value="1h">Last hour</option>
             <option value="24h">Last 24 hours</option>
             <option value="7d">Last 7 days</option>

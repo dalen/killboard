@@ -45,8 +45,9 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
 
 const getTimeFilters = (
   search: URLSearchParams,
+  defaultRange: '1h' | 'recent',
 ): ScenarioRecordFilterInput => {
-  const range = search.get('range') ?? '1h';
+  const range = search.get('range') ?? defaultRange;
   const now = new Date();
   now.setSeconds(0, 0);
   let start: Date | undefined;
@@ -115,9 +116,10 @@ export const getScenarioFilters = (
   }: { characterId?: string; guildId?: string; wins?: boolean } = {},
 ): ScenarioRecordFilterInput => {
   const { queueType } = getQueueTypeFilters(search);
+  const defaultRange = characterId || guildId ? 'recent' : '1h';
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
-    ...getTimeFilters(search),
+    ...getTimeFilters(search, defaultRange),
   };
 
   if (queueType !== undefined) {
