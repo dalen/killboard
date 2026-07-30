@@ -206,12 +206,25 @@ interface ScenarioBreakdownEntry {
   topPlayer?: Standout;
 }
 
+type ScenarioBreakdownSortKey =
+  | 'name'
+  | 'matches'
+  | 'order'
+  | 'destruction'
+  | 'players'
+  | 'duration'
+  | 'balance';
+
 const ScenarioBreakdown = ({
   scenarios,
 }: {
   scenarios: ScenarioRecord[];
 }): ReactElement => {
   const [expandedScenarioId, setExpandedScenarioId] = useState<string>();
+  const [minimumMatches, setMinimumMatches] = useState(1);
+  const [sortKey, setSortKey] =
+    useState<ScenarioBreakdownSortKey>('matches');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const breakdown = useMemo(() => {
     const grouped = new Map<
       string,
@@ -306,9 +319,79 @@ const ScenarioBreakdown = ({
       );
   }, [scenarios]);
 
+  const visibleBreakdown = useMemo(() => {
+    const valueFor = (
+      entry: ScenarioBreakdownEntry,
+      key: ScenarioBreakdownSortKey,
+    ): number | string => {
+      const completedMatches = entry.orderWins + entry.destructionWins;
+      const orderRate =
+        completedMatches > 0 ? entry.orderWins / completedMatches : 0.5;
+
+      switch (key) {
+        case 'name':
+          return entry.name;
+        case 'matches':
+          return entry.matches.length;
+        case 'order':
+          return orderRate;
+        case 'destruction':
+          return 1 - orderRate;
+        case 'players':
+          return entry.averagePlayers;
+        case 'duration':
+          return entry.averageDurationSeconds;
+        case 'balance':
+          return Math.abs(orderRate - 0.5);
+      }
+    };
+
+    return breakdown
+      .filter((entry) => entry.matches.length >= minimumMatches)
+      .toSorted((left, right) => {
+        const leftValue = valueFor(left, sortKey);
+        const rightValue = valueFor(right, sortKey);
+        const comparison =
+          typeof leftValue === 'string' && typeof rightValue === 'string'
+            ? leftValue.localeCompare(rightValue)
+            : Number(leftValue) - Number(rightValue);
+        return (
+          (sortDirection === 'asc' ? comparison : -comparison) ||
+          right.matches.length - left.matches.length ||
+          left.name.localeCompare(right.name)
+        );
+      });
+  }, [breakdown, minimumMatches, sortDirection, sortKey]);
+
   if (breakdown.length === 0) {
     return <></>;
   }
+
+  const sortHeading = (
+    label: string,
+    key: ScenarioBreakdownSortKey,
+  ): ReactElement => (
+    <button
+      type="button"
+      className="scenario-breakdown-sort"
+      onClick={() => {
+        if (sortKey === key) {
+          setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
+        } else {
+          setSortKey(key);
+          setSortDirection(key === 'name' ? 'asc' : 'desc');
+        }
+      }}
+    >
+      {label}
+      {sortKey === key && (
+        <i
+          className={`fas fa-caret-${sortDirection === 'asc' ? 'up' : 'down'}`}
+          aria-hidden="true"
+        />
+      )}
+    </button>
+  );
 
   return (
     <section className="scenario-breakdown mb-4">
@@ -317,23 +400,43 @@ const ScenarioBreakdown = ({
           <h2>Scenario Breakdown</h2>
           <p>Activity and realm balance for the selected time window.</p>
         </div>
-        <span>{breakdown.length} scenarios played</span>
+        <div className="scenario-breakdown-controls">
+          <label>
+            <span>Minimum matches</span>
+            <select
+              value={minimumMatches}
+              onChange={(event) => {
+                setMinimumMatches(Number(event.target.value));
+              }}
+            >
+              <option value={1}>1+</option>
+              <option value={3}>3+</option>
+              <option value={5}>5+</option>
+              <option value={10}>10+</option>
+              <option value={25}>25+</option>
+            </select>
+          </label>
+          <span>
+            {visibleBreakdown.length} of {breakdown.length} scenarios
+          </span>
+        </div>
       </header>
       <div className="scenario-breakdown-table-wrap">
         <table className="table is-fullwidth scenario-breakdown-table">
           <thead>
             <tr>
-              <th>Scenario</th>
-              <th>Matches</th>
-              <th>Order</th>
-              <th>Destruction</th>
-              <th>Avg. players</th>
-              <th>Avg. duration</th>
+              <th>{sortHeading('Scenario', 'name')}</th>
+              <th>{sortHeading('Matches', 'matches')}</th>
+              <th>{sortHeading('Order', 'order')}</th>
+              <th>{sortHeading('Destruction', 'destruction')}</th>
+              <th>{sortHeading('Avg. players', 'players')}</th>
+              <th>{sortHeading('Avg. duration', 'duration')}</th>
               <th>Top contributor</th>
+              <th>{sortHeading('Balance', 'balance')}</th>
             </tr>
           </thead>
           <tbody>
-            {breakdown.map((entry) => {
+            {visibleBreakdown.map((entry) => {
               const completedMatches =
                 entry.orderWins + entry.destructionWins;
               const orderRate =
@@ -359,6 +462,13 @@ const ScenarioBreakdown = ({
                 />
               );
             })}
+            {visibleBreakdown.length === 0 && (
+              <tr>
+                <td colSpan={8} className="has-text-centered">
+                  No scenarios meet the selected minimum.
+                </td>
+              </tr>
+            )}
           </tbody>
         </table>
       </div>
@@ -381,6 +491,19 @@ const ScenarioBreakdownRows = ({
 }): ReactElement => {
   const durationMinutes = Math.floor(entry.averageDurationSeconds / 60);
   const durationSeconds = Math.round(entry.averageDurationSeconds % 60);
+  const balanceDifference = Math.abs(orderRate - 50);
+  const balanceStatus =
+    balanceDifference <= 5
+      ? 'Balanced'
+      : balanceDifference <= 10
+        ? 'Watch'
+        : 'Lopsided';
+  const balanceClass =
+    balanceDifference <= 5
+      ? 'balanced'
+      : balanceDifference <= 10
+        ? 'watch'
+        : 'lopsided';
 
   return (
     <>
@@ -419,10 +542,17 @@ const ScenarioBreakdownRows = ({
             '—'
           )}
         </td>
+        <td>
+          <span
+            className={`scenario-balance-status scenario-balance-status-${balanceClass}`}
+          >
+            {balanceStatus}
+          </span>
+        </td>
       </tr>
       {isExpanded && (
         <tr className="scenario-breakdown-matches">
-          <td colSpan={7}>
+          <td colSpan={8}>
             <div>
               {entry.matches.slice(0, 50).map((match) => (
                 <Link key={match.id} to={`/scenario/${match.id}`}>

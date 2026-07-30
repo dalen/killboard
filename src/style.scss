@@ -326,13 +326,40 @@ td.scenariolist-score-destruction {
   margin: 0;
 }
 
+.scenario-breakdown-controls {
+  align-items: flex-end;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.scenario-breakdown-controls label > span {
+  display: block;
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+}
+
+.scenario-breakdown-controls select {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  min-width: 90px;
+  padding: 0.3rem;
+}
+
+.scenario-breakdown-controls > span {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.75rem;
+  padding-bottom: 0.35rem;
+  white-space: nowrap;
+}
+
 .scenario-breakdown-table-wrap {
   overflow-x: auto;
 }
 
 .scenario-breakdown-table {
   background: transparent;
-  min-width: 850px;
+  min-width: 940px;
 }
 
 .scenario-breakdown-table th {
@@ -342,6 +369,26 @@ td.scenariolist-score-destruction {
 
 .scenario-breakdown-table td {
   vertical-align: middle;
+}
+
+.scenario-breakdown-sort {
+  align-items: center;
+  background: none;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: inherit;
+  gap: 0.3rem;
+  padding: 0;
+  white-space: nowrap;
+}
+
+.scenario-breakdown-sort:hover,
+.scenario-breakdown-sort:focus-visible,
+.scenario-breakdown-sort i {
+  color: $text-strong;
 }
 
 .scenario-breakdown-toggle {
@@ -378,6 +425,35 @@ td.scenariolist-score-destruction {
 
 .scenario-breakdown-table small {
   color: rgba(255, 255, 255, 0.55);
+}
+
+.scenario-balance-status {
+  border: 1px solid;
+  border-radius: 999px;
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  min-width: 62px;
+  padding: 0.15rem 0.4rem;
+  text-align: center;
+}
+
+.scenario-balance-status-balanced {
+  background: rgba(48, 155, 86, 0.14);
+  border-color: rgb(48, 155, 86);
+  color: rgb(112, 220, 142);
+}
+
+.scenario-balance-status-watch {
+  background: rgba(217, 160, 25, 0.14);
+  border-color: rgb(217, 160, 25);
+  color: rgb(242, 194, 76);
+}
+
+.scenario-balance-status-lopsided {
+  background: rgba(201, 54, 54, 0.14);
+  border-color: rgb(201, 54, 54);
+  color: rgb(241, 100, 100);
 }
 
 .scenario-breakdown-matches > td {
@@ -542,6 +618,16 @@ td.scenariolist-score-destruction {
     align-items: flex-start;
     flex-direction: column;
     gap: 0.35rem;
+  }
+
+  .scenario-breakdown-controls {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .scenario-breakdown-controls > span {
+    padding-bottom: 0;
   }
 
   .scenario-breakdown-matches > td > div {
