@@ -306,6 +306,49 @@ export const ScenarioList = ({
     ytd: 'matches · complete year to date',
     custom: 'matches · complete custom dates',
   };
+  const selectedWindowLabel = (() => {
+    if (!isFullWindow) {
+      return undefined;
+    }
+    const now = new Date();
+    now.setSeconds(0, 0);
+    let start: Date | undefined;
+    let end = now;
+    switch (range) {
+      case '1h':
+        start = new Date(now.getTime() - 60 * 60 * 1000);
+        break;
+      case '24h':
+        start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+        break;
+      case '7d':
+        start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case '30d':
+        start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case '90d':
+        start = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+        break;
+      case 'ytd':
+        start = new Date(now.getFullYear(), 0, 1);
+        break;
+      case 'custom': {
+        const from = search.get('from');
+        const to = search.get('to');
+        start = from ? new Date(`${from}T00:00:00`) : undefined;
+        end = to ? new Date(`${to}T23:59:59.999`) : now;
+        break;
+      }
+    }
+    if (!start || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return undefined;
+    }
+    return `${format(start, 'MMM d, h:mm a')} – ${format(
+      end,
+      'MMM d, h:mm a',
+    )}`;
+  })();
   const visibleScenarios =
     loadMore && isFullWindow ? scenarios.slice(0, resultLimit) : scenarios;
 
@@ -313,8 +356,13 @@ export const ScenarioList = ({
     <>
       <div className="scenario-feed-toolbar mb-3">
         <div>
-          <strong>{t('components:scenarioList.recentActivity')}</strong>
+          <strong>
+            {selectedWindowLabel
+              ? 'Selected scenario window'
+              : t('components:scenarioList.recentActivity')}
+          </strong>
           <span>
+            {selectedWindowLabel && `${selectedWindowLabel} · match activity `}
             {format(earliestScenarioDate, 'MMM d, h:mm a')} –{' '}
             {format(latestScenarioDate, 'MMM d, h:mm a')}
             {loading && ` · gathering ${scenarios.length} of ${windowTotal || '…'}`}
