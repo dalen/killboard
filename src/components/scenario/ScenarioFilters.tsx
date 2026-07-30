@@ -48,6 +48,7 @@ const getTimeFilters = (
 ): ScenarioRecordFilterInput => {
   const range = search.get('range') ?? 'recent';
   const now = new Date();
+  now.setSeconds(0, 0);
   let start: Date | undefined;
   let end: Date | undefined;
 
