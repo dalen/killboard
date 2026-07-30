@@ -119,10 +119,19 @@ td.scenariolist-score-destruction {
   padding: 0.65rem 0.85rem;
 }
 
-.scenario-win-balance > div:first-child {
+.scenario-win-balance-labels {
   display: flex;
-  justify-content: space-between;
   margin-bottom: 0.4rem;
+}
+
+.scenario-win-balance-labels span {
+  min-width: 0;
+  text-align: center;
+}
+
+.scenario-win-balance-labels strong {
+  display: block;
+  font-size: 1.1rem;
 }
 
 .scenario-win-balance strong {
@@ -200,6 +209,15 @@ td.scenariolist-score-destruction {
 @media (max-width: 768px) {
   .scenario-list-summary {
     grid-template-columns: 1fr;
+  }
+
+  .scenario-win-balance-labels {
+    gap: 0.5rem;
+  }
+
+  .scenario-win-balance-labels span {
+    flex: 1;
+    width: auto !important;
   }
 }
 

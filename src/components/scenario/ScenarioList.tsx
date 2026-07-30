@@ -317,12 +317,14 @@ export const ScenarioList = ({
         </div>
       </div>
       <div className="scenario-win-balance mb-4">
-        <div>
-          <span>
-            <strong>{orderWins}</strong> Order wins
+        <div className="scenario-win-balance-labels">
+          <span style={{ width: `${orderWinPercentage}%` }}>
+            <strong>{orderWinPercentage.toFixed(1)}%</strong>
+            Order win rate · {orderWins.toLocaleString()} wins
           </span>
-          <span>
-            <strong>{destructionWins}</strong> Destruction wins
+          <span style={{ width: `${100 - orderWinPercentage}%` }}>
+            <strong>{(100 - orderWinPercentage).toFixed(1)}%</strong>
+            Destruction win rate · {destructionWins.toLocaleString()} wins
           </span>
         </div>
         <div className="scenario-win-balance-bar">
