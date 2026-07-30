@@ -242,6 +242,87 @@ td.scenariolist-score-destruction {
   gap: 1rem;
 }
 
+.character-scenario-filters {
+  align-items: end;
+  background: rgba(20, 20, 20, 0.55);
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(5, minmax(130px, 1fr)) auto;
+  padding: 0.75rem;
+}
+
+.character-scenario-filters label > span {
+  display: block;
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.character-scenario-filters select,
+.character-scenario-filters input {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  min-height: 34px;
+  padding: 0.35rem;
+  width: 100%;
+}
+
+.character-scenario-filters > button {
+  gap: 0.35rem;
+}
+
+.character-scenario-connections {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.character-scenario-connection {
+  background: rgba(20, 20, 20, 0.55);
+  border-top: 3px solid $primary;
+  min-width: 0;
+  padding: 0.75rem;
+}
+
+.character-scenario-connection > header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.character-scenario-connection h2 {
+  color: $text-strong;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.character-scenario-connection header span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.72rem;
+}
+
+.character-scenario-connection table {
+  font-size: 0.78rem;
+}
+
+.character-scenario-connection th,
+.character-scenario-connection td {
+  padding: 0.3em 0.25em !important;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.character-scenario-connection td:first-child {
+  width: 28px;
+}
+
+.character-scenario-connection td:first-child .image {
+  height: 24px;
+  width: 24px;
+}
+
 .scenario-standouts-grid .scenario-standouts table {
   font-size: 0.74rem;
   table-layout: fixed;
@@ -603,10 +684,22 @@ td.scenariolist-score-destruction {
   .scenario-modal-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  .character-scenario-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .character-scenario-connections {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 520px) {
   .scenario-standout-filters {
+    grid-template-columns: 1fr;
+  }
+
+  .character-scenario-filters {
     grid-template-columns: 1fr;
   }
 

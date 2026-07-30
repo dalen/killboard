@@ -10,6 +10,7 @@ import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioListTable } from '@/components/scenario/ScenarioListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ScenarioStandouts } from '@/components/scenario/ScenarioStandouts';
+import { CharacterScenarioConnections } from '@/components/scenario/CharacterScenarioConnections';
 
 const SCENARIO_LIST = gql`
   query GetScenarioList(
@@ -214,10 +215,17 @@ export const ScenarioList = ({
   if (loading && scenarios.length === 0) {
     return (
       <>
-        <ScenarioStandouts
-          defaultRange={isProfileHistory ? 'recent' : '1h'}
-          scenarios={[]}
-        />
+        {characterId ? (
+          <CharacterScenarioConnections
+            characterId={characterId}
+            scenarios={[]}
+          />
+        ) : (
+          <ScenarioStandouts
+            defaultRange={isProfileHistory ? 'recent' : '1h'}
+            scenarios={[]}
+          />
+        )}
         <div className="scenario-window-loading">
           <progress className="progress is-small is-primary" />
           <strong>Gathering the complete selected time window…</strong>
@@ -242,10 +250,17 @@ export const ScenarioList = ({
   if (scenarios.length === 0) {
     return (
       <>
-        <ScenarioStandouts
-          defaultRange={isProfileHistory ? 'recent' : '1h'}
-          scenarios={[]}
-        />
+        {characterId ? (
+          <CharacterScenarioConnections
+            characterId={characterId}
+            scenarios={[]}
+          />
+        ) : (
+          <ScenarioStandouts
+            defaultRange={isProfileHistory ? 'recent' : '1h'}
+            scenarios={[]}
+          />
+        )}
         <ErrorMessage customText={t('common:notFound')} />
       </>
     );
@@ -379,10 +394,17 @@ export const ScenarioList = ({
           {windowTotal ? ` of ${windowTotal}` : ''} matches gathered.
         </div>
       )}
-      <ScenarioStandouts
-        defaultRange={isProfileHistory ? 'recent' : '1h'}
-        scenarios={scenarios}
-      />
+      {characterId ? (
+        <CharacterScenarioConnections
+          characterId={characterId}
+          scenarios={scenarios}
+        />
+      ) : (
+        <ScenarioStandouts
+          defaultRange={isProfileHistory ? 'recent' : '1h'}
+          scenarios={scenarios}
+        />
+      )}
       <ScenarioListTable data={visibleScenarios} />
       {loadMore ? (
         ((isFullWindow && resultLimit < scenarios.length) ||
