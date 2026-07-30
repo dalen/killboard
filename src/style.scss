@@ -268,6 +268,19 @@ td.scenariolist-score-destruction {
   padding: 0.65rem 0.85rem;
 }
 
+.scenario-active-filters {
+  align-items: center;
+  background: rgba(20, 20, 20, 0.45);
+  border-left: 3px solid rgba(135, 123, 105, 0.7);
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 0.75rem;
+}
+
+.scenario-active-filters > span {
+  font-size: 0.82rem;
+}
+
 .scenario-player-link {
   background: none;
   border: 0;
@@ -345,6 +358,12 @@ td.scenariolist-score-destruction {
 
   .scenario-modal-filters {
     grid-template-columns: 1fr;
+  }
+
+  .scenario-active-filters {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.55rem;
   }
 }
 

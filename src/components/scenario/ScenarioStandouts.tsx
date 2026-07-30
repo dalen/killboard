@@ -455,7 +455,7 @@ export const ScenarioStandouts = ({
       : 'all';
   const metric = rankingMetrics.includes(metricParam) ? metricParam : 'overall';
   const limit = [5, 10, 25].includes(limitParam) ? limitParam : 5;
-  const minimumScenarios = [1, 2, 3, 5].includes(minimumScenariosParam)
+  const minimumScenarios = [1, 3, 10, 25].includes(minimumScenariosParam)
     ? minimumScenariosParam
     : 1;
   const mode: RankingMode = modeParam === 'average' ? 'average' : 'totals';
@@ -495,6 +495,28 @@ export const ScenarioStandouts = ({
     (careerOption) =>
       role === 'all' || scenarioCareerRoles[careerOption] === role,
   );
+  const queueTypeLabels: Record<string, string> = {
+    all: 'All types',
+    standard: 'Standard',
+    solo: 'Random Scenarios',
+    city_siege: 'City Siege',
+    group_challenge: 'Group Challenge',
+  };
+  const tierLabels: Record<string, string> = {
+    all: 'All tiers',
+    '1': 'Tier 1',
+    '3': 'Tier 2–3',
+    '4': 'Tier 4',
+  };
+  const rangeLabels: Record<string, string> = {
+    recent: 'Most recent',
+    '24h': 'Last 24 hours',
+    '7d': 'Last 7 days',
+    '30d': 'Last 30 days',
+    '90d': 'Last 90 days',
+    ytd: 'Year to date',
+    custom: 'Custom dates',
+  };
 
   return (
     <>
@@ -689,6 +711,25 @@ export const ScenarioStandouts = ({
             <option value={25}>Top 25</option>
           </select>
         </label>
+        <label>
+          <span>Minimum scenarios</span>
+          <select
+            value={minimumScenarios}
+            onChange={(event) => {
+              updateParams({
+                lbMin:
+                  event.target.value === '1'
+                    ? undefined
+                    : event.target.value,
+              });
+            }}
+          >
+            <option value={1}>1+</option>
+            <option value={3}>3+</option>
+            <option value={10}>10+</option>
+            <option value={25}>25+</option>
+          </select>
+        </label>
         <div className="scenario-standout-actions">
           <span>Share view</span>
           <button
@@ -714,6 +755,43 @@ export const ScenarioStandouts = ({
             <span>{shareStatus || 'Copy link'}</span>
           </button>
         </div>
+      </div>
+      <div className="scenario-active-filters mb-3">
+        <span>
+          <strong>{rangeLabels[range] ?? 'Most recent'}</strong> ·{' '}
+          {tierLabels[tier] ?? 'All tiers'} ·{' '}
+          {queueTypeLabels[queueType] ?? 'All types'} ·{' '}
+          {scenarios.length.toLocaleString()} matches
+        </span>
+        <button
+          type="button"
+          className="button is-small"
+          onClick={() => {
+            const next = new URLSearchParams(searchParams);
+            [
+              'queue_type',
+              'tier',
+              'range',
+              'from',
+              'to',
+              'lbRealm',
+              'lbRole',
+              'lbCareer',
+              'lbMetric',
+              'lbLimit',
+              'lbMin',
+              'lbMode',
+            ].forEach((key) => {
+              next.delete(key);
+            });
+            setSearchParams(next, { replace: true });
+          }}
+        >
+          <span className="icon">
+            <i className="fas fa-arrow-rotate-left" />
+          </span>
+          <span>Reset filters</span>
+        </button>
       </div>
       <div className="scenario-ranking-note mb-3">
         <strong>How rankings work:</strong> totals cover the scenarios currently
@@ -882,9 +960,9 @@ export const ScenarioStandouts = ({
                     }}
                   >
                     <option value={1}>1+</option>
-                    <option value={2}>2+</option>
                     <option value={3}>3+</option>
-                    <option value={5}>5+</option>
+                    <option value={10}>10+</option>
+                    <option value={25}>25+</option>
                   </select>
                 </label>
                 <label>

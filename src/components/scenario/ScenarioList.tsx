@@ -97,13 +97,25 @@ export const ScenarioList = ({
   const [windowLoading, setWindowLoading] = useState(false);
   const [windowError, setWindowError] = useState<Error>();
   const [reloadToken, setReloadToken] = useState(0);
-  const filterKey = search.toString();
+  const dataFilterKey = [
+    'queue_type',
+    'tier',
+    'range',
+    'from',
+    'to',
+  ]
+    .map((key) => `${key}=${search.get(key) ?? ''}`)
+    .concat([
+      `character=${characterId ?? ''}`,
+      `guild=${guildId ?? ''}`,
+    ])
+    .join('&');
   const client = useApolloClient();
   const where = getScenarioFilters(search, { characterId, guildId });
 
   useEffect(() => {
     setResultLimit(perPage);
-  }, [filterKey, perPage]);
+  }, [dataFilterKey, perPage]);
 
   const {
     loading: recentLoading,
@@ -128,6 +140,7 @@ export const ScenarioList = ({
     }
 
     let cancelled = false;
+    const controller = new AbortController();
     const loadWindow = async (): Promise<void> => {
       setWindowScenarios([]);
       setWindowTotal(0);
@@ -139,6 +152,11 @@ export const ScenarioList = ({
       try {
         do {
           const result = await client.query<Query>({
+            context: {
+              fetchOptions: {
+                signal: controller.signal,
+              },
+            },
             fetchPolicy: 'network-only',
             query: SCENARIO_LIST,
             variables: {
@@ -164,7 +182,7 @@ export const ScenarioList = ({
           }
         } while (!cancelled);
       } catch (caughtError) {
-        if (!cancelled) {
+        if (!cancelled && !controller.signal.aborted) {
           setWindowError(
             caughtError instanceof Error
               ? caughtError
@@ -181,8 +199,9 @@ export const ScenarioList = ({
     void loadWindow();
     return () => {
       cancelled = true;
+      controller.abort();
     };
-  }, [client, filterKey, isFullWindow, reloadToken]);
+  }, [client, dataFilterKey, isFullWindow, reloadToken]);
 
   const loading = isFullWindow ? windowLoading : recentLoading;
   const error = isFullWindow ? windowError : recentError;
