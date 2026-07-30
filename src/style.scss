@@ -664,7 +664,27 @@ td.scenariolist-score-destruction {
 }
 
 .scenario-standouts-expand {
+  flex: 0 0 auto;
+}
+
+.scenario-standouts-mode {
+  align-items: center;
+  display: flex;
+  gap: 0.35rem;
   margin-left: auto;
+}
+
+.scenario-standouts-mode > span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.68rem !important;
+}
+
+.scenario-standouts-mode select {
+  background: rgba(20, 20, 20, 0.92);
+  border: 1px solid rgba(135, 123, 105, 0.45);
+  color: $text-strong;
+  font-size: 0.72rem;
+  padding: 0.25rem 0.35rem;
 }
 
 .scenario-standouts-modal .modal-card {

@@ -13,7 +13,7 @@ import { assetUrl } from '@/utils';
 type RealmFilter = 'both' | 'order' | 'destruction';
 type RoleFilter = 'all' | ScenarioRole;
 type CareerFilter = 'all' | Career;
-type RankingMode = 'totals' | 'average';
+type RankingMode = 'totals' | 'average' | 'median';
 type TableSortKey =
   | 'overall'
   | 'career'
@@ -39,6 +39,14 @@ type RankingMetric =
   | 'healing'
   | 'protection'
   | 'objectiveScore';
+type ContributionMetric =
+  | 'kills'
+  | 'killDamage'
+  | 'damage'
+  | 'deathBlows'
+  | 'healing'
+  | 'protection'
+  | 'objectiveScore';
 
 interface Standout {
   career: Career;
@@ -48,6 +56,7 @@ interface Standout {
   healing: number;
   killDamage: number;
   kills: number;
+  medians: Record<ContributionMetric, number>;
   name: string;
   objectiveScore: number;
   overall: number;
@@ -87,6 +96,27 @@ const dateInputValue = (date: Date): string => {
   return offsetDate.toISOString().slice(0, 10);
 };
 
+const contributionMetrics: ContributionMetric[] = [
+  'kills',
+  'killDamage',
+  'damage',
+  'deathBlows',
+  'healing',
+  'protection',
+  'objectiveScore',
+];
+
+const median = (values: number[]): number => {
+  if (values.length === 0) {
+    return 0;
+  }
+  const sorted = values.toSorted((left, right) => left - right);
+  const middle = Math.floor(sorted.length / 2);
+  return sorted.length % 2 === 0
+    ? (sorted[middle - 1] + sorted[middle]) / 2
+    : sorted[middle];
+};
+
 const getStandouts = ({
   career,
   limit,
@@ -106,7 +136,12 @@ const getStandouts = ({
   scenarios: ScenarioRecord[];
   team: number;
 }): Standout[] => {
-  const characters = new Map<string, Omit<Standout, 'overall' | 'winRate'>>();
+  const characters = new Map<
+    string,
+    Omit<Standout, 'medians' | 'overall' | 'winRate'> & {
+      samples: Record<ContributionMetric, number[]>;
+    }
+  >();
 
   for (const scenario of scenarios) {
     for (const entry of scenario.scoreboardEntries) {
@@ -122,6 +157,15 @@ const getStandouts = ({
           name: entry.character.name,
           objectiveScore: 0,
           protection: 0,
+          samples: {
+            damage: [],
+            deathBlows: [],
+            healing: [],
+            killDamage: [],
+            kills: [],
+            objectiveScore: [],
+            protection: [],
+          },
           scenarios: 0,
           wins: 0,
         };
@@ -133,6 +177,9 @@ const getStandouts = ({
         current.kills += entry.kills;
         current.objectiveScore += entry.objectiveScore;
         current.protection += entry.protection;
+        for (const contributionMetric of contributionMetrics) {
+          current.samples[contributionMetric].push(entry[contributionMetric]);
+        }
         current.scenarios += 1;
         current.wins += scenario.winner === team ? 1 : 0;
         characters.set(entry.character.id, current);
@@ -140,47 +187,83 @@ const getStandouts = ({
     }
   }
 
-  const values = [...characters.values()].filter(
-    (value) =>
-      value.scenarios >= minimumScenarios &&
-      (role === 'all' || scenarioCareerRoles[value.career] === role) &&
-      (career === 'all' || value.career === career),
-  );
+  const values = [...characters.values()]
+    .filter(
+      (value) =>
+        value.scenarios >= minimumScenarios &&
+        (role === 'all' || scenarioCareerRoles[value.career] === role) &&
+        (career === 'all' || value.career === career),
+    )
+    .map((value): Standout => {
+      const medians = Object.fromEntries(
+        contributionMetrics.map((key) => [key, median(value.samples[key])]),
+      ) as Record<ContributionMetric, number>;
+      const { samples: _samples, ...totals } = value;
+      return {
+        ...totals,
+        medians,
+        overall: 0,
+        winRate: value.wins / value.scenarios,
+      };
+    });
+  const contributionValue = (
+    value: Standout,
+    key: ContributionMetric,
+  ): number => {
+    if (mode === 'average') {
+      return value[key] / value.scenarios;
+    }
+    if (mode === 'median') {
+      return value.medians[key];
+    }
+    return value[key];
+  };
   const maximums = {
-    damage: Math.max(...values.map((value) => value.damage), 1),
-    healing: Math.max(...values.map((value) => value.healing), 1),
-    killDamage: Math.max(...values.map((value) => value.killDamage), 1),
-    objectiveScore: Math.max(...values.map((value) => value.objectiveScore), 1),
-    protection: Math.max(...values.map((value) => value.protection), 1),
+    damage: Math.max(
+      ...values.map((value) => contributionValue(value, 'damage')),
+      1,
+    ),
+    healing: Math.max(
+      ...values.map((value) => contributionValue(value, 'healing')),
+      1,
+    ),
+    killDamage: Math.max(
+      ...values.map((value) => contributionValue(value, 'killDamage')),
+      1,
+    ),
+    objectiveScore: Math.max(
+      ...values.map((value) => contributionValue(value, 'objectiveScore')),
+      1,
+    ),
+    protection: Math.max(
+      ...values.map((value) => contributionValue(value, 'protection')),
+      1,
+    ),
   };
 
   return values
     .map((value) => {
       const primaryContribution = Math.max(
-        value.damage / maximums.damage,
-        value.healing / maximums.healing,
-        value.killDamage / maximums.killDamage,
-        value.objectiveScore / maximums.objectiveScore,
-        value.protection / maximums.protection,
+        contributionValue(value, 'damage') / maximums.damage,
+        contributionValue(value, 'healing') / maximums.healing,
+        contributionValue(value, 'killDamage') / maximums.killDamage,
+        contributionValue(value, 'objectiveScore') / maximums.objectiveScore,
+        contributionValue(value, 'protection') / maximums.protection,
       );
-      const winRate = value.wins / value.scenarios;
 
-      return Object.assign(value, {
+      return {
+        ...value,
         overall:
           primaryContribution * 0.65 +
-          winRate * 0.2 +
+          value.winRate * 0.2 +
           (value.scenarios / scenarios.length) * 0.15,
-        winRate,
-      });
+      };
     })
     .toSorted(
       (left, right) => {
         const metricValue = (standout: Standout): number => {
-          if (
-            mode === 'average' &&
-            !['overall', 'scenarios', 'wins', 'winRate'].includes(metric)
-          ) {
-            return standout[metric] / standout.scenarios;
+          if (contributionMetrics.includes(metric as ContributionMetric)) {
+            return contributionValue(standout, metric as ContributionMetric);
           }
           return standout[metric];
         };
@@ -599,6 +682,7 @@ const StandoutTable = ({
   sortable = false,
   team,
   onExpand,
+  onModeChange,
   onSelectPlayer,
 }: {
   career: CareerFilter;
@@ -612,6 +696,7 @@ const StandoutTable = ({
   sortable?: boolean;
   team: number;
   onExpand?: () => void;
+  onModeChange?: (mode: RankingMode) => void;
   onSelectPlayer?: (standout: Standout, realm: 'Order' | 'Destruction') => void;
 }): ReactElement => {
   const [sortKey, setSortKey] = useState<TableSortKey>(metric);
@@ -628,12 +713,13 @@ const StandoutTable = ({
   });
   const sortableValue = (standout: Standout, key: TableSortKey): number => {
     const value = standout[key];
-    if (
-      typeof value === 'number' &&
-      mode === 'average' &&
-      !['overall', 'scenarios', 'wins', 'winRate'].includes(key)
-    ) {
-      return value / standout.scenarios;
+    if (contributionMetrics.includes(key as ContributionMetric)) {
+      if (mode === 'average') {
+        return Number(value) / standout.scenarios;
+      }
+      if (mode === 'median') {
+        return standout.medians[key as ContributionMetric];
+      }
     }
     return typeof value === 'number' ? value : 0;
   };
@@ -658,8 +744,15 @@ const StandoutTable = ({
       })
     : standouts;
   const wins = scenarios.filter((scenario) => scenario.winner === team).length;
-  const contributionValue = (value: number, standout: Standout): number =>
-    mode === 'average' ? value / standout.scenarios : value;
+  const contributionValue = (
+    standout: Standout,
+    key: ContributionMetric,
+  ): number =>
+    mode === 'average'
+      ? standout[key] / standout.scenarios
+      : mode === 'median'
+        ? standout.medians[key]
+        : standout[key];
   const sortBy = (key: TableSortKey): void => {
     if (key === sortKey) {
       setSortDirection((current) => (current === 'desc' ? 'asc' : 'desc'));
@@ -712,9 +805,29 @@ const StandoutTable = ({
           <span>
             {scenarios.length} scenarios · {wins} wins ·{' '}
             {scenarios.length - wins} losses · ranked by {metricLabels[metric]}
-            {mode === 'average' ? ' per scenario' : ''}
+            {mode === 'average'
+              ? ' per scenario'
+              : mode === 'median'
+                ? ' by median'
+                : ''}
           </span>
         </div>
+        {onModeChange && (
+          <label className="scenario-standouts-mode">
+            <span>View</span>
+            <select
+              aria-label={`${realm} numbers shown`}
+              value={mode}
+              onChange={(event) => {
+                onModeChange(event.target.value as RankingMode);
+              }}
+            >
+              <option value="totals">Totals</option>
+              <option value="average">Average</option>
+              <option value="median">Median</option>
+            </select>
+          </label>
+        )}
         {onExpand && (
           <button
             type="button"
@@ -781,36 +894,28 @@ const StandoutTable = ({
                   <td align="right">{standout.wins}</td>
                   <td align="right">{Math.round(standout.winRate * 100)}%</td>
                   <td align="right">
-                    {compactNumber(contributionValue(standout.kills, standout))}
+                    {compactNumber(contributionValue(standout, 'kills'))}
                   </td>
                   <td align="right">
                     {compactNumber(
-                      contributionValue(standout.killDamage, standout),
+                      contributionValue(standout, 'killDamage'),
                     )}
                   </td>
                   <td align="right">
-                    {compactNumber(
-                      contributionValue(standout.damage, standout),
-                    )}
+                    {compactNumber(contributionValue(standout, 'damage'))}
+                  </td>
+                  <td align="right">
+                    {compactNumber(contributionValue(standout, 'deathBlows'))}
+                  </td>
+                  <td align="right">
+                    {compactNumber(contributionValue(standout, 'healing'))}
+                  </td>
+                  <td align="right">
+                    {compactNumber(contributionValue(standout, 'protection'))}
                   </td>
                   <td align="right">
                     {compactNumber(
-                      contributionValue(standout.deathBlows, standout),
-                    )}
-                  </td>
-                  <td align="right">
-                    {compactNumber(
-                      contributionValue(standout.healing, standout),
-                    )}
-                  </td>
-                  <td align="right">
-                    {compactNumber(
-                      contributionValue(standout.protection, standout),
-                    )}
-                  </td>
-                  <td align="right">
-                    {compactNumber(
-                      contributionValue(standout.objectiveScore, standout),
+                      contributionValue(standout, 'objectiveScore'),
                     )}
                   </td>
                 </tr>
@@ -852,7 +957,8 @@ export const ScenarioStandouts = ({
   const minimumScenarios = [1, 3, 10, 25].includes(minimumScenariosParam)
     ? minimumScenariosParam
     : 1;
-  const mode: RankingMode = modeParam === 'average' ? 'average' : 'totals';
+  const mode: RankingMode =
+    modeParam === 'average' || modeParam === 'median' ? modeParam : 'totals';
   const [expandedTeam, setExpandedTeam] = useState<number>();
   const [selectedPlayer, setSelectedPlayer] = useState<{
     realm: 'Order' | 'Destruction';
@@ -1214,6 +1320,11 @@ export const ScenarioStandouts = ({
             onExpand={() => {
               setExpandedTeam(0);
             }}
+            onModeChange={(nextMode) => {
+              updateParams({
+                lbMode: nextMode === 'totals' ? undefined : nextMode,
+              });
+            }}
             onSelectPlayer={(standout, selectedRealm) => {
               setSelectedPlayer({ realm: selectedRealm, standout });
             }}
@@ -1232,6 +1343,11 @@ export const ScenarioStandouts = ({
             team={1}
             onExpand={() => {
               setExpandedTeam(1);
+            }}
+            onModeChange={(nextMode) => {
+              updateParams({
+                lbMode: nextMode === 'totals' ? undefined : nextMode,
+              });
             }}
             onSelectPlayer={(standout, selectedRealm) => {
               setSelectedPlayer({ realm: selectedRealm, standout });
@@ -1379,6 +1495,7 @@ export const ScenarioStandouts = ({
                   >
                     <option value="totals">Totals</option>
                     <option value="average">Per scenario</option>
+                    <option value="median">Median scenario</option>
                   </select>
                 </label>
               </div>
