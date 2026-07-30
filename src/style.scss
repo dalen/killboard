@@ -242,6 +242,63 @@ td.scenariolist-score-destruction {
   gap: 1rem;
 }
 
+.scenario-standouts-grid .scenario-standouts table {
+  font-size: 0.74rem;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.scenario-standouts-grid .scenario-standouts th,
+.scenario-standouts-grid .scenario-standouts td {
+  overflow: hidden;
+  padding: 0.3em 0.18em !important;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scenario-standouts-grid .scenario-standouts th:first-child,
+.scenario-standouts-grid .scenario-standouts td:first-child {
+  width: 30px;
+}
+
+.scenario-standouts-grid .scenario-standouts th:nth-child(2),
+.scenario-standouts-grid .scenario-standouts td:nth-child(2) {
+  width: 102px;
+}
+
+.scenario-standouts-grid .scenario-standouts th:nth-child(3),
+.scenario-standouts-grid .scenario-standouts td:nth-child(3),
+.scenario-standouts-grid .scenario-standouts th:nth-child(4),
+.scenario-standouts-grid .scenario-standouts td:nth-child(4),
+.scenario-standouts-grid .scenario-standouts th:nth-child(9),
+.scenario-standouts-grid .scenario-standouts td:nth-child(9) {
+  width: 29px;
+}
+
+.scenario-standouts-grid .scenario-standouts th:nth-child(5),
+.scenario-standouts-grid .scenario-standouts td:nth-child(5) {
+  width: 38px;
+}
+
+.scenario-standouts-grid .scenario-standouts th:nth-child(n + 6),
+.scenario-standouts-grid .scenario-standouts td:nth-child(n + 6) {
+  width: 46px;
+}
+
+.scenario-standouts-grid .scenario-standouts .scenario-player-link {
+  display: block;
+  font-size: 0.78rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.scenario-standouts-grid .scenario-standouts td:first-child .image {
+  height: 24px;
+  width: 24px;
+}
+
 .scenario-breakdown {
   background: rgba(20, 20, 20, 0.55);
   border-top: 3px solid $primary;
