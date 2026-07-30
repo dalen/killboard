@@ -1,10 +1,10 @@
 import { gql } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
-import type { Query } from '@/__generated__/graphql';
+import type { Query, ScenarioRecord } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioListTable } from '@/components/scenario/ScenarioListTable';
@@ -89,43 +89,133 @@ export const ScenarioList = ({
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const range = search.get('range') ?? 'recent';
-  const rangeLimit: Record<string, number> = {
-    recent: perPage,
-    '24h': 50,
-    '7d': 100,
-    '30d': 150,
-    '90d': 200,
-    ytd: 250,
-    custom: 100,
-  };
-  const initialLimit = loadMore ? (rangeLimit[range] ?? perPage) : perPage;
-  const [resultLimit, setResultLimit] = useState(initialLimit);
+  const isFullWindow = range !== 'recent';
+  const [resultLimit, setResultLimit] = useState(perPage);
   const [loadingMore, setLoadingMore] = useState(false);
+  const [windowScenarios, setWindowScenarios] = useState<ScenarioRecord[]>([]);
+  const [windowTotal, setWindowTotal] = useState(0);
+  const [windowLoading, setWindowLoading] = useState(false);
+  const [windowError, setWindowError] = useState<Error>();
+  const [reloadToken, setReloadToken] = useState(0);
   const filterKey = search.toString();
+  const client = useApolloClient();
+  const where = getScenarioFilters(search, { characterId, guildId });
 
   useEffect(() => {
-    setResultLimit(initialLimit);
-  }, [filterKey, initialLimit]);
+    setResultLimit(perPage);
+  }, [filterKey, perPage]);
 
-  const { loading, error, data, refetch } = useQuery<Query>(SCENARIO_LIST, {
+  const {
+    loading: recentLoading,
+    error: recentError,
+    data,
+    refetch,
+  } = useQuery<Query>(SCENARIO_LIST, {
+    skip: isFullWindow,
     variables: {
-      first: loadMore ? resultLimit : perPage,
-      where: getScenarioFilters(search, { characterId, guildId }),
+      first: perPage,
+      where,
     },
   });
 
-  if (loading) {
+  useEffect(() => {
+    if (!isFullWindow) {
+      setWindowScenarios([]);
+      setWindowTotal(0);
+      setWindowLoading(false);
+      setWindowError(undefined);
+      return;
+    }
+
+    let cancelled = false;
+    const loadWindow = async (): Promise<void> => {
+      setWindowScenarios([]);
+      setWindowTotal(0);
+      setWindowError(undefined);
+      setWindowLoading(true);
+      let after: string | undefined;
+      const accumulated: ScenarioRecord[] = [];
+
+      try {
+        do {
+          const result = await client.query<Query>({
+            fetchPolicy: 'network-only',
+            query: SCENARIO_LIST,
+            variables: {
+              after,
+              first: 100,
+              where,
+            },
+          });
+          const connection = result.data?.scenarios;
+          if (!connection) {
+            break;
+          }
+
+          accumulated.push(...(connection.nodes ?? []));
+          after = connection.pageInfo.endCursor ?? undefined;
+          if (!cancelled) {
+            setWindowTotal(connection.totalCount);
+            setWindowScenarios([...accumulated]);
+          }
+
+          if (!connection.pageInfo.hasNextPage || !after) {
+            break;
+          }
+        } while (!cancelled);
+      } catch (caughtError) {
+        if (!cancelled) {
+          setWindowError(
+            caughtError instanceof Error
+              ? caughtError
+              : new Error('Unable to load the selected time window.'),
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setWindowLoading(false);
+        }
+      }
+    };
+
+    void loadWindow();
+    return () => {
+      cancelled = true;
+    };
+  }, [client, filterKey, isFullWindow, reloadToken]);
+
+  const loading = isFullWindow ? windowLoading : recentLoading;
+  const error = isFullWindow ? windowError : recentError;
+  const scenarios = isFullWindow
+    ? windowScenarios
+    : (data?.scenarios?.nodes ?? []);
+  const pageInfo = data?.scenarios?.pageInfo;
+
+  if (loading && scenarios.length === 0) {
+    return (
+      <>
+        <ScenarioStandouts scenarios={[]} />
+        <div className="scenario-window-loading">
+          <progress className="progress is-small is-primary" />
+          <strong>Gathering the complete selected time window…</strong>
+          <span>
+            Player scoreboards are loaded in batches so the final leaderboard is
+            exact.
+          </span>
+        </div>
+      </>
+    );
+  }
+  if (recentLoading) {
     return <progress className="progress" />;
   }
   if (error) {
     return <ErrorMessage name={error.name} message={error.message} />;
   }
-  if (data?.scenarios?.nodes == null) {
+  if (!isFullWindow && data?.scenarios?.nodes == null) {
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
-  const pageInfo = data?.scenarios?.pageInfo;
-  const scenarios = data.scenarios.nodes;
   if (scenarios.length === 0) {
     return (
       <>
@@ -167,13 +257,15 @@ export const ScenarioList = ({
     ) / scenarios.length;
   const rangeLabels: Record<string, string> = {
     recent: 'most recent matches',
-    '24h': 'matches loaded · last 24 hours',
-    '7d': 'matches loaded · last 7 days',
-    '30d': 'matches loaded · last 30 days',
-    '90d': 'matches loaded · last 90 days',
-    ytd: 'matches loaded · year to date',
-    custom: 'matches loaded · custom dates',
+    '24h': 'matches · complete last 24 hours',
+    '7d': 'matches · complete last 7 days',
+    '30d': 'matches · complete last 30 days',
+    '90d': 'matches · complete last 90 days',
+    ytd: 'matches · complete year to date',
+    custom: 'matches · complete custom dates',
   };
+  const visibleScenarios =
+    loadMore && isFullWindow ? scenarios.slice(0, resultLimit) : scenarios;
 
   return (
     <>
@@ -183,12 +275,19 @@ export const ScenarioList = ({
           <span>
             {format(earliestScenarioDate, 'MMM d, h:mm a')} –{' '}
             {format(latestScenarioDate, 'MMM d, h:mm a')}
+            {loading && ` · gathering ${scenarios.length} of ${windowTotal || '…'}`}
           </span>
         </div>
         <button
           type="button"
           className="button is-small"
-          onClick={() => refetch()}
+          onClick={() => {
+            if (isFullWindow) {
+              setReloadToken((current) => current + 1);
+            } else {
+              void refetch();
+            }
+          }}
         >
           <span className="icon is-small">
             <i className="fas fa-rotate-right" aria-hidden="true" />
@@ -199,7 +298,11 @@ export const ScenarioList = ({
       <div className="scenario-list-summary">
         <div>
           <strong>{scenarios.length}</strong>
-          <span>{rangeLabels[range] ?? 'matches loaded'}</span>
+          <span>
+            {loading
+              ? `gathering ${scenarios.length} of ${windowTotal || '…'}`
+              : (rangeLabels[range] ?? 'matches')}
+          </span>
         </div>
         <div>
           <strong>{averagePlayers.toFixed(1)}</strong>
@@ -226,18 +329,34 @@ export const ScenarioList = ({
           <span style={{ width: `${orderWinPercentage}%` }} />
         </div>
       </div>
+      {loading && (
+        <div className="scenario-window-progress mb-3">
+          <progress
+            className="progress is-small is-primary"
+            value={scenarios.length}
+            max={windowTotal || undefined}
+          />
+          Calculating the full {range === 'ytd' ? 'year-to-date' : range}{' '}
+          leaderboard: {scenarios.length}
+          {windowTotal ? ` of ${windowTotal}` : ''} matches gathered.
+        </div>
+      )}
       <ScenarioStandouts scenarios={scenarios} />
-      <ScenarioListTable data={scenarios} />
+      <ScenarioListTable data={visibleScenarios} />
       {loadMore ? (
-        pageInfo.hasNextPage && (
+        ((isFullWindow && resultLimit < scenarios.length) ||
+          (!isFullWindow && pageInfo?.hasNextPage)) && (
           <div className="has-text-centered mt-4">
             <button
               type="button"
               className={`button is-primary ${loadingMore ? 'is-loading' : ''}`}
               disabled={loadingMore}
               onClick={async () => {
-                const nextLimit =
-                  resultLimit + (range === 'recent' ? perPage : 50);
+                const nextLimit = resultLimit + perPage;
+                if (isFullWindow) {
+                  setResultLimit(nextLimit);
+                  return;
+                }
                 setLoadingMore(true);
                 try {
                   await refetch({
@@ -254,13 +373,13 @@ export const ScenarioList = ({
             </button>
           </div>
         )
-      ) : (
+      ) : !isFullWindow && pageInfo ? (
         <QueryPagination
           pageInfo={pageInfo}
           perPage={perPage}
           refetch={refetch}
         />
-      )}
+      ) : null}
     </>
   );
 };

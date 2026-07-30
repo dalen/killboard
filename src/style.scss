@@ -158,6 +158,28 @@ td.scenariolist-score-destruction {
   font-size: 0.78rem;
 }
 
+.scenario-window-loading,
+.scenario-window-progress {
+  background: rgba(20, 20, 20, 0.55);
+  border-left: 3px solid $primary;
+  padding: 0.85rem;
+}
+
+.scenario-window-loading strong,
+.scenario-window-loading span {
+  display: block;
+}
+
+.scenario-window-loading span,
+.scenario-window-progress {
+  font-size: 0.8rem;
+}
+
+.scenario-window-loading .progress,
+.scenario-window-progress .progress {
+  margin-bottom: 0.55rem;
+}
+
 .scenario-list-summary > div {
   background: rgba(50, 50, 50, 0.35);
   border-top: 2px solid $primary;
