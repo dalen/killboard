@@ -119,19 +119,10 @@ td.scenariolist-score-destruction {
   padding: 0.65rem 0.85rem;
 }
 
-.scenario-win-balance-labels {
+.scenario-win-balance-totals {
   display: flex;
+  justify-content: space-between;
   margin-bottom: 0.4rem;
-}
-
-.scenario-win-balance-labels span {
-  min-width: 0;
-  text-align: center;
-}
-
-.scenario-win-balance-labels strong {
-  display: block;
-  font-size: 1.1rem;
 }
 
 .scenario-win-balance strong {
@@ -141,13 +132,37 @@ td.scenariolist-score-destruction {
 .scenario-win-balance-bar {
   background: rgb(158, 12, 13);
   height: 6px;
-  overflow: hidden;
+  position: relative;
 }
 
-.scenario-win-balance-bar span {
+.scenario-win-balance-bar > span {
   background: rgb(12, 47, 158);
   display: block;
   height: 100%;
+}
+
+.scenario-win-balance-junction {
+  align-items: center;
+  display: flex;
+  gap: 0.45rem;
+  position: absolute;
+  top: -1.65rem;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.scenario-win-balance-junction strong {
+  background: rgba(0, 0, 0, 0.78);
+  font-size: 0.78rem;
+  padding: 0.08rem 0.25rem;
+}
+
+.scenario-win-rate-order {
+  color: #6f91ff !important;
+}
+
+.scenario-win-rate-destruction {
+  color: #ff7474 !important;
 }
 
 .scenario-feed-toolbar {
@@ -211,13 +226,8 @@ td.scenariolist-score-destruction {
     grid-template-columns: 1fr;
   }
 
-  .scenario-win-balance-labels {
-    gap: 0.5rem;
-  }
-
-  .scenario-win-balance-labels span {
-    flex: 1;
-    width: auto !important;
+  .scenario-win-balance-junction {
+    gap: 0.2rem;
   }
 }
 
