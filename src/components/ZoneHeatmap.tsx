@@ -6,7 +6,7 @@ export const ZoneHeatmap = ({
   zoneId,
   max,
   data,
-  size = 640,
+  size,
 }: {
   zoneId: string;
   max: number;
