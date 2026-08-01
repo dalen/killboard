@@ -15,7 +15,6 @@ type RoleFilter = 'all' | ScenarioRole;
 type CareerFilter = 'all' | Career;
 type RankingMode = 'totals' | 'average' | 'median';
 type TableSortKey =
-  | 'overall'
   | 'career'
   | 'name'
   | 'scenarios'
@@ -29,7 +28,6 @@ type TableSortKey =
   | 'protection'
   | 'objectiveScore';
 type RankingMetric =
-  | 'overall'
   | 'wins'
   | 'winRate'
   | 'kills'
@@ -59,7 +57,6 @@ interface Standout {
   medians: Record<ContributionMetric, number>;
   name: string;
   objectiveScore: number;
-  overall: number;
   protection: number;
   scenarios: number;
   winRate: number;
@@ -67,7 +64,6 @@ interface Standout {
 }
 
 const metricLabels: Record<RankingMetric, string> = {
-  overall: 'Overall contribution',
   wins: 'Wins',
   winRate: 'Win rate',
   kills: 'Kills',
@@ -138,7 +134,7 @@ const getStandouts = ({
 }): Standout[] => {
   const characters = new Map<
     string,
-    Omit<Standout, 'medians' | 'overall' | 'winRate'> & {
+    Omit<Standout, 'medians' | 'winRate'> & {
       samples: Record<ContributionMetric, number[]>;
     }
   >();
@@ -202,7 +198,6 @@ const getStandouts = ({
       return {
         ...totals,
         medians,
-        overall: 0,
         winRate: value.wins / value.scenarios,
       };
     });
@@ -218,63 +213,21 @@ const getStandouts = ({
     }
     return value[key];
   };
-  const maximums = {
-    damage: Math.max(
-      ...values.map((value) => contributionValue(value, 'damage')),
-      1,
-    ),
-    healing: Math.max(
-      ...values.map((value) => contributionValue(value, 'healing')),
-      1,
-    ),
-    killDamage: Math.max(
-      ...values.map((value) => contributionValue(value, 'killDamage')),
-      1,
-    ),
-    objectiveScore: Math.max(
-      ...values.map((value) => contributionValue(value, 'objectiveScore')),
-      1,
-    ),
-    protection: Math.max(
-      ...values.map((value) => contributionValue(value, 'protection')),
-      1,
-    ),
-  };
-
   return values
-    .map((value) => {
-      const primaryContribution = Math.max(
-        contributionValue(value, 'damage') / maximums.damage,
-        contributionValue(value, 'healing') / maximums.healing,
-        contributionValue(value, 'killDamage') / maximums.killDamage,
-        contributionValue(value, 'objectiveScore') / maximums.objectiveScore,
-        contributionValue(value, 'protection') / maximums.protection,
-      );
-
-      return {
-        ...value,
-        overall:
-          primaryContribution * 0.65 +
-          value.winRate * 0.2 +
-          (value.scenarios / scenarios.length) * 0.15,
+    .toSorted((left, right) => {
+      const metricValue = (standout: Standout): number => {
+        if (contributionMetrics.includes(metric as ContributionMetric)) {
+          return contributionValue(standout, metric as ContributionMetric);
+        }
+        return standout[metric];
       };
-    })
-    .toSorted(
-      (left, right) => {
-        const metricValue = (standout: Standout): number => {
-          if (contributionMetrics.includes(metric as ContributionMetric)) {
-            return contributionValue(standout, metric as ContributionMetric);
-          }
-          return standout[metric];
-        };
 
-        return (
-          metricValue(right) - metricValue(left) ||
+      return (
+        metricValue(right) - metricValue(left) ||
         right.scenarios - left.scenarios ||
-          right.kills - left.kills
-        );
-      },
-    )
+        right.kills - left.kills
+      );
+    })
     .slice(0, limit);
 };
 
@@ -305,8 +258,7 @@ const ScenarioBreakdown = ({
 }): ReactElement => {
   const [expandedScenarioId, setExpandedScenarioId] = useState<string>();
   const [minimumMatches, setMinimumMatches] = useState(1);
-  const [sortKey, setSortKey] =
-    useState<ScenarioBreakdownSortKey>('matches');
+  const [sortKey, setSortKey] = useState<ScenarioBreakdownSortKey>('matches');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
   const breakdown = useMemo(() => {
     const grouped = new Map<
@@ -355,7 +307,7 @@ const ScenarioBreakdown = ({
           ...getStandouts({
             career: 'all',
             limit: 1,
-            metric: 'overall',
+            metric: 'kills',
             minimumScenarios: 1,
             mode: 'totals',
             role: 'all',
@@ -365,7 +317,7 @@ const ScenarioBreakdown = ({
           ...getStandouts({
             career: 'all',
             limit: 1,
-            metric: 'overall',
+            metric: 'kills',
             minimumScenarios: 1,
             mode: 'totals',
             role: 'all',
@@ -374,7 +326,7 @@ const ScenarioBreakdown = ({
           }),
         ].toSorted(
           (left, right) =>
-            right.overall - left.overall ||
+            right.kills - left.kills ||
             right.scenarios - left.scenarios ||
             right.kills - left.kills,
         );
@@ -486,18 +438,20 @@ const ScenarioBreakdown = ({
         <div className="scenario-breakdown-controls">
           <label>
             <span>Minimum matches</span>
-            <select
-              value={minimumMatches}
-              onChange={(event) => {
-                setMinimumMatches(Number(event.target.value));
-              }}
-            >
-              <option value={1}>1+</option>
-              <option value={3}>3+</option>
-              <option value={5}>5+</option>
-              <option value={10}>10+</option>
-              <option value={25}>25+</option>
-            </select>
+            <div className="select">
+              <select
+                value={minimumMatches}
+                onChange={(event) => {
+                  setMinimumMatches(Number(event.target.value));
+                }}
+              >
+                <option value={1}>1+</option>
+                <option value={3}>3+</option>
+                <option value={5}>5+</option>
+                <option value={10}>10+</option>
+                <option value={25}>25+</option>
+              </select>
+            </div>
           </label>
           <span>
             {visibleBreakdown.length} of {breakdown.length} scenarios
@@ -514,14 +468,17 @@ const ScenarioBreakdown = ({
               <th>{sortHeading('Destruction', 'destruction')}</th>
               <th>{sortHeading('Avg. players', 'players')}</th>
               <th>{sortHeading('Avg. duration', 'duration')}</th>
-              <th>Top contributor</th>
-              <th>{sortHeading('Balance', 'balance')}</th>
+              <th title="Most kills across matches of this scenario type in the selected window">
+                Top killer
+              </th>
+              <th title="Balanced: 45–55% win rate for either realm. Watch: 40–60%. Lopsided: beyond that.">
+                {sortHeading('Balance', 'balance')}
+              </th>
             </tr>
           </thead>
           <tbody>
             {visibleBreakdown.map((entry) => {
-              const completedMatches =
-                entry.orderWins + entry.destructionWins;
+              const completedMatches = entry.orderWins + entry.destructionWins;
               const orderRate =
                 completedMatches > 0
                   ? Math.round((entry.orderWins / completedMatches) * 100)
@@ -654,6 +611,15 @@ const ScenarioBreakdownRows = ({
                         ? 'Destruction'
                         : 'Draw'}
                   </strong>
+                  <span className="scenario-breakdown-match-score">
+                    <span className="scenario-breakdown-order">
+                      {match.points[0]}
+                    </span>
+                    {' – '}
+                    <span className="scenario-breakdown-destruction">
+                      {match.points[1]}
+                    </span>
+                  </span>
                   <span>{match.numPlayers} players</span>
                 </Link>
               ))}
@@ -733,8 +699,7 @@ const StandoutTable = ({
             scenarioCareerName(right.career),
           );
         } else {
-          result =
-            sortableValue(left, sortKey) - sortableValue(right, sortKey);
+          result = sortableValue(left, sortKey) - sortableValue(right, sortKey);
         }
 
         return (
@@ -793,9 +758,11 @@ const StandoutTable = ({
     <section className={`scenario-standouts scenario-standouts-team-${team}`}>
       <header>
         <img
-          src={assetUrl(`/images/icons/scenario/${
-            team === 0 ? 'order' : 'destruction'
-          }.png`)}
+          src={assetUrl(
+            `/images/icons/scenario/${
+              team === 0 ? 'order' : 'destruction'
+            }.png`,
+          )}
           width={42}
           height={42}
           alt={realm}
@@ -815,17 +782,19 @@ const StandoutTable = ({
         {onModeChange && (
           <label className="scenario-standouts-mode">
             <span>View</span>
-            <select
-              aria-label={`${realm} numbers shown`}
-              value={mode}
-              onChange={(event) => {
-                onModeChange(event.target.value as RankingMode);
-              }}
-            >
-              <option value="totals">Totals</option>
-              <option value="average">Average</option>
-              <option value="median">Median</option>
-            </select>
+            <div className="select">
+              <select
+                aria-label={`${realm} numbers shown`}
+                value={mode}
+                onChange={(event) => {
+                  onModeChange(event.target.value as RankingMode);
+                }}
+              >
+                <option value="totals">Totals</option>
+                <option value="average">Average</option>
+                <option value="median">Median</option>
+              </select>
+            </div>
           </label>
         )}
         {onExpand && (
@@ -858,11 +827,11 @@ const StandoutTable = ({
                 <th align="right">{heading('WR', 'winRate', 'win rate')}</th>
                 <th align="right">{heading('Kills', 'kills')}</th>
                 <th align="right">
-                  {heading('KDmg', 'killDamage', 'kill damage')}
+                  {heading('DB', 'deathBlows', 'death blows')}
                 </th>
                 <th align="right">{heading('Dmg', 'damage', 'damage')}</th>
                 <th align="right">
-                  {heading('DB', 'deathBlows', 'death blows')}
+                  {heading('KDmg', 'killDamage', 'kill damage')}
                 </th>
                 <th align="right">{heading('Heals', 'healing', 'healing')}</th>
                 <th align="right">
@@ -897,15 +866,13 @@ const StandoutTable = ({
                     {compactNumber(contributionValue(standout, 'kills'))}
                   </td>
                   <td align="right">
-                    {compactNumber(
-                      contributionValue(standout, 'killDamage'),
-                    )}
+                    {compactNumber(contributionValue(standout, 'deathBlows'))}
                   </td>
                   <td align="right">
                     {compactNumber(contributionValue(standout, 'damage'))}
                   </td>
                   <td align="right">
-                    {compactNumber(contributionValue(standout, 'deathBlows'))}
+                    {compactNumber(contributionValue(standout, 'killDamage'))}
                   </td>
                   <td align="right">
                     {compactNumber(contributionValue(standout, 'healing'))}
@@ -952,7 +919,7 @@ export const ScenarioStandouts = ({
     careerParam === 'all' || Object.values(Career).includes(careerParam)
       ? careerParam
       : 'all';
-  const metric = rankingMetrics.includes(metricParam) ? metricParam : 'overall';
+  const metric = rankingMetrics.includes(metricParam) ? metricParam : 'winRate';
   const limit = [5, 10, 25].includes(limitParam) ? limitParam : 5;
   const minimumScenarios = [1, 3, 10, 25].includes(minimumScenariosParam)
     ? minimumScenariosParam
@@ -976,6 +943,51 @@ export const ScenarioStandouts = ({
       }
     }
     setSearchParams(next, { replace: true });
+  };
+
+  // A range like 'range=24h' is relative to "now", so a copied link would
+  // show a different window whenever it's reopened. Resolve it to an
+  // absolute start/end timestamp at share-time so the link keeps showing
+  // this exact window later.
+  const buildShareUrl = (): string => {
+    const shared = new URLSearchParams(searchParams);
+    if (range !== 'custom' && range !== 'recent') {
+      const now = new Date();
+      now.setSeconds(0, 0);
+      let start: Date | undefined;
+      switch (range) {
+        case '1h': {
+          start = new Date(now.getTime() - 60 * 60 * 1000);
+          break;
+        }
+        case '24h': {
+          start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+          break;
+        }
+        case '7d': {
+          start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          break;
+        }
+        case '30d': {
+          start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          break;
+        }
+        case '90d': {
+          start = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+          break;
+        }
+        case 'ytd': {
+          start = new Date(now.getFullYear(), 0, 1);
+          break;
+        }
+      }
+      if (start) {
+        shared.set('range', 'custom');
+        shared.set('from', start.toISOString());
+        shared.set('to', now.toISOString());
+      }
+    }
+    return `${window.location.origin}${window.location.pathname}?${shared.toString()}`;
   };
 
   useEffect(() => {
@@ -1024,79 +1036,86 @@ export const ScenarioStandouts = ({
       <div className="scenario-standout-filters mb-3">
         <label>
           <span>Type</span>
-          <select
-            value={queueType}
-            onChange={(event) => {
-              updateParams({
-                queue_type:
-                  event.target.value === 'all'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All types</option>
-            <option value="standard">Standard</option>
-            <option value="solo">Random Scenario</option>
-            <option value="city_siege">City Siege</option>
-            <option value="group_challenge">Group Challenge</option>
-          </select>
+          <div className="select">
+            <select
+              value={queueType}
+              onChange={(event) => {
+                updateParams({
+                  queue_type:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All types</option>
+              <option value="standard">Standard</option>
+              <option value="solo">Random Scenario</option>
+              <option value="city_siege">City Siege</option>
+              <option value="group_challenge">Group Challenge</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Tier</span>
-          <select
-            value={tier}
-            onChange={(event) => {
-              updateParams({
-                tier:
-                  event.target.value === 'all'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All tiers</option>
-            <option value="1">Tier 1</option>
-            <option value="3">Tier 2–3</option>
-            <option value="4">Tier 4</option>
-          </select>
+          <div className="select">
+            <select
+              value={tier}
+              onChange={(event) => {
+                updateParams({
+                  tier:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All tiers</option>
+              <option value="1">Tier 1</option>
+              <option value="3">Tier 2–3</option>
+              <option value="4">Tier 4</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Time</span>
-          <select
-            value={range}
-            onChange={(event) => {
-              const nextRange = event.target.value;
-              if (nextRange === 'custom') {
-                const today = new Date();
-                const sevenDaysAgo = new Date(
-                  today.getTime() - 7 * 24 * 60 * 60 * 1000,
-                );
-                updateParams({
-                  from: searchParams.get('from') ?? dateInputValue(sevenDaysAgo),
-                  range: 'custom',
-                  to: searchParams.get('to') ?? dateInputValue(today),
-                });
-              } else {
-                updateParams({
-                  from: undefined,
-                  range: nextRange === defaultRange ? undefined : nextRange,
-                  to: undefined,
-                });
-              }
-            }}
-          >
-            {defaultRange === 'recent' && (
-              <option value="recent">Most recent</option>
-            )}
-            <option value="1h">Last hour</option>
-            <option value="24h">Last 24 hours</option>
-            <option value="7d">Last 7 days</option>
-            <option value="30d">Last 30 days</option>
-            <option value="90d">Last 90 days</option>
-            <option value="ytd">Year to date</option>
-            <option value="custom">Custom dates</option>
-          </select>
+          <div className="select">
+            <select
+              value={range}
+              onChange={(event) => {
+                const nextRange = event.target.value;
+                if (nextRange === 'custom') {
+                  const today = new Date();
+                  const sevenDaysAgo = new Date(
+                    today.getTime() - 7 * 24 * 60 * 60 * 1000,
+                  );
+                  updateParams({
+                    from:
+                      searchParams.get('from') ?? dateInputValue(sevenDaysAgo),
+                    range: 'custom',
+                    to: searchParams.get('to') ?? dateInputValue(today),
+                  });
+                } else {
+                  updateParams({
+                    from: undefined,
+                    range: nextRange === defaultRange ? undefined : nextRange,
+                    to: undefined,
+                  });
+                }
+              }}
+            >
+              {defaultRange === 'recent' && (
+                <option value="recent">Most recent</option>
+              )}
+              <option value="1h">Last hour</option>
+              <option value="24h">Last 24 hours</option>
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="ytd">Year to date</option>
+              <option value="custom">Custom dates</option>
+            </select>
+          </div>
         </label>
         {range === 'custom' && (
           <>
@@ -1104,7 +1123,7 @@ export const ScenarioStandouts = ({
               <span>Start</span>
               <input
                 type="date"
-                value={searchParams.get('from') ?? ''}
+                value={(searchParams.get('from') ?? '').slice(0, 10)}
                 onChange={(event) => {
                   updateParams({ from: event.target.value || undefined });
                 }}
@@ -1114,7 +1133,7 @@ export const ScenarioStandouts = ({
               <span>End</span>
               <input
                 type="date"
-                value={searchParams.get('to') ?? ''}
+                value={(searchParams.get('to') ?? '').slice(0, 10)}
                 onChange={(event) => {
                   updateParams({ to: event.target.value || undefined });
                 }}
@@ -1124,124 +1143,139 @@ export const ScenarioStandouts = ({
         )}
         <label>
           <span>Realm</span>
-          <select
-            value={realm}
-            onChange={(event) => {
-              updateParams({
-                lbRealm:
-                  event.target.value === 'both'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value="both">Both realms</option>
-            <option value="order">Order</option>
-            <option value="destruction">Destruction</option>
-          </select>
+          <div className="select">
+            <select
+              value={realm}
+              onChange={(event) => {
+                updateParams({
+                  lbRealm:
+                    event.target.value === 'both'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="both">Both realms</option>
+              <option value="order">Order</option>
+              <option value="destruction">Destruction</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Role</span>
-          <select
-            value={role}
-            onChange={(event) => {
-              updateParams({
-                lbCareer: undefined,
-                lbRole:
-                  event.target.value === 'all' ? undefined : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All roles</option>
-            {scenarioRoleOrder.map((roleOption) => (
-              <option key={roleOption} value={roleOption}>
-                {roleOption}
-              </option>
-            ))}
-          </select>
+          <div className="select">
+            <select
+              value={role}
+              onChange={(event) => {
+                updateParams({
+                  lbCareer: undefined,
+                  lbRole:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All roles</option>
+              {scenarioRoleOrder.map((roleOption) => (
+                <option key={roleOption} value={roleOption}>
+                  {roleOption}
+                </option>
+              ))}
+            </select>
+          </div>
         </label>
         <label>
           <span>Career</span>
-          <select
-            value={career}
-            onChange={(event) => {
-              updateParams({
-                lbCareer:
-                  event.target.value === 'all' ? undefined : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All careers</option>
-            {careerOptions.map((careerOption) => (
-              <option key={careerOption} value={careerOption}>
-                {scenarioCareerName(careerOption)}
-              </option>
-            ))}
-          </select>
+          <div className="select">
+            <select
+              value={career}
+              onChange={(event) => {
+                updateParams({
+                  lbCareer:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All careers</option>
+              {careerOptions.map((careerOption) => (
+                <option key={careerOption} value={careerOption}>
+                  {scenarioCareerName(careerOption)}
+                </option>
+              ))}
+            </select>
+          </div>
         </label>
         <label>
           <span>Rank by</span>
-          <select
-            value={metric}
-            onChange={(event) => {
-              updateParams({
-                lbMetric:
-                  event.target.value === 'overall'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            {Object.entries(metricLabels).map(([value, label]) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
+          <div className="select">
+            <select
+              value={metric}
+              onChange={(event) => {
+                updateParams({
+                  lbMetric:
+                    event.target.value === 'winRate'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              {Object.entries(metricLabels).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </div>
         </label>
         <label>
           <span>Results</span>
-          <select
-            value={limit}
-            onChange={(event) => {
-              updateParams({
-                lbLimit:
-                  event.target.value === '5' ? undefined : event.target.value,
-              });
-            }}
-          >
-            <option value={5}>Top 5</option>
-            <option value={10}>Top 10</option>
-            <option value={25}>Top 25</option>
-          </select>
+          <div className="select">
+            <select
+              value={limit}
+              onChange={(event) => {
+                updateParams({
+                  lbLimit:
+                    event.target.value === '5' ? undefined : event.target.value,
+                });
+              }}
+            >
+              <option value={5}>Top 5</option>
+              <option value={10}>Top 10</option>
+              <option value={25}>Top 25</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Minimum scenarios</span>
-          <select
-            value={minimumScenarios}
-            onChange={(event) => {
-              updateParams({
-                lbMin:
-                  event.target.value === '1'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value={1}>1+</option>
-            <option value={3}>3+</option>
-            <option value={10}>10+</option>
-            <option value={25}>25+</option>
-          </select>
+          <div className="select">
+            <select
+              value={minimumScenarios}
+              onChange={(event) => {
+                updateParams({
+                  lbMin:
+                    event.target.value === '1' ? undefined : event.target.value,
+                });
+              }}
+            >
+              <option value={1}>1+</option>
+              <option value={3}>3+</option>
+              <option value={10}>10+</option>
+              <option value={25}>25+</option>
+            </select>
+          </div>
         </label>
         <div className="scenario-standout-actions">
           <span>Share view</span>
           <button
             type="button"
             className="button is-small"
+            title="Copies a link that keeps showing this exact time window, even for relative ranges like Last 24 hours"
             onClick={() => {
               void navigator.clipboard
-                .writeText(window.location.href)
+                .writeText(buildShareUrl())
                 .then(() => {
                   setShareStatus('Link copied');
                   window.setTimeout(() => {
@@ -1299,11 +1333,13 @@ export const ScenarioStandouts = ({
       </div>
       <div className="scenario-ranking-note mb-3">
         <strong>How rankings work:</strong> totals cover the scenarios currently
-        loaded on this page. Overall contribution combines a character&apos;s strongest
-        combat or objective stat (65%), win rate (20%), and participation (15%).
-        Open a player for averages and full-profile access. Longer time windows
-        remain responsive by loading matches in batches; use Show more scenarios
-        to expand the analysis.
+        loaded on this page. Use &quot;Rank by&quot; to sort by a specific stat
+        (win rate, kills, kill damage, damage, healing, protection, or objective
+        score) &mdash; there is no single combined score, since combat, healing,
+        and objective play aren&apos;t directly comparable. Open a player for
+        averages and full-profile access. Longer time windows remain responsive
+        by loading matches in batches; use Show more scenarios to expand the
+        analysis.
       </div>
       <div className="scenario-standouts-grid mb-4">
         {realm !== 'destruction' && (
@@ -1400,103 +1436,113 @@ export const ScenarioStandouts = ({
               <div className="scenario-modal-filters mb-3">
                 <label>
                   <span>Role</span>
-                  <select
-                    value={role}
-                    onChange={(event) => {
-                      updateParams({
-                        lbCareer: undefined,
-                        lbRole:
-                          event.target.value === 'all'
-                            ? undefined
-                            : event.target.value,
-                      });
-                    }}
-                  >
-                    <option value="all">All roles</option>
-                    {scenarioRoleOrder.map((roleOption) => (
-                      <option key={roleOption} value={roleOption}>
-                        {roleOption}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="select">
+                    <select
+                      value={role}
+                      onChange={(event) => {
+                        updateParams({
+                          lbCareer: undefined,
+                          lbRole:
+                            event.target.value === 'all'
+                              ? undefined
+                              : event.target.value,
+                        });
+                      }}
+                    >
+                      <option value="all">All roles</option>
+                      {scenarioRoleOrder.map((roleOption) => (
+                        <option key={roleOption} value={roleOption}>
+                          {roleOption}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </label>
                 <label>
                   <span>Career</span>
-                  <select
-                    value={career}
-                    onChange={(event) => {
-                      updateParams({
-                        lbCareer:
-                          event.target.value === 'all'
-                            ? undefined
-                            : event.target.value,
-                      });
-                    }}
-                  >
-                    <option value="all">All careers</option>
-                    {careerOptions.map((careerOption) => (
-                      <option key={careerOption} value={careerOption}>
-                        {scenarioCareerName(careerOption)}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="select">
+                    <select
+                      value={career}
+                      onChange={(event) => {
+                        updateParams({
+                          lbCareer:
+                            event.target.value === 'all'
+                              ? undefined
+                              : event.target.value,
+                        });
+                      }}
+                    >
+                      <option value="all">All careers</option>
+                      {careerOptions.map((careerOption) => (
+                        <option key={careerOption} value={careerOption}>
+                          {scenarioCareerName(careerOption)}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </label>
                 <label>
                   <span>Rank by</span>
-                  <select
-                    value={metric}
-                    onChange={(event) => {
-                      updateParams({
-                        lbMetric:
-                          event.target.value === 'overall'
-                            ? undefined
-                            : event.target.value,
-                      });
-                    }}
-                  >
-                    {Object.entries(metricLabels).map(([value, label]) => (
-                      <option key={value} value={value}>
-                        {label}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="select">
+                    <select
+                      value={metric}
+                      onChange={(event) => {
+                        updateParams({
+                          lbMetric:
+                            event.target.value === 'winRate'
+                              ? undefined
+                              : event.target.value,
+                        });
+                      }}
+                    >
+                      {Object.entries(metricLabels).map(([value, label]) => (
+                        <option key={value} value={value}>
+                          {label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </label>
                 <label>
                   <span>Minimum scenarios</span>
-                  <select
-                    value={minimumScenarios}
-                    onChange={(event) => {
-                      updateParams({
-                        lbMin:
-                          event.target.value === '1'
-                            ? undefined
-                            : event.target.value,
-                      });
-                    }}
-                  >
-                    <option value={1}>1+</option>
-                    <option value={3}>3+</option>
-                    <option value={10}>10+</option>
-                    <option value={25}>25+</option>
-                  </select>
+                  <div className="select">
+                    <select
+                      value={minimumScenarios}
+                      onChange={(event) => {
+                        updateParams({
+                          lbMin:
+                            event.target.value === '1'
+                              ? undefined
+                              : event.target.value,
+                        });
+                      }}
+                    >
+                      <option value={1}>1+</option>
+                      <option value={3}>3+</option>
+                      <option value={10}>10+</option>
+                      <option value={25}>25+</option>
+                    </select>
+                  </div>
                 </label>
                 <label>
                   <span>Numbers shown</span>
-                  <select
-                    value={mode}
-                    onChange={(event) => {
-                      updateParams({
-                        lbMode:
-                          event.target.value === 'totals'
-                            ? undefined
-                            : event.target.value,
-                      });
-                    }}
-                  >
-                    <option value="totals">Totals</option>
-                    <option value="average">Per scenario</option>
-                    <option value="median">Median scenario</option>
-                  </select>
+                  <div className="select">
+                    <select
+                      value={mode}
+                      onChange={(event) => {
+                        updateParams({
+                          lbMode:
+                            event.target.value === 'totals'
+                              ? undefined
+                              : event.target.value,
+                        });
+                      }}
+                    >
+                      <option value="totals">Totals</option>
+                      <option value="average">Per scenario</option>
+                      <option value="median">Median scenario</option>
+                    </select>
+                  </div>
                 </label>
               </div>
               <StandoutTable
@@ -1573,11 +1619,15 @@ export const ScenarioStandouts = ({
                   <span>Death blows</span>
                 </div>
                 <div>
-                  <strong>{compactNumber(selectedPlayer.standout.damage)}</strong>
+                  <strong>
+                    {compactNumber(selectedPlayer.standout.damage)}
+                  </strong>
                   <span>Total damage</span>
                 </div>
                 <div>
-                  <strong>{compactNumber(selectedPlayer.standout.healing)}</strong>
+                  <strong>
+                    {compactNumber(selectedPlayer.standout.healing)}
+                  </strong>
                   <span>Total healing</span>
                 </div>
                 <div>
@@ -1594,7 +1644,8 @@ export const ScenarioStandouts = ({
                 </div>
               </div>
               <div className="scenario-player-averages">
-                Per scenario: {compactNumber(
+                Per scenario:{' '}
+                {compactNumber(
                   selectedPlayer.standout.damage /
                     selectedPlayer.standout.scenarios,
                 )}{' '}

@@ -43,6 +43,15 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   return {};
 };
 
+// A 'from'/'to' filter value can either be a plain YYYY-MM-DD date (from the
+// date picker inputs) or a full ISO timestamp. Shared links bake in the
+// latter so a shared link always reproduces the same absolute time window,
+// instead of drifting when a relative range is reinterpreted later.
+export const parseFilterDate = (value: string, endOfDay: boolean): Date =>
+  value.includes('T')
+    ? new Date(value)
+    : new Date(`${value}T${endOfDay ? '23:59:59.999' : '00:00:00'}`);
+
 const getTimeFilters = (
   search: URLSearchParams,
   defaultRange: '1h' | 'recent',
@@ -82,10 +91,10 @@ const getTimeFilters = (
       const startValue = search.get('from');
       const endValue = search.get('to');
       if (startValue) {
-        start = new Date(`${startValue}T00:00:00`);
+        start = parseFilterDate(startValue, false);
       }
       if (endValue) {
-        end = new Date(`${endValue}T23:59:59.999`);
+        end = parseFilterDate(endValue, true);
       }
       break;
     }

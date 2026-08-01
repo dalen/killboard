@@ -74,9 +74,7 @@ const ConnectionTable = ({
             <tr>
               <th aria-label="Career" />
               <th>Character</th>
-              <th align="right">
-                {killsOnly ? 'Killing blows' : 'Matches'}
-              </th>
+              <th align="right">{killsOnly ? 'Killing blows' : 'Matches'}</th>
               {!killsOnly && (
                 <>
                   <th align="right">W</th>
@@ -218,8 +216,7 @@ export const CharacterScenarioConnections = ({
         if (entry.character.id === characterId) {
           continue;
         }
-        const target =
-          entry.team === ownEntry.team ? teammateMap : opponentMap;
+        const target = entry.team === ownEntry.team ? teammateMap : opponentMap;
         const current = target.get(entry.character.id) ?? {
           career: entry.character.career,
           id: entry.character.id,
@@ -276,78 +273,84 @@ export const CharacterScenarioConnections = ({
       <div className="character-scenario-filters mb-3">
         <label>
           <span>Type</span>
-          <select
-            value={queueType}
-            onChange={(event) => {
-              updateParams({
-                queue_type:
-                  event.target.value === 'all'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All types</option>
-            <option value="standard">Standard</option>
-            <option value="solo">Random Scenario</option>
-            <option value="city_siege">City Siege</option>
-            <option value="group_challenge">Group Challenge</option>
-          </select>
+          <div className="select">
+            <select
+              value={queueType}
+              onChange={(event) => {
+                updateParams({
+                  queue_type:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All types</option>
+              <option value="standard">Standard</option>
+              <option value="solo">Random Scenario</option>
+              <option value="city_siege">City Siege</option>
+              <option value="group_challenge">Group Challenge</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Tier</span>
-          <select
-            value={tier}
-            onChange={(event) => {
-              updateParams({
-                tier:
-                  event.target.value === 'all'
-                    ? undefined
-                    : event.target.value,
-              });
-            }}
-          >
-            <option value="all">All tiers</option>
-            <option value="1">Tier 1</option>
-            <option value="3">Tier 2–3</option>
-            <option value="4">Tier 4</option>
-          </select>
+          <div className="select">
+            <select
+              value={tier}
+              onChange={(event) => {
+                updateParams({
+                  tier:
+                    event.target.value === 'all'
+                      ? undefined
+                      : event.target.value,
+                });
+              }}
+            >
+              <option value="all">All tiers</option>
+              <option value="1">Tier 1</option>
+              <option value="3">Tier 2–3</option>
+              <option value="4">Tier 4</option>
+            </select>
+          </div>
         </label>
         <label>
           <span>Time</span>
-          <select
-            value={range}
-            onChange={(event) => {
-              const nextRange = event.target.value;
-              if (nextRange === 'custom') {
-                const today = new Date();
-                const sevenDaysAgo = new Date(
-                  today.getTime() - 7 * 24 * 60 * 60 * 1000,
-                );
-                updateParams({
-                  from:
-                    searchParams.get('from') ?? dateInputValue(sevenDaysAgo),
-                  range: 'custom',
-                  to: searchParams.get('to') ?? dateInputValue(today),
-                });
-              } else {
-                updateParams({
-                  from: undefined,
-                  range: nextRange === 'recent' ? undefined : nextRange,
-                  to: undefined,
-                });
-              }
-            }}
-          >
-            <option value="recent">Most recent</option>
-            <option value="1h">Last hour</option>
-            <option value="24h">Last 24 hours</option>
-            <option value="7d">Last 7 days</option>
-            <option value="30d">Last 30 days</option>
-            <option value="90d">Last 90 days</option>
-            <option value="ytd">Year to date</option>
-            <option value="custom">Custom dates</option>
-          </select>
+          <div className="select">
+            <select
+              value={range}
+              onChange={(event) => {
+                const nextRange = event.target.value;
+                if (nextRange === 'custom') {
+                  const today = new Date();
+                  const sevenDaysAgo = new Date(
+                    today.getTime() - 7 * 24 * 60 * 60 * 1000,
+                  );
+                  updateParams({
+                    from:
+                      searchParams.get('from') ?? dateInputValue(sevenDaysAgo),
+                    range: 'custom',
+                    to: searchParams.get('to') ?? dateInputValue(today),
+                  });
+                } else {
+                  updateParams({
+                    from: undefined,
+                    range: nextRange === 'recent' ? undefined : nextRange,
+                    to: undefined,
+                  });
+                }
+              }}
+            >
+              <option value="recent">Most recent</option>
+              <option value="1h">Last hour</option>
+              <option value="24h">Last 24 hours</option>
+              <option value="7d">Last 7 days</option>
+              <option value="30d">Last 30 days</option>
+              <option value="90d">Last 90 days</option>
+              <option value="ytd">Year to date</option>
+              <option value="custom">Custom dates</option>
+            </select>
+          </div>
         </label>
         {range === 'custom' && (
           <>

@@ -6,7 +6,10 @@ import { format } from 'date-fns';
 import { useEffect, useState } from 'react';
 import type { Query, ScenarioRecord } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { getScenarioFilters } from '@/components/scenario/ScenarioFilters';
+import {
+  getScenarioFilters,
+  parseFilterDate,
+} from '@/components/scenario/ScenarioFilters';
 import { ScenarioListTable } from '@/components/scenario/ScenarioListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { ScenarioStandouts } from '@/components/scenario/ScenarioStandouts';
@@ -99,18 +102,9 @@ export const ScenarioList = ({
   const [windowLoading, setWindowLoading] = useState(false);
   const [windowError, setWindowError] = useState<Error>();
   const [reloadToken, setReloadToken] = useState(0);
-  const dataFilterKey = [
-    'queue_type',
-    'tier',
-    'range',
-    'from',
-    'to',
-  ]
+  const dataFilterKey = ['queue_type', 'tier', 'range', 'from', 'to']
     .map((key) => `${key}=${search.get(key) ?? ''}`)
-    .concat([
-      `character=${characterId ?? ''}`,
-      `guild=${guildId ?? ''}`,
-    ])
+    .concat([`character=${characterId ?? ''}`, `guild=${guildId ?? ''}`])
     .join('&');
   const client = useApolloClient();
   const where = getScenarioFilters(search, { characterId, guildId });
@@ -336,12 +330,16 @@ export const ScenarioList = ({
       case 'custom': {
         const from = search.get('from');
         const to = search.get('to');
-        start = from ? new Date(`${from}T00:00:00`) : undefined;
-        end = to ? new Date(`${to}T23:59:59.999`) : now;
+        start = from ? parseFilterDate(from, false) : undefined;
+        end = to ? parseFilterDate(to, true) : now;
         break;
       }
     }
-    if (!start || Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    if (
+      !start ||
+      Number.isNaN(start.getTime()) ||
+      Number.isNaN(end.getTime())
+    ) {
       return undefined;
     }
     return `${format(start, 'MMM d, h:mm a')} – ${format(
@@ -365,7 +363,8 @@ export const ScenarioList = ({
             {selectedWindowLabel && `${selectedWindowLabel} · match activity `}
             {format(earliestScenarioDate, 'MMM d, h:mm a')} –{' '}
             {format(latestScenarioDate, 'MMM d, h:mm a')}
-            {loading && ` · gathering ${scenarios.length} of ${windowTotal || '…'}`}
+            {loading &&
+              ` · gathering ${scenarios.length} of ${windowTotal || '…'}`}
           </span>
         </div>
         <button
