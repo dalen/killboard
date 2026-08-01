@@ -257,6 +257,10 @@ td.scenariolist-score-destruction {
   margin-bottom: 0.2rem;
 }
 
+.character-scenario-filters .select {
+  width: 100%;
+}
+
 .character-scenario-filters select,
 .character-scenario-filters input {
   background: rgba(20, 20, 20, 0.9);
@@ -351,8 +355,8 @@ td.scenariolist-score-destruction {
 .scenario-standouts-grid .scenario-standouts td:nth-child(3),
 .scenario-standouts-grid .scenario-standouts th:nth-child(4),
 .scenario-standouts-grid .scenario-standouts td:nth-child(4),
-.scenario-standouts-grid .scenario-standouts th:nth-child(9),
-.scenario-standouts-grid .scenario-standouts td:nth-child(9) {
+.scenario-standouts-grid .scenario-standouts th:nth-child(7),
+.scenario-standouts-grid .scenario-standouts td:nth-child(7) {
   width: 29px;
 }
 
@@ -417,6 +421,10 @@ td.scenariolist-score-destruction {
   display: block;
   font-size: 0.7rem;
   margin-bottom: 0.15rem;
+}
+
+.scenario-breakdown-controls .select {
+  width: 100%;
 }
 
 .scenario-breakdown-controls select {
@@ -566,6 +574,21 @@ td.scenariolist-score-destruction {
   font-size: 0.72rem;
 }
 
+.scenario-breakdown-match-score {
+  display: flex;
+  gap: 0.2rem;
+}
+
+.scenario-breakdown-matches a .scenario-breakdown-order {
+  color: rgb(72, 128, 255);
+  font-weight: 600;
+}
+
+.scenario-breakdown-matches a .scenario-breakdown-destruction {
+  color: rgb(235, 70, 70);
+  font-weight: 600;
+}
+
 .scenario-breakdown-matches p {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.75rem;
@@ -633,6 +656,10 @@ td.scenariolist-score-destruction {
   margin-bottom: 0.2rem;
 }
 
+.scenario-standout-filters .select {
+  width: 100%;
+}
+
 .scenario-standout-filters select {
   background: rgba(20, 20, 20, 0.9);
   border: 1px solid rgba(135, 123, 105, 0.4);
@@ -662,6 +689,10 @@ td.scenariolist-score-destruction {
   display: block;
   font-size: 0.72rem;
   margin-bottom: 0.2rem;
+}
+
+.scenario-modal-filters .select {
+  width: 100%;
 }
 
 .scenario-modal-filters select {
@@ -770,6 +801,10 @@ td.scenariolist-score-destruction {
 .scenario-standouts-mode > span {
   color: rgba(255, 255, 255, 0.6);
   font-size: 0.68rem !important;
+}
+
+.scenario-standouts-mode .select {
+  width: 100%;
 }
 
 .scenario-standouts-mode select {
