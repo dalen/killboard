@@ -88,6 +88,47 @@ tr.scenario-scoreboard-row-team-1 {
   border-bottom: 2px solid #000000;
 }
 
+.scenario-scoreboard-teams {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.scenario-scoreboard-team {
+  border-left: 3px solid;
+  padding-left: 0.85rem;
+}
+
+.scenario-scoreboard-team-order {
+  border-color: rgb(12, 47, 158);
+}
+
+.scenario-scoreboard-team-destruction {
+  border-color: rgb(158, 12, 13);
+}
+
+.scenario-scoreboard-team-header {
+  align-items: center;
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+}
+
+.scenario-scoreboard-team-header strong {
+  color: $text-strong;
+  font-size: 1.1rem;
+}
+
+.scenario-scoreboard-team-header span {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.85rem;
+}
+
+.scoreboard-stat-share {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.75rem;
+}
+
 p.scenario-score-order {
   color: rgba(12, 47, 158);
   font-weight: bold;
