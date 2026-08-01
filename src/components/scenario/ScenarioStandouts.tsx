@@ -921,11 +921,17 @@ export const ScenarioStandouts = ({
       : 'all';
   const metric = rankingMetrics.includes(metricParam) ? metricParam : 'winRate';
   const limit = [5, 10, 25].includes(limitParam) ? limitParam : 5;
-  const minimumScenarios = [1, 3, 10, 25].includes(minimumScenariosParam)
-    ? minimumScenariosParam
-    : 1;
   const mode: RankingMode =
     modeParam === 'average' || modeParam === 'median' ? modeParam : 'totals';
+  // Averaging (or taking the median) over very few scenarios lets a single
+  // lucky match dominate the ranking. Default to a higher minimum sample
+  // size in those views; Totals can stay at 1+ since it isn't skewed the
+  // same way. An explicit ?lbMin= always wins over this default.
+  const minimumScenarios = [1, 3, 10, 25].includes(minimumScenariosParam)
+    ? minimumScenariosParam
+    : mode === 'totals'
+      ? 1
+      : 10;
   const [expandedTeam, setExpandedTeam] = useState<number>();
   const [selectedPlayer, setSelectedPlayer] = useState<{
     realm: 'Order' | 'Destruction';
@@ -1254,10 +1260,7 @@ export const ScenarioStandouts = ({
             <select
               value={minimumScenarios}
               onChange={(event) => {
-                updateParams({
-                  lbMin:
-                    event.target.value === '1' ? undefined : event.target.value,
-                });
+                updateParams({ lbMin: event.target.value });
               }}
             >
               <option value={1}>1+</option>
@@ -1336,10 +1339,12 @@ export const ScenarioStandouts = ({
         loaded on this page. Use &quot;Rank by&quot; to sort by a specific stat
         (win rate, kills, kill damage, damage, healing, protection, or objective
         score) &mdash; there is no single combined score, since combat, healing,
-        and objective play aren&apos;t directly comparable. Open a player for
-        averages and full-profile access. Longer time windows remain responsive
-        by loading matches in batches; use Show more scenarios to expand the
-        analysis.
+        and objective play aren&apos;t directly comparable. Average and Median
+        default to a 10+ scenario minimum so a single lucky match can&apos;t top
+        the board; lower it manually if you want to see small samples. Open a
+        player for averages and full-profile access. Longer time windows remain
+        responsive by loading matches in batches; use Show more scenarios to
+        expand the analysis.
       </div>
       <div className="scenario-standouts-grid mb-4">
         {realm !== 'destruction' && (
@@ -1509,12 +1514,7 @@ export const ScenarioStandouts = ({
                     <select
                       value={minimumScenarios}
                       onChange={(event) => {
-                        updateParams({
-                          lbMin:
-                            event.target.value === '1'
-                              ? undefined
-                              : event.target.value,
-                        });
+                        updateParams({ lbMin: event.target.value });
                       }}
                     >
                       <option value={1}>1+</option>
