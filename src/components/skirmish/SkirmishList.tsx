@@ -13,7 +13,7 @@ export const SkirmishList = ({
   query,
   queryOptions,
   perPage,
-  title = undefined,
+  title,
   showZone = true,
 }: {
   query: DocumentNode;
