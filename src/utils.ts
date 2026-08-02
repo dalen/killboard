@@ -2,8 +2,9 @@ import type { QuestTypeFlagsFlags } from '@/__generated__/graphql';
 import {
   Career,
   KillDamageSourceType,
-  QuestRepeatableType
+  QuestRepeatableType,
 } from '@/__generated__/graphql';
+import { CreatureTitle } from '@/__generated__/schema-types';
 
 export const assetUrl = (path: string): string =>
   `${import.meta.env.BASE_URL}${path.replace(/^\//, '')}`;
@@ -98,13 +99,14 @@ export const variablesFromCursor = (
   first: number | undefined;
   last: number | undefined;
 } => {
-  if (type === 'after')
-    {return {
+  if (type === 'after') {
+    return {
       after: cursor,
       before: undefined,
       first: perPage,
       last: undefined,
-    };}
+    };
+  }
 
   return {
     after: undefined,
@@ -146,11 +148,13 @@ export const killDamageText = (killDamage: {
   damageType: KillDamageSourceType;
   ability?: { name?: string | null } | null;
 }): string => {
-  if (killDamage.damageType === KillDamageSourceType.FallDamage)
-    {return 'Fall Damage';}
+  if (killDamage.damageType === KillDamageSourceType.FallDamage) {
+    return 'Fall Damage';
+  }
 
-  if (killDamage.damageType === KillDamageSourceType.Other)
-    {return 'Auto Attack';}
+  if (killDamage.damageType === KillDamageSourceType.Other) {
+    return 'Auto Attack';
+  }
 
   return killDamage.ability?.name || 'Unknown';
 };
@@ -198,4 +202,77 @@ export const questTypeIcon = (
   }
 
   return 'quest_green.png';
+};
+
+export const creatureTitleIcon = (title: CreatureTitle): string | null => {
+  if (title === CreatureTitle.None) {
+    return null;
+  }
+
+  const value = title as string;
+
+  if (value.includes('HEAL') || value.includes('RITUALIST')) {
+    return assetUrl('/images/icons/healing.png');
+  }
+  if (value === 'BLACKSMITH') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_blacksmith.png');
+  }
+  if (
+    value.includes('MERCHANT') ||
+    value.includes('VENDOR') ||
+    value.includes('QUARTERMASTER')
+  ) {
+    return assetUrl('/images/corner_icons/ea_icon_corner_merchant.png');
+  }
+  if (value.includes('TRAINER')) {
+    return assetUrl('/images/corner_icons/ea_icon_corner_training.png');
+  }
+  if (value === 'APOTHECARY') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_apothecary.png');
+  }
+  if (value === 'AUCTIONEER') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_auction.png');
+  }
+  if (value === 'CULTIVATOR') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_cultivating.png');
+  }
+  if (value.includes('REGISTRAR') || value === 'HERALD') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_guild.png');
+  }
+  if (value === 'POSTMASTER') {
+    return assetUrl('/images/corner_icons/ea_icon_corner_mail.png');
+  }
+  if (value === 'BANKER' || value.includes('VAULT')) {
+    return assetUrl('/images/corner_icons/ea_icon_corner_bag.png');
+  }
+  if (
+    value.includes('GUARD') ||
+    value.includes('LORD') ||
+    value.includes('GENERAL') ||
+    value === 'DOGOF_WAR' ||
+    value === 'SERGEANT'
+  ) {
+    return assetUrl('/images/corner_icons/ea_icon_corner_rvr.png');
+  }
+
+  return null;
+};
+
+export const creatureTitleLabel = (title: CreatureTitle): string => {
+  if (title === CreatureTitle.None) {
+    return '';
+  }
+
+  return (title as string)
+    .split('_')
+    .flatMap((word) => {
+      // A handful of source enum values glue "OF" onto the previous word
+      // (e.g. ALTAROF_KHAINE_GUARD, DOGOF_WAR) - split those back apart.
+      if (word.length > 2 && word.endsWith('OF')) {
+        return [word.slice(0, -2), 'OF'];
+      }
+      return [word];
+    })
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(' ');
 };
