@@ -117,6 +117,7 @@
   },
   "creatures": {
     "title": "Creatures",
+    "id": "ID",
     "search": "Name",
     "name": "Name",
     "creatureSubType": "Type",
