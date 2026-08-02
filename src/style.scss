@@ -700,6 +700,28 @@ td.scenariolist-score-destruction {
   }
 }
 
+// Scrollable card for long lists (e.g. a creature's vendor items) that used
+// to be paginated 10-at-a-time. Keeps the whole filtered list in view
+// without pushing the rest of the page down.
+.vendor-items-scroll-box {
+  background: rgba(20, 20, 20, 0.45);
+  border: 1px solid rgba(135, 123, 105, 0.35);
+  border-radius: 4px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.vendor-items-scroll-box table {
+  margin-bottom: 0;
+}
+
+.vendor-items-scroll-box thead th {
+  background: #1a1a1a;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
 .scenario-standout-filters {
   background: rgba(20, 20, 20, 0.55);
   display: grid;
