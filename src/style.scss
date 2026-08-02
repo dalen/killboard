@@ -639,6 +639,67 @@ td.scenariolist-score-destruction {
   padding: 0.5rem;
 }
 
+// Generic filter grid + result summary bar, matching the visual language
+// introduced on the Scenarios page (.scenario-standout-filters /
+// .scenario-active-filters below), but under page-agnostic names so any
+// page's filter area can share the same flat, cardless look instead of
+// each page inventing its own (a plain Bulma .card box on some pages, a
+// bare unstyled label+input on others).
+.filter-grid {
+  background: rgba(20, 20, 20, 0.55);
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  margin-bottom: 1.25rem;
+  padding: 0.75rem;
+}
+
+.filter-grid label > span {
+  display: block;
+  font-size: 0.72rem;
+  margin-bottom: 0.2rem;
+}
+
+.filter-grid .select {
+  height: auto;
+  width: 100%;
+}
+
+.filter-grid select {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+  padding: 0.4rem;
+  width: 100%;
+}
+
+.filter-grid .field {
+  margin-bottom: 0 !important;
+}
+
+.filter-grid .control input.input {
+  background: rgba(20, 20, 20, 0.9);
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  color: $text-strong;
+}
+
+.filter-summary-bar {
+  align-items: center;
+  background: rgba(20, 20, 20, 0.45);
+  border-left: 3px solid rgba(135, 123, 105, 0.7);
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  margin-bottom: 1.25rem;
+  padding: 0.55rem 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .filter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .scenario-standout-filters {
   background: rgba(20, 20, 20, 0.55);
   display: grid;
