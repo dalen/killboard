@@ -71,46 +71,78 @@ export const VendorItems = ({
 
   useEffect(() => {
     let cancelled = false;
+    let totalCount: number | undefined;
     const controller = new AbortController();
+
+    // Cursors from this API are just base64-encoded zero-based offsets
+    // (e.g. offset 49 -> btoa("49")), which lets us request an arbitrary
+    // [start, start + count) window directly instead of only being able to
+    // walk forward page by page.
+    const encodeOffset = (offset: number): string | undefined =>
+      offset > 0 ? btoa(String(offset - 1)) : undefined;
+
+    // Fetch a window of `count` items starting at `start`. If the window
+    // comes back null (one malformed row poisons the whole array under
+    // GraphQL's non-null propagation rules), split it in half and retry
+    // each half independently. This isolates the exact bad row(s) instead
+    // of discarding the entire 50-item page they happened to land on.
+    const fetchRange = async (
+      start: number,
+      count: number,
+    ): Promise<VendorItemNode[]> => {
+      if (count <= 0) {
+        return [];
+      }
+      const result = await client.query<Query>({
+        context: { fetchOptions: { signal: controller.signal } },
+        errorPolicy: 'all',
+        fetchPolicy: 'cache-first',
+        query: VENDOR_ITEMS,
+        variables: { after: encodeOffset(start), creatureId, first: count },
+      });
+      const connection = result.data?.creature?.vendorItems;
+      if (!connection) {
+        return [];
+      }
+      if (totalCount === undefined) {
+        totalCount = connection.totalCount;
+        if (!cancelled) {
+          setTotal(connection.totalCount);
+        }
+      }
+      if (connection.nodes) {
+        return connection.nodes;
+      }
+      if (count === 1) {
+        // Narrowed down to a single unrecoverable row.
+        if (!cancelled) {
+          setHasDataIssue(true);
+        }
+        return [];
+      }
+      const half = Math.ceil(count / 2);
+      const left = await fetchRange(start, half);
+      const right = await fetchRange(start + half, count - half);
+      return [...left, ...right];
+    };
 
     const loadAll = async (): Promise<void> => {
       setLoading(true);
       setLoadError(undefined);
       setHasDataIssue(false);
       setItems([]);
-      let after: string | undefined;
+      let offset = 0;
       const accumulated: VendorItemNode[] = [];
 
       try {
         do {
-          const result = await client.query<Query>({
-            context: { fetchOptions: { signal: controller.signal } },
-            errorPolicy: 'all',
-            fetchPolicy: 'cache-first',
-            query: VENDOR_ITEMS,
-            variables: { after, creatureId, first: perPage },
-          });
-          const connection = result.data?.creature?.vendorItems;
-          if (!connection) {
-            break;
-          }
-          if (connection.nodes === null || connection.nodes === undefined) {
-            // A single malformed row (e.g. an item reference pointing at
-            // deleted data) makes the whole page come back null under
-            // GraphQL's non-null propagation rules. Skip that page rather
-            // than failing the entire list.
-            if (!cancelled) {
-              setHasDataIssue(true);
-            }
-          } else {
-            accumulated.push(...connection.nodes);
-          }
-          after = connection.pageInfo.endCursor ?? undefined;
+          const nodes = await fetchRange(offset, perPage);
+          accumulated.push(...nodes);
+          offset += perPage;
           if (!cancelled) {
-            setTotal(connection.totalCount);
             setItems([...accumulated]);
           }
-          if (!connection.pageInfo.hasNextPage || !after) {
+          if (totalCount === undefined || offset >= totalCount) {
             break;
           }
         } while (!cancelled);
