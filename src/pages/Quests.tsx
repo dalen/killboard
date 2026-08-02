@@ -124,19 +124,17 @@ export const Quests = (): ReactElement => {
         </ul>
       </nav>
 
-      <div className="card mb-5">
-        <div className="card-content">
-          <div className="field">
-            <label className="label">{t('pages:quests.search')}</label>
-            <SearchBox
-              initialQuery={search.get('name') || ''}
-              onSubmit={(event) => {
-                search.set('name', event);
-                setSearch(search);
-              }}
-            />
-          </div>
-        </div>
+      <div className="filter-grid">
+        <label>
+          <span>{t('pages:quests.search')}</span>
+          <SearchBox
+            initialQuery={search.get('name') || ''}
+            onSubmit={(event) => {
+              search.set('name', event);
+              setSearch(search);
+            }}
+          />
+        </label>
       </div>
 
       <div className="table-container">
