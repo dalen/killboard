@@ -74,18 +74,8 @@ export const Instances = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.instances?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const entries = data.instances.nodes;
-  const { pageInfo } = data.instances;
+  const entries = data?.instances?.nodes;
+  const { pageInfo } = data?.instances ?? {};
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -113,53 +103,64 @@ export const Instances = (): ReactElement => {
         </label>
       </div>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:instances.name')}</th>
-              <th>{t('pages:instances.encounters')}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((instance) => (
-              <tr key={instance.id}>
-                <td>
-                  <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
-                </td>
-                <td>{instance.encounters?.length || 0}</td>
-                <td>
-                  <Link
-                    to={`/instance-statistics/${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
-                    {t('pages:instances.statistics')}
-                  </Link>
-                  <Link
-                    to={`/instance-runs?instance=${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right mr-2"
-                  >
-                    {t('pages:instances.runs')}
-                  </Link>
-                </td>
+      {loading && entries == null && <progress className="progress" />}
+      {!loading && error && (
+        <ErrorMessage name={error.name} message={error.message} />
+      )}
+      {!loading && !error && entries == null && (
+        <ErrorMessage customText={t('common:notFound')} />
+      )}
+      {entries != null && (
+        <div className="table-container">
+          <table
+            className={clsx(
+              'table',
+              'is-striped',
+              'is-hoverable',
+              isMobile ? 'is-narrow' : 'is-fullwidth',
+            )}
+          >
+            <thead>
+              <tr>
+                <th>{t('pages:instances.name')}</th>
+                <th>{t('pages:instances.encounters')}</th>
+                <th></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        refetch={refetch}
-      />
+            </thead>
+            <tbody>
+              {entries.map((instance) => (
+                <tr key={instance.id}>
+                  <td>
+                    <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
+                  </td>
+                  <td>{instance.encounters?.length || 0}</td>
+                  <td>
+                    <Link
+                      to={`/instance-statistics/${instance.id}`}
+                      className="button is-primary p-2 is-pulled-right"
+                    >
+                      {t('pages:instances.statistics')}
+                    </Link>
+                    <Link
+                      to={`/instance-runs?instance=${instance.id}`}
+                      className="button is-primary p-2 is-pulled-right mr-2"
+                    >
+                      {t('pages:instances.runs')}
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {entries != null && pageInfo && (
+        <QueryPagination
+          pageInfo={pageInfo}
+          perPage={perPage}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 };

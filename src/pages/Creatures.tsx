@@ -81,18 +81,13 @@ export const Creatures = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.creatures?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const entries = data.creatures.nodes;
-  const { pageInfo } = data.creatures;
+  // The search box lives outside the loading/error branches below so it
+  // never unmounts while typing -- live filtering refetches on every
+  // keystroke pause, and re-rendering the whole page (search box
+  // included) around a fresh <progress> element used to yank focus out
+  // of the input mid-word.
+  const entries = data?.creatures?.nodes;
+  const { pageInfo } = data?.creatures ?? {};
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -120,104 +115,118 @@ export const Creatures = (): ReactElement => {
         </label>
       </div>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:creatures.id')}</th>
-              <th>{t('pages:creatures.name')}</th>
-              <th>{t('pages:creatures.realm')}</th>
-              <th>{t('pages:creatures.role')}</th>
-              <th>{t('pages:creatures.location')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((creature) => {
-              const zoneNames = [
-                ...new Set(
-                  creature.spawns
-                    .map((spawn) => spawn.zone?.name)
-                    .filter((name): name is string => Boolean(name)),
-                ),
-              ];
-              const icon = creatureTitleIcon(creature.title);
-              const label = creatureTitleLabel(creature.title);
+      {loading && entries == null && <progress className="progress" />}
+      {!loading && error && (
+        <ErrorMessage name={error.name} message={error.message} />
+      )}
+      {!loading && !error && entries == null && (
+        <ErrorMessage customText={t('common:notFound')} />
+      )}
+      {entries != null && (
+        <div className="table-container">
+          <table
+            className={clsx(
+              'table',
+              'is-striped',
+              'is-hoverable',
+              isMobile ? 'is-narrow' : 'is-fullwidth',
+            )}
+          >
+            <thead>
+              <tr>
+                <th>{t('pages:creatures.id')}</th>
+                <th>{t('pages:creatures.name')}</th>
+                <th>{t('pages:creatures.realm')}</th>
+                <th>{t('pages:creatures.role')}</th>
+                <th>{t('pages:creatures.location')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.map((creature) => {
+                const zoneNames = [
+                  ...new Set(
+                    creature.spawns
+                      .map((spawn) => spawn.zone?.name)
+                      .filter((name): name is string => Boolean(name)),
+                  ),
+                ];
+                const icon = creatureTitleIcon(creature.title);
+                const label = creatureTitleLabel(creature.title);
 
-              return (
-                <tr key={creature.id}>
-                  <td>{creature.id}</td>
-                  <td>
-                    <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
-                  </td>
-                  <td>
-                    {creature.realm === Realm.Order && (
-                      <span className="icon-text">
-                        <figure className="image is-24x24 m-0 mr-1">
-                          <img
-                            src="/images/icons/scenario/order.png"
-                            width={24}
-                            height={24}
-                            alt={t('common:realmOrder')}
-                          />
-                        </figure>
-                        {t('common:realmOrder')}
-                      </span>
-                    )}
-                    {creature.realm === Realm.Destruction && (
-                      <span className="icon-text">
-                        <figure className="image is-24x24 m-0 mr-1">
-                          <img
-                            src="/images/icons/scenario/destruction.png"
-                            width={24}
-                            height={24}
-                            alt={t('common:realmDestruction')}
-                          />
-                        </figure>
-                        {t('common:realmDestruction')}
-                      </span>
-                    )}
-                    {creature.realm == null && (
-                      <span>{t('common:realmNeutral')}</span>
-                    )}
-                  </td>
-                  <td>
-                    {label && (
-                      <span className="icon-text">
-                        {icon && (
+                return (
+                  <tr key={creature.id}>
+                    <td>{creature.id}</td>
+                    <td>
+                      <Link to={`/creature/${creature.id}`}>
+                        {creature.name}
+                      </Link>
+                    </td>
+                    <td>
+                      {creature.realm === Realm.Order && (
+                        <span className="icon-text">
                           <figure className="image is-24x24 m-0 mr-1">
-                            <img src={icon} width={24} height={24} alt="" />
+                            <img
+                              src="/images/icons/scenario/order.png"
+                              width={24}
+                              height={24}
+                              alt={t('common:realmOrder')}
+                            />
                           </figure>
-                        )}
-                        {label}
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {zoneNames.length > 0 && (
-                      <span>
-                        {zoneNames[0]}
-                        {zoneNames.length > 1 && ` (+${zoneNames.length - 1})`}
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        refetch={refetch}
-      />
+                          {t('common:realmOrder')}
+                        </span>
+                      )}
+                      {creature.realm === Realm.Destruction && (
+                        <span className="icon-text">
+                          <figure className="image is-24x24 m-0 mr-1">
+                            <img
+                              src="/images/icons/scenario/destruction.png"
+                              width={24}
+                              height={24}
+                              alt={t('common:realmDestruction')}
+                            />
+                          </figure>
+                          {t('common:realmDestruction')}
+                        </span>
+                      )}
+                      {creature.realm == null && (
+                        <span>{t('common:realmNeutral')}</span>
+                      )}
+                    </td>
+                    <td>
+                      {label && (
+                        <span className="icon-text">
+                          {icon && (
+                            <figure className="image is-24x24 m-0 mr-1">
+                              <img src={icon} width={24} height={24} alt="" />
+                            </figure>
+                          )}
+                          {label}
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {zoneNames.length > 0 && (
+                        <span>
+                          {zoneNames[0]}
+                          {zoneNames.length > 1 &&
+                            ` (+${zoneNames.length - 1})`}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {entries != null && pageInfo && (
+        <QueryPagination
+          pageInfo={pageInfo}
+          perPage={perPage}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 };

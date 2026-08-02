@@ -113,18 +113,8 @@ export const Items = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.items?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const entries = data.items.nodes;
-  const { pageInfo } = data.items;
+  const entries = data?.items?.nodes;
+  const { pageInfo } = data?.items ?? {};
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -394,35 +384,49 @@ export const Items = (): ReactElement => {
           </div>
         </label>
       </div>
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
+
+      {loading && entries == null && <progress className="progress" />}
+      {!loading && error && (
+        <ErrorMessage name={error.name} message={error.message} />
+      )}
+      {!loading && !error && entries == null && (
+        <ErrorMessage customText={t('common:notFound')} />
+      )}
+      {entries != null && (
+        <>
+          <div className="table-container">
+            <table
+              className={clsx(
+                'table',
+                'is-striped',
+                'is-hoverable',
+                isMobile ? 'is-narrow' : 'is-fullwidth',
+              )}
+            >
+              <thead>
+                <tr>
+                  <th aria-label="empty header" />
+                  <th>{t('pages:items.name')}</th>
+                  <th>{t('pages:items.itemType')}</th>
+                  <th>{t('pages:items.slot')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {entries.map((entry) => (
+                  <ItemListEntry key={entry.id} item={entry} />
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {pageInfo && (
+            <QueryPagination
+              pageInfo={pageInfo}
+              perPage={perPage}
+              refetch={refetch}
+            />
           )}
-        >
-          <thead>
-            <tr>
-              <th aria-label="empty header" />
-              <th>{t('pages:items.name')}</th>
-              <th>{t('pages:items.itemType')}</th>
-              <th>{t('pages:items.slot')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((entry) => (
-              <ItemListEntry key={entry.id} item={entry} />
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        refetch={refetch}
-      />
+        </>
+      )}
     </div>
   );
 };
