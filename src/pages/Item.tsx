@@ -121,7 +121,7 @@ export const Item = ({
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
   return (
-    <div className="container is-widescreen mt-2">
+    <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
