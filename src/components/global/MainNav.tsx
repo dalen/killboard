@@ -12,7 +12,7 @@ export const MainNav = (): ReactElement => {
   const { pathname } = useLocation();
 
   return (
-    <div className="container is-mobile mt-2">
+    <div className="container is-max-widescreen mt-2">
       <div className="tabs is-fullwidth">
         <li className={clsx({ 'is-active': pathname.startsWith('/creature') })}>
           <Link to="/creatures">{t('pages:home.showCreatures')}</Link>
