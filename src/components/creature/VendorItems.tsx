@@ -67,6 +67,7 @@ export const VendorItems = ({
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<Error>();
+  const [hasDataIssue, setHasDataIssue] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -75,6 +76,7 @@ export const VendorItems = ({
     const loadAll = async (): Promise<void> => {
       setLoading(true);
       setLoadError(undefined);
+      setHasDataIssue(false);
       setItems([]);
       let after: string | undefined;
       const accumulated: VendorItemNode[] = [];
@@ -83,6 +85,7 @@ export const VendorItems = ({
         do {
           const result = await client.query<Query>({
             context: { fetchOptions: { signal: controller.signal } },
+            errorPolicy: 'all',
             fetchPolicy: 'cache-first',
             query: VENDOR_ITEMS,
             variables: { after, creatureId, first: perPage },
@@ -91,7 +94,17 @@ export const VendorItems = ({
           if (!connection) {
             break;
           }
-          accumulated.push(...(connection.nodes ?? []));
+          if (connection.nodes === null || connection.nodes === undefined) {
+            // A single malformed row (e.g. an item reference pointing at
+            // deleted data) makes the whole page come back null under
+            // GraphQL's non-null propagation rules. Skip that page rather
+            // than failing the entire list.
+            if (!cancelled) {
+              setHasDataIssue(true);
+            }
+          } else {
+            accumulated.push(...connection.nodes);
+          }
           after = connection.pageInfo.endCursor ?? undefined;
           if (!cancelled) {
             setTotal(connection.totalCount);
@@ -159,6 +172,12 @@ export const VendorItems = ({
       {loading && (
         <p className="mb-2">
           Gathering {items.length} of {total || '…'} items…
+        </p>
+      )}
+      {hasDataIssue && (
+        <p className="mb-2 has-text-warning">
+          Some items could not be loaded due to a data issue and are missing
+          from this list.
         </p>
       )}
       <div className="vendor-items-scroll-box">
