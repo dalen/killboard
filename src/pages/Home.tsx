@@ -15,7 +15,7 @@ export const Home = ({
   tab: 'players' | 'guilds' | 'scenarios' | 'skirmishes';
 }): ReactElement => {
   return (
-    <div className="container is-mobile mt-2">
+    <div className="container is-max-widescreen mt-2">
       {tab === 'scenarios' && <ScenarioList loadMore perPage={10} />}
       {tab === 'players' && (
         <>
