@@ -19,7 +19,7 @@ export const Home = ({
       {tab === 'scenarios' && <ScenarioList loadMore perPage={10} />}
       {tab === 'players' && (
         <>
-          <SearchBox isPlayer />
+          <SearchBox isPlayer navigateOnSubmit />
           <div className="columns">
             <div className="column is-6">
               <MonthlyLeaderboard />
@@ -33,7 +33,7 @@ export const Home = ({
       )}
       {tab === 'guilds' && (
         <>
-          <SearchBox isPlayer={false} />
+          <SearchBox isPlayer={false} navigateOnSubmit />
           <div className="columns">
             <div className="column is-6">
               <MonthlyGuildLeaderboard />
