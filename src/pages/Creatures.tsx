@@ -3,12 +3,17 @@ import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import type { CreatureFilterInput, Query } from '@/__generated__/graphql';
+import {
+  Realm,
+  type CreatureFilterInput,
+  type Query,
+} from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
+import { creatureTitleIcon, creatureTitleLabel } from '../utils';
 
 const CREATURES = gql`
   query GetCreatures(
@@ -29,6 +34,13 @@ const CREATURES = gql`
         id
         name
         realm
+        title
+        spawns {
+          zone {
+            id
+            name
+          }
+        }
       }
       pageInfo {
         hasNextPage
@@ -120,16 +132,82 @@ export const Creatures = (): ReactElement => {
           <thead>
             <tr>
               <th>{t('pages:creatures.name')}</th>
+              <th>{t('pages:creatures.realm')}</th>
+              <th>{t('pages:creatures.role')}</th>
+              <th>{t('pages:creatures.location')}</th>
             </tr>
           </thead>
           <tbody>
-            {entries.map((creature) => (
-              <tr key={creature.id}>
-                <td>
-                  <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
-                </td>
-              </tr>
-            ))}
+            {entries.map((creature) => {
+              const zoneNames = [
+                ...new Set(
+                  creature.spawns
+                    .map((spawn) => spawn.zone?.name)
+                    .filter((name): name is string => Boolean(name)),
+                ),
+              ];
+              const icon = creatureTitleIcon(creature.title);
+              const label = creatureTitleLabel(creature.title);
+
+              return (
+                <tr key={creature.id}>
+                  <td>
+                    <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
+                  </td>
+                  <td>
+                    {creature.realm === Realm.Order && (
+                      <span className="icon-text">
+                        <figure className="image is-24x24 m-0 mr-1">
+                          <img
+                            src="/images/icons/scenario/order.png"
+                            width={24}
+                            height={24}
+                            alt={t('common:realmOrder')}
+                          />
+                        </figure>
+                        {t('common:realmOrder')}
+                      </span>
+                    )}
+                    {creature.realm === Realm.Destruction && (
+                      <span className="icon-text">
+                        <figure className="image is-24x24 m-0 mr-1">
+                          <img
+                            src="/images/icons/scenario/destruction.png"
+                            width={24}
+                            height={24}
+                            alt={t('common:realmDestruction')}
+                          />
+                        </figure>
+                        {t('common:realmDestruction')}
+                      </span>
+                    )}
+                    {creature.realm == null && (
+                      <span>{t('common:realmNeutral')}</span>
+                    )}
+                  </td>
+                  <td>
+                    {label && (
+                      <span className="icon-text">
+                        {icon && (
+                          <figure className="image is-24x24 m-0 mr-1">
+                            <img src={icon} width={24} height={24} alt="" />
+                          </figure>
+                        )}
+                        {label}
+                      </span>
+                    )}
+                  </td>
+                  <td>
+                    {zoneNames.length > 0 && (
+                      <span>
+                        {zoneNames[0]}
+                        {zoneNames.length > 1 && ` (+${zoneNames.length - 1})`}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
