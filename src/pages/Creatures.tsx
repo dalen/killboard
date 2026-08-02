@@ -131,6 +131,7 @@ export const Creatures = (): ReactElement => {
         >
           <thead>
             <tr>
+              <th>{t('pages:creatures.id')}</th>
               <th>{t('pages:creatures.name')}</th>
               <th>{t('pages:creatures.realm')}</th>
               <th>{t('pages:creatures.role')}</th>
@@ -151,6 +152,7 @@ export const Creatures = (): ReactElement => {
 
               return (
                 <tr key={creature.id}>
+                  <td>{creature.id}</td>
                   <td>
                     <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
                   </td>
