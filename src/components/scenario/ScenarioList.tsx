@@ -3,7 +3,7 @@ import { useApolloClient, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import { format } from 'date-fns';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Query, ScenarioRecord } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import {
@@ -102,6 +102,14 @@ export const ScenarioList = ({
   const [windowLoading, setWindowLoading] = useState(false);
   const [windowError, setWindowError] = useState<Error>();
   const [reloadToken, setReloadToken] = useState(0);
+  // Leaving this page (e.g. clicking into a character) unmounts ScenarioList,
+  // so windowScenarios is lost and the batch-load below runs again on
+  // remount. Apollo's InMemoryCache survives that unmount (it lives on the
+  // client, not the component), so defaulting to 'cache-first' lets a
+  // return visit reuse what was already fetched instead of redownloading
+  // the whole window. The explicit Refresh button sets this ref to force a
+  // real network fetch for that one pass.
+  const forceNetworkRefresh = useRef(false);
   const dataFilterKey = ['queue_type', 'tier', 'range', 'from', 'to']
     .map((key) => `${key}=${search.get(key) ?? ''}`)
     .concat([`character=${characterId ?? ''}`, `guild=${guildId ?? ''}`])
@@ -138,6 +146,11 @@ export const ScenarioList = ({
     let cancelled = false;
     const controller = new AbortController();
     const loadWindow = async (): Promise<void> => {
+      // Only a real click on Refresh forces the network; capture and
+      // consume that intent once per load so later reloads (e.g. a plain
+      // remount) go back to preferring the cache.
+      const useNetworkOnly = forceNetworkRefresh.current;
+      forceNetworkRefresh.current = false;
       setWindowScenarios([]);
       setWindowTotal(0);
       setWindowError(undefined);
@@ -153,7 +166,7 @@ export const ScenarioList = ({
                 signal: controller.signal,
               },
             },
-            fetchPolicy: 'network-only',
+            fetchPolicy: useNetworkOnly ? 'network-only' : 'cache-first',
             query: SCENARIO_LIST,
             variables: {
               after,
@@ -372,6 +385,7 @@ export const ScenarioList = ({
           className="button is-small"
           onClick={() => {
             if (isFullWindow) {
+              forceNetworkRefresh.current = true;
               setReloadToken((current) => current + 1);
             } else {
               void refetch();
