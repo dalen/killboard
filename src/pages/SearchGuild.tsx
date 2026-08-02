@@ -80,7 +80,7 @@ export const SearchGuild = (): ReactElement => {
   };
 
   return (
-    <div className="container is-max-desktop mt-2">
+    <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
