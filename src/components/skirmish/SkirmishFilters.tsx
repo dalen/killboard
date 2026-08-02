@@ -77,46 +77,50 @@ export const SkirmishFilters = (): ReactElement => {
               <label className="label">
                 {t('skirmishFilters.locationType')}
               </label>
-              <select
-                value={locationType}
-                onChange={(event) => {
-                  search.set('type', event.target.value);
-                  setSearch(search);
-                }}
-              >
-                <option value="all">
-                  {t('skirmishFilters.locationTypeAll')}
-                </option>
-                <option value="rvr">
-                  {t('skirmishFilters.locationTypeRvr')}
-                </option>
-                <option value="rvrt1">
-                  {t('skirmishFilters.locationTypeRvrT1')}
-                </option>
-                <option value="scenario">
-                  {t('skirmishFilters.locationTypeScenario')}
-                </option>
-              </select>
+              <div className="select">
+                <select
+                  value={locationType}
+                  onChange={(event) => {
+                    search.set('type', event.target.value);
+                    setSearch(search);
+                  }}
+                >
+                  <option value="all">
+                    {t('skirmishFilters.locationTypeAll')}
+                  </option>
+                  <option value="rvr">
+                    {t('skirmishFilters.locationTypeRvr')}
+                  </option>
+                  <option value="rvrt1">
+                    {t('skirmishFilters.locationTypeRvrT1')}
+                  </option>
+                  <option value="scenario">
+                    {t('skirmishFilters.locationTypeScenario')}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
           <div className="column">
             <div className="field">
               <label className="label">{t('skirmishFilters.minPlayers')}</label>
-              <select
-                onChange={(event) => {
-                  search.set('minPlayers', event.target.value);
-                  setSearch(search);
-                }}
-              >
-                <option value="all">
-                  {t('skirmishFilters.minPlayersAll')}
-                </option>
-                <option value="12">{t('skirmishFilters.minPlayers12')}</option>
-                <option value="48">{t('skirmishFilters.minPlayers48')}</option>
-                <option value="100">
-                  {t('skirmishFilters.minPlayers100')}
-                </option>
-              </select>
+              <div className="select">
+                <select
+                  onChange={(event) => {
+                    search.set('minPlayers', event.target.value);
+                    setSearch(search);
+                  }}
+                >
+                  <option value="all">
+                    {t('skirmishFilters.minPlayersAll')}
+                  </option>
+                  <option value="12">{t('skirmishFilters.minPlayers12')}</option>
+                  <option value="48">{t('skirmishFilters.minPlayers48')}</option>
+                  <option value="100">
+                    {t('skirmishFilters.minPlayers100')}
+                  </option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
