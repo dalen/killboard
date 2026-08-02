@@ -34,6 +34,26 @@ export const Home = ({
         <li className={clsx({ 'is-active': tab === 'skirmishes' })}>
           <Link to="/skirmishes">{t('pages:home.showSkirmishes')}</Link>
         </li>
+        {/* These pages already exist in the site (each has its own route
+            and full page layout) but weren't reachable from anywhere in
+            the main nav - just linking out to them here, same as the tabs
+            above, rather than rendering their content inline in Home. The
+            ranked leaderboard page intentionally isn't added here. */}
+        <li>
+          <Link to="/items">{t('pages:home.showItems')}</Link>
+        </li>
+        <li>
+          <Link to="/quests">{t('pages:home.showQuests')}</Link>
+        </li>
+        <li>
+          <Link to="/creatures">{t('pages:home.showCreatures')}</Link>
+        </li>
+        <li>
+          <Link to="/instances">{t('pages:home.showInstances')}</Link>
+        </li>
+        <li>
+          <Link to="/storylines">{t('pages:home.showStorylines')}</Link>
+        </li>
       </div>
       {tab === 'scenarios' && (
         <ScenarioList loadMore perPage={10} />
