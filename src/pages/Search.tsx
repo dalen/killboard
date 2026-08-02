@@ -140,7 +140,12 @@ export const Search = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
+      <SearchBox
+        initialQuery={query}
+        onSubmit={handleSubmit}
+        isPlayer
+        navigateOnSubmit
+      />
       <div className="table-container">
         <table
           className={clsx(

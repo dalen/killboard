@@ -163,6 +163,7 @@ export const CharacterScenarioConnections = ({
           let after: string | undefined;
           do {
             const result = await client.query<Query>({
+              errorPolicy: 'all',
               fetchPolicy: 'network-only',
               query: CHARACTER_SCENARIO_DEATHS,
               variables: {
@@ -175,6 +176,9 @@ export const CharacterScenarioConnections = ({
               },
             });
             const connection = result.data?.kills;
+            // A malformed row nulls out the whole `nodes` array under
+            // GraphQL's non-null propagation rules; skip it rather than
+            // losing the request (or the whole panel) to a thrown error.
             loaded.push(...(connection?.nodes ?? []));
             after = connection?.pageInfo.endCursor ?? undefined;
             if (!connection?.pageInfo.hasNextPage || !after) {
@@ -185,6 +189,14 @@ export const CharacterScenarioConnections = ({
             break;
           }
         }
+        if (!cancelled) {
+          setDeathblows(loaded);
+        }
+      } catch {
+        // This panel is supplementary (deathblow breakdown within a
+        // character's scenario history) -- on failure, keep whatever we
+        // already gathered instead of silently discarding it and leaving
+        // the section looking empty.
         if (!cancelled) {
           setDeathblows(loaded);
         }

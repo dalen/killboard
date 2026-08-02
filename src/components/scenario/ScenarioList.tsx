@@ -101,6 +101,7 @@ export const ScenarioList = ({
   const [windowTotal, setWindowTotal] = useState(0);
   const [windowLoading, setWindowLoading] = useState(false);
   const [windowError, setWindowError] = useState<Error>();
+  const [windowHasDataIssue, setWindowHasDataIssue] = useState(false);
   const [reloadToken, setReloadToken] = useState(0);
   // Leaving this page (e.g. clicking into a character) unmounts ScenarioList,
   // so windowScenarios is lost and the batch-load below runs again on
@@ -144,7 +145,63 @@ export const ScenarioList = ({
     }
 
     let cancelled = false;
+    let windowTotalCount: number | undefined;
     const controller = new AbortController();
+
+    // Cursors from this API are base64-encoded zero-based offsets, so an
+    // arbitrary [start, start + count) window can be requested directly.
+    const encodeOffset = (offset: number): string | undefined =>
+      offset > 0 ? btoa(String(offset - 1)) : undefined;
+
+    // A single malformed row nulls out the whole array it's in under
+    // GraphQL's non-null propagation rules. Rather than losing an entire
+    // 50-item page (or failing the whole window) when that happens, split
+    // the failing range in half and retry each half until the bad row(s)
+    // are isolated.
+    const fetchRange = async (
+      useNetworkOnly: boolean,
+      start: number,
+      count: number,
+    ): Promise<ScenarioRecord[]> => {
+      if (count <= 0) {
+        return [];
+      }
+      const result = await client.query<Query>({
+        context: { fetchOptions: { signal: controller.signal } },
+        errorPolicy: 'all',
+        fetchPolicy: useNetworkOnly ? 'network-only' : 'cache-first',
+        query: SCENARIO_LIST,
+        variables: { after: encodeOffset(start), first: count, where },
+      });
+      const connection = result.data?.scenarios;
+      if (!connection) {
+        return [];
+      }
+      if (windowTotalCount === undefined) {
+        windowTotalCount = connection.totalCount;
+        if (!cancelled) {
+          setWindowTotal(connection.totalCount);
+        }
+      }
+      if (connection.nodes) {
+        return connection.nodes;
+      }
+      if (count === 1) {
+        if (!cancelled) {
+          setWindowHasDataIssue(true);
+        }
+        return [];
+      }
+      const half = Math.ceil(count / 2);
+      const left = await fetchRange(useNetworkOnly, start, half);
+      const right = await fetchRange(
+        useNetworkOnly,
+        start + half,
+        count - half,
+      );
+      return [...left, ...right];
+    };
+
     const loadWindow = async (): Promise<void> => {
       // Only a real click on Refresh forces the network; capture and
       // consume that intent once per load so later reloads (e.g. a plain
@@ -154,39 +211,20 @@ export const ScenarioList = ({
       setWindowScenarios([]);
       setWindowTotal(0);
       setWindowError(undefined);
+      setWindowHasDataIssue(false);
       setWindowLoading(true);
-      let after: string | undefined;
+      let offset = 0;
       const accumulated: ScenarioRecord[] = [];
 
       try {
         do {
-          const result = await client.query<Query>({
-            context: {
-              fetchOptions: {
-                signal: controller.signal,
-              },
-            },
-            fetchPolicy: useNetworkOnly ? 'network-only' : 'cache-first',
-            query: SCENARIO_LIST,
-            variables: {
-              after,
-              first: 50,
-              where,
-            },
-          });
-          const connection = result.data?.scenarios;
-          if (!connection) {
-            break;
-          }
-
-          accumulated.push(...(connection.nodes ?? []));
-          after = connection.pageInfo.endCursor ?? undefined;
+          const nodes = await fetchRange(useNetworkOnly, offset, 50);
+          accumulated.push(...nodes);
+          offset += 50;
           if (!cancelled) {
-            setWindowTotal(connection.totalCount);
             setWindowScenarios([...accumulated]);
           }
-
-          if (!connection.pageInfo.hasNextPage || !after) {
+          if (windowTotalCount === undefined || offset >= windowTotalCount) {
             break;
           }
         } while (!cancelled);
@@ -454,6 +492,12 @@ export const ScenarioList = ({
           leaderboard: {scenarios.length}
           {windowTotal ? ` of ${windowTotal}` : ''} matches gathered.
         </div>
+      )}
+      {isFullWindow && windowHasDataIssue && (
+        <p className="mb-3 has-text-warning">
+          Some matches could not be loaded due to a data issue and are missing
+          from these results.
+        </p>
       )}
       {characterId ? (
         <CharacterScenarioConnections

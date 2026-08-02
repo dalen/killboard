@@ -91,7 +91,11 @@ export const SearchGuild = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} />
+      <SearchBox
+        initialQuery={query}
+        onSubmit={handleSubmit}
+        navigateOnSubmit
+      />
       <div className="table-container">
         <table
           className={clsx(
