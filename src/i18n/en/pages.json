@@ -119,7 +119,10 @@
     "title": "Creatures",
     "search": "Name",
     "name": "Name",
-    "creatureSubType": "Type"
+    "creatureSubType": "Type",
+    "realm": "Realm",
+    "role": "Role",
+    "location": "Location"
   },
   "creature": {
     "creatureId": "Creature #{{creatureId}}",
