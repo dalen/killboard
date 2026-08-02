@@ -57,8 +57,16 @@ const getTimeFilters = (
   defaultRange: '1h' | 'recent',
 ): ScenarioRecordFilterInput => {
   const range = search.get('range') ?? defaultRange;
+  // Round "now" down to a 5-minute bucket instead of using the exact
+  // current time. GetTimeFilters recomputes on every mount (e.g. leaving
+  // /scenarios to view a character, then coming back), and Apollo's cache
+  // only matches identical query variables — even a few seconds' drift in
+  // "now" would produce a different startTime.gte on each mount and force
+  // a full refetch instead of reusing the cache. Bucketing keeps the same
+  // variables (and cache hit) for repeat visits within the same 5-minute
+  // window. The explicit Refresh button still bypasses the cache entirely.
   const now = new Date();
-  now.setSeconds(0, 0);
+  now.setMinutes(Math.floor(now.getMinutes() / 5) * 5, 0, 0);
   let start: Date | undefined;
   let end: Date | undefined;
 
