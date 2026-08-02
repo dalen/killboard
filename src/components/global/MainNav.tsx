@@ -14,9 +14,6 @@ export const MainNav = (): ReactElement => {
   return (
     <div className="container is-mobile mt-2">
       <div className="tabs is-fullwidth">
-        <li className={clsx({ 'is-active': pathname === '/class-activity' })}>
-          <Link to="/class-activity">{t('pages:home.showClassActivity')}</Link>
-        </li>
         <li className={clsx({ 'is-active': pathname.startsWith('/creature') })}>
           <Link to="/creatures">{t('pages:home.showCreatures')}</Link>
         </li>
