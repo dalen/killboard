@@ -407,7 +407,7 @@ export const InstanceHub = ({
                   isMobile ? 'is-narrow' : 'is-fullwidth',
                 )}
               >
-                <thead>
+                <thead className="is-relative">
                   <tr>
                     <th
                       className={clsx(
