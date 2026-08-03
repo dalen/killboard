@@ -51,10 +51,21 @@ export const SearchBox = ({
     // /search/guild/:query). Every other caller (Creatures, Items, Quests,
     // Instances, ...) just wants the callback -- it must NOT navigate,
     // since that used to unconditionally send users to guild search.
+    //
+    // An empty value gets its own destination instead of navigating to
+    // `/search/guild/` (trailing empty segment). There's no route for
+    // that exact shape, and bare `/search/guild` actually matches the
+    // player route `/search/:query` with query="guild" - landing back on
+    // this box showing the literal word "guild" instead of clearing.
     if (navigateOnSubmit) {
-      void navigate(isPlayer ? `/search/${value}` : `/search/guild/${value}`, {
-        replace: true,
-      });
+      if (value) {
+        void navigate(
+          isPlayer ? `/search/${value}` : `/search/guild/${value}`,
+          { replace: true },
+        );
+      } else {
+        void navigate(isPlayer ? '/' : '/guilds', { replace: true });
+      }
     }
     if (onSubmit) {
       onSubmit(value);
