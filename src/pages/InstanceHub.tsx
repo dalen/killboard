@@ -39,8 +39,6 @@ const INSTANCE_HUB = gql`
       order: { start: DESC }
     ) {
       totalCount
-      averageDuration
-      averageDeaths
       nodes {
         id
         start
@@ -228,14 +226,41 @@ export const InstanceHub = ({
     [runs, metric, role, realm],
   );
 
-  const averageDurationText = data?.instanceRuns
-    ? formatDuration(
-        intervalToDuration({
-          end: new Date(Math.round(data.instanceRuns.averageDuration)),
-          start: new Date(0),
-        }),
-      )
-    : null;
+  // Computed from the loaded batch (not the connection's all-history
+  // averageDuration/averageDeaths fields) so this stays consistent with
+  // the "most recent N runs" framing above, and isn't skewed by the rare
+  // run in the underlying data with a bogus multi-day end time.
+  const averageDurationText = useMemo(() => {
+    if (runs.length === 0) {
+      return null;
+    }
+    const totalMs = runs.reduce(
+      (sum, run) =>
+        sum + (new Date(run.end).getTime() - new Date(run.start).getTime()),
+      0,
+    );
+    return formatDuration(
+      intervalToDuration({
+        end: new Date(Math.round(totalMs / runs.length)),
+        start: new Date(0),
+      }),
+    );
+  }, [runs]);
+
+  const averageDeaths =
+    runs.length === 0
+      ? null
+      : (
+          runs.reduce(
+            (sum, run) =>
+              sum +
+              run.scoreboardEntries.reduce(
+                (deaths, entry) => deaths + Number(entry.deaths),
+                0,
+              ),
+            0,
+          ) / runs.length
+        ).toFixed(1);
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -299,7 +324,7 @@ export const InstanceHub = ({
                     </div>
                     <div className="column">
                       <strong>{t('pages:instanceRuns.averageDeaths')}</strong>
-                      <p>{data?.instanceRuns?.averageDeaths.toFixed(1)}</p>
+                      <p>{averageDeaths}</p>
                     </div>
                   </div>
                 </div>
