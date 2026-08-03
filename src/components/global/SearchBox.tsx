@@ -20,6 +20,7 @@ export const SearchBox = ({
   const navigate = useNavigate();
   const [query, setQuery] = useState(initialQuery ?? '');
   const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const inputRef = useRef<HTMLInputElement>(null);
   // Tracks the last value *this component* pushed out via commit(), so the
   // effect below can tell "the URL changed because we just typed and our
   // own debounced commit landed" apart from "the URL changed for some
@@ -41,6 +42,29 @@ export const SearchBox = ({
     return () => {
       clearTimeout(debounceRef.current);
     };
+  }, []);
+
+  // navigateOnSubmit boxes (Home's player/guild tabs, plus the dedicated
+  // Search/SearchGuild pages) can go from one page to a completely
+  // different one mid-search: committing a debounced keystroke navigates
+  // from e.g. /guilds to /search/guild/:query, which swaps in a whole new
+  // route element and mounts a brand-new input. The old input's focus
+  // goes with it, so without this the user has to click back into the
+  // box to keep typing. Runs once per mount, which lines up with exactly
+  // that one moment - staying on the same search results page for
+  // further keystrokes only updates the URL param, it doesn't remount.
+  useEffect(() => {
+    if (!navigateOnSubmit) {
+      return;
+    }
+    const input = inputRef.current;
+    if (!input) {
+      return;
+    }
+    input.focus();
+    const end = input.value.length;
+    input.setSelectionRange(end, end);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const commit = (value: string): void => {
@@ -82,6 +106,7 @@ export const SearchBox = ({
       <div className="field mb-4">
         <p className="control has-icons-left has-icons-right">
           <input
+            ref={inputRef}
             className="input"
             type="search"
             placeholder={t('searchBox.placeholder') ?? ''}
