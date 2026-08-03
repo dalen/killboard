@@ -142,7 +142,7 @@ export const Instances = (): ReactElement => {
                       {t('pages:instances.statistics')}
                     </Link>
                     <Link
-                      to={`/instance-runs?instance=${instance.id}`}
+                      to={`/instance/${instance.id}`}
                       className="button is-primary p-2 is-pulled-right mr-2"
                     >
                       {t('pages:instances.runs')}

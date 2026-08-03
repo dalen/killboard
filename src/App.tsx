@@ -32,6 +32,7 @@ import { Storyline } from '@/pages/Storyline';
 import { StorylineEntry } from '@/pages/StorylineEntry';
 import { StorylineActivity } from '@/pages/StorylineActivity';
 import { InstanceStatistics } from '@/pages/InstanceStatistics';
+import { InstanceHub } from '@/pages/InstanceHub';
 
 // Extend the Window interface to include gtag
 declare global {
@@ -151,6 +152,15 @@ const App = () => {
         />
 
         <Route path="/instances" element={<Instances />} />
+        <Route path="/instance/:id" element={<InstanceHub tab="runs" />} />
+        <Route
+          path="/instance/:id/characters"
+          element={<InstanceHub tab="characters" />}
+        />
+        <Route
+          path="/instance/:id/leaderboards"
+          element={<InstanceHub tab="leaderboards" />}
+        />
         <Route
           path="/instance-statistics/:id"
           element={<InstanceStatistics />}
