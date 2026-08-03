@@ -168,6 +168,7 @@
     "questGivers": "Quest Givers"
   },
   "instances": {
+    "title": "Instances",
     "search": "Search",
     "name": "Name",
     "encounters": "Encounters",

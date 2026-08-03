@@ -639,6 +639,80 @@ td.scenariolist-score-destruction {
   padding: 0.5rem;
 }
 
+// Instance list cards, mirroring the scenario-match-card visual language
+// (dark panel, left accent border) instead of a plain Bulma table.
+.instance-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.instance-card {
+  background: rgba(20, 20, 20, 0.62);
+  border: 1px solid rgba(135, 123, 105, 0.3);
+  border-left: 3px solid $primary;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.instance-card-header {
+  align-items: center;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.instance-card-icon {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(135, 123, 105, 0.35);
+  color: $link;
+  display: flex;
+  flex-shrink: 0;
+  font-size: 1.2rem;
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+}
+
+.instance-card-header strong {
+  font-size: 1.05rem;
+}
+
+.instance-card-header strong a {
+  color: $text-strong;
+}
+
+.instance-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.instance-card-meta span {
+  background: rgba(50, 50, 50, 0.6);
+  border: 1px solid rgba(135, 123, 105, 0.25);
+  font-size: 0.72rem;
+  padding: 0.25rem 0.45rem;
+}
+
+.instance-card-actions {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: auto;
+}
+
+.instance-card-actions .button {
+  flex: 1;
+}
+
+@media (max-width: 520px) {
+  .instance-card-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 // Generic filter grid + result summary bar, matching the visual language
 // introduced on the Scenarios page (.scenario-standout-filters /
 // .scenario-active-filters below), but under page-agnostic names so any
