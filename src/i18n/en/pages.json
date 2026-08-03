@@ -283,6 +283,18 @@
     "protection": "Protection",
     "rank": "Rank",
     "level": "Level",
-    "bestRun": "Best Run"
+    "bestRun": "Best Run",
+    "time": "Time",
+    "rangeRecent": "Most recent 50",
+    "range24h": "Last 24 hours",
+    "range7d": "Last 7 days",
+    "range30d": "Last 30 days",
+    "range90d": "Last 90 days",
+    "rangeYtd": "Year to date",
+    "rangeCustom": "Custom dates",
+    "startDate": "Start",
+    "endDate": "End",
+    "gatheringRuns": "gathering {{loaded}} of {{total}}",
+    "rangeRunsNote": "{{count}} runs · {{rangeLabel}}"
   }
 }

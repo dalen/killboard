@@ -1,14 +1,15 @@
 import { gql } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams, useSearchParams } from 'react-router';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { format, formatDuration, intervalToDuration } from 'date-fns';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
 import {
   Archetype,
   Career,
+  type InstanceRunFilterInput,
   type InstanceRunScoreboardEntryFragment,
   type Query,
 } from '@/__generated__/graphql';
@@ -16,30 +17,49 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { SortConfigDirection, useSortableData } from '@/hooks/useSortableData';
+import { parseFilterDate } from '@/components/scenario/ScenarioFilters';
 import { INSTANCE_RUN_SCOREBOARD_FRAGMENT } from '@/components/instance_run/InstanceRunScoreboard';
 
 // Inspired by maartenson.net's per-dungeon Runs/Characters/Leaderboards
 // tabs. That site tracks its own historical data with hourly graphs and a
 // date-compare tool, which would need its own scraper and years of
 // storage to replicate. Simpler approach here: the API already supports
-// filtering instanceRuns by instanceId and returns each run's full
-// scoreboard inline, so one request for the most recent RUNS_TO_LOAD runs
-// is enough to derive all three tabs client-side. No new backend, cron,
-// or cache.
+// filtering instanceRuns by instanceId AND by start date range, and
+// returns each run's full scoreboard inline, so this page can page
+// through the live API for whatever window is selected instead of
+// standing up a new Worker/D1 cache. The default "Most recent 50" tab
+// stays a single fast request; anything else (24h/7d/30d/90d/YTD/custom)
+// walks the API in batches, the same trick already used by the Scenarios
+// page's time-window loader.
 const RUNS_TO_LOAD = 50;
+const WINDOW_BATCH_SIZE = 50;
 
-const INSTANCE_HUB = gql`
-  query InstanceHub($id: ID!, $instanceIdNum: UnsignedShort!, $first: Int) {
+const INSTANCE_HUB_META = gql`
+  query InstanceHubMeta($id: ID!) {
     instance(id: $id) {
       id
       name
     }
+  }
+`;
+
+const INSTANCE_HUB_RUNS = gql`
+  query InstanceHubRuns(
+    $where: InstanceRunFilterInput!
+    $first: Int
+    $after: String
+  ) {
     instanceRuns(
-      where: { instanceId: { eq: $instanceIdNum } }
+      where: $where
       first: $first
+      after: $after
       order: { start: DESC }
     ) {
       totalCount
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
       nodes {
         id
         start
@@ -72,6 +92,7 @@ const ORDER_CAREERS = new Set<Career>([
   Career.WitchHunter,
 ]);
 
+type RangeKey = '24h' | '30d' | '7d' | '90d' | 'custom' | 'recent' | 'ytd';
 type RealmFilter = 'all' | 'ORDER' | 'DESTRUCTION';
 type RoleFilter = 'all' | Archetype;
 type MetricKey = 'damage' | 'healing' | 'protection';
@@ -194,6 +215,83 @@ const formatDurationBetween = (start: string, end: string): string =>
     intervalToDuration({ end: new Date(end), start: new Date(start) }),
   );
 
+// Undefined start/end means "recent" mode (no date filter at all - handled
+// by the fast single-request path instead of the windowed loader).
+const getHubTimeWindow = (
+  search: URLSearchParams,
+): { end?: Date; start?: Date } | undefined => {
+  const range = (search.get('range') as RangeKey | null) ?? 'recent';
+  const now = new Date();
+  now.setMinutes(Math.floor(now.getMinutes() / 5) * 5, 0, 0);
+
+  switch (range) {
+    case '24h': {
+      return { end: now, start: new Date(now.getTime() - 24 * 60 * 60 * 1000) };
+    }
+    case '7d': {
+      return {
+        end: now,
+        start: new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000),
+      };
+    }
+    case '30d': {
+      return {
+        end: now,
+        start: new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000),
+      };
+    }
+    case '90d': {
+      return {
+        end: now,
+        start: new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000),
+      };
+    }
+    case 'ytd': {
+      return { end: now, start: new Date(now.getFullYear(), 0, 1) };
+    }
+    case 'custom': {
+      const from = search.get('from');
+      const to = search.get('to');
+      return {
+        end: to ? parseFilterDate(to, true) : now,
+        start: from ? parseFilterDate(from, false) : undefined,
+      };
+    }
+    default: {
+      return undefined;
+    }
+  }
+};
+
+const buildRunsWhere = (
+  instanceIdNum: number,
+  window?: { end?: Date; start?: Date },
+): InstanceRunFilterInput => ({
+  instanceId: { eq: instanceIdNum },
+  ...(window?.start || window?.end
+    ? {
+        start: {
+          ...(window.start && !Number.isNaN(window.start.getTime())
+            ? { gte: window.start.toISOString() }
+            : {}),
+          ...(window.end && !Number.isNaN(window.end.getTime())
+            ? { lte: window.end.toISOString() }
+            : {}),
+        },
+      }
+    : {}),
+});
+
+const RANGE_LABEL_KEYS: Record<RangeKey, string> = {
+  '24h': 'pages:instanceHub.range24h',
+  '7d': 'pages:instanceHub.range7d',
+  '30d': 'pages:instanceHub.range30d',
+  '90d': 'pages:instanceHub.range90d',
+  custom: 'pages:instanceHub.rangeCustom',
+  recent: 'pages:instanceHub.rangeRecent',
+  ytd: 'pages:instanceHub.rangeYtd',
+};
+
 export const InstanceHub = ({
   tab,
 }: {
@@ -204,18 +302,158 @@ export const InstanceHub = ({
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+  const client = useApolloClient();
 
-  const { data, loading, error } = useQuery<Query>(INSTANCE_HUB, {
+  const { data: metaData } = useQuery<Query>(INSTANCE_HUB_META, {
     skip: !id,
+    variables: { id },
+  });
+  const instanceName = metaData?.instance?.name;
+
+  const range = (search.get('range') as RangeKey | null) ?? 'recent';
+  const isWindowed = range !== 'recent';
+  const timeWindow = getHubTimeWindow(search);
+  const windowKey = `${range}|${search.get('from') ?? ''}|${search.get('to') ?? ''}`;
+
+  const {
+    data: recentData,
+    loading: recentLoading,
+    error: recentError,
+  } = useQuery<Query>(INSTANCE_HUB_RUNS, {
+    skip: !id || isWindowed,
     variables: {
       first: RUNS_TO_LOAD,
-      id,
-      instanceIdNum: Number(id),
+      where: buildRunsWhere(Number(id)),
     },
   });
 
-  const runs = (data?.instanceRuns?.nodes ?? []) as HubRun[];
-  const instanceName = data?.instance?.name;
+  const [windowRuns, setWindowRuns] = useState<HubRun[]>([]);
+  const [windowTotal, setWindowTotal] = useState(0);
+  const [windowLoading, setWindowLoading] = useState(false);
+  const [windowError, setWindowError] = useState<Error>();
+
+  useEffect(() => {
+    if (!isWindowed || !id) {
+      setWindowRuns([]);
+      setWindowTotal(0);
+      setWindowLoading(false);
+      setWindowError(undefined);
+      return;
+    }
+
+    let cancelled = false;
+    let total: number | undefined;
+    const controller = new AbortController();
+    const instanceIdNum = Number(id);
+    const where = buildRunsWhere(instanceIdNum, timeWindow);
+
+    // Cursors from this API are base64-encoded zero-based offsets, so an
+    // arbitrary [start, start + count) window can be requested directly.
+    const encodeOffset = (offset: number): string | undefined =>
+      offset > 0 ? btoa(String(offset - 1)) : undefined;
+
+    // A single malformed row nulls out the whole array it's in under
+    // GraphQL's non-null propagation rules. Rather than losing an entire
+    // batch when that happens, split the failing range in half and retry
+    // each half until the bad row(s) are isolated.
+    const fetchRange = async (
+      start: number,
+      count: number,
+    ): Promise<{ nodes: HubRun[]; total: number }> => {
+      if (count <= 0) {
+        return { nodes: [], total: 0 };
+      }
+      const result = await client.query<Query>({
+        context: { fetchOptions: { signal: controller.signal } },
+        errorPolicy: 'all',
+        fetchPolicy: 'cache-first',
+        query: INSTANCE_HUB_RUNS,
+        variables: { after: encodeOffset(start), first: count, where },
+      });
+      const connection = result.data?.instanceRuns;
+      if (!connection) {
+        return { nodes: [], total: 0 };
+      }
+      if (connection.nodes) {
+        return {
+          nodes: connection.nodes as HubRun[],
+          total: connection.totalCount,
+        };
+      }
+      if (count === 1) {
+        return { nodes: [], total: connection.totalCount };
+      }
+      const half = Math.ceil(count / 2);
+      const left = await fetchRange(start, half);
+      const right = await fetchRange(start + half, count - half);
+      return {
+        nodes: [...left.nodes, ...right.nodes],
+        total: left.total || right.total,
+      };
+    };
+
+    const loadWindow = async (): Promise<void> => {
+      setWindowRuns([]);
+      setWindowTotal(0);
+      setWindowError(undefined);
+      setWindowLoading(true);
+      let offset = 0;
+      const accumulated: HubRun[] = [];
+
+      try {
+        do {
+          const { nodes, total: batchTotal } = await fetchRange(
+            offset,
+            WINDOW_BATCH_SIZE,
+          );
+          accumulated.push(...nodes);
+          offset += WINDOW_BATCH_SIZE;
+          if (total === undefined) {
+            total = batchTotal;
+            if (!cancelled) {
+              setWindowTotal(batchTotal);
+            }
+          }
+          if (!cancelled) {
+            setWindowRuns([...accumulated]);
+          }
+          if (total === undefined || offset >= total) {
+            break;
+          }
+        } while (!cancelled);
+      } catch (caughtError) {
+        if (!cancelled && !controller.signal.aborted) {
+          setWindowError(
+            caughtError instanceof Error
+              ? caughtError
+              : new Error('Unable to load the selected time window.'),
+          );
+        }
+      } finally {
+        if (!cancelled) {
+          setWindowLoading(false);
+        }
+      }
+    };
+
+    void loadWindow();
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client, id, isWindowed, windowKey]);
+
+  const loading = isWindowed
+    ? windowLoading && windowRuns.length === 0
+    : recentLoading;
+  const error = isWindowed ? windowError : recentError;
+  const runs = (
+    isWindowed ? windowRuns : (recentData?.instanceRuns?.nodes ?? [])
+  ) as HubRun[];
+  const totalCount = isWindowed
+    ? windowTotal
+    : (recentData?.instanceRuns?.totalCount ?? 0);
 
   const characters = useMemo(() => summarizeCharacters(runs), [runs]);
   const {
@@ -243,7 +481,7 @@ export const InstanceHub = ({
 
   // Computed from the loaded batch (not the connection's all-history
   // averageDuration/averageDeaths fields) so this stays consistent with
-  // the "most recent N runs" framing above, and isn't skewed by the rare
+  // whichever window is currently displayed, and isn't skewed by the rare
   // run in the underlying data with a bogus multi-day end time.
   const averageDurationText = useMemo(() => {
     if (runs.length === 0) {
@@ -276,6 +514,28 @@ export const InstanceHub = ({
             0,
           ) / runs.length
         ).toFixed(1);
+
+  const setRange = (nextRange: RangeKey): void => {
+    if (nextRange === 'custom') {
+      const today = new Date();
+      const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      search.set('range', 'custom');
+      search.set(
+        'from',
+        search.get('from') ?? sevenDaysAgo.toISOString().slice(0, 10),
+      );
+      search.set('to', search.get('to') ?? today.toISOString().slice(0, 10));
+    } else {
+      if (nextRange === 'recent') {
+        search.delete('range');
+      } else {
+        search.set('range', nextRange);
+      }
+      search.delete('from');
+      search.delete('to');
+    }
+    setSearch(search);
+  };
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -311,6 +571,60 @@ export const InstanceHub = ({
         </li>
       </div>
 
+      <div className="filter-grid">
+        <label>
+          <span>{t('pages:instanceHub.time')}</span>
+          <div className="select">
+            <select
+              value={range}
+              onChange={(event) => {
+                setRange(event.target.value as RangeKey);
+              }}
+            >
+              <option value="recent">
+                {t('pages:instanceHub.rangeRecent')}
+              </option>
+              <option value="24h">{t('pages:instanceHub.range24h')}</option>
+              <option value="7d">{t('pages:instanceHub.range7d')}</option>
+              <option value="30d">{t('pages:instanceHub.range30d')}</option>
+              <option value="90d">{t('pages:instanceHub.range90d')}</option>
+              <option value="ytd">{t('pages:instanceHub.rangeYtd')}</option>
+              <option value="custom">
+                {t('pages:instanceHub.rangeCustom')}
+              </option>
+            </select>
+          </div>
+        </label>
+        {range === 'custom' && (
+          <>
+            <label>
+              <span>{t('pages:instanceHub.startDate')}</span>
+              <input
+                className="input"
+                type="date"
+                value={(search.get('from') ?? '').slice(0, 10)}
+                onChange={(event) => {
+                  search.set('from', event.target.value);
+                  setSearch(search);
+                }}
+              />
+            </label>
+            <label>
+              <span>{t('pages:instanceHub.endDate')}</span>
+              <input
+                className="input"
+                type="date"
+                value={(search.get('to') ?? '').slice(0, 10)}
+                onChange={(event) => {
+                  search.set('to', event.target.value);
+                  setSearch(search);
+                }}
+              />
+            </label>
+          </>
+        )}
+      </div>
+
       {loading && <progress className="progress" />}
       {!loading && error && (
         <ErrorMessage name={error.name} message={error.message} />
@@ -321,7 +635,21 @@ export const InstanceHub = ({
       {!loading && !error && runs.length > 0 && (
         <>
           <p className="is-size-7 has-text-grey mb-4">
-            {t('pages:instanceHub.recentRunsNote', { count: runs.length })}
+            {isWindowed
+              ? t('pages:instanceHub.rangeRunsNote', {
+                  count: runs.length,
+                  rangeLabel: t(RANGE_LABEL_KEYS[range]),
+                })
+              : t('pages:instanceHub.recentRunsNote', { count: runs.length })}
+            {isWindowed && windowLoading && (
+              <>
+                {' · '}
+                {t('pages:instanceHub.gatheringRuns', {
+                  loaded: runs.length,
+                  total: windowTotal || '…',
+                })}
+              </>
+            )}
           </p>
 
           {tab === 'runs' && (
@@ -331,7 +659,7 @@ export const InstanceHub = ({
                   <div className="columns">
                     <div className="column">
                       <strong>{t('pages:instanceHub.totalRuns')}</strong>
-                      <p>{data?.instanceRuns?.totalCount.toLocaleString()}</p>
+                      <p>{totalCount.toLocaleString()}</p>
                     </div>
                     <div className="column">
                       <strong>{t('pages:instanceRuns.averageDuration')}</strong>
