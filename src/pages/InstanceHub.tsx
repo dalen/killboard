@@ -28,7 +28,7 @@ import { INSTANCE_RUN_SCOREBOARD_FRAGMENT } from '@/components/instance_run/Inst
 const RUNS_TO_LOAD = 50;
 
 const INSTANCE_HUB = gql`
-  query InstanceHub($id: ID!, $instanceIdNum: Int!, $first: Int) {
+  query InstanceHub($id: ID!, $instanceIdNum: UnsignedShort!, $first: Int) {
     instance(id: $id) {
       id
       name
