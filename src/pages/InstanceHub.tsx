@@ -15,6 +15,7 @@ import {
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { SortConfigDirection, useSortableData } from '@/hooks/useSortableData';
 import { INSTANCE_RUN_SCOREBOARD_FRAGMENT } from '@/components/instance_run/InstanceRunScoreboard';
 
 // Inspired by maartenson.net's per-dungeon Runs/Characters/Leaderboards
@@ -217,6 +218,20 @@ export const InstanceHub = ({
   const instanceName = data?.instance?.name;
 
   const characters = useMemo(() => summarizeCharacters(runs), [runs]);
+  const {
+    items: sortedCharacters,
+    requestSort: requestCharacterSort,
+    sortConfig: characterSortConfig,
+  } = useSortableData(characters, {
+    direction: SortConfigDirection.descending,
+    key: 'runCount',
+  });
+  const getCharacterSortClass = (key: string): string => {
+    if (!characterSortConfig || characterSortConfig.key !== key) {
+      return '';
+    }
+    return characterSortConfig.direction;
+  };
 
   const metric = (search.get('metric') as MetricKey | null) ?? 'damage';
   const role = (search.get('role') as RoleFilter | null) ?? 'all';
@@ -394,20 +409,95 @@ export const InstanceHub = ({
               >
                 <thead>
                   <tr>
-                    <th>{t('pages:instanceHub.character')}</th>
-                    <th>{t('pages:instanceHub.career')}</th>
-                    <th align="right">{t('pages:instanceHub.runsCount')}</th>
-                    <th>{t('pages:instanceHub.lastRun')}</th>
-                    <th align="right">{t('pages:instanceHub.totalDamage')}</th>
-                    <th align="right">{t('pages:instanceHub.totalHealing')}</th>
-                    <th align="right">
+                    <th
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('name'),
+                      )}
+                      onClick={() => requestCharacterSort('name')}
+                    >
+                      {t('pages:instanceHub.character')}
+                    </th>
+                    <th
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('career'),
+                      )}
+                      onClick={() => requestCharacterSort('career')}
+                    >
+                      {t('pages:instanceHub.career')}
+                    </th>
+                    <th
+                      align="right"
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('runCount'),
+                      )}
+                      onClick={() => requestCharacterSort('runCount')}
+                    >
+                      {t('pages:instanceHub.runsCount')}
+                    </th>
+                    <th
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('lastRunStart'),
+                      )}
+                      onClick={() => requestCharacterSort('lastRunStart')}
+                    >
+                      {t('pages:instanceHub.lastRun')}
+                    </th>
+                    <th
+                      align="right"
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('totalDamage'),
+                      )}
+                      onClick={() => requestCharacterSort('totalDamage')}
+                    >
+                      {t('pages:instanceHub.totalDamage')}
+                    </th>
+                    <th
+                      align="right"
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('totalHealing'),
+                      )}
+                      onClick={() => requestCharacterSort('totalHealing')}
+                    >
+                      {t('pages:instanceHub.totalHealing')}
+                    </th>
+                    <th
+                      align="right"
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('totalProtection'),
+                      )}
+                      onClick={() => requestCharacterSort('totalProtection')}
+                    >
                       {t('pages:instanceHub.totalProtection')}
                     </th>
-                    <th align="right">{t('pages:instanceHub.totalDeaths')}</th>
+                    <th
+                      align="right"
+                      className={clsx(
+                        'is-clickable',
+                        'has-text-link',
+                        getCharacterSortClass('totalDeaths'),
+                      )}
+                      onClick={() => requestCharacterSort('totalDeaths')}
+                    >
+                      {t('pages:instanceHub.totalDeaths')}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {characters.map((character) => (
+                  {sortedCharacters.map((character) => (
                     <tr key={character.id}>
                       <td>
                         <Link to={`/character/${character.id}`}>
