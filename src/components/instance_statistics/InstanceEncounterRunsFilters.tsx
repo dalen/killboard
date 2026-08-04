@@ -131,9 +131,16 @@ const getMaxItemRatingFilters = (
   return {};
 };
 
+// The API's `start` filter is a DateTime field, not a raw timestamp number -
+// passing the number 0 (as this used to) makes the whole request 400 with
+// "DateTime cannot coerce the given value JSON element of type Number".
+// The Unix epoch as an ISO-8601 string keeps the original intent (exclude
+// any zero/unset start dates) with a value the API actually accepts.
+const EPOCH = '1970-01-01T00:00:00.000Z';
+
 export const getInstanceEncounterRunsFilters = (search: URLSearchParams) => ({
   scoreboardEntryCount: { gte: 6 },
-  start: { gt: 0 },
+  start: { gt: EPOCH },
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
   ...getAvgItemRatingFilters(search),

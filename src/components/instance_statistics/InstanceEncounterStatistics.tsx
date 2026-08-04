@@ -3,7 +3,8 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { formatDuration, intervalToDuration } from 'date-fns';
+import { formatDuration } from 'date-fns';
+import { parseIsoDuration } from '@/utils';
 import { useSearchParams } from 'react-router';
 
 const INSTANCE_ENCOUNTER_STATISTICS = gql`
@@ -66,10 +67,7 @@ export const InstanceEncounterStatistics = ({
       <td>{name}</td>
       <td>
         {formatDuration(
-          intervalToDuration({
-            end: new Date(data.instanceEncounterRuns.medianDuration),
-            start: new Date(0),
-          }),
+          parseIsoDuration(data.instanceEncounterRuns.medianDuration),
         )}
       </td>
       <td>{data.instanceEncounterRuns.medianDeaths}</td>
