@@ -181,7 +181,8 @@
     "encounter": "Encounter",
     "medianDuration": "Median Duration",
     "medianDeaths": "Median Deaths",
-    "averageDeaths": "Average Deaths"
+    "averageDeaths": "Average Deaths",
+    "completedOnly": "Completed only"
   },
   "instanceRuns": {
     "title": "Instance Runs",
@@ -190,9 +191,6 @@
     "instance": "Instance",
     "encounters": "Encounters",
     "deaths": "Deaths",
-    "itemRatingMin": "Min Item",
-    "itemRatingMax": "Max Item",
-    "itemRatingAverage": "Avg Item",
     "numTanks": "Tanks",
     "numDps": "Dps",
     "numHealers": "Healers",
@@ -200,6 +198,7 @@
     "averageDuration": "Average Duration",
     "averageDeaths": "Average Deaths",
     "averageDurationUnavailable": "Not available (some runs in this instance have invalid duration data)",
+    "minCompletedEncounters": "Min completed encounters",
     "averageDurationSampleNote": "Based on the {{sampleSize}} most recent runs; {{excluded}} excluded for exceeding 7 hours (likely abandoned/never-closed sessions)."
   },
   "instanceRun": {
@@ -297,6 +296,7 @@
     "startDate": "Start",
     "endDate": "End",
     "gatheringRuns": "gathering {{loaded}} of {{total}}",
-    "rangeRunsNote": "{{count}} runs \u00b7 {{rangeLabel}}"
+    "rangeRunsNote": "{{count}} runs \u00b7 {{rangeLabel}}",
+    "durationOutliersExcluded": "{{count}} run(s) excluded from the average for an implausible duration (likely abandoned/never-closed sessions)."
   }
 }

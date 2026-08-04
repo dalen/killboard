@@ -33,6 +33,10 @@ import { INSTANCE_RUN_SCOREBOARD_FRAGMENT } from '@/components/instance_run/Inst
 // page's time-window loader.
 const RUNS_TO_LOAD = 50;
 const WINDOW_BATCH_SIZE = 50;
+// Some instanceRuns rows never get a proper end timestamp written
+// (abandoned/never-closed sessions); anything longer than this is treated as
+// bad data rather than a real dungeon clear when averaging durations.
+const MAX_PLAUSIBLE_DURATION_MS = 7 * 60 * 60 * 1000; // 7 hours
 
 const INSTANCE_HUB_META = gql`
   query InstanceHubMeta($id: ID!) {
@@ -481,24 +485,44 @@ export const InstanceHub = ({
 
   // Computed from the loaded batch (not the connection's all-history
   // averageDuration/averageDeaths fields) so this stays consistent with
-  // whichever window is currently displayed, and isn't skewed by the rare
-  // run in the underlying data with a bogus multi-day end time.
-  const averageDurationText = useMemo(() => {
+  // whichever window is currently displayed. Some runs never get a proper
+  // end timestamp written (abandoned/never-closed sessions) and can carry a
+  // multi-day duration that would badly skew a plain average, so anything
+  // over 7 hours - implausible for a real dungeon clear - is excluded and
+  // counted separately.
+  const durationStats = useMemo(() => {
     if (runs.length === 0) {
       return null;
     }
-    const totalMs = runs.reduce(
-      (sum, run) =>
-        sum + (new Date(run.end).getTime() - new Date(run.start).getTime()),
-      0,
+    const durationsMs = runs
+      .map(
+        (run) => new Date(run.end).getTime() - new Date(run.start).getTime(),
+      )
+      .filter((ms) => Number.isFinite(ms) && ms >= 0);
+    const saneDurationsMs = durationsMs.filter(
+      (ms) => ms <= MAX_PLAUSIBLE_DURATION_MS,
     );
-    return formatDuration(
-      intervalToDuration({
-        end: new Date(Math.round(totalMs / runs.length)),
-        start: new Date(0),
-      }),
-    );
+
+    if (saneDurationsMs.length === 0) {
+      return null;
+    }
+
+    return {
+      excluded: durationsMs.length - saneDurationsMs.length,
+      text: formatDuration(
+        intervalToDuration({
+          end: new Date(
+            Math.round(
+              saneDurationsMs.reduce((a, b) => a + b, 0) /
+                saneDurationsMs.length,
+            ),
+          ),
+          start: new Date(0),
+        }),
+      ),
+    };
   }, [runs]);
+  const averageDurationText = durationStats?.text ?? null;
 
   const averageDeaths =
     runs.length === 0
@@ -663,7 +687,17 @@ export const InstanceHub = ({
                     </div>
                     <div className="column">
                       <strong>{t('pages:instanceRuns.averageDuration')}</strong>
-                      <p>{averageDurationText}</p>
+                      <p>
+                        {averageDurationText ??
+                          t('pages:instanceRuns.averageDurationUnavailable')}
+                      </p>
+                      {durationStats != null && durationStats.excluded > 0 && (
+                        <p className="is-size-7 has-text-grey">
+                          {t('pages:instanceHub.durationOutliersExcluded', {
+                            count: durationStats.excluded,
+                          })}
+                        </p>
+                      )}
                     </div>
                     <div className="column">
                       <strong>{t('pages:instanceRuns.averageDeaths')}</strong>

@@ -46,7 +46,6 @@ const INSTANCE_RUNS = gql`
           name
         }
         scoreboardEntries {
-          itemRating
           deaths
           archetype
           damage
@@ -104,9 +103,6 @@ interface InstanceRunRow {
   end: string;
   id: string;
   instanceName: string;
-  itemRatingAverage: number;
-  itemRatingMax: number;
-  itemRatingMin: number;
   numDPS: number;
   numHealers: number;
   numTanks: number;
@@ -162,10 +158,6 @@ export const InstanceRunsList = () => {
   const rows = useMemo<InstanceRunRow[]>(
     () =>
       (data?.instanceRuns?.nodes ?? []).map((instanceRun) => {
-        const itemRatings = instanceRun.scoreboardEntries.map(
-          (entry) => entry.itemRating,
-        );
-
         return {
           deaths: instanceRun.scoreboardEntries
             .map((entry) => entry.deaths)
@@ -179,10 +171,6 @@ export const InstanceRunsList = () => {
           end: instanceRun.end,
           id: instanceRun.id,
           instanceName: instanceRun.instance.name,
-          itemRatingAverage:
-            itemRatings.reduce((a, b) => a + b, 0) / itemRatings.length,
-          itemRatingMax: Math.max(...itemRatings),
-          itemRatingMin: Math.min(...itemRatings),
           numDPS: instanceRun.scoreboardEntries.filter((entry) =>
             [Archetype.MeleeDps, Archetype.RangedDps].includes(
               entry.archetype,
@@ -340,36 +328,6 @@ export const InstanceRunsList = () => {
               </span>
             </th>{' '}
             <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('itemRatingMin'),
-              )}
-              onClick={() => requestSort('itemRatingMin')}
-            >
-              {t('pages:instanceRuns.itemRatingMin')}
-            </th>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('itemRatingAverage'),
-              )}
-              onClick={() => requestSort('itemRatingAverage')}
-            >
-              {t('pages:instanceRuns.itemRatingAverage')}
-            </th>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('itemRatingMax'),
-              )}
-              onClick={() => requestSort('itemRatingMax')}
-            >
-              {t('pages:instanceRuns.itemRatingMax')}
-            </th>
-            <th
               align="center"
               className={clsx(
                 'is-clickable',
@@ -452,9 +410,6 @@ export const InstanceRunsList = () => {
                 </td>
                 <td>{row.encounters}</td>
                 <td align="center">{row.deaths}</td>
-                <td align="center">{row.itemRatingMin}</td>
-                <td align="center">{row.itemRatingAverage.toFixed(0)}</td>
-                <td align="center">{row.itemRatingMax}</td>
                 <td align="center">{row.numTanks}</td>
                 <td align="center">{row.numHealers}</td>
                 <td align="center">{row.numDPS}</td>
