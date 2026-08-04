@@ -169,9 +169,20 @@ export const InstanceRunsList = () => {
 
   const { pageInfo } = data.instanceRuns;
 
-  const averageDuration = formatDuration(
-    parseIsoDuration(data.instanceRuns.averageDuration),
+  // A meaningful chunk of instanceRuns rows never get a proper `end` written
+  // (abandoned/never-closed sessions), which can drag the API's averageDuration
+  // into the thousands of days for instances with a lot of history. That's a
+  // data-quality issue upstream, not something to silently paper over - but
+  // showing "7030 days" as if it were a real number is worse than saying
+  // "not available", so guard against implausible values until the API side
+  // filters these out.
+  const averageDurationParsed = parseIsoDuration(
+    data.instanceRuns.averageDuration,
   );
+  const averageDurationIsPlausible = (averageDurationParsed.days ?? 0) < 1;
+  const averageDuration = averageDurationIsPlausible
+    ? formatDuration(averageDurationParsed)
+    : t('pages:instanceRuns.averageDurationUnavailable');
 
   return (
     <>
