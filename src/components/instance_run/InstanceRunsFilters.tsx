@@ -2,17 +2,25 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import type { InstanceRunFilterInput } from '@/__generated__/graphql';
 import type { ReactElement } from 'react';
+import { INSTANCE_GROUPS } from '@/utils/instanceGroups';
 
 const getInstanceFilters = (
   search: URLSearchParams,
 ): InstanceRunFilterInput => {
   const instance = search.get('instance');
 
-  if (instance && instance !== 'all') {
-    return { instanceId: { eq: Number(instance) } };
+  if (!instance || instance === 'all') {
+    return {};
   }
 
-  return {};
+  const group = INSTANCE_GROUPS.find(
+    (candidate) => candidate.id === Number(instance),
+  );
+  const instanceIds = group?.instanceIds ?? [Number(instance)];
+
+  return instanceIds.length === 1
+    ? { instanceId: { eq: instanceIds[0] } }
+    : { instanceId: { in: instanceIds } };
 };
 
 const getCompletedEncountersFilters = (
@@ -54,27 +62,11 @@ export const InstanceRunsFilters = (): ReactElement => {
             }}
           >
             <option value="all">{t('pages:instanceRuns.all')}</option>
-            <option value="260">Lost Vale</option>
-            <option value="176">Sigmar Crypts</option>
-            <option value="196">Bilerot</option>
-            <option value="160">Bastion Stair</option>
-            <option value="163">Thar&apos;Ignan</option>
-            <option value="164">Lord Slaurith</option>
-            <option value="165">Kaarn the Vanquisher</option>
-            <option value="166">Skull Lord Var&apos;Ithrok</option>
-            <option value="60">Gunbad</option>
-            <option value="63">Gunbad Nursery</option>
-            <option value="64">Gunbad Lab</option>
-            <option value="65">Squig Boss</option>
-            <option value="66">Gunbad Baracks</option>
-            <option value="36">Dragonback Pass (Order)</option>
-            <option value="37">Dragonback Pass (Destruction)</option>
-            <option value="152">Altdorf Sewers 1</option>
-            <option value="153">Altdorf Sewers 2</option>
-            <option value="169">Altdorf Sewers 3</option>
-            <option value="155">Sacellum 1</option>
-            <option value="156">Sacellum 2</option>
-            <option value="173">Sacellum 3</option>
+            {INSTANCE_GROUPS.map((group) => (
+              <option key={group.id} value={group.id}>
+                {group.name}
+              </option>
+            ))}
           </select>
         </div>
       </label>
