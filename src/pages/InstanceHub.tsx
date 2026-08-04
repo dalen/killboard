@@ -107,7 +107,7 @@ const ORDER_CAREERS = new Set<Career>([
 type RangeKey = '24h' | '30d' | '7d' | '90d' | 'custom' | 'recent' | 'ytd';
 type RealmFilter = 'all' | 'ORDER' | 'DESTRUCTION';
 type RoleFilter = 'all' | Archetype;
-type MetricKey = 'damage' | 'healing' | 'protection';
+type MetricKey = 'damage' | 'healing' | 'protection' | 'runs';
 
 const careerRealm = (career: Career): 'ORDER' | 'DESTRUCTION' =>
   ORDER_CAREERS.has(career) ? 'ORDER' : 'DESTRUCTION';
@@ -282,9 +282,13 @@ const buildLeaderboard = ({
           (runCounts.get(entry.character.id) ?? 0) + 1,
         );
 
-        const value = Number(entry[metric]);
+        // Runs isn't a per-scoreboard-entry stat, so there's no "best single
+        // run" to compare - just keep the character's most recent matching
+        // run as their representative "Best Run" link, and rank by total
+        // run count afterwards instead.
+        const value = metric === 'runs' ? 0 : Number(entry[metric]);
         const current = best.get(entry.character.id);
-        if (!current || value > current.value) {
+        if (!current || metric === 'runs' || value > current.value) {
           best.set(entry.character.id, {
             career: entry.character.career,
             characterId: entry.character.id,
@@ -301,10 +305,14 @@ const buildLeaderboard = ({
   }
 
   return [...best.values()]
-    .map((entry) => ({
-      ...entry,
-      runCount: runCounts.get(entry.characterId) ?? 0,
-    }))
+    .map((entry) => {
+      const runCount = runCounts.get(entry.characterId) ?? 0;
+      return {
+        ...entry,
+        runCount,
+        value: metric === 'runs' ? runCount : entry.value,
+      };
+    })
     .toSorted((a, b) => b.value - a.value);
 };
 
@@ -686,9 +694,6 @@ export const InstanceHub = ({
     <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
-          <li>
-            <Link to="/">{t('common:home')}</Link>
-          </li>
           <li>
             <Link to="/instances">{t('common:instances')}</Link>
           </li>
@@ -1102,6 +1107,7 @@ export const InstanceHub = ({
                       <option value="protection">
                         {t('pages:instanceHub.protection')}
                       </option>
+                      <option value="runs">{t('pages:instanceHub.runs')}</option>
                     </select>
                   </div>
                 </label>
@@ -1166,7 +1172,9 @@ export const InstanceHub = ({
                       <th>{t('pages:instanceHub.career')}</th>
                       <th align="right">{t('pages:instanceHub.level')}</th>
                       <th align="right">{t(`pages:instanceHub.${metric}`)}</th>
-                      <th align="right">{t('pages:instanceHub.runs')}</th>
+                      {metric !== 'runs' && (
+                        <th align="right">{t('pages:instanceHub.runs')}</th>
+                      )}
                       <th></th>
                     </tr>
                   </thead>
@@ -1189,7 +1197,9 @@ export const InstanceHub = ({
                           CR {entry.level} · RR {entry.renownRank}
                         </td>
                         <td align="right">{entry.value.toLocaleString()}</td>
-                        <td align="right">{entry.runCount}</td>
+                        {metric !== 'runs' && (
+                          <td align="right">{entry.runCount}</td>
+                        )}
                         <td>
                           <Link
                             to={`/instance-run/${entry.runId}`}
