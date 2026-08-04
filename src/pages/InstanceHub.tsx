@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { useApolloClient, useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams, useSearchParams } from 'react-router';
-import { useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useState } from 'react';
 import { format, formatDuration, intervalToDuration } from 'date-fns';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
@@ -140,6 +140,57 @@ const runWasCleared = (run: HubRun): boolean => {
     );
   }
   return [...downedByEncounterId.values()].every(Boolean);
+};
+
+interface RunCluster {
+  primary: HubRun;
+  wiped: HubRun[];
+}
+
+// Separate InstanceRun rows recorded close together in time are almost
+// always the same group's session: a few short wiped attempts followed by
+// the run that actually cleared everything. Flat-listing all of them makes
+// the Runs tab look like it's mostly failures. Cluster runs whose gap to the
+// previous run's end is under 20 minutes, surface the cluster's cleared run
+// (or its last attempt, if none cleared) as the visible row, and nest the
+// rest as collapsible detail.
+const CLUSTER_GAP_MS = 20 * 60 * 1000;
+
+const clusterRuns = (runs: HubRun[]): RunCluster[] => {
+  const chronological = runs.toSorted(
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime(),
+  );
+
+  const groups: HubRun[][] = [];
+  for (const run of chronological) {
+    const currentGroup = groups[groups.length - 1];
+    const previousRun = currentGroup?.[currentGroup.length - 1];
+    const gapMs = previousRun
+      ? new Date(run.start).getTime() - new Date(previousRun.end).getTime()
+      : undefined;
+
+    if (currentGroup && gapMs !== undefined && gapMs <= CLUSTER_GAP_MS) {
+      currentGroup.push(run);
+    } else {
+      groups.push([run]);
+    }
+  }
+
+  return groups
+    .map((group) => {
+      const cleared = group.filter(runWasCleared);
+      const primary = cleared.length > 0 ? cleared.at(-1)! : group.at(-1)!;
+      return {
+        latestStart: group.at(-1)!.start,
+        primary,
+        wiped: group.filter((run) => run.id !== primary.id),
+      };
+    })
+    .toSorted(
+      (a, b) =>
+        new Date(b.latestStart).getTime() - new Date(a.latestStart).getTime(),
+    )
+    .map(({ primary, wiped }) => ({ primary, wiped }));
 };
 
 interface CharacterSummary {
@@ -500,6 +551,22 @@ export const InstanceHub = ({
     ? windowTotal
     : (recentData?.instanceRuns?.totalCount ?? 0);
 
+  const runClusters = useMemo(() => clusterRuns(runs), [runs]);
+  const [expandedClusters, setExpandedClusters] = useState<Set<string>>(
+    new Set(),
+  );
+  const toggleCluster = (primaryId: string): void => {
+    setExpandedClusters((previous) => {
+      const next = new Set(previous);
+      if (next.has(primaryId)) {
+        next.delete(primaryId);
+      } else {
+        next.add(primaryId);
+      }
+      return next;
+    });
+  };
+
   const characters = useMemo(() => summarizeCharacters(runs), [runs]);
   const {
     items: sortedCharacters,
@@ -766,34 +833,95 @@ export const InstanceHub = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {runs.map((run) => (
-                      <tr key={run.id}>
-                        <td>
-                          <small>
-                            {format(new Date(run.start), 'yyyy-MM-dd HH:mm')}
-                          </small>
-                        </td>
-                        <td>{formatDurationBetween(run.start, run.end)}</td>
-                        <td>
-                          {runWasCleared(run)
-                            ? t('pages:instanceHub.completed')
-                            : t('pages:instanceHub.notCompleted')}
-                        </td>
-                        <td align="center">
-                          {run.scoreboardEntries
-                            .map((entry) => Number(entry.deaths))
-                            .reduce((a, b) => a + b, 0)}
-                        </td>
-                        <td>
-                          <Link
-                            to={`/instance-run/${run.id}`}
-                            className="button is-primary p-2 is-pulled-right"
-                          >
-                            {t('common:details')}
-                          </Link>
-                        </td>
-                      </tr>
-                    ))}
+                    {runClusters.map(({ primary, wiped }) => {
+                      const expanded = expandedClusters.has(primary.id);
+                      const cleared = runWasCleared(primary);
+
+                      return (
+                        <Fragment key={primary.id}>
+                          <tr>
+                            <td>
+                              <small>
+                                {format(
+                                  new Date(primary.start),
+                                  'yyyy-MM-dd HH:mm',
+                                )}
+                              </small>
+                            </td>
+                            <td>
+                              {formatDurationBetween(
+                                primary.start,
+                                primary.end,
+                              )}
+                            </td>
+                            <td>
+                              {cleared
+                                ? t('pages:instanceHub.completed')
+                                : t('pages:instanceHub.notCompleted')}
+                              {wiped.length > 0 && (
+                                <>
+                                  {' '}
+                                  <button
+                                    type="button"
+                                    className="button is-small is-ghost has-text-grey p-0"
+                                    onClick={() => toggleCluster(primary.id)}
+                                  >
+                                    {t('pages:instanceHub.wipedAttempts', {
+                                      count: wiped.length,
+                                    })}{' '}
+                                    {expanded ? '▾' : '▸'}
+                                  </button>
+                                </>
+                              )}
+                            </td>
+                            <td align="center">
+                              {primary.scoreboardEntries
+                                .map((entry) => Number(entry.deaths))
+                                .reduce((a, b) => a + b, 0)}
+                            </td>
+                            <td>
+                              <Link
+                                to={`/instance-run/${primary.id}`}
+                                className="button is-primary p-2 is-pulled-right"
+                              >
+                                {t('common:details')}
+                              </Link>
+                            </td>
+                          </tr>
+                          {expanded &&
+                            wiped.map((run) => (
+                              <tr key={run.id} className="has-text-grey">
+                                <td>
+                                  <small>
+                                    {'↳ '}
+                                    {format(
+                                      new Date(run.start),
+                                      'yyyy-MM-dd HH:mm',
+                                    )}
+                                  </small>
+                                </td>
+                                <td>
+                                  {formatDurationBetween(run.start, run.end)}
+                                </td>
+                                <td>{t('pages:instanceHub.notCompleted')}</td>
+                                <td align="center">
+                                  {run.scoreboardEntries
+                                    .map((entry) => Number(entry.deaths))
+                                    .reduce((a, b) => a + b, 0)}
+                                </td>
+                                <td>
+                                  <Link
+                                    to={`/instance-run/${run.id}`}
+                                    className="button is-small p-2 is-pulled-right"
+                                  >
+                                    {t('common:details')}
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))}
+                        </Fragment>
+                      );
+                    })}
                   </tbody>
                 </table>
               </div>

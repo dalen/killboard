@@ -2,7 +2,7 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import type { Query } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
@@ -64,6 +64,15 @@ export const InstanceStatistics = (): ReactElement => {
       ),
     [data],
   );
+
+  // Bastion Stair's four named bosses (and similar cases like Gunbad's Squig
+  // Boss) are each their own instance ID under the hood - keep the group's
+  // main dungeon encounters as the primary list, and tuck the named-boss
+  // instance IDs into a collapsible section beneath it instead of mixing
+  // them into one flat list.
+  const coreRows = rows.filter((row) => row.instanceId === group?.id);
+  const namedBossRows = rows.filter((row) => row.instanceId !== group?.id);
+  const [showNamedBosses, setShowNamedBosses] = useState(false);
 
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
@@ -139,7 +148,7 @@ export const InstanceStatistics = (): ReactElement => {
           </tr>
         </thead>
         <tbody>
-          {rows.map((row) => (
+          {coreRows.map((row) => (
             <InstanceEncounterStatistics
               key={`${row.instanceId}-${row.encounterId}`}
               name={row.name}
@@ -147,6 +156,33 @@ export const InstanceStatistics = (): ReactElement => {
               encounterId={row.encounterId}
             />
           ))}
+          {namedBossRows.length > 0 && (
+            <>
+              <tr>
+                <td colSpan={4}>
+                  <button
+                    type="button"
+                    className="button is-small is-ghost has-text-link p-0"
+                    onClick={() => setShowNamedBosses((current) => !current)}
+                  >
+                    {t('pages:instanceStatistics.namedBosses', {
+                      count: namedBossRows.length,
+                    })}{' '}
+                    {showNamedBosses ? '▾' : '▸'}
+                  </button>
+                </td>
+              </tr>
+              {showNamedBosses &&
+                namedBossRows.map((row) => (
+                  <InstanceEncounterStatistics
+                    key={`${row.instanceId}-${row.encounterId}`}
+                    name={row.name}
+                    instanceId={row.instanceId}
+                    encounterId={row.encounterId}
+                  />
+                ))}
+            </>
+          )}
         </tbody>
       </table>
     </div>
