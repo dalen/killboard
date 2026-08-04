@@ -297,6 +297,7 @@
     "gatheringRuns": "gathering {{loaded}} of {{total}}",
     "rangeRunsNote": "{{count}} runs \u00b7 {{rangeLabel}}",
     "durationOutliersExcluded": "{{count}} run(s) excluded from the average for an implausible duration (likely abandoned/never-closed sessions).",
-    "wipedAttempts": "{{count}} wiped attempt(s)"
+    "wipedAttempts": "{{count}} wiped attempt(s)",
+    "runs": "Runs"
   }
 }

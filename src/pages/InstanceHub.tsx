@@ -211,6 +211,7 @@ interface LeaderboardEntry {
   level: number;
   name: string;
   renownRank: number;
+  runCount: number;
   runId: string;
   value: number;
 }
@@ -268,6 +269,7 @@ const buildLeaderboard = ({
   realm: RealmFilter;
 }): LeaderboardEntry[] => {
   const best = new Map<string, LeaderboardEntry>();
+  const runCounts = new Map<string, number>();
 
   for (const run of runs) {
     for (const entry of run.scoreboardEntries) {
@@ -275,6 +277,11 @@ const buildLeaderboard = ({
       const matchesRealm =
         realm === 'all' || careerRealm(entry.character.career) === realm;
       if (matchesRole && matchesRealm) {
+        runCounts.set(
+          entry.character.id,
+          (runCounts.get(entry.character.id) ?? 0) + 1,
+        );
+
         const value = Number(entry[metric]);
         const current = best.get(entry.character.id);
         if (!current || value > current.value) {
@@ -284,6 +291,7 @@ const buildLeaderboard = ({
             level: Number(entry.level),
             name: entry.character.name,
             renownRank: Number(entry.renownRank),
+            runCount: 0,
             runId: run.id,
             value,
           });
@@ -292,7 +300,12 @@ const buildLeaderboard = ({
     }
   }
 
-  return [...best.values()].toSorted((a, b) => b.value - a.value);
+  return [...best.values()]
+    .map((entry) => ({
+      ...entry,
+      runCount: runCounts.get(entry.characterId) ?? 0,
+    }))
+    .toSorted((a, b) => b.value - a.value);
 };
 
 const formatDurationBetween = (start: string, end: string): string =>
@@ -1153,6 +1166,7 @@ export const InstanceHub = ({
                       <th>{t('pages:instanceHub.career')}</th>
                       <th align="right">{t('pages:instanceHub.level')}</th>
                       <th align="right">{t(`pages:instanceHub.${metric}`)}</th>
+                      <th align="right">{t('pages:instanceHub.runs')}</th>
                       <th></th>
                     </tr>
                   </thead>
@@ -1175,6 +1189,7 @@ export const InstanceHub = ({
                           CR {entry.level} · RR {entry.renownRank}
                         </td>
                         <td align="right">{entry.value.toLocaleString()}</td>
+                        <td align="right">{entry.runCount}</td>
                         <td>
                           <Link
                             to={`/instance-run/${entry.runId}`}
