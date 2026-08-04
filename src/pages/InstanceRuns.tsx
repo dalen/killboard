@@ -14,6 +14,9 @@ export const InstanceRuns = (): ReactElement => {
           <li>
             <Link to="/">{t('common:home')}</Link>
           </li>
+          <li>
+            <Link to="/instances/">{t('common:instances')}</Link>
+          </li>
           <li className="is-active">
             <Link to="/instance-runs">{t('pages:instanceRuns.title')}</Link>
           </li>

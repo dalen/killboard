@@ -72,9 +72,11 @@ export const Instances = (): ReactElement => {
         id: group.id,
         name: group.name,
       };
-    }).filter((card) =>
-      nameFilter ? card.name.toLowerCase().includes(nameFilter) : true,
-    );
+    })
+      .filter((card) =>
+        nameFilter ? card.name.toLowerCase().includes(nameFilter) : true,
+      )
+      .toSorted((a, b) => b.encounterCount - a.encounterCount);
   }, [data, nameFilter]);
 
   return (

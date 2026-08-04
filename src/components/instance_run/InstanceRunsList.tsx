@@ -317,16 +317,8 @@ export const InstanceRunsList = () => {
               )}
               onClick={() => requestSort('deaths')}
             >
-              <span className="icon">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={36}
-                  height={32}
-                  alt={t('pages:instanceRuns.deaths') ?? ''}
-                  title={t('pages:instanceRuns.deaths') ?? ''}
-                />
-              </span>
-            </th>{' '}
+              {t('pages:instanceRuns.deaths')}
+            </th>
             <th
               align="center"
               className={clsx(

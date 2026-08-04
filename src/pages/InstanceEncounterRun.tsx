@@ -105,7 +105,7 @@ export const InstanceEncounterRun = (): ReactElement => {
             <Link to="/">{t('common:home')}</Link>
           </li>
           <li>
-            <Link to="/instance-runs">{t('common:instanceRuns')}</Link>
+            <Link to="/instances/">{t('common:instances')}</Link>
           </li>
           <li>
             <Link to={`/instance-run/${instanceRunId}`}>
