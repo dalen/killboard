@@ -89,9 +89,6 @@ export const InstanceStatistics = (): ReactElement => {
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
-            <Link to="/">{t('common:home')}</Link>
-          </li>
-          <li>
             <Link to="/instances/">{t('common:instances')}</Link>
           </li>
           <li className="is-active">
