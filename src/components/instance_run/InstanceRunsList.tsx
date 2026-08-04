@@ -69,6 +69,30 @@ const INSTANCE_RUNS = gql`
   }
 `;
 
+// The API's averageDuration aggregate isn't reliable for instances with a lot
+// of history - runs that never got a proper `end` written (abandoned/never-
+// closed sessions) can drag it into the thousands of days (see comment below
+// on averageDurationParsed). Sampling the most recent runs and computing a
+// duration average client-side, excluding implausible outliers, gives users
+// something honest to look at in the meantime. This should go away once the
+// API filters bad rows out of its own aggregate - see the notes for dalen.
+const DURATION_SAMPLE_SIZE = 500;
+const MAX_PLAUSIBLE_DURATION_MS = 7 * 60 * 60 * 1000; // 7 hours
+
+const INSTANCE_RUNS_DURATION_SAMPLE = gql`
+  query GetInstanceRunsDurationSample(
+    $first: Int
+    $where: InstanceRunFilterInput
+  ) {
+    instanceRuns(first: $first, where: $where, order: { start: DESC }) {
+      nodes {
+        start
+        end
+      }
+    }
+  }
+`;
+
 interface InstanceRunRow {
   deaths: number;
   durationMs: number;
@@ -96,8 +120,40 @@ export const InstanceRunsList = () => {
       where: getInstanceRunsFilters(search),
     },
   });
+  const { data: durationSampleData } = useQuery<Query>(
+    INSTANCE_RUNS_DURATION_SAMPLE,
+    {
+      variables: {
+        first: DURATION_SAMPLE_SIZE,
+        where: getInstanceRunsFilters(search),
+      },
+    },
+  );
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+
+  const durationSample = useMemo(() => {
+    const nodes = durationSampleData?.instanceRuns?.nodes ?? [];
+    const durationsMs = nodes
+      .map(
+        (node) => new Date(node.end).getTime() - new Date(node.start).getTime(),
+      )
+      .filter((ms) => Number.isFinite(ms) && ms >= 0);
+    const saneDurationsMs = durationsMs.filter(
+      (ms) => ms <= MAX_PLAUSIBLE_DURATION_MS,
+    );
+
+    if (saneDurationsMs.length === 0) {
+      return null;
+    }
+
+    return {
+      averageMs:
+        saneDurationsMs.reduce((a, b) => a + b, 0) / saneDurationsMs.length,
+      excluded: durationsMs.length - saneDurationsMs.length,
+      sampleSize: durationsMs.length,
+    };
+  }, [durationSampleData]);
 
   const rows = useMemo<InstanceRunRow[]>(
     () =>
@@ -171,18 +227,25 @@ export const InstanceRunsList = () => {
 
   // A meaningful chunk of instanceRuns rows never get a proper `end` written
   // (abandoned/never-closed sessions), which can drag the API's averageDuration
-  // into the thousands of days for instances with a lot of history. That's a
-  // data-quality issue upstream, not something to silently paper over - but
-  // showing "7030 days" as if it were a real number is worse than saying
-  // "not available", so guard against implausible values until the API side
-  // filters these out.
+  // aggregate into the thousands of days for instances with a lot of history.
+  // Prefer a duration computed from a recent sample with implausible outliers
+  // (>7h) excluded - it's honest about its scope (see the note rendered below)
+  // rather than hiding the problem or showing a nonsensical number. Fall back
+  // to the raw API aggregate only when the sample query hasn't returned
+  // anything usable yet.
   const averageDurationParsed = parseIsoDuration(
     data.instanceRuns.averageDuration,
   );
-  const averageDurationIsPlausible = (averageDurationParsed.days ?? 0) < 1;
-  const averageDuration = averageDurationIsPlausible
-    ? formatDuration(averageDurationParsed)
-    : t('pages:instanceRuns.averageDurationUnavailable');
+  const apiAverageIsPlausible = (averageDurationParsed.days ?? 0) < 1;
+
+  let averageDuration = t('pages:instanceRuns.averageDurationUnavailable');
+  if (durationSample != null) {
+    averageDuration = formatDuration(
+      intervalToDuration({ end: durationSample.averageMs, start: 0 }),
+    );
+  } else if (apiAverageIsPlausible) {
+    averageDuration = formatDuration(averageDurationParsed);
+  }
 
   return (
     <>
@@ -192,6 +255,14 @@ export const InstanceRunsList = () => {
             <strong>{`${t('pages:instanceRuns.averageDuration')} `}</strong>
             {averageDuration}
           </p>
+          {durationSample != null && durationSample.excluded > 0 && (
+            <p className="is-size-7 has-text-grey">
+              {t('pages:instanceRuns.averageDurationSampleNote', {
+                excluded: durationSample.excluded,
+                sampleSize: durationSample.sampleSize,
+              })}
+            </p>
+          )}
         </div>
       </div>
       <table

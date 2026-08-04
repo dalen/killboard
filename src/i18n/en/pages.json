@@ -199,7 +199,8 @@
     "all": "All",
     "averageDuration": "Average Duration",
     "averageDeaths": "Average Deaths",
-    "averageDurationUnavailable": "Not available (some runs in this instance have invalid duration data)"
+    "averageDurationUnavailable": "Not available (some runs in this instance have invalid duration data)",
+    "averageDurationSampleNote": "Based on the {{sampleSize}} most recent runs; {{excluded}} excluded for exceeding 7 hours (likely abandoned/never-closed sessions)."
   },
   "instanceRun": {
     "title": "#{{id}}",
