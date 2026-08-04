@@ -18,6 +18,10 @@ import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { SortConfigDirection, useSortableData } from '@/hooks/useSortableData';
 import { parseFilterDate } from '@/components/scenario/ScenarioFilters';
+import {
+  getInstanceGroupById,
+  getInstanceGroupByIdOrFallback,
+} from '@/utils/instanceGroups';
 import { INSTANCE_RUN_SCOREBOARD_FRAGMENT } from '@/components/instance_run/InstanceRunScoreboard';
 
 // Inspired by maartenson.net's per-dungeon Runs/Characters/Leaderboards
@@ -69,6 +73,10 @@ const INSTANCE_HUB_RUNS = gql`
         start
         end
         completed
+        encounters {
+          encounterId
+          completed
+        }
         scoreboardEntries {
           ...InstanceRunScoreboardEntry
         }
@@ -106,11 +114,33 @@ const careerRealm = (career: Career): 'ORDER' | 'DESTRUCTION' =>
 
 interface HubRun {
   completed: boolean;
+  encounters: { completed: boolean; encounterId: string }[];
   end: string;
   id: string;
   scoreboardEntries: InstanceRunScoreboardEntryFragment[];
   start: string;
 }
+
+// The InstanceRun's own `completed` field tracks whether the session was
+// properly closed server-side, not whether the group actually downed
+// everything they fought - the vast majority of runs are `completed: false`
+// even when every boss they pulled died. Derive a "cleared" label instead
+// from the encounters themselves: true only if every distinct boss the group
+// engaged was eventually downed (no encounter left as a standing wipe).
+const runWasCleared = (run: HubRun): boolean => {
+  if (run.encounters.length === 0) {
+    return false;
+  }
+  const downedByEncounterId = new Map<string, boolean>();
+  for (const encounter of run.encounters) {
+    downedByEncounterId.set(
+      encounter.encounterId,
+      (downedByEncounterId.get(encounter.encounterId) ?? false) ||
+        encounter.completed,
+    );
+  }
+  return [...downedByEncounterId.values()].every(Boolean);
+};
 
 interface CharacterSummary {
   career: Career;
@@ -268,10 +298,13 @@ const getHubTimeWindow = (
 };
 
 const buildRunsWhere = (
-  instanceIdNum: number,
+  instanceIds: number[],
   window?: { end?: Date; start?: Date },
 ): InstanceRunFilterInput => ({
-  instanceId: { eq: instanceIdNum },
+  instanceId:
+    instanceIds.length === 1
+      ? { eq: instanceIds[0] }
+      : { in: instanceIds },
   ...(window?.start || window?.end
     ? {
         start: {
@@ -308,11 +341,20 @@ export const InstanceHub = ({
   const isMobile = width <= 768;
   const client = useApolloClient();
 
+  const knownGroup = id ? getInstanceGroupById(Number(id)) : undefined;
+  // A handful of instance IDs are really just one wing of a larger dungeon
+  // (see src/utils/instanceGroups.ts) - for those, the curated group name is
+  // used directly and this query is skipped entirely. It only runs for
+  // instance IDs the curated list doesn't recognize, purely to get a display
+  // name for the fallback single-instance "group".
   const { data: metaData } = useQuery<Query>(INSTANCE_HUB_META, {
-    skip: !id,
+    skip: !id || knownGroup != null,
     variables: { id },
   });
-  const instanceName = metaData?.instance?.name;
+  const group = id
+    ? getInstanceGroupByIdOrFallback(Number(id), metaData?.instance?.name)
+    : undefined;
+  const instanceName = group?.name;
 
   const range = (search.get('range') as RangeKey | null) ?? 'recent';
   const isWindowed = range !== 'recent';
@@ -324,10 +366,10 @@ export const InstanceHub = ({
     loading: recentLoading,
     error: recentError,
   } = useQuery<Query>(INSTANCE_HUB_RUNS, {
-    skip: !id || isWindowed,
+    skip: !id || isWindowed || !group,
     variables: {
       first: RUNS_TO_LOAD,
-      where: buildRunsWhere(Number(id)),
+      where: group ? buildRunsWhere(group.instanceIds) : {},
     },
   });
 
@@ -337,7 +379,7 @@ export const InstanceHub = ({
   const [windowError, setWindowError] = useState<Error>();
 
   useEffect(() => {
-    if (!isWindowed || !id) {
+    if (!isWindowed || !id || !group) {
       setWindowRuns([]);
       setWindowTotal(0);
       setWindowLoading(false);
@@ -348,8 +390,7 @@ export const InstanceHub = ({
     let cancelled = false;
     let total: number | undefined;
     const controller = new AbortController();
-    const instanceIdNum = Number(id);
-    const where = buildRunsWhere(instanceIdNum, timeWindow);
+    const where = buildRunsWhere(group.instanceIds, timeWindow);
 
     // Cursors from this API are base64-encoded zero-based offsets, so an
     // arbitrary [start, start + count) window can be requested directly.
@@ -734,7 +775,7 @@ export const InstanceHub = ({
                         </td>
                         <td>{formatDurationBetween(run.start, run.end)}</td>
                         <td>
-                          {run.completed
+                          {runWasCleared(run)
                             ? t('pages:instanceHub.completed')
                             : t('pages:instanceHub.notCompleted')}
                         </td>
