@@ -2,30 +2,21 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import type {
-  GetInstancesQuery,
-  InstanceFilterInput,
-} from '@/__generated__/graphql';
+import { useMemo } from 'react';
+import type { GetInstancesQuery } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
-import { QueryPagination } from '@/components/global/QueryPagination';
 import type { ReactElement } from 'react';
+import { INSTANCE_GROUPS } from '@/utils/instanceGroups';
+
+// There are only ~20 instances total (a handful of which get merged into
+// single dungeon groups below), so the whole list fits in one request - no
+// need for the pagination the site uses on genuinely large lists.
+const MAX_INSTANCES = 50;
 
 const QUERY = gql`
-  query GetInstances(
-    $first: Int
-    $last: Int
-    $before: String
-    $after: String
-    $where: InstanceFilterInput
-  ) {
-    instances(
-      first: $first
-      last: $last
-      before: $before
-      after: $after
-      where: $where
-    ) {
+  query GetInstances($first: Int) {
+    instances(first: $first) {
       nodes {
         id
         name
@@ -33,53 +24,63 @@ const QUERY = gql`
           id
         }
       }
-      pageInfo {
-        hasNextPage
-        endCursor
-        hasPreviousPage
-        startCursor
-      }
     }
   }
 `;
 
-const getInstanceNameFilter = (
-  search: URLSearchParams,
-): InstanceFilterInput => {
-  const name = search.get('name');
-
-  if (!name) {
-    return {};
-  }
-
-  return { name: { contains: name } };
-};
-
-const getFilters = (search: URLSearchParams): InstanceFilterInput => ({
-  ...getInstanceNameFilter(search),
-});
+interface InstanceCard {
+  encounterCount: number;
+  id: number;
+  name: string;
+}
 
 export const Instances = (): ReactElement => {
-  const perPage = 15;
   const [search, setSearch] = useSearchParams();
-  const { t } = useTranslation(['common', 'pages', 'enums']);
-  const { loading, error, data, refetch } = useQuery<GetInstancesQuery>(QUERY, {
-    variables: {
-      first: perPage,
-      where: getFilters(search),
-    },
+  const { t } = useTranslation(['common', 'pages']);
+  const { loading, error, data } = useQuery<GetInstancesQuery>(QUERY, {
+    variables: { first: MAX_INSTANCES },
   });
 
-  const entries = data?.instances?.nodes;
-  const { pageInfo } = data?.instances ?? {};
+  const nameFilter = (search.get('name') ?? '').toLowerCase();
+
+  // Several "instances" the API returns are really just a single wing/boss
+  // of a larger dungeon (see src/utils/instanceGroups.ts) - fold them into
+  // one card per dungeon, with a de-duplicated encounter count across every
+  // instance ID in the group.
+  const cards = useMemo<InstanceCard[]>(() => {
+    const instances = data?.instances?.nodes ?? [];
+    const encounterIdsByInstanceId = new Map<number, string[]>();
+    for (const instance of instances) {
+      encounterIdsByInstanceId.set(
+        Number(instance.id),
+        (instance.encounters ?? [])
+          .filter((encounter): encounter is { id: string } => encounter != null)
+          .map((encounter) => encounter.id),
+      );
+    }
+
+    return INSTANCE_GROUPS.map((group) => {
+      const encounterIds = new Set<string>();
+      for (const instanceId of group.instanceIds) {
+        for (const encounterId of encounterIdsByInstanceId.get(instanceId) ??
+          []) {
+          encounterIds.add(encounterId);
+        }
+      }
+      return {
+        encounterCount: encounterIds.size,
+        id: group.id,
+        name: group.name,
+      };
+    }).filter((card) =>
+      nameFilter ? card.name.toLowerCase().includes(nameFilter) : true,
+    );
+  }, [data, nameFilter]);
 
   return (
     <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
-          <li>
-            <Link to="/">{t('common:home')}</Link>
-          </li>
           <li className="is-active">
             <Link to="/instances">{t('pages:instances.title')}</Link>
           </li>
@@ -99,43 +100,39 @@ export const Instances = (): ReactElement => {
         </label>
       </div>
 
-      {loading && entries == null && <progress className="progress" />}
+      {loading && data == null && <progress className="progress" />}
       {!loading && error && (
         <ErrorMessage name={error.name} message={error.message} />
       )}
-      {!loading && !error && entries == null && (
+      {!loading && !error && cards.length === 0 && (
         <ErrorMessage customText={t('common:notFound')} />
       )}
-      {entries != null && entries.length === 0 && (
-        <ErrorMessage customText={t('common:notFound')} />
-      )}
-      {entries != null && entries.length > 0 && (
+      {cards.length > 0 && (
         <div className="instance-card-grid">
-          {entries.map((instance) => (
-            <article className="instance-card" key={instance.id}>
+          {cards.map((card) => (
+            <article className="instance-card" key={card.id}>
               <div className="instance-card-header">
                 <span className="instance-card-icon">
                   <i className="fas fa-dungeon" aria-hidden="true" />
                 </span>
                 <strong>
-                  <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
+                  <Link to={`/instance/${card.id}`}>{card.name}</Link>
                 </strong>
               </div>
               <div className="instance-card-meta">
                 <span>
-                  {instance.encounters?.length || 0}{' '}
-                  {t('pages:instances.encounters')}
+                  {card.encounterCount} {t('pages:instances.encounters')}
                 </span>
               </div>
               <div className="instance-card-actions">
                 <Link
-                  to={`/instance/${instance.id}`}
+                  to={`/instance/${card.id}`}
                   className="button is-primary is-small"
                 >
                   {t('pages:instances.runs')}
                 </Link>
                 <Link
-                  to={`/instance-statistics/${instance.id}`}
+                  to={`/instance-statistics/${card.id}`}
                   className="button is-small"
                 >
                   {t('pages:instances.statistics')}
@@ -144,13 +141,6 @@ export const Instances = (): ReactElement => {
             </article>
           ))}
         </div>
-      )}
-      {entries != null && pageInfo && (
-        <QueryPagination
-          pageInfo={pageInfo}
-          perPage={perPage}
-          refetch={refetch}
-        />
       )}
     </div>
   );
