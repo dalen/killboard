@@ -76,7 +76,11 @@ const INSTANCE_RUNS = gql`
 // duration average client-side, excluding implausible outliers, gives users
 // something honest to look at in the meantime. This should go away once the
 // API filters bad rows out of its own aggregate - see the notes for dalen.
-const DURATION_SAMPLE_SIZE = 500;
+// Capped at 50 because that's the API's hard per-request page-size ceiling
+// (HC0051) - a bigger "sample" would need to paginate across multiple
+// requests, which starts to look like the kind of separate client-side sync
+// logic we're trying to avoid.
+const DURATION_SAMPLE_SIZE = 50;
 const MAX_PLAUSIBLE_DURATION_MS = 7 * 60 * 60 * 1000; // 7 hours
 
 const INSTANCE_RUNS_DURATION_SAMPLE = gql`
