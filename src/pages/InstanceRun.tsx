@@ -40,7 +40,6 @@ const INSTANCE_RUN = gql`
         instanceId
         encounterId
         scoreboardEntries {
-          itemRating
           archetype
           deaths
           damage
@@ -84,13 +83,6 @@ export const InstanceRun = (): ReactElement => {
   });
 
   const instanceDuration = formatDuration(instanceDurationObject);
-  const instanceItemRatings = instanceRun.scoreboardEntries.map(
-    (e) => e.itemRating,
-  );
-  const instanceItemRatingMin = Math.min(...instanceItemRatings);
-  const instanceItemRatingMax = Math.max(...instanceItemRatings);
-  const instanceItemRatingAverage =
-    instanceItemRatings.reduce((a, b) => a + b) / instanceItemRatings.length;
   const instanceNumTanks = instanceRun.scoreboardEntries.filter(
     (e) => e.archetype === Archetype.Tank,
   ).length;
@@ -138,20 +130,6 @@ export const InstanceRun = (): ReactElement => {
             </div>
             <div className="media-content">
               <p>
-                <strong>{t('pages:instanceRun.itemRatingMin')}</strong>{' '}
-                {instanceItemRatingMin}
-              </p>
-              <p>
-                <strong>{t('pages:instanceRun.itemRatingAverage')}</strong>{' '}
-                {instanceItemRatingAverage.toFixed(0)}
-              </p>
-              <p>
-                <strong>{t('pages:instanceRun.itemRatingMax')}</strong>{' '}
-                {instanceItemRatingMax}
-              </p>
-            </div>
-            <div className="media-content">
-              <p>
                 <strong>{t('pages:instanceRun.numTanks')}</strong>{' '}
                 {instanceNumTanks}
               </p>
@@ -183,20 +161,7 @@ export const InstanceRun = (): ReactElement => {
             <th>{t('pages:instanceRun.startTime')}</th>
             <th>{t('pages:instanceRun.encounter')}</th>
             <th>{t('pages:instanceRun.duration')}</th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={36}
-                  height={32}
-                  alt={t('pages:instanceRun.deaths') ?? ''}
-                  title={t('pages:instanceRun.deaths') ?? ''}
-                />
-              </span>
-            </th>
-            <th>{t('pages:instanceRun.itemRatingMin')}</th>
-            <th>{t('pages:instanceRun.itemRatingAverage')}</th>
-            <th>{t('pages:instanceRun.itemRatingMax')}</th>
+            <th align="center">{t('pages:instanceRun.deaths')}</th>
             <th align="center">
               <span className="icon">
                 <img
@@ -242,13 +207,6 @@ export const InstanceRun = (): ReactElement => {
             });
 
             const duration = formatDuration(durationObject);
-            const itemRatings = instanceEncounterRun.scoreboardEntries.map(
-              (e) => e.itemRating,
-            );
-            const itemRatingMin = Math.min(...itemRatings);
-            const itemRatingMax = Math.max(...itemRatings);
-            const itemRatingAverage =
-              itemRatings.reduce((a, b) => a + b) / itemRatings.length;
             const numTanks = instanceEncounterRun.scoreboardEntries.filter(
               (e) => e.archetype === Archetype.Tank,
             ).length;
@@ -294,9 +252,6 @@ export const InstanceRun = (): ReactElement => {
                     .map((e) => e.deaths)
                     .reduce((a, b) => a + b, 0)}
                 </td>
-                <td align="center">{itemRatingMin}</td>
-                <td align="center">{itemRatingAverage.toFixed(0)}</td>
-                <td align="center">{itemRatingMax}</td>
                 <td align="center">{numTanks}</td>
                 <td align="center">{numHealers}</td>
                 <td align="center">{numDPS}</td>
