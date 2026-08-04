@@ -212,7 +212,8 @@
     "deaths": "Deaths",
     "numTanks": "Tanks",
     "numDps": "Dps",
-    "numHealers": "Healers"
+    "numHealers": "Healers",
+    "wipedAttempts": "{{count}} wiped attempt(s)"
   },
   "instanceEncounterRun": {
     "title": "Encounter #{{id}}",
