@@ -95,7 +95,7 @@ export const Instances = (): ReactElement => {
             <Link to="/">{t('common:home')}</Link>
           </li>
           <li className="is-active">
-            <Link to="/creatures">{t('pages:creatures.title')}</Link>
+            <Link to="/instances">{t('common:instances')}</Link>
           </li>
         </ul>
       </nav>

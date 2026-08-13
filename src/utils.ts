@@ -1,3 +1,4 @@
+import type { Duration } from 'date-fns';
 import type { QuestTypeFlagsFlags } from '@/__generated__/graphql';
 import {
   Career,
@@ -83,6 +84,29 @@ export const careerIcon = (career: Career): string => {
       return '/images/icons/hidden.png';
     }
   }
+};
+
+// The API's Duration scalar serializes as an ISO-8601 duration string (e.g.
+// "P19DT16H26M27.52S" or "PT1M34.729S"), not a millisecond count - passing
+// it straight into `new Date(x)` produces an Invalid Date / NaN. This
+// parses just the day/hour/minute/second components (TimeSpans never carry
+// year/month/week designators) directly into a date-fns Duration object,
+// ready for formatDuration() with no Date math involved.
+const ISO_DURATION_PATTERN =
+  /^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:([\d.]+)S)?)?$/;
+
+export const parseIsoDuration = (iso: string): Duration => {
+  const match = ISO_DURATION_PATTERN.exec(iso);
+  if (!match) {
+    return {};
+  }
+  const [, days, hours, minutes, seconds] = match;
+  return {
+    days: days ? Number(days) : undefined,
+    hours: hours ? Number(hours) : undefined,
+    minutes: minutes ? Number(minutes) : undefined,
+    seconds: seconds ? Math.round(Number(seconds)) : undefined,
+  };
 };
 
 export const variablesFromCursor = (

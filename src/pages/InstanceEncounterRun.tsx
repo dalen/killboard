@@ -102,10 +102,7 @@ export const InstanceEncounterRun = (): ReactElement => {
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
-            <Link to="/">{t('common:home')}</Link>
-          </li>
-          <li>
-            <Link to="/instance-runs">{t('common:instanceRuns')}</Link>
+            <Link to="/instances/">{t('common:instances')}</Link>
           </li>
           <li>
             <Link to={`/instance-run/${instanceRunId}`}>

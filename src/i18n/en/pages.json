@@ -171,7 +171,9 @@
     "encounter": "Encounter",
     "medianDuration": "Median Duration",
     "medianDeaths": "Median Deaths",
-    "averageDeaths": "Average Deaths"
+    "averageDeaths": "Average Deaths",
+    "completedOnly": "Completed only",
+    "namedBosses": "Named Bosses ({{count}})"
   },
   "instanceRuns": {
     "title": "Instance Runs",
@@ -180,15 +182,15 @@
     "instance": "Instance",
     "encounters": "Encounters",
     "deaths": "Deaths",
-    "itemRatingMin": "Min Item",
-    "itemRatingMax": "Max Item",
-    "itemRatingAverage": "Avg Item",
     "numTanks": "Tanks",
     "numDps": "Dps",
     "numHealers": "Healers",
     "all": "All",
     "averageDuration": "Average Duration",
-    "averageDeaths": "Average Deaths"
+    "averageDeaths": "Average Deaths",
+    "averageDurationUnavailable": "Not available (some runs in this instance have invalid duration data)",
+    "minCompletedEncounters": "Min completed encounters",
+    "averageDurationSampleNote": "Based on the {{sampleSize}} most recent runs; {{excluded}} excluded for exceeding 7 hours (likely abandoned/never-closed sessions)."
   },
   "instanceRun": {
     "title": "#{{id}}",
@@ -198,12 +200,10 @@
     "encounters": "Encounters",
     "encounter": "Encounter",
     "deaths": "Deaths",
-    "itemRatingMin": "Min Item",
-    "itemRatingMax": "Max Item",
-    "itemRatingAverage": "Avg Item",
     "numTanks": "Tanks",
     "numDps": "Dps",
-    "numHealers": "Healers"
+    "numHealers": "Healers",
+    "wipedAttempts": "{{count}} wiped attempt(s)"
   },
   "instanceEncounterRun": {
     "title": "Encounter #{{id}}",

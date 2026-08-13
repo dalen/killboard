@@ -7,13 +7,16 @@ import {
   formatISO,
   intervalToDuration,
 } from 'date-fns';
+import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import type { Query } from '@/__generated__/graphql';
 import { Archetype } from '@/__generated__/graphql';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
+import { SortConfigDirection, useSortableData } from '@/hooks/useSortableData';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { parseIsoDuration } from '@/utils';
 import clsx from 'clsx';
 
 const INSTANCE_RUNS = gql`
@@ -43,7 +46,6 @@ const INSTANCE_RUNS = gql`
           name
         }
         scoreboardEntries {
-          itemRating
           deaths
           archetype
           damage
@@ -66,6 +68,19 @@ const INSTANCE_RUNS = gql`
   }
 `;
 
+interface InstanceRunRow {
+  deaths: number;
+  durationMs: number;
+  encounters: number;
+  end: string;
+  id: string;
+  instanceName: string;
+  numDPS: number;
+  numHealers: number;
+  numTanks: number;
+  start: string;
+}
+
 export const InstanceRunsList = () => {
   const perPage = 25;
 
@@ -80,6 +95,52 @@ export const InstanceRunsList = () => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
+  const rows = useMemo<InstanceRunRow[]>(
+    () =>
+      (data?.instanceRuns?.nodes ?? []).map((instanceRun) => {
+        return {
+          deaths: instanceRun.scoreboardEntries
+            .map((entry) => entry.deaths)
+            .reduce((a, b) => a + b, 0),
+          durationMs:
+            new Date(instanceRun.end).getTime() -
+            new Date(instanceRun.start).getTime(),
+          encounters: new Set(instanceRun.encounters.map((e) => e.encounterId))
+            .size,
+          end: instanceRun.end,
+          id: instanceRun.id,
+          instanceName: instanceRun.instance.name,
+          numDPS: instanceRun.scoreboardEntries.filter((entry) =>
+            [Archetype.MeleeDps, Archetype.RangedDps].includes(entry.archetype),
+          ).length,
+          numHealers: instanceRun.scoreboardEntries.filter(
+            (entry) => entry.archetype === Archetype.Healer,
+          ).length,
+          numTanks: instanceRun.scoreboardEntries.filter(
+            (entry) => entry.archetype === Archetype.Tank,
+          ).length,
+          start: instanceRun.start,
+        };
+      }),
+    [data],
+  );
+
+  const {
+    items: sortedRows,
+    requestSort,
+    sortConfig,
+  } = useSortableData(rows, {
+    direction: SortConfigDirection.descending,
+    key: 'start',
+  });
+
+  const getSortClass = (key: string): string => {
+    if (!sortConfig || sortConfig.key !== key) {
+      return '';
+    }
+    return sortConfig.direction;
+  };
+
   if (data?.instanceRuns?.nodes?.length === 0) {
     return <p>{t('common:noResults')}</p>;
   }
@@ -93,12 +154,9 @@ export const InstanceRunsList = () => {
 
   const { pageInfo } = data.instanceRuns;
 
-  const averageDurationObject = intervalToDuration({
-    end: new Date(Math.round(data.instanceRuns.averageDuration)),
-    start: new Date(0),
-  });
-
-  const averageDuration = formatDuration(averageDurationObject);
+  const averageDuration = formatDuration(
+    parseIsoDuration(data.instanceRuns.averageDuration),
+  );
 
   return (
     <>
@@ -110,137 +168,169 @@ export const InstanceRunsList = () => {
           </p>
         </div>
       </div>
-      <table
-        className={clsx(
-          'table',
-          'is-striped',
-          'is-hoverable',
-          'is-marginless',
-          isMobile ? 'is-narrow' : 'is-fullwidth',
-        )}
-      >
-        <thead>
-          <tr>
-            <th>{t('pages:instanceRuns.startTime')}</th>
-            <th>{t('pages:instanceRuns.instance')}</th>
-            <th>{t('pages:instanceRuns.duration')}</th>
-            <th>{t('pages:instanceRuns.encounters')}</th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={36}
-                  height={32}
-                  alt={t('pages:instanceRuns.deaths') ?? ''}
-                  title={t('pages:instanceRuns.deaths') ?? ''}
-                />
-              </span>
-            </th>{' '}
-            <th>{t('pages:instanceRuns.itemRatingMin')}</th>
-            <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
-            <th>{t('pages:instanceRuns.itemRatingMax')}</th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/protection.png"
-                  width={28}
-                  height={33}
-                  alt={t('pages:instanceRuns.numTanks') ?? ''}
-                  title={t('pages:instanceRuns.numTanks') ?? ''}
-                />
-              </span>
-            </th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/healing.png"
-                  width={28}
-                  height={28}
-                  alt={t('pages:instanceRuns.numHealers') ?? ''}
-                  title={t('pages:instanceRuns.numHealers') ?? ''}
-                />
-              </span>
-            </th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/damage.png"
-                  width={30}
-                  height={32}
-                  alt={t('pages:instanceRuns.numDps') ?? ''}
-                  title={t('pages:instanceRuns.numDps') ?? ''}
-                />
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.instanceRuns.nodes.map((instanceRun) => {
-            const startDate = new Date(instanceRun.start);
-            const endDate = new Date(instanceRun.end);
-            const durationObject = intervalToDuration({
-              end: endDate,
-              start: startDate,
-            });
+      <div className="table-container">
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            'is-marginless',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
+          <thead className="is-relative">
+            <tr>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('start'),
+                )}
+                onClick={() => requestSort('start')}
+              >
+                {t('pages:instanceRuns.startTime')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('instanceName'),
+                )}
+                onClick={() => requestSort('instanceName')}
+              >
+                {t('pages:instanceRuns.instance')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('durationMs'),
+                )}
+                onClick={() => requestSort('durationMs')}
+              >
+                {t('pages:instanceRuns.duration')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('encounters'),
+                )}
+                onClick={() => requestSort('encounters')}
+              >
+                {t('pages:instanceRuns.encounters')}
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('deaths'),
+                )}
+                onClick={() => requestSort('deaths')}
+              >
+                {t('pages:instanceRuns.deaths')}
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numTanks'),
+                )}
+                onClick={() => requestSort('numTanks')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/protection.png"
+                    width={28}
+                    height={33}
+                    alt={t('pages:instanceRuns.numTanks') ?? ''}
+                    title={t('pages:instanceRuns.numTanks') ?? ''}
+                  />
+                </span>
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numHealers'),
+                )}
+                onClick={() => requestSort('numHealers')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/healing.png"
+                    width={28}
+                    height={28}
+                    alt={t('pages:instanceRuns.numHealers') ?? ''}
+                    title={t('pages:instanceRuns.numHealers') ?? ''}
+                  />
+                </span>
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numDPS'),
+                )}
+                onClick={() => requestSort('numDPS')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/damage.png"
+                    width={30}
+                    height={32}
+                    alt={t('pages:instanceRuns.numDps') ?? ''}
+                    title={t('pages:instanceRuns.numDps') ?? ''}
+                  />
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedRows.map((row) => {
+              const startDate = new Date(row.start);
 
-            const duration = formatDuration(durationObject);
-            const itemRatings = instanceRun.scoreboardEntries.map(
-              (e) => e.itemRating,
-            );
-            const itemRatingMin = Math.min(...itemRatings);
-            const itemRatingMax = Math.max(...itemRatings);
-            const itemRatingAverage =
-              itemRatings.reduce((a, b) => a + b) / itemRatings.length;
-            const numTanks = instanceRun.scoreboardEntries.filter(
-              (e) => e.archetype === Archetype.Tank,
-            ).length;
-            const numHealers = instanceRun.scoreboardEntries.filter(
-              (e) => e.archetype === Archetype.Healer,
-            ).length;
-            const numDPS = instanceRun.scoreboardEntries.filter((e) =>
-              [Archetype.MeleeDps, Archetype.RangedDps].includes(e.archetype),
-            ).length;
-
-            const numEncounters = new Set(
-              instanceRun.encounters.map((e) => e.encounterId),
-            ).size;
-
-            return (
-              <tr key={instanceRun.id}>
-                <td>
-                  <small>
-                    {formatISO(startDate, { representation: 'date' })}
-                    <br />
-                    {format(startDate, 'HH:mm')}
-                  </small>
-                </td>
-                <td>{instanceRun.instance.name}</td>
-                <td>{duration}</td>
-                <td>{numEncounters}</td>
-                <td align="center">
-                  {instanceRun.scoreboardEntries
-                    .map((e) => e.deaths)
-                    .reduce((a, b) => a + b, 0)}
-                </td>
-                <td align="center">{itemRatingMin}</td>
-                <td align="center">{itemRatingAverage.toFixed(0)}</td>
-                <td align="center">{itemRatingMax}</td>
-                <td align="center">{numTanks}</td>
-                <td align="center">{numHealers}</td>
-                <td align="center">{numDPS}</td>
-                <td>
-                  <Link
-                    to={`/instance-run/${instanceRun.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
-                    {t('common:details')}
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={row.id}>
+                  <td>
+                    <small>
+                      {formatISO(startDate, { representation: 'date' })}
+                      <br />
+                      {format(startDate, 'HH:mm')}
+                    </small>
+                  </td>
+                  <td>{row.instanceName}</td>
+                  <td>
+                    {formatDuration(
+                      intervalToDuration({
+                        end: new Date(row.end),
+                        start: startDate,
+                      }),
+                    )}
+                  </td>
+                  <td>{row.encounters}</td>
+                  <td align="center">{row.deaths}</td>
+                  <td align="center">{row.numTanks}</td>
+                  <td align="center">{row.numHealers}</td>
+                  <td align="center">{row.numDPS}</td>
+                  <td>
+                    <Link
+                      to={`/instance-run/${row.id}`}
+                      className="button is-primary p-2 is-pulled-right"
+                    >
+                      {t('common:details')}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
