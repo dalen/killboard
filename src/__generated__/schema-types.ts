@@ -13,7 +13,6 @@ export type Scalars = {
   Long: { input: any; output: any; }
   Short: { input: any; output: any; }
   URL: { input: any; output: any; }
-  UUID: { input: any; output: any; }
   UnsignedByte: { input: any; output: any; }
   UnsignedInt: { input: any; output: any; }
   UnsignedLong: { input: any; output: any; }
@@ -455,7 +454,7 @@ export type Creature = SearchContent & {
   questsStarter: Array<Quest>;
   realm?: Maybe<Realm>;
   spawns: Array<CreatureSpawn>;
-  title: CreatureTitle;
+  title?: Maybe<CreatureTitle>;
   /** Items sold by this creature */
   vendorItems?: Maybe<VendorItemsConnection>;
 };
@@ -473,6 +472,12 @@ export type CreatureFilterInput = {
   /** Name */
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<CreatureFilterInput>>;
+  /** Realm */
+  realm?: InputMaybe<RealmsOperationFilterInput>;
+  /** Title */
+  title?: InputMaybe<NullableOfCreatureTitleOperationFilterInput>;
+  /** Zones */
+  zones?: InputMaybe<ListIdOperationFilterInput>;
 };
 
 /** Damage dealt by a creature */
@@ -489,6 +494,12 @@ export type CreatureKillDamage = KillDamageSource & {
 export type CreatureSortInput = {
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
+  /** Realm */
+  realm?: InputMaybe<SortEnumType>;
+  /** Title */
+  title?: InputMaybe<SortEnumType>;
+  /** Zone */
+  zone?: InputMaybe<SortEnumType>;
 };
 
 export type CreatureSpawn = {
@@ -701,6 +712,8 @@ export enum CreatureTitle {
   VictoriousQuartermaster = 'VICTORIOUS_QUARTERMASTER',
   WarlordArmorQuartermaster = 'WARLORD_ARMOR_QUARTERMASTER',
   WarCrestVaultKeeper = 'WAR_CREST_VAULT_KEEPER',
+  WarEmblemMerchant = 'WAR_EMBLEM_MERCHANT',
+  WarEmblemQuartermaster = 'WAR_EMBLEM_QUARTERMASTER',
   WarGuard = 'WAR_GUARD',
   WeaponMerchant = 'WEAPON_MERCHANT',
   WoodChoppazGuard = 'WOOD_CHOPPAZ_GUARD'
@@ -785,6 +798,21 @@ export type DropsFromGameObjectsEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: GameObject;
+};
+
+export type DurationOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Duration']['input']>;
+  gt?: InputMaybe<Scalars['Duration']['input']>;
+  gte?: InputMaybe<Scalars['Duration']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Duration']['input']>>>;
+  lt?: InputMaybe<Scalars['Duration']['input']>;
+  lte?: InputMaybe<Scalars['Duration']['input']>;
+  neq?: InputMaybe<Scalars['Duration']['input']>;
+  ngt?: InputMaybe<Scalars['Duration']['input']>;
+  ngte?: InputMaybe<Scalars['Duration']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Duration']['input']>>>;
+  nlt?: InputMaybe<Scalars['Duration']['input']>;
+  nlte?: InputMaybe<Scalars['Duration']['input']>;
 };
 
 /** Character equipment slots */
@@ -1228,8 +1256,8 @@ export type InstanceRunFilterInput = {
   completed?: InputMaybe<BooleanOperationFilterInput>;
   completedEncounters?: InputMaybe<IntOperationFilterInput>;
   end?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  instanceId?: InputMaybe<UnsignedShortOperationFilterInput>;
+  id?: InputMaybe<IdOperationFilterInput>;
+  instanceId?: InputMaybe<IdOperationFilterInput>;
   maxItemRating?: InputMaybe<UnsignedIntOperationFilterInput>;
   minItemRating?: InputMaybe<UnsignedIntOperationFilterInput>;
   or?: InputMaybe<Array<InstanceRunFilterInput>>;
@@ -1868,6 +1896,13 @@ export type ListFilterInputTypeOfScenarioScoreboardEntryFilterInput = {
   some?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
 };
 
+export type ListIdOperationFilterInput = {
+  all?: InputMaybe<IdOperationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<IdOperationFilterInput>;
+  some?: InputMaybe<IdOperationFilterInput>;
+};
+
 export type LiveEvent = Event & SearchContent & {
   __typename?: 'LiveEvent';
   endTime: Scalars['DateTime']['output'];
@@ -1933,6 +1968,13 @@ export type MembersEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: GuildMember;
+};
+
+export type NullableOfCreatureTitleOperationFilterInput = {
+  eq?: InputMaybe<CreatureTitle>;
+  in?: InputMaybe<Array<InputMaybe<CreatureTitle>>>;
+  neq?: InputMaybe<CreatureTitle>;
+  nin?: InputMaybe<Array<InputMaybe<CreatureTitle>>>;
 };
 
 export type NullableOfTomeSectionOperationFilterInput = {
@@ -2440,7 +2482,9 @@ export type Quest = SearchContent & {
   choiceCount: Scalars['UnsignedByte']['output'];
   /** Description */
   description?: Maybe<Scalars['String']['output']>;
-  /** Gold reward (in brass coins) */
+  /** Expiration time */
+  expireTime?: Maybe<Scalars['Duration']['output']>;
+  /** Gold reward (in copper coins) */
   gold: Scalars['UnsignedInt']['output'];
   /** Id of the quest */
   id: Scalars['ID']['output'];
@@ -2460,7 +2504,9 @@ export type Quest = SearchContent & {
   objectives: Array<QuestObjective>;
   /** Available to races */
   raceRestriction: Array<Race>;
-  /** Repeatable Type */
+  /** Repeatable time, if repeatable type is set */
+  repeatableTime: Scalars['Duration']['output'];
+  /** Repeatable type */
   repeatableType: QuestRepeatableType;
   /** Choice rewards */
   rewardsChoice: Array<QuestReward>;
@@ -2477,11 +2523,21 @@ export type Quest = SearchContent & {
 export type QuestFilterInput = {
   and?: InputMaybe<Array<QuestFilterInput>>;
   careerRestriction?: InputMaybe<CareerMaskOperationFilterInput>;
+  expireTime?: InputMaybe<DurationOperationFilterInput>;
+  /** Money Reward in copper coins */
+  gold?: InputMaybe<UnsignedIntOperationFilterInput>;
   id?: InputMaybe<IdOperationFilterInput>;
+  /** Minimum level to accept quest */
+  minLevel?: InputMaybe<UnsignedByteOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<QuestFilterInput>>;
   raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
+  /** Repeat time for the quest if repeatableType is not None */
+  repeatableTime?: InputMaybe<DurationOperationFilterInput>;
+  repeatableType?: InputMaybe<QuestRepeatableTypeOperationFilterInput>;
   type?: InputMaybe<QuestTypeFlagsOperationFilterInput>;
+  /** XP Reward */
+  xp?: InputMaybe<UnsignedIntOperationFilterInput>;
 };
 
 /** Info about a quest objective */
@@ -2502,6 +2558,13 @@ export enum QuestRepeatableType {
   Weekly = 'WEEKLY'
 }
 
+export type QuestRepeatableTypeOperationFilterInput = {
+  eq?: InputMaybe<QuestRepeatableType>;
+  in?: InputMaybe<Array<QuestRepeatableType>>;
+  neq?: InputMaybe<QuestRepeatableType>;
+  nin?: InputMaybe<Array<QuestRepeatableType>>;
+};
+
 /** Info about a quest reward */
 export type QuestReward = {
   __typename?: 'QuestReward';
@@ -2512,9 +2575,17 @@ export type QuestReward = {
 };
 
 export type QuestSortInput = {
+  careerRestriction?: InputMaybe<SortEnumType>;
+  /** Money Reward in copper coins */
+  gold?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  /** Minimum level to accept quest */
+  minLevel?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
+  raceRestriction?: InputMaybe<SortEnumType>;
   type?: InputMaybe<SortEnumType>;
+  /** XP Reward */
+  xp?: InputMaybe<SortEnumType>;
 };
 
 export enum QuestTypeFlags {
@@ -2903,7 +2974,7 @@ export type ScenarioScoreboardEntry = {
   healing: Scalars['UnsignedInt']['output'];
   /** Healing of others */
   healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
+  /** Healing Received */
   healingReceived: Scalars['UnsignedInt']['output'];
   /** Healing of self */
   healingSelf: Scalars['UnsignedInt']['output'];
@@ -2917,6 +2988,8 @@ export type ScenarioScoreboardEntry = {
   killsSolo: Scalars['UnsignedInt']['output'];
   /** Level at the time of the scenario */
   level: Scalars['UnsignedByte']['output'];
+  /** Medals earned during the scenario */
+  medals: Scalars['UnsignedInt']['output'];
   /** Objective Score */
   objectiveScore: Scalars['UnsignedInt']['output'];
   /** Damage Prevented */
@@ -2973,7 +3046,8 @@ export enum ScenarioType {
   PickUpGroupRandom = 'PICK_UP_GROUP_RANDOM',
   Random6V6 = 'RANDOM6V6',
   ReverseDaemonBall = 'REVERSE_DAEMON_BALL',
-  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL'
+  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL',
+  Scripted = 'SCRIPTED'
 }
 
 /** A connection to a list of items. */
@@ -3654,21 +3728,6 @@ export type UsedToPurchaseEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: VendorItem;
-};
-
-export type UuidOperationFilterInput = {
-  eq?: InputMaybe<Scalars['UUID']['input']>;
-  gt?: InputMaybe<Scalars['UUID']['input']>;
-  gte?: InputMaybe<Scalars['UUID']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  lt?: InputMaybe<Scalars['UUID']['input']>;
-  lte?: InputMaybe<Scalars['UUID']['input']>;
-  neq?: InputMaybe<Scalars['UUID']['input']>;
-  ngt?: InputMaybe<Scalars['UUID']['input']>;
-  ngte?: InputMaybe<Scalars['UUID']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  nlt?: InputMaybe<Scalars['UUID']['input']>;
-  nlte?: InputMaybe<Scalars['UUID']['input']>;
 };
 
 export type VendorItem = {
