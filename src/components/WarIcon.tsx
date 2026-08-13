@@ -1,4 +1,5 @@
 import type { ReactElement } from 'react';
+import { assetUrl } from '@/utils';
 
 export const WarIcon = ({
   icon,
@@ -19,18 +20,18 @@ export const WarIcon = ({
     switch (frameType) {
       case 'circle': {
         return selected
-          ? '/images/icons/round_frame_press.png'
-          : '/images/icons/round_frame.png';
+          ? assetUrl('/images/icons/round_frame_press.png')
+          : assetUrl('/images/icons/round_frame.png');
       }
       case 'hex': {
         return selected
-          ? '/images/icons/hex_frame_press.png'
-          : '/images/icons/hex_frame.png';
+          ? assetUrl('/images/icons/hex_frame_press.png')
+          : assetUrl('/images/icons/hex_frame.png');
       }
       default: {
         return selected
-          ? '/images/icons/square_frame_press.png'
-          : '/images/icons/square_frame.png';
+          ? assetUrl('/images/icons/square_frame_press.png')
+          : assetUrl('/images/icons/square_frame.png');
       }
     }
   })();

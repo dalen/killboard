@@ -9,7 +9,6 @@ import { GuildMemberList } from '@/components/guild/GuildMemberList';
 import { GUILD_INFO_FRAGMENT, GuildInfo } from '@/components/guild/GuildInfo';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
-import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { GuildLatestSkirmishes } from '@/components/guild/GuildLatestSkirmishes';
 import type { ReactElement } from 'react';
@@ -127,7 +126,6 @@ export const Guild = ({
       {tab === 'members' && <GuildMemberList id={id} />}
       {tab === 'scenarios' && (
         <div>
-          <ScenarioFilters showPremadeOnly />
           <div className="columns is-desktop">
             <div className="column">
               <ScenarioCount guildId={id} wins title="Wins" />

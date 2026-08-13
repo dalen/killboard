@@ -1,237 +1,310 @@
 import { Link } from 'react-router';
 import Tippy from '@tippyjs/react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ScenarioScoreboardEntryFragment } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
-import { useSortableData } from '@/hooks/useSortableData';
+import {
+  scenarioCareerRoles,
+  scenarioRoleOrder,
+} from '@/components/scenario/scenarioRoles';
+import { assetUrl } from '@/utils';
 import type { ReactElement } from 'react';
+
+type StatKey =
+  | 'kills'
+  | 'deaths'
+  | 'deathBlows'
+  | 'damage'
+  | 'killDamage'
+  | 'healing'
+  | 'protection'
+  | 'objectiveScore';
+
+const STAT_KEYS: StatKey[] = [
+  'kills',
+  'deaths',
+  'deathBlows',
+  'damage',
+  'killDamage',
+  'healing',
+  'protection',
+  'objectiveScore',
+];
+
+// Percentage of the entry's own team total for this stat. Showing this next
+// to the raw number lets you compare a healer's contribution to a DPS's
+// contribution without inventing a combined score across different roles.
+const shareOfTeam = (value: number, total: number): string =>
+  total > 0 ? `${Math.round((value / total) * 100)}%` : '—';
+
+const StatCell = ({
+  total,
+  tooltip,
+  value,
+}: {
+  total: number;
+  tooltip?: ReactElement;
+  value: number;
+}): ReactElement => {
+  const inner = (
+    <span>
+      {value.toLocaleString()}{' '}
+      <small className="scoreboard-stat-share">
+        ({shareOfTeam(value, total)})
+      </small>
+    </span>
+  );
+  return (
+    <td align="right">
+      {tooltip ? (
+        <Tippy duration={0} placement="top" content={tooltip}>
+          {inner}
+        </Tippy>
+      ) : (
+        inner
+      )}
+    </td>
+  );
+};
+
+const TeamSection = ({
+  entries,
+  realm,
+  sortDirection,
+  sortKey,
+  onSort,
+}: {
+  entries: ScenarioScoreboardEntryFragment[];
+  realm: 'order' | 'destruction';
+  sortDirection: 'asc' | 'desc';
+  sortKey: StatKey;
+  onSort: (key: StatKey) => void;
+}): ReactElement => {
+  const { t } = useTranslation(['components']);
+
+  const statLabels: Record<StatKey, string> = {
+    damage: t('components:scenarioScoreboard.damage'),
+    deathBlows: t('components:scenarioScoreboard.dbs'),
+    deaths: t('components:scenarioScoreboard.deaths'),
+    healing: t('components:scenarioScoreboard.healing'),
+    killDamage: t('components:scenarioScoreboard.killDamage'),
+    kills: t('components:scenarioScoreboard.kills'),
+    objectiveScore: t('components:scenarioScoreboard.objectiveScore'),
+    protection: t('components:scenarioScoreboard.protection'),
+  };
+
+  const totals = STAT_KEYS.reduce(
+    (acc, key) => {
+      acc[key] = entries.reduce((sum, entry) => sum + Number(entry[key]), 0);
+      return acc;
+    },
+    {} as Record<StatKey, number>,
+  );
+
+  const roleGroups = scenarioRoleOrder
+    .map((role) => ({
+      role,
+      roleEntries: entries
+        .filter((entry) => scenarioCareerRoles[entry.character.career] === role)
+        .toSorted((left, right) => {
+          const comparison = Number(left[sortKey]) - Number(right[sortKey]);
+          return sortDirection === 'asc' ? comparison : -comparison;
+        }),
+    }))
+    .filter((group) => group.roleEntries.length > 0);
+
+  return (
+    <section
+      className={`scenario-scoreboard-team scenario-scoreboard-team-${realm}`}
+    >
+      <header className="scenario-scoreboard-team-header">
+        <img
+          src={assetUrl(`/images/icons/scenario/${realm}.png`)}
+          width={32}
+          height={32}
+          alt={realm}
+        />
+        <strong>{realm === 'order' ? 'Order' : 'Destruction'}</strong>
+        <span>{entries.length} players</span>
+      </header>
+      <div className="scenario-roster-totals">
+        {STAT_KEYS.map((key) => (
+          <span key={key}>
+            <strong>{totals[key].toLocaleString()}</strong>
+            {statLabels[key]}
+          </span>
+        ))}
+      </div>
+      {roleGroups.map(({ role, roleEntries }) => (
+        <div className="table-container mb-4" key={role}>
+          <table className="table is-fullwidth scenario-scoreboard-table">
+            <thead>
+              <tr className="scenario-role-heading">
+                <th colSpan={4 + STAT_KEYS.length}>
+                  {role} ({roleEntries.length})
+                </th>
+              </tr>
+              <tr>
+                <th aria-label={t('components:scenarioScoreboard.career')} />
+                <th>{t('components:scenarioScoreboard.name')}</th>
+                <th colSpan={2}>{t('components:scenarioScoreboard.guild')}</th>
+                {STAT_KEYS.map((key) => (
+                  <th
+                    key={key}
+                    align="right"
+                    className="is-clickable has-text-link"
+                    onClick={() => {
+                      onSort(key);
+                    }}
+                  >
+                    {statLabels[key]}
+                    {sortKey === key && (sortDirection === 'asc' ? ' ▲' : ' ▼')}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {roleEntries.map((entry) => (
+                <tr key={entry.character.id}>
+                  <td>
+                    <CareerIcon career={entry.character.career} />
+                  </td>
+                  <td>
+                    <Link to={`/character/${entry.character.id}`}>
+                      {entry.character.name}
+                    </Link>
+                    <small>
+                      CR {entry.level} · RR {entry.renownRank}
+                    </small>
+                  </td>
+                  <td>
+                    {entry.guild && (
+                      <Link to={`/guild/${entry.guild.id}`}>
+                        <GuildHeraldry
+                          size="24"
+                          heraldry={entry.guild.heraldry}
+                          realm={entry.guild.realm}
+                        />
+                      </Link>
+                    )}
+                  </td>
+                  <td>
+                    {entry.guild && (
+                      <Link to={`/guild/${entry.guild.id}`}>
+                        {entry.guild.name}
+                      </Link>
+                    )}
+                  </td>
+                  <StatCell
+                    total={totals.kills}
+                    value={entry.kills}
+                    tooltip={
+                      <div className="scoreboard-tooltip">
+                        Solo Kills: {entry.killsSolo}
+                      </div>
+                    }
+                  />
+                  <StatCell
+                    total={totals.deaths}
+                    value={entry.deaths}
+                    tooltip={
+                      <div className="scoreboard-tooltip">
+                        Damage Receive: {entry.damageReceived}
+                        <br />
+                        Healing Received: {entry.healingReceived}
+                        <br />
+                        Protection Received: {entry.protectionReceived}
+                      </div>
+                    }
+                  />
+                  <StatCell
+                    total={totals.deathBlows}
+                    value={entry.deathBlows}
+                  />
+                  <StatCell
+                    total={totals.damage}
+                    value={Number(entry.damage)}
+                  />
+                  <StatCell
+                    total={totals.killDamage}
+                    value={Number(entry.killDamage)}
+                  />
+                  <StatCell
+                    total={totals.healing}
+                    value={Number(entry.healing)}
+                    tooltip={
+                      <div className="scoreboard-tooltip">
+                        Healing of Self: {entry.healingSelf}
+                        <br />
+                        Healing of Others: {entry.healingOthers}
+                        <br />
+                        Resurrections Done: {entry.resurrectionsDone}
+                      </div>
+                    }
+                  />
+                  <StatCell
+                    total={totals.protection}
+                    value={Number(entry.protection)}
+                    tooltip={
+                      <div className="scoreboard-tooltip">
+                        Protection of Self: {entry.protectionSelf}
+                        <br />
+                        Protection of Others: {entry.protectionOthers}
+                      </div>
+                    }
+                  />
+                  <StatCell
+                    total={totals.objectiveScore}
+                    value={Number(entry.objectiveScore)}
+                  />
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </section>
+  );
+};
 
 export const ScenarioScoreboard = ({
   entries,
 }: {
   entries: ScenarioScoreboardEntryFragment[];
 }): ReactElement => {
-  const { items, requestSort, sortConfig } = useSortableData(entries);
-  const { t } = useTranslation(['components']);
+  const [sortKey, setSortKey] = useState<StatKey>('killDamage');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  const getClassName = (name: string) => {
-    if (!sortConfig) {
-      return '';
+  const handleSort = (key: StatKey): void => {
+    if (key === sortKey) {
+      setSortDirection((current) => (current === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDirection('desc');
     }
-    return sortConfig.key === name ? sortConfig.direction : '';
   };
 
-  return (
-    <div className="table-container">
-      <table className="table is-fullwidth">
-        <thead className="is-relative">
-          <tr>
-            <th
-              id="th-career"
-              align="left"
-              onClick={() => requestSort('character.career')}
-              className={`${getClassName('career')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.career')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('character.name')}
-              className={`${getClassName('name')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.name')}
-            </th>
-            <th
-              colSpan={2}
-              align="left"
-              onClick={() => requestSort('guild.name')}
-              className={`${getClassName('guild')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.guild')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('level')}
-              className={`${getClassName('level')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.rank')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('kills')}
-              className={`${getClassName('kills')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.kills')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('deaths')}
-              className={`${getClassName('deaths')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.deaths')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('deathBlows')}
-              className={`${getClassName(
-                'deathBlows',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.dbs')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('damage')}
-              className={`${getClassName('damage')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.damage')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('killDamage')}
-              className={`${getClassName('killDamage')} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.killDamage')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('healing')}
-              className={`${getClassName(
-                'healing',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.healing')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('protection')}
-              className={`${getClassName(
-                'protection',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.protection')}
-            </th>
-            <th
-              align="left"
-              onClick={() => requestSort('objectiveScore')}
-              className={`${getClassName(
-                'objectiveScore',
-              )} is-clickable has-text-link`}
-            >
-              {t('components:scenarioScoreboard.objectiveScore')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {items.map((entry: ScenarioScoreboardEntryFragment) => (
-            <tr
-              key={entry.character.id}
-              className={`scenario-scoreboard-row-team-${entry.team}`}
-            >
-              <td aria-labelledby="th-career">
-                <CareerIcon career={entry.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${entry.character.id}`}>
-                  {entry.character.name}
-                </Link>
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    <GuildHeraldry
-                      size="32"
-                      heraldry={entry.guild.heraldry}
-                      realm={entry.guild.realm}
-                    />
-                  </Link>
-                )}
-              </td>
-              <td>
-                {entry.guild && (
-                  <Link to={`/guild/${entry.guild.id}`}>
-                    {entry.guild.name}
-                  </Link>
-                )}
-              </td>
-              <td align="left">{entry.level}</td>
+  const orderEntries = entries.filter((entry) => entry.team === 0);
+  const destructionEntries = entries.filter((entry) => entry.team === 1);
 
-              <td align="left">
-                <Tippy
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Solo Kills: {entry.killsSolo}
-                    </div>
-                  }
-                >
-                  <span>{entry.kills}</span>
-                </Tippy>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Damage Receive: {entry.damageReceived}
-                      <br />
-                      Healing Received: {entry.healingReceived}
-                      <br />
-                      Protection Received: {entry.protectionReceived}
-                    </div>
-                  }
-                >
-                  <span>{entry.deaths}</span>
-                </Tippy>
-              </td>
-              <td align="left">{entry.deathBlows}</td>
-              <td align="left">
-                <span>{Number(entry.damage).toLocaleString()}</span>
-              </td>
-              <td align="left">
-                <span>{Number(entry.killDamage).toLocaleString()}</span>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Healing of Self: {entry.healingSelf}
-                      <br />
-                      Healing of Others: {entry.healingOthers}
-                      <br />
-                      Resurrections Done: {entry.resurrectionsDone}
-                    </div>
-                  }
-                >
-                  <span>{Number(entry.healing).toLocaleString()}</span>
-                </Tippy>
-              </td>
-              <td align="left">
-                <Tippy
-                  duration={0}
-                  placement="top"
-                  content={
-                    <div className="scoreboard-tooltip">
-                      Protection of Self: {entry.protectionSelf}
-                      <br />
-                      Protection of Others: {entry.protectionOthers}
-                    </div>
-                  }
-                >
-                  <span>{Number(entry.protection).toLocaleString()}</span>
-                </Tippy>
-              </td>
-              <td align="left">
-                {Number(entry.objectiveScore).toLocaleString()}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  return (
+    <div className="scenario-scoreboard-teams">
+      <TeamSection
+        entries={orderEntries}
+        realm="order"
+        sortDirection={sortDirection}
+        sortKey={sortKey}
+        onSort={handleSort}
+      />
+      <TeamSection
+        entries={destructionEntries}
+        realm="destruction"
+        sortDirection={sortDirection}
+        sortKey={sortKey}
+        onSort={handleSort}
+      />
     </div>
   );
 };

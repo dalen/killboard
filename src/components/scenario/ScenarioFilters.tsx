@@ -1,28 +1,26 @@
 import type { ScenarioRecordFilterInput } from '@/__generated__/graphql';
-import type { ReactElement } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSearchParams } from 'react-router';
 
 const getQueueTypeFilters = (
   search: URLSearchParams,
-): { queueType?: number; premadeOnly: boolean } => {
+): { queueType?: number } => {
   const queueType = search.get('queue_type');
-  const premadeOnly = search.get('premadeOnly') === 'true';
 
   switch (queueType) {
-    case 'standard':
-      return { queueType: 0, premadeOnly };
-    case 'group_ranked':
-      return { queueType: 1, premadeOnly };
-    case 'solo':
-      return { queueType: 2, premadeOnly };
-    case 'city_siege':
-      return { queueType: 3, premadeOnly };
-    case 'solo_ranked':
-      return { queueType: 4, premadeOnly };
+    case 'standard': {
+      return { queueType: 0 };
+    }
+    case 'solo': {
+      return { queueType: 2 };
+    }
+    case 'city_siege': {
+      return { queueType: 4 };
+    }
+    case 'group_challenge': {
+      return { queueType: 6 };
+    }
   }
 
-  return { premadeOnly };
+  return {};
 };
 
 const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
@@ -45,6 +43,87 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   return {};
 };
 
+// A 'from'/'to' filter value can either be a plain YYYY-MM-DD date (from the
+// date picker inputs) or a full ISO timestamp. Shared links bake in the
+// latter so a shared link always reproduces the same absolute time window,
+// instead of drifting when a relative range is reinterpreted later.
+export const parseFilterDate = (value: string, endOfDay: boolean): Date =>
+  value.includes('T')
+    ? new Date(value)
+    : new Date(`${value}T${endOfDay ? '23:59:59.999' : '00:00:00'}`);
+
+const getTimeFilters = (
+  search: URLSearchParams,
+  defaultRange: '1h' | 'recent',
+): ScenarioRecordFilterInput => {
+  const range = search.get('range') ?? defaultRange;
+  // Round "now" down to a 5-minute bucket instead of using the exact
+  // current time. GetTimeFilters recomputes on every mount (e.g. leaving
+  // /scenarios to view a character, then coming back), and Apollo's cache
+  // only matches identical query variables — even a few seconds' drift in
+  // "now" would produce a different startTime.gte on each mount and force
+  // a full refetch instead of reusing the cache. Bucketing keeps the same
+  // variables (and cache hit) for repeat visits within the same 5-minute
+  // window. The explicit Refresh button still bypasses the cache entirely.
+  const now = new Date();
+  now.setMinutes(Math.floor(now.getMinutes() / 5) * 5, 0, 0);
+  let start: Date | undefined;
+  let end: Date | undefined;
+
+  switch (range) {
+    case '1h': {
+      start = new Date(now.getTime() - 60 * 60 * 1000);
+      break;
+    }
+    case '24h': {
+      start = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '7d': {
+      start = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '30d': {
+      start = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case '90d': {
+      start = new Date(now.getTime() - 90 * 24 * 60 * 60 * 1000);
+      break;
+    }
+    case 'ytd': {
+      start = new Date(now.getFullYear(), 0, 1);
+      break;
+    }
+    case 'custom': {
+      const startValue = search.get('from');
+      const endValue = search.get('to');
+      if (startValue) {
+        start = parseFilterDate(startValue, false);
+      }
+      if (endValue) {
+        end = parseFilterDate(endValue, true);
+      }
+      break;
+    }
+  }
+
+  if (!start && !end) {
+    return {};
+  }
+
+  return {
+    startTime: {
+      ...(start && !Number.isNaN(start.getTime())
+        ? { gte: start.toISOString() }
+        : {}),
+      ...(end && !Number.isNaN(end.getTime())
+        ? { lte: end.toISOString() }
+        : {}),
+    },
+  };
+};
+
 export const getScenarioFilters = (
   search: URLSearchParams,
   {
@@ -53,9 +132,11 @@ export const getScenarioFilters = (
     wins,
   }: { characterId?: string; guildId?: string; wins?: boolean } = {},
 ): ScenarioRecordFilterInput => {
-  const { queueType, premadeOnly } = getQueueTypeFilters(search);
+  const { queueType } = getQueueTypeFilters(search);
+  const defaultRange = characterId || guildId ? 'recent' : '1h';
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
+    ...getTimeFilters(search, defaultRange),
   };
 
   if (queueType !== undefined) {
@@ -63,125 +144,18 @@ export const getScenarioFilters = (
   }
 
   const scoreboardEntry: Record<string, unknown> = {};
-  if (characterId) scoreboardEntry.characterId = { eq: characterId };
-  if (guildId) scoreboardEntry.guildId = { eq: guildId };
-  if (wins !== undefined) scoreboardEntry.isWinner = { eq: wins };
-  if (premadeOnly) scoreboardEntry.isGuildPremade = { eq: true };
-
+  if (characterId) {
+    scoreboardEntry.characterId = { eq: characterId };
+  }
+  if (guildId) {
+    scoreboardEntry.guildId = { eq: guildId };
+  }
+  if (wins !== undefined) {
+    scoreboardEntry.isWinner = { eq: wins };
+  }
   if (Object.keys(scoreboardEntry).length > 0) {
     where.scoreboardEntries = { some: scoreboardEntry };
   }
 
   return where;
-};
-
-export const ScenarioFilters = ({
-  showPremadeOnly = false,
-}: {
-  showPremadeOnly?: boolean;
-}): ReactElement => {
-  const { t } = useTranslation('components');
-  const [search, setSearch] = useSearchParams();
-
-  const queueType = search.get('queue_type') || 'all';
-
-  return (
-    <div className="card mb-5">
-      <div className="card-content">
-        <div className="columns">
-          <div className="column">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="queueType-select">
-                  {t('scenarioFilters.queueType')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="queueType-select"
-                      value={queueType}
-                      onChange={(event) => {
-                        search.set('queue_type', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.queueTypeAll')}
-                      </option>
-                      <option value="standard">
-                        {t('scenarioFilters.queueTypeStandard')}
-                      </option>
-                      <option value="solo">
-                        {t('scenarioFilters.queueTypeSolo')}
-                      </option>
-                      <option value="city_siege">
-                        {t('scenarioFilters.queueTypeCitySiege')}
-                      </option>
-                      <option value="group_ranked">
-                        {t('scenarioFilters.queueTypeGroupRanked')}
-                      </option>
-                      <option value="solo_ranked">
-                        {t('scenarioFilters.queueTypeSoloRanked')}
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="tier-select">
-                  {t('scenarioFilters.tier')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="tier-select"
-                      value={search.get('tier') || 'all'}
-                      onChange={(event) => {
-                        search.set('tier', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.tierAll')}
-                      </option>
-                      <option value="1">1</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          {showPremadeOnly && (
-            <div className="column">
-              <label title="Scenarios with 6+ guild members only">
-                <input
-                  type="checkbox"
-                  checked={search.has('premadeOnly')}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      search.set('premadeOnly', 'true');
-                    } else {
-                      search.delete('premadeOnly');
-                    }
-                    setSearch(search);
-                  }}
-                />{' '}
-                {t('scenarioFilters.premadeOnly')}
-              </label>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
 };
