@@ -269,3 +269,22 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   z-index: 5;
   pointer-events: none;
 }
+
+.vendor-items-scroll-box {
+  background: rgba(20, 20, 20, 0.45);
+  border: 1px solid rgba(135, 123, 105, 0.35);
+  border-radius: 4px;
+  max-height: 480px;
+  overflow-y: auto;
+}
+
+.vendor-items-scroll-box table {
+  margin-bottom: 0;
+}
+
+.vendor-items-scroll-box thead th {
+  background: #1a1a1a;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
