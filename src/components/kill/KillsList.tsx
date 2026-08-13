@@ -13,7 +13,7 @@ export const KillsList = ({
   query,
   queryOptions,
   perPage,
-  title = undefined,
+  title,
   showTime = true,
   showVictim = true,
   showKiller = true,

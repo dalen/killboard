@@ -376,42 +376,6 @@ export const Search = (): ReactElement => {
                   </tr>
                 );
               }
-
-              /*
-              If (searchItem.__typename === 'GameObject') {
-                return (
-                  <tr>
-                    <td>
-                      <Link to={`/gameobject/${searchItem.id}`}>
-                        <div className="icon-text">
-                          <span className="icon has-text-info">
-                            <figure className={`image m-0`}>
-                              <img
-                                src="/images/corner_icons/ea_icon_corner_bag.png"
-                                width={48}
-                                height={48}
-                                alt={searchItem.name}
-                              />
-                            </figure>
-                          </span>
-                        </div>
-                      </Link>
-                    </td>
-                    <td>
-                      <Link to={`/gameobject/${searchItem.id}`}>
-                        {searchItem.name}
-                      </Link>
-                    </td>
-                    <td></td>
-                    <td align="right">
-                      <span className="tag is-primary">
-                        {searchItem.__typename}
-                      </span>
-                    </td>
-                  </tr>
-                );
-              }
-              */
             })}
           </tbody>
         </table>

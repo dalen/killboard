@@ -5,7 +5,6 @@ import { CharacterRecentDeaths } from '@/components/character/CharacterRecentDea
 import { CharacterRecentKills } from '@/components/character/CharacterRecentKills';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
-import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { CharacterArmory } from '@/components/character/CharacterArmory';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { CharacterLatestSkirmishes } from '@/components/character/CharacterLatestSkirmishes';
@@ -71,7 +70,6 @@ export const Character = ({
       )}
       {tab === 'scenarios' && (
         <div>
-          <ScenarioFilters />
           <div className="columns is-desktop">
             <div className="column">
               <ScenarioCount characterId={id} wins title="Wins" />
