@@ -31,6 +31,7 @@ import { Storyline } from '@/pages/Storyline';
 import { StorylineEntry } from '@/pages/StorylineEntry';
 import { StorylineActivity } from '@/pages/StorylineActivity';
 import { InstanceStatistics } from '@/pages/InstanceStatistics';
+import { Events } from '@/pages/Events';
 
 // Extend the Window interface to include gtag
 declare global {
@@ -58,6 +59,7 @@ const App = () => {
       <Route path="/" element={<Home tab="players" />} />
       <Route path="/guilds" element={<Home tab="guilds" />} />
       <Route path="/scenarios" element={<Home tab="scenarios" />} />
+      <Route path="/events" element={<Events />} />
       <Route path="/kill/:id" element={<Kill />} />
       <Route path="/kills" element={<Kills />} />
       <Route path="/character/:id" element={<Character tab="kills" />} />

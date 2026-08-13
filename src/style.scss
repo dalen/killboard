@@ -156,6 +156,76 @@ $tooltip-item-set-enabled: rgb(0, 255, 0);
 $tooltip-item-set-disabled: rgb(175, 175, 175);
 $tooltip-item-bonus: rgb(255, 255, 0);
 
+.event-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 1rem;
+  padding-bottom: 2rem;
+}
+
+.event-card {
+  background: rgba(10, 21, 38, 0.85);
+  border: 1px solid #38445e;
+  border-radius: 0.5rem;
+  padding: 1.1rem;
+}
+
+.event-card-active {
+  border-color: #3d9361;
+  box-shadow: inset 3px 0 #55c983;
+}
+
+.event-card-header {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  justify-content: space-between;
+}
+
+.event-card-type {
+  color: #9ba5ba;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.event-times {
+  margin: 0;
+}
+
+.event-times > div {
+  display: grid;
+  gap: 0.5rem;
+  grid-template-columns: 3.5rem 1fr;
+  margin: 0.65rem 0;
+}
+
+.event-times dt,
+.event-times dd strong {
+  color: #7f8ba2;
+  font-size: 0.75rem;
+}
+
+.event-times dd {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+}
+
+.event-times dd span {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: 3.6rem 1fr;
+}
+
+.event-countdown {
+  border-top: 1px solid #2d374b;
+  color: #c4cede;
+  font-weight: 600;
+  margin-top: 1rem;
+  padding-top: 0.8rem;
+}
+
 .item-name-utility {
   color: $rarity-utility;
 }
