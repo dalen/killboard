@@ -105,16 +105,13 @@ export const InstanceRunsList = () => {
           durationMs:
             new Date(instanceRun.end).getTime() -
             new Date(instanceRun.start).getTime(),
-          encounters: new Set(
-            instanceRun.encounters.map((e) => e.encounterId),
-          ).size,
+          encounters: new Set(instanceRun.encounters.map((e) => e.encounterId))
+            .size,
           end: instanceRun.end,
           id: instanceRun.id,
           instanceName: instanceRun.instance.name,
           numDPS: instanceRun.scoreboardEntries.filter((entry) =>
-            [Archetype.MeleeDps, Archetype.RangedDps].includes(
-              entry.archetype,
-            ),
+            [Archetype.MeleeDps, Archetype.RangedDps].includes(entry.archetype),
           ).length,
           numHealers: instanceRun.scoreboardEntries.filter(
             (entry) => entry.archetype === Archetype.Healer,
@@ -171,167 +168,169 @@ export const InstanceRunsList = () => {
           </p>
         </div>
       </div>
-      <table
-        className={clsx(
-          'table',
-          'is-striped',
-          'is-hoverable',
-          'is-marginless',
-          isMobile ? 'is-narrow' : 'is-fullwidth',
-        )}
-      >
-        <thead className="is-relative">
-          <tr>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('start'),
-              )}
-              onClick={() => requestSort('start')}
-            >
-              {t('pages:instanceRuns.startTime')}
-            </th>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('instanceName'),
-              )}
-              onClick={() => requestSort('instanceName')}
-            >
-              {t('pages:instanceRuns.instance')}
-            </th>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('durationMs'),
-              )}
-              onClick={() => requestSort('durationMs')}
-            >
-              {t('pages:instanceRuns.duration')}
-            </th>
-            <th
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('encounters'),
-              )}
-              onClick={() => requestSort('encounters')}
-            >
-              {t('pages:instanceRuns.encounters')}
-            </th>
-            <th
-              align="center"
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('deaths'),
-              )}
-              onClick={() => requestSort('deaths')}
-            >
-              {t('pages:instanceRuns.deaths')}
-            </th>
-            <th
-              align="center"
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('numTanks'),
-              )}
-              onClick={() => requestSort('numTanks')}
-            >
-              <span className="icon">
-                <img
-                  src="/images/icons/protection.png"
-                  width={28}
-                  height={33}
-                  alt={t('pages:instanceRuns.numTanks') ?? ''}
-                  title={t('pages:instanceRuns.numTanks') ?? ''}
-                />
-              </span>
-            </th>
-            <th
-              align="center"
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('numHealers'),
-              )}
-              onClick={() => requestSort('numHealers')}
-            >
-              <span className="icon">
-                <img
-                  src="/images/icons/healing.png"
-                  width={28}
-                  height={28}
-                  alt={t('pages:instanceRuns.numHealers') ?? ''}
-                  title={t('pages:instanceRuns.numHealers') ?? ''}
-                />
-              </span>
-            </th>
-            <th
-              align="center"
-              className={clsx(
-                'is-clickable',
-                'has-text-link',
-                getSortClass('numDPS'),
-              )}
-              onClick={() => requestSort('numDPS')}
-            >
-              <span className="icon">
-                <img
-                  src="/images/icons/damage.png"
-                  width={30}
-                  height={32}
-                  alt={t('pages:instanceRuns.numDps') ?? ''}
-                  title={t('pages:instanceRuns.numDps') ?? ''}
-                />
-              </span>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedRows.map((row) => {
-            const startDate = new Date(row.start);
+      <div className="table-container">
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            'is-marginless',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+          )}
+        >
+          <thead className="is-relative">
+            <tr>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('start'),
+                )}
+                onClick={() => requestSort('start')}
+              >
+                {t('pages:instanceRuns.startTime')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('instanceName'),
+                )}
+                onClick={() => requestSort('instanceName')}
+              >
+                {t('pages:instanceRuns.instance')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('durationMs'),
+                )}
+                onClick={() => requestSort('durationMs')}
+              >
+                {t('pages:instanceRuns.duration')}
+              </th>
+              <th
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('encounters'),
+                )}
+                onClick={() => requestSort('encounters')}
+              >
+                {t('pages:instanceRuns.encounters')}
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('deaths'),
+                )}
+                onClick={() => requestSort('deaths')}
+              >
+                {t('pages:instanceRuns.deaths')}
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numTanks'),
+                )}
+                onClick={() => requestSort('numTanks')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/protection.png"
+                    width={28}
+                    height={33}
+                    alt={t('pages:instanceRuns.numTanks') ?? ''}
+                    title={t('pages:instanceRuns.numTanks') ?? ''}
+                  />
+                </span>
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numHealers'),
+                )}
+                onClick={() => requestSort('numHealers')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/healing.png"
+                    width={28}
+                    height={28}
+                    alt={t('pages:instanceRuns.numHealers') ?? ''}
+                    title={t('pages:instanceRuns.numHealers') ?? ''}
+                  />
+                </span>
+              </th>
+              <th
+                align="center"
+                className={clsx(
+                  'is-clickable',
+                  'has-text-link',
+                  getSortClass('numDPS'),
+                )}
+                onClick={() => requestSort('numDPS')}
+              >
+                <span className="icon">
+                  <img
+                    src="/images/icons/damage.png"
+                    width={30}
+                    height={32}
+                    alt={t('pages:instanceRuns.numDps') ?? ''}
+                    title={t('pages:instanceRuns.numDps') ?? ''}
+                  />
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {sortedRows.map((row) => {
+              const startDate = new Date(row.start);
 
-            return (
-              <tr key={row.id}>
-                <td>
-                  <small>
-                    {formatISO(startDate, { representation: 'date' })}
-                    <br />
-                    {format(startDate, 'HH:mm')}
-                  </small>
-                </td>
-                <td>{row.instanceName}</td>
-                <td>
-                  {formatDuration(
-                    intervalToDuration({
-                      end: new Date(row.end),
-                      start: startDate,
-                    }),
-                  )}
-                </td>
-                <td>{row.encounters}</td>
-                <td align="center">{row.deaths}</td>
-                <td align="center">{row.numTanks}</td>
-                <td align="center">{row.numHealers}</td>
-                <td align="center">{row.numDPS}</td>
-                <td>
-                  <Link
-                    to={`/instance-run/${row.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
-                    {t('common:details')}
-                  </Link>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={row.id}>
+                  <td>
+                    <small>
+                      {formatISO(startDate, { representation: 'date' })}
+                      <br />
+                      {format(startDate, 'HH:mm')}
+                    </small>
+                  </td>
+                  <td>{row.instanceName}</td>
+                  <td>
+                    {formatDuration(
+                      intervalToDuration({
+                        end: new Date(row.end),
+                        start: startDate,
+                      }),
+                    )}
+                  </td>
+                  <td>{row.encounters}</td>
+                  <td align="center">{row.deaths}</td>
+                  <td align="center">{row.numTanks}</td>
+                  <td align="center">{row.numHealers}</td>
+                  <td align="center">{row.numDPS}</td>
+                  <td>
+                    <Link
+                      to={`/instance-run/${row.id}`}
+                      className="button is-primary p-2 is-pulled-right"
+                    >
+                      {t('common:details')}
+                    </Link>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
