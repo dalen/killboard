@@ -49,10 +49,12 @@ export const InstanceRunsFilters = (): ReactElement => {
     Number(search.get('completedEncounters') ?? 0);
 
   return (
-    <div className="filter-grid">
-      <label>
-        <span>{t('pages:instanceRuns.instance')}</span>
-        <div className="select">
+    <div className="columns is-variable is-3 mb-4">
+      <div className="column">
+        <label className="label" htmlFor="instance-select">
+          {t('pages:instanceRuns.instance')}
+        </label>
+        <div className="select is-fullwidth">
           <select
             id="instance-select"
             value={instance}
@@ -69,9 +71,11 @@ export const InstanceRunsFilters = (): ReactElement => {
             ))}
           </select>
         </div>
-      </label>
-      <label>
-        <span>{t('pages:instanceRuns.minCompletedEncounters')}</span>
+      </div>
+      <div className="column">
+        <label className="label" htmlFor="completedEncounters">
+          {t('pages:instanceRuns.minCompletedEncounters')}
+        </label>
         <input
           id="completedEncounters"
           className="input"
@@ -84,7 +88,7 @@ export const InstanceRunsFilters = (): ReactElement => {
             setSearch(search);
           }}
         />
-      </label>
+      </div>
     </div>
   );
 };
