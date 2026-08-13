@@ -32,7 +32,8 @@
     "price": "Price",
     "zone": "Zone",
     "destruction": "Destruction",
-    "order": "Order"
+    "order": "Order",
+    "filterItems": "Filter items"
   },
   "itemQuests": {
     "questName": "Quest Name",
