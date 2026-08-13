@@ -2,7 +2,6 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import useWindowDimensions from '@/hooks/useWindowDimensions';
 import type {
   GetInstancesQuery,
   InstanceFilterInput,
@@ -11,7 +10,6 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import type { ReactElement } from 'react';
-import clsx from 'clsx';
 
 const QUERY = gql`
   query GetInstances(
@@ -71,9 +69,6 @@ export const Instances = (): ReactElement => {
       where: getFilters(search),
     },
   });
-  const { width } = useWindowDimensions();
-  const isMobile = width <= 768;
-
   if (loading) {
     return <progress className="progress" />;
   }
@@ -115,47 +110,20 @@ export const Instances = (): ReactElement => {
         </div>
       </div>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:instances.name')}</th>
-              <th>{t('pages:instances.encounters')}</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((instance) => (
-              <tr key={instance.id}>
-                <td>
-                  <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
-                </td>
-                <td>{instance.encounters?.length || 0}</td>
-                <td>
-                  <Link
-                    to={`/instance-statistics/${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
-                    {t('pages:instances.statistics')}
-                  </Link>
-                  <Link
-                    to={`/instance-runs?instance=${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right mr-2"
-                  >
-                    {t('pages:instances.runs')}
-                  </Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="instance-card-grid">
+        {entries.map((instance) => (
+          <article className="instance-card" key={instance.id}>
+            <div className="instance-card-header">
+              <span className="instance-card-icon"><i className="fas fa-dungeon" aria-hidden="true" /></span>
+              <strong><Link to={`/instance/${instance.id}`}>{instance.name}</Link></strong>
+            </div>
+            <div className="instance-card-meta"><span>{instance.encounters?.length || 0} {t('pages:instances.encounters')}</span></div>
+            <div className="instance-card-actions">
+              <Link to={`/instance/${instance.id}`} className="button is-primary is-small">{t('pages:instances.runs')}</Link>
+              <Link to={`/instance-statistics/${instance.id}`} className="button is-small">{t('pages:instances.statistics')}</Link>
+            </div>
+          </article>
+        ))}
       </div>
       <QueryPagination
         pageInfo={pageInfo}
