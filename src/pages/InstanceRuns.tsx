@@ -12,7 +12,7 @@ export const InstanceRuns = (): ReactElement => {
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
-            <Link to="/">{t('common:home')}</Link>
+            <Link to="/instances/">{t('common:instances')}</Link>
           </li>
           <li className="is-active">
             <Link to="/instance-runs">{t('pages:instanceRuns.title')}</Link>
