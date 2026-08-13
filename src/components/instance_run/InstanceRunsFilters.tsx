@@ -49,7 +49,7 @@ export const InstanceRunsFilters = (): ReactElement => {
     Number(search.get('completedEncounters') ?? 0);
 
   return (
-    <div className="columns is-variable is-3 mb-4">
+    <div className="columns is-variable is-3 mx-0 mb-4">
       <div className="column">
         <label className="label" htmlFor="instance-select">
           {t('pages:instanceRuns.instance')}
