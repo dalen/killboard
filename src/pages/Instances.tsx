@@ -95,24 +95,22 @@ export const Instances = (): ReactElement => {
             <Link to="/">{t('common:home')}</Link>
           </li>
           <li className="is-active">
-            <Link to="/creatures">{t('pages:creatures.title')}</Link>
+            <Link to="/instances">{t('pages:instances.title')}</Link>
           </li>
         </ul>
       </nav>
 
-      <div className="card mb-5">
-        <div className="card-content">
-          <div className="field">
-            <label className="label">{t('pages:instances.search')}</label>
-            <SearchBox
-              initialQuery={search.get('name') || ''}
-              onSubmit={(event) => {
-                search.set('name', event);
-                setSearch(search);
-              }}
-            />
-          </div>
-        </div>
+      <div className="filter-grid">
+        <label>
+          <span>{t('pages:instances.search')}</span>
+          <SearchBox
+            initialQuery={search.get('name') || ''}
+            onSubmit={(event) => {
+              search.set('name', event);
+              setSearch(search);
+            }}
+          />
+        </label>
       </div>
 
       <div className="table-container">
