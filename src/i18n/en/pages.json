@@ -1,4 +1,8 @@
 {
+  "events": {
+    "title": "Live Events",
+    "description": "Active and upcoming Return of Reckoning events."
+  },
   "characterPage": {
     "characterId": "Character #{{characterId}}",
     "kills": "Kills",
