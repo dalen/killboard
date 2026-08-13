@@ -58,21 +58,9 @@ export const InstanceEncounterStatistics = ({
     return <ErrorMessage name={error.name} message={error.message} />;
   }
 
-  // Encounters with a sub-minute median duration are almost always trash
-  // pulls or bugged/incomplete fights rather than real boss encounters -
-  // leave them off the list entirely (this also covers the zero-duration
-  // "no data" case).
   const medianDuration = parseIsoDuration(
     data.instanceEncounterRuns.medianDuration,
   );
-  const medianDurationSeconds =
-    (medianDuration.days ?? 0) * 86_400 +
-    (medianDuration.hours ?? 0) * 3600 +
-    (medianDuration.minutes ?? 0) * 60 +
-    (medianDuration.seconds ?? 0);
-  if (medianDurationSeconds < 60) {
-    return null;
-  }
 
   return (
     <tr>
