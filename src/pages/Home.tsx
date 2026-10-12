@@ -35,6 +35,9 @@ export const Home = ({
         <li className={clsx({ 'is-active': tab === 'skirmishes' })}>
           <Link to="/skirmishes">{t('pages:home.showSkirmishes')}</Link>
         </li>
+        <li>
+          <Link to="/events">{t('common:events')}</Link>
+        </li>
       </div>
       {tab === 'scenarios' && (
         <>
