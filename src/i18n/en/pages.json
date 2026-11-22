@@ -28,7 +28,13 @@
     "showGuildLeaderboard": "Guilds",
     "showPlayerLeaderboard": "Players",
     "showScenarios": "Scenarios",
-    "showSkirmishes": "Skirmishes"
+    "showSkirmishes": "Skirmishes",
+    "showDatabase": "Database",
+    "showCreatures": "Creatures",
+    "showItems": "Items",
+    "showQuests": "Quests",
+    "showInstances": "Instances",
+    "showStorylines": "Storylines"
   },
   "killPage": {
     "killer": "Killer",

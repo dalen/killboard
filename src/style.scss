@@ -269,3 +269,69 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   z-index: 5;
   pointer-events: none;
 }
+
+.tabs .nav-database-dropdown {
+  position: relative;
+}
+
+.tabs .nav-database-dropdown > summary {
+  align-items: center;
+  border-bottom: 1px solid transparent;
+  color: inherit;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  margin-bottom: -1px;
+  padding: 0.5em 1em;
+  vertical-align: top;
+}
+
+.tabs .nav-database-dropdown > summary::-webkit-details-marker {
+  display: none;
+}
+
+.tabs .nav-database-dropdown > summary::after {
+  content: '▾';
+  font-size: 0.7em;
+  margin-left: 0.4em;
+}
+
+.tabs .nav-database-dropdown:not([open]) > summary::after {
+  content: '▸';
+}
+
+.tabs .nav-database-dropdown > summary:hover {
+  border-bottom-color: $text-strong;
+  color: $text-strong;
+}
+
+.tabs li.is-active .nav-database-dropdown > summary,
+.tabs .nav-database-dropdown[open] > summary {
+  border-bottom-color: $link;
+  color: $link;
+}
+
+.nav-database-menu {
+  background: #171717;
+  border: 1px solid rgba(135, 123, 105, 0.4);
+  display: flex;
+  flex-direction: column;
+  min-width: 10rem;
+  padding: 0.35rem;
+  position: fixed;
+  z-index: 30;
+}
+
+.nav-database-menu a {
+  color: $navbar-item-color;
+  display: block;
+  padding: 0.45em 0.6em;
+  white-space: nowrap;
+}
+
+.nav-database-menu a:hover,
+.nav-database-menu a:focus-visible {
+  background: rgba(255, 153, 0, 0.12);
+  color: #fff;
+}
