@@ -12,6 +12,7 @@ export const MainNav = (): ReactElement => {
 
   const isDatabaseActive =
     pathname.startsWith('/creature') ||
+    pathname.startsWith('/gameobject') ||
     pathname.startsWith('/instance') ||
     pathname.startsWith('/item') ||
     pathname.startsWith('/quest') ||
@@ -19,7 +20,9 @@ export const MainNav = (): ReactElement => {
 
   useEffect(() => {
     const details = databaseRef.current;
-    if (details == null) return undefined;
+    if (details == null) {
+      return undefined;
+    }
 
     const updatePosition = () => {
       const rect = details.getBoundingClientRect();
@@ -32,7 +35,9 @@ export const MainNav = (): ReactElement => {
     };
 
     const handleToggle = () => {
-      if (details.open) updatePosition();
+      if (details.open) {
+        updatePosition();
+      }
     };
 
     const handleOutsideEvent = (event: Event) => {
@@ -46,7 +51,9 @@ export const MainNav = (): ReactElement => {
     };
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && details.open) details.open = false;
+      if (event.key === 'Escape' && details.open) {
+        details.open = false;
+      }
     };
 
     details.addEventListener('toggle', handleToggle);
@@ -63,6 +70,13 @@ export const MainNav = (): ReactElement => {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, []);
+
+  useEffect(() => {
+    const details = databaseRef.current;
+    if (details != null) {
+      details.open = false;
+    }
+  }, [pathname]);
 
   return (
     <div className="container is-max-widescreen mt-2">
