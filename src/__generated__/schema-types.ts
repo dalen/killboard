@@ -13,7 +13,6 @@ export type Scalars = {
   Long: { input: any; output: any; }
   Short: { input: any; output: any; }
   URL: { input: any; output: any; }
-  UUID: { input: any; output: any; }
   UnsignedByte: { input: any; output: any; }
   UnsignedInt: { input: any; output: any; }
   UnsignedLong: { input: any; output: any; }
@@ -105,6 +104,18 @@ export enum AbilityType {
   TauntGuard = 'TAUNT_GUARD'
 }
 
+export type ActiveCharactersPoint = {
+  __typename?: 'ActiveCharactersPoint';
+  /** Number of active Destruction characters */
+  destruction: Scalars['Int']['output'];
+  /** Start of the hour (UTC) */
+  hour: Scalars['DateTime']['output'];
+  /** Number of active Order characters */
+  order: Scalars['Int']['output'];
+  /** Number of active characters */
+  total: Scalars['Int']['output'];
+};
+
 /** Player Archetypes */
 export enum Archetype {
   Healer = 'HEALER',
@@ -134,6 +145,54 @@ export type BattlefieldObjective = Location & SearchContent & {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   position: Position;
+};
+
+/** A battlefield objective's pin on a zone's map */
+export type BattlefieldObjectiveMapPoint = Location & MapPoint & {
+  __typename?: 'BattlefieldObjectiveMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** The battlefield objective */
+  objective?: Maybe<BattlefieldObjective>;
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+};
+
+/** A bomb target's pin on a zone's map */
+export type BombTargetMapPoint = Location & MapPoint & {
+  __typename?: 'BombTargetMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Number of the point in its zone (its id in mappoints.xml) */
+  number: Scalars['UnsignedShort']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+  /** Realm of the bomb target; NEUTRAL is both */
+  realm?: Maybe<Realm>;
 };
 
 export type BooleanOperationFilterInput = {
@@ -276,6 +335,41 @@ export type ChapterInfluenceReward = {
   tier: Scalars['UnsignedByte']['output'];
 };
 
+/** A chapter's pin on a zone's map */
+export type ChapterMapPoint = Location & MapPoint & {
+  __typename?: 'ChapterMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** Chapter number */
+  chapterNumber: Scalars['UnsignedByte']['output'];
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Number of the point in its zone (its id in mappoints.xml) */
+  number: Scalars['UnsignedShort']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+  /** Race of the chapter; also gives its realm */
+  race?: Maybe<Faction>;
+  /** Highest rank the chapter is for; null is no upper end */
+  rankMax?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Lowest rank the chapter is for */
+  rankMin: Scalars['UnsignedByte']['output'];
+  /** Realm the chapter's ranks are for; NEUTRAL is both */
+  realm?: Maybe<Realm>;
+  /** Services shown on the tooltip */
+  services: Array<HubService>;
+};
+
 /** Info about a character */
 export type Character = SearchContent & {
   __typename?: 'Character';
@@ -390,6 +484,12 @@ export type CharacterStatsInput = {
   intelligence: Scalars['Int']['input'];
   /** Ability Level */
   level: Scalars['UnsignedByte']['input'];
+  /** Main hand weapon DPS */
+  mainHand: Scalars['Float']['input'];
+  /** Off hand weapon DPS */
+  offHand: Scalars['Float']['input'];
+  /** Ranged weapon DPS */
+  ranged: Scalars['Float']['input'];
   /** Strength */
   strength: Scalars['Int']['input'];
   /** Willpower */
@@ -455,7 +555,7 @@ export type Creature = SearchContent & {
   questsStarter: Array<Quest>;
   realm?: Maybe<Realm>;
   spawns: Array<CreatureSpawn>;
-  title: CreatureTitle;
+  title?: Maybe<CreatureTitle>;
   /** Items sold by this creature */
   vendorItems?: Maybe<VendorItemsConnection>;
 };
@@ -473,6 +573,12 @@ export type CreatureFilterInput = {
   /** Name */
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<CreatureFilterInput>>;
+  /** Realm */
+  realm?: InputMaybe<RealmsOperationFilterInput>;
+  /** Title */
+  title?: InputMaybe<NullableOfCreatureTitleOperationFilterInput>;
+  /** Zones */
+  zones?: InputMaybe<ListIdOperationFilterInput>;
 };
 
 /** Damage dealt by a creature */
@@ -489,6 +595,12 @@ export type CreatureKillDamage = KillDamageSource & {
 export type CreatureSortInput = {
   id?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
+  /** Realm */
+  realm?: InputMaybe<SortEnumType>;
+  /** Title */
+  title?: InputMaybe<SortEnumType>;
+  /** Zone */
+  zone?: InputMaybe<SortEnumType>;
 };
 
 export type CreatureSpawn = {
@@ -701,6 +813,8 @@ export enum CreatureTitle {
   VictoriousQuartermaster = 'VICTORIOUS_QUARTERMASTER',
   WarlordArmorQuartermaster = 'WARLORD_ARMOR_QUARTERMASTER',
   WarCrestVaultKeeper = 'WAR_CREST_VAULT_KEEPER',
+  WarEmblemMerchant = 'WAR_EMBLEM_MERCHANT',
+  WarEmblemQuartermaster = 'WAR_EMBLEM_QUARTERMASTER',
   WarGuard = 'WAR_GUARD',
   WeaponMerchant = 'WEAPON_MERCHANT',
   WoodChoppazGuard = 'WOOD_CHOPPAZ_GUARD'
@@ -787,6 +901,21 @@ export type DropsFromGameObjectsEdge = {
   node: GameObject;
 };
 
+export type DurationOperationFilterInput = {
+  eq?: InputMaybe<Scalars['Duration']['input']>;
+  gt?: InputMaybe<Scalars['Duration']['input']>;
+  gte?: InputMaybe<Scalars['Duration']['input']>;
+  in?: InputMaybe<Array<InputMaybe<Scalars['Duration']['input']>>>;
+  lt?: InputMaybe<Scalars['Duration']['input']>;
+  lte?: InputMaybe<Scalars['Duration']['input']>;
+  neq?: InputMaybe<Scalars['Duration']['input']>;
+  ngt?: InputMaybe<Scalars['Duration']['input']>;
+  ngte?: InputMaybe<Scalars['Duration']['input']>;
+  nin?: InputMaybe<Array<InputMaybe<Scalars['Duration']['input']>>>;
+  nlt?: InputMaybe<Scalars['Duration']['input']>;
+  nlte?: InputMaybe<Scalars['Duration']['input']>;
+};
+
 /** Character equipment slots */
 export enum EquipSlot {
   Back = 'BACK',
@@ -828,6 +957,16 @@ export type Event = {
   name: Scalars['String']['output'];
   startTime: Scalars['DateTime']['output'];
 };
+
+/** A race as the map points name it: greenskins are one race */
+export enum Faction {
+  Chaos = 'CHAOS',
+  DarkElf = 'DARK_ELF',
+  Dwarf = 'DWARF',
+  Empire = 'EMPIRE',
+  Greenskin = 'GREENSKIN',
+  HighElf = 'HIGH_ELF'
+}
 
 export type FallKillDamage = KillDamageSource & {
   __typename?: 'FallKillDamage';
@@ -1012,6 +1151,28 @@ export type GuildsEdge = {
   /** The item at the end of the edge. */
   node: Guild;
 };
+
+/** A service a chapter's or war camp's map pin lists */
+export enum HubService {
+  ApprenticeCareerTrainer = 'APPRENTICE_CAREER_TRAINER',
+  ApprenticeRenownTrainer = 'APPRENTICE_RENOWN_TRAINER',
+  Auctioneer = 'AUCTIONEER',
+  CareerTrainer = 'CAREER_TRAINER',
+  CraftSupplyMerchant = 'CRAFT_SUPPLY_MERCHANT',
+  FlightMaster = 'FLIGHT_MASTER',
+  GeneralMerchants = 'GENERAL_MERCHANTS',
+  Healer = 'HEALER',
+  KillCollector = 'KILL_COLLECTOR',
+  Mailbox = 'MAILBOX',
+  Quartermaster = 'QUARTERMASTER',
+  RallyMaster = 'RALLY_MASTER',
+  RecruitsEmblemMerchant = 'RECRUITS_EMBLEM_MERCHANT',
+  RecruitsMedallionMerchant = 'RECRUITS_MEDALLION_MERCHANT',
+  RenownGearMerchant = 'RENOWN_GEAR_MERCHANT',
+  RenownTrainer = 'RENOWN_TRAINER',
+  SiegeWeaponMerchant = 'SIEGE_WEAPON_MERCHANT',
+  TradeskillTrainers = 'TRADESKILL_TRAINERS'
+}
 
 export type Icon = {
   __typename?: 'Icon';
@@ -1228,8 +1389,8 @@ export type InstanceRunFilterInput = {
   completed?: InputMaybe<BooleanOperationFilterInput>;
   completedEncounters?: InputMaybe<IntOperationFilterInput>;
   end?: InputMaybe<DateTimeOperationFilterInput>;
-  id?: InputMaybe<UuidOperationFilterInput>;
-  instanceId?: InputMaybe<UnsignedShortOperationFilterInput>;
+  id?: InputMaybe<IdOperationFilterInput>;
+  instanceId?: InputMaybe<IdOperationFilterInput>;
   maxItemRating?: InputMaybe<UnsignedIntOperationFilterInput>;
   minItemRating?: InputMaybe<UnsignedIntOperationFilterInput>;
   or?: InputMaybe<Array<InstanceRunFilterInput>>;
@@ -1689,6 +1850,31 @@ export type Keep = Location & SearchContent & {
   position: Position;
 };
 
+/** A keep's pin on a zone's map */
+export type KeepMapPoint = Location & MapPoint & {
+  __typename?: 'KeepMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** The keep */
+  keep?: Maybe<Keep>;
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Objective whose state the pin shows */
+  objectiveId?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+};
+
 export type Kill = {
   __typename?: 'Kill';
   /** List of all enemy players contributing to the kill */
@@ -1714,7 +1900,7 @@ export type Kill = {
   scenario?: Maybe<Scenario>;
   /**
    * ScenarioId, 0 if not in a scenario
-   * @deprecated No longer supported.
+   * @deprecated No longer supported
    */
   scenarioId?: Maybe<Scalars['ID']['output']>;
   /** Scenario information */
@@ -1841,6 +2027,41 @@ export type KillsHeatmapPoint = {
   y: Scalars['UnsignedInt']['output'];
 };
 
+/** Major or minor landmark */
+export enum LandmarkImportance {
+  Major = 'MAJOR',
+  Minor = 'MINOR'
+}
+
+/** A landmark's pin on a zone's map */
+export type LandmarkMapPoint = Location & MapPoint & {
+  __typename?: 'LandmarkMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** War Journal glyphs the landmark needs */
+  glyphs: Array<Scalars['UnsignedShort']['output']>;
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Major or minor landmark */
+  importance: LandmarkImportance;
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Number of the point in its zone (its id in mappoints.xml) */
+  number: Scalars['UnsignedShort']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+  /** Special kind of landmark, given to the map tooltip */
+  specialType?: Maybe<Scalars['UnsignedShort']['output']>;
+};
+
 /** A connection to a list of items. */
 export type LeaderboardConnection = {
   __typename?: 'LeaderboardConnection';
@@ -1866,6 +2087,13 @@ export type ListFilterInputTypeOfScenarioScoreboardEntryFilterInput = {
   any?: InputMaybe<Scalars['Boolean']['input']>;
   none?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
   some?: InputMaybe<ScenarioScoreboardEntryFilterInput>;
+};
+
+export type ListIdOperationFilterInput = {
+  all?: InputMaybe<IdOperationFilterInput>;
+  any?: InputMaybe<Scalars['Boolean']['input']>;
+  none?: InputMaybe<IdOperationFilterInput>;
+  some?: InputMaybe<IdOperationFilterInput>;
 };
 
 export type LiveEvent = Event & SearchContent & {
@@ -1899,6 +2127,16 @@ export type LongOperationFilterInput = {
   nlte?: InputMaybe<Scalars['Long']['input']>;
 };
 
+/** A point of a zone's map (its mappoints.xml): a pin, a zone transition or a text point. Each kind is a type of its own */
+export type MapPoint = {
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+};
+
 export type MapSetup = {
   __typename?: 'MapSetup';
   /** The unique id of the map setup */
@@ -1912,6 +2150,13 @@ export type MapSetup = {
   /** The SE corner Y coordinate of the map */
   seCornerY: Scalars['Int']['output'];
 };
+
+/** Side of its point a map text is drawn from */
+export enum MapTextAnchor {
+  Center = 'CENTER',
+  Left = 'LEFT',
+  Right = 'RIGHT'
+}
 
 /** A connection to a list of items. */
 export type MembersConnection = {
@@ -1933,6 +2178,13 @@ export type MembersEdge = {
   cursor: Scalars['String']['output'];
   /** The item at the end of the edge. */
   node: GuildMember;
+};
+
+export type NullableOfCreatureTitleOperationFilterInput = {
+  eq?: InputMaybe<CreatureTitle>;
+  in?: InputMaybe<Array<InputMaybe<CreatureTitle>>>;
+  neq?: InputMaybe<CreatureTitle>;
+  nin?: InputMaybe<Array<InputMaybe<CreatureTitle>>>;
 };
 
 export type NullableOfTomeSectionOperationFilterInput = {
@@ -2003,6 +2255,46 @@ export enum PublicQuestDifficulty {
   VeryHard = 'VERY_HARD'
 }
 
+/** A public quest's pin on a zone's map */
+export type PublicQuestMapPoint = Location & MapPoint & {
+  __typename?: 'PublicQuestMapPoint';
+  /** Where Destruction's pin is, when the map shows a neutral quest to each realm at its own place */
+  destructionPosition?: Maybe<Position>;
+  /** Difficulty of the public quest */
+  difficulty: PublicQuestDifficulty;
+  /** Icon set of the pin */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the public quest */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the public quest runs during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Name of the public quest */
+  name: Scalars['String']['output'];
+  /** Highest group size the tooltip suggests; null is no upper end */
+  playersMax?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Lowest group size the tooltip suggests */
+  playersMin: Scalars['UnsignedByte']['output'];
+  /** Where the pin is; Order's when Destruction has a pin of its own */
+  position: Position;
+  /** Highest rank the tooltip shows the quest for; null is no upper end */
+  rankMax?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Lowest rank the tooltip shows the quest for */
+  rankMin: Scalars['UnsignedByte']['output'];
+  /** Realm that may take part; NEUTRAL is both */
+  realm?: Maybe<Realm>;
+  /** Rewards the tooltip shows; null is none given */
+  rewards?: Maybe<PublicQuestRewards>;
+};
+
+/** Rewards a public quest's map tooltip shows */
+export enum PublicQuestRewards {
+  Advanced = 'ADVANCED',
+  Basic = 'BASIC',
+  Normal = 'NORMAL'
+}
+
 export enum PublicQuestType {
   CitySiege = 'CITY_SIEGE',
   Fortress = 'FORTRESS',
@@ -2016,8 +2308,8 @@ export type Query = {
   __typename?: 'Query';
   /** Get an ability by its ID. */
   ability?: Maybe<AbilityInfo>;
-  /** Number of characters participating in one or more kills during the period */
-  activeCharactersStats?: Maybe<Scalars['Int']['output']>;
+  /** Number of characters participating in one or more kills, per hour. The period is expanded to whole hours and can be at most 31 days. Recent hours are only included once they have been processed, which happens shortly after they end. */
+  activeCharactersSeries: Array<ActiveCharactersPoint>;
   /** Get one character */
   character?: Maybe<Character>;
   /** Query for CharacterRatings matching a filter */
@@ -2112,11 +2404,12 @@ export type QueryAbilityArgs = {
 };
 
 
-export type QueryActiveCharactersStatsArgs = {
+export type QueryActiveCharactersSeriesArgs = {
   career?: InputMaybe<Career>;
   from: Scalars['DateTime']['input'];
   maxLevel?: InputMaybe<Scalars['Byte']['input']>;
   minLevel?: InputMaybe<Scalars['Byte']['input']>;
+  realm?: InputMaybe<Realm>;
   to: Scalars['DateTime']['input'];
 };
 
@@ -2440,7 +2733,9 @@ export type Quest = SearchContent & {
   choiceCount: Scalars['UnsignedByte']['output'];
   /** Description */
   description?: Maybe<Scalars['String']['output']>;
-  /** Gold reward (in brass coins) */
+  /** Expiration time */
+  expireTime?: Maybe<Scalars['Duration']['output']>;
+  /** Gold reward (in copper coins) */
   gold: Scalars['UnsignedInt']['output'];
   /** Id of the quest */
   id: Scalars['ID']['output'];
@@ -2460,7 +2755,9 @@ export type Quest = SearchContent & {
   objectives: Array<QuestObjective>;
   /** Available to races */
   raceRestriction: Array<Race>;
-  /** Repeatable Type */
+  /** Repeatable time, if repeatable type is set */
+  repeatableTime: Scalars['Duration']['output'];
+  /** Repeatable type */
   repeatableType: QuestRepeatableType;
   /** Choice rewards */
   rewardsChoice: Array<QuestReward>;
@@ -2477,11 +2774,21 @@ export type Quest = SearchContent & {
 export type QuestFilterInput = {
   and?: InputMaybe<Array<QuestFilterInput>>;
   careerRestriction?: InputMaybe<CareerMaskOperationFilterInput>;
+  expireTime?: InputMaybe<DurationOperationFilterInput>;
+  /** Money Reward in copper coins */
+  gold?: InputMaybe<UnsignedIntOperationFilterInput>;
   id?: InputMaybe<IdOperationFilterInput>;
+  /** Minimum level to accept quest */
+  minLevel?: InputMaybe<UnsignedByteOperationFilterInput>;
   name?: InputMaybe<StringOperationFilterInput>;
   or?: InputMaybe<Array<QuestFilterInput>>;
   raceRestriction?: InputMaybe<RaceMaskOperationFilterInput>;
+  /** Repeat time for the quest if repeatableType is not None */
+  repeatableTime?: InputMaybe<DurationOperationFilterInput>;
+  repeatableType?: InputMaybe<QuestRepeatableTypeOperationFilterInput>;
   type?: InputMaybe<QuestTypeFlagsOperationFilterInput>;
+  /** XP Reward */
+  xp?: InputMaybe<UnsignedIntOperationFilterInput>;
 };
 
 /** Info about a quest objective */
@@ -2502,6 +2809,13 @@ export enum QuestRepeatableType {
   Weekly = 'WEEKLY'
 }
 
+export type QuestRepeatableTypeOperationFilterInput = {
+  eq?: InputMaybe<QuestRepeatableType>;
+  in?: InputMaybe<Array<QuestRepeatableType>>;
+  neq?: InputMaybe<QuestRepeatableType>;
+  nin?: InputMaybe<Array<QuestRepeatableType>>;
+};
+
 /** Info about a quest reward */
 export type QuestReward = {
   __typename?: 'QuestReward';
@@ -2512,9 +2826,17 @@ export type QuestReward = {
 };
 
 export type QuestSortInput = {
+  careerRestriction?: InputMaybe<SortEnumType>;
+  /** Money Reward in copper coins */
+  gold?: InputMaybe<SortEnumType>;
   id?: InputMaybe<SortEnumType>;
+  /** Minimum level to accept quest */
+  minLevel?: InputMaybe<SortEnumType>;
   name?: InputMaybe<SortEnumType>;
+  raceRestriction?: InputMaybe<SortEnumType>;
   type?: InputMaybe<SortEnumType>;
+  /** XP Reward */
+  xp?: InputMaybe<SortEnumType>;
 };
 
 export enum QuestTypeFlags {
@@ -2903,7 +3225,7 @@ export type ScenarioScoreboardEntry = {
   healing: Scalars['UnsignedInt']['output'];
   /** Healing of others */
   healingOthers: Scalars['UnsignedInt']['output'];
-  /** Healing of self */
+  /** Healing Received */
   healingReceived: Scalars['UnsignedInt']['output'];
   /** Healing of self */
   healingSelf: Scalars['UnsignedInt']['output'];
@@ -2917,6 +3239,8 @@ export type ScenarioScoreboardEntry = {
   killsSolo: Scalars['UnsignedInt']['output'];
   /** Level at the time of the scenario */
   level: Scalars['UnsignedByte']['output'];
+  /** Medals earned during the scenario */
+  medals: Scalars['UnsignedInt']['output'];
   /** Objective Score */
   objectiveScore: Scalars['UnsignedInt']['output'];
   /** Damage Prevented */
@@ -2973,7 +3297,8 @@ export enum ScenarioType {
   PickUpGroupRandom = 'PICK_UP_GROUP_RANDOM',
   Random6V6 = 'RANDOM6V6',
   ReverseDaemonBall = 'REVERSE_DAEMON_BALL',
-  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL'
+  RotatingKingOfTheHill = 'ROTATING_KING_OF_THE_HILL',
+  Scripted = 'SCRIPTED'
 }
 
 /** A connection to a list of items. */
@@ -3372,6 +3697,31 @@ export type StringOperationFilterInput = {
   startsWith?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** A text drawn on a zone's map; its name is the text */
+export type TextMapPoint = Location & MapPoint & {
+  __typename?: 'TextMapPoint';
+  /** Side of the point the text is drawn from */
+  anchor: MapTextAnchor;
+  /** Blue of the text's colour */
+  colorB: Scalars['UnsignedByte']['output'];
+  /** Green of the text's colour */
+  colorG: Scalars['UnsignedByte']['output'];
+  /** Red of the text's colour */
+  colorR: Scalars['UnsignedByte']['output'];
+  /** Font of the text, e.g. font_default_text_giant */
+  font: Scalars['String']['output'];
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Number of the point in its zone (its id in mappoints.xml) */
+  number: Scalars['UnsignedShort']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+};
+
 export enum TomeHelpType {
   AdvancedHelp = 'ADVANCED_HELP',
   BeginnerHelp = 'BEGINNER_HELP',
@@ -3656,21 +4006,6 @@ export type UsedToPurchaseEdge = {
   node: VendorItem;
 };
 
-export type UuidOperationFilterInput = {
-  eq?: InputMaybe<Scalars['UUID']['input']>;
-  gt?: InputMaybe<Scalars['UUID']['input']>;
-  gte?: InputMaybe<Scalars['UUID']['input']>;
-  in?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  lt?: InputMaybe<Scalars['UUID']['input']>;
-  lte?: InputMaybe<Scalars['UUID']['input']>;
-  neq?: InputMaybe<Scalars['UUID']['input']>;
-  ngt?: InputMaybe<Scalars['UUID']['input']>;
-  ngte?: InputMaybe<Scalars['UUID']['input']>;
-  nin?: InputMaybe<Array<InputMaybe<Scalars['UUID']['input']>>>;
-  nlt?: InputMaybe<Scalars['UUID']['input']>;
-  nlte?: InputMaybe<Scalars['UUID']['input']>;
-};
-
 export type VendorItem = {
   __typename?: 'VendorItem';
   count: Scalars['UnsignedShort']['output'];
@@ -3789,6 +4124,35 @@ export type WarJournalStorylineFilterInput = {
   or?: InputMaybe<Array<WarJournalStorylineFilterInput>>;
 };
 
+/** A war camp's pin on a zone's map */
+export type WarcampMapPoint = Location & MapPoint & {
+  __typename?: 'WarcampMapPoint';
+  /** If false, the pin stays where it falls on a round map, cut to the circle, instead of being moved to its edge */
+  allowGutter: Scalars['Boolean']['output'];
+  /** Icon set of an objective's or keep's states */
+  iconSet?: Maybe<Scalars['UnsignedByte']['output']>;
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Live event the pin shows during only; null is always */
+  liveEvent?: Maybe<LiveEvent>;
+  /** Icon (mapicons.xml); null is the pin type's default (mappointdefaults.csv) */
+  mapIcon?: Maybe<Scalars['UnsignedShort']['output']>;
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Number of the point in its zone (its id in mappoints.xml) */
+  number: Scalars['UnsignedShort']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+  /** Race of the war camp; also gives its realm */
+  race?: Maybe<Faction>;
+  /** Realm of the war camp */
+  realm?: Maybe<Realm>;
+  /** Services shown on the tooltip */
+  services: Array<HubService>;
+};
+
 export type ZandriExpeditionEvent = Event & {
   __typename?: 'ZandriExpeditionEvent';
   endTime?: Maybe<Scalars['DateTime']['output']>;
@@ -3806,6 +4170,8 @@ export type Zone = SearchContent & {
   id: Scalars['ID']['output'];
   /** Locations in the zone */
   locations: Array<Location>;
+  /** The points of the zone's map, in their order in its mappoints.xml */
+  mapPoints: Array<MapPoint>;
   /** The map setup of the zone */
   mapSetup?: Maybe<MapSetup>;
   /** The name of the zone */
@@ -3824,6 +4190,21 @@ export type ZoneArea = {
   name?: Maybe<Scalars['String']['output']>;
   /** Zone information */
   zone: Zone;
+};
+
+/** A zone transition on a zone's map; its name is the text the map shows */
+export type ZoneTransitionMapPoint = Location & MapPoint & {
+  __typename?: 'ZoneTransitionMapPoint';
+  /** Unique identifier of the map point */
+  id: Scalars['ID']['output'];
+  /** Place of the point in its zone's mappoints.xml; the client numbers the pins in this order */
+  index: Scalars['UnsignedShort']['output'];
+  /** Internal name of the point */
+  name: Scalars['String']['output'];
+  /** Where the point is; its zone is not always the zone whose map lists it */
+  position: Position;
+  /** Zone the transition leads to */
+  toZone?: Maybe<Zone>;
 };
 
 export enum ZoneType {

@@ -13,6 +13,10 @@ const WAR_JOURNAL_STORYLINES = gql`
     warJournalStorylines {
       id
       name
+      summary
+      entries {
+        id
+      }
     }
   }
 `;
@@ -64,6 +68,7 @@ export const Storylines = (): ReactElement => {
           <thead>
             <tr>
               <th>{t('pages:warJournalStorylines.name')}</th>
+              <th>{t('pages:warJournalStorylines.entryCount')}</th>
             </tr>
           </thead>
           <tbody>
@@ -71,7 +76,11 @@ export const Storylines = (): ReactElement => {
               <tr key={entry.id}>
                 <td>
                   <Link to={`/storylines/${entry.id}`}>{entry.name}</Link>
+                  {entry.summary && (
+                    <p className="is-size-7">{entry.summary}</p>
+                  )}
                 </td>
+                <td>{entry.entries.length}</td>
               </tr>
             ))}
           </tbody>

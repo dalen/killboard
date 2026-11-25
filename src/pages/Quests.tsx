@@ -32,6 +32,7 @@ const QUESTS = gql`
       nodes {
         id
         name
+        minLevel
         type {
           isGroup
           isTravel
@@ -81,8 +82,27 @@ const getQuestNameFilter = (search: URLSearchParams): QuestFilterInput => {
   return { name: { contains: name } };
 };
 
+const getQuestMinLevelFilter = (search: URLSearchParams): QuestFilterInput => {
+  const minLevel = search.get('minLevel');
+  if (minLevel === null || minLevel === '') {
+    return {};
+  }
+
+  const parsedMinLevel = Number(minLevel);
+  if (
+    !Number.isInteger(parsedMinLevel) ||
+    parsedMinLevel < 0 ||
+    parsedMinLevel > 40
+  ) {
+    return {};
+  }
+
+  return { minLevel: { gte: parsedMinLevel } };
+};
+
 const getFilters = (search: URLSearchParams): QuestFilterInput => ({
   ...getQuestNameFilter(search),
+  ...getQuestMinLevelFilter(search),
 });
 
 export const Quests = (): ReactElement => {
@@ -126,15 +146,56 @@ export const Quests = (): ReactElement => {
 
       <div className="card mb-5">
         <div className="card-content">
-          <div className="field">
-            <label className="label">{t('pages:quests.search')}</label>
-            <SearchBox
-              initialQuery={search.get('name') || ''}
-              onSubmit={(event) => {
-                search.set('name', event);
-                setSearch(search);
-              }}
-            />
+          <div className="columns">
+            <div className="column is-three-quarters">
+              <div className="field">
+                <label className="label">{t('pages:quests.search')}</label>
+                <SearchBox
+                  initialQuery={search.get('name') || ''}
+                  onSubmit={(event) => {
+                    if (event) {
+                      search.set('name', event);
+                    } else {
+                      search.delete('name');
+                    }
+                    setSearch(search);
+                  }}
+                />
+              </div>
+            </div>
+            <div className="column">
+              <div className="field">
+                <label className="label" htmlFor="quest-min-level">
+                  {t('pages:quests.minLevel')}
+                </label>
+                <input
+                  className="input"
+                  id="quest-min-level"
+                  type="number"
+                  min={0}
+                  max={40}
+                  step={1}
+                  value={search.get('minLevel') ?? ''}
+                  onChange={(event) => {
+                    const { value } = event.target;
+                    const parsedValue = Number(value);
+                    if (
+                      value === '' ||
+                      (Number.isInteger(parsedValue) &&
+                        parsedValue >= 0 &&
+                        parsedValue <= 40)
+                    ) {
+                      if (value === '') {
+                        search.delete('minLevel');
+                      } else {
+                        search.set('minLevel', value);
+                      }
+                      setSearch(search);
+                    }
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -151,6 +212,7 @@ export const Quests = (): ReactElement => {
           <thead>
             <tr>
               <th>{t('pages:quests.name')}</th>
+              <th>{t('pages:quests.minLevel')}</th>
               <th align="right">{t('pages:quests.xp')}</th>
               <th align="right" id="table_gold">
                 <span className="mr-2">{t('pages:quests.gold')}</span>
@@ -177,6 +239,7 @@ export const Quests = (): ReactElement => {
                     </div>
                   </Link>
                 </td>
+                <td>{quest.minLevel}</td>
                 <td align="right">{quest.xp}</td>
                 <td align="right" aria-labelledby="table_gold">
                   <GoldPrice price={quest.gold} />

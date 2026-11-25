@@ -26,6 +26,8 @@
     "title": "Kills"
   },
   "itemVendors": {
+    "incompleteData": "Some vendor items could not be loaded because the game API returned missing item data. You can continue to another page.",
+    "range": "Items {{start}}–{{end}} of {{total}}",
     "item": "Item",
     "creatureName": "Creature Name",
     "realm": "Realm",

@@ -89,6 +89,7 @@ export const Storyline = (): ReactElement => {
             <tr>
               <th>{t('pages:warJournalStoryline.entryNumber')}</th>
               <th>{t('pages:warJournalStoryline.entryName')}</th>
+              <th>{t('pages:warJournalStoryline.rvr')}</th>
             </tr>
           </thead>
           <tbody>

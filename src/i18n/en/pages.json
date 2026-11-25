@@ -120,10 +120,21 @@
     "title": "Creatures",
     "search": "Name",
     "name": "Name",
+    "id": "ID",
+    "realm": "Realm",
+    "allRealms": "All Realms",
+    "role": "Role",
+    "allRoles": "All Roles",
+    "location": "Location",
+    "allLocations": "All Locations",
     "creatureSubType": "Type"
   },
   "creature": {
     "creatureId": "Creature #{{creatureId}}",
+    "zoneId": "Zone #{{zoneId}}",
+    "noSpawnLocations": "No spawn locations are recorded for this creature.",
+    "mapUnavailable": "We know where it spawns, but there isn't a usable map for this zone yet.",
+    "mapMarkersUnavailable": "There are spawn locations for this, but I can't mark them on the map yet.",
     "questsStarter": "Quests",
     "vendorItems": "Items Sold"
   },
@@ -143,6 +154,10 @@
   },
   "gameobject": {
     "gameobjectId": "Game Object #{{gameobjectId}}",
+    "zoneId": "Zone #{{zoneId}}",
+    "noSpawnLocations": "No spawn locations are recorded for this game object.",
+    "mapUnavailable": "We know where it spawns, but there isn't a usable map for this zone yet.",
+    "mapMarkersUnavailable": "There are spawn locations for this, but I can't mark them on the map yet.",
     "questsStarter": "Quests",
     "vendorItems": "Items Sold"
   },
@@ -150,6 +165,7 @@
     "title": "Quests",
     "search": "Search",
     "name": "Name",
+    "minLevel": "Min Level",
     "xp": "Xp",
     "gold": "Gold",
     "given": "Rewards",
@@ -229,12 +245,14 @@
   },
   "warJournalStorylines": {
     "title": "Storylines",
-    "name": "Name"
+    "name": "Name",
+    "entryCount": "Entries"
   },
   "warJournalStoryline": {
     "storylineName": "{{storylineName}}",
     "entryNumber": "Entry",
     "entryName": "Name",
+    "rvr": "RvR",
     "influenceRewards": "Influence Rewards",
     "basicRewards": "Basic",
     "advancedRewards": "Advanced",

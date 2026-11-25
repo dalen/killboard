@@ -1,9 +1,21 @@
-import type { QuestTypeFlagsFlags } from '@/__generated__/graphql';
+import type { MapSetup, QuestTypeFlagsFlags } from '@/__generated__/graphql';
 import {
   Career,
   KillDamageSourceType,
   QuestRepeatableType
 } from '@/__generated__/graphql';
+import { CreatureTitle } from '@/__generated__/schema-types';
+
+export const hasUsableMapSetup = (
+  mapSetup: MapSetup | null | undefined,
+): mapSetup is MapSetup =>
+  mapSetup != null &&
+  Number.isFinite(mapSetup.nwCornerX) &&
+  Number.isFinite(mapSetup.nwCornerY) &&
+  Number.isFinite(mapSetup.seCornerX) &&
+  Number.isFinite(mapSetup.seCornerY) &&
+  mapSetup.seCornerX > mapSetup.nwCornerX &&
+  mapSetup.seCornerY > mapSetup.nwCornerY;
 
 export const careerIcon = (career: Career): string => {
   switch (career) {
@@ -195,4 +207,80 @@ export const questTypeIcon = (
   }
 
   return 'quest_green.png';
+};
+
+export const creatureTitleIcon = (
+  title: CreatureTitle | null | undefined,
+): string | null => {
+  if (title == null || title === CreatureTitle.None) {
+    return null;
+  }
+
+  const value = title as string;
+  if (value.includes('HEAL') || value.includes('RITUALIST')) {
+    return '/images/icons/healing.png';
+  }
+  if (value === 'BLACKSMITH') {
+    return '/images/corner_icons/ea_icon_corner_blacksmith.png';
+  }
+  if (
+    value.includes('MERCHANT') ||
+    value.includes('VENDOR') ||
+    value.includes('QUARTERMASTER')
+  )
+  {
+    return '/images/corner_icons/ea_icon_corner_merchant.png';
+  }
+  if (value.includes('TRAINER')) {
+    return '/images/corner_icons/ea_icon_corner_training.png';
+  }
+  if (value === 'APOTHECARY') {
+    return '/images/corner_icons/ea_icon_corner_apothecary.png';
+  }
+  if (value === 'AUCTIONEER') {
+    return '/images/corner_icons/ea_icon_corner_auction.png';
+  }
+  if (value === 'CULTIVATOR') {
+    return '/images/corner_icons/ea_icon_corner_cultivating.png';
+  }
+  if (value.includes('REGISTRAR') || value === 'HERALD') {
+    return '/images/corner_icons/ea_icon_corner_guild.png';
+  }
+  if (value === 'POSTMASTER') {
+    return '/images/corner_icons/ea_icon_corner_mail.png';
+  }
+  if (value === 'BANKER' || value.includes('VAULT')) {
+    return '/images/corner_icons/ea_icon_corner_bag.png';
+  }
+  if (
+    value.includes('GUARD') ||
+    value.includes('LORD') ||
+    value.includes('GENERAL') ||
+    value === 'DOGOF_WAR' ||
+    value === 'SERGEANT'
+  )
+  {
+    return '/images/corner_icons/ea_icon_corner_rvr.png';
+  }
+
+  return null;
+};
+
+export const creatureTitleLabel = (
+  title: CreatureTitle | null | undefined,
+): string => {
+  if (title == null || title === CreatureTitle.None) {
+    return '';
+  }
+
+  return (title as string)
+    .split('_')
+    .flatMap((word) => {
+      if (word.length > 2 && word.endsWith('OF')) {
+        return [word.slice(0, -2), 'OF'];
+      }
+      return [word];
+    })
+    .map((word) => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(' ');
 };

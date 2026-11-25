@@ -5,7 +5,8 @@ import { useQuery } from '@apollo/client/react';
 import type { MapSetup, Query, Zone } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { MapPositions } from '@/components/MapPositions';
-import { questTypeIcon } from '../utils';
+import { MapFallback } from '@/components/MapFallback';
+import { hasUsableMapSetup, questTypeIcon } from '../utils';
 import type { ReactElement } from 'react';
 import { VendorItems } from '@/components/creature/VendorItems';
 
@@ -76,23 +77,21 @@ export const Creature = ({
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
-  const zoneIds: string[] = [
-    ...new Set(entry.spawns.map((spawn) => spawn.position.zone?.id as string)),
-  ];
-
-  const zones = new Map<string, [Zone, MapSetup]>(
-    entry.spawns.map((spawn): [string, [Zone, MapSetup]] => [
-      spawn.position.zone?.id as string,
-      [spawn.position.zone as Zone, spawn.position.mapSetup as MapSetup],
-    ]),
-  );
-
-  const zone = zoneId ? zones.get(zoneId)?.[0] : zones.get(zoneIds[0])?.[0];
-  const mapSetup = zoneId ? zones.get(zoneId)?.[1] : zones.get(zoneIds[0])?.[1];
-
-  if (zone == null || mapSetup == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
+  const zones = entry.spawns.reduce((availableZones, spawn) => {
+    const { zone, mapSetup } = spawn.position;
+    if (zone != null) {
+      const previousMapSetup = availableZones.get(zone.id)?.[1];
+      availableZones.set(zone.id, [
+        zone,
+        hasUsableMapSetup(mapSetup) ? mapSetup : previousMapSetup,
+      ]);
+    }
+    return availableZones;
+  }, new Map<string, [Zone, MapSetup | null | undefined]>());
+  const zoneIds = [...zones.keys()];
+  const activeZoneId = zoneId ?? zoneIds[0];
+  const zone = activeZoneId ? zones.get(activeZoneId)?.[0] : undefined;
+  const mapSetup = activeZoneId ? zones.get(activeZoneId)?.[1] : undefined;
 
   const hasQuests = entry.questsStarter.length > 0;
   const hasVendorItems = (entry.vendorItems?.totalCount ?? 0) > 0;
@@ -113,7 +112,7 @@ export const Creature = ({
           </li>
           <li className="is-active">
             <Link to={`/creature/${id}`}>
-              {t('pages:creature.creatureId', { creatureId: id })}
+              {entry.name || t('pages:creature.creatureId', { creatureId: id })}
             </Link>
           </li>
         </ul>
@@ -195,7 +194,8 @@ export const Creature = ({
           {zoneIds.map((z) => (
             <li key={z} className={zoneId === z ? 'is-active' : ''}>
               <Link to={`/creature/${id}/zone/${z}`}>
-                {zones.get(z)?.[0].name}
+                {zones.get(z)?.[0].name ||
+                  t('pages:creature.zoneId', { zoneId: z })}
               </Link>
             </li>
           ))}
@@ -204,26 +204,45 @@ export const Creature = ({
 
       <div className="card mb-5">
         <div className="card-content">
-          <div
-            style={{
-              height: '640px',
-              width: '640px',
-            }}
-          >
-            <MapPositions
-              positions={entry.spawns
-                .filter((spawn) => spawn.position.zone?.id === zone.id)
-                .map((spawn) => ({
-                  x: spawn.position.x,
-                  y: spawn.position.y,
-                }))}
-              zoneId={Number(zone.id)}
-              nwCornerX={mapSetup.nwCornerX}
-              nwCornerY={mapSetup.nwCornerY}
-              seCornerX={mapSetup.seCornerX}
-              seCornerY={mapSetup.seCornerY}
-            />
-          </div>
+          {zone != null && mapSetup != null && (
+            <div
+              style={{
+                height: '640px',
+                width: '640px',
+              }}
+            >
+              <MapPositions
+                positions={entry.spawns
+                  .filter((spawn) => spawn.position.zone?.id === zone.id)
+                  .map((spawn) => ({
+                    x: spawn.position.x,
+                    y: spawn.position.y,
+                  }))}
+                zoneId={Number(zone.id)}
+                nwCornerX={mapSetup.nwCornerX}
+                nwCornerY={mapSetup.nwCornerY}
+                seCornerX={mapSetup.seCornerX}
+                seCornerY={mapSetup.seCornerY}
+              />
+            </div>
+          )}
+          {entry.spawns.length === 0 && (
+            <div className="notification is-dark mb-0">
+              {t('pages:creature.noSpawnLocations')}
+            </div>
+          )}
+          {entry.spawns.length > 0 &&
+            (zone == null || mapSetup == null) && (
+              <MapFallback
+                key={zone?.id ?? 'unmapped'}
+                zoneId={zone?.id}
+                zoneName={zone?.name}
+                mapUnavailableText={t('pages:creature.mapUnavailable')}
+                markersUnavailableText={t(
+                  'pages:creature.mapMarkersUnavailable',
+                )}
+              />
+            )}
         </div>
       </div>
     </div>
