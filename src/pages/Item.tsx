@@ -3,20 +3,16 @@ import { Link, useParams } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import clsx from 'clsx';
-import Tippy from '@tippyjs/react';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { isPercentage } from '../utils';
 import { ItemQuests } from '@/components/item/ItemQuests';
 import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
 import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
-import { ItemPopup } from '@/components/item/ItemPopup';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
+import { ItemDrops, type ItemDropSource } from '@/components/item/ItemDrops';
 import type { ReactElement } from 'react';
-import {
-  EquipSlot,
-  type GetItemInfoQuery,
-  ItemType,
-} from '@/__generated__/graphql';
+import { EquipSlot, type Query, ItemType } from '@/__generated__/graphql';
 
 const ITEM_INFO = gql`
   query GetItemInfo($id: ID!) {
@@ -82,13 +78,32 @@ const ITEM_INFO = gql`
         id
         description
       }
-      soldByVendors {
+      soldByVendors(first: 25) {
         totalCount
+        nodes {
+          creatures {
+            id
+            spawns {
+              zone {
+                name
+              }
+            }
+          }
+        }
       }
       usedToPurchase {
         totalCount
       }
       rewardedFromQuests {
+        totalCount
+      }
+      dropsFromCreatures {
+        totalCount
+      }
+      dropsFromGameObjects {
+        totalCount
+      }
+      rewardedFromChapters {
         totalCount
       }
     }
@@ -98,11 +113,11 @@ const ITEM_INFO = gql`
 export const Item = ({
   tab,
 }: {
-  tab: 'vendors' | 'quests' | 'purchase';
+  tab: 'vendors' | 'quests' | 'purchase' | ItemDropSource;
 }): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
-  const { loading, error, data } = useQuery<GetItemInfoQuery>(ITEM_INFO, {
+  const { loading, error, data } = useQuery<Query>(ITEM_INFO, {
     variables: {
       id,
     },
@@ -120,6 +135,14 @@ export const Item = ({
   }
 
   const { item } = data;
+  const sellerCount = new Set(
+    item.soldByVendors?.nodes
+      ?.flatMap(({ creatures }) =>
+        creatures
+          .filter((creature) => creature.spawns.length > 0)
+          .map(({ id }) => id),
+      ) ?? [],
+  ).size;
 
   const setItemCosts = item.itemSet?.items.map((setItem) => {
     const crestRequirements =
@@ -159,6 +182,15 @@ export const Item = ({
   if (item.rewardedFromQuests?.totalCount) {
     activeTabs.push('quests');
   }
+  if (item.dropsFromCreatures?.totalCount) {
+    activeTabs.push('creatures');
+  }
+  if (item.dropsFromGameObjects?.totalCount) {
+    activeTabs.push('gameObjects');
+  }
+  if (item.rewardedFromChapters?.totalCount) {
+    activeTabs.push('chapters');
+  }
   const activeTab = activeTabs.includes(tab) ? tab : activeTabs[0];
 
   return (
@@ -172,9 +204,7 @@ export const Item = ({
             <Link to="/items">{t('common:items')}</Link>
           </li>
           <li className="is-active">
-            <div className="ml-2">
-              {item.name}
-            </div>
+            <div className="ml-2">{item.name}</div>
           </li>
         </ul>
       </nav>
@@ -313,11 +343,10 @@ export const Item = ({
                         className="set-piece-row mb-1"
                       >
                         <span className="set-piece-name">
-                          <Tippy
-                            duration={0}
+                          <ItemPopupTrigger
+                            itemId={setItemCost.item.id}
                             placement="right-start"
                             offset={[0, 6]}
-                            content={<ItemPopup itemId={setItemCost.item.id} />}
                           >
                             <span className="icon-text">
                               <figure className="image is-24x24 m-0 mr-1">
@@ -331,7 +360,7 @@ export const Item = ({
                                 </Link>
                               )}
                             </span>
-                          </Tippy>
+                          </ItemPopupTrigger>
                         </span>
                         <span className="set-piece-cost">
                           {setItemCost.cost != null ? (
@@ -361,7 +390,9 @@ export const Item = ({
                           <>
                             <strong>{t('pages:itemPage.fullSetTotal')}</strong>
                             <span className="icon-text ml-2">
-                              <strong>{setWarCrestTotal.toLocaleString()}</strong>
+                              <strong>
+                                {setWarCrestTotal.toLocaleString()}
+                              </strong>
                               <figure className="image is-16x16 ml-1">
                                 <img
                                   src={pricedSetItems[0].crestIcon}
@@ -392,7 +423,7 @@ export const Item = ({
         {activeTabs.includes('vendors') && (
           <li className={activeTab === 'vendors' ? 'is-active' : ''}>
             <Link to={`/item/${id}`}>
-              {t('pages:itemPage.vendors')} ({item.soldByVendors?.totalCount})
+              {t('pages:itemPage.vendors')} ({sellerCount})
             </Link>
           </li>
         )}
@@ -411,10 +442,39 @@ export const Item = ({
             </Link>
           </li>
         )}
+        {activeTabs.includes('creatures') && (
+          <li className={activeTab === 'creatures' ? 'is-active' : ''}>
+            <Link to={`/item/${id}/drops/creatures`}>
+              {t('pages:itemSources.droppedByCreatures')} (
+              {item.dropsFromCreatures?.totalCount})
+            </Link>
+          </li>
+        )}
+        {activeTabs.includes('gameObjects') && (
+          <li className={activeTab === 'gameObjects' ? 'is-active' : ''}>
+            <Link to={`/item/${id}/drops/objects`}>
+              {t('pages:itemSources.droppedByGameObjects')} (
+              {item.dropsFromGameObjects?.totalCount})
+            </Link>
+          </li>
+        )}
+        {activeTabs.includes('chapters') && (
+          <li className={activeTab === 'chapters' ? 'is-active' : ''}>
+            <Link to={`/item/${id}/chapters`}>
+              {t('pages:itemSources.chapters')} (
+              {item.rewardedFromChapters?.totalCount})
+            </Link>
+          </li>
+        )}
       </div>
       {activeTab === 'vendors' && <ItemVendorsSell itemId={id} />}
       {activeTab === 'purchase' && <ItemVendorsPurchase itemId={id} />}
       {activeTab === 'quests' && <ItemQuests itemId={id} />}
+      {(activeTab === 'creatures' ||
+        activeTab === 'gameObjects' ||
+        activeTab === 'chapters') && (
+        <ItemDrops itemId={id} source={activeTab} />
+      )}
     </div>
   );
 };

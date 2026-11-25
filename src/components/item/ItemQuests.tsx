@@ -3,10 +3,11 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import Tippy from '@tippyjs/react';
 import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { ItemPopup } from './ItemPopup';
+import { GoldPrice } from '@/components/GoldPrice';
+import { HoverPopupTrigger } from '@/components/global/HoverPopupTrigger';
+import { ItemPopupTrigger } from './ItemPopupTrigger';
 import { questTypeIcon } from '@/utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
 
@@ -29,6 +30,10 @@ const ITEM_INFO = gql`
         nodes {
           id
           name
+          minLevel
+          maxLevel
+          xp
+          gold
           type {
             isGroup
             isTravel
@@ -67,8 +72,8 @@ const ITEM_INFO = gql`
 `;
 
 export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
-  const [perPage, setPerPage] = useState(10);
-  const { t } = useTranslation(['common', 'components']);
+  const [perPage, setPerPage] = useState(25);
+  const { t } = useTranslation(['common', 'components', 'pages']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
       first: perPage,
@@ -89,137 +94,174 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
-  if (rewardedFromQuests?.nodes == null) {
-    return null;
-  }
-
   const { pageInfo } = rewardedFromQuests;
 
   return (
     <>
-      <table className="table is-striped is-fullwidth">
-        <thead>
-          <tr>
-            <th>{t('components:itemQuests.questName')}</th>
-            <th>{t('components:itemQuests.given')}</th>
-            <th>{t('components:itemQuests.choice')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rewardedFromQuests.nodes.map((quest) => (
-            <tr key={quest.id}>
-              <td>
-                <Link to={`/quest/${quest.id}`}>
-                  <div className="icon-text">
-                    <span className="icon has-text-info">
-                      <img
-                        src={`/images/icons/${questTypeIcon(
-                          quest.type,
-                          quest.repeatableType,
-                        )}`}
-                        alt="Quest Type"
-                      />
-                    </span>
-                    <span>{quest.name}</span>
-                  </div>
-                </Link>
-              </td>
-              <td>
-                <div className="mb-2 is-flex">
-                  {quest.rewardsGiven.slice(0, 5).map((reward) => (
-                    <div key={`${quest.id}-${reward.item.id}`}>
-                      <Tippy
-                        duration={0}
-                        placement="top"
-                        content={<ItemPopup itemId={reward.item.id} />}
-                      >
-                        <div>
-                          <Link to={`/item/${reward.item.id}`}>
-                            <figure className="image is-32x32">
-                              <div style={{ position: 'relative' }}>
-                                <img
-                                  style={{
-                                    left: 0,
-                                    position: 'absolute',
-                                    top: 0,
-                                  }}
-                                  src={reward.item.iconUrl}
-                                  alt={reward.item.name}
-                                />
-                                {reward.count > 1 && (
-                                  <div
-                                    className="has-text-white"
-                                    style={{
-                                      position: 'absolute',
-                                      right: 4,
-                                      top: 0,
-                                    }}
-                                  >
-                                    {reward.count}
-                                  </div>
-                                )}
-                              </div>
-                            </figure>
-                          </Link>
-                        </div>
-                      </Tippy>
-                    </div>
-                  ))}
-                </div>
-                {quest.rewardsGiven.length > 5 && (
-                  <div>{quest.rewardsGiven.length - 5} other items</div>
-                )}
-              </td>
-              <td>
-                <div className="mb-2 is-flex">
-                  {quest.rewardsChoice.slice(0, 5).map((reward) => (
-                    <div key={`${quest.id}-${reward.item.id}`}>
-                      <Tippy
-                        duration={0}
-                        placement="top"
-                        content={<ItemPopup itemId={reward.item.id} />}
-                      >
-                        <div>
-                          <Link to={`/item/${reward.item.id}`}>
-                            <figure className="image is-32x32">
-                              <div style={{ position: 'relative' }}>
-                                <img
-                                  style={{
-                                    left: 0,
-                                    position: 'absolute',
-                                    top: 0,
-                                  }}
-                                  src={reward.item.iconUrl}
-                                  alt={reward.item.name}
-                                />
-                                {reward.count > 1 && (
-                                  <div
-                                    className="has-text-white"
-                                    style={{
-                                      position: 'absolute',
-                                      right: 4,
-                                      top: 0,
-                                    }}
-                                  >
-                                    {reward.count}
-                                  </div>
-                                )}
-                              </div>
-                            </figure>
-                          </Link>
-                        </div>
-                      </Tippy>
-                    </div>
-                  ))}
-                </div>
-                {quest.rewardsChoice.length > 5 && (
-                  <div>{quest.rewardsChoice.length - 5} other items</div>
-                )}
-              </td>
+      <div className="item-relation-scroll">
+        <table className="table is-striped is-fullwidth">
+          <thead>
+            <tr>
+              <th>{t('components:itemQuests.questName')}</th>
+              <th>
+                {t('pages:quests.minLevel')}–{t('pages:quests.maxLevel')}
+              </th>
+              <th>{t('pages:quests.xp')}</th>
+              <th>{t('pages:quests.gold')}</th>
+              <th>{t('components:itemQuests.given')}</th>
+              <th>{t('components:itemQuests.choice')}</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {rewardedFromQuests.nodes.map((quest) => (
+              <tr key={quest.id}>
+                <td>
+                  <HoverPopupTrigger
+                    placement="top"
+                    content={
+                      <div className="item-relation-tooltip">
+                        <strong>{quest.name}</strong>
+                        <div>
+                          {t('pages:quests.minLevel')}: {quest.minLevel}
+                          {quest.maxLevel !== quest.minLevel &&
+                            `–${quest.maxLevel}`}
+                        </div>
+                        <div>
+                          {t('pages:quests.xp')}: {quest.xp.toLocaleString()}
+                        </div>
+                        <div className="icon-text">
+                          {t('pages:quests.gold')}:{' '}
+                          <GoldPrice price={quest.gold} />
+                        </div>
+                        <div>
+                          {quest.repeatableType === 'WEEKLY'
+                            ? t('pages:quests.repeatabilityOptions.weekly')
+                            : quest.repeatableType === 'DONE'
+                              ? t('pages:quests.repeatabilityOptions.done')
+                              : t('pages:quests.repeatabilityOptions.none')}
+                        </div>
+                      </div>
+                    }
+                  >
+                    <Link to={`/quest/${quest.id}`}>
+                      <span className="icon-text">
+                        <span className="icon has-text-info">
+                          <img
+                            src={`/images/icons/${questTypeIcon(
+                              quest.type,
+                              quest.repeatableType,
+                            )}`}
+                            alt="Quest Type"
+                          />
+                        </span>
+                        <span>{quest.name}</span>
+                      </span>
+                    </Link>
+                  </HoverPopupTrigger>
+                </td>
+                <td>
+                  {quest.minLevel}
+                  {quest.maxLevel !== quest.minLevel && `–${quest.maxLevel}`}
+                </td>
+                <td>{quest.xp.toLocaleString()}</td>
+                <td>
+                  <GoldPrice price={quest.gold} />
+                </td>
+                <td>
+                  <div className="mb-2 is-flex">
+                    {quest.rewardsGiven.slice(0, 5).map((reward) => (
+                      <div key={`${quest.id}-${reward.item.id}`}>
+                        <ItemPopupTrigger
+                          itemId={reward.item.id}
+                          placement="top"
+                        >
+                          <div>
+                            <Link to={`/item/${reward.item.id}`}>
+                              <figure className="image is-32x32">
+                                <div style={{ position: 'relative' }}>
+                                  <img
+                                    style={{
+                                      left: 0,
+                                      position: 'absolute',
+                                      top: 0,
+                                    }}
+                                    src={reward.item.iconUrl}
+                                    alt={reward.item.name}
+                                  />
+                                  {reward.count > 1 && (
+                                    <div
+                                      className="has-text-white"
+                                      style={{
+                                        position: 'absolute',
+                                        right: 4,
+                                        top: 0,
+                                      }}
+                                    >
+                                      {reward.count}
+                                    </div>
+                                  )}
+                                </div>
+                              </figure>
+                            </Link>
+                          </div>
+                        </ItemPopupTrigger>
+                      </div>
+                    ))}
+                  </div>
+                  {quest.rewardsGiven.length > 5 && (
+                    <div>{quest.rewardsGiven.length - 5} other items</div>
+                  )}
+                </td>
+                <td>
+                  <div className="mb-2 is-flex">
+                    {quest.rewardsChoice.slice(0, 5).map((reward) => (
+                      <div key={`${quest.id}-${reward.item.id}`}>
+                        <ItemPopupTrigger
+                          itemId={reward.item.id}
+                          placement="top"
+                        >
+                          <div>
+                            <Link to={`/item/${reward.item.id}`}>
+                              <figure className="image is-32x32">
+                                <div style={{ position: 'relative' }}>
+                                  <img
+                                    style={{
+                                      left: 0,
+                                      position: 'absolute',
+                                      top: 0,
+                                    }}
+                                    src={reward.item.iconUrl}
+                                    alt={reward.item.name}
+                                  />
+                                  {reward.count > 1 && (
+                                    <div
+                                      className="has-text-white"
+                                      style={{
+                                        position: 'absolute',
+                                        right: 4,
+                                        top: 0,
+                                      }}
+                                    >
+                                      {reward.count}
+                                    </div>
+                                  )}
+                                </div>
+                              </figure>
+                            </Link>
+                          </div>
+                        </ItemPopupTrigger>
+                      </div>
+                    ))}
+                  </div>
+                  {quest.rewardsChoice.length > 5 && (
+                    <div>{quest.rewardsChoice.length - 5} other items</div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

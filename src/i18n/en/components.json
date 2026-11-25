@@ -185,7 +185,8 @@
   },
   "itemVendorsFilters": {
     "all": "All",
-    "career": "Career"
+    "career": "Career",
+    "blankZone": "Blank / Unknown"
   },
   "rankedLeaderboard": {
     "career": "Career",

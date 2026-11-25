@@ -11,6 +11,7 @@ import {
   getCurrentFilters,
 } from '@/components/item/ItemVendorsFilters';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 
 const ITEM_INFO = gql`
   query GetItemUsedToPurchase(
@@ -73,7 +74,7 @@ export const ItemVendorsPurchase = ({
 }: {
   itemId: string | undefined;
 }) => {
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(25);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
@@ -102,107 +103,111 @@ export const ItemVendorsPurchase = ({
   return (
     <>
       <ItemVendorsFilters />
-      <table className="table is-striped is-fullwidth">
-        <thead>
-          <tr>
-            <th>{t('components:itemVendors.item')}</th>
-            <th>{t('components:itemVendors.price')}</th>
-            <th>{t('components:itemVendors.creatureName')}</th>
-            <th>{t('components:itemVendors.realm')}</th>
-            <th>{t('components:itemVendors.zone')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {vendorItems.nodes.map((vendorItem) => {
-            const numRows = vendorItem.creatures.filter(
-              (c) => c.spawns.length > 0,
-            ).length;
+      <div className="item-relation-scroll">
+        <table className="table is-striped is-fullwidth">
+          <thead>
+            <tr>
+              <th>{t('components:itemVendors.item')}</th>
+              <th>{t('components:itemVendors.price')}</th>
+              <th>{t('components:itemVendors.creatureName')}</th>
+              <th>{t('components:itemVendors.realm')}</th>
+              <th>{t('components:itemVendors.zone')}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {vendorItems.nodes.map((vendorItem) => {
+              const numRows = vendorItem.creatures.filter(
+                (c) => c.spawns.length > 0,
+              ).length;
 
-            return vendorItem.creatures
-              .filter((creature) => creature.spawns.length > 0)
-              .map((creature, index) => (
-                <tr key={`${vendorItem.item.id}-${creature.id}`}>
-                  {index === 0 && (
-                    <>
-                      <td rowSpan={numRows}>
-                        <span className="icon-text">
-                          <figure className="image is-24x24 mx-1">
-                            <img
-                              src={vendorItem.item.iconUrl}
-                              alt="Item Icon"
-                            />
-                          </figure>
-                          <Link
-                            to={`/item/${vendorItem.item.id}`}
-                            className="mr-1"
+              return vendorItem.creatures
+                .filter((creature) => creature.spawns.length > 0)
+                .map((creature, index) => (
+                  <tr key={`${vendorItem.item.id}-${creature.id}`}>
+                    {index === 0 && (
+                      <>
+                        <td rowSpan={numRows}>
+                          <ItemPopupTrigger
+                            itemId={vendorItem.item.id}
+                            placement="top"
                           >
-                            {vendorItem.item.name}
-                          </Link>
-                          x{vendorItem.count}
-                        </span>
-                      </td>
-                      <td rowSpan={numRows}>
-                        <GoldPrice price={vendorItem.price} />
-                        {vendorItem.requiredItems.map((requiredItem) => (
-                          <span
-                            key={requiredItem.item.id}
-                            className="icon-text"
-                          >
-                            <figure className="image is-24x24 mx-1">
-                              <img
-                                src={requiredItem.item.iconUrl}
-                                alt="Item Icon"
-                              />
-                            </figure>
-                            <Link
-                              to={`/item/${requiredItem.item.id}`}
-                              className="mr-1"
+                            <span className="icon-text">
+                              <figure className="image is-24x24 mx-1">
+                                <img src={vendorItem.item.iconUrl} alt="" />
+                              </figure>
+                              <Link
+                                to={`/item/${vendorItem.item.id}`}
+                                className="mr-1"
+                              >
+                                {vendorItem.item.name}
+                              </Link>
+                              x{vendorItem.count}
+                            </span>
+                          </ItemPopupTrigger>
+                        </td>
+                        <td rowSpan={numRows}>
+                          <GoldPrice price={vendorItem.price} />
+                          {vendorItem.requiredItems.map((requiredItem) => (
+                            <span
+                              key={requiredItem.item.id}
+                              className="icon-text"
                             >
-                              {requiredItem.item.name}
-                            </Link>
-                            x{requiredItem.count}
-                          </span>
-                        ))}
-                      </td>
-                    </>
-                  )}
-                  <td>
-                    <Link to={`/creature/${creature.id}`}>
-                      {creature.name}{' '}
-                    </Link>
-                  </td>
-                  <td>
-                    {creature.realm === Realm.Order && (
-                      <figure className="image is-24x24 m-0">
-                        <img
-                          src="/images/icons/scenario/order.png"
-                          width={24}
-                          height={24}
-                          alt={t('components:itemVendors.order')}
-                        />
-                      </figure>
+                              <figure className="image is-24x24 mx-1">
+                                <img
+                                  src={requiredItem.item.iconUrl}
+                                  alt="Item Icon"
+                                />
+                              </figure>
+                              <Link
+                                to={`/item/${requiredItem.item.id}`}
+                                className="mr-1"
+                              >
+                                {requiredItem.item.name}
+                              </Link>
+                              x{requiredItem.count}
+                            </span>
+                          ))}
+                        </td>
+                      </>
                     )}
-                    {creature.realm === Realm.Destruction && (
-                      <figure className="image is-24x24 m-0">
-                        <img
-                          src="/images/icons/scenario/destruction.png"
-                          width={24}
-                          height={24}
-                          alt={t('components:itemVendors.destruction')}
-                        />
-                      </figure>
-                    )}
-                  </td>
-                  <td>
-                    {creature.spawns
-                      .map((creatureSpawn) => creatureSpawn.zone.name)
-                      .join(', ')}
-                  </td>
-                </tr>
-              ));
-          })}
-        </tbody>
-      </table>
+                    <td>
+                      <Link to={`/creature/${creature.id}`}>
+                        {creature.name}{' '}
+                      </Link>
+                    </td>
+                    <td>
+                      {creature.realm === Realm.Order && (
+                        <figure className="image is-24x24 m-0">
+                          <img
+                            src="/images/icons/scenario/order.png"
+                            width={24}
+                            height={24}
+                            alt={t('components:itemVendors.order')}
+                          />
+                        </figure>
+                      )}
+                      {creature.realm === Realm.Destruction && (
+                        <figure className="image is-24x24 m-0">
+                          <img
+                            src="/images/icons/scenario/destruction.png"
+                            width={24}
+                            height={24}
+                            alt={t('components:itemVendors.destruction')}
+                          />
+                        </figure>
+                      )}
+                    </td>
+                    <td>
+                      {creature.spawns
+                        .map((creatureSpawn) => creatureSpawn.zone.name)
+                        .join(', ')}
+                    </td>
+                  </tr>
+                ));
+            })}
+          </tbody>
+        </table>
+      </div>
       <QueryPagination
         pageInfo={pageInfo}
         refetch={refetch}

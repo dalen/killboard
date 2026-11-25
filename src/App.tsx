@@ -143,6 +143,15 @@ const App = () => {
         <Route path="/item/:id" element={<Item tab="vendors" />} />
         <Route path="/item/:id/purchase" element={<Item tab="purchase" />} />
         <Route path="/item/:id/quests" element={<Item tab="quests" />} />
+        <Route
+          path="/item/:id/drops/creatures"
+          element={<Item tab="creatures" />}
+        />
+        <Route
+          path="/item/:id/drops/objects"
+          element={<Item tab="gameObjects" />}
+        />
+        <Route path="/item/:id/chapters" element={<Item tab="chapters" />} />
 
         <Route path="/instance-runs" element={<InstanceRuns />} />
         <Route path="/instance-run/:id" element={<InstanceRun />} />

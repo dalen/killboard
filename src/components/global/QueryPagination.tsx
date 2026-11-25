@@ -18,7 +18,10 @@ export const QueryPagination = <T,>({
 }): ReactNode => {
   const { t } = useTranslation(['common']);
 
-  if (!pageInfo) {
+  if (
+    !pageInfo ||
+    (!pageInfo.hasPreviousPage && !pageInfo.hasNextPage)
+  ) {
     return null;
   }
 

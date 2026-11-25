@@ -2,18 +2,16 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import type { GetQuestsQuery, QuestFilterInput } from '@/__generated__/graphql';
 import { QuestRepeatableType, SortEnumType } from '@/__generated__/schema-types';
 import type { QuestSortInput } from '@/__generated__/schema-types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { SearchBox } from '@/components/global/SearchBox';
 import { GoldPrice } from '@/components/GoldPrice';
-import { ItemPopup } from '@/components/item/ItemPopup';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 import { questTypeIcon } from '../utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { type ReactElement, useEffect, useState } from 'react';
+import { type FormEvent, type ReactElement, useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 const QUESTS = gql`
@@ -171,14 +169,14 @@ const getFilters = (search: URLSearchParams): QuestFilterInput => ({
 
 export const Quests = (): ReactElement => {
   const [search, setSearch] = useSearchParams();
-  const [perPage, setPerPage] = useState(15);
-  const [minLevelDraft, setMinLevelDraft] = useState(search.get('minLevel') ?? '');
-  const [maxLevelDraft, setMaxLevelDraft] = useState(search.get('maxLevel') ?? '');
-  const { t } = useTranslation(['common', 'pages', 'enums']);
+  const [perPage, setPerPage] = useState(25);
+  const [draftSearch, setDraftSearch] = useState(
+    () => new URLSearchParams(search),
+  );
+  const { t } = useTranslation(['common', 'components', 'pages', 'enums']);
 
   useEffect(() => {
-    setMinLevelDraft(search.get('minLevel') ?? '');
-    setMaxLevelDraft(search.get('maxLevel') ?? '');
+    setDraftSearch(new URLSearchParams(search));
   }, [search]);
 
   const { loading, error, data, refetch } = useQuery<GetQuestsQuery>(QUESTS, {
@@ -191,8 +189,8 @@ export const Quests = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  const updateFilters = (updates: Record<string, string>) => {
-    const nextSearch = new URLSearchParams(search);
+  const updateDraftFilters = (updates: Record<string, string>) => {
+    const nextSearch = new URLSearchParams(draftSearch);
     for (const [key, value] of Object.entries(updates)) {
       if (value === '' || value === 'all') {
         nextSearch.delete(key);
@@ -200,19 +198,12 @@ export const Quests = (): ReactElement => {
         nextSearch.set(key, value);
       }
     }
-    setSearch(nextSearch);
-    void refetch({
-      after: undefined,
-      before: undefined,
-      first: perPage,
-      last: undefined,
-      where: getFilters(nextSearch),
-      order: getSort(nextSearch),
-    });
+    setDraftSearch(nextSearch);
   };
 
-  const applyLevelRange = () => {
-    updateFilters({ minLevel: minLevelDraft, maxLevel: maxLevelDraft });
+  const applyFilters = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setSearch(new URLSearchParams(draftSearch));
   };
 
   const updateSort = (field: 'minLevel' | 'xp' | 'gold') => {
@@ -223,7 +214,10 @@ export const Quests = (): ReactElement => {
     } else if (active) {
       direction = 'DESC';
     }
-    updateFilters({ sort: field, direction });
+    const nextSearch = new URLSearchParams(search);
+    nextSearch.set('sort', field);
+    nextSearch.set('direction', direction);
+    setSearch(nextSearch);
   };
 
   const sortHeader = (field: 'minLevel' | 'xp' | 'gold', label: string) => {
@@ -270,18 +264,34 @@ export const Quests = (): ReactElement => {
         </ul>
       </nav>
 
-      <div className="card mb-5">
+      <form className="card mb-5" onSubmit={applyFilters}>
         <div className="card-content">
+          <div className="is-flex is-justify-content-flex-end mb-4">
+            <button className="button is-primary" type="submit">
+              {t('pages:items.applyFilters')}
+            </button>
+          </div>
           <div className="columns is-multiline">
             <div className="column is-12-tablet is-4-desktop">
               <div className="field">
-                <label className="label">{t('pages:quests.search')}</label>
-                <SearchBox
-                  initialQuery={search.get('name') || ''}
-                  onSubmit={(event) => {
-                    updateFilters({ name: event || '' });
-                  }}
-                />
+                <label className="label" htmlFor="quest-search">
+                  {t('pages:quests.search')}
+                </label>
+                <p className="control has-icons-left">
+                  <input
+                    className="input"
+                    id="quest-search"
+                    type="search"
+                    placeholder={t('components:searchBox.placeholder')}
+                    value={draftSearch.get('name') ?? ''}
+                    onChange={(event) =>
+                      updateDraftFilters({ name: event.currentTarget.value })
+                    }
+                  />
+                  <span className="icon is-small is-left">
+                    <i className="fas fa-search" />
+                  </span>
+                </p>
               </div>
             </div>
             <div className="column is-6-tablet is-2-desktop">
@@ -296,7 +306,7 @@ export const Quests = (): ReactElement => {
                   min={0}
                   max={40}
                   step={1}
-                  value={minLevelDraft}
+                  value={draftSearch.get('minLevel') ?? ''}
                   onChange={(event) => {
                     const { value } = event.target;
                     const parsedValue = Number(value);
@@ -306,13 +316,7 @@ export const Quests = (): ReactElement => {
                         parsedValue >= 0 &&
                         parsedValue <= 40)
                     ) {
-                      setMinLevelDraft(value);
-                    }
-                  }}
-                  onBlur={applyLevelRange}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      event.currentTarget.blur();
+                      updateDraftFilters({ minLevel: value });
                     }
                   }}
                 />
@@ -330,7 +334,7 @@ export const Quests = (): ReactElement => {
                   min={0}
                   max={40}
                   step={1}
-                  value={maxLevelDraft}
+                  value={draftSearch.get('maxLevel') ?? ''}
                   onChange={(event) => {
                     const { value } = event.target;
                     const parsedValue = Number(value);
@@ -340,13 +344,7 @@ export const Quests = (): ReactElement => {
                         parsedValue >= 0 &&
                         parsedValue <= 40)
                     ) {
-                      setMaxLevelDraft(value);
-                    }
-                  }}
-                  onBlur={applyLevelRange}
-                  onKeyDown={(event) => {
-                    if (event.key === 'Enter') {
-                      event.currentTarget.blur();
+                      updateDraftFilters({ maxLevel: value });
                     }
                   }}
                 />
@@ -356,7 +354,13 @@ export const Quests = (): ReactElement => {
               <div className="field">
                 <label className="label" htmlFor="quest-type">{t('pages:quests.type')}</label>
                 <div className="select is-fullwidth">
-                  <select id="quest-type" value={search.get('type') ?? 'all'} onChange={(event) => updateFilters({ type: event.target.value })}>
+                  <select
+                    id="quest-type"
+                    value={draftSearch.get('type') ?? 'all'}
+                    onChange={(event) =>
+                      updateDraftFilters({ type: event.target.value })
+                    }
+                  >
                     <option value="all">{t('pages:quests.allTypes')}</option>
                     {(['group', 'travel', 'tome', 'rvr', 'playerKill', 'epic'] as const).map((type) => (
                       <option key={type} value={type}>{t(`pages:quests.typeOptions.${type}`)}</option>
@@ -369,7 +373,13 @@ export const Quests = (): ReactElement => {
               <div className="field">
                 <label className="label" htmlFor="quest-repeatability">{t('pages:quests.repeatability')}</label>
                 <div className="select is-fullwidth">
-                  <select id="quest-repeatability" value={search.get('repeatability') ?? 'all'} onChange={(event) => updateFilters({ repeatability: event.target.value })}>
+                  <select
+                    id="quest-repeatability"
+                    value={draftSearch.get('repeatability') ?? 'all'}
+                    onChange={(event) =>
+                      updateDraftFilters({ repeatability: event.target.value })
+                    }
+                  >
                     <option value="all">{t('pages:quests.allRepeatability')}</option>
                     <option value={QuestRepeatableType.None}>{t('pages:quests.repeatabilityOptions.none')}</option>
                     <option value={QuestRepeatableType.Done}>{t('pages:quests.repeatabilityOptions.done')}</option>
@@ -380,7 +390,7 @@ export const Quests = (): ReactElement => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
 
       <div className="table-container">
         <table
@@ -439,10 +449,9 @@ export const Quests = (): ReactElement => {
                   <div className="mb-2 is-flex">
                     {quest.rewardsGiven.slice(0, 5).map((reward) => (
                       <div key={`${quest.id}-${reward.item.id}`}>
-                        <Tippy
-                          duration={0}
-                          placement="top"
-                          content={<ItemPopup itemId={reward.item.id} />}
+                        <ItemPopupTrigger
+                          itemId={reward.item.id}
+                          placement="top-start"
                         >
                           <div>
                             <Link to={`/item/${reward.item.id}`}>
@@ -473,7 +482,7 @@ export const Quests = (): ReactElement => {
                               </figure>
                             </Link>
                           </div>
-                        </Tippy>
+                        </ItemPopupTrigger>
                       </div>
                     ))}
                   </div>
@@ -482,17 +491,16 @@ export const Quests = (): ReactElement => {
                   )}
                 </td>
                 <td>
-                  {quest.choiceCount > 0 && (
+                  {quest.choiceCount > 0 && quest.rewardsChoice.length > 0 && (
                     <div>Choose {quest.choiceCount}</div>
                   )}
 
                   <div className="mb-2 is-flex">
                     {quest.rewardsChoice.slice(0, 5).map((reward) => (
                       <div key={`${quest.id}-${reward.item.id}`}>
-                        <Tippy
-                          duration={0}
-                          placement="top"
-                          content={<ItemPopup itemId={reward.item.id} />}
+                        <ItemPopupTrigger
+                          itemId={reward.item.id}
+                          placement="top-start"
                         >
                           <div>
                             <Link to={`/item/${reward.item.id}`}>
@@ -523,7 +531,7 @@ export const Quests = (): ReactElement => {
                               </figure>
                             </Link>
                           </div>
-                        </Tippy>
+                        </ItemPopupTrigger>
                       </div>
                     ))}
                   </div>

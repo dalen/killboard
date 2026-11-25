@@ -81,7 +81,7 @@ export const VendorItems = ({
 }: {
   creatureId: string | undefined;
 }) => {
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(25);
   const [pageStart, setPageStart] = useState(0);
   const [recoveredPage, setRecoveredPage] = useState<{
     key: string;

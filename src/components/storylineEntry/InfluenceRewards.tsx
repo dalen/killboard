@@ -3,10 +3,9 @@ import type {
   ChapterInfluenceRewardFragment,
 } from '@/__generated__/graphql';
 import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
-import { ItemPopup } from '@/components/item/ItemPopup';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 import { canUseItem } from '@/itemUtils';
 import { gql } from '@apollo/client';
-import Tippy from '@tippyjs/react';
 import type { ReactElement } from 'react';
 import { Link } from 'react-router';
 
@@ -37,10 +36,9 @@ export const InfluenceRewards = ({
       .filter((item) => career === null || canUseItem(item.item, career))
       .map((reward) => (
         <div key={reward.item.id}>
-          <Tippy
-            duration={0}
+          <ItemPopupTrigger
+            itemId={reward.item.id}
             placement="top"
-            content={<ItemPopup itemId={reward.item.id} />}
           >
             <div>
               <Link to={`/item/${reward.item.id}`}>
@@ -71,7 +69,7 @@ export const InfluenceRewards = ({
                 </figure>
               </Link>
             </div>
-          </Tippy>
+          </ItemPopupTrigger>
         </div>
       ))}
   </div>

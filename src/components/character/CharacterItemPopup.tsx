@@ -110,21 +110,29 @@ export const CharacterItemPopup = ({
                     <GoldPrice price={vendorCost.price} />
                   </span>
                 )}
-                {vendorCost.requiredItems.map((requiredItem) => (
-                  <span
-                    key={`${requiredItem.item.id}-${requiredItem.count}`}
-                    className="icon-text item-popup-currency-cost"
-                    title={requiredItem.item.name}
-                  >
-                    <span>{requiredItem.count.toLocaleString()}</span>
-                    <figure className="image is-16x16 ml-1">
-                      <img
-                        src={requiredItem.item.iconUrl}
-                        alt={requiredItem.item.name}
-                      />
-                    </figure>
-                  </span>
-                ))}
+                {vendorCost.requiredItems.length > 0 && (
+                  <div className="item-popup-currency-list">
+                    {vendorCost.requiredItems.map((requiredItem) => (
+                      <span
+                        key={`${requiredItem.item.id}-${requiredItem.count}`}
+                        className="item-popup-currency-cost"
+                        title={requiredItem.item.name}
+                      >
+                        <span className="item-popup-currency-detail">
+                          <span className="item-popup-currency-icon-count">
+                            <figure className="image is-16x16 m-0">
+                              <img src={requiredItem.item.iconUrl} alt="" />
+                            </figure>
+                            <span>{requiredItem.count.toLocaleString()}</span>
+                          </span>
+                          <span className="item-popup-currency-name">
+                            {requiredItem.item.name}
+                          </span>
+                        </span>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             ))}
             {uniqueVendorCosts.length > 3 && (

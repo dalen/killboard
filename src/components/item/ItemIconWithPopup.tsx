@@ -1,9 +1,8 @@
 import type { ReactElement } from 'react';
 import { Link } from 'react-router';
-import Tippy from '@tippyjs/react';
 import { itemFigureClass } from '@/itemUtils';
 import type { ItemListEntryFragment } from '@/__generated__/graphql';
-import { ItemPopup } from '@/components/item/ItemPopup';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 
 export { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 
@@ -13,11 +12,10 @@ export const ItemIconWithPopup = ({
   item: ItemListEntryFragment;
 }): ReactElement => {
   return (
-    <Tippy
-      duration={0}
+    <ItemPopupTrigger
+      itemId={item.id}
       placement="right-start"
       offset={[0, 6]}
-      content={<ItemPopup itemId={item.id} />}
     >
       <Link to={`/item/${item.id}`}>
         <figure
@@ -28,6 +26,6 @@ export const ItemIconWithPopup = ({
           <img src={item.iconUrl} alt={item.name} />
         </figure>
       </Link>
-    </Tippy>
+    </ItemPopupTrigger>
   );
 };

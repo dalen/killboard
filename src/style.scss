@@ -270,6 +270,63 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   pointer-events: none;
 }
 
+.item-relation-scroll {
+  max-height: min(68vh, 44rem);
+  overflow: auto;
+  overscroll-behavior: contain;
+}
+
+.item-relation-scroll .table thead th {
+  background: #16181c;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.item-vendor-filters {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(12rem, 1fr));
+  margin-bottom: 1rem;
+  max-width: 38rem;
+}
+
+.item-vendor-price-row td {
+  background: rgba(20, 22, 25, 0.96) !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.45rem;
+  padding-top: 0.45rem;
+  position: sticky;
+  top: 2.5rem;
+  z-index: 1;
+}
+
+@media (max-width: 600px) {
+  .item-vendor-filters {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.item-relation-tooltip {
+  background: rgba(0, 0, 0, 0.96);
+  border: 1px solid rgb(83, 66, 53);
+  border-radius: 5px;
+  box-sizing: border-box;
+  color: #f1f1f1;
+  font-size: 0.8rem;
+  line-height: 1.35;
+  max-height: min(60vh, 28rem);
+  max-width: min(22rem, calc(100vw - 2rem));
+  overflow-y: auto;
+  padding: 0.65rem 0.75rem;
+  pointer-events: none;
+  width: max-content;
+}
+
+.item-relation-tooltip > * + * {
+  margin-top: 0.25rem;
+}
+
 .item-popup-header {
   align-items: flex-start;
   display: flex;
@@ -288,15 +345,17 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   flex: 0 0 auto;
   flex-direction: column;
   gap: 0.2rem;
-  max-width: 45%;
+  max-width: 55%;
+  min-width: 0;
+  width: 55%;
 }
 
 .item-popup-cost-option {
-  align-items: center;
+  align-items: flex-end;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.5rem;
-  justify-content: flex-end;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
 }
 
 .item-popup-currency-cost,
@@ -307,8 +366,51 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   white-space: nowrap;
 }
 
+.item-popup-currency-cost {
+  display: block;
+  min-width: 0;
+  text-align: right;
+  width: 100%;
+}
+
+.item-popup-currency-list {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+  width: 100%;
+}
+
 .item-popup-currency-cost .image {
   flex: 0 0 16px;
+}
+
+.item-popup-currency-detail {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+  justify-content: flex-end;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.item-popup-currency-icon-count {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.2rem;
+  flex: 0 0 auto;
+  justify-content: center;
+  min-height: 16px;
+  width: auto;
+}
+
+.item-popup-currency-name {
+  display: inline;
+  font-size: 0.65rem;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .item-popup-more-costs {

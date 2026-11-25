@@ -106,6 +106,12 @@
     "fullSetTotal": "Full set total:",
     "partialSetTotal": "War Crest total for {{priced}} of {{total}} priced pieces: {{count}}"
   },
+  "itemSources": {
+    "droppedByCreatures": "Dropped by creatures",
+    "droppedByGameObjects": "Found in objects",
+    "chapters": "Chapter rewards",
+    "chapterId": "Chapter ID"
+  },
   "itemPopup": {
     "vendorCosts": "Vendor costs",
     "moreOptions": "+{{count}} more price options"
@@ -128,7 +134,8 @@
     "itemLevel": "Item level",
     "uniqueEquipped": "Unique equipped",
     "yes": "Yes",
-    "stats": "Stats"
+    "stats": "Stats",
+    "applyFilters": "Apply filters"
   },
   "rankedLeaderboard": {
     "typeSolo": "Solo",

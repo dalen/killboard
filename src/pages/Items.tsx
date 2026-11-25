@@ -1,6 +1,6 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { type ReactElement, useState } from 'react';
+import { type FormEvent, type ReactElement, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
@@ -17,7 +17,6 @@ import {
 } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { SearchBox } from '@/components/global/SearchBox';
 import { ItemListEntry } from '@/components/item/ItemListEntry';
 import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 import { itemNameClass } from '@/itemUtils';
@@ -185,20 +184,14 @@ const NumericFilter = ({
         ].map(({ key, name }) => (
           <div className="control is-expanded" key={key}>
             <input
-              key={`${key}:${search.get(key) ?? ''}`}
               className="input"
               type="number"
               min="0"
               inputMode="numeric"
               aria-label={`${name} ${label}`}
               placeholder={name}
-              defaultValue={search.get(key) ?? ''}
-              onBlur={(event) => update(key, event.currentTarget.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  event.currentTarget.blur();
-                }
-              }}
+              value={search.get(key) ?? ''}
+              onChange={(event) => update(key, event.currentTarget.value)}
             />
           </div>
         ))}
@@ -208,8 +201,14 @@ const NumericFilter = ({
 };
 
 export const Items = (): ReactElement => {
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(25);
   const [search, setSearch] = useSearchParams();
+  const [draftSearch, setDraftSearch] = useState(
+    () => new URLSearchParams(search),
+  );
+  useEffect(() => {
+    setDraftSearch(new URLSearchParams(search));
+  }, [search]);
   const { t } = useTranslation(['common', 'enums', 'pages']);
   const { loading, error, data, refetch } = useQuery<SearchItemsQuery>(
     SEARCH_ITEMS,
@@ -308,13 +307,18 @@ export const Items = (): ReactElement => {
         <select
           id={id}
           className={
-            key === 'rarity' && search.get(key)
-              ? itemNameClass({ rarity: search.get(key) as ItemRarity })
+            key === 'rarity' && draftSearch.get(key)
+              ? itemNameClass({ rarity: draftSearch.get(key) as ItemRarity })
               : undefined
           }
-          value={search.get(key) ?? 'all'}
+          value={draftSearch.get(key) ?? 'all'}
           onChange={(event) =>
-            setFilter({ search, setSearch, key, value: event.target.value })
+            setFilter({
+              search: draftSearch,
+              setSearch: setDraftSearch,
+              key,
+              value: event.target.value,
+            })
           }
         >
           <option value="all">{allLabel}</option>
@@ -336,16 +340,38 @@ export const Items = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <div className="card mb-5">
+      <form
+        className="card mb-5"
+        onSubmit={(event: FormEvent<HTMLFormElement>) => {
+          event.preventDefault();
+          setSearch(new URLSearchParams(draftSearch));
+        }}
+      >
         <div className="card-content">
           <div className="field">
-            <label className="label">{t('pages:items.search')}</label>
-            <SearchBox
-              initialQuery={search.get('query') ?? ''}
-              onSubmit={(value) =>
-                setFilter({ search, setSearch, key: 'query', value })
-              }
-            />
+            <label className="label" htmlFor="item-search">
+              {t('pages:items.search')}
+            </label>
+            <p className="control has-icons-left">
+              <input
+                id="item-search"
+                className="input"
+                type="search"
+                placeholder={t('components:searchBox.placeholder')}
+                value={draftSearch.get('query') ?? ''}
+                onChange={(event) =>
+                  setFilter({
+                    search: draftSearch,
+                    setSearch: setDraftSearch,
+                    key: 'query',
+                    value: event.currentTarget.value,
+                  })
+                }
+              />
+              <span className="icon is-small is-left">
+                <i className="fas fa-search" />
+              </span>
+            </p>
           </div>
           <div className="columns is-multiline">
             <div className="column is-one-third-tablet">
@@ -416,8 +442,8 @@ export const Items = (): ReactElement => {
                 label={t('pages:items.levelRequirement')}
                 minKey="levelMin"
                 maxKey="levelMax"
-                search={search}
-                setSearch={setSearch}
+                search={draftSearch}
+                setSearch={setDraftSearch}
               />
             </div>
             <div className="column is-one-third-tablet">
@@ -425,8 +451,8 @@ export const Items = (): ReactElement => {
                 label={t('pages:items.renownRequirement')}
                 minKey="renownMin"
                 maxKey="renownMax"
-                search={search}
-                setSearch={setSearch}
+                search={draftSearch}
+                setSearch={setDraftSearch}
               />
             </div>
             <div className="column is-one-third-tablet">
@@ -434,13 +460,18 @@ export const Items = (): ReactElement => {
                 label={t('pages:items.itemLevel')}
                 minKey="itemLevelMin"
                 maxKey="itemLevelMax"
-                search={search}
-                setSearch={setSearch}
+                search={draftSearch}
+                setSearch={setDraftSearch}
               />
             </div>
           </div>
+          <div className="is-flex is-justify-content-flex-end">
+            <button className="button is-primary" type="submit">
+              {t('pages:items.applyFilters')}
+            </button>
+          </div>
         </div>
-      </div>
+      </form>
       <div className="table-container">
         <table
           className={clsx(

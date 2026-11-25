@@ -5,7 +5,7 @@ import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GoldPrice } from '@/components/GoldPrice';
-import { ItemPopup } from '@/components/item/ItemPopup';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 import { WarIcon } from '@/components/WarIcon';
 import type { ReactElement } from 'react';
 import { Career, type GetQuestInfoQuery, Realm } from '@/__generated__/graphql';
@@ -210,10 +210,9 @@ export const Quest = (): ReactElement => {
             )}
             {quest.rewardsGiven.map((reward) => (
               <div key={`${quest.id}-${reward.item.id}`}>
-                <Tippy
-                  duration={0}
+                <ItemPopupTrigger
+                  itemId={reward.item.id}
                   placement="top"
-                  content={<ItemPopup itemId={reward.item.id} />}
                 >
                   <div>
                     <Link to={`/item/${reward.item.id}`}>
@@ -244,7 +243,7 @@ export const Quest = (): ReactElement => {
                       </figure>
                     </Link>
                   </div>
-                </Tippy>
+                </ItemPopupTrigger>
               </div>
             ))}
           </div>
@@ -306,10 +305,9 @@ export const Quest = (): ReactElement => {
                   )
                   .map((reward) => (
                     <div key={`${quest.id}-${reward.item.id}`}>
-                      <Tippy
-                        duration={0}
+                      <ItemPopupTrigger
+                        itemId={reward.item.id}
                         placement="top"
-                        content={<ItemPopup itemId={reward.item.id} />}
                       >
                         <div>
                           <Link to={`/item/${reward.item.id}`}>
@@ -340,7 +338,7 @@ export const Quest = (): ReactElement => {
                             </figure>
                           </Link>
                         </div>
-                      </Tippy>
+                      </ItemPopupTrigger>
                     </div>
                   ))}
               </div>
