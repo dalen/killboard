@@ -99,7 +99,16 @@
     "itemId": "Item #{{itemId}}",
     "vendors": "Sold by",
     "purchase": "Used to purchase",
-    "quests": "Quests"
+    "quests": "Quests",
+    "from": "From",
+    "warCrests": "War Crests",
+    "costNotListed": "Not listed",
+    "fullSetTotal": "Full set total:",
+    "partialSetTotal": "War Crest total for {{priced}} of {{total}} priced pieces: {{count}}"
+  },
+  "itemPopup": {
+    "vendorCosts": "Vendor costs",
+    "moreOptions": "+{{count}} more price options"
   },
   "items": {
     "title": "Items",
@@ -110,7 +119,16 @@
     "stat": "Stat",
     "name": "Name",
     "slot": "Slot",
-    "usableByCareer": "Usable by"
+    "usableByCareer": "Usable by",
+    "rarity": "Rarity",
+    "level": "Level",
+    "levelRequirement": "Required level",
+    "renownRank": "Renown rank",
+    "renownRequirement": "Required renown rank",
+    "itemLevel": "Item level",
+    "uniqueEquipped": "Unique equipped",
+    "yes": "Yes",
+    "stats": "Stats"
   },
   "rankedLeaderboard": {
     "typeSolo": "Solo",
@@ -167,23 +185,23 @@
     "name": "Name",
     "minLevel": "Min Level",
     "maxLevel": "Max Level",
-      "type": "Type",
-      "allTypes": "All Types",
-      "typeOptions": {
-        "group": "Group",
-        "travel": "Travel",
-        "tome": "Tome",
-        "rvr": "RvR",
-        "playerKill": "Player Kill",
-        "epic": "Epic"
-      },
-      "repeatability": "Repeatability",
-      "allRepeatability": "All Quests",
-      "repeatabilityOptions": {
-        "none": "Not Repeatable",
-        "done": "Repeatable",
-        "weekly": "Weekly"
-      },
+    "type": "Type",
+    "allTypes": "All Types",
+    "typeOptions": {
+      "group": "Group",
+      "travel": "Travel",
+      "tome": "Tome",
+      "rvr": "RvR",
+      "playerKill": "Player Kill",
+      "epic": "Epic"
+    },
+    "repeatability": "Repeatability",
+    "allRepeatability": "All Quests",
+    "repeatabilityOptions": {
+      "none": "Not Repeatable",
+      "done": "Repeatable",
+      "weekly": "Weekly"
+    },
     "xp": "Xp",
     "gold": "Gold",
     "given": "Rewards",
@@ -224,14 +242,14 @@
     },
     "encounter": "Encounter",
     "fastestDuration": "Fastest Recorded",
-      "recordDate": "Date",
-      "recordGroup": "Group in Recorded Run",
-      "viewRun": "View Run",
+    "recordDate": "Date",
+    "recordGroup": "Group in Recorded Run",
+    "viewRun": "View Run",
     "character": "Character",
     "recentRuns": "Runs in Recent Sample",
     "lastSeen": "Last Seen",
-      "recentCharactersNote": "Top 25 of {{count}} characters by appearances across the 50 most recent recorded runs. This is a recent sample, not an all-time ranking.",
-      "recentLeaderboardNote": "Fastest completed encounter times among the 50 most recent recorded runs. This is a recent sample, not an all-time record list."
+    "recentCharactersNote": "Top 25 of {{count}} characters by appearances across the 50 most recent recorded runs. This is a recent sample, not an all-time ranking.",
+    "recentLeaderboardNote": "Fastest completed encounter times among the 50 most recent recorded runs. This is a recent sample, not an all-time record list."
   },
   "instanceRuns": {
     "title": "Instance Runs",

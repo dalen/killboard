@@ -1,95 +1,25 @@
 import type { ReactElement } from 'react';
-import { useState } from 'react';
 import { Link } from 'react-router';
-import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
+import Tippy from '@tippyjs/react';
 import { itemFigureClass } from '@/itemUtils';
-import { gql } from '@apollo/client';
 import type { ItemListEntryFragment } from '@/__generated__/graphql';
+import { ItemPopup } from '@/components/item/ItemPopup';
 
-export const ITEM_FRAGMENT = gql`
-  fragment ItemListEntry on Item {
-    id
-    iconUrl
-    name
-    careerRestriction
-    raceRestriction
-    uniqueEquipped
-    description
-    type
-    slot
-    rarity
-    armor
-    dps
-    speed
-    levelRequirement
-    renownRankRequirement
-    itemLevel
-    talismanSlots
-    itemSet {
-      id
-      name
-      items {
-        id
-      }
-      bonuses {
-        itemsRequired
-        bonus {
-          ... on Ability {
-            description
-            __typename
-          }
-          ... on ItemStat {
-            stat
-            value
-            percentage
-            __typename
-          }
-        }
-      }
-    }
-    abilities {
-      id
-      description
-    }
-    buffs {
-      id
-      description
-    }
-    stats {
-      stat
-      value
-    }
-  }
-`;
+export { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 
 export const ItemIconWithPopup = ({
   item,
 }: {
   item: ItemListEntryFragment;
 }): ReactElement => {
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const showModal = () => {
-    if (!modalOpen && item.name !== '') {
-      setModalOpen(true);
-    }
-  };
-
-  const hideModal = () => {
-    if (modalOpen) {
-      setModalOpen(false);
-    }
-  };
-
   return (
-    <div className="is-relative">
-      <Link
-        to={`/item/${item.id}`}
-        onMouseOver={showModal}
-        onMouseLeave={hideModal}
-        onFocus={showModal}
-        onBlur={hideModal}
-      >
+    <Tippy
+      duration={0}
+      placement="right-start"
+      offset={[0, 6]}
+      content={<ItemPopup itemId={item.id} />}
+    >
+      <Link to={`/item/${item.id}`}>
         <figure
           className={`${itemFigureClass(
             item,
@@ -98,9 +28,6 @@ export const ItemIconWithPopup = ({
           <img src={item.iconUrl} alt={item.name} />
         </figure>
       </Link>
-      {modalOpen && (
-        <CharacterItemPopup item={item} talismans={[]} itemsEquipped={[]} />
-      )}
-    </div>
+    </Tippy>
   );
 };

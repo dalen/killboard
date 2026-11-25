@@ -4,13 +4,26 @@ import { t } from 'i18next';
 import { CharacterItemPopup } from '@/components/character/CharacterItemPopup';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import type { ReactElement } from 'react';
-import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 import type { GetItemPopupInfoQuery } from '@/__generated__/graphql';
 
 const ITEM_POPUP_INFO = gql`
   query GetItemPopupInfo($id: ID!) {
     item(id: $id) {
       ...ItemListEntry
+      soldByVendors(first: 20) {
+        nodes {
+          price
+          requiredItems {
+            count
+            item {
+              id
+              name
+              iconUrl
+            }
+          }
+        }
+      }
     }
   }
 
@@ -43,6 +56,12 @@ export const ItemPopup = ({
   }
 
   return (
-    <CharacterItemPopup item={data.item} talismans={[]} itemsEquipped={[]} />
+    <CharacterItemPopup
+      item={data.item}
+      talismans={[]}
+      itemsEquipped={[]}
+      popupClassName="item-popup-tooltip"
+      vendorCosts={data.item.soldByVendors?.nodes ?? []}
+    />
   );
 };

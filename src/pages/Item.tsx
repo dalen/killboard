@@ -3,12 +3,14 @@ import { Link, useParams } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import clsx from 'clsx';
+import Tippy from '@tippyjs/react';
 import { itemNameClass, statMultiplier } from '../itemUtils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { isPercentage } from '../utils';
 import { ItemQuests } from '@/components/item/ItemQuests';
 import { ItemVendorsPurchase } from '@/components/item/ItemVendorsPurchase';
 import { ItemVendorsSell } from '@/components/item/ItemVendorsSell';
+import { ItemPopup } from '@/components/item/ItemPopup';
 import type { ReactElement } from 'react';
 import {
   EquipSlot,
@@ -47,6 +49,18 @@ const ITEM_INFO = gql`
           id
           name
           iconUrl
+          soldByVendors(first: 20) {
+            nodes {
+              requiredItems {
+                count
+                item {
+                  id
+                  name
+                  iconUrl
+                }
+              }
+            }
+          }
         }
         bonuses {
           itemsRequired
@@ -107,6 +121,33 @@ export const Item = ({
 
   const { item } = data;
 
+  const setItemCosts = item.itemSet?.items.map((setItem) => {
+    const crestRequirements =
+      setItem.soldByVendors?.nodes?.flatMap((vendorItem) =>
+        vendorItem.requiredItems.filter(
+          ({ item: requiredItem }) =>
+            requiredItem.name.trim().toLowerCase() === 'war crest',
+        ),
+      ) ?? [];
+    const distinctCosts = [
+      ...new Set(crestRequirements.map(({ count }) => count)),
+    ].sort((a, b) => a - b);
+    const cost = distinctCosts[0];
+
+    return {
+      item: setItem,
+      cost,
+      costOptions: distinctCosts.length,
+      crestIcon: crestRequirements.find(({ count }) => count === cost)?.item
+        .iconUrl,
+    };
+  });
+  const pricedSetItems = setItemCosts?.filter(({ cost }) => cost != null) ?? [];
+  const setWarCrestTotal = pricedSetItems.reduce(
+    (total, { cost }) => total + (cost ?? 0),
+    0,
+  );
+
   const activeTabs: string[] = [];
 
   if (item.soldByVendors?.totalCount) {
@@ -132,7 +173,7 @@ export const Item = ({
           </li>
           <li className="is-active">
             <div className="ml-2">
-              {t('pages:itemPage.itemId', { itemId: id })}
+              {item.name}
             </div>
           </li>
         </ul>
@@ -266,36 +307,80 @@ export const Item = ({
                     <div className="is-size-5 is-family-secondary">
                       {item.itemSet.name}
                     </div>
-                    {item.itemSet.items.map((itemSetItem) => (
-                      <div className="mb-1">
-                        <span key={itemSetItem.id} className="icon-text">
-                          {itemSetItem.id === item.id && (
-                            <>
+                    {setItemCosts?.map((setItemCost) => (
+                      <div
+                        key={setItemCost.item.id}
+                        className="set-piece-row mb-1"
+                      >
+                        <span className="set-piece-name">
+                          <Tippy
+                            duration={0}
+                            placement="right-start"
+                            offset={[0, 6]}
+                            content={<ItemPopup itemId={setItemCost.item.id} />}
+                          >
+                            <span className="icon-text">
                               <figure className="image is-24x24 m-0 mr-1">
+                                <img src={setItemCost.item.iconUrl} alt="" />
+                              </figure>
+                              {setItemCost.item.id === item.id ? (
+                                <span>{setItemCost.item.name}</span>
+                              ) : (
+                                <Link to={`/item/${setItemCost.item.id}`}>
+                                  {setItemCost.item.name}
+                                </Link>
+                              )}
+                            </span>
+                          </Tippy>
+                        </span>
+                        <span className="set-piece-cost">
+                          {setItemCost.cost != null ? (
+                            <span className="icon-text">
+                              {setItemCost.costOptions > 1 && (
+                                <span>{t('pages:itemPage.from')} </span>
+                              )}
+                              <span>{setItemCost.cost.toLocaleString()}</span>
+                              <figure className="image is-16x16 ml-1">
                                 <img
-                                  src={itemSetItem.iconUrl}
-                                  alt="Item Icon"
+                                  src={setItemCost.crestIcon}
+                                  alt={t('pages:itemPage.warCrests')}
                                 />
                               </figure>
-                              {itemSetItem.name}
-                            </>
-                          )}
-                          {itemSetItem.id !== item.id && (
-                            <>
-                              <figure className="image is-24x24 m-0 mr-1">
-                                <img
-                                  src={itemSetItem.iconUrl}
-                                  alt="Item Icon"
-                                />
-                              </figure>
-                              <Link to={`/item/${itemSetItem.id}`}>
-                                {itemSetItem.name}
-                              </Link>
-                            </>
+                            </span>
+                          ) : (
+                            <span className="has-text-grey">
+                              {t('pages:itemPage.costNotListed')}
+                            </span>
                           )}
                         </span>
                       </div>
                     ))}
+                    {pricedSetItems.length > 0 && (
+                      <div className="set-piece-total mt-3 pt-3">
+                        {pricedSetItems.length === item.itemSet.items.length ? (
+                          <>
+                            <strong>{t('pages:itemPage.fullSetTotal')}</strong>
+                            <span className="icon-text ml-2">
+                              <strong>{setWarCrestTotal.toLocaleString()}</strong>
+                              <figure className="image is-16x16 ml-1">
+                                <img
+                                  src={pricedSetItems[0].crestIcon}
+                                  alt={t('pages:itemPage.warCrests')}
+                                />
+                              </figure>
+                            </span>
+                          </>
+                        ) : (
+                          <div>
+                            {t('pages:itemPage.partialSetTotal', {
+                              priced: pricedSetItems.length,
+                              total: item.itemSet.items.length,
+                              count: setWarCrestTotal.toLocaleString(),
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

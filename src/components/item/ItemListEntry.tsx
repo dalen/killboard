@@ -10,22 +10,41 @@ export const ItemListEntry = ({
 }: {
   item: ItemListEntryFragment;
 }): ReactElement => {
-  const { t } = useTranslation(['enums']);
+  const { t } = useTranslation(['enums', 'pages']);
+  const allStats = item.stats
+    .map((stat) => `${stat.value} ${t(`enums:stat.${stat.stat}`)}`)
+    .join(' · ');
+  const stats = item.stats
+    .slice(0, 2)
+    .map((stat) => `${stat.value} ${t(`enums:stat.${stat.stat}`)}`)
+    .join(' · ');
 
   return (
     <tr>
-      <td>
+      <td className="is-hidden-touch">
         <ItemIconWithPopup item={item} />
       </td>
       <td>
         <Link to={`/item/${item.id}`}>
-          <div className={`${itemNameClass(item)} has-text-weight-semi/bold`}>
+          <div className={`${itemNameClass(item)} has-text-weight-semibold`}>
             {item.name}
           </div>
         </Link>
       </td>
-      <td>{t(`enums:itemType.${item.type}`)}</td>
-      <td>{t(`enums:itemSlot.${item.slot}`)}</td>
+      <td className="is-hidden-touch">{t(`enums:itemType.${item.type}`)}</td>
+      <td className="is-hidden-touch">{t(`enums:itemSlot.${item.slot}`)}</td>
+      <td>
+        <span className={itemNameClass({ rarity: item.rarity })}>
+          {t(`enums:itemRarity.${item.rarity}`)}
+        </span>
+      </td>
+      <td>{item.levelRequirement || 0}</td>
+      <td>{item.renownRankRequirement || 0}</td>
+      <td>{item.itemLevel || 0}</td>
+      <td className="is-hidden-touch" title={allStats}>
+        {stats || 0}
+        {item.stats.length > 2 && ` +${item.stats.length - 2}`}
+      </td>
     </tr>
   );
 };

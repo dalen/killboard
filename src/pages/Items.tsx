@@ -1,26 +1,34 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { useTranslation } from 'react-i18next';
-import { Link, useSearchParams } from 'react-router';
-import { SearchBox } from '@/components/global/SearchBox';
-import type {
-  ItemFilterInput,
-  ItemType,
-  SearchItemsQuery,
-} from '@/__generated__/graphql';
-import { ErrorMessage } from '@/components/global/ErrorMessage';
-import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { ItemListEntry } from '@/components/item/ItemListEntry';
-import { QueryPagination } from '@/components/global/QueryPagination';
 import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
-import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+import { useTranslation } from 'react-i18next';
+import { Link, useSearchParams } from 'react-router';
+import {
+  Career,
+  EquipSlot,
+  type ItemFilterInput,
+  ItemRarity,
+  type ItemSortInput,
+  ItemType,
+  type SearchItemsQuery,
+  SortEnumType,
+  Stat,
+} from '@/__generated__/graphql';
+import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { QueryPagination } from '@/components/global/QueryPagination';
+import { SearchBox } from '@/components/global/SearchBox';
+import { ItemListEntry } from '@/components/item/ItemListEntry';
+import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
+import { itemNameClass } from '@/itemUtils';
+import useWindowDimensions from '@/hooks/useWindowDimensions';
 
 const SEARCH_ITEMS = gql`
   query SearchItems(
     $query: ItemFilterInput
     $usableByCareer: Career
     $hasStats: [Stat!]
+    $order: [ItemSortInput!]
     $first: Int
     $last: Int
     $before: String
@@ -30,6 +38,7 @@ const SEARCH_ITEMS = gql`
       where: $query
       usableByCareer: $usableByCareer
       hasStats: $hasStats
+      order: $order
       first: $first
       last: $last
       before: $before
@@ -50,62 +59,166 @@ const SEARCH_ITEMS = gql`
   ${ITEM_FRAGMENT}
 `;
 
-const getSearchFilter = (search: URLSearchParams): ItemFilterInput => {
-  const query = search.get('query');
-
-  if (!query) {
-    return {};
-  }
-
-  return { name: { contains: query } };
+const numericRange = (
+  search: URLSearchParams,
+  minKey: string,
+  maxKey: string,
+) => {
+  const min = Number(search.get(minKey));
+  const max = Number(search.get(maxKey));
+  return {
+    ...(search.get(minKey) && Number.isFinite(min) ? { gte: min } : {}),
+    ...(search.get(maxKey) && Number.isFinite(max) ? { lte: max } : {}),
+  };
 };
 
-const getItemTypeFilter = (search: URLSearchParams): ItemFilterInput => {
+const getItemsFilters = (search: URLSearchParams): ItemFilterInput => {
+  const query = search.get('query')?.trim();
   const type = search.get('type');
+  const slot = search.get('slot');
+  const rarity = search.get('rarity');
+  const unique = search.get('unique');
 
-  if (!type || type === 'all') {
-    return {};
-  }
-
-  return { type: { eq: type as ItemType } };
+  return {
+    ...(query ? { name: { contains: query } } : {}),
+    ...(type && type !== 'all' ? { type: { eq: type as ItemType } } : {}),
+    ...(slot && slot !== 'all' ? { slot: { eq: slot as EquipSlot } } : {}),
+    ...(rarity && rarity !== 'all'
+      ? { rarity: { eq: rarity as ItemRarity } }
+      : {}),
+    ...(unique === 'yes' ? { uniqueEquipped: { eq: true } } : {}),
+    ...(Object.keys(numericRange(search, 'levelMin', 'levelMax')).length
+      ? { levelRequirement: numericRange(search, 'levelMin', 'levelMax') }
+      : {}),
+    ...(Object.keys(numericRange(search, 'renownMin', 'renownMax')).length
+      ? {
+          renownRankRequirement: numericRange(search, 'renownMin', 'renownMax'),
+        }
+      : {}),
+    ...(Object.keys(numericRange(search, 'itemLevelMin', 'itemLevelMax')).length
+      ? { itemLevel: numericRange(search, 'itemLevelMin', 'itemLevelMax') }
+      : {}),
+  };
 };
 
-const getItemsFilters = (search: URLSearchParams): ItemFilterInput => ({
-  ...getSearchFilter(search),
-  ...getItemTypeFilter(search),
-});
-
-const usableByCareerFilter = (search: URLSearchParams) => {
+const getCareer = (search: URLSearchParams): Career | undefined => {
   const career = search.get('career');
-
-  if (career === 'all') {
-    return {};
-  }
-
-  return { usableByCareer: career };
+  return career && career !== 'all' ? (career as Career) : undefined;
 };
 
-const hasStatsFilter = (search: URLSearchParams) => {
+const getStat = (search: URLSearchParams): Stat[] | undefined => {
   const stat = search.get('stat');
+  return stat && stat !== 'any' ? [stat as Stat] : undefined;
+};
 
-  if (stat === 'any' || !stat) {
-    return {};
+const SORT_FIELDS = [
+  'name',
+  'type',
+  'slot',
+  'rarity',
+  'levelRequirement',
+  'renownRankRequirement',
+  'itemLevel',
+  'armor',
+  'dps',
+  'speed',
+] as const;
+
+const getSort = (search: URLSearchParams): ItemSortInput[] => {
+  const field =
+    SORT_FIELDS.find((value) => value === search.get('sort')) ?? 'name';
+  const direction =
+    search.get('direction') === 'desc' ? SortEnumType.Desc : SortEnumType.Asc;
+  return [{ [field]: direction } as ItemSortInput, { id: SortEnumType.Asc }];
+};
+
+const setFilter = ({
+  search,
+  setSearch,
+  key,
+  value,
+}: {
+  search: URLSearchParams;
+  setSearch: (next: URLSearchParams) => void;
+  key: string;
+  value: string;
+}) => {
+  const next = new URLSearchParams(search);
+  if (!value || value === 'all' || value === 'any') {
+    next.delete(key);
+  } else {
+    next.set(key, value);
   }
+  setSearch(next);
+};
 
-  return { hasStats: [stat] };
+const NumericFilter = ({
+  label,
+  minKey,
+  maxKey,
+  search,
+  setSearch,
+}: {
+  label: string;
+  minKey: string;
+  maxKey: string;
+  search: URLSearchParams;
+  setSearch: (next: URLSearchParams) => void;
+}): ReactElement => {
+  const update = (key: string, value: string) => {
+    const next = new URLSearchParams(search);
+    if (value.trim()) {
+      next.set(key, value);
+    } else {
+      next.delete(key);
+    }
+    setSearch(next);
+  };
+
+  return (
+    <div className="field">
+      <label className="label">{label}</label>
+      <div className="field is-grouped">
+        {[
+          { key: minKey, name: 'Min' },
+          { key: maxKey, name: 'Max' },
+        ].map(({ key, name }) => (
+          <div className="control is-expanded" key={key}>
+            <input
+              key={`${key}:${search.get(key) ?? ''}`}
+              className="input"
+              type="number"
+              min="0"
+              inputMode="numeric"
+              aria-label={`${name} ${label}`}
+              placeholder={name}
+              defaultValue={search.get(key) ?? ''}
+              onBlur={(event) => update(key, event.currentTarget.value)}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  event.currentTarget.blur();
+                }
+              }}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export const Items = (): ReactElement => {
   const [perPage, setPerPage] = useState(15);
   const [search, setSearch] = useSearchParams();
-  const { t } = useTranslation(['common', 'pages']);
+  const { t } = useTranslation(['common', 'enums', 'pages']);
   const { loading, error, data, refetch } = useQuery<SearchItemsQuery>(
     SEARCH_ITEMS,
     {
       variables: {
         query: getItemsFilters(search),
-        ...usableByCareerFilter(search),
-        ...hasStatsFilter(search),
+        usableByCareer: getCareer(search),
+        hasStats: getStat(search),
+        order: getSort(search),
         first: perPage,
       },
     },
@@ -123,8 +236,93 @@ export const Items = (): ReactElement => {
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
-  const entries = data.items.nodes;
-  const { pageInfo } = data.items;
+  const { nodes: entries, pageInfo } = data.items;
+  const currentSort = search.get('sort') ?? 'name';
+  const direction = search.get('direction') === 'desc' ? 'desc' : 'asc';
+  const toggleSort = (field: (typeof SORT_FIELDS)[number]) => {
+    const next = new URLSearchParams(search);
+    if (next.get('sort') === field) {
+      next.set('direction', direction === 'asc' ? 'desc' : 'asc');
+    } else {
+      next.set('sort', field);
+      next.set('direction', 'asc');
+    }
+    setSearch(next);
+  };
+  const sortHeader = (field: (typeof SORT_FIELDS)[number], label: string) => (
+    <button
+      className="button is-ghost is-small p-0 has-text-weight-bold"
+      onClick={() => toggleSort(field)}
+      aria-label={`${label}, ${currentSort === field ? direction : 'not sorted'}`}
+    >
+      {label}
+      {currentSort === field && (
+        <span className="ml-1" aria-hidden="true">
+          {direction === 'asc' ? '↑' : '↓'}
+        </span>
+      )}
+    </button>
+  );
+  const enumOptions = (values: string[], translationKey: string) =>
+    values.flatMap((value) => {
+      const label = t(`${translationKey}.${value}`);
+      const missingLabel = `${translationKey.split(':')[1]}.${value}`;
+      return label === missingLabel
+        ? []
+        : [
+            <option key={value} value={value}>
+              {label}
+            </option>,
+          ];
+    });
+  const rarityOptions = [
+    ItemRarity.Utility,
+    ItemRarity.Common,
+    ItemRarity.Uncommon,
+    ItemRarity.Rare,
+    ItemRarity.VeryRare,
+    ItemRarity.Mythic,
+  ].map((rarity) => (
+    <option key={rarity} value={rarity} className={itemNameClass({ rarity })}>
+      {t(`enums:itemRarity.${rarity}`)}
+    </option>
+  ));
+  const selectFilter = ({
+    id,
+    label,
+    key,
+    options,
+    allLabel = t('pages:items.all'),
+  }: {
+    id: string;
+    label: string;
+    key: string;
+    options: ReactElement[];
+    allLabel?: string;
+  }) => (
+    <div className="field">
+      <label className="label" htmlFor={id}>
+        {label}
+      </label>
+      <div className="select is-fullwidth">
+        <select
+          id={id}
+          className={
+            key === 'rarity' && search.get(key)
+              ? itemNameClass({ rarity: search.get(key) as ItemRarity })
+              : undefined
+          }
+          value={search.get(key) ?? 'all'}
+          onChange={(event) =>
+            setFilter({ search, setSearch, key, value: event.target.value })
+          }
+        >
+          <option value="all">{allLabel}</option>
+          {options}
+        </select>
+      </div>
+    </div>
+  );
 
   return (
     <div className="container is-max-desktop mt-2">
@@ -143,293 +341,102 @@ export const Items = (): ReactElement => {
           <div className="field">
             <label className="label">{t('pages:items.search')}</label>
             <SearchBox
-              initialQuery={search.get('query') || ''}
-              onSubmit={(event) => {
-                search.set('query', event);
-                setSearch(search);
-              }}
+              initialQuery={search.get('query') ?? ''}
+              onSubmit={(value) =>
+                setFilter({ search, setSearch, key: 'query', value })
+              }
             />
           </div>
-          <div className="columns">
-            <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="type">
-                  {t('pages:items.itemType')}
-                </label>
-                <select
-                  id="type"
-                  value={search.get('type') ?? undefined}
-                  onChange={(event) => {
-                    search.set('type', event.target.value);
-                    setSearch(search);
-                  }}
-                >
-                  <option value="all">{t('pages:items.all')}</option>
-                  <option value="SWORD">{t('enums:itemType.SWORD')}</option>
-                  <option value="AXE">{t('enums:itemType.AXE')}</option>
-                  <option value="HAMMER">{t('enums:itemType.HAMMER')}</option>
-                  <option value="BASIC_SHIELD">
-                    {t('enums:itemType.BASIC_SHIELD')}
-                  </option>
-                  <option value="SHIELD">{t('enums:itemType.SHIELD')}</option>
-                  <option value="ROBE">{t('enums:itemType.ROBE')}</option>
-                  <option value="BOW">{t('enums:itemType.BOW')}</option>
-                  <option value="CROSSBOW">
-                    {t('enums:itemType.CROSSBOW')}
-                  </option>
-                  <option value="GUN">{t('enums:itemType.GUN')}</option>
-                  <option value="EXPERT_SHIELD">
-                    {t('enums:itemType.EXPERT_SHIELD')}
-                  </option>
-                  <option value="STAFF">{t('enums:itemType.STAFF')}</option>
-                  <option value="DAGGER">{t('enums:itemType.DAGGER')}</option>
-                  <option value="SPEAR">{t('enums:itemType.SPEAR')}</option>
-                  <option value="PISTOL">{t('enums:itemType.PISTOL')}</option>
-                  <option value="LANCE">{t('enums:itemType.LANCE')}</option>
-                  <option value="REPEATING_CROSSBOW">
-                    {t('enums:itemType.REPEATING_CROSSBOW')}
-                  </option>
-                  <option value="LIGHT_ARMOR">
-                    {t('enums:itemType.LIGHT_ARMOR')}
-                  </option>
-                  <option value="MEDIUM_ARMOR">
-                    {t('enums:itemType.MEDIUM_ARMOR')}
-                  </option>
-                  <option value="HEAVY_ARMOR">
-                    {t('enums:itemType.HEAVY_ARMOR')}
-                  </option>
-                  <option value="QUEST">{t('enums:itemType.QUEST')}</option>
-                  <option value="MEDIUM_ROBE">
-                    {t('enums:itemType.MEDIUM_ROBE')}
-                  </option>
-                  <option value="ENHANCEMENT">
-                    {t('enums:itemType.ENHANCEMENT')}
-                  </option>
-                  <option value="TROPHY">{t('enums:itemType.TROPHY')}</option>
-                  <option value="CHARM">{t('enums:itemType.CHARM')}</option>
-                  <option value="DYE">{t('enums:itemType.DYE')}</option>
-                  <option value="BASIC_MOUNT">
-                    {t('enums:itemType.BASIC_MOUNT')}
-                  </option>
-                  <option value="ADVANCED_MOUNT">
-                    {t('enums:itemType.ADVANCED_MOUNT')}
-                  </option>
-                  <option value="POTION">{t('enums:itemType.POTION')}</option>
-                  <option value="SALVAGING">
-                    {t('enums:itemType.SALVAGING')}
-                  </option>
-                  <option value="MARKETING">
-                    {t('enums:itemType.MARKETING')}
-                  </option>
-                  <option value="CRAFTING">
-                    {t('enums:itemType.CRAFTING')}
-                  </option>
-                  <option value="ACCESSORY">
-                    {t('enums:itemType.ACCESSORY')}
-                  </option>
-                  <option value="CURRENCY">
-                    {t('enums:itemType.CURRENCY')}
-                  </option>
-                  <option value="TELEPORT">
-                    {t('enums:itemType.TELEPORT')}
-                  </option>
-                  <option value="TELEPORT_GROUP">
-                    {t('enums:itemType.TELEPORT_GROUP')}
-                  </option>
-                  <option value="SIEGE">{t('enums:itemType.SIEGE')}</option>
-                  <option value="TREASURE_CHEST">
-                    {t('enums:itemType.TREASURE_CHEST')}
-                  </option>
-                  <option value="TREASURE_KEY">
-                    {t('enums:itemType.TREASURE_KEY')}
-                  </option>
-                  <option value="REFINER_TOOL">
-                    {t('enums:itemType.REFINER_TOOL')}
-                  </option>
-                </select>
-              </div>
+          <div className="columns is-multiline">
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'type',
+                label: t('pages:items.itemType'),
+                key: 'type',
+                options: enumOptions(
+                  Object.values(ItemType).filter(
+                    (value) => value !== ItemType.None,
+                  ),
+                  'enums:itemType',
+                ),
+              })}
             </div>
-            <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="stat">
-                  {t('pages:items.stat')}
-                </label>
-                <select
-                  id="stat"
-                  value={search.get('stat') ?? undefined}
-                  onChange={(event) => {
-                    search.set('stat', event.target.value);
-                    setSearch(search);
-                  }}
-                >
-                  <option value="any">{t('pages:items.any')}</option>
-                  <option value="WOUNDS">{t('enums:stat.WOUNDS')}</option>
-                  <option value="WEAPON_SKILL">
-                    {t('enums:stat.WEAPON_SKILL')}
-                  </option>
-                  <option value="WILLPOWER">{t('enums:stat.WILLPOWER')}</option>
-                  <option value="BALLISTIC_SKILL">
-                    {t('enums:stat.BALLISTIC_SKILL')}
-                  </option>
-                  <option value="TOUGHNESS">{t('enums:stat.TOUGHNESS')}</option>
-                  <option value="INITIATIVE">
-                    {t('enums:stat.INITIATIVE')}
-                  </option>
-                  <option value="STRENGTH">{t('enums:stat.STRENGTH')}</option>
-                  <option value="INTELLIGENCE">
-                    {t('enums:stat.INTELLIGENCE')}
-                  </option>
-                  <option value="BLOCK">{t('enums:stat.BLOCK')}</option>
-                  <option value="PARRY">{t('enums:stat.PARRY')}</option>
-                  <option value="DISRUPT">{t('enums:stat.DISRUPT')}</option>
-                  <option value="EVADE">{t('enums:stat.EVADE')}</option>
-                  <option value="ELEMENTAL_RESISTANCE">
-                    {t('enums:stat.ELEMENTAL_RESISTANCE')}
-                  </option>
-                  <option value="SPIRIT_RESISTANCE">
-                    {t('enums:stat.SPIRIT_RESISTANCE')}
-                  </option>
-                  <option value="CORPOREAL_RESISTANCE">
-                    {t('enums:stat.CORPOREAL_RESISTANCE')}
-                  </option>
-                  <option value="HEAL_CRIT_RATE">
-                    {t('enums:stat.HEAL_CRIT_RATE')}
-                  </option>
-                  <option value="RANGED_CRIT_RATE">
-                    {t('enums:stat.RANGED_CRIT_RATE')}
-                  </option>
-                  <option value="MELEE_CRIT_RATE">
-                    {t('enums:stat.MELEE_CRIT_RATE')}
-                  </option>
-                  <option value="MAGIC_CRIT_RATE">
-                    {t('enums:stat.MAGIC_CRIT_RATE')}
-                  </option>
-                  <option value="ACTION_POINT_REGEN">
-                    {t('enums:stat.ACTION_POINT_REGEN')}
-                  </option>
-                  <option value="MORALE_REGEN">
-                    {t('enums:stat.MORALE_REGEN')}
-                  </option>
-                  <option value="HEALTH_REGEN">
-                    {t('enums:stat.HEALTH_REGEN')}
-                  </option>
-                  <option value="CRITICAL_HIT_RATE_REDUCTION">
-                    {t('enums:stat.CRITICAL_HIT_RATE_REDUCTION')}
-                  </option>
-                  <option value="BLOCK_STRIKETHROUGH">
-                    {t('enums:stat.BLOCK_STRIKETHROUGH')}
-                  </option>
-                  <option value="PARRY_STRIKETHROUGH">
-                    {t('enums:stat.PARRY_STRIKETHROUGH')}
-                  </option>
-                  <option value="DISRUPT_STRIKETHROUGH">
-                    {t('enums:stat.DISRUPT_STRIKETHROUGH')}
-                  </option>
-                  <option value="EVADE_STRIKETHROUGH">
-                    {t('enums:stat.EVADE_STRIKETHROUGH')}
-                  </option>
-                  <option value="HEALING_POWER">
-                    {t('enums:stat.HEALING_POWER')}
-                  </option>
-                  <option value="MAGIC_POWER">
-                    {t('enums:stat.MAGIC_POWER')}
-                  </option>
-                  <option value="RANGED_POWER">
-                    {t('enums:stat.RANGED_POWER')}
-                  </option>
-                  <option value="MELEE_POWER">
-                    {t('enums:stat.MELEE_POWER')}
-                  </option>
-                  <option value="FORTITUDE">{t('enums:stat.FORTITUDE')}</option>
-                  <option value="AUTO_ATTACK_SPEED">
-                    {t('enums:stat.AUTO_ATTACK_SPEED')}
-                  </option>
-                  <option value="AUTO_ATTACK_DAMAGE">
-                    {t('enums:stat.AUTO_ATTACK_DAMAGE')}
-                  </option>
-                  <option value="ARMOR_PENETRATION">
-                    {t('enums:stat.ARMOR_PENETRATION')}
-                  </option>
-                  <option value="ARMOR_PENETRATION_REDUCTION">
-                    {t('enums:stat.ARMOR_PENETRATION_REDUCTION')}
-                  </option>
-                  <option value="HATE_CAUSED">
-                    {t('enums:stat.HATE_CAUSED')}
-                  </option>
-                  <option value="HATE_RECEIVED">
-                    {t('enums:stat.HATE_RECEIVED')}
-                  </option>
-                </select>
-              </div>
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'slot',
+                label: t('pages:items.slot'),
+                key: 'slot',
+                options: enumOptions(
+                  Object.values(EquipSlot).filter(
+                    (value) => value !== EquipSlot.None,
+                  ),
+                  'enums:itemSlot',
+                ),
+              })}
             </div>
-            <div className="column">
-              <div className="field">
-                <label className="label" htmlFor="career">
-                  {t('pages:items.usableByCareer')}
-                </label>
-                <select
-                  id="career"
-                  value={search.get('career') ?? undefined}
-                  onChange={(event) => {
-                    search.set('career', event.target.value);
-                    setSearch(search);
-                  }}
-                >
-                  <option value="all">{t('pages:items.all')}</option>
-                  <option value="ARCHMAGE">{t('enums:career.ARCHMAGE')}</option>
-                  <option value="BLACKGUARD">
-                    {t('enums:career.BLACKGUARD')}
-                  </option>
-                  <option value="BLACK_ORC">
-                    {t('enums:career.BLACK_ORC')}
-                  </option>
-                  <option value="BRIGHT_WIZARD">
-                    {t('enums:career.BRIGHT_WIZARD')}
-                  </option>
-                  <option value="CHOPPA">{t('enums:career.CHOPPA')}</option>
-                  <option value="CHOSEN">{t('enums:career.CHOSEN')}</option>
-                  <option value="DISCIPLE_OF_KHAINE">
-                    {t('enums:career.DISCIPLE_OF_KHAINE')}
-                  </option>
-                  <option value="ENGINEER">{t('enums:career.ENGINEER')}</option>
-                  <option value="IRON_BREAKER">
-                    {t('enums:career.IRON_BREAKER')}
-                  </option>
-                  <option value="KNIGHT_OF_THE_BLAZING_SUN">
-                    {t('enums:career.KNIGHT_OF_THE_BLAZING_SUN')}
-                  </option>
-                  <option value="MAGUS">{t('enums:career.MAGUS')}</option>
-                  <option value="MARAUDER">{t('enums:career.MARAUDER')}</option>
-                  <option value="RUNE_PRIEST">
-                    {t('enums:career.RUNE_PRIEST')}
-                  </option>
-                  <option value="SHADOW_WARRIOR">
-                    {t('enums:career.SHADOW_WARRIOR')}
-                  </option>
-                  <option value="SHAMAN">{t('enums:career.SHAMAN')}</option>
-                  <option value="SLAYER">{t('enums:career.SLAYER')}</option>
-                  <option value="SORCERER">{t('enums:career.SORCERER')}</option>
-                  <option value="SQUIG_HERDER">
-                    {t('enums:career.SQUIG_HERDER')}
-                  </option>
-                  <option value="SWORD_MASTER">
-                    {t('enums:career.SWORD_MASTER')}
-                  </option>
-                  <option value="WARRIOR_PRIEST">
-                    {t('enums:career.WARRIOR_PRIEST')}
-                  </option>
-                  <option value="WHITE_LION">
-                    {t('enums:career.WHITE_LION')}
-                  </option>
-                  <option value="WITCH_ELF">
-                    {t('enums:career.WITCH_ELF')}
-                  </option>
-                  <option value="WITCH_HUNTER">
-                    {t('enums:career.WITCH_HUNTER')}
-                  </option>
-                  <option value="ZEALOT">{t('enums:career.ZEALOT')}</option>
-                </select>
-              </div>
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'rarity',
+                label: t('pages:items.rarity'),
+                key: 'rarity',
+                options: rarityOptions,
+              })}
+            </div>
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'career',
+                label: t('pages:items.usableByCareer'),
+                key: 'career',
+                options: enumOptions(Object.values(Career), 'enums:career'),
+              })}
+            </div>
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'stat',
+                label: t('pages:items.stat'),
+                key: 'stat',
+                options: enumOptions(Object.values(Stat), 'enums:stat'),
+                allLabel: t('pages:items.any'),
+              })}
+            </div>
+            <div className="column is-one-third-tablet">
+              {selectFilter({
+                id: 'unique',
+                label: t('pages:items.uniqueEquipped'),
+                key: 'unique',
+                options: [
+                  <option key="yes" value="yes">
+                    {t('pages:items.yes')}
+                  </option>,
+                ],
+              })}
+            </div>
+            <div className="column is-one-third-tablet">
+              <NumericFilter
+                label={t('pages:items.levelRequirement')}
+                minKey="levelMin"
+                maxKey="levelMax"
+                search={search}
+                setSearch={setSearch}
+              />
+            </div>
+            <div className="column is-one-third-tablet">
+              <NumericFilter
+                label={t('pages:items.renownRequirement')}
+                minKey="renownMin"
+                maxKey="renownMax"
+                search={search}
+                setSearch={setSearch}
+              />
+            </div>
+            <div className="column is-one-third-tablet">
+              <NumericFilter
+                label={t('pages:items.itemLevel')}
+                minKey="itemLevelMin"
+                maxKey="itemLevelMax"
+                search={search}
+                setSearch={setSearch}
+              />
             </div>
           </div>
         </div>
@@ -445,10 +452,24 @@ export const Items = (): ReactElement => {
         >
           <thead>
             <tr>
-              <th aria-label="empty header" />
-              <th>{t('pages:items.name')}</th>
-              <th>{t('pages:items.itemType')}</th>
-              <th>{t('pages:items.slot')}</th>
+              <th className="is-hidden-touch" aria-label="Item icon" />
+              <th>{sortHeader('name', t('pages:items.name'))}</th>
+              <th className="is-hidden-touch">
+                {sortHeader('type', t('pages:items.itemType'))}
+              </th>
+              <th className="is-hidden-touch">
+                {sortHeader('slot', t('pages:items.slot'))}
+              </th>
+              <th>{sortHeader('rarity', t('pages:items.rarity'))}</th>
+              <th>{sortHeader('levelRequirement', t('pages:items.level'))}</th>
+              <th>
+                {sortHeader(
+                  'renownRankRequirement',
+                  t('pages:items.renownRank'),
+                )}
+              </th>
+              <th>{sortHeader('itemLevel', t('pages:items.itemLevel'))}</th>
+              <th className="is-hidden-touch">{t('pages:items.stats')}</th>
             </tr>
           </thead>
           <tbody>

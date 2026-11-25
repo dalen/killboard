@@ -10,6 +10,15 @@ import { isPercentage } from '@/utils';
 import { itemNameClass, statMultiplier } from '@/itemUtils';
 import type { ReactElement } from 'react';
 import type { ItemListEntryFragment } from '@/__generated__/graphql';
+import { GoldPrice } from '@/components/GoldPrice';
+
+type ItemVendorCost = {
+  price: number;
+  requiredItems: Array<{
+    count: number;
+    item: { id: string; name: string; iconUrl: string };
+  }>;
+};
 
 const numEquippedInSet = (
   itemSet: ItemListEntryFragment['itemSet'],
@@ -38,31 +47,95 @@ export const CharacterItemPopup = ({
   item,
   talismans,
   itemsEquipped,
+  popupClassName = 'popup',
+  vendorCosts = [],
 }: {
   item: ItemListEntryFragment;
   talismans: TalismanFragment[];
   itemsEquipped: EquippedCharacterItemFragment[];
+  popupClassName?: string;
+  vendorCosts?: ItemVendorCost[];
 }): ReactElement => {
-  const { t } = useTranslation(['enums']);
+  const { t } = useTranslation(['enums', 'pages']);
+
+  const uniqueVendorCosts = Array.from(
+    new Map(
+      vendorCosts.map((vendorCost) => {
+        const requiredItems = [...vendorCost.requiredItems].sort((a, b) =>
+          a.item.id.localeCompare(b.item.id),
+        );
+        const costKey = JSON.stringify({
+          price: vendorCost.price,
+          requiredItems: requiredItems.map(({ count, item: requiredItem }) => [
+            requiredItem.id,
+            count,
+          ]),
+        });
+        return [costKey, { ...vendorCost, requiredItems }] as const;
+      }),
+    ).values(),
+  );
 
   const numEquipped = item.itemSet
     ? numEquippedInSet(item.itemSet, itemsEquipped)
     : 0;
 
   return (
-    <div className="popup">
-      <div className="is-flex mb-4">
-        <figure className="image is-32x32 m-0">
-          <img
-            src={item.iconUrl}
-            alt="Character"
-            className={`character-item-icon ite-${item.rarity}`}
-          />
-        </figure>
-
-        <div className="ml-2 is-size-6">
-          <div className={itemNameClass(item)}>{item.name}</div>
+    <div className={popupClassName}>
+      <div className="item-popup-header mb-4">
+        <div className="is-flex item-popup-title">
+          <figure className="image is-32x32 m-0">
+            <img
+              src={item.iconUrl}
+              alt="Character"
+              className={`character-item-icon ite-${item.rarity}`}
+            />
+          </figure>
+          <div className="ml-2 is-size-6">
+            <div className={itemNameClass(item)}>{item.name}</div>
+          </div>
         </div>
+        {uniqueVendorCosts.length > 0 && (
+          <div
+            className="item-popup-costs"
+            aria-label={t('pages:itemPopup.vendorCosts')}
+          >
+            {uniqueVendorCosts.slice(0, 3).map((vendorCost, index) => (
+              <div
+                key={`${index}-${vendorCost.price}`}
+                className="item-popup-cost-option"
+              >
+                {vendorCost.price > 0 && (
+                  <span className="item-popup-gold-cost">
+                    <GoldPrice price={vendorCost.price} />
+                  </span>
+                )}
+                {vendorCost.requiredItems.map((requiredItem) => (
+                  <span
+                    key={`${requiredItem.item.id}-${requiredItem.count}`}
+                    className="icon-text item-popup-currency-cost"
+                    title={requiredItem.item.name}
+                  >
+                    <span>{requiredItem.count.toLocaleString()}</span>
+                    <figure className="image is-16x16 ml-1">
+                      <img
+                        src={requiredItem.item.iconUrl}
+                        alt={requiredItem.item.name}
+                      />
+                    </figure>
+                  </span>
+                ))}
+              </div>
+            ))}
+            {uniqueVendorCosts.length > 3 && (
+              <div className="item-popup-more-costs">
+                {t('pages:itemPopup.moreOptions', {
+                  count: uniqueVendorCosts.length - 3,
+                })}
+              </div>
+            )}
+          </div>
+        )}
       </div>
       <div className="is-size-7">{t(`enums:itemSlot.${item.slot}`)}</div>
       {item.type !== ItemType.None && (

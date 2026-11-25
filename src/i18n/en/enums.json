@@ -28,6 +28,7 @@
   },
   "itemSlot": {
     "NONE": "",
+    "STANDARD": "Standard",
     "HELM": "Helm",
     "BODY": "Body",
     "SHOULDER": "Shoulder",
@@ -41,6 +42,11 @@
     "JEWELLERY2": "Jewellery",
     "JEWELLERY3": "Jewellery",
     "JEWELLERY4": "Jewellery",
+    "TROPHY1": "Trophy",
+    "TROPHY2": "Trophy",
+    "TROPHY3": "Trophy",
+    "TROPHY4": "Trophy",
+    "TROPHY5": "Trophy",
     "EITHER_HAND": "Weapon",
     "EVENT": "Event Item",
     "MAIN_HAND": "Main Hand",
@@ -88,6 +94,14 @@
     "TREASURE_CHEST": "Treasure Chest",
     "TREASURE_KEY": "Treasure Key",
     "REFINER_TOOL": "Refiner Tool"
+  },
+  "itemRarity": {
+    "UTILITY": "Utility",
+    "COMMON": "Common",
+    "UNCOMMON": "Uncommon",
+    "RARE": "Rare",
+    "VERY_RARE": "Very Rare",
+    "MYTHIC": "Mythic"
   },
   "stat": {
     "WOUNDS": "Wounds",

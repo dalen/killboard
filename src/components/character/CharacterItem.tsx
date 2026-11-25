@@ -10,7 +10,7 @@ import type {
 import { CharacterItemPopup } from './CharacterItemPopup';
 import { itemFigureClass, itemNameClass } from '@/itemUtils';
 import { gql } from '@apollo/client';
-import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 
 export const ITEM_TALISMAN_FRAGMENT = gql`
   fragment Talisman on Item {

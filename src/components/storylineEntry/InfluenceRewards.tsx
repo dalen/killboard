@@ -2,7 +2,7 @@ import type {
   Career,
   ChapterInfluenceRewardFragment,
 } from '@/__generated__/graphql';
-import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
+import { ITEM_FRAGMENT } from '@/components/item/ItemListEntryFragment';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { canUseItem } from '@/itemUtils';
 import { gql } from '@apollo/client';
