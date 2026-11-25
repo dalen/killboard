@@ -276,13 +276,6 @@ export const VendorItems = ({
 
   return (
     <>
-      <p className="mb-2" aria-live="polite">
-        {t('components:itemVendors.range', {
-          start: rangeStart,
-          end: rangeEnd,
-          total: totalCount,
-        })}
-      </p>
       {pageRecovery?.status === 'done' && pageRecovery.skipped > 0 && (
         <div className="notification is-warning is-light py-2 px-3">
           {t('components:itemVendors.skippedData', {
@@ -359,15 +352,31 @@ export const VendorItems = ({
           </table>
         </div>
       )}
-      <QueryPagination
-        pageInfo={pageInfo}
-        refetch={changePage}
-        perPage={perPage}
-        onPerPageChange={(size) => {
-          setPerPage(size);
-          setPageStart(0);
+      <div
+        className="is-flex is-flex-wrap-wrap is-justify-content-space-between is-align-items-center mt-2 pt-2"
+        style={{
+          borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+          gap: '0.75rem',
         }}
-      />
+      >
+        <p className="mb-0 is-size-7 has-text-grey" aria-live="polite">
+          {t('components:itemVendors.range', {
+            start: rangeStart,
+            end: rangeEnd,
+            total: totalCount,
+          })}
+        </p>
+        <QueryPagination
+          pageInfo={pageInfo}
+          refetch={changePage}
+          perPage={perPage}
+          className="field is-grouped is-align-items-center mb-0"
+          onPerPageChange={(size) => {
+            setPerPage(size);
+            setPageStart(0);
+          }}
+        />
+      </div>
     </>
   );
 };

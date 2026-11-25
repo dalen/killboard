@@ -8,10 +8,12 @@ export const QueryPagination = <T,>({
   perPage,
   refetch,
   onPerPageChange,
+  className = 'field is-grouped is-align-items-center is-pulled-right',
 }: {
   pageInfo: PageInfo;
   perPage: number;
   onPerPageChange: (perPage: number) => void;
+  className?: string;
   refetch: (
     variables?: Partial<OperationVariables>,
   ) => Promise<ApolloClient.QueryResult<T>>;
@@ -26,7 +28,7 @@ export const QueryPagination = <T,>({
   }
 
   return (
-    <div className="field is-grouped is-align-items-center is-pulled-right">
+    <div className={className}>
       <label className="label is-small mb-0">
         {t('common:itemsPerPage')}
       </label>
