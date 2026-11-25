@@ -27,6 +27,8 @@
   },
   "itemVendors": {
     "incompleteData": "Some vendor items could not be loaded because the game API returned missing item data. You can continue to another page.",
+    "skippedData_one": "{{count}} vendor entry with missing item data was skipped; the rest are shown.",
+    "skippedData_other": "{{count}} vendor entries with missing item data were skipped; the rest are shown.",
     "range": "Items {{start}}–{{end}} of {{total}}",
     "item": "Item",
     "creatureName": "Creature Name",

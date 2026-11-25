@@ -16,7 +16,7 @@ import {
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { creatureTitleIcon, creatureTitleLabel } from '../utils';
 
@@ -145,7 +145,7 @@ const duplicatedLocationNames = new Set(
 );
 
 export const Creatures = (): ReactElement => {
-  const perPage = 15;
+  const [perPage, setPerPage] = useState(15);
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const locationId = getCreatureLocation(search);
@@ -405,6 +405,7 @@ export const Creatures = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

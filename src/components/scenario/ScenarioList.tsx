@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
@@ -50,12 +51,13 @@ const SCENARIO_LIST = gql`
 export const ScenarioList = ({
   characterId,
   guildId,
-  perPage = 15,
+  perPage: initialPerPage = 15,
 }: {
   characterId?: string;
   guildId?: string;
   perPage?: number;
 }): React.ReactElement | null => {
+  const [perPage, setPerPage] = useState(initialPerPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -84,6 +86,7 @@ export const ScenarioList = ({
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </>

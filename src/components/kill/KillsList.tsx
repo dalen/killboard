@@ -13,7 +13,7 @@ export const KillsList = ({
   query,
   queryOptions,
   perPage,
-  title = undefined,
+  title,
   showTime = true,
   showVictim = true,
   showKiller = true,
@@ -26,6 +26,7 @@ export const KillsList = ({
   showVictim?: boolean;
   showKiller?: boolean;
 }): React.ReactElement | null => {
+  const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -33,7 +34,7 @@ export const KillsList = ({
     ...queryOptions,
     variables: {
       ...queryOptions?.variables,
-      first: perPage,
+      first: currentPerPage,
       ...getCurrentFilters(search),
     },
   });
@@ -72,7 +73,8 @@ export const KillsList = ({
       />
       <QueryPagination
         pageInfo={pageInfo}
-        perPage={perPage}
+        perPage={currentPerPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

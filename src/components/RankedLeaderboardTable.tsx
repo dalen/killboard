@@ -8,7 +8,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { CareerIcon } from '@/components/CareerIcon';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 
 const RANKED_LEADERBOARD = gql`
@@ -79,7 +79,7 @@ export const RankedLeaderboardTable = ({
   const { t } = useTranslation(['components', 'common']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
-  const perPage = 20;
+  const [perPage, setPerPage] = useState(20);
 
   const { loading, error, data, refetch } = useQuery<Query>(
     RANKED_LEADERBOARD,
@@ -234,6 +234,7 @@ export const RankedLeaderboardTable = ({
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

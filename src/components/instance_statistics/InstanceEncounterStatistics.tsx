@@ -3,7 +3,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceEncounterRunsFilters } from '@/components/instance_statistics/InstanceEncounterRunsFilters';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { formatDuration, intervalToDuration } from 'date-fns';
+import { formatApiDuration } from '@/utils';
 import { useSearchParams } from 'react-router';
 
 const INSTANCE_ENCOUNTER_STATISTICS = gql`
@@ -57,7 +57,7 @@ export const InstanceEncounterStatistics = ({
     return <ErrorMessage name={error.name} message={error.message} />;
   }
 
-  if (data.instanceEncounterRuns.medianDuration === 0) {
+  if (data.instanceEncounterRuns.medianDuration === 'PT0S') {
     return null;
   }
 
@@ -65,12 +65,7 @@ export const InstanceEncounterStatistics = ({
     <tr>
       <td>{name}</td>
       <td>
-        {formatDuration(
-          intervalToDuration({
-            end: new Date(data.instanceEncounterRuns.medianDuration),
-            start: new Date(0),
-          }),
-        )}
+        {formatApiDuration(data.instanceEncounterRuns.medianDuration)}
       </td>
       <td>{data.instanceEncounterRuns.medianDeaths}</td>
       <td>

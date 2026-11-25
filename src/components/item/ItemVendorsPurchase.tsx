@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { gql } from '@apollo/client';
@@ -72,7 +73,7 @@ export const ItemVendorsPurchase = ({
 }: {
   itemId: string | undefined;
 }) => {
-  const perPage = 10;
+  const [perPage, setPerPage] = useState(10);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
@@ -206,6 +207,7 @@ export const ItemVendorsPurchase = ({
         pageInfo={pageInfo}
         refetch={refetch}
         perPage={perPage}
+        onPerPageChange={setPerPage}
       />
     </>
   );

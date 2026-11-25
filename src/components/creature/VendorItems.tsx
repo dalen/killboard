@@ -1,9 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import { type OperationVariables, gql } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
-import type { Query } from '@/__generated__/graphql';
+import {
+  CombinedGraphQLErrors,
+  type OperationVariables,
+  gql,
+} from '@apollo/client';
+import { useApolloClient, useQuery } from '@apollo/client/react';
+import type { Query, VendorItem } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { GoldPrice } from '@/components/GoldPrice';
@@ -20,6 +24,9 @@ const VENDOR_ITEMS = gql`
       id
       vendorItems(first: $first, last: $last, before: $before, after: $after) {
         totalCount
+        edges {
+          cursor
+        }
         nodes {
           count
           item {
@@ -48,27 +55,194 @@ const VENDOR_ITEMS = gql`
   }
 `;
 
+const getFailedNodeIndexes = (error: unknown): number[] => {
+  if (!CombinedGraphQLErrors.is(error)) {
+    return [];
+  }
+
+  return [
+    ...new Set(
+      error.errors.flatMap(({ path }) => {
+        if (!path) {
+          return [];
+        }
+        const nodesIndex = path.indexOf('nodes');
+        const nodeIndex = path[nodesIndex + 1];
+        return nodesIndex !== -1 && typeof nodeIndex === 'number'
+          ? [nodeIndex]
+          : [];
+      }),
+    ),
+  ].toSorted((first, second) => first - second);
+};
+
 export const VendorItems = ({
   creatureId,
 }: {
   creatureId: string | undefined;
 }) => {
-  const perPage = 10;
+  const [perPage, setPerPage] = useState(10);
   const [pageStart, setPageStart] = useState(0);
+  const [recoveredPage, setRecoveredPage] = useState<{
+    key: string;
+    status: 'loading' | 'done' | 'failed';
+    items: VendorItem[];
+    skipped: number;
+  } | null>(null);
+  const recoveryAttempt = useRef<string | null>(null);
+  const client = useApolloClient();
   const { t } = useTranslation(['common', 'components']);
-  const { loading, error, data, refetch } = useQuery<Query>(VENDOR_ITEMS, {
-    variables: {
-      creatureId,
-      first: perPage,
+  const { loading, error, data, refetch, variables } = useQuery<Query>(
+    VENDOR_ITEMS,
+    {
+      variables: {
+        creatureId,
+        first: perPage,
+      },
+      errorPolicy: 'all',
     },
-    errorPolicy: 'all',
-  });
+  );
+
+  const currentPageKey = JSON.stringify([
+    creatureId,
+    variables.after,
+    variables.before,
+    variables.first,
+    variables.last,
+  ]);
+  const vendorItems = data?.creature?.vendorItems;
+  const needsRecovery =
+    error != null && vendorItems?.nodes == null && vendorItems?.edges != null;
+
+  useEffect(() => {
+    if (!needsRecovery || !vendorItems?.edges) {
+      return;
+    }
+
+    if (recoveryAttempt.current === currentPageKey) {
+      return;
+    }
+    recoveryAttempt.current = currentPageKey;
+
+    const failedIndexes = getFailedNodeIndexes(error);
+    const failedIndexSet = new Set(failedIndexes);
+    const { edges } = vendorItems;
+    const segments: { start: number; end: number }[] = [];
+    let segmentStart = 0;
+
+    for (const failedIndex of failedIndexes) {
+      if (failedIndex < edges.length) {
+        if (failedIndex > segmentStart) {
+          segments.push({ start: segmentStart, end: failedIndex });
+        }
+        segmentStart = Math.max(segmentStart, failedIndex + 1);
+      }
+    }
+    if (segmentStart < edges.length) {
+      segments.push({ start: segmentStart, end: edges.length });
+    }
+
+    if (failedIndexSet.size === 0) {
+      setRecoveredPage({
+        key: currentPageKey,
+        status: 'failed',
+        items: [],
+        skipped: 0,
+      });
+      return;
+    }
+
+    setRecoveredPage({
+      key: currentPageKey,
+      status: 'loading',
+      items: [],
+      skipped: failedIndexSet.size,
+    });
+
+    let cancelled = false;
+    const recoverPage = async () => {
+      try {
+        const results = await Promise.all(
+          segments.map(({ start, end }) => {
+            const count = end - start;
+            const segmentVariables = variables.before
+              ? {
+                  creatureId,
+                  first: undefined,
+                  last: count,
+                  after: undefined,
+                  before:
+                    end < edges.length
+                      ? edges[end]?.cursor
+                      : variables.before,
+                }
+              : {
+                  creatureId,
+                  first: count,
+                  last: undefined,
+                  before: undefined,
+                  after:
+                    start > 0 ? edges[start - 1]?.cursor : variables.after,
+                };
+
+            return client.query<Query>({
+              query: VENDOR_ITEMS,
+              variables: segmentVariables,
+              fetchPolicy: 'no-cache',
+              errorPolicy: 'all',
+            });
+          }),
+        );
+
+        const items: VendorItem[] = [];
+        for (const result of results) {
+          const nodes = result.data?.creature?.vendorItems?.nodes;
+          if (!nodes || result.error) {
+            throw new Error('Could not recover valid vendor item entries.');
+          }
+          items.push(
+            ...nodes.filter((node: VendorItem) => node?.item != null),
+          );
+        }
+
+        if (!cancelled) {
+          setRecoveredPage({
+            key: currentPageKey,
+            status: 'done',
+            items,
+            skipped: failedIndexSet.size,
+          });
+        }
+      } catch {
+        if (!cancelled) {
+          setRecoveredPage({
+            key: currentPageKey,
+            status: 'failed',
+            items: [],
+            skipped: failedIndexSet.size,
+          });
+        }
+      }
+    };
+
+    void recoverPage();
+    return () => {
+      cancelled = true;
+    };
+  }, [
+    client,
+    currentPageKey,
+    creatureId,
+    error,
+    needsRecovery,
+    variables.after,
+    variables.before,
+    vendorItems?.edges,
+  ]);
 
   if (loading && !data) {
     return <progress className="progress" />;
   }
-
-  const vendorItems = data?.creature?.vendorItems;
 
   if (error && !vendorItems) {
     return <ErrorMessage name={error.name} message={error.message} />;
@@ -79,18 +253,25 @@ export const VendorItems = ({
   }
 
   const { nodes, pageInfo, totalCount } = vendorItems;
+  const pageRecovery =
+    recoveredPage?.key === currentPageKey ? recoveredPage : null;
+  if (needsRecovery && pageRecovery?.status !== 'done' && pageRecovery?.status !== 'failed') {
+    return <progress className="progress" />;
+  }
+  const entries =
+    pageRecovery?.status === 'done'
+      ? pageRecovery.items
+      : (nodes ?? []).filter((node) => node?.item != null);
   const rangeStart = totalCount === 0 ? 0 : pageStart + 1;
-  const rangeEnd = nodes
-    ? pageStart + nodes.length
-    : Math.min(pageStart + perPage, totalCount);
+  const rangeEnd = Math.min(pageStart + perPage, totalCount);
 
-  const changePage = (variables?: Partial<OperationVariables>) => {
-    if (variables?.after) {
+  const changePage = (nextVariables?: Partial<OperationVariables>) => {
+    if (nextVariables?.after) {
       setPageStart((start) => start + perPage);
-    } else if (variables?.before) {
+    } else if (nextVariables?.before) {
       setPageStart((start) => Math.max(0, start - perPage));
     }
-    return refetch(variables);
+    return refetch(nextVariables);
   };
 
   return (
@@ -102,22 +283,47 @@ export const VendorItems = ({
           total: totalCount,
         })}
       </p>
-      {error && (
+      {pageRecovery?.status === 'done' && pageRecovery.skipped > 0 && (
+        <div className="notification is-warning is-light py-2 px-3">
+          {t('components:itemVendors.skippedData', {
+            count: pageRecovery.skipped,
+          })}
+        </div>
+      )}
+      {error && pageRecovery?.status !== 'done' && (
         <div className="notification is-warning">
           {t('components:itemVendors.incompleteData')}
         </div>
       )}
-      {nodes && (
-        <div style={{ maxHeight: '60vh', overflowY: 'auto' }}>
+      {entries.length > 0 && (
+        <div style={{ height: '60vh', overflowY: 'auto' }}>
           <table className="table is-striped is-fullwidth mb-0">
-            <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+            <thead>
               <tr>
-                <th>{t('components:itemVendors.item')}</th>
-                <th>{t('components:itemVendors.price')}</th>
+                <th
+                  style={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                    backgroundColor: '#15171a',
+                  }}
+                >
+                  {t('components:itemVendors.item')}
+                </th>
+                <th
+                  style={{
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1,
+                    backgroundColor: '#15171a',
+                  }}
+                >
+                  {t('components:itemVendors.price')}
+                </th>
               </tr>
             </thead>
             <tbody>
-              {nodes.map((vendorItem) => (
+              {entries.map((vendorItem) => (
                 <tr key={vendorItem.item.id}>
                   <td>
                     <span className="icon-text">
@@ -157,6 +363,10 @@ export const VendorItems = ({
         pageInfo={pageInfo}
         refetch={changePage}
         perPage={perPage}
+        onPerPageChange={(size) => {
+          setPerPage(size);
+          setPageStart(0);
+        }}
       />
     </>
   );

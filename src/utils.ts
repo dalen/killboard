@@ -5,6 +5,52 @@ import {
   QuestRepeatableType
 } from '@/__generated__/graphql';
 import { CreatureTitle } from '@/__generated__/schema-types';
+import { formatDuration as formatDateDuration, intervalToDuration } from 'date-fns';
+
+const SECONDS_PER_MINUTE = 60;
+const SECONDS_PER_HOUR = SECONDS_PER_MINUTE * 60;
+const SECONDS_PER_DAY = SECONDS_PER_HOUR * 24;
+const MILLISECONDS_PER_SECOND = 10 ** 3;
+
+export const formatApiDuration = (
+  value: string | number | null | undefined,
+): string => {
+  if (value == null) {
+    return '—';
+  }
+
+  let durationMs = Number.NaN;
+  if (typeof value === 'number') {
+    durationMs = value;
+  } else {
+    const match = /^P(?:(?<days>\d+(?:\.\d+)?)D)?(?:T(?:(?<hours>\d+(?:\.\d+)?)H)?(?:(?<minutes>\d+(?:\.\d+)?)M)?(?:(?<seconds>\d+(?:\.\d+)?)S)?)?$/.exec(
+      value,
+    );
+    if (!match?.groups) {
+      return '—';
+    }
+    const {
+      days = '0',
+      hours = '0',
+      minutes = '0',
+      seconds = '0',
+    } = match.groups;
+    durationMs =
+      (Number(days) * SECONDS_PER_DAY +
+        Number(hours) * SECONDS_PER_HOUR +
+        Number(minutes) * SECONDS_PER_MINUTE +
+        Number(seconds)) *
+      MILLISECONDS_PER_SECOND;
+  }
+
+  if (!Number.isFinite(durationMs) || durationMs < 0) {
+    return '—';
+  }
+
+  return formatDateDuration(
+    intervalToDuration({ start: 0, end: durationMs }),
+  );
+};
 
 export const hasUsableMapSetup = (
   mapSetup: MapSetup | null | undefined,

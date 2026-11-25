@@ -5,13 +5,15 @@ import { useQuery } from '@apollo/client/react';
 import Tippy from '@tippyjs/react';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import type { GetQuestsQuery, QuestFilterInput } from '@/__generated__/graphql';
+import { QuestRepeatableType, SortEnumType } from '@/__generated__/schema-types';
+import type { QuestSortInput } from '@/__generated__/schema-types';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopup } from '@/components/item/ItemPopup';
 import { questTypeIcon } from '../utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useEffect, useState } from 'react';
 import clsx from 'clsx';
 
 const QUESTS = gql`
@@ -21,6 +23,7 @@ const QUESTS = gql`
     $before: String
     $after: String
     $where: QuestFilterInput
+    $order: [QuestSortInput!]
   ) {
     quests(
       first: $first
@@ -28,6 +31,7 @@ const QUESTS = gql`
       before: $before
       after: $after
       where: $where
+      order: $order
     ) {
       nodes {
         id
@@ -84,39 +88,161 @@ const getQuestNameFilter = (search: URLSearchParams): QuestFilterInput => {
 
 const getQuestMinLevelFilter = (search: URLSearchParams): QuestFilterInput => {
   const minLevel = search.get('minLevel');
-  if (minLevel === null || minLevel === '') {
+  const maxLevel = search.get('maxLevel');
+  const parsedMinLevel = minLevel === null || minLevel === '' ? undefined : Number(minLevel);
+  const parsedMaxLevel = maxLevel === null || maxLevel === '' ? undefined : Number(maxLevel);
+  const validMinLevel =
+    parsedMinLevel !== undefined &&
+    Number.isInteger(parsedMinLevel) &&
+    parsedMinLevel >= 0 &&
+    parsedMinLevel <= 40;
+  const validMaxLevel =
+    parsedMaxLevel !== undefined &&
+    Number.isInteger(parsedMaxLevel) &&
+    parsedMaxLevel >= 0 &&
+    parsedMaxLevel <= 40;
+
+  if (!validMinLevel && !validMaxLevel) {
     return {};
   }
 
-  const parsedMinLevel = Number(minLevel);
+  return {
+    minLevel: {
+      ...(validMinLevel ? { gte: parsedMinLevel } : {}),
+      ...(validMaxLevel ? { lte: parsedMaxLevel } : {}),
+    },
+  };
+};
+
+const questTypeFlags = {
+  epic: 'isEpic',
+  group: 'isGroup',
+  playerKill: 'isPlayerKill',
+  rvr: 'isRvR',
+  tome: 'isTome',
+  travel: 'isTravel',
+} as const;
+
+const getQuestTypeFilter = (search: URLSearchParams): QuestFilterInput => {
+  const type = search.get('type');
+  if (!type || !(type in questTypeFlags)) {
+    return {};
+  }
+  const flag = questTypeFlags[type as keyof typeof questTypeFlags];
+  return { type: { eq: { [flag]: true } } };
+};
+
+const getQuestRepeatabilityFilter = (
+  search: URLSearchParams,
+): QuestFilterInput => {
+  const repeatability = search.get('repeatability');
   if (
-    !Number.isInteger(parsedMinLevel) ||
-    parsedMinLevel < 0 ||
-    parsedMinLevel > 40
+    !Object.values(QuestRepeatableType).includes(
+      repeatability as QuestRepeatableType,
+    )
   ) {
     return {};
   }
+  return { repeatableType: { eq: repeatability as QuestRepeatableType } };
+};
 
-  return { minLevel: { gte: parsedMinLevel } };
+const getSort = (search: URLSearchParams): QuestSortInput[] => {
+  const field = search.get('sort');
+  if (field !== 'minLevel' && field !== 'xp' && field !== 'gold') {
+    return [];
+  }
+  const direction = search.get('direction') === 'DESC' ? SortEnumType.Desc : SortEnumType.Asc;
+  return [{ [field]: direction }];
+};
+
+const getAriaSort = (search: URLSearchParams, field: string) => {
+  if (search.get('sort') !== field) {
+    return 'none' as const;
+  }
+  return search.get('direction') === 'DESC' ? ('descending' as const) : ('ascending' as const);
 };
 
 const getFilters = (search: URLSearchParams): QuestFilterInput => ({
   ...getQuestNameFilter(search),
   ...getQuestMinLevelFilter(search),
+  ...getQuestTypeFilter(search),
+  ...getQuestRepeatabilityFilter(search),
 });
 
 export const Quests = (): ReactElement => {
-  const perPage = 15;
   const [search, setSearch] = useSearchParams();
+  const [perPage, setPerPage] = useState(15);
+  const [minLevelDraft, setMinLevelDraft] = useState(search.get('minLevel') ?? '');
+  const [maxLevelDraft, setMaxLevelDraft] = useState(search.get('maxLevel') ?? '');
   const { t } = useTranslation(['common', 'pages', 'enums']);
+
+  useEffect(() => {
+    setMinLevelDraft(search.get('minLevel') ?? '');
+    setMaxLevelDraft(search.get('maxLevel') ?? '');
+  }, [search]);
+
   const { loading, error, data, refetch } = useQuery<GetQuestsQuery>(QUESTS, {
     variables: {
       first: perPage,
       where: getFilters(search),
+      order: getSort(search),
     },
   });
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+
+  const updateFilters = (updates: Record<string, string>) => {
+    const nextSearch = new URLSearchParams(search);
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === '' || value === 'all') {
+        nextSearch.delete(key);
+      } else {
+        nextSearch.set(key, value);
+      }
+    }
+    setSearch(nextSearch);
+    void refetch({
+      after: undefined,
+      before: undefined,
+      first: perPage,
+      last: undefined,
+      where: getFilters(nextSearch),
+      order: getSort(nextSearch),
+    });
+  };
+
+  const applyLevelRange = () => {
+    updateFilters({ minLevel: minLevelDraft, maxLevel: maxLevelDraft });
+  };
+
+  const updateSort = (field: 'minLevel' | 'xp' | 'gold') => {
+    const active = search.get('sort') === field;
+    let direction = 'ASC';
+    if (active && search.get('direction') !== 'ASC') {
+      direction = 'ASC';
+    } else if (active) {
+      direction = 'DESC';
+    }
+    updateFilters({ sort: field, direction });
+  };
+
+  const sortHeader = (field: 'minLevel' | 'xp' | 'gold', label: string) => {
+    const active = search.get('sort') === field;
+    const direction = active ? (search.get('direction') ?? 'ASC') : undefined;
+    return (
+      <button
+        className="button is-ghost p-0 has-text-weight-bold"
+        type="button"
+        aria-label={`${label}${direction ? `, ${direction === 'ASC' ? 'ascending' : 'descending'}` : ''}`}
+        onClick={() => updateSort(field)}
+      >
+        {label}
+        {active && (
+          <span className="ml-1">{direction === 'ASC' ? '▲' : '▼'}</span>
+        )}
+      </button>
+    );
+  };
 
   if (loading) {
     return <progress className="progress" />;
@@ -146,24 +272,19 @@ export const Quests = (): ReactElement => {
 
       <div className="card mb-5">
         <div className="card-content">
-          <div className="columns">
-            <div className="column is-three-quarters">
+          <div className="columns is-multiline">
+            <div className="column is-12-tablet is-4-desktop">
               <div className="field">
                 <label className="label">{t('pages:quests.search')}</label>
                 <SearchBox
                   initialQuery={search.get('name') || ''}
                   onSubmit={(event) => {
-                    if (event) {
-                      search.set('name', event);
-                    } else {
-                      search.delete('name');
-                    }
-                    setSearch(search);
+                    updateFilters({ name: event || '' });
                   }}
                 />
               </div>
             </div>
-            <div className="column">
+            <div className="column is-6-tablet is-2-desktop">
               <div className="field">
                 <label className="label" htmlFor="quest-min-level">
                   {t('pages:quests.minLevel')}
@@ -175,7 +296,7 @@ export const Quests = (): ReactElement => {
                   min={0}
                   max={40}
                   step={1}
-                  value={search.get('minLevel') ?? ''}
+                  value={minLevelDraft}
                   onChange={(event) => {
                     const { value } = event.target;
                     const parsedValue = Number(value);
@@ -185,15 +306,76 @@ export const Quests = (): ReactElement => {
                         parsedValue >= 0 &&
                         parsedValue <= 40)
                     ) {
-                      if (value === '') {
-                        search.delete('minLevel');
-                      } else {
-                        search.set('minLevel', value);
-                      }
-                      setSearch(search);
+                      setMinLevelDraft(value);
+                    }
+                  }}
+                  onBlur={applyLevelRange}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.currentTarget.blur();
                     }
                   }}
                 />
+              </div>
+            </div>
+            <div className="column is-6-tablet is-2-desktop">
+              <div className="field">
+                <label className="label" htmlFor="quest-max-level">
+                  {t('pages:quests.maxLevel')}
+                </label>
+                <input
+                  className="input"
+                  id="quest-max-level"
+                  type="number"
+                  min={0}
+                  max={40}
+                  step={1}
+                  value={maxLevelDraft}
+                  onChange={(event) => {
+                    const { value } = event.target;
+                    const parsedValue = Number(value);
+                    if (
+                      value === '' ||
+                      (Number.isInteger(parsedValue) &&
+                        parsedValue >= 0 &&
+                        parsedValue <= 40)
+                    ) {
+                      setMaxLevelDraft(value);
+                    }
+                  }}
+                  onBlur={applyLevelRange}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.currentTarget.blur();
+                    }
+                  }}
+                />
+              </div>
+            </div>
+            <div className="column is-6-tablet is-2-desktop">
+              <div className="field">
+                <label className="label" htmlFor="quest-type">{t('pages:quests.type')}</label>
+                <div className="select is-fullwidth">
+                  <select id="quest-type" value={search.get('type') ?? 'all'} onChange={(event) => updateFilters({ type: event.target.value })}>
+                    <option value="all">{t('pages:quests.allTypes')}</option>
+                    {(['group', 'travel', 'tome', 'rvr', 'playerKill', 'epic'] as const).map((type) => (
+                      <option key={type} value={type}>{t(`pages:quests.typeOptions.${type}`)}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div className="column is-6-tablet is-2-desktop">
+              <div className="field">
+                <label className="label" htmlFor="quest-repeatability">{t('pages:quests.repeatability')}</label>
+                <div className="select is-fullwidth">
+                  <select id="quest-repeatability" value={search.get('repeatability') ?? 'all'} onChange={(event) => updateFilters({ repeatability: event.target.value })}>
+                    <option value="all">{t('pages:quests.allRepeatability')}</option>
+                    <option value={QuestRepeatableType.None}>{t('pages:quests.repeatabilityOptions.none')}</option>
+                    <option value={QuestRepeatableType.Done}>{t('pages:quests.repeatabilityOptions.done')}</option>
+                    <option value={QuestRepeatableType.Weekly}>{t('pages:quests.repeatabilityOptions.weekly')}</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -212,10 +394,18 @@ export const Quests = (): ReactElement => {
           <thead>
             <tr>
               <th>{t('pages:quests.name')}</th>
-              <th>{t('pages:quests.minLevel')}</th>
-              <th align="right">{t('pages:quests.xp')}</th>
-              <th align="right" id="table_gold">
-                <span className="mr-2">{t('pages:quests.gold')}</span>
+              <th aria-sort={getAriaSort(search, 'minLevel')}>
+                {sortHeader('minLevel', t('pages:quests.minLevel'))}
+              </th>
+              <th align="right" aria-sort={getAriaSort(search, 'xp')}>
+                {sortHeader('xp', t('pages:quests.xp'))}
+              </th>
+              <th
+                align="right"
+                id="table_gold"
+                aria-sort={getAriaSort(search, 'gold')}
+              >
+                {sortHeader('gold', t('pages:quests.gold'))}
               </th>
               <th>{t('pages:quests.given')}</th>
               <th>{t('pages:quests.choice')}</th>
@@ -236,6 +426,7 @@ export const Quests = (): ReactElement => {
                           alt="Quest Type"
                         />
                       </span>
+                      <span>{quest.name}</span>
                     </div>
                   </Link>
                 </td>
@@ -348,6 +539,7 @@ export const Quests = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

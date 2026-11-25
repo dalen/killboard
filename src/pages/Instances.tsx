@@ -10,7 +10,7 @@ import type {
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 
 const QUERY = gql`
@@ -62,7 +62,7 @@ const getFilters = (search: URLSearchParams): InstanceFilterInput => ({
 });
 
 export const Instances = (): ReactElement => {
-  const perPage = 15;
+  const [perPage, setPerPage] = useState(15);
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const { loading, error, data, refetch } = useQuery<GetInstancesQuery>(QUERY, {
@@ -160,6 +160,7 @@ export const Instances = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

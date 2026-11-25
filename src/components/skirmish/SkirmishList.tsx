@@ -13,7 +13,7 @@ export const SkirmishList = ({
   query,
   queryOptions,
   perPage,
-  title = undefined,
+  title,
   showZone = true,
 }: {
   query: DocumentNode;
@@ -22,6 +22,7 @@ export const SkirmishList = ({
   title?: string | null;
   showZone?: boolean;
 }): React.ReactElement | null => {
+  const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
@@ -29,7 +30,7 @@ export const SkirmishList = ({
     ...queryOptions,
     variables: {
       ...queryOptions?.variables,
-      first: perPage,
+      first: currentPerPage,
       ...getCurrentFilters(search),
     },
   });
@@ -63,7 +64,8 @@ export const SkirmishList = ({
       <SkirmishListTable data={skirmishes.nodes} showZone={showZone} />
       <QueryPagination
         pageInfo={pageInfo}
-        perPage={perPage}
+        perPage={currentPerPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

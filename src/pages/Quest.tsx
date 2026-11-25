@@ -97,7 +97,7 @@ export const Quest = (): ReactElement => {
           </li>
           <li className="is-active">
             <div className="ml-2">
-              {t('pages:quest.questId', { questId: id })}
+              {quest.name || t('pages:quest.questId', { questId: id })}
             </div>
           </li>
         </ul>

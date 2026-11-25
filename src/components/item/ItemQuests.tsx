@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { gql } from '@apollo/client';
@@ -66,7 +67,7 @@ const ITEM_INFO = gql`
 `;
 
 export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
-  const perPage = 10;
+  const [perPage, setPerPage] = useState(10);
   const { t } = useTranslation(['common', 'components']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_INFO, {
     variables: {
@@ -222,6 +223,7 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </>

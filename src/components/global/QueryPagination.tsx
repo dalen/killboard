@@ -7,9 +7,11 @@ export const QueryPagination = <T,>({
   pageInfo,
   perPage,
   refetch,
+  onPerPageChange,
 }: {
   pageInfo: PageInfo;
   perPage: number;
+  onPerPageChange: (perPage: number) => void;
   refetch: (
     variables?: Partial<OperationVariables>,
   ) => Promise<ApolloClient.QueryResult<T>>;
@@ -21,7 +23,34 @@ export const QueryPagination = <T,>({
   }
 
   return (
-    <div className="field is-grouped is-pulled-right">
+    <div className="field is-grouped is-align-items-center is-pulled-right">
+      <label className="label is-small mb-0">
+        {t('common:itemsPerPage')}
+      </label>
+      <div className="control">
+        <div className="select is-small">
+          <select
+            aria-label={t('common:itemsPerPage')}
+            value={perPage}
+            onChange={(event) => {
+              const nextPerPage = Number(event.currentTarget.value);
+              onPerPageChange(nextPerPage);
+              void refetch({
+                after: undefined,
+                before: undefined,
+                first: nextPerPage,
+                last: undefined,
+              });
+            }}
+          >
+            {[10, 15, 20, 25, 50].map((size) => (
+              <option key={size} value={size}>
+                {size}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
       {pageInfo.hasPreviousPage && (
         <button
           className="button  is-info is-small"

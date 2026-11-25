@@ -7,7 +7,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import type { SearchGuildsQuery } from '../__generated__/graphql';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 
 const SEARCH_GUILD = gql`
@@ -50,7 +50,7 @@ const SEARCH_GUILD = gql`
 `;
 
 export const SearchGuild = (): ReactElement => {
-  const perPage = 15;
+  const [perPage, setPerPage] = useState(15);
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
@@ -130,6 +130,7 @@ export const SearchGuild = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

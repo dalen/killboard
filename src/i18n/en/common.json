@@ -11,6 +11,7 @@
   "notFound": "Not found",
   "prevPage": "Previous",
   "nextPage": "Next",
+  "itemsPerPage": "Items per page",
   "realmOrder": "Order",
   "realmDestruction": "Destruction",
   "realmNeutral": "Neutral",

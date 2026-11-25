@@ -7,7 +7,7 @@ import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 
 const GUILD_MEMBERS = gql`
@@ -48,7 +48,7 @@ export const GuildMemberList = ({
 }: {
   id: string | undefined;
 }): ReactElement => {
-  const perPage = 25;
+  const [perPage, setPerPage] = useState(25);
 
   const { t } = useTranslation(['common', 'pages']);
   const { loading, error, data, refetch } = useQuery<Query>(GUILD_MEMBERS, {
@@ -110,6 +110,7 @@ export const GuildMemberList = ({
         pageInfo={pageInfo}
         refetch={refetch}
         perPage={perPage}
+        onPerPageChange={setPerPage}
       />
     </div>
   );

@@ -81,7 +81,7 @@ const SKIRMISH_SCOREBOARD = gql`
 `;
 
 export const SkirmishScoreboard = ({ id }: { id: string }): ReactElement => {
-  const perPage = 25;
+  const [perPage, setPerPage] = React.useState(25);
 
   const { t } = useTranslation(['components']);
   const { loading, error, data, refetch } = useQuery<Query>(
@@ -319,6 +319,7 @@ export const SkirmishScoreboard = ({ id }: { id: string }): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

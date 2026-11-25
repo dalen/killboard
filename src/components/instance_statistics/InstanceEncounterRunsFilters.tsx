@@ -133,7 +133,6 @@ const getMaxItemRatingFilters = (
 
 export const getInstanceEncounterRunsFilters = (search: URLSearchParams) => ({
   scoreboardEntryCount: { gte: 6 },
-  start: { gt: 0 },
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
   ...getAvgItemRatingFilters(search),

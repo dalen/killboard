@@ -166,6 +166,24 @@
     "search": "Search",
     "name": "Name",
     "minLevel": "Min Level",
+    "maxLevel": "Max Level",
+      "type": "Type",
+      "allTypes": "All Types",
+      "typeOptions": {
+        "group": "Group",
+        "travel": "Travel",
+        "tome": "Tome",
+        "rvr": "RvR",
+        "playerKill": "Player Kill",
+        "epic": "Epic"
+      },
+      "repeatability": "Repeatability",
+      "allRepeatability": "All Quests",
+      "repeatabilityOptions": {
+        "none": "Not Repeatable",
+        "done": "Repeatable",
+        "weekly": "Weekly"
+      },
     "xp": "Xp",
     "gold": "Gold",
     "given": "Rewards",
@@ -195,8 +213,26 @@
     "medianDeaths": "Median Deaths",
     "averageDeaths": "Average Deaths"
   },
+  "instanceHub": {
+    "tabs": {
+      "runs": "Runs",
+      "characters": "Characters",
+      "leaderboards": "Leaderboards"
+    },
+    "encounter": "Encounter",
+    "fastestDuration": "Fastest Recorded",
+      "recordDate": "Date",
+      "recordGroup": "Group in Recorded Run",
+      "viewRun": "View Run",
+    "character": "Character",
+    "recentRuns": "Runs in Recent Sample",
+    "lastSeen": "Last Seen",
+      "recentCharactersNote": "Top 25 of {{count}} characters by appearances across the 50 most recent recorded runs. This is a recent sample, not an all-time ranking.",
+      "recentLeaderboardNote": "Fastest completed encounter times among the 50 most recent recorded runs. This is a recent sample, not an all-time record list."
+  },
   "instanceRuns": {
     "title": "Instance Runs",
+    "medianDuration": "Median Duration",
     "startTime": "Time",
     "duration": "Duration",
     "instance": "Instance",

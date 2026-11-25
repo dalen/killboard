@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
@@ -15,6 +16,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import clsx from 'clsx';
+import { formatApiDuration } from '@/utils';
 
 const INSTANCE_RUNS = gql`
   query GetInstanceRuns(
@@ -60,21 +62,26 @@ const INSTANCE_RUNS = gql`
         startCursor
       }
       totalCount
-      averageDuration
+      medianDuration
       averageDeaths
     }
   }
 `;
 
-export const InstanceRunsList = () => {
-  const perPage = 25;
+export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) => {
+  const [perPage, setPerPage] = useState(25);
 
   const [search] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);
   const { data, error, loading, refetch } = useQuery<Query>(INSTANCE_RUNS, {
     variables: {
       first: perPage,
-      where: getInstanceRunsFilters(search),
+      where: instanceId
+        ? {
+            ...getInstanceRunsFilters(search),
+            instanceId: { eq: Number(instanceId) },
+          }
+        : getInstanceRunsFilters(search),
     },
   });
   const { width } = useWindowDimensions();
@@ -93,20 +100,15 @@ export const InstanceRunsList = () => {
 
   const { pageInfo } = data.instanceRuns;
 
-  const averageDurationObject = intervalToDuration({
-    end: new Date(Math.round(data.instanceRuns.averageDuration)),
-    start: new Date(0),
-  });
-
-  const averageDuration = formatDuration(averageDurationObject);
+  const medianDuration = formatApiDuration(data.instanceRuns.medianDuration);
 
   return (
     <>
       <div className="card mb-5">
         <div className="card-content">
           <p>
-            <strong>{`${t('pages:instanceRuns.averageDuration')} `}</strong>
-            {averageDuration}
+            <strong>{`${t('pages:instanceRuns.medianDuration')} `}</strong>
+            {medianDuration}
           </p>
         </div>
       </div>
@@ -244,6 +246,7 @@ export const InstanceRunsList = () => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </>

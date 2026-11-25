@@ -11,7 +11,7 @@ import type { SearchQuery } from '../__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { itemFigureClass, itemNameClass } from '../itemUtils';
 import { questTypeIcon } from '../utils';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 
 const SEARCH = gql`
@@ -102,7 +102,7 @@ const SEARCH = gql`
 `;
 
 export const Search = (): ReactElement => {
-  const perPage = 15;
+  const [perPage, setPerPage] = useState(15);
 
   const { t } = useTranslation(['common', 'pages']);
   const { query } = useParams();
@@ -419,6 +419,7 @@ export const Search = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>

@@ -31,6 +31,7 @@ import { Storyline } from '@/pages/Storyline';
 import { StorylineEntry } from '@/pages/StorylineEntry';
 import { StorylineActivity } from '@/pages/StorylineActivity';
 import { InstanceStatistics } from '@/pages/InstanceStatistics';
+import { Instance } from '@/pages/Instance';
 import { MainNav } from '@/components/global/MainNav';
 
 // Extend the Window interface to include gtag
@@ -151,6 +152,7 @@ const App = () => {
         />
 
         <Route path="/instances" element={<Instances />} />
+        <Route path="/instance/:id" element={<Instance />} />
         <Route
           path="/instance-statistics/:id"
           element={<InstanceStatistics />}

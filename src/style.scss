@@ -323,6 +323,10 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   z-index: 30;
 }
 
+.nav-database-dropdown:not([open]) > .nav-database-menu {
+  display: none;
+}
+
 .nav-database-menu a {
   color: $navbar-item-color;
   display: block;

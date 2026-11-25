@@ -9,6 +9,7 @@ import { MapFallback } from '@/components/MapFallback';
 import { hasUsableMapSetup, questTypeIcon } from '../utils';
 import type { ReactElement } from 'react';
 import { VendorItems } from '@/components/creature/VendorItems';
+import { GoldPrice } from '@/components/GoldPrice';
 
 const CREATURE_DETAILS = gql`
   query GetCreature($id: ID!) {
@@ -36,6 +37,9 @@ const CREATURE_DETAILS = gql`
       questsStarter {
         id
         name
+        minLevel
+        xp
+        gold
         type {
           isEpic
           isGroup
@@ -100,6 +104,139 @@ export const Creature = ({
     (hasQuests ? 'quests' : undefined) ??
     (hasVendorItems ? 'vendorItems' : undefined);
 
+  const zoneMapPanel = (
+    <div className="card mb-5">
+      <div className="card-content">
+        {zoneIds.length > 1 ? (
+          <div className="tabs is-small mb-4">
+            <ul>
+              {zoneIds.map((z) => (
+                <li key={z} className={zoneId === z ? 'is-active' : ''}>
+                  <Link to={`/creature/${id}/zone/${z}`}>
+                    {zones.get(z)?.[0].name ||
+                      t('pages:creature.zoneId', { zoneId: z })}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          zone != null && (
+            <p className="is-size-5 is-family-secondary has-text-info mb-4">
+              {zone.name}
+            </p>
+          )
+        )}
+          {zone != null && mapSetup != null && (
+            <div style={{ width: '100%', maxWidth: '640px', margin: '0 auto' }}>
+              <MapPositions
+                positions={entry.spawns
+                  .filter((spawn) => spawn.position.zone?.id === zone.id)
+                  .map((spawn) => ({
+                    x: spawn.position.x,
+                    y: spawn.position.y,
+                  }))}
+                zoneId={Number(zone.id)}
+                nwCornerX={mapSetup.nwCornerX}
+                nwCornerY={mapSetup.nwCornerY}
+                seCornerX={mapSetup.seCornerX}
+                seCornerY={mapSetup.seCornerY}
+              />
+            </div>
+          )}
+          {entry.spawns.length === 0 && (
+            <div className="notification is-dark mb-0">
+              {t('pages:creature.noSpawnLocations')}
+            </div>
+          )}
+          {entry.spawns.length > 0 &&
+            (zone == null || mapSetup == null) && (
+              <MapFallback
+                key={zone?.id ?? 'unmapped'}
+                zoneId={zone?.id}
+                zoneName={zone?.name}
+                mapUnavailableText={t('pages:creature.mapUnavailable')}
+                markersUnavailableText={t(
+                  'pages:creature.mapMarkersUnavailable',
+                )}
+              />
+            )}
+      </div>
+    </div>
+  );
+
+  const questPanel = (
+    <div className="card mb-5">
+      <div className="card-content">
+        <p className="is-size-4 is-family-secondary has-text-info">
+          {t('pages:creature.questsStarter')}
+        </p>
+        {entry.questsStarter.map((quest) => (
+          <Link
+            className="is-block mb-3"
+            key={quest.id}
+            to={`/quest/${quest.id}`}
+          >
+            <div className="icon-text">
+              <span className="icon has-text-info">
+                <img
+                  src={`/images/icons/${questTypeIcon(
+                    quest.type,
+                    quest.repeatableType,
+                  )}`}
+                  alt="Quest Type"
+                />
+              </span>
+              <span>{quest.name}</span>
+            </div>
+            <div className="ml-6 is-size-7 is-flex is-align-items-center is-flex-wrap-wrap">
+              <span className="mr-3">
+                {t('pages:quests.minLevel')}: {quest.minLevel}
+              </span>
+              <span className="mr-3">
+                {t('pages:quests.xp')}: {quest.xp.toLocaleString()}
+              </span>
+              {quest.gold > 0 && (
+                <span className="icon-text">
+                  {t('pages:quests.gold')}: <GoldPrice price={quest.gold} />
+                </span>
+              )}
+            </div>
+          </Link>
+        ))}
+      </div>
+    </div>
+  );
+
+  let mainContent = zoneMapPanel;
+  if (activeTab === 'quests') {
+    mainContent = (
+      <div className="columns is-multiline is-variable is-4 mx-0">
+        <div className="column is-12-desktop is-5-widescreen">
+          {zoneMapPanel}
+        </div>
+        <div className="column is-12-desktop is-7-widescreen">
+          {questPanel}
+        </div>
+      </div>
+    );
+  } else if (activeTab === 'vendorItems') {
+    mainContent = (
+      <div className="columns is-multiline is-variable is-4 mx-0">
+        <div className="column is-12-desktop is-5-widescreen">
+          {zoneMapPanel}
+        </div>
+        <div className="column is-12-desktop is-7-widescreen">
+          <div className="card mb-5">
+            <div className="card-content">
+              <VendorItems creatureId={id} />
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
@@ -161,90 +298,7 @@ export const Creature = ({
         </ul>
       </div>
 
-      {activeTab === 'quests' && (
-        <div className="card mb-5">
-          <div className="card-content">
-            <p className="is-size-4 is-family-secondary has-text-info">
-              {t('pages:creature.questsStarter')}
-            </p>
-            {entry.questsStarter.map((quest) => (
-              <Link to={`/quest/${quest.id}`}>
-                <div className="icon-text">
-                  <span className="icon has-text-info">
-                    <img
-                      src={`/images/icons/${questTypeIcon(
-                        quest.type,
-                        quest.repeatableType,
-                      )}`}
-                      alt="Quest Type"
-                    />
-                  </span>
-                  <span>{quest.name}</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {activeTab === 'vendorItems' && <VendorItems creatureId={id} />}
-
-      <div className="tabs">
-        <ul>
-          {zoneIds.map((z) => (
-            <li key={z} className={zoneId === z ? 'is-active' : ''}>
-              <Link to={`/creature/${id}/zone/${z}`}>
-                {zones.get(z)?.[0].name ||
-                  t('pages:creature.zoneId', { zoneId: z })}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-
-      <div className="card mb-5">
-        <div className="card-content">
-          {zone != null && mapSetup != null && (
-            <div
-              style={{
-                height: '640px',
-                width: '640px',
-              }}
-            >
-              <MapPositions
-                positions={entry.spawns
-                  .filter((spawn) => spawn.position.zone?.id === zone.id)
-                  .map((spawn) => ({
-                    x: spawn.position.x,
-                    y: spawn.position.y,
-                  }))}
-                zoneId={Number(zone.id)}
-                nwCornerX={mapSetup.nwCornerX}
-                nwCornerY={mapSetup.nwCornerY}
-                seCornerX={mapSetup.seCornerX}
-                seCornerY={mapSetup.seCornerY}
-              />
-            </div>
-          )}
-          {entry.spawns.length === 0 && (
-            <div className="notification is-dark mb-0">
-              {t('pages:creature.noSpawnLocations')}
-            </div>
-          )}
-          {entry.spawns.length > 0 &&
-            (zone == null || mapSetup == null) && (
-              <MapFallback
-                key={zone?.id ?? 'unmapped'}
-                zoneId={zone?.id}
-                zoneName={zone?.name}
-                mapUnavailableText={t('pages:creature.mapUnavailable')}
-                markersUnavailableText={t(
-                  'pages:creature.mapMarkersUnavailable',
-                )}
-              />
-            )}
-        </div>
-      </div>
+      {mainContent}
     </div>
   );
 };

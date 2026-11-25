@@ -12,7 +12,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { ItemListEntry } from '@/components/item/ItemListEntry';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import type { ReactElement } from 'react';
+import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
 import { ITEM_FRAGMENT } from '@/components/item/ItemIconWithPopup';
 
@@ -96,7 +96,7 @@ const hasStatsFilter = (search: URLSearchParams) => {
 };
 
 export const Items = (): ReactElement => {
-  const perPage = 15;
+  const [perPage, setPerPage] = useState(15);
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);
   const { loading, error, data, refetch } = useQuery<SearchItemsQuery>(
@@ -461,6 +461,7 @@ export const Items = (): ReactElement => {
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}
+        onPerPageChange={setPerPage}
         refetch={refetch}
       />
     </div>
