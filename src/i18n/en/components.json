@@ -45,6 +45,10 @@
   },
   "killsFilters": {
     "allTime": "All time",
+    "last30m": "Last 30 minutes",
+    "last1h": "Last hour",
+    "last2h": "Last 2 hours",
+    "last4h": "Last 4 hours",
     "thisWeek": "This Week",
     "lastWeek": "Last Week",
     "thisMonth": "This Month",

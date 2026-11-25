@@ -110,7 +110,10 @@
     "droppedByCreatures": "Dropped by creatures",
     "droppedByGameObjects": "Found in objects",
     "chapters": "Chapter rewards",
+    "chapter": "Chapter",
     "chapterId": "Chapter ID",
+    "chapterInfluenceRewards": "Other influence rewards",
+    "showOtherChapterRewards": "Show {{count}} other rewards",
     "chapterWithoutName": "Chapter {{chapterId}}"
   },
   "itemPopup": {

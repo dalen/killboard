@@ -63,6 +63,10 @@ export const hasUsableMapSetup = (
   mapSetup.seCornerX > mapSetup.nwCornerX &&
   mapSetup.seCornerY > mapSetup.nwCornerY;
 
+export const isPlayerFacingZone = (
+  zoneName: string | null | undefined,
+): boolean => zoneName != null && !/\btest\b/i.test(zoneName);
+
 export const careerIcon = (career: Career): string => {
   switch (career) {
     case Career.Archmage: {

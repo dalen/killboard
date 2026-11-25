@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router';
+import { Link, Navigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
@@ -6,7 +6,7 @@ import type { MapSetup, Query, Zone } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { MapPositions } from '@/components/MapPositions';
 import { MapFallback } from '@/components/MapFallback';
-import { hasUsableMapSetup, questTypeIcon } from '../utils';
+import { hasUsableMapSetup, isPlayerFacingZone, questTypeIcon } from '../utils';
 import type { ReactElement } from 'react';
 
 const GAMEOBJECT_DETAILS = gql`
@@ -71,7 +71,7 @@ export const GameObject = (): ReactElement => {
 
   const zones = entry.spawns.reduce((availableZones, spawn) => {
     const { zone, mapSetup } = spawn.position;
-    if (zone != null) {
+    if (zone != null && isPlayerFacingZone(zone.name)) {
       const previousMapSetup = availableZones.get(zone.id)?.[1];
       availableZones.set(zone.id, [
         zone,
@@ -81,7 +81,19 @@ export const GameObject = (): ReactElement => {
     return availableZones;
   }, new Map<string, [Zone, MapSetup | null | undefined]>());
   const zoneIds = [...zones.keys()];
-  const activeZoneId = zoneId ?? zoneIds[0];
+  const activeZoneId = zoneId && zones.has(zoneId) ? zoneId : zoneIds[0];
+  if (zoneId != null && !zones.has(zoneId)) {
+    return (
+      <Navigate
+        to={
+          activeZoneId
+            ? `/gameobject/${id}/zone/${activeZoneId}`
+            : `/gameobject/${id}`
+        }
+        replace
+      />
+    );
+  }
   const zone = activeZoneId ? zones.get(activeZoneId)?.[0] : undefined;
   const mapSetup = activeZoneId ? zones.get(activeZoneId)?.[1] : undefined;
 
@@ -174,9 +186,13 @@ export const GameObject = (): ReactElement => {
         <div className="card-content">
           {zone != null && mapSetup != null && (
             <div
+              className={!hasQuests ? 'map-only-viewport-fit' : undefined}
               style={{
-                height: '640px',
-                width: '640px',
+                width: '100%',
+                maxWidth: !hasQuests
+                  ? 'min(640px, max(280px, calc(100vh - 26rem)))'
+                  : '640px',
+                margin: '0 auto',
               }}
             >
               <MapPositions

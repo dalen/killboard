@@ -18,7 +18,11 @@ import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { type ReactElement, useState } from 'react';
 import clsx from 'clsx';
-import { creatureTitleIcon, creatureTitleLabel } from '../utils';
+import {
+  creatureTitleIcon,
+  creatureTitleLabel,
+  isPlayerFacingZone,
+} from '../utils';
 
 const CREATURES = gql`
   query GetCreatures(
@@ -110,12 +114,16 @@ const getCreatureNameFilter = (
 };
 
 const creatureRoleValues = new Set<string>(creatureRoleOptions);
+const playerFacingLocationOptions = creatureLocationOptions.filter((zone) =>
+  isPlayerFacingZone(zone.name),
+);
 
 const isCreatureRole = (value: string | null): value is CreatureTitle =>
   value != null && creatureRoleValues.has(value);
 
 const isCreatureLocation = (value: string | null): value is string =>
-  value != null && creatureLocationOptions.some((zone) => zone.id === value);
+  value != null &&
+  playerFacingLocationOptions.some((zone) => zone.id === value);
 
 const getCreatureLocation = (search: URLSearchParams): string | undefined => {
   const location = search.get('location');
@@ -136,7 +144,7 @@ const getFilters = (search: URLSearchParams): CreatureFilterInput => {
 };
 
 const duplicatedLocationNames = new Set(
-  creatureLocationOptions
+  playerFacingLocationOptions
     .filter(
       (zone, index, zones) =>
         zones.findIndex((candidate) => candidate.name === zone.name) !== index,
@@ -296,7 +304,7 @@ export const Creatures = (): ReactElement => {
                     <option value="all">
                       {t('pages:creatures.allLocations')}
                     </option>
-                    {creatureLocationOptions.map((zone) => (
+                    {playerFacingLocationOptions.map((zone) => (
                       <option key={zone.id} value={zone.id}>
                         {duplicatedLocationNames.has(zone.name)
                           ? `${zone.name} (#${zone.id})`
@@ -335,7 +343,10 @@ export const Creatures = (): ReactElement => {
                 ...new Set(
                   creature.spawns
                     .map((spawn) => spawn.zone?.name)
-                    .filter((name): name is string => Boolean(name)),
+                    .filter(
+                      (name): name is string =>
+                        Boolean(name) && isPlayerFacingZone(name),
+                    ),
                 ),
               ];
               const icon = creatureTitleIcon(creature.title);

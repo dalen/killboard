@@ -1,7 +1,7 @@
 import {
-  getUnixTime,
   startOfMonth,
   startOfWeek,
+  subMinutes,
   subMonths,
   subWeeks,
 } from 'date-fns';
@@ -13,10 +13,38 @@ const getPeriodFilters = (search: URLSearchParams) => {
   const period = search.get('period');
 
   switch (period) {
+    case 'last30m':
+      return {
+        time: {
+          gte: subMinutes(new Date(), 30).toISOString(),
+        },
+      };
+
+    case 'last1h':
+      return {
+        time: {
+          gte: subMinutes(new Date(), 60).toISOString(),
+        },
+      };
+
+    case 'last2h':
+      return {
+        time: {
+          gte: subMinutes(new Date(), 120).toISOString(),
+        },
+      };
+
+    case 'last4h':
+      return {
+        time: {
+          gte: subMinutes(new Date(), 240).toISOString(),
+        },
+      };
+
     case 'thisWeek': {
       return {
         time: {
-          gte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+          gte: startOfWeek(new Date(), { weekStartsOn: 1 }).toISOString(),
         },
       };
     }
@@ -24,10 +52,10 @@ const getPeriodFilters = (search: URLSearchParams) => {
     case 'lastWeek': {
       return {
         time: {
-          gte: getUnixTime(
-            startOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 1 }),
-          ),
-          lte: getUnixTime(startOfWeek(new Date(), { weekStartsOn: 1 })),
+          gte: startOfWeek(subWeeks(new Date(), 1), {
+            weekStartsOn: 1,
+          }).toISOString(),
+          lte: startOfWeek(new Date(), { weekStartsOn: 1 }).toISOString(),
         },
       };
     }
@@ -35,7 +63,7 @@ const getPeriodFilters = (search: URLSearchParams) => {
     case 'thisMonth': {
       return {
         time: {
-          gte: getUnixTime(startOfMonth(new Date())),
+          gte: startOfMonth(new Date()).toISOString(),
         },
       };
     }
@@ -43,8 +71,8 @@ const getPeriodFilters = (search: URLSearchParams) => {
     case 'lastMonth': {
       return {
         time: {
-          gte: getUnixTime(getUnixTime(startOfMonth(subMonths(new Date(), 1)))),
-          lte: getUnixTime(startOfMonth(new Date())),
+          gte: startOfMonth(subMonths(new Date(), 1)).toISOString(),
+          lte: startOfMonth(new Date()).toISOString(),
         },
       };
     }
@@ -86,6 +114,10 @@ export const KillsFilters = (): ReactElement => {
                 }}
               >
                 <option value="all">{t('killsFilters.allTime')}</option>
+                <option value="last30m">{t('killsFilters.last30m')}</option>
+                <option value="last1h">{t('killsFilters.last1h')}</option>
+                <option value="last2h">{t('killsFilters.last2h')}</option>
+                <option value="last4h">{t('killsFilters.last4h')}</option>
                 <option value="thisWeek">{t('killsFilters.thisWeek')}</option>
                 <option value="lastWeek">{t('killsFilters.lastWeek')}</option>
                 <option value="thisMonth">{t('killsFilters.thisMonth')}</option>

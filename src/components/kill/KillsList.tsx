@@ -29,13 +29,18 @@ export const KillsList = ({
   const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
+  const searchKey = search.toString();
+  const currentFilters = React.useMemo(
+    () => getCurrentFilters(new URLSearchParams(searchKey)),
+    [searchKey],
+  );
 
   const { loading, error, data, refetch } = useQuery<Query>(query, {
     ...queryOptions,
     variables: {
       ...queryOptions?.variables,
       first: currentPerPage,
-      ...getCurrentFilters(search),
+      ...currentFilters,
     },
   });
 

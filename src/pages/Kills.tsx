@@ -11,12 +11,11 @@ const LATEST_KILLS = gql`
     $last: Int
     $before: String
     $after: String
-    $from: DateTime
-    $to: DateTime
+    $time: DateTimeOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
-      where: { time: { gte: $from, lte: $to } }
+      where: { time: $time }
       first: $first
       last: $last
       before: $before

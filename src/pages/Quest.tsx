@@ -44,6 +44,9 @@ const QUEST_INFO = gql`
           id
           iconUrl
           name
+          careerRestriction
+          raceRestriction
+          type
         }
       }
       description
@@ -93,6 +96,16 @@ export const Quest = (): ReactElement => {
   const career = Object.values(Career).includes(selectedCareer as Career)
     ? (selectedCareer as Career)
     : null;
+  const visibleGivenRewards = quest.rewardsGiven.filter(
+    (reward) => career === null || canUseItem(reward.item, career),
+  );
+  const visibleChoiceRewards = quest.rewardsChoice.filter(
+    (reward) => career === null || canUseItem(reward.item, career),
+  );
+  const hasCareerRestrictedRewards = [
+    ...quest.rewardsGiven,
+    ...quest.rewardsChoice,
+  ].some((reward) => reward.item.careerRestriction.length > 0);
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -165,6 +178,38 @@ export const Quest = (): ReactElement => {
             {t('pages:quest.rewards')}
           </div>
 
+          {hasCareerRestrictedRewards && (
+            <div className="field mb-3">
+              <label className="label" htmlFor="quest-career-select">
+                {t('pages:quest.careerFilter')}
+              </label>
+              <div className="control">
+                <div className="select">
+                  <select
+                    id="quest-career-select"
+                    value={career ?? 'all'}
+                    onChange={(event) => {
+                      const nextSearch = new URLSearchParams(search);
+                      if (event.target.value === 'all') {
+                        nextSearch.delete('career');
+                      } else {
+                        nextSearch.set('career', event.target.value);
+                      }
+                      setSearch(nextSearch);
+                    }}
+                  >
+                    <option value="all">{t('pages:quest.allCareers')}</option>
+                    {Object.values(Career).map((careerOption) => (
+                      <option key={careerOption} value={careerOption}>
+                        {t(`enums:career.${careerOption}`)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="mb-2 is-flex">
             {quest.xp > 0 && (
               <div>
@@ -208,12 +253,9 @@ export const Quest = (): ReactElement => {
                 </Tippy>
               </div>
             )}
-            {quest.rewardsGiven.map((reward) => (
+            {visibleGivenRewards.map((reward) => (
               <div key={`${quest.id}-${reward.item.id}`}>
-                <ItemPopupTrigger
-                  itemId={reward.item.id}
-                  placement="top"
-                >
+                <ItemPopupTrigger itemId={reward.item.id} placement="top">
                   <div>
                     <Link to={`/item/${reward.item.id}`}>
                       <figure className="image is-48x48">
@@ -248,99 +290,50 @@ export const Quest = (): ReactElement => {
             ))}
           </div>
 
-          {quest.choiceCount > 0 && quest.rewardsChoice.length > 0 && (
+          {quest.choiceCount > 0 && visibleChoiceRewards.length > 0 && (
             <>
-              <div className="columns is-vcentered is-multiline mb-1">
-                <div className="column is-12-mobile is-6-tablet">
-                  <div className="is-size-4 is-family-secondary has-text-info">
-                    {t('pages:quest.choiceCount', {
-                      count: quest.choiceCount,
-                    })}
-                  </div>
-                </div>
-                {quest.rewardsChoice.some(
-                  (reward) => reward.item.careerRestriction.length > 0,
-                ) && (
-                  <div className="column is-12-mobile is-6-tablet">
-                    <div className="field">
-                      <label className="label" htmlFor="quest-career-select">
-                        {t('pages:quest.careerFilter')}
-                      </label>
-                      <div className="control">
-                        <div className="select is-fullwidth">
-                          <select
-                            id="quest-career-select"
-                            value={career ?? 'all'}
-                            onChange={(event) => {
-                              const nextSearch = new URLSearchParams(search);
-                              if (event.target.value === 'all') {
-                                nextSearch.delete('career');
-                              } else {
-                                nextSearch.set('career', event.target.value);
-                              }
-                              setSearch(nextSearch);
-                            }}
-                          >
-                            <option value="all">
-                              {t('pages:quest.allCareers')}
-                            </option>
-                            {Object.values(Career).map((careerOption) => (
-                              <option key={careerOption} value={careerOption}>
-                                {t(`enums:career.${careerOption}`)}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+              <div className="is-size-4 is-family-secondary has-text-info mb-1">
+                {t('pages:quest.choiceCount', {
+                  count: quest.choiceCount,
+                })}
               </div>
 
               <div className="mb-2 is-flex is-flex-wrap-wrap">
-                {quest.rewardsChoice
-                  .filter(
-                    (reward) =>
-                      career === null || canUseItem(reward.item, career),
-                  )
-                  .map((reward) => (
-                    <div key={`${quest.id}-${reward.item.id}`}>
-                      <ItemPopupTrigger
-                        itemId={reward.item.id}
-                        placement="top"
-                      >
-                        <div>
-                          <Link to={`/item/${reward.item.id}`}>
-                            <figure className="image is-48x48">
-                              <div style={{ position: 'relative' }}>
-                                <img
+                {visibleChoiceRewards.map((reward) => (
+                  <div key={`${quest.id}-${reward.item.id}`}>
+                    <ItemPopupTrigger itemId={reward.item.id} placement="top">
+                      <div>
+                        <Link to={`/item/${reward.item.id}`}>
+                          <figure className="image is-48x48">
+                            <div style={{ position: 'relative' }}>
+                              <img
+                                style={{
+                                  left: 0,
+                                  position: 'absolute',
+                                  top: 0,
+                                }}
+                                src={reward.item.iconUrl}
+                                alt={reward.item.name}
+                              />
+                              {reward.count > 1 && (
+                                <div
+                                  className="has-text-white"
                                   style={{
-                                    left: 0,
                                     position: 'absolute',
+                                    right: 6,
                                     top: 0,
                                   }}
-                                  src={reward.item.iconUrl}
-                                  alt={reward.item.name}
-                                />
-                                {reward.count > 1 && (
-                                  <div
-                                    className="has-text-white"
-                                    style={{
-                                      position: 'absolute',
-                                      right: 6,
-                                      top: 0,
-                                    }}
-                                  >
-                                    {reward.count}
-                                  </div>
-                                )}
-                              </div>
-                            </figure>
-                          </Link>
-                        </div>
-                      </ItemPopupTrigger>
-                    </div>
-                  ))}
+                                >
+                                  {reward.count}
+                                </div>
+                              )}
+                            </div>
+                          </figure>
+                        </Link>
+                      </div>
+                    </ItemPopupTrigger>
+                  </div>
+                ))}
               </div>
             </>
           )}

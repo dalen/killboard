@@ -3,10 +3,12 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import { Realm, type Query } from '@/__generated__/graphql';
+import { Career, type Query, Realm } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { HoverPopupTrigger } from '@/components/global/HoverPopupTrigger';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
+import { canUseItem } from '@/itemUtils';
 
 const ITEM_DROPS = gql`
   query GetItemDropSources(
@@ -91,6 +93,18 @@ const ITEM_DROPS = gql`
         nodes {
           id
           name
+          rewards {
+            tier
+            count
+            item {
+              id
+              name
+              iconUrl
+              careerRestriction
+              raceRestriction
+              type
+            }
+          }
         }
       }
     }
@@ -107,6 +121,7 @@ export const ItemDrops = ({
   source: ItemDropSource;
 }) => {
   const [perPage, setPerPage] = useState(25);
+  const [career, setCareer] = useState<Career | 'all'>('all');
   const { t } = useTranslation(['common', 'components', 'pages']);
   const { loading, error, data, refetch } = useQuery<Query>(ITEM_DROPS, {
     variables: {
@@ -136,10 +151,46 @@ export const ItemDrops = ({
     return <ErrorMessage customText={t('common:notFound')} />;
   }
 
+  const showChapterCareerFilter =
+    chapters?.nodes?.some((chapter) =>
+      chapter.rewards.some(
+        (reward) => reward.item.careerRestriction.length > 0,
+      ),
+    ) ?? false;
+
   return (
     <>
+      {source === 'chapters' && showChapterCareerFilter && (
+        <div className="field mb-3">
+          <label className="label" htmlFor="chapter-rewards-career-select">
+            {t('pages:warJournalStoryline.careerFilter')}
+          </label>
+          <div className="control">
+            <div className="select">
+              <select
+                id="chapter-rewards-career-select"
+                value={career}
+                onChange={(event) =>
+                  setCareer(event.target.value as Career | 'all')
+                }
+              >
+                <option value="all">
+                  {t('pages:warJournalStoryline.allCareers')}
+                </option>
+                {Object.values(Career).map((careerOption) => (
+                  <option key={careerOption} value={careerOption}>
+                    {t(`enums:career.${careerOption}`)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="item-relation-scroll">
-        <table className="table is-striped is-fullwidth">
+        <table
+          className={`table is-striped is-fullwidth${source === 'chapters' ? ' item-chapter-rewards' : ''}`}
+        >
           <thead>
             {source === 'creatures' && (
               <tr>
@@ -159,6 +210,7 @@ export const ItemDrops = ({
               <tr>
                 <th>{t('pages:itemSources.chapter')}</th>
                 <th>{t('pages:itemSources.chapterId')}</th>
+                <th>{t('pages:itemSources.chapterInfluenceRewards')}</th>
               </tr>
             )}
           </thead>
@@ -231,12 +283,65 @@ export const ItemDrops = ({
                 </tr>
               );
             })}
-            {chapters?.nodes?.map((chapter) => (
-              <tr id={`chapter-${chapter.id}`} key={chapter.id}>
-                <td>{chapter.name}</td>
-                <td>{chapter.id}</td>
-              </tr>
-            ))}
+            {chapters?.nodes?.map((chapter) => {
+              const rewards = chapter.rewards
+                .filter((reward) => reward.item.id !== itemId)
+                .filter(
+                  (reward) =>
+                    career === 'all' || canUseItem(reward.item, career),
+                );
+
+              return (
+                <tr id={`chapter-${chapter.id}`} key={chapter.id}>
+                  <td>{chapter.name}</td>
+                  <td>{chapter.id}</td>
+                  <td>
+                    {rewards.length === 0 ? (
+                      '—'
+                    ) : (
+                      <details>
+                        <summary>
+                          {t('pages:itemSources.showOtherChapterRewards', {
+                            count: rewards.length,
+                          })}
+                        </summary>
+                        <div className="is-flex is-flex-wrap-wrap mt-2">
+                          {rewards.map((reward) => (
+                            <div
+                              className="icon-text mr-3 mb-2"
+                              key={`${chapter.id}-${reward.tier}-${reward.item.id}`}
+                            >
+                              <ItemPopupTrigger
+                                itemId={reward.item.id}
+                                placement="top"
+                              >
+                                <Link to={`/item/${reward.item.id}`}>
+                                  <figure className="image is-24x24">
+                                    <img
+                                      src={reward.item.iconUrl}
+                                      alt={reward.item.name}
+                                    />
+                                  </figure>
+                                </Link>
+                              </ItemPopupTrigger>
+                              <span>
+                                <span className="has-text-grey-light">
+                                  {t(`pages:chapter.tier${reward.tier}`)}:{' '}
+                                </span>
+                                <Link to={`/item/${reward.item.id}`}>
+                                  {reward.item.name}
+                                </Link>
+                                {reward.count > 1 && ` ×${reward.count}`}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </details>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>
