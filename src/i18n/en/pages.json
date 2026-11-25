@@ -196,11 +196,14 @@
     "choiceCount": "Choose {{count}}",
     "xp": "Xp",
     "money": "Money",
-    "questGivers": "Quest Givers"
+    "questGivers": "Quest Givers",
+    "careerFilter": "Career",
+    "allCareers": "All Careers"
   },
   "instances": {
     "search": "Search",
     "name": "Name",
+    "zone": "Zone",
     "encounters": "Encounters",
     "runs": "Runs",
     "statistics": "Statistics"

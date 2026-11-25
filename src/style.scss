@@ -334,8 +334,156 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   white-space: nowrap;
 }
 
+.nav-database-menu a:last-child {
+  border-bottom: 0;
+}
+
 .nav-database-menu a:hover,
 .nav-database-menu a:focus-visible {
   background: rgba(255, 153, 0, 0.12);
   color: #fff;
+}
+
+.creature-quests-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.creature-quests-table th:first-child,
+.creature-quests-table td:first-child {
+  width: 50%;
+}
+
+.creature-quests-table th:nth-child(2),
+.creature-quests-table td:nth-child(2) {
+  width: 19%;
+}
+
+.creature-quests-table th:nth-child(3),
+.creature-quests-table td:nth-child(3) {
+  width: 15%;
+}
+
+.creature-quests-table th:nth-child(4),
+.creature-quests-table td:nth-child(4) {
+  width: 16%;
+}
+
+.creature-quest-name {
+  align-items: center;
+  display: flex;
+  min-width: 0;
+}
+
+.creature-quest-name .icon {
+  flex: 0 0 auto;
+}
+
+.creature-quest-name-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.creature-quest-sort-label-short {
+  display: none;
+}
+
+.creature-quest-gold > span {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.instance-list-table {
+  width: 100%;
+}
+
+.instance-list-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.instance-list-actions .button {
+  margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+  .creature-quests-table th:first-child,
+  .creature-quests-table td:first-child {
+    width: 42%;
+  }
+
+  .creature-quests-table th:nth-child(2),
+  .creature-quests-table td:nth-child(2) {
+    width: 16%;
+  }
+
+  .creature-quests-table th:nth-child(3),
+  .creature-quests-table td:nth-child(3) {
+    width: 20%;
+  }
+
+  .creature-quests-table th:nth-child(4),
+  .creature-quests-table td:nth-child(4) {
+    width: 22%;
+  }
+
+  .creature-quests-table th,
+  .creature-quests-table td {
+    padding: 0.4em 0.2em;
+  }
+
+  .creature-quests-table th .button {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .creature-quest-sort-label-full {
+    display: none;
+  }
+
+  .creature-quest-sort-label-short {
+    display: inline;
+  }
+
+  .instance-list-table {
+    table-layout: fixed;
+  }
+
+  .instance-list-table th:first-child,
+  .instance-list-table td:first-child {
+    width: 27%;
+  }
+
+  .instance-list-table th:nth-child(2),
+  .instance-list-table td:nth-child(2) {
+    width: 27%;
+  }
+
+  .instance-list-table th:nth-child(3),
+  .instance-list-table td:nth-child(3) {
+    width: 16%;
+  }
+
+  .instance-list-table th:nth-child(4),
+  .instance-list-table td:nth-child(4) {
+    width: 30%;
+  }
+
+  .instance-list-actions {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .instance-list-actions .button {
+    font-size: 0.7rem;
+    justify-content: center;
+    padding: 0.35em 0.2em;
+    white-space: nowrap;
+  }
 }

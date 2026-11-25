@@ -145,7 +145,7 @@ const duplicatedLocationNames = new Set(
 );
 
 export const Creatures = (): ReactElement => {
-  const [perPage, setPerPage] = useState(15);
+  const [perPage, setPerPage] = useState(50);
   const [search, setSearch] = useSearchParams();
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const locationId = getCreatureLocation(search);

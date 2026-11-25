@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
@@ -58,6 +58,16 @@ const CREATURE_DETAILS = gql`
   }
 `;
 
+const getQuestAriaSort = (
+  active: boolean,
+  direction: 'ASC' | 'DESC',
+): 'none' | 'ascending' | 'descending' => {
+  if (!active) {
+    return 'none';
+  }
+  return direction === 'ASC' ? 'ascending' : 'descending';
+};
+
 export const Creature = ({
   tab,
 }: {
@@ -65,6 +75,7 @@ export const Creature = ({
 }): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id, zoneId } = useParams();
+  const [search, setSearch] = useSearchParams();
   const { loading, error, data } = useQuery<Query>(CREATURE_DETAILS, {
     variables: { id },
   });
@@ -103,6 +114,54 @@ export const Creature = ({
     tab ??
     (hasQuests ? 'quests' : undefined) ??
     (hasVendorItems ? 'vendorItems' : undefined);
+
+  const questSortField = search.get('sort');
+  const questSortDirection = search.get('direction') === 'DESC' ? 'DESC' : 'ASC';
+  const sortedQuests = [...entry.questsStarter];
+  if (
+    questSortField === 'minLevel' ||
+    questSortField === 'xp' ||
+    questSortField === 'gold'
+  ) {
+    sortedQuests.sort((a, b) => {
+      const difference = a[questSortField] - b[questSortField];
+      return questSortDirection === 'ASC' ? difference : -difference;
+    });
+  }
+
+  const updateQuestSort = (field: 'minLevel' | 'xp' | 'gold') => {
+    const nextSearch = new URLSearchParams(search);
+    const direction =
+      questSortField === field && questSortDirection === 'ASC' ? 'DESC' : 'ASC';
+    nextSearch.set('sort', field);
+    nextSearch.set('direction', direction);
+    setSearch(nextSearch);
+  };
+
+  const questSortHeader = (
+    field: 'minLevel' | 'xp' | 'gold',
+    label: string,
+  ) => {
+    const active = questSortField === field;
+    return (
+      <button
+        className="button is-ghost p-0 has-text-weight-bold"
+        type="button"
+        aria-label={`${label}${active ? `, ${questSortDirection === 'ASC' ? 'ascending' : 'descending'}` : ''}`}
+        onClick={() => updateQuestSort(field)}
+      >
+        <span className="creature-quest-sort-label-full">{label}</span>
+        <span className="creature-quest-sort-label-short">
+          {field === 'minLevel' ? 'Lvl' : label}
+        </span>
+        {active && (
+          <span className="ml-1">
+            {questSortDirection === 'ASC' ? '▲' : '▼'}
+          </span>
+        )}
+      </button>
+    );
+  };
 
   const zoneMapPanel = (
     <div className="card mb-5">
@@ -171,39 +230,75 @@ export const Creature = ({
         <p className="is-size-4 is-family-secondary has-text-info">
           {t('pages:creature.questsStarter')}
         </p>
-        {entry.questsStarter.map((quest) => (
-          <Link
-            className="is-block mb-3"
-            key={quest.id}
-            to={`/quest/${quest.id}`}
-          >
-            <div className="icon-text">
-              <span className="icon has-text-info">
-                <img
-                  src={`/images/icons/${questTypeIcon(
-                    quest.type,
-                    quest.repeatableType,
-                  )}`}
-                  alt="Quest Type"
-                />
-              </span>
-              <span>{quest.name}</span>
-            </div>
-            <div className="ml-6 is-size-7 is-flex is-align-items-center is-flex-wrap-wrap">
-              <span className="mr-3">
-                {t('pages:quests.minLevel')}: {quest.minLevel}
-              </span>
-              <span className="mr-3">
-                {t('pages:quests.xp')}: {quest.xp.toLocaleString()}
-              </span>
-              {quest.gold > 0 && (
-                <span className="icon-text">
-                  {t('pages:quests.gold')}: <GoldPrice price={quest.gold} />
-                </span>
-              )}
-            </div>
-          </Link>
-        ))}
+        <div className="table-container">
+          <table className="table is-fullwidth is-striped is-hoverable is-narrow creature-quests-table">
+            <thead>
+              <tr>
+                <th>{t('pages:quests.name')}</th>
+                <th
+                  aria-sort={getQuestAriaSort(
+                    questSortField === 'minLevel',
+                    questSortDirection,
+                  )}
+                >
+                  {questSortHeader(
+                    'minLevel',
+                    t('pages:quests.minLevel'),
+                  )}
+                </th>
+                <th
+                  aria-sort={getQuestAriaSort(
+                    questSortField === 'xp',
+                    questSortDirection,
+                  )}
+                >
+                  {questSortHeader('xp', t('pages:quests.xp'))}
+                </th>
+                <th
+                  aria-sort={getQuestAriaSort(
+                    questSortField === 'gold',
+                    questSortDirection,
+                  )}
+                >
+                  {questSortHeader('gold', t('pages:quests.gold'))}
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedQuests.map((quest) => (
+                <tr key={quest.id}>
+                  <td className="creature-quest-name-cell">
+                    <Link
+                      className="creature-quest-name"
+                      to={`/quest/${quest.id}`}
+                      title={quest.name}
+                    >
+                      <span className="icon has-text-info mr-1">
+                        <img
+                          src={`/images/icons/${questTypeIcon(
+                            quest.type,
+                            quest.repeatableType,
+                          )}`}
+                          alt="Quest Type"
+                        />
+                      </span>
+                      <span className="creature-quest-name-text">
+                        {quest.name}
+                      </span>
+                    </Link>
+                  </td>
+                  <td>{quest.minLevel}</td>
+                  <td>{quest.xp.toLocaleString()}</td>
+                  <td>
+                    <span className="creature-quest-gold">
+                      <GoldPrice price={quest.gold} />
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

@@ -31,6 +31,10 @@ const QUERY = gql`
       nodes {
         id
         name
+        zone {
+          id
+          name
+        }
         encounters {
           id
         }
@@ -95,7 +99,7 @@ export const Instances = (): ReactElement => {
             <Link to="/">{t('common:home')}</Link>
           </li>
           <li className="is-active">
-            <Link to="/creatures">{t('pages:creatures.title')}</Link>
+            <Link to="/instances">{t('pages:home.showInstances')}</Link>
           </li>
         </ul>
       </nav>
@@ -119,6 +123,7 @@ export const Instances = (): ReactElement => {
         <table
           className={clsx(
             'table',
+            'instance-list-table',
             'is-striped',
             'is-hoverable',
             isMobile ? 'is-narrow' : 'is-fullwidth',
@@ -127,6 +132,7 @@ export const Instances = (): ReactElement => {
           <thead>
             <tr>
               <th>{t('pages:instances.name')}</th>
+              <th>{t('pages:instances.zone')}</th>
               <th>{t('pages:instances.encounters')}</th>
               <th></th>
             </tr>
@@ -137,20 +143,23 @@ export const Instances = (): ReactElement => {
                 <td>
                   <Link to={`/instance/${instance.id}`}>{instance.name}</Link>
                 </td>
+                <td>{instance.zone?.name || '—'}</td>
                 <td>{instance.encounters?.length || 0}</td>
                 <td>
-                  <Link
-                    to={`/instance-statistics/${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
-                    {t('pages:instances.statistics')}
-                  </Link>
-                  <Link
-                    to={`/instance-runs?instance=${instance.id}`}
-                    className="button is-primary p-2 is-pulled-right mr-2"
-                  >
-                    {t('pages:instances.runs')}
-                  </Link>
+                  <div className="instance-list-actions">
+                    <Link
+                      to={`/instance-runs?instance=${instance.id}`}
+                      className="button is-primary p-2"
+                    >
+                      {t('pages:instances.runs')}
+                    </Link>
+                    <Link
+                      to={`/instance-statistics/${instance.id}`}
+                      className="button is-primary p-2"
+                    >
+                      {t('pages:instances.statistics')}
+                    </Link>
+                  </div>
                 </td>
               </tr>
             ))}
