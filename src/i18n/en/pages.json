@@ -110,7 +110,8 @@
     "droppedByCreatures": "Dropped by creatures",
     "droppedByGameObjects": "Found in objects",
     "chapters": "Chapter rewards",
-    "chapterId": "Chapter ID"
+    "chapterId": "Chapter ID",
+    "chapterWithoutName": "Chapter {{chapterId}}"
   },
   "itemPopup": {
     "vendorCosts": "Vendor costs",
@@ -135,7 +136,12 @@
     "uniqueEquipped": "Unique equipped",
     "yes": "Yes",
     "stats": "Stats",
-    "applyFilters": "Apply filters"
+    "applyFilters": "Apply filters",
+    "sources": "Item sources",
+    "questSource": "Quest",
+    "influenceSource": "Influence",
+    "moreQuestSources": "{{count}} more quest sources",
+    "moreInfluenceSources": "{{count}} more influence sources"
   },
   "rankedLeaderboard": {
     "typeSolo": "Solo",

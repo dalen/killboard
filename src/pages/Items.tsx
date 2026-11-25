@@ -8,6 +8,7 @@ import {
   Career,
   EquipSlot,
   type ItemFilterInput,
+  type GetItemListSourcesQuery,
   ItemRarity,
   type ItemSortInput,
   ItemType,
@@ -56,6 +57,30 @@ const SEARCH_ITEMS = gql`
   }
 
   ${ITEM_FRAGMENT}
+`;
+
+const ITEM_LIST_SOURCES = gql`
+  query GetItemListSources($itemIds: [ID!]!, $first: Int!) {
+    items(where: { id: { in: $itemIds } }, first: $first) {
+      nodes {
+        id
+        rewardedFromQuests(first: 2) {
+          totalCount
+          nodes {
+            id
+            name
+          }
+        }
+        rewardedFromChapters(first: 2) {
+          totalCount
+          nodes {
+            id
+            name
+          }
+        }
+      }
+    }
+  }
 `;
 
 const numericRange = (
@@ -222,6 +247,17 @@ export const Items = (): ReactElement => {
       },
     },
   );
+  const sourceItemIds = (data?.items?.nodes ?? []).map(({ id }) => id);
+  const { data: sourceData } = useQuery<GetItemListSourcesQuery>(
+    ITEM_LIST_SOURCES,
+    {
+      variables: {
+        itemIds: sourceItemIds,
+        first: sourceItemIds.length,
+      },
+      skip: sourceItemIds.length === 0,
+    },
+  );
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
@@ -236,6 +272,9 @@ export const Items = (): ReactElement => {
   }
 
   const { nodes: entries, pageInfo } = data.items;
+  const sourceByItemId = new Map(
+    (sourceData?.items?.nodes ?? []).map((item) => [item.id, item]),
+  );
   const currentSort = search.get('sort') ?? 'name';
   const direction = search.get('direction') === 'desc' ? 'desc' : 'asc';
   const toggleSort = (field: (typeof SORT_FIELDS)[number]) => {
@@ -505,7 +544,11 @@ export const Items = (): ReactElement => {
           </thead>
           <tbody>
             {entries.map((entry) => (
-              <ItemListEntry key={entry.id} item={entry} />
+              <ItemListEntry
+                key={entry.id}
+                item={entry}
+                sources={sourceByItemId.get(entry.id)}
+              />
             ))}
           </tbody>
         </table>

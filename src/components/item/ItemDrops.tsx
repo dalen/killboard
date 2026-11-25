@@ -232,7 +232,7 @@ export const ItemDrops = ({
               );
             })}
             {chapters?.nodes?.map((chapter) => (
-              <tr key={chapter.id}>
+              <tr id={`chapter-${chapter.id}`} key={chapter.id}>
                 <td>{chapter.name}</td>
                 <td>{chapter.id}</td>
               </tr>
