@@ -58,20 +58,20 @@ export const KillsList = ({
   }
 
   if (kills.nodes.length === 0) {
-    return null;
+    return <p>{t('common:noResults')}</p>;
   }
 
+  const currentPageKills = kills.nodes;
   const { pageInfo } = kills;
-
   return (
     <div>
       {title && (
-        <div className="is-size-4 is-family-secondary is-uppercase">
+        <div className="is-size-4 is-family-secondary is-uppercase mb-2">
           {title} {kills.totalCount != null && kills.totalCount}
         </div>
       )}
       <KillsListTable
-        data={kills.nodes}
+        data={currentPageKills}
         showTime={showTime}
         showKiller={showKiller}
         showVictim={showVictim}

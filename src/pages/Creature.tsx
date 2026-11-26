@@ -205,7 +205,7 @@ export const Creature = ({
                 width: '100%',
                 maxWidth:
                   activeTab == null
-                    ? 'min(640px, max(280px, calc(100vh - 26rem)))'
+                    ? 'min(640px, calc(100vw - 4rem), max(280px, calc(100vh - 26rem)))'
                     : '640px',
                 margin: '0 auto',
               }}

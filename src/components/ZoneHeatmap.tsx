@@ -11,7 +11,7 @@ export const ZoneHeatmap = ({
   zoneId: string;
   max: number;
   data: [number, number, number][];
-  size: number;
+  size?: number;
 }): ReactElement => {
   const divElement = useRef<HTMLDivElement>(null);
   const canvasElement = useRef<HTMLCanvasElement>(null);

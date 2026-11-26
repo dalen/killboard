@@ -250,7 +250,6 @@ export const Quests = (): ReactElement => {
 
   const entries = data.quests.nodes;
   const { pageInfo } = data.quests;
-
   return (
     <div className="container is-max-widescreen mt-2">
       <nav className="breadcrumb" aria-label="breadcrumbs">
@@ -266,11 +265,6 @@ export const Quests = (): ReactElement => {
 
       <form className="card mb-5" onSubmit={applyFilters}>
         <div className="card-content">
-          <div className="is-flex is-justify-content-flex-end mb-4">
-            <button className="button is-primary" type="submit">
-              {t('pages:items.applyFilters')}
-            </button>
-          </div>
           <div className="columns is-multiline">
             <div className="column is-12-tablet is-4-desktop">
               <div className="field">
@@ -388,6 +382,11 @@ export const Quests = (): ReactElement => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className="quest-filter-actions is-flex is-justify-content-flex-end mt-2">
+            <button className="button is-primary" type="submit">
+              {t('pages:items.applyFilters')}
+            </button>
           </div>
         </div>
       </form>

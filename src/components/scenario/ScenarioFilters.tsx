@@ -1,5 +1,9 @@
-import type { ScenarioRecordFilterInput } from '@/__generated__/graphql';
-import type { ReactElement } from 'react';
+import type {
+  DateTimeOperationFilterInput,
+  ScenarioRecordFilterInput,
+} from '@/__generated__/graphql';
+import { format, subDays, subMonths, subYears } from 'date-fns';
+import { type ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
@@ -17,9 +21,9 @@ const getQueueTypeFilters = (
     case 'solo':
       return { queueType: 2, premadeOnly };
     case 'city_siege':
-      return { queueType: 3, premadeOnly };
-    case 'solo_ranked':
       return { queueType: 4, premadeOnly };
+    case 'solo_ranked':
+      return { queueType: 5, premadeOnly };
   }
 
   return { premadeOnly };
@@ -45,18 +49,131 @@ const getTierFilters = (search: URLSearchParams): ScenarioRecordFilterInput => {
   return {};
 };
 
+const getValidDate = (value: string | null): string | undefined => {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return undefined;
+  }
+
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value
+    ? undefined
+    : value;
+};
+
+type ScenarioDatePreset = '7d' | '30d' | '90d' | '6m' | '1y' | 'custom';
+type ScenarioDateRange = { from: string; through: string };
+
+const getPresetDateRange = (
+  preset: Exclude<ScenarioDatePreset, 'custom'>,
+): ScenarioDateRange => {
+  const today = new Date();
+  let start: Date;
+
+  switch (preset) {
+    case '7d':
+      start = subDays(today, 6);
+      break;
+    case '30d':
+      start = subDays(today, 29);
+      break;
+    case '90d':
+      start = subDays(today, 89);
+      break;
+    case '6m':
+      start = subMonths(today, 6);
+      break;
+    case '1y':
+      start = subYears(today, 1);
+      break;
+  }
+
+  return {
+    from: format(start, 'yyyy-MM-dd'),
+    through: format(today, 'yyyy-MM-dd'),
+  };
+};
+
+export const getScenarioDateRange = (
+  search: URLSearchParams,
+  defaultLastWeek = false,
+): ScenarioDateRange => {
+  const fromValue = search.get('dateFrom');
+  const throughValue = search.get('dateThrough');
+
+  if (defaultLastWeek && fromValue == null && throughValue == null) {
+    return getPresetDateRange('7d');
+  }
+
+  return {
+    from: getValidDate(fromValue) ?? '',
+    through: getValidDate(throughValue) ?? '',
+  };
+};
+
+const getMatchingDatePreset = (
+  range: ScenarioDateRange,
+): ScenarioDatePreset => {
+  for (const preset of ['7d', '30d', '90d', '6m', '1y'] as const) {
+    const presetRange = getPresetDateRange(preset);
+    if (
+      presetRange.from === range.from &&
+      presetRange.through === range.through
+    ) {
+      return preset;
+    }
+  }
+  return 'custom';
+};
+
+const getLocalDateBoundary = (value: string, nextDay = false): string => {
+  const [year, month, day] = value.split('-').map(Number);
+  const boundary = new Date(year, month - 1, day);
+  if (nextDay) {
+    boundary.setDate(boundary.getDate() + 1);
+  }
+  return boundary.toISOString();
+};
+
+const getStartDateFilter = (
+  search: URLSearchParams,
+  defaultLastWeek: boolean,
+): DateTimeOperationFilterInput | undefined => {
+  const { from, through } = getScenarioDateRange(search, defaultLastWeek);
+  const filter: DateTimeOperationFilterInput = {};
+
+  if (from) {
+    filter.gte = getLocalDateBoundary(from);
+  }
+  if (through) {
+    filter.lt = getLocalDateBoundary(through, true);
+  }
+
+  return Object.keys(filter).length ? filter : undefined;
+};
+
 export const getScenarioFilters = (
   search: URLSearchParams,
   {
     characterId,
     guildId,
     wins,
-  }: { characterId?: string; guildId?: string; wins?: boolean } = {},
+    defaultLastWeek = false,
+  }: {
+    characterId?: string;
+    guildId?: string;
+    wins?: boolean;
+    defaultLastWeek?: boolean;
+  } = {},
 ): ScenarioRecordFilterInput => {
   const { queueType, premadeOnly } = getQueueTypeFilters(search);
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
   };
+  const startTime = getStartDateFilter(search, defaultLastWeek);
+
+  if (startTime) {
+    where.startTime = startTime;
+  }
 
   if (queueType !== undefined) {
     where.queueType = { eq: queueType };
@@ -77,19 +194,60 @@ export const getScenarioFilters = (
 
 export const ScenarioFilters = ({
   showPremadeOnly = false,
+  defaultLastWeek = false,
 }: {
   showPremadeOnly?: boolean;
+  defaultLastWeek?: boolean;
 }): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
+  const [dateRange, setDateRange] = useState<ScenarioDateRange>(() =>
+    getScenarioDateRange(search, defaultLastWeek),
+  );
+  const [datePreset, setDatePreset] = useState<ScenarioDatePreset>(() =>
+    getMatchingDatePreset(dateRange),
+  );
 
   const queueType = search.get('queue_type') || 'all';
+
+  useEffect(() => {
+    const nextRange = getScenarioDateRange(search, defaultLastWeek);
+    setDateRange(nextRange);
+    setDatePreset(getMatchingDatePreset(nextRange));
+  }, [defaultLastWeek, search]);
+
+  const applyDateFilters = () => {
+    const next = new URLSearchParams(search);
+    if (dateRange.from) {
+      next.set('dateFrom', dateRange.from);
+    } else {
+      next.delete('dateFrom');
+    }
+    if (dateRange.through) {
+      next.set('dateThrough', dateRange.through);
+    } else {
+      next.delete('dateThrough');
+    }
+    setSearch(next);
+  };
+
+  const updateDateRange = (updates: Partial<ScenarioDateRange>) => {
+    setDateRange((current) => ({ ...current, ...updates }));
+    setDatePreset('custom');
+  };
+
+  const chooseDatePreset = (value: ScenarioDatePreset) => {
+    setDatePreset(value);
+    if (value !== 'custom') {
+      setDateRange(getPresetDateRange(value));
+    }
+  };
 
   return (
     <div className="card mb-5">
       <div className="card-content">
-        <div className="columns">
-          <div className="column">
+        <div className="columns is-multiline">
+          <div className="column is-6-tablet is-2-desktop">
             <div className="field is-horizontal">
               <div className="field-label is-normal">
                 <label className="label" htmlFor="queueType-select">
@@ -131,7 +289,7 @@ export const ScenarioFilters = ({
               </div>
             </div>
           </div>
-          <div className="column">
+          <div className="column is-6-tablet is-2-desktop">
             <div className="field is-horizontal">
               <div className="field-label is-normal">
                 <label className="label" htmlFor="tier-select">
@@ -160,6 +318,88 @@ export const ScenarioFilters = ({
                 </div>
               </div>
             </div>
+          </div>
+          <div className="column is-6-tablet is-2-desktop">
+            <div className="field">
+              <label className="label" htmlFor="scenario-date-preset">
+                {t('scenarioFilters.dateRange')}
+              </label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select
+                    id="scenario-date-preset"
+                    value={datePreset}
+                    onChange={(event) =>
+                      chooseDatePreset(
+                        event.currentTarget.value as ScenarioDatePreset,
+                      )
+                    }
+                  >
+                    <option value="7d">
+                      {t('scenarioFilters.last7Days')}
+                    </option>
+                    <option value="30d">
+                      {t('scenarioFilters.last30Days')}
+                    </option>
+                    <option value="90d">
+                      {t('scenarioFilters.last90Days')}
+                    </option>
+                    <option value="6m">{t('scenarioFilters.last6Months')}</option>
+                    <option value="1y">{t('scenarioFilters.lastYear')}</option>
+                    <option value="custom">
+                      {t('scenarioFilters.customDates')}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="column is-12-mobile is-6-tablet is-3-desktop">
+            <div className="field">
+              <label className="label" htmlFor="scenario-date-from">
+                {t('scenarioFilters.dateFrom')}
+              </label>
+              <div className="control">
+                <input
+                  className="input"
+                  id="scenario-date-from"
+                  type="date"
+                  value={dateRange.from}
+                  max={dateRange.through || undefined}
+                  onChange={(event) =>
+                    updateDateRange({ from: event.currentTarget.value })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="column is-12-mobile is-6-tablet is-3-desktop">
+            <div className="field">
+              <label className="label" htmlFor="scenario-date-through">
+                {t('scenarioFilters.dateThrough')}
+              </label>
+              <div className="control">
+                <input
+                  className="input"
+                  id="scenario-date-through"
+                  type="date"
+                  value={dateRange.through}
+                  min={dateRange.from || undefined}
+                  onChange={(event) =>
+                    updateDateRange({ through: event.currentTarget.value })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+          <div className="column is-12 has-text-right">
+            <button
+              className="button is-primary"
+              type="button"
+              onClick={applyDateFilters}
+            >
+              {t('scenarioFilters.applyDateFilters')}
+            </button>
           </div>
           {showPremadeOnly && (
             <div className="column">

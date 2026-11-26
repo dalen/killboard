@@ -19,8 +19,8 @@ export const Home = ({
     <div className="container is-mobile mt-2">
       {tab === 'scenarios' && (
         <>
-          <ScenarioFilters />
-          <ScenarioList perPage={10} />
+          <ScenarioFilters defaultLastWeek />
+          <ScenarioList perPage={10} defaultLastWeek />
         </>
       )}
       {tab === 'players' && (

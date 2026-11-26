@@ -217,11 +217,11 @@ export const Item = ({
                 <img src={item.iconUrl} alt="Item Icon" />
               </figure>
             </figure>
-            <div className="media-content">
+            <div className="media-content item-detail-media-content">
               <div className="columns">
                 <div className="column">
-                  <div className="is-flex mb-4">
-                    <div className="is-size-3  is-family-secondary">
+                  <div className="is-flex mb-4 item-detail-title-row">
+                    <div className="is-size-3 is-family-secondary item-detail-name">
                       <div className={itemNameClass(item)}>{item.name}</div>
                     </div>
                   </div>

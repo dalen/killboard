@@ -68,6 +68,11 @@ $table-head-cell-color: $link;
   height: auto;
 }
 
+.item-detail-name {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
 // RoR style on navbar
 nav.navbar {
   background: url('https://www.returnofreckoning.com/forum/styles/dawar/theme/images/bar-bg-red.jpg')
@@ -335,6 +340,69 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 @media (max-width: 600px) {
   .item-vendor-filters {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  nav.navbar .navbar-menu {
+    max-width: 100vw;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  nav.navbar .navbar-start {
+    flex: 0 0 auto;
+    min-width: max-content;
+  }
+
+  .container > .tabs.is-fullwidth {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .container > .tabs.is-fullwidth li {
+    flex: 0 0 auto;
+  }
+
+  .container > .tabs.is-fullwidth li a {
+    white-space: nowrap;
+  }
+
+  .media-content {
+    min-width: 0;
+  }
+
+  .item-detail-media-content {
+    overflow-x: clip;
+    overflow-y: visible;
+  }
+
+  .item-detail-name,
+  .item-detail-name > div {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .item-detail-title-row {
+    display: block !important;
+  }
+
+  .item-detail-name {
+    display: block;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .quest-filter-actions {
+    justify-content: flex-start;
+  }
+
+  .quest-filter-actions .button {
+    max-width: 100%;
+    width: auto;
   }
 }
 
@@ -627,6 +695,101 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 
 .instance-list-actions .button {
   margin: 0;
+}
+
+.kill-activity-chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.kill-activity-gridline {
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 1;
+}
+
+.kill-activity-axis-label {
+  fill: currentColor;
+  font-size: 11px;
+}
+
+.kill-activity-line-order,
+.kill-activity-line-destruction {
+  stroke-width: 2.5;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.kill-activity-line-order {
+  stroke: #3e8ed0;
+}
+
+.kill-activity-line-destruction {
+  stroke: #f14668;
+}
+
+.kill-activity-point-order {
+  fill: #3e8ed0;
+}
+
+.kill-activity-point-destruction {
+  fill: #f14668;
+}
+
+.kill-activity-legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+}
+
+.kill-activity-legend-order,
+.kill-activity-legend-destruction {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+}
+
+.kill-activity-legend-order {
+  background: #3e8ed0;
+}
+
+.kill-activity-legend-destruction {
+  margin-left: 0.75rem;
+  background: #f14668;
+}
+
+.scenario-outcome-summary__realm {
+  height: 100%;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.24);
+}
+
+.scenario-outcome-summary__realm--order {
+  border-left: 3px solid #3e8ed0;
+}
+
+.scenario-outcome-summary__realm--destruction {
+  border-left: 3px solid #f14668;
+}
+
+.scenario-outcome-summary__realm .title {
+  color: $text-strong;
+}
+
+.scenario-outcome-summary__metric {
+  height: 100%;
+  padding: 0.65rem;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.16);
+}
+
+.filtered-result-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 
 @media screen and (max-width: 768px) {

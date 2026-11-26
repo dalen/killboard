@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { KillsList } from '@/components/kill/KillsList';
+import { KillActivity } from '@/components/kill/KillActivity';
 import type { ReactElement } from 'react';
 
 const LATEST_KILLS = gql`
@@ -22,14 +23,19 @@ const LATEST_KILLS = gql`
       after: $after
       soloOnly: $soloOnly
     ) {
+      totalCount
       nodes {
         id
         time
         position {
           zoneId
+          zone {
+            name
+          }
         }
         scenario {
           id
+          name
         }
         victim {
           level
@@ -86,6 +92,7 @@ export const Kills = (): ReactElement => {
       </nav>
       <div>
         <KillsFilters />
+        <KillActivity />
         <KillsList
           query={LATEST_KILLS}
           perPage={10}

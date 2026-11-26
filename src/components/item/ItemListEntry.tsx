@@ -39,8 +39,9 @@ export const ItemListEntry = ({
             {item.name}
           </div>
         </Link>
-        {(Boolean(sources?.rewardedFromQuests?.totalCount) ||
-          Boolean(sources?.rewardedFromChapters?.totalCount)) && (
+        {sources != null &&
+          (Boolean(sources.rewardedFromQuests?.totalCount) ||
+            Boolean(sources.rewardedFromChapters?.totalCount)) && (
           <div
             className="item-list-sources"
             aria-label={t('pages:items.sources')}

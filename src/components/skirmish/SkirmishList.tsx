@@ -49,7 +49,7 @@ export const SkirmishList = ({
   }
 
   if (skirmishes.nodes.length === 0) {
-    return null;
+    return <p>{t('common:noResults')}</p>;
   }
 
   const { pageInfo } = skirmishes;
