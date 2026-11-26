@@ -27,6 +27,7 @@ const WAR_JOURNAL_ENTRY_DETAILS = gql`
         }
         tasks {
           name
+          text
         }
       }
     }
@@ -100,41 +101,58 @@ export const StorylineActivity = (): ReactElement => {
 
       <div className="card mb-5">
         <div className="card-content">
-          <p className="is-size-4 is-family-secondary has-text-info">
+          <h1 className="title is-3 is-family-secondary has-text-info">
             {entry.name}
-          </p>
-          <p className="is-size-5 is-family-secondary has-text-primary">
-            {entry.activityType}
-          </p>
-          {entry.text && <p dangerouslySetInnerHTML={{ __html: entry.text }} />}
+          </h1>
+          <div className="tags mb-3">
+            <span className="tag is-warning is-light">{entry.activityType}</span>
+            {entry.zone?.name && <span className="tag is-dark">{entry.zone.name}</span>}
+          </div>
+          {entry.text && (
+            <div className="content" dangerouslySetInnerHTML={{ __html: entry.text }} />
+          )}
         </div>
       </div>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:warJournalStorylineActivity.taskNumber')}</th>
-              <th>{t('pages:warJournalStorylineActivity.taskName')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entry.tasks.map((task, index) => (
-              <tr key={task.name}>
-                <td>{index + 1}</td>
-                <td>{task.name}</td>
+      {entry.tasks.length > 0 ? (
+        <div className="table-container">
+          <table
+            className={clsx(
+              'table',
+              'is-striped',
+              'is-hoverable',
+              isMobile ? 'is-narrow' : 'is-fullwidth',
+            )}
+          >
+            <thead>
+              <tr>
+                <th>{t('pages:warJournalStorylineActivity.taskNumber')}</th>
+                <th>{t('pages:warJournalStorylineActivity.taskName')}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {entry.tasks.map((task, index) => (
+                <tr key={`${entry.id}-${index}`}>
+                  <td>{index + 1}</td>
+                  <td>
+                    <strong>{task.name}</strong>
+                    {task.text && (
+                      <div
+                        className="content is-small mt-1 mb-0"
+                        dangerouslySetInnerHTML={{ __html: task.text }}
+                      />
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="notification is-dark">
+          {t('pages:warJournalStorylineActivity.noTasks')}
+        </div>
+      )}
     </div>
   );
 };

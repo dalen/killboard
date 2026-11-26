@@ -199,6 +199,7 @@
     "title": "Game Objects",
     "search": "Search",
     "applyFilters": "Apply filters",
+    "id": "ID",
     "name": "Name",
     "model": "Model",
     "locations": "Locations"
@@ -354,13 +355,43 @@
   "warJournalStorylines": {
     "title": "Storylines",
     "name": "Name",
-    "entryCount": "Entries"
+    "intro": "Explore the realm storylines and browse their journal entries.",
+    "search": "Search storylines",
+    "searchPlaceholder": "Search names, summaries, and entries",
+    "resultCount": "Showing {{count}} of {{total}} storylines",
+    "distinguishingEntries": "Includes: {{entries}}",
+    "viewEntries": "View {{count}} entries",
+    "noResults": "No storylines match your search."
   },
   "warJournalStoryline": {
     "storylineName": "{{storylineName}}",
+    "entryCount": "{{count}} journal entries",
+    "search": "Search entries",
+    "searchPlaceholder": "Search entry names and locations",
+    "zone": "Zone",
+    "allZones": "All zones",
+    "area": "Area",
+    "allAreas": "All areas",
+    "mode": "Content type",
+    "allEntries": "All entries",
+    "rvrEntries": "RvR",
+    "pveEntries": "PvE",
+    "pve": "PvE",
+    "location": "Location",
     "entryNumber": "Entry",
     "entryName": "Name",
+    "filteredEntryCount": "Showing {{count}} of {{total}} entries",
+    "applyFilters": "Apply filters",
+    "noResults": "No entries match these filters.",
     "rvr": "RvR",
+    "questLocation": "Quest giver and location",
+    "zoneMap": "{{zone}} map",
+    "mapUnavailable": "A map isn't available for this zone yet.",
+    "mapHasNoQuestGiverPin": "This shows the zone map; the API doesn't provide an exact quest giver marker.",
+    "objectives": "Activities and objectives",
+    "activityCount": "{{count}} activities",
+    "taskCount": "{{count}} tasks",
+    "openActivity": "View activity details",
     "influenceRewards": "Influence Rewards",
     "basicRewards": "Basic",
     "advancedRewards": "Advanced",
@@ -374,6 +405,7 @@
     "storylineActivityName": "{{storylineActivityName}}",
     "taskNumber": "#",
     "taskName": "Task",
-    "zone": "Zone"
+    "zone": "Zone",
+    "noTasks": "No task details are recorded for this activity."
   }
 }

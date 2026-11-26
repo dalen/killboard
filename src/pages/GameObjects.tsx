@@ -172,6 +172,7 @@ export const GameObjects = (): ReactElement => {
         >
           <thead>
             <tr>
+              <th>{t('pages:gameObjects.id')}</th>
               <th>
                 <button
                   className="button is-ghost is-small p-0 has-text-weight-bold"
@@ -202,6 +203,7 @@ export const GameObjects = (): ReactElement => {
 
               return (
                 <tr key={gameObject.id}>
+                  <td className="has-text-grey-light">{gameObject.id}</td>
                   <td>
                     <Link to={`/gameobject/${gameObject.id}`}>
                       {gameObject.name}
