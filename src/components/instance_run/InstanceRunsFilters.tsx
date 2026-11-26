@@ -1,7 +1,12 @@
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import type { InstanceRunFilterInput } from '@/__generated__/graphql';
 import type { ReactElement } from 'react';
+import {
+  getInstanceRunFamily,
+  INSTANCE_RUN_FAMILIES,
+} from '@/components/instance_run/instanceRunFamilies';
 
 const getInstanceFilters = (
   search: URLSearchParams,
@@ -9,10 +14,32 @@ const getInstanceFilters = (
   const instance = search.get('instance');
 
   if (instance && instance !== 'all') {
+    const family = getInstanceRunFamily(instance);
+    if (family) return { instanceId: { in: family.ids.map(Number) } };
     return { instanceId: { eq: Number(instance) } };
   }
 
   return {};
+};
+
+const getStartDateFilters = (
+  search: URLSearchParams,
+): InstanceRunFilterInput => {
+  const from = search.get('from');
+  const through = search.get('through');
+  const start: NonNullable<InstanceRunFilterInput['start']> = {};
+
+  if (from && /^\d{4}-\d{2}-\d{2}$/.test(from)) {
+    const [year, month, day] = from.split('-').map(Number);
+    start.gte = new Date(year, month - 1, day).toISOString();
+  }
+
+  if (through && /^\d{4}-\d{2}-\d{2}$/.test(through)) {
+    const [year, month, day] = through.split('-').map(Number);
+    start.lt = new Date(year, month - 1, day + 1).toISOString();
+  }
+
+  return Object.keys(start).length ? { start } : {};
 };
 
 const getCompletedEncountersFilters = (
@@ -145,42 +172,73 @@ const getMaxItemRatingFilters = (
 };
 
 export const getInstanceRunsFilters = (search: URLSearchParams) => ({
+  // Hide empty dungeon records by default, while keeping Sewers and Sacellum visible.
+  // Boss kills remain visible regardless of party size.
+  or: [
+    { completedEncounters: { gte: 1 } },
+    {
+      instanceId: {
+        in: INSTANCE_RUN_FAMILIES.filter(
+          (family) =>
+            family.key === 'altdorf-sewers' || family.key === 'sacellum',
+        ).flatMap((family) => family.ids.map(Number)),
+      },
+    },
+  ],
   ...getInstanceFilters(search),
+  ...getStartDateFilters(search),
   ...getCompletedEncountersFilters(search),
   ...getMinItemRatingFilters(search),
   ...getAvgItemRatingFilters(search),
   ...getMaxItemRatingFilters(search),
 });
 
-export const InstanceRunsFilters = (): ReactElement => {
+export const InstanceRunsFilters = ({
+  onApply,
+}: {
+  onApply: () => void;
+}): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const [search, setSearch] = useSearchParams();
-  const instance = search.get('instance') ?? 'all';
-  const completedEncounters =
-    search.get('completedEncounters') &&
-    Number(search.get('completedEncounters') ?? 0);
-  const minItemRatingMin =
-    search.get('minItemRatingMin') &&
-    Number(search.get('minItemRatingMin') ?? 0);
-  const minItemRatingMax =
-    search.get('minItemRatingMax') &&
-    Number(search.get('minItemRatingMax') ?? 0);
-  const avgItemRatingMin =
-    search.get('minItemRatingMax') &&
-    Number(search.get('avgItemRatingMin') ?? 0);
-  const avgItemRatingMax =
-    search.get('minItemRatingMax') &&
-    Number(search.get('avgItemRatingMax') ?? 0);
-  const maxItemRatingMin =
-    search.get('maxItemRatingMax') &&
-    Number(search.get('maxItemRatingMin') ?? 0);
-  const maxItemRatingMax =
-    search.get('maxItemRatingMax') &&
-    Number(search.get('maxItemRatingMax') ?? 0);
+  const [draft, setDraft] = useState(() => new URLSearchParams(search));
+  const searchKey = search.toString();
+
+  useEffect(() => {
+    setDraft(new URLSearchParams(searchKey));
+  }, [searchKey]);
+
+  const updateDraft = (key: string, value: string) => {
+    setDraft((current) => {
+      const next = new URLSearchParams(current);
+      if (value) next.set(key, value);
+      else next.delete(key);
+      return next;
+    });
+  };
+
+  const applyFilters = (values = draft) => {
+    const next = new URLSearchParams(values);
+    next.delete('after');
+    next.delete('before');
+    setSearch(next);
+    onApply();
+  };
+
+  const requestedInstance = draft.get('instance') ?? 'all';
+  const instance =
+    getInstanceRunFamily(requestedInstance)?.key ?? requestedInstance;
+  const from = draft.get('from') ?? '';
+  const through = draft.get('through') ?? '';
 
   return (
     <div className="card mb-5">
-      <div className="card-content">
+      <form
+        className="card-content"
+        onSubmit={(event) => {
+          event.preventDefault();
+          applyFilters();
+        }}
+      >
         <div className="columns">
           <div className="column">
             <div className="field">
@@ -193,34 +251,53 @@ export const InstanceRunsFilters = (): ReactElement => {
                     id="instance-select"
                     value={instance}
                     onChange={(event) => {
-                      search.set('instance', event.target.value);
-                      setSearch(search);
+                      const next = new URLSearchParams(draft);
+                      if (event.target.value === 'all') next.delete('instance');
+                      else next.set('instance', event.target.value);
+                      setDraft(next);
+                      applyFilters(next);
                     }}
                   >
                     <option value="all">{t('pages:instanceRuns.all')}</option>
                     <option value="260">Lost Vale</option>
                     <option value="176">Sigmar Crypts</option>
                     <option value="196">Bilerot</option>
-                    <option value="160">Bastion Stair</option>
-                    <option value="163">Thar&apos;Ignan</option>
-                    <option value="164">Lord Slaurith</option>
-                    <option value="165">Kaarn the Vanquisher</option>
-                    <option value="166">Skull Lord Var&apos;Ithrok</option>
-                    <option value="60">Gunbad</option>
-                    <option value="63">Gunbad Nursery</option>
-                    <option value="64">Gunbad Lab</option>
-                    <option value="65">Squig Boss</option>
-                    <option value="66">Gunbad Baracks</option>
+                    <option value="bastion-stair">Bastion Stair</option>
+                    <option value="gunbad">Gunbad</option>
                     <option value="36">Dragonback Pass (Order)</option>
                     <option value="37">Dragonback Pass (Destruction)</option>
-                    <option value="152">Altdorf Sewers 1</option>
-                    <option value="153">Altdorf Sewers 2</option>
-                    <option value="169">Altdorf Sewers 3</option>
-                    <option value="155">Sacellum 1</option>
-                    <option value="156">Sacellum 2</option>
-                    <option value="173">Sacellum 3</option>
+                    <option value="altdorf-sewers">Altdorf Sewers</option>
+                    <option value="sacellum">Sacellum</option>
                   </select>
                 </div>
+              </div>
+            </div>
+            <div className="columns is-mobile">
+              <div className="column">
+                <label className="label" htmlFor="instance-run-from">
+                  {t('pages:instanceRuns.dateFrom')}
+                </label>
+                <input
+                  id="instance-run-from"
+                  className="input"
+                  type="date"
+                  value={from}
+                  onChange={(event) => updateDraft('from', event.target.value)}
+                />
+              </div>
+              <div className="column">
+                <label className="label" htmlFor="instance-run-through">
+                  {t('pages:instanceRuns.dateThrough')}
+                </label>
+                <input
+                  id="instance-run-through"
+                  className="input"
+                  type="date"
+                  value={through}
+                  onChange={(event) =>
+                    updateDraft('through', event.target.value)
+                  }
+                />
               </div>
             </div>
             <div className="field">
@@ -234,11 +311,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={completedEncounters ?? undefined}
-                  onChange={(event) => {
-                    search.set('completedEncounters', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('completedEncounters') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('completedEncounters', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -259,11 +335,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={minItemRatingMax ?? undefined}
-                  onChange={(event) => {
-                    search.set('minItemRatingMax', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('minItemRatingMax') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('minItemRatingMax', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -281,11 +356,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={minItemRatingMin ?? undefined}
-                  onChange={(event) => {
-                    search.set('minItemRatingMin', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('minItemRatingMin') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('minItemRatingMin', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -306,11 +380,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={avgItemRatingMax ?? undefined}
-                  onChange={(event) => {
-                    search.set('avgItemRatingMax', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('avgItemRatingMax') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('avgItemRatingMax', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -328,11 +401,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={avgItemRatingMin ?? undefined}
-                  onChange={(event) => {
-                    search.set('avgItemRatingMin', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('avgItemRatingMin') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('avgItemRatingMin', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -353,11 +425,10 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={maxItemRatingMax ?? undefined}
-                  onChange={(event) => {
-                    search.set('maxItemRatingMax', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('maxItemRatingMax') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('maxItemRatingMax', event.target.value)
+                  }
                 />
               </div>
             </div>
@@ -375,17 +446,21 @@ export const InstanceRunsFilters = (): ReactElement => {
                   type="number"
                   step={1}
                   placeholder="0"
-                  value={maxItemRatingMin ?? undefined}
-                  onChange={(event) => {
-                    search.set('maxItemRatingMin', event.target.value);
-                    setSearch(search);
-                  }}
+                  value={draft.get('maxItemRatingMin') ?? ''}
+                  onChange={(event) =>
+                    updateDraft('maxItemRatingMin', event.target.value)
+                  }
                 />
               </div>
             </div>
           </div>
         </div>
-      </div>
+        <div className="is-flex is-justify-content-flex-end mt-2">
+          <button className="button is-primary" type="submit">
+            {t('pages:instanceRuns.applyFilters')}
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

@@ -2,10 +2,11 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { InstanceRunsFilters } from '@/components/instance_run/InstanceRunsFilters';
 import { InstanceRunsList } from '@/components/instance_run/InstanceRunsList';
-import type { ReactElement } from 'react';
+import { useState, type ReactElement } from 'react';
 
 export const InstanceRuns = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
+  const [filterRevision, setFilterRevision] = useState(0);
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -19,8 +20,10 @@ export const InstanceRuns = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <InstanceRunsFilters />
-      <InstanceRunsList />
+      <InstanceRunsFilters
+        onApply={() => setFilterRevision((revision) => revision + 1)}
+      />
+      <InstanceRunsList key={filterRevision} />
     </div>
   );
 };

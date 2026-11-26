@@ -105,7 +105,7 @@ export const MainNav = (): ReactElement => {
             >
               <Link to="/creatures">{t('pages:home.showCreatures')}</Link>
               <Link to="/instances">{t('pages:home.showInstances')}</Link>
-              <Link to="/instance-runs">{t('pages:instanceRuns.title')}</Link>
+              <Link to="/gameobjects">{t('pages:gameObjects.title')}</Link>
               <Link to="/items">{t('pages:home.showItems')}</Link>
               <Link to="/quests">{t('pages:home.showQuests')}</Link>
               <Link to="/storylines">{t('pages:home.showStorylines')}</Link>

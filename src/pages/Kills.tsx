@@ -5,6 +5,8 @@ import { KillsFilters } from '@/components/kill/KillsFilters';
 import { KillsList } from '@/components/kill/KillsList';
 import { KillActivity } from '@/components/kill/KillActivity';
 import type { ReactElement } from 'react';
+import { useSearchParams } from 'react-router';
+import type { KillTimeZoneMode } from '@/components/kill/killTime';
 
 const LATEST_KILLS = gql`
   query GetKills(
@@ -77,6 +79,9 @@ const LATEST_KILLS = gql`
 
 export const Kills = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
+  const [search] = useSearchParams();
+  const timeZoneMode: KillTimeZoneMode =
+    search.get('timeZone') === 'local' ? 'local' : 'altdorf';
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -91,11 +96,13 @@ export const Kills = (): ReactElement => {
         </ul>
       </nav>
       <div>
-        <KillsFilters />
-        <KillActivity />
+        <KillsFilters defaultPeriod="last7d" showTimeZone />
+        <KillActivity defaultPeriod="last7d" />
         <KillsList
           query={LATEST_KILLS}
           perPage={10}
+          defaultPeriod="last7d"
+          timeZoneMode={timeZoneMode}
           title={t('pages:killsPage.title')}
         />
       </div>

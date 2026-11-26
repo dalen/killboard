@@ -1,4 +1,3 @@
-import { format, formatISO } from 'date-fns';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
@@ -6,17 +5,20 @@ import type { Kill } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
+import { type KillTimeZoneMode, formatKillTime } from './killTime';
 
 export const KillsListTable = ({
   data,
   showTime = true,
   showVictim = true,
   showKiller = true,
+  timeZoneMode = 'local',
 }: {
   data: Kill[];
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
+  timeZoneMode?: KillTimeZoneMode;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const { width } = useWindowDimensions();
@@ -55,9 +57,9 @@ export const KillsListTable = ({
                 {showTime && (
                   <td>
                     <small>
-                      {formatISO(date, { representation: 'date' })}
+                      {formatKillTime(date, timeZoneMode, 'date')}
                       <br />
-                      {format(date, 'HH:mm:ss')}
+                      {formatKillTime(date, timeZoneMode, 'time')}
                     </small>
                   </td>
                 )}

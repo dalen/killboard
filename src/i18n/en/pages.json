@@ -195,6 +195,14 @@
     "questsStarter": "Quests",
     "vendorItems": "Items Sold"
   },
+  "gameObjects": {
+    "title": "Game Objects",
+    "search": "Search",
+    "applyFilters": "Apply filters",
+    "name": "Name",
+    "model": "Model",
+    "locations": "Locations"
+  },
   "quests": {
     "title": "Quests",
     "search": "Search",
@@ -231,16 +239,25 @@
     "xp": "Xp",
     "money": "Money",
     "questGivers": "Quest Givers",
+    "showGiverLocation": "Show location on map",
+    "giverLocationZone": "Location",
+    "giverLocationUnavailable": "No public location is recorded for this quest giver.",
+    "giverMapUnavailable": "A map isn't available for this location yet.",
+    "giverMarkersUnavailable": "A map is available, but the quest giver's marker can't be shown yet.",
     "careerFilter": "Career",
     "allCareers": "All Careers"
   },
   "instances": {
+    "description": "Browse instance areas, recorded runs, and encounter statistics.",
     "search": "Search",
     "name": "Name",
     "zone": "Zone",
     "encounters": "Encounters",
     "runs": "Runs",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "sectionCount": "{{count}} areas",
+    "sections": "Show {{count}} sections",
+    "hideSections": "Hide sections"
   },
   "instanceStatistics": {
     "search": "Search",
@@ -269,7 +286,25 @@
   },
   "instanceRuns": {
     "title": "Instance Runs",
-    "medianDuration": "Median Duration",
+    "medianDuration": "Median Session Duration",
+    "groupsOnPage": "Groups on this page",
+    "completedEncountersTotal": "Completed encounters",
+    "applyFilters": "Apply filters",
+    "breakdown": "Breakdown ({{count}} sections)",
+    "collapseBreakdown": "Hide breakdown",
+    "section": "Section",
+    "bossesKilled": "Bosses killed",
+    "firstBossKill": "First boss kill",
+    "lastBossKill": "Last boss kill",
+    "bossKillTime": "Boss kill time",
+    "sincePreviousBoss": "Since previous boss",
+    "bossesRecorded": "Bosses recorded",
+    "complete": "Complete",
+    "lostValeCompletionTitle": "N'Kari defeated; the other Lost Vale bosses are optional secret encounters.",
+    "dateFrom": "Date from",
+    "dateThrough": "Date through",
+    "groupingHint": "Expand a group to see its instance sections and boss kills in time order.",
+    "sectionDuration": "Duration",
     "startTime": "Time",
     "duration": "Duration",
     "instance": "Instance",

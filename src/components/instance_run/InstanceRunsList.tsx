@@ -2,12 +2,7 @@ import { useState } from 'react';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
-import {
-  format,
-  formatDuration,
-  formatISO,
-  intervalToDuration,
-} from 'date-fns';
+import { format, intervalToDuration } from 'date-fns';
 import { Link, useSearchParams } from 'react-router';
 import type { Query } from '@/__generated__/graphql';
 import { Archetype } from '@/__generated__/graphql';
@@ -17,6 +12,11 @@ import { getInstanceRunsFilters } from '@/components/instance_run/InstanceRunsFi
 import { QueryPagination } from '@/components/global/QueryPagination';
 import clsx from 'clsx';
 import { formatApiDuration } from '@/utils';
+import {
+  getInstanceRunFamily,
+  isLostValeComplete,
+  INSTANCE_RUN_FAMILIES,
+} from '@/components/instance_run/instanceRunFamilies';
 
 const INSTANCE_RUNS = gql`
   query GetInstanceRuns(
@@ -43,8 +43,14 @@ const INSTANCE_RUNS = gql`
         instance {
           id
           name
+          encounters {
+            id
+          }
         }
         scoreboardEntries {
+          character {
+            id
+          }
           itemRating
           deaths
           archetype
@@ -52,7 +58,14 @@ const INSTANCE_RUNS = gql`
           healing
         }
         encounters {
+          id
           encounterId
+          completed
+          start
+          end
+          encounter {
+            name
+          }
         }
       }
       pageInfo {
@@ -68,8 +81,166 @@ const INSTANCE_RUNS = gql`
   }
 `;
 
-export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) => {
+type InstanceRunNode = NonNullable<
+  NonNullable<Query['instanceRuns']>['nodes']
+>[number];
+
+// Some dungeon wings are spaced well beyond fifteen minutes, especially when
+// the first instance record contains the early Bastion Stair encounters.
+const INSTANCE_FAMILY_SEGMENT_GAP_MS = 60 * 60 * 1000;
+
+const formatCompactDuration = (
+  duration: ReturnType<typeof intervalToDuration>,
+): string => {
+  const units = [
+    [duration.days, 'd'],
+    [duration.hours, 'h'],
+    [duration.minutes, 'm'],
+    [duration.seconds, 's'],
+  ] as const;
+  const parts = units.flatMap(([value, label]) =>
+    value != null && value > 0 ? [`${value}${label}`] : [],
+  );
+
+  return parts.join(' ') || '0s';
+};
+type InstanceRunFamily = (typeof INSTANCE_RUN_FAMILIES)[number];
+
+type InstanceRunGroup = {
+  key: string;
+  family?: InstanceRunFamily;
+  run: InstanceRunNode;
+  segments: InstanceRunNode[];
+};
+
+const belongsToSameParty = (left: string[], right: string[]) => {
+  const rightIds = new Set(right);
+  const sharedCount = left.filter((characterId) =>
+    rightIds.has(characterId),
+  ).length;
+  const smallerRosterSize = Math.min(left.length, right.length);
+  const largerRosterSize = Math.max(left.length, right.length);
+
+  // Ignore single-character partial records; require substantial overlap on both sides.
+  return (
+    sharedCount >= 3 &&
+    sharedCount / smallerRosterSize >= 0.75 &&
+    sharedCount / largerRosterSize >= 0.5
+  );
+};
+
+/** Join same-party records for sections that form one larger dungeon. */
+const groupInstanceRuns = (runs: InstanceRunNode[]): InstanceRunGroup[] => {
+  const combined: InstanceRunGroup[] = [];
+
+  for (const run of [...runs].sort(
+    (left, right) =>
+      new Date(left.start).getTime() - new Date(right.start).getTime(),
+  )) {
+    const family = getInstanceRunFamily(run.instanceId);
+    const roster = run.scoreboardEntries
+      .map((entry) => entry.character.id)
+      .sort();
+    const runStart = new Date(run.start).getTime();
+    const matchingGroup = family
+      ? [...combined].reverse().find((group) => {
+          if (group.family?.key !== family.key) return false;
+          const groupEnd = Math.max(
+            ...group.segments.map((segment) => new Date(segment.end).getTime()),
+          );
+          const sharesParty = group.segments.some((segment) =>
+            belongsToSameParty(
+              roster,
+              segment.scoreboardEntries.map((entry) => entry.character.id),
+            ),
+          );
+          return (
+            sharesParty &&
+            runStart >=
+              Math.min(
+                ...group.segments.map((segment) =>
+                  new Date(segment.start).getTime(),
+                ),
+              ) &&
+            runStart - groupEnd <= INSTANCE_FAMILY_SEGMENT_GAP_MS
+          );
+        })
+      : undefined;
+
+    if (matchingGroup) {
+      matchingGroup.segments.push(run);
+      if (
+        run.instanceId === family?.ids[0] &&
+        matchingGroup.run.instanceId !== family.ids[0]
+      ) {
+        matchingGroup.run = run;
+      }
+    } else {
+      combined.push({
+        key: '',
+        family,
+        run,
+        segments: [run],
+      });
+    }
+  }
+
+  return combined
+    .map((group) => ({
+      ...group,
+      key: group.family
+        ? `${group.family.key}:${group.segments
+            .map((segment) => segment.id)
+            .sort()
+            .join(':')}`
+        : group.run.id,
+    }))
+    .sort((left, right) => {
+      const leftStart = Math.min(
+        ...left.segments.map((segment) => new Date(segment.start).getTime()),
+      );
+      const rightStart = Math.min(
+        ...right.segments.map((segment) => new Date(segment.start).getTime()),
+      );
+      return rightStart - leftStart;
+    });
+};
+
+const getCompletedBossKills = (segments: InstanceRunNode[]) =>
+  segments
+    .flatMap((segment) =>
+      segment.encounters
+        .filter((encounter) => encounter.completed)
+        .map((encounter) => ({
+          ...encounter,
+          instanceName: segment.instance.name,
+        })),
+    )
+    .sort(
+      (left, right) =>
+        new Date(left.end).getTime() - new Date(right.end).getTime(),
+    );
+
+const getBossKillSpan = (segments: InstanceRunNode[]) => {
+  const killTimes = getCompletedBossKills(segments).map((encounter) =>
+    new Date(encounter.end).getTime(),
+  );
+
+  if (killTimes.length < 2) return null;
+
+  return intervalToDuration({
+    start: Math.min(...killTimes),
+    end: Math.max(...killTimes),
+  });
+};
+
+export const InstanceRunsList = ({
+  instanceId,
+}: { instanceId?: string } = {}) => {
   const [perPage, setPerPage] = useState(25);
+  const [expandedRunGroups, setExpandedRunGroups] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const [search] = useSearchParams();
   const { t } = useTranslation(['common', 'pages']);
@@ -79,7 +250,11 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
       where: instanceId
         ? {
             ...getInstanceRunsFilters(search),
-            instanceId: { eq: Number(instanceId) },
+            instanceId: getInstanceRunFamily(instanceId)
+              ? {
+                  in: getInstanceRunFamily(instanceId)!.ids.map(Number),
+                }
+              : { eq: Number(instanceId) },
           }
         : getInstanceRunsFilters(search),
     },
@@ -99,6 +274,18 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
   }
 
   const { pageInfo } = data.instanceRuns;
+  const combinedRuns = groupInstanceRuns(data.instanceRuns.nodes);
+  const totalCompletedEncounters = combinedRuns.reduce(
+    (total, group) =>
+      total +
+      group.segments.reduce(
+        (count, segment) =>
+          count +
+          segment.encounters.filter((encounter) => encounter.completed).length,
+        0,
+      ),
+    0,
+  );
 
   const medianDuration = formatApiDuration(data.instanceRuns.medianDuration);
 
@@ -106,9 +293,19 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
     <>
       <div className="card mb-5">
         <div className="card-content">
-          <p>
+          <p className="mb-2">
             <strong>{`${t('pages:instanceRuns.medianDuration')} `}</strong>
             {medianDuration}
+          </p>
+          <p className="is-size-7">
+            <strong>{`${t('pages:instanceRuns.groupsOnPage')}: `}</strong>
+            {combinedRuns.length}
+            <span className="mx-3">·</span>
+            <strong>{`${t('pages:instanceRuns.completedEncountersTotal')}: `}</strong>
+            {totalCompletedEncounters}
+          </p>
+          <p className="is-size-7 has-text-grey-light mt-2">
+            {t('pages:instanceRuns.groupingHint')}
           </p>
         </div>
       </div>
@@ -118,6 +315,7 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
           'is-striped',
           'is-hoverable',
           'is-marginless',
+          'instance-runs-main-table',
           isMobile ? 'is-narrow' : 'is-fullwidth',
         )}
       >
@@ -126,22 +324,20 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
             <th>{t('pages:instanceRuns.startTime')}</th>
             <th>{t('pages:instanceRuns.instance')}</th>
             <th>{t('pages:instanceRuns.duration')}</th>
-            <th>{t('pages:instanceRuns.encounters')}</th>
-            <th align="center">
-              <span className="icon">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={36}
-                  height={32}
-                  alt={t('pages:instanceRuns.deaths') ?? ''}
-                  title={t('pages:instanceRuns.deaths') ?? ''}
-                />
-              </span>
-            </th>{' '}
-            <th>{t('pages:instanceRuns.itemRatingMin')}</th>
-            <th>{t('pages:instanceRuns.itemRatingAverage')}</th>
-            <th>{t('pages:instanceRuns.itemRatingMax')}</th>
-            <th align="center">
+            <th>{t('pages:instanceRuns.bossesRecorded')}</th>
+            <th className="is-hidden-mobile">
+              {t('pages:instanceRuns.itemRatingMin')}
+            </th>
+            <th className="is-hidden-mobile">
+              {t('pages:instanceRuns.itemRatingAverage')}
+            </th>
+            <th className="is-hidden-mobile">
+              {t('pages:instanceRuns.itemRatingMax')}
+            </th>
+            <th className="is-hidden-mobile">
+              {t('pages:instanceRuns.deaths')}
+            </th>
+            <th align="center" className="is-hidden-mobile">
               <span className="icon">
                 <img
                   src="/images/icons/protection.png"
@@ -152,7 +348,7 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
                 />
               </span>
             </th>
-            <th align="center">
+            <th align="center" className="is-hidden-mobile">
               <span className="icon">
                 <img
                   src="/images/icons/healing.png"
@@ -163,7 +359,7 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
                 />
               </span>
             </th>
-            <th align="center">
+            <th align="center" className="is-hidden-mobile">
               <span className="icon">
                 <img
                   src="/images/icons/damage.png"
@@ -174,72 +370,313 @@ export const InstanceRunsList = ({ instanceId }: { instanceId?: string } = {}) =
                 />
               </span>
             </th>
+            <th>{t('common:details')}</th>
           </tr>
         </thead>
         <tbody>
-          {data.instanceRuns.nodes.map((instanceRun) => {
-            const startDate = new Date(instanceRun.start);
-            const endDate = new Date(instanceRun.end);
-            const durationObject = intervalToDuration({
-              end: endDate,
-              start: startDate,
-            });
-
-            const duration = formatDuration(durationObject);
-            const itemRatings = instanceRun.scoreboardEntries.map(
-              (e) => e.itemRating,
+          {combinedRuns.flatMap((group) => {
+            const { run, segments, family } = group;
+            const groupBossKills = getCompletedBossKills(segments);
+            const startDate = groupBossKills.length
+              ? new Date(groupBossKills[0].end)
+              : new Date(
+                  Math.min(
+                    ...segments.map((segment) =>
+                      new Date(segment.start).getTime(),
+                    ),
+                  ),
+                );
+            const endDate = groupBossKills.length
+              ? new Date(groupBossKills[groupBossKills.length - 1].end)
+              : new Date(
+                  Math.max(
+                    ...segments.map((segment) =>
+                      new Date(segment.end).getTime(),
+                    ),
+                  ),
+                );
+            const durationObject =
+              getBossKillSpan(segments) ??
+              intervalToDuration({ end: endDate, start: startDate });
+            const duration = formatCompactDuration(durationObject);
+            const expanded = expandedRunGroups.has(group.key);
+            const partyEntries = [
+              ...new Map(
+                segments
+                  .flatMap((segment) => segment.scoreboardEntries)
+                  .map((entry) => [entry.character.id, entry]),
+              ).values(),
+            ];
+            const itemRatings = partyEntries.map((entry) => entry.itemRating);
+            const itemRatingMin = itemRatings.length
+              ? Math.min(...itemRatings)
+              : 0;
+            const itemRatingMax = itemRatings.length
+              ? Math.max(...itemRatings)
+              : 0;
+            const itemRatingAverage = itemRatings.length
+              ? itemRatings.reduce((a, b) => a + b, 0) / itemRatings.length
+              : 0;
+            const numTanks = partyEntries.filter(
+              (entry) => entry.archetype === Archetype.Tank,
+            ).length;
+            const numHealers = partyEntries.filter(
+              (entry) => entry.archetype === Archetype.Healer,
+            ).length;
+            const numDPS = partyEntries.filter((entry) =>
+              [Archetype.MeleeDps, Archetype.RangedDps].includes(
+                entry.archetype,
+              ),
+            ).length;
+            const completedEncounters = segments.flatMap((segment) =>
+              segment.encounters.filter((encounter) => encounter.completed),
             );
-            const itemRatingMin = Math.min(...itemRatings);
-            const itemRatingMax = Math.max(...itemRatings);
-            const itemRatingAverage =
-              itemRatings.reduce((a, b) => a + b) / itemRatings.length;
-            const numTanks = instanceRun.scoreboardEntries.filter(
-              (e) => e.archetype === Archetype.Tank,
-            ).length;
-            const numHealers = instanceRun.scoreboardEntries.filter(
-              (e) => e.archetype === Archetype.Healer,
-            ).length;
-            const numDPS = instanceRun.scoreboardEntries.filter((e) =>
-              [Archetype.MeleeDps, Archetype.RangedDps].includes(e.archetype),
-            ).length;
+            const lostValeComplete = segments.some((segment) =>
+              isLostValeComplete(segment.instanceId, completedEncounters),
+            );
+            const completedEncounterIds = new Set(
+              completedEncounters.map((encounter) => encounter.encounterId),
+            );
+            const expectedEncounterIds = new Set(
+              segments.flatMap((segment) =>
+                (
+                  segment.instance.encounters?.map(
+                    (encounter) => encounter?.id,
+                  ) ?? []
+                ).filter((id): id is string => Boolean(id)),
+              ),
+            );
+            const expectedEncounterCount = Math.max(
+              expectedEncounterIds.size,
+              completedEncounterIds.size,
+            );
+            const totalDeaths = segments
+              .flatMap((segment) => segment.scoreboardEntries)
+              .reduce((total, entry) => total + entry.deaths, 0);
 
-            const numEncounters = new Set(
-              instanceRun.encounters.map((e) => e.encounterId),
-            ).size;
-
-            return (
-              <tr key={instanceRun.id}>
+            const rows = [
+              <tr key={group.key}>
                 <td>
                   <small>
-                    {formatISO(startDate, { representation: 'date' })}
-                    <br />
-                    {format(startDate, 'HH:mm')}
+                    <span style={{ whiteSpace: 'nowrap' }}>
+                      {format(startDate, 'yyyy-MM-dd HH:mm')}
+                    </span>
                   </small>
                 </td>
-                <td>{instanceRun.instance.name}</td>
-                <td>{duration}</td>
-                <td>{numEncounters}</td>
-                <td align="center">
-                  {instanceRun.scoreboardEntries
-                    .map((e) => e.deaths)
-                    .reduce((a, b) => a + b, 0)}
+                <td>
+                  <div>{family?.name ?? run.instance.name}</div>
+                  {family && segments.length > 1 && (
+                    <button
+                      type="button"
+                      className="instance-run-breakdown-toggle mt-1"
+                      aria-expanded={expanded}
+                      onClick={() => {
+                        setExpandedRunGroups((current) => {
+                          const next = new Set(current);
+                          if (next.has(group.key)) next.delete(group.key);
+                          else next.add(group.key);
+                          return next;
+                        });
+                      }}
+                    >
+                      <span className="icon is-small">
+                        <i
+                          className={`fas fa-chevron-${expanded ? 'up' : 'down'}`}
+                        />
+                      </span>
+                      <span>
+                        {t(
+                          expanded
+                            ? 'pages:instanceRuns.collapseBreakdown'
+                            : 'pages:instanceRuns.breakdown',
+                          { count: segments.length },
+                        )}
+                      </span>
+                    </button>
+                  )}
                 </td>
-                <td align="center">{itemRatingMin}</td>
-                <td align="center">{itemRatingAverage.toFixed(0)}</td>
-                <td align="center">{itemRatingMax}</td>
-                <td align="center">{numTanks}</td>
-                <td align="center">{numHealers}</td>
-                <td align="center">{numDPS}</td>
+                <td>
+                  {duration}
+                  {groupBossKills.length > 1 && (
+                    <div className="is-size-7 has-text-grey-light">
+                      {groupBossKills[0].encounter?.name ??
+                        `Encounter ${groupBossKills[0].encounterId}`}
+                      {' → '}
+                      {groupBossKills[groupBossKills.length - 1].encounter
+                        ?.name ??
+                        `Encounter ${groupBossKills[groupBossKills.length - 1].encounterId}`}
+                      <span className="ml-2">
+                        {format(startDate, 'HH:mm')}–{format(endDate, 'HH:mm')}
+                      </span>
+                    </div>
+                  )}
+                </td>
+                <td
+                  title={
+                    lostValeComplete
+                      ? t('pages:instanceRuns.lostValeCompletionTitle')
+                      : t('pages:instanceRuns.bossesRecorded')
+                  }
+                >
+                  {lostValeComplete
+                    ? `${t('pages:instanceRuns.complete')} (${completedEncounterIds.size} / ${expectedEncounterCount})`
+                    : expectedEncounterCount
+                      ? `${completedEncounterIds.size} / ${expectedEncounterCount}`
+                      : completedEncounterIds.size}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {itemRatingMin}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {itemRatingAverage.toFixed(0)}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {itemRatingMax}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {totalDeaths}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {numTanks}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {numHealers}
+                </td>
+                <td align="center" className="is-hidden-mobile">
+                  {numDPS}
+                </td>
                 <td>
                   <Link
-                    to={`/instance-run/${instanceRun.id}`}
-                    className="button is-primary p-2 is-pulled-right"
+                    to={{
+                      pathname: `/instance-run/${run.id}`,
+                      search: `?runs=${encodeURIComponent(
+                        segments.map((segment) => segment.id).join(','),
+                      )}`,
+                    }}
+                    className="instance-run-action-link is-pulled-right"
                   >
                     {t('common:details')}
                   </Link>
                 </td>
-              </tr>
-            );
+              </tr>,
+            ];
+
+            if (expanded) {
+              rows.push(
+                <tr key={`${group.key}-breakdown`}>
+                  <td colSpan={12}>
+                    <div className="table-container">
+                      <table className="table is-fullwidth is-narrow mb-0">
+                        <thead>
+                          <tr>
+                            <th>{t('pages:instanceRuns.section')}</th>
+                            <th>{t('pages:instanceRuns.startTime')}</th>
+                            <th>{t('pages:instanceRuns.sectionDuration')}</th>
+                            <th>{t('pages:instanceRuns.encounters')}</th>
+                            <th>{t('pages:instanceRuns.bossesKilled')}</th>
+                            <th>{t('pages:instanceRuns.firstBossKill')}</th>
+                            <th>{t('pages:instanceRuns.lastBossKill')}</th>
+                            <th></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {segments.map((segment) => {
+                            const segmentKills = getCompletedBossKills([
+                              segment,
+                            ]);
+                            const segmentExpectedCount =
+                              segment.instance.encounters?.length ??
+                              segmentKills.length;
+                            const segmentStart = new Date(segment.start);
+                            const segmentDuration =
+                              getBossKillSpan([segment]) ??
+                              intervalToDuration({
+                                start: segmentStart,
+                                end: new Date(segment.end),
+                              });
+
+                            const firstKill = segmentKills[0];
+                            const lastKill =
+                              segmentKills[segmentKills.length - 1];
+
+                            return (
+                              <tr key={segment.id}>
+                                <td>{segment.instance.name}</td>
+                                <td>
+                                  <span style={{ whiteSpace: 'nowrap' }}>
+                                    {format(segmentStart, 'yyyy-MM-dd HH:mm')}
+                                  </span>
+                                </td>
+                                <td>{formatCompactDuration(segmentDuration)}</td>
+                                <td>
+                                  {segmentKills.length} /{' '}
+                                  {Math.max(
+                                    segmentExpectedCount,
+                                    segmentKills.length,
+                                  )}
+                                </td>
+                                <td>
+                                  {segmentKills.length ? (
+                                    <ol className="instance-run-boss-list">
+                                      {segmentKills.map((encounter) => (
+                                        <li key={encounter.id}>
+                                          <span>
+                                            {encounter.encounter?.name ??
+                                              `Encounter ${encounter.encounterId}`}
+                                          </span>
+                                          <time
+                                            dateTime={new Date(
+                                              encounter.end,
+                                            ).toISOString()}
+                                          >
+                                            {format(
+                                              new Date(encounter.end),
+                                              'HH:mm',
+                                            )}
+                                          </time>
+                                        </li>
+                                      ))}
+                                    </ol>
+                                  ) : (
+                                    '—'
+                                  )}
+                                </td>
+                                <td>
+                                  {firstKill
+                                    ? format(
+                                        new Date(firstKill.end),
+                                        'yyyy-MM-dd HH:mm',
+                                      )
+                                    : '—'}
+                                </td>
+                                <td>
+                                  {lastKill
+                                    ? format(
+                                        new Date(lastKill.end),
+                                        'yyyy-MM-dd HH:mm',
+                                      )
+                                    : '—'}
+                                </td>
+                                <td>
+                                  <Link
+                                    to={`/instance-run/${segment.id}`}
+                                    className="instance-run-action-link"
+                                  >
+                                    {t('common:details')}
+                                  </Link>
+                                </td>
+                              </tr>
+                            );
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                  </td>
+                </tr>,
+              );
+            }
+
+            return rows;
           })}
         </tbody>
       </table>

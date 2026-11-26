@@ -15,6 +15,7 @@ import { Scenario } from '@/pages/Scenario';
 import { ZoneMap } from '@/pages/ZoneMap';
 import { Skirmish } from '@/pages/Skirmish';
 import { Item } from '@/pages/Item';
+import { GameObjects } from '@/pages/GameObjects';
 import { RankedLeaderboard } from '@/pages/RankedLeaderboard';
 import { Items } from '@/pages/Items';
 import { Creatures } from '@/pages/Creatures';
@@ -140,6 +141,7 @@ const App = () => {
         <Route path="/zone_heatmap/:id" element={<ZoneMap />} />
 
         <Route path="/items" element={<Items />} />
+        <Route path="/gameobjects" element={<GameObjects />} />
         <Route path="/item/:id" element={<Item tab="vendors" />} />
         <Route path="/item/:id/purchase" element={<Item tab="purchase" />} />
         <Route path="/item/:id/quests" element={<Item tab="quests" />} />

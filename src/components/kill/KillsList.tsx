@@ -8,6 +8,7 @@ import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { getCurrentFilters } from '@/components/kill/KillsFilters';
 import { KillsListTable } from '@/components/kill/KillsListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import type { KillTimeZoneMode } from './killTime';
 
 export const KillsList = ({
   query,
@@ -17,6 +18,8 @@ export const KillsList = ({
   showTime = true,
   showVictim = true,
   showKiller = true,
+  defaultPeriod = 'all',
+  timeZoneMode = 'local',
 }: {
   query: DocumentNode;
   queryOptions?: useQuery.Options<Query>;
@@ -25,14 +28,16 @@ export const KillsList = ({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
+  defaultPeriod?: string;
+  timeZoneMode?: KillTimeZoneMode;
 }): React.ReactElement | null => {
   const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const searchKey = search.toString();
   const currentFilters = React.useMemo(
-    () => getCurrentFilters(new URLSearchParams(searchKey)),
-    [searchKey],
+    () => getCurrentFilters(new URLSearchParams(searchKey), defaultPeriod),
+    [defaultPeriod, searchKey],
   );
 
   const { loading, error, data, refetch } = useQuery<Query>(query, {
@@ -75,6 +80,7 @@ export const KillsList = ({
         showTime={showTime}
         showKiller={showKiller}
         showVictim={showVictim}
+        timeZoneMode={timeZoneMode}
       />
       <QueryPagination
         pageInfo={pageInfo}

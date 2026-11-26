@@ -1,6 +1,7 @@
 import {
   startOfMonth,
   startOfWeek,
+  subDays,
   subMinutes,
   subMonths,
   subWeeks,
@@ -9,37 +10,57 @@ import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 
-const getPeriodFilters = (search: URLSearchParams) => {
-  const period = search.get('period');
+const getPeriodFilters = (search: URLSearchParams, defaultPeriod: string) => {
+  const period = search.get('period') || defaultPeriod;
 
   switch (period) {
-    case 'last30m':
+    case 'last30m': {
       return {
         time: {
           gte: subMinutes(new Date(), 30).toISOString(),
         },
       };
+    }
 
-    case 'last1h':
+    case 'last1h': {
       return {
         time: {
           gte: subMinutes(new Date(), 60).toISOString(),
         },
       };
+    }
 
-    case 'last2h':
+    case 'last2h': {
       return {
         time: {
           gte: subMinutes(new Date(), 120).toISOString(),
         },
       };
+    }
 
-    case 'last4h':
+    case 'last4h': {
       return {
         time: {
           gte: subMinutes(new Date(), 240).toISOString(),
         },
       };
+    }
+
+    case 'last7d': {
+      return {
+        time: {
+          gte: subDays(new Date(), 7).toISOString(),
+        },
+      };
+    }
+
+    case 'last30d': {
+      return {
+        time: {
+          gte: subDays(new Date(), 30).toISOString(),
+        },
+      };
+    }
 
     case 'thisWeek': {
       return {
@@ -82,23 +103,32 @@ const getPeriodFilters = (search: URLSearchParams) => {
 };
 
 const getSoloKillsFilters = (search: URLSearchParams) => {
-  if (search.has('soloOnly')) {
+  if (search.get('soloOnly') === 'true') {
     return { soloOnly: true };
   }
 
   return {};
 };
 
-export const getCurrentFilters = (search: URLSearchParams) => ({
-  ...getPeriodFilters(search),
+export const getCurrentFilters = (
+  search: URLSearchParams,
+  defaultPeriod = 'all',
+) => ({
+  ...getPeriodFilters(search, defaultPeriod),
   ...getSoloKillsFilters(search),
 });
 
-export const KillsFilters = (): ReactElement => {
+export const KillsFilters = ({
+  defaultPeriod = 'all',
+  showTimeZone = false,
+}: {
+  defaultPeriod?: string;
+  showTimeZone?: boolean;
+}): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
 
-  const period = search.get('period') || 'all';
+  const period = search.get('period') || defaultPeriod;
 
   return (
     <div className="card mb-5">
@@ -118,6 +148,8 @@ export const KillsFilters = (): ReactElement => {
                 <option value="last1h">{t('killsFilters.last1h')}</option>
                 <option value="last2h">{t('killsFilters.last2h')}</option>
                 <option value="last4h">{t('killsFilters.last4h')}</option>
+                <option value="last7d">{t('killsFilters.last7d')}</option>
+                <option value="last30d">{t('killsFilters.last30d')}</option>
                 <option value="thisWeek">{t('killsFilters.thisWeek')}</option>
                 <option value="lastWeek">{t('killsFilters.lastWeek')}</option>
                 <option value="thisMonth">{t('killsFilters.thisMonth')}</option>
@@ -129,7 +161,7 @@ export const KillsFilters = (): ReactElement => {
             <label className="label">
               <input
                 type="checkbox"
-                checked={search.has('soloOnly')}
+                checked={search.get('soloOnly') === 'true'}
                 onChange={(event) => {
                   if (event.target.checked) {
                     search.set('soloOnly', 'true');
@@ -142,6 +174,37 @@ export const KillsFilters = (): ReactElement => {
               {t('killsFilters.soloOnly')}
             </label>
           </div>
+          {showTimeZone && (
+            <div className="column">
+              <label className="label" htmlFor="kills-time-zone">
+                {t('killsFilters.timeZone')}
+              </label>
+              <div className="select">
+                <select
+                  id="kills-time-zone"
+                  value={
+                    search.get('timeZone') === 'local' ? 'local' : 'altdorf'
+                  }
+                  onChange={(event) => {
+                    const next = new URLSearchParams(search);
+                    if (event.target.value === 'local') {
+                      next.set('timeZone', 'local');
+                    } else {
+                      next.delete('timeZone');
+                    }
+                    setSearch(next);
+                  }}
+                >
+                  <option value="altdorf">
+                    {t('killsFilters.altdorfTime')}
+                  </option>
+                  <option value="local">
+                    {t('killsFilters.computerTime')}
+                  </option>
+                </select>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

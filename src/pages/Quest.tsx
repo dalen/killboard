@@ -6,9 +6,10 @@ import Tippy from '@tippyjs/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GoldPrice } from '@/components/GoldPrice';
 import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
+import { QuestGiverLocation } from '@/components/quest/QuestGiverLocation';
 import { WarIcon } from '@/components/WarIcon';
 import type { ReactElement } from 'react';
-import { Career, type GetQuestInfoQuery, Realm } from '@/__generated__/graphql';
+import { Career, type GetQuestInfoQuery } from '@/__generated__/graphql';
 import { canUseItem } from '@/itemUtils';
 
 const QUEST_INFO = gql`
@@ -65,6 +66,23 @@ const QUEST_INFO = gql`
         id
         name
         realm
+        spawns {
+          id
+          position {
+            x
+            y
+            zone {
+              id
+              name
+            }
+            mapSetup {
+              nwCornerX
+              nwCornerY
+              seCornerX
+              seCornerY
+            }
+          }
+        }
       }
     }
   }
@@ -343,37 +361,7 @@ export const Quest = (): ReactElement => {
           </div>
           <div>
             {quest.starterCreatures.map((creature) => (
-              <div className="icon-text">
-                <span className="icon has-text-info">
-                  {creature.realm === Realm.Order && (
-                    <img
-                      src="/images/icons/scenario/order.png"
-                      width={24}
-                      height={24}
-                      alt={t('comon:realmOrder')}
-                    />
-                  )}
-                  {creature.realm === Realm.Destruction && (
-                    <img
-                      src="/images/icons/scenario/destruction.png"
-                      width={24}
-                      height={24}
-                      alt={t('components:realmDestruction')}
-                    />
-                  )}
-                  {creature.realm === Realm.Neutral && (
-                    <img
-                      src="/images/icons/quest_green.png"
-                      width={24}
-                      height={24}
-                      alt={t('components:realmNeutral')}
-                    />
-                  )}
-                </span>
-                <span>
-                  <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
-                </span>
-              </div>
+              <QuestGiverLocation key={creature.id} creature={creature} />
             ))}
           </div>
         </div>
