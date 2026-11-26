@@ -99,7 +99,8 @@ const App = () => {
         <Route path="/gameobject/:id/quests" element={<GameObject />} />
         <Route path="/gameobject/:id/zone/:zoneId" element={<GameObject />} />
 
-        <Route path="/guild/:id" element={<Guild tab="kills" />} />
+        <Route path="/guild/:id" element={<Guild tab="overview" />} />
+        <Route path="/guild/:id/kills" element={<Guild tab="kills" />} />
         <Route path="/guild/:id/members" element={<Guild tab="members" />} />
         <Route
           path="/guild/:id/scenarios"

@@ -1,0 +1,203 @@
+.guild-profile-card {
+  border-top: 2px solid rgba(255, 174, 0, 0.75);
+
+  .guild-profile-heading {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
+
+  .guild-profile-leader {
+    display: flex;
+    flex-direction: column;
+    min-width: 7rem;
+  }
+
+  .guild-profile-summary {
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  .guild-profile-description {
+    margin-top: 0.7rem;
+
+    summary {
+      width: fit-content;
+      color: #ffae00;
+      cursor: pointer;
+    }
+
+    div {
+      margin-top: 0.5rem;
+      white-space: pre-wrap;
+    }
+  }
+}
+
+.guild-tabs {
+  overflow-x: auto;
+  overflow-y: hidden;
+
+  ul {
+    flex-wrap: nowrap;
+  }
+}
+
+.guild-overview {
+  .guild-stat {
+    height: 100%;
+    padding: 0.85rem 1rem;
+    border-left: 2px solid rgba(255, 174, 0, 0.65);
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 0 0.35rem 0.35rem 0;
+
+    .heading {
+      margin-bottom: 0.35rem;
+    }
+
+    .title {
+      margin-bottom: 0;
+      font-variant-numeric: tabular-nums;
+    }
+  }
+
+  .guild-battle-list {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .guild-battle-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto auto;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 0.9rem 0.35rem;
+    color: inherit;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    transition: background-color 120ms ease;
+
+    &:hover,
+    &:focus-visible {
+      background: rgba(255, 174, 0, 0.08);
+    }
+  }
+
+  .guild-battle-main,
+  .guild-battle-result {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .guild-battle-main {
+    min-width: 0;
+
+    strong {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .guild-battle-result {
+    align-items: flex-end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .guild-battle-arrow {
+    color: #ffae00;
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .guild-rival-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: grid;
+      grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .guild-rival-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    a {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .guild-feud-link {
+      color: #ffae00;
+      font-size: 0.75rem;
+    }
+  }
+
+  .guild-rival-rank {
+    color: #ffae00;
+    font-weight: 700;
+  }
+
+  .guild-rival-kills {
+    color: rgba(255, 255, 255, 0.75);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .columns > .column > .card {
+    height: 100%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .guild-profile-card {
+    .guild-profile-heading {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .title.is-3 {
+      font-size: 1.35rem;
+      overflow-wrap: anywhere;
+    }
+
+    .tags {
+      gap: 0.35rem;
+    }
+  }
+
+  .guild-overview {
+    .guild-battle-row {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 0.65rem;
+      padding-inline: 0;
+    }
+
+    .guild-battle-arrow {
+      display: none;
+    }
+
+    .guild-stat {
+      padding: 0.65rem 0.55rem;
+
+      .heading {
+        font-size: 0.65rem;
+      }
+
+      .title {
+        font-size: 1.35rem;
+      }
+    }
+
+    .columns.is-mobile > .column {
+      min-width: 0;
+    }
+  }
+}

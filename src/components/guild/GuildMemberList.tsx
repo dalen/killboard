@@ -1,28 +1,25 @@
 import { gql } from '@apollo/client';
-import { useQuery } from '@apollo/client/react';
+import { useApolloClient } from '@apollo/client/react';
+import { Career } from '@/__generated__/graphql';
+import { type ReactElement, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
+import clsx from 'clsx';
 import { CareerIcon } from '@/components/CareerIcon';
-import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
-import { QueryPagination } from '@/components/global/QueryPagination';
-import { type ReactElement, useState } from 'react';
-import clsx from 'clsx';
+
+const MEMBERS_PER_REQUEST = 50;
 
 const GUILD_MEMBERS = gql`
-  query GetGuildMembers(
-    $id: ID!
-    $first: Int
-    $last: Int
-    $before: String
-    $after: String
-  ) {
+  query GetGuildMembers($id: ID!, $first: Int, $after: String) {
     guild(id: $id) {
-      members(first: $first, last: $last, before: $before, after: $after) {
+      members(first: $first, after: $after) {
+        totalCount
         nodes {
           rank {
             name
+            rank
           }
           character {
             id
@@ -35,83 +32,413 @@ const GUILD_MEMBERS = gql`
         pageInfo {
           hasNextPage
           endCursor
-          hasPreviousPage
-          startCursor
         }
       }
     }
   }
 `;
 
+interface Member {
+  rank: { name: string; rank: number };
+  character: {
+    id: string;
+    name: string;
+    career: Career;
+    level: number;
+    renownRank: number;
+  };
+}
+
+interface MembersConnection {
+  totalCount: number;
+  nodes: Member[];
+  pageInfo: { hasNextPage: boolean; endCursor: string | null };
+}
+
+interface MembersData {
+  guild: {
+    members: MembersConnection;
+  } | null;
+}
+
+type SortKey = 'name' | 'level' | 'renownRank' | 'rank';
+type SortDirection = 'asc' | 'desc';
+
+const getSortValue = (member: Member, key: SortKey): string | number => {
+  switch (key) {
+    case 'name': {
+      return member.character.name.toLocaleLowerCase();
+    }
+    case 'level': {
+      return member.character.level;
+    }
+    case 'renownRank': {
+      return member.character.renownRank;
+    }
+    case 'rank': {
+      return member.rank.rank;
+    }
+    default: {
+      return '';
+    }
+  }
+};
+
 export const GuildMemberList = ({
   id,
 }: {
   id: string | undefined;
 }): ReactElement => {
-  const [perPage, setPerPage] = useState(25);
-
-  const { t } = useTranslation(['common', 'pages']);
-  const { loading, error, data, refetch } = useQuery<Query>(GUILD_MEMBERS, {
-    variables: { first: perPage, id },
-  });
+  const client = useApolloClient();
+  const { t } = useTranslation(['common', 'pages', 'enums']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+  const [members, setMembers] = useState<Member[]>([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [loadedCount, setLoadedCount] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [careerFilter, setCareerFilter] = useState<Career | ''>('');
+  const [rankFilter, setRankFilter] = useState('');
+  const [sortKey, setSortKey] = useState<SortKey>('name');
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
+  const [perPage, setPerPage] = useState(25);
+  const [page, setPage] = useState(0);
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
+  useEffect(() => {
+    let active = true;
+
+    const loadMembers = async () => {
+      setMembers([]);
+      setTotalCount(0);
+      setLoadedCount(0);
+      setError(null);
+      setLoading(true);
+
+      if (!id) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const allMembers: Member[] = [];
+        let after: string | undefined = undefined;
+        let hasNextPage = true;
+        let expectedCount = 0;
+        const seenCursors = new Set<string>();
+
+        while (hasNextPage) {
+          // Cursor pages depend on the previous response, so fetch sequentially.
+          // eslint-disable-next-line no-await-in-loop
+          const result: { data: MembersData | undefined } =
+            (
+              // eslint-disable-next-line no-await-in-loop
+              await client.query<MembersData>({
+              query: GUILD_MEMBERS,
+              variables: { id, first: MEMBERS_PER_REQUEST, after },
+              fetchPolicy: 'no-cache',
+              })
+            ) as { data: MembersData | undefined };
+
+          const connection: MembersConnection | undefined =
+            result.data?.guild?.members;
+          if (!connection) {
+            throw new Error(t('common:notFound'));
+          }
+
+          const {
+            nodes,
+            totalCount: pageTotal,
+            pageInfo: { hasNextPage: hasMore, endCursor },
+          } = connection;
+          allMembers.push(...nodes);
+          expectedCount = pageTotal;
+          hasNextPage = hasMore;
+          after = endCursor ?? undefined;
+
+          if (hasNextPage && (!after || seenCursors.has(after))) {
+            throw new Error('The member list returned an invalid page cursor.');
+          }
+          if (after) {
+            seenCursors.add(after);
+          }
+
+          if (active) {
+            setTotalCount(expectedCount);
+            setLoadedCount(allMembers.length);
+          }
+        }
+
+        if (active) {
+          setMembers(allMembers);
+          setTotalCount(expectedCount);
+          setLoadedCount(allMembers.length);
+        }
+      } catch (fetchError) {
+        if (active) {
+          setError(
+            fetchError instanceof Error
+              ? fetchError
+              : new Error(String(fetchError)),
+          );
+        }
+      } finally {
+        if (active) {
+          setLoading(false);
+        }
+      }
+    };
+
+    void loadMembers();
+    return () => {
+      active = false;
+    };
+  }, [client, id, t]);
+
+  const ranks = useMemo(
+    () =>
+      [...new Set(members.map((member) => member.rank.name))].toSorted(
+        (first, second) => first.localeCompare(second),
+      ),
+    [members],
+  );
+  const careers = useMemo(
+    () =>
+      Object.values(Career).toSorted((first, second) =>
+        t(`enums:career.${first}`).localeCompare(t(`enums:career.${second}`)),
+      ),
+    [t],
+  );
+  const filteredMembers = useMemo(() => {
+    const filtered = members.filter(
+      (member) =>
+        (!careerFilter || member.character.career === careerFilter) &&
+        (!rankFilter || member.rank.name === rankFilter),
+    );
+
+    return filtered.toSorted((first, second) => {
+      const firstValue = getSortValue(first, sortKey);
+      const secondValue = getSortValue(second, sortKey);
+      const comparison =
+        sortKey === 'name'
+          ? String(firstValue).localeCompare(String(secondValue))
+          : (firstValue as number) - (secondValue as number);
+      return sortDirection === 'asc' ? comparison : -comparison;
+    });
+  }, [careerFilter, members, rankFilter, sortDirection, sortKey]);
+
+  const pageCount = Math.ceil(filteredMembers.length / perPage);
+  const pageMembers = filteredMembers.slice(page * perPage, (page + 1) * perPage);
+
+  const changeSort = (key: SortKey) => {
+    setPage(0);
+    if (key === sortKey) {
+      setSortDirection((direction) => (direction === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortKey(key);
+      setSortDirection(key === 'name' ? 'asc' : 'desc');
+    }
+  };
+
+  const sortHeader = (key: SortKey, label: string) => {
+    let ariaSort: 'ascending' | 'descending' | 'none' = 'none';
+    if (key === sortKey) {
+      ariaSort = sortDirection === 'asc' ? 'ascending' : 'descending';
+    }
+
+    return (
+      <th aria-sort={ariaSort}>
+        <button
+          className="button is-ghost p-0 has-text-weight-bold"
+          type="button"
+          onClick={() => changeSort(key)}
+        >
+          {label}
+          {key === sortKey && (
+            <span aria-hidden="true" className="ml-1">
+              {sortDirection === 'asc' ? '↑' : '↓'}
+            </span>
+          )}
+        </button>
+      </th>
+    );
+  };
+
   if (error) {
     return <ErrorMessage name={error.name} message={error.message} />;
   }
-  if (data?.guild?.members?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const { pageInfo } = data.guild.members;
 
   return (
-    <div className="table-container">
-      <table
-        className={clsx(
-          'table',
-          'is-striped',
-          'is-hoverable',
-          isMobile ? 'is-narrow' : 'is-fullwidth',
-        )}
-      >
-        <thead>
-          <tr>
-            <th aria-label="Career" id="th-career" />
-            <th>{t('pages:guildMembers.name')}</th>
-            <th>{t('pages:guildMembers.level')}</th>
-            <th>{t('pages:guildMembers.renownRank')}</th>
-            <th>{t('pages:guildMembers.guildRank')}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.guild.members.nodes.map((member) => (
-            <tr key={member.character.id}>
-              <td aria-labelledby="th-career">
-                <CareerIcon career={member.character.career} />
-              </td>
-              <td>
-                <Link to={`/character/${member.character.id}`}>
-                  {member.character.name}
-                </Link>
-              </td>
-              <td>{member.character.level}</td>
-              <td>{member.character.renownRank}</td>
-              <td>{member.rank.name}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <QueryPagination
-        pageInfo={pageInfo}
-        refetch={refetch}
-        perPage={perPage}
-        onPerPageChange={setPerPage}
-      />
+    <div>
+      {loading ? (
+        <div className="mb-4">
+          <p className="mb-2">
+            {t('pages:guildMembers.loadingMembers', {
+              loaded: loadedCount,
+              total: totalCount || '…',
+            })}
+          </p>
+          <progress
+            className="progress is-info"
+            max={totalCount || undefined}
+            value={totalCount ? loadedCount : undefined}
+          />
+        </div>
+      ) : (
+        <>
+          <div className="columns is-multiline is-align-items-flex-end mb-2">
+            <div className="column is-one-quarter-desktop is-half-tablet">
+              <label className="label" htmlFor="guild-member-career-filter">
+                {t('pages:guildMembers.classFilter')}
+              </label>
+              <div className="select is-fullwidth">
+                <select
+                  id="guild-member-career-filter"
+                  value={careerFilter}
+                  onChange={(event) => {
+                    setCareerFilter(event.currentTarget.value as Career | '');
+                    setPage(0);
+                  }}
+                >
+                  <option value="">{t('pages:guildMembers.allClasses')}</option>
+                  {careers.map((career) => (
+                    <option key={career} value={career}>
+                      {t(`enums:career.${career}`)}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="column is-one-quarter-desktop is-half-tablet">
+              <label className="label" htmlFor="guild-member-rank-filter">
+                {t('pages:guildMembers.rankFilter')}
+              </label>
+              <div className="select is-fullwidth">
+                <select
+                  id="guild-member-rank-filter"
+                  value={rankFilter}
+                  onChange={(event) => {
+                    setRankFilter(event.currentTarget.value);
+                    setPage(0);
+                  }}
+                >
+                  <option value="">{t('pages:guildMembers.allRanks')}</option>
+                  {ranks.map((rank) => (
+                    <option key={rank} value={rank}>
+                      {rank}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            <div className="column has-text-right-desktop">
+              {t('pages:guildMembers.showingMembers', {
+                shown: filteredMembers.length,
+                total: totalCount,
+              })}
+            </div>
+          </div>
+
+          <div className="table-container">
+            <table
+              className={clsx(
+                'table',
+                'is-striped',
+                'is-hoverable',
+                isMobile ? 'is-narrow' : 'is-fullwidth',
+              )}
+            >
+              <thead>
+                <tr>
+                  <th aria-label={t('pages:guildMembers.class')} id="th-career">
+                    {t('pages:guildMembers.class')}
+                  </th>
+                  {sortHeader('name', t('pages:guildMembers.name'))}
+                  {sortHeader('level', t('pages:guildMembers.level'))}
+                  {sortHeader('renownRank', t('pages:guildMembers.renownRank'))}
+                  {sortHeader('rank', t('pages:guildMembers.guildRank'))}
+                </tr>
+              </thead>
+              <tbody>
+                {pageMembers.map((member) => (
+                  <tr key={member.character.id}>
+                    <td aria-labelledby="th-career">
+                      <CareerIcon career={member.character.career} />
+                    </td>
+                    <td>
+                      <Link to={`/character/${member.character.id}`}>
+                        {member.character.name}
+                      </Link>
+                    </td>
+                    <td>{member.character.level}</td>
+                    <td>{member.character.renownRank}</td>
+                    <td>{member.rank.name}</td>
+                  </tr>
+                ))}
+                {pageMembers.length === 0 && (
+                  <tr>
+                    <td colSpan={5} className="has-text-centered">
+                      {t('pages:guildMembers.noMatchingMembers')}
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="is-flex is-flex-wrap-wrap is-justify-content-space-between is-align-items-center mt-3">
+            <div className="is-flex is-align-items-center">
+              <label className="label is-small mb-0 mr-2" htmlFor="guild-members-per-page">
+                {t('common:itemsPerPage')}
+              </label>
+              <div className="select is-small">
+                <select
+                  id="guild-members-per-page"
+                  value={perPage}
+                  onChange={(event) => {
+                    setPerPage(Number(event.currentTarget.value));
+                    setPage(0);
+                  }}
+                >
+                  {[10, 15, 20, 25, 50].map((size) => (
+                    <option key={size} value={size}>
+                      {size}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            {pageCount > 1 && (
+              <div className="buttons are-small mb-0">
+                <button
+                  className="button is-info"
+                  type="button"
+                  disabled={page === 0}
+                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                >
+                  {t('common:prevPage')}
+                </button>
+                <span className="button is-static">
+                  {t('pages:guildMembers.pageOf', {
+                    page: page + 1,
+                    pages: pageCount,
+                  })}
+                </span>
+                <button
+                  className="button is-info"
+                  type="button"
+                  disabled={page + 1 >= pageCount}
+                  onClick={() =>
+                    setPage((current) => Math.min(pageCount - 1, current + 1))
+                  }
+                >
+                  {t('common:nextPage')}
+                </button>
+              </div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 };

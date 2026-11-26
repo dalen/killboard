@@ -7,11 +7,16 @@
     "armory": "Armory"
   },
   "guildFeud": {
-    "guildFeudId": "#{{guildId1}} vs #{{guildId2}}"
+    "guildFeudId": "#{{guildId1}} vs #{{guildId2}}",
+    "periodLabel": "Head-to-head period",
+    "lastDays_one": "Last {{count}} day",
+    "lastDays_other": "Last {{count}} days",
+    "allTime": "All time"
   },
   "guildPage": {
     "description": "Description:",
     "guildId": "Guild #{{guildId}}",
+    "overview": "Overview",
     "kills": "Kills",
     "leader": "Leader:",
     "members": "Members",
@@ -19,6 +24,15 @@
     "skirmishes": "Skirmishes"
   },
   "guildMembers": {
+    "class": "Class",
+    "classFilter": "Class",
+    "rankFilter": "Guild rank",
+    "allClasses": "All classes",
+    "allRanks": "All ranks",
+    "loadingMembers": "Loading guild members: {{loaded}} of {{total}}",
+    "showingMembers": "Showing {{shown}} of {{total}} members",
+    "noMatchingMembers": "No members match these filters.",
+    "pageOf": "Page {{page}} of {{pages}}",
     "level": "Level",
     "name": "Name",
     "renownRank": "RR",

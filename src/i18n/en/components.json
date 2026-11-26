@@ -16,8 +16,35 @@
   },
   "guildInfo": {
     "description": "Description:",
+    "aboutGuild": "About this guild",
+    "guildLevel": "Guild level {{level}}",
     "leader": "Leader:",
-    "members": "Members:"
+    "members": "Members:",
+    "memberCount_one": "{{count}} member",
+    "memberCount_other": "{{count}} members"
+  },
+  "guildOverview": {
+    "battleRecord": "Guild campaign",
+    "lastDays_one": "Last {{count}} day",
+    "lastDays_other": "Last {{count}} days",
+    "timeRange": "Activity date range",
+    "guildKills": "Kills recorded",
+    "guildDeaths": "Deaths recorded",
+    "netRecord": "Net record",
+    "recordNote": "Counts come from recorded player kills tagged to this guild. They are not a full objective or keep-war score.",
+    "recentBattles": "Recent battles",
+    "recentBattlesNote": "Battlegrounds where guild members were recorded.",
+    "allBattles": "All skirmishes",
+    "headToHead": "Compare head-to-head →",
+    "noBattles": "No recent skirmishes found for this guild in this period.",
+    "openBattle": "Open battleground",
+    "kills": "kills",
+    "players": "players",
+    "rivalWatch": "Battlefield watch",
+    "rivalWatchTitle": "Guilds to watch",
+    "rivalWatchNote": "Enemy guilds with the most recorded kills in your latest shared battlegrounds. Their totals include all kills in those battles, not only kills against your members.",
+    "noRivals": "No enemy guild activity is available in these recent battles.",
+    "rivalDataScope": "Based on enemy guild kill totals across the {{count}} most recent skirmishes shown here. This is a battle snapshot, not a full-month feud ranking."
   },
   "guildRecentDeaths": {
     "title": "Deaths"

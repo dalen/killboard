@@ -12,6 +12,7 @@ import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { GuildLatestSkirmishes } from '@/components/guild/GuildLatestSkirmishes';
+import { GuildOverview } from '@/components/guild/GuildOverview';
 import type { ReactElement } from 'react';
 import type { GetGuildInfoQuery } from '@/__generated__/graphql';
 
@@ -64,7 +65,7 @@ const GUILD_INFO = gql`
 export const Guild = ({
   tab,
 }: {
-  tab: 'kills' | 'members' | 'scenarios' | 'skirmishes';
+  tab: 'overview' | 'kills' | 'members' | 'scenarios' | 'skirmishes';
 }): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
   const { id } = useParams();
@@ -97,26 +98,34 @@ export const Guild = ({
         </ul>
       </nav>
       <GuildInfo guild={data.guild} />
-      <div className="tabs">
-        <li className={tab === 'kills' ? 'is-active' : ''}>
-          <Link to={`/guild/${id}`}>{t('pages:guildPage.kills')}</Link>
-        </li>
-        <li className={tab === 'members' ? 'is-active' : ''}>
-          <Link to={`/guild/${id}/members`}>
-            {t('pages:guildPage.members')}
-          </Link>
-        </li>
-        <li className={tab === 'scenarios' ? 'is-active' : ''}>
-          <Link to={`/guild/${id}/scenarios`}>
-            {t('pages:guildPage.scenarios')}
-          </Link>
-        </li>
-        <li className={tab === 'skirmishes' ? 'is-active' : ''}>
-          <Link to={`/guild/${id}/skirmishes`}>
-            {t('pages:guildPage.skirmishes')}
-          </Link>
-        </li>
+      <div className="tabs is-boxed guild-tabs mb-5">
+        <ul>
+          <li className={tab === 'overview' ? 'is-active' : ''}>
+            <Link to={`/guild/${id}`}>{t('pages:guildPage.overview')}</Link>
+          </li>
+          <li className={tab === 'kills' ? 'is-active' : ''}>
+            <Link to={`/guild/${id}/kills`}>{t('pages:guildPage.kills')}</Link>
+          </li>
+          <li className={tab === 'members' ? 'is-active' : ''}>
+            <Link to={`/guild/${id}/members`}>
+              {t('pages:guildPage.members')}
+            </Link>
+          </li>
+          <li className={tab === 'scenarios' ? 'is-active' : ''}>
+            <Link to={`/guild/${id}/scenarios`}>
+              {t('pages:guildPage.scenarios')}
+            </Link>
+          </li>
+          <li className={tab === 'skirmishes' ? 'is-active' : ''}>
+            <Link to={`/guild/${id}/skirmishes`}>
+              {t('pages:guildPage.skirmishes')}
+            </Link>
+          </li>
+        </ul>
       </div>
+      {tab === 'overview' && (
+        <GuildOverview id={Number(id)} realm={data.guild.realm} />
+      )}
       {tab === 'kills' && (
         <div>
           <KillsFilters />

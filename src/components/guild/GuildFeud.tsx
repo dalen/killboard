@@ -2,6 +2,7 @@ import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import { KillsList } from '@/components/kill/KillsList';
+import type { DateTimeOperationFilterInput } from '@/__generated__/graphql';
 import type { ReactElement } from 'react';
 
 const GUILD_FEUD = gql`
@@ -12,9 +13,11 @@ const GUILD_FEUD = gql`
     $last: Int
     $before: String
     $after: String
+    $time: DateTimeOperationFilterInput
   ) {
     kills(
       guildFeudFilter: { guild1Id: $guild1Id, guild2Id: $guild2Id }
+      where: { time: $time }
       first: $first
       last: $last
       before: $before
@@ -70,9 +73,11 @@ const GUILD_FEUD = gql`
 export const GuildFeud = ({
   guild1,
   guild2,
+  time,
 }: {
   guild1: string;
   guild2: string;
+  time?: DateTimeOperationFilterInput;
 }): ReactElement => {
   const { t } = useTranslation('components');
 
@@ -86,7 +91,7 @@ export const GuildFeud = ({
       <KillsList
         query={GUILD_FEUD}
         queryOptions={{
-          variables: { guild1Id: guild1, guild2Id: guild2 },
+          variables: { guild1Id: guild1, guild2Id: guild2, time },
         }}
         perPage={10}
       />
