@@ -167,7 +167,18 @@
     "protection": "Protection",
     "rank": "Rank",
     "quitter": "Quitter",
-    "quittersSummary": "Players marked as quitters: {{count}}"
+    "quittersSummary": "Players marked as quitters: {{count}}",
+    "teamComposition": "Recorded team composition",
+    "teamCompositionNote": "Estimated from scoreboard totals: tank and DPS careers stay in their usual roles. Healer careers count as DPS only when recorded kill damage is higher than healing; ties stay under Healers.",
+    "roles": {
+      "tank": "Tanks",
+      "healer": "Healers",
+      "meleeDps": "Melee DPS",
+      "rangedDps": "Ranged DPS"
+    },
+    "noRecordedPlayers": "No players recorded",
+    "matchLeaders": "Match leaders",
+    "matchLeadersNote": "Highest recorded value in each scoreboard category. Ties are shown; categories with no recorded value are hidden."
   },
   "scenarioList": {
     "matchesFound": "Matches found: {{count}}",

@@ -72,9 +72,9 @@ export const ScenarioListTable = ({
                       ? 'components:scenarioList.scenarioDurationHour'
                       : 'components:scenarioList.scenarioDuration',
                     {
-                      hours: duration.hours,
-                      minutes: duration.minutes,
-                      seconds: duration.seconds,
+                      hours: duration.hours ?? 0,
+                      minutes: duration.minutes ?? 0,
+                      seconds: duration.seconds ?? 0,
                     },
                   )}
                 </td>

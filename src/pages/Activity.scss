@@ -15,11 +15,39 @@
 }
 
 .activity-page-filters .field {
+  min-width: 0;
+}
+
+.activity-page-filters .field {
   margin-bottom: 0;
 }
 
 .activity-timeline {
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.activity-counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.activity-count {
+  align-items: baseline;
+  background: rgba(20, 22, 25, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.3rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.65rem;
+  justify-content: space-between;
+  min-width: 12rem;
+  padding: 0.45rem 0.65rem;
+}
+
+.activity-count strong {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.85rem;
 }
 
 .activity-timeline-entry {
@@ -54,13 +82,14 @@
   font-size: 0.85rem;
 }
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 800px) {
   .activity-page-heading {
     flex-direction: column;
   }
 
   .activity-page-filters {
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     width: 100%;
   }
 
@@ -72,6 +101,12 @@
 
   .activity-timeline-entry {
     gap: 0.4rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .activity-page-filters {
     grid-template-columns: minmax(0, 1fr);
   }
 }

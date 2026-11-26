@@ -65,6 +65,8 @@
     "methodology": "We show up to 10 newest records of each type in the selected period. A fight may appear as both a skirmish and individual kills. These are recorded events, not a count of players currently online.",
     "activityType": "Activity type",
     "allActivityTypes": "All activity",
+    "recordsInPeriod": "Records in selected period",
+    "countSummary": "Showing {{shown}} of {{total}}",
     "period": "Time period",
     "types": {
       "kill": "Player kill",
@@ -75,8 +77,14 @@
     "unknownPlayer": "Unknown player",
     "unknownLocation": "Location not recorded",
     "skirmish": "Recorded skirmish",
-    "skirmishSummary": "{{players}} players · {{kills}} kills",
-    "instanceSummary": "{{bosses}} bosses recorded · {{players}} players"
+    "skirmishPlayerCount_one": "{{count}} player",
+    "skirmishPlayerCount_other": "{{count}} players",
+    "skirmishKillCount_one": "{{count}} kill",
+    "skirmishKillCount_other": "{{count}} kills",
+    "instanceBossCount_one": "{{count}} boss recorded",
+    "instanceBossCount_other": "{{count}} bosses recorded",
+    "instancePlayerCount_one": "{{count}} player",
+    "instancePlayerCount_other": "{{count}} players"
   },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"

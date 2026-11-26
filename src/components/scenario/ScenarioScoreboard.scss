@@ -1,0 +1,77 @@
+.scenario-team-composition__side {
+  background: rgba(20, 22, 25, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.35rem;
+  height: 100%;
+  padding: 0.75rem;
+}
+
+.scenario-team-composition__side--0 {
+  border-top: 2px solid #3298dc;
+}
+
+.scenario-team-composition__side--1 {
+  border-top: 2px solid #f14668;
+}
+
+.scenario-team-composition__careers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.scenario-team-composition__roles {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.scenario-team-composition__role {
+  min-width: 0;
+}
+
+@media screen and (max-width: 480px) {
+  .scenario-team-composition__roles {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.scenario-team-composition__careers li {
+  align-items: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 0.25rem;
+  display: inline-flex;
+  gap: 0.4rem;
+  max-width: 100%;
+  padding: 0.25rem 0.45rem;
+}
+
+.scenario-team-composition__careers .image {
+  flex: 0 0 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.scenario-team-composition__careers img {
+  height: 24px;
+  width: 24px;
+}
+
+.scenario-team-composition__careers li > span:nth-child(2) {
+  overflow-wrap: anywhere;
+}
+
+.scenario-match-leaders__card {
+  background: rgba(20, 22, 25, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 0.35rem;
+  height: 100%;
+  padding: 0.75rem;
+}
+
+.scenario-match-leaders__names {
+  overflow-wrap: anywhere;
+}

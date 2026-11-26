@@ -21,6 +21,7 @@ const RECENT_ACTIVITY = gql`
   ) {
     kills(first: $first, where: { time: { gte: $from } })
       @include(if: $includeKills) {
+      totalCount
       nodes {
         id
         time
@@ -44,6 +45,7 @@ const RECENT_ACTIVITY = gql`
     }
     skirmishes(first: $first, where: { startTime: { gte: $from } })
       @include(if: $includeSkirmishes) {
+      totalCount
       nodes {
         id
         startTime
@@ -62,6 +64,7 @@ const RECENT_ACTIVITY = gql`
     }
     instanceRuns(first: $first, where: $runWhere, order: { start: DESC })
       @include(if: $includeInstanceRuns) {
+      totalCount
       nodes {
         id
         start
@@ -203,10 +206,14 @@ export const Activity = (): ReactElement => {
         skirmish.primaryZoneArea?.name ??
         skirmish.primaryZone?.name ??
         t('pages:activityPage.skirmish'),
-      detail: t('pages:activityPage.skirmishSummary', {
-        players: skirmish.numberOfPlayers,
-        kills: skirmish.numberOfKills,
-      }),
+      detail: [
+        t('pages:activityPage.skirmishPlayerCount', {
+          count: skirmish.numberOfPlayers,
+        }),
+        t('pages:activityPage.skirmishKillCount', {
+          count: skirmish.numberOfKills,
+        }),
+      ].join(' · '),
       href: `/skirmish/${skirmish.id}`,
     }));
     const instances = (data?.instanceRuns?.nodes ?? []).map((run) => ({
@@ -214,11 +221,15 @@ export const Activity = (): ReactElement => {
       kind: 'instance' as const,
       time: run.start,
       title: run.instance.name,
-      detail: t('pages:activityPage.instanceSummary', {
-        bosses: run.encounters.filter((encounter) => encounter.completed)
-          .length,
-        players: run.scoreboardEntries.length,
-      }),
+      detail: [
+        t('pages:activityPage.instanceBossCount', {
+          count: run.encounters.filter((encounter) => encounter.completed)
+            .length,
+        }),
+        t('pages:activityPage.instancePlayerCount', {
+          count: run.scoreboardEntries.length,
+        }),
+      ].join(' · '),
       href: `/instance-run/${run.id}`,
     }));
 
@@ -350,6 +361,47 @@ export const Activity = (): ReactElement => {
           <p className="is-size-7 has-text-grey mt-4">
             {t('pages:activityPage.methodology')}
           </p>
+
+          {!loading && !error && (
+            <div
+              className="activity-counts mt-4"
+              aria-label={t('pages:activityPage.recordsInPeriod')}
+            >
+              {activityKind === 'all' || activityKind === 'kill' ? (
+                <div className="activity-count">
+                  <span>{t('pages:activityPage.types.kill')}</span>
+                  <strong>
+                    {t('pages:activityPage.countSummary', {
+                      shown: data?.kills?.nodes?.length ?? 0,
+                      total: (data?.kills?.totalCount ?? 0).toLocaleString(),
+                    })}
+                  </strong>
+                </div>
+              ) : null}
+              {activityKind === 'all' || activityKind === 'skirmish' ? (
+                <div className="activity-count">
+                  <span>{t('pages:activityPage.types.skirmish')}</span>
+                  <strong>
+                    {t('pages:activityPage.countSummary', {
+                      shown: data?.skirmishes?.nodes?.length ?? 0,
+                      total: (data?.skirmishes?.totalCount ?? 0).toLocaleString(),
+                    })}
+                  </strong>
+                </div>
+              ) : null}
+              {activityKind === 'all' || activityKind === 'instance' ? (
+                <div className="activity-count">
+                  <span>{t('pages:activityPage.types.instance')}</span>
+                  <strong>
+                    {t('pages:activityPage.countSummary', {
+                      shown: data?.instanceRuns?.nodes?.length ?? 0,
+                      total: (data?.instanceRuns?.totalCount ?? 0).toLocaleString(),
+                    })}
+                  </strong>
+                </div>
+              ) : null}
+            </div>
+          )}
 
           {loading && <progress className="progress mt-4" />}
           {error && <ErrorMessage name={error.name} message={error.message} />}
