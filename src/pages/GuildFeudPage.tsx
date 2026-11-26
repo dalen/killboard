@@ -5,6 +5,7 @@ import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GUILD_INFO_FRAGMENT, GuildInfo } from '@/components/guild/GuildInfo';
 import { GuildFeud } from '@/components/guild/GuildFeud';
+import './GuildFeudPage.scss';
 import type {
   DateTimeOperationFilterInput,
   GetGuildFeudInfoQuery,
@@ -124,7 +125,7 @@ export const GuildFeudPage = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <div className="columns is-desktop">
+      <div className="columns is-desktop guild-feud-comparison">
         <div className="column is-5">
           <GuildInfo guild={data.guild1} />
         </div>

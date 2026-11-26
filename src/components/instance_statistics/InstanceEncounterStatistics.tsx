@@ -11,6 +11,8 @@ const INSTANCE_ENCOUNTER_STATISTICS = gql`
     $where: InstanceEncounterRunFilterInput
   ) {
     instanceEncounterRuns(where: $where, order: { start: DESC }) {
+      totalCount
+      completedCount
       medianDuration
       averageDuration
       medianDeaths
@@ -43,18 +45,25 @@ export const InstanceEncounterStatistics = ({
     },
   );
 
-  if (loading || !data?.instanceEncounterRuns) {
+  if (error) {
     return (
       <tr>
-        <td>{name}</td>
-        <td colSpan={3}>
-          <progress className="progress" />
+        <td colSpan={6}>
+          <ErrorMessage name={error.name} message={error.message} />
         </td>
       </tr>
     );
   }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
+
+  if (loading || !data?.instanceEncounterRuns) {
+    return (
+      <tr>
+        <td>{name}</td>
+        <td colSpan={5}>
+          <progress className="progress" />
+        </td>
+      </tr>
+    );
   }
 
   if (data.instanceEncounterRuns.medianDuration === 'PT0S') {
@@ -64,6 +73,8 @@ export const InstanceEncounterStatistics = ({
   return (
     <tr>
       <td>{name}</td>
+      <td>{data.instanceEncounterRuns.totalCount}</td>
+      <td>{data.instanceEncounterRuns.completedCount}</td>
       <td>
         {formatApiDuration(data.instanceEncounterRuns.medianDuration)}
       </td>

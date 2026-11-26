@@ -9,6 +9,7 @@ import { ScenarioList } from '@/components/scenario/ScenarioList';
 import { LatestSkirmishes } from '@/components/skirmish/LatestSkirmishes';
 import { TopSkirmishes } from '@/components/skirmish/TopSkirmishes';
 import type { ReactElement } from 'react';
+import './Home.scss';
 
 export const Home = ({
   tab,
@@ -26,7 +27,7 @@ export const Home = ({
       {tab === 'players' && (
         <>
           <SearchBox isPlayer />
-          <div className="columns">
+          <div className="columns home-leaderboard-columns">
             <div className="column is-6">
               <MonthlyLeaderboard />
             </div>
@@ -40,7 +41,7 @@ export const Home = ({
       {tab === 'guilds' && (
         <>
           <SearchBox isPlayer={false} />
-          <div className="columns">
+          <div className="columns home-leaderboard-columns">
             <div className="column is-6">
               <MonthlyGuildLeaderboard />
             </div>

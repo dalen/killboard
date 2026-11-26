@@ -46,6 +46,14 @@ const getPeriodFilters = (search: URLSearchParams, defaultPeriod: string) => {
       };
     }
 
+    case 'last24h': {
+      return {
+        time: {
+          gte: subMinutes(new Date(), 24 * 60).toISOString(),
+        },
+      };
+    }
+
     case 'last7d': {
       return {
         time: {
@@ -148,6 +156,7 @@ export const KillsFilters = ({
                 <option value="last1h">{t('killsFilters.last1h')}</option>
                 <option value="last2h">{t('killsFilters.last2h')}</option>
                 <option value="last4h">{t('killsFilters.last4h')}</option>
+                <option value="last24h">{t('killsFilters.last24h')}</option>
                 <option value="last7d">{t('killsFilters.last7d')}</option>
                 <option value="last30d">{t('killsFilters.last30d')}</option>
                 <option value="thisWeek">{t('killsFilters.thisWeek')}</option>

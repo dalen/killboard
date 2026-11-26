@@ -1,0 +1,11 @@
+@media screen and (max-width: 768px) {
+  .storyline-cards {
+    margin-left: 0;
+    margin-right: 0;
+
+    > .column {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}

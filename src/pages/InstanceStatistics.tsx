@@ -66,57 +66,61 @@ export const InstanceStatistics = (): ReactElement => {
       </p>
 
       <InstanceEncounterRunsFilters />
-      <table
-        className={clsx(
-          'table',
-          'is-striped',
-          'is-hoverable',
-          'is-marginless',
-          isMobile ? 'is-narrow' : 'is-fullwidth',
-          'mb-5',
-        )}
-      >
-        <thead>
-          <tr>
-            <th>{t('pages:instanceStatistics.encounter')}</th>
-            <th>{t('pages:instanceStatistics.medianDuration')}</th>
-            <th>
-              <span className="icon mr-1">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={18}
-                  height={16}
-                  alt={t('pages:instanceStatistics.medianDeaths') ?? ''}
-                  title={t('pages:instanceStatistics.medianDeaths') ?? ''}
-                />
-              </span>
-              {t('pages:instanceStatistics.medianDeaths')}
-            </th>
-            <th>
-              <span className="icon mr-1">
-                <img
-                  src="/images/icons/deaths.png"
-                  width={18}
-                  height={16}
-                  alt={t('pages:instanceStatistics.averageDeaths') ?? ''}
-                  title={t('pages:instanceStatistics.averageDeaths') ?? ''}
-                />
-              </span>
-              {t('pages:instanceStatistics.averageDeaths')}
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.instance.encounters.map((instanceEncounter) => (
-            <InstanceEncounterStatistics
-              key={instanceEncounter?.id}
-              name={instanceEncounter?.name ?? ''}
-              instanceId={Number(id)}
-              encounterId={Number(instanceEncounter?.id)}
-            />
-          ))}
-        </tbody>
-      </table>
+      <div className="table-container">
+        <table
+          className={clsx(
+            'table',
+            'is-striped',
+            'is-hoverable',
+            'is-marginless',
+            isMobile ? 'is-narrow' : 'is-fullwidth',
+            'mb-5',
+          )}
+        >
+          <thead>
+            <tr>
+              <th>{t('pages:instanceStatistics.encounter')}</th>
+              <th>{t('pages:instanceStatistics.runs')}</th>
+              <th>{t('pages:instanceStatistics.completedRuns')}</th>
+              <th>{t('pages:instanceStatistics.medianDuration')}</th>
+              <th>
+                <span className="icon mr-1">
+                  <img
+                    src="/images/icons/deaths.png"
+                    width={18}
+                    height={16}
+                    alt={t('pages:instanceStatistics.medianDeaths') ?? ''}
+                    title={t('pages:instanceStatistics.medianDeaths') ?? ''}
+                  />
+                </span>
+                {t('pages:instanceStatistics.medianDeaths')}
+              </th>
+              <th>
+                <span className="icon mr-1">
+                  <img
+                    src="/images/icons/deaths.png"
+                    width={18}
+                    height={16}
+                    alt={t('pages:instanceStatistics.averageDeaths') ?? ''}
+                    title={t('pages:instanceStatistics.averageDeaths') ?? ''}
+                  />
+                </span>
+                {t('pages:instanceStatistics.averageDeaths')}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.instance.encounters.map((instanceEncounter) => (
+              <InstanceEncounterStatistics
+                key={instanceEncounter?.id}
+                name={instanceEncounter?.name ?? ''}
+                instanceId={Number(id)}
+                encounterId={Number(instanceEncounter?.id)}
+              />
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

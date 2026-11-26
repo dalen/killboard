@@ -345,10 +345,15 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 
 @media screen and (max-width: 768px) {
   nav.navbar .navbar-menu {
-    max-width: 100vw;
+    max-width: 100%;
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   nav.navbar .navbar-start {
@@ -359,7 +364,12 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   .container > .tabs.is-fullwidth {
     overflow-x: auto;
     overscroll-behavior-x: contain;
+    scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
   }
 
   .container > .tabs.is-fullwidth li {

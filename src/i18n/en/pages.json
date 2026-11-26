@@ -55,7 +55,26 @@
     "killId": "Kill #{{killId}}"
   },
   "killsPage": {
-    "title": "Kills"
+    "title": "Kills",
+    "sections": "Killboard sections",
+    "allTimeDescription": "Showing the newest kills first. Use Next to browse older kills."
+  },
+  "activityPage": {
+    "title": "Recent Activity",
+    "description": "A combined view of recently recorded kills, skirmishes, and dungeon runs.",
+    "methodology": "We show up to 10 newest records of each type in the selected period. A fight may appear as both a skirmish and individual kills. These are recorded events, not a count of players currently online.",
+    "period": "Time period",
+    "types": {
+      "kill": "Player kill",
+      "skirmish": "Skirmish",
+      "instance": "Dungeon run"
+    },
+    "killSummary": "{{killer}} killed {{victim}}",
+    "unknownPlayer": "Unknown player",
+    "unknownLocation": "Location not recorded",
+    "skirmish": "Recorded skirmish",
+    "skirmishSummary": "{{players}} players · {{kills}} kills",
+    "instanceSummary": "{{bosses}} bosses recorded · {{players}} players"
   },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
@@ -278,6 +297,8 @@
     "search": "Search",
     "name": "Name",
     "encounter": "Encounter",
+    "runs": "Runs",
+    "completedRuns": "Completed Runs",
     "medianDuration": "Median Duration",
     "medianDeaths": "Median Deaths",
     "averageDeaths": "Average Deaths"

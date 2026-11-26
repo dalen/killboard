@@ -18,8 +18,11 @@ export const KillsList = ({
   showTime = true,
   showVictim = true,
   showKiller = true,
+  mobileCards = false,
   defaultPeriod = 'all',
   timeZoneMode = 'local',
+  showTotalCount = true,
+  description,
 }: {
   query: DocumentNode;
   queryOptions?: useQuery.Options<Query>;
@@ -28,8 +31,11 @@ export const KillsList = ({
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
+  mobileCards?: boolean;
   defaultPeriod?: string;
   timeZoneMode?: KillTimeZoneMode;
+  showTotalCount?: boolean;
+  description?: string;
 }): React.ReactElement | null => {
   const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
@@ -72,14 +78,17 @@ export const KillsList = ({
     <div>
       {title && (
         <div className="is-size-4 is-family-secondary is-uppercase mb-2">
-          {title} {kills.totalCount != null && kills.totalCount}
+          {title}
+          {showTotalCount && kills.totalCount != null ? ` ${kills.totalCount}` : ''}
         </div>
       )}
+      {description && <p className="is-size-7 has-text-grey-light mb-2">{description}</p>}
       <KillsListTable
         data={currentPageKills}
         showTime={showTime}
         showKiller={showKiller}
         showVictim={showVictim}
+        mobileCards={mobileCards}
         timeZoneMode={timeZoneMode}
       />
       <QueryPagination

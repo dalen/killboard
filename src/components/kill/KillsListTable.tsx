@@ -6,23 +6,106 @@ import { CareerIcon } from '@/components/CareerIcon';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 import { type KillTimeZoneMode, formatKillTime } from './killTime';
+import './KillsListTable.scss';
 
 export const KillsListTable = ({
   data,
   showTime = true,
   showVictim = true,
   showKiller = true,
+  mobileCards = false,
   timeZoneMode = 'local',
 }: {
   data: Kill[];
   showTime?: boolean;
   showVictim?: boolean;
   showKiller?: boolean;
+  mobileCards?: boolean;
   timeZoneMode?: KillTimeZoneMode;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
+
+  if (mobileCards && isMobile) {
+    return (
+      <div className="kill-mobile-cards">
+        {data.map((kill) => {
+          const attacker = kill.attackers[0];
+          const victim = kill.victim;
+          const date = new Date(kill.time);
+
+          return (
+            <article className="kill-mobile-card" key={kill.id}>
+              {showTime && (
+                <time className="kill-mobile-time" dateTime={kill.time}>
+                  {formatKillTime(date, timeZoneMode, 'full')}
+                </time>
+              )}
+              <div className="kill-mobile-parties">
+                {showKiller && (
+                  <div className="kill-mobile-party">
+                    <CareerIcon career={attacker.character.career} />
+                    <div className="kill-mobile-party-details">
+                      <span className="kill-mobile-party-label">
+                        {t('components:killsList.killer')}
+                      </span>
+                      <Link to={`/character/${attacker.character.id}`}>
+                        <strong>{attacker.character.name}</strong>
+                      </Link>
+                      {attacker.guild && (
+                        <Link to={`/guild/${attacker.guild.id}`}>
+                          {attacker.guild.name}
+                        </Link>
+                      )}
+                      <small>
+                        Lvl {attacker.level} · RR {attacker.renownRank}
+                      </small>
+                    </div>
+                  </div>
+                )}
+                {showKiller && showVictim && (
+                  <span className="kill-mobile-versus" aria-hidden="true">
+                    vs
+                  </span>
+                )}
+                {showVictim && (
+                  <div className="kill-mobile-party kill-mobile-party-victim">
+                    <CareerIcon career={victim.character.career} />
+                    <div className="kill-mobile-party-details">
+                      <span className="kill-mobile-party-label">
+                        {t('components:killsList.victim')}
+                      </span>
+                      <Link to={`/character/${victim.character.id}`}>
+                        <strong>{victim.character.name}</strong>
+                      </Link>
+                      {victim.guild && (
+                        <Link to={`/guild/${victim.guild.id}`}>
+                          {victim.guild.name}
+                        </Link>
+                      )}
+                      <small>
+                        Lvl {victim.level} · RR {victim.renownRank}
+                      </small>
+                    </div>
+                  </div>
+                )}
+              </div>
+              <footer className="kill-mobile-footer">
+                <span>{kill.scenario ? 'Scenario' : 'RvR'}</span>
+                <Link
+                  to={`/kill/${kill.id}`}
+                  className="button is-primary is-small"
+                >
+                  {t('components:killsList.details')}
+                </Link>
+              </footer>
+            </article>
+          );
+        })}
+      </div>
+    );
+  }
 
   return (
     <div className="table-container">

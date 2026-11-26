@@ -94,6 +94,7 @@ export const GuildFeud = ({
           variables: { guild1Id: guild1, guild2Id: guild2, time },
         }}
         perPage={10}
+        mobileCards
       />
     </div>
   );

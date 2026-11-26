@@ -5,6 +5,7 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import type { ReactElement } from 'react';
+import './Storylines.scss';
 import type { GetWarJournalStorylinesQuery } from '@/__generated__/graphql';
 
 const WAR_JOURNAL_STORYLINES = gql`
@@ -94,7 +95,7 @@ export const Storylines = (): ReactElement => {
       </p>
 
       {filteredStorylines.length > 0 ? (
-        <div className="columns is-multiline">
+        <div className="columns is-multiline storyline-cards">
           {filteredStorylines.map((storyline) => {
             const sameName = storylines.filter(
               (candidate) => candidate.name === storyline.name,

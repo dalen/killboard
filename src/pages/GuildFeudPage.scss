@@ -1,0 +1,11 @@
+@media screen and (max-width: 1023px) {
+  .guild-feud-comparison {
+    margin-left: 0;
+    margin-right: 0;
+
+    > .column {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}

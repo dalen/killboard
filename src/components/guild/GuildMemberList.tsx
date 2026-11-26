@@ -3,7 +3,7 @@ import { useApolloClient } from '@apollo/client/react';
 import { Career } from '@/__generated__/graphql';
 import { type ReactElement, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import clsx from 'clsx';
 import { CareerIcon } from '@/components/CareerIcon';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
@@ -63,6 +63,8 @@ interface MembersData {
 
 type SortKey = 'name' | 'level' | 'renownRank' | 'rank';
 type SortDirection = 'asc' | 'desc';
+const pageSizes = [10, 15, 20, 25, 50] as const;
+const sortKeys: SortKey[] = ['name', 'level', 'renownRank', 'rank'];
 
 const getSortValue = (member: Member, key: SortKey): string | number => {
   switch (key) {
@@ -91,6 +93,7 @@ export const GuildMemberList = ({
 }): ReactElement => {
   const client = useApolloClient();
   const { t } = useTranslation(['common', 'pages', 'enums']);
+  const [search, setSearch] = useSearchParams();
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
   const [members, setMembers] = useState<Member[]>([]);
@@ -98,12 +101,34 @@ export const GuildMemberList = ({
   const [loadedCount, setLoadedCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
-  const [careerFilter, setCareerFilter] = useState<Career | ''>('');
-  const [rankFilter, setRankFilter] = useState('');
-  const [sortKey, setSortKey] = useState<SortKey>('name');
-  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
-  const [perPage, setPerPage] = useState(25);
-  const [page, setPage] = useState(0);
+  const selectedCareer = search.get('career') as Career | null;
+  const careerFilter = selectedCareer && Object.values(Career).includes(selectedCareer)
+    ? selectedCareer
+    : '';
+  const rankFilter = search.get('guildRank') ?? '';
+  const selectedSort = search.get('memberSort');
+  const sortKey = sortKeys.includes(selectedSort as SortKey)
+    ? (selectedSort as SortKey)
+    : 'name';
+  const sortDirection: SortDirection = search.get('memberDirection') === 'desc' ? 'desc' : 'asc';
+  const selectedPageSize = Number(search.get('membersPerPage'));
+  const perPage = pageSizes.includes(selectedPageSize as (typeof pageSizes)[number])
+    ? selectedPageSize
+    : 25;
+  const selectedPage = Number(search.get('membersPage'));
+  const page = Number.isInteger(selectedPage) && selectedPage >= 0 ? selectedPage : 0;
+
+  const updateMemberSearch = (updates: Record<string, string | number | null>) => {
+    const nextSearch = new URLSearchParams(search);
+    for (const [key, value] of Object.entries(updates)) {
+      if (value === null || value === '') {
+        nextSearch.delete(key);
+      } else {
+        nextSearch.set(key, String(value));
+      }
+    }
+    setSearch(nextSearch);
+  };
 
   useEffect(() => {
     let active = true;
@@ -228,16 +253,19 @@ export const GuildMemberList = ({
   }, [careerFilter, members, rankFilter, sortDirection, sortKey]);
 
   const pageCount = Math.ceil(filteredMembers.length / perPage);
-  const pageMembers = filteredMembers.slice(page * perPage, (page + 1) * perPage);
+  const currentPage = Math.min(page, Math.max(pageCount - 1, 0));
+  const pageMembers = filteredMembers.slice(currentPage * perPage, (currentPage + 1) * perPage);
 
   const changeSort = (key: SortKey) => {
-    setPage(0);
+    let nextDirection: SortDirection = key === 'name' ? 'asc' : 'desc';
     if (key === sortKey) {
-      setSortDirection((direction) => (direction === 'asc' ? 'desc' : 'asc'));
-    } else {
-      setSortKey(key);
-      setSortDirection(key === 'name' ? 'asc' : 'desc');
+      nextDirection = sortDirection === 'asc' ? 'desc' : 'asc';
     }
+    updateMemberSearch({
+      memberSort: key,
+      memberDirection: nextDirection,
+      membersPage: null,
+    });
   };
 
   const sortHeader = (key: SortKey, label: string) => {
@@ -286,7 +314,7 @@ export const GuildMemberList = ({
         </div>
       ) : (
         <>
-          <div className="columns is-multiline is-align-items-flex-end mb-2">
+          <div className="columns guild-member-filters is-multiline is-align-items-flex-end mb-2">
             <div className="column is-one-quarter-desktop is-half-tablet">
               <label className="label" htmlFor="guild-member-career-filter">
                 {t('pages:guildMembers.classFilter')}
@@ -296,8 +324,10 @@ export const GuildMemberList = ({
                   id="guild-member-career-filter"
                   value={careerFilter}
                   onChange={(event) => {
-                    setCareerFilter(event.currentTarget.value as Career | '');
-                    setPage(0);
+                    updateMemberSearch({
+                      career: event.currentTarget.value,
+                      membersPage: null,
+                    });
                   }}
                 >
                   <option value="">{t('pages:guildMembers.allClasses')}</option>
@@ -318,8 +348,10 @@ export const GuildMemberList = ({
                   id="guild-member-rank-filter"
                   value={rankFilter}
                   onChange={(event) => {
-                    setRankFilter(event.currentTarget.value);
-                    setPage(0);
+                    updateMemberSearch({
+                      guildRank: event.currentTarget.value,
+                      membersPage: null,
+                    });
                   }}
                 >
                   <option value="">{t('pages:guildMembers.allRanks')}</option>
@@ -345,7 +377,8 @@ export const GuildMemberList = ({
                 'table',
                 'is-striped',
                 'is-hoverable',
-                isMobile ? 'is-narrow' : 'is-fullwidth',
+                'is-fullwidth',
+                isMobile && 'is-narrow',
               )}
             >
               <thead>
@@ -396,11 +429,13 @@ export const GuildMemberList = ({
                   id="guild-members-per-page"
                   value={perPage}
                   onChange={(event) => {
-                    setPerPage(Number(event.currentTarget.value));
-                    setPage(0);
+                    updateMemberSearch({
+                      membersPerPage: Number(event.currentTarget.value),
+                      membersPage: null,
+                    });
                   }}
                 >
-                  {[10, 15, 20, 25, 50].map((size) => (
+                  {pageSizes.map((size) => (
                     <option key={size} value={size}>
                       {size}
                     </option>
@@ -413,24 +448,24 @@ export const GuildMemberList = ({
                 <button
                   className="button is-info"
                   type="button"
-                  disabled={page === 0}
-                  onClick={() => setPage((current) => Math.max(0, current - 1))}
+                  disabled={currentPage === 0}
+                  onClick={() =>
+                    updateMemberSearch({ membersPage: Math.max(0, currentPage - 1) })
+                  }
                 >
                   {t('common:prevPage')}
                 </button>
                 <span className="button is-static">
                   {t('pages:guildMembers.pageOf', {
-                    page: page + 1,
+                    page: currentPage + 1,
                     pages: pageCount,
                   })}
                 </span>
                 <button
                   className="button is-info"
                   type="button"
-                  disabled={page + 1 >= pageCount}
-                  onClick={() =>
-                    setPage((current) => Math.min(pageCount - 1, current + 1))
-                  }
+                  disabled={currentPage + 1 >= pageCount}
+                  onClick={() => updateMemberSearch({ membersPage: currentPage + 1 })}
                 >
                   {t('common:nextPage')}
                 </button>

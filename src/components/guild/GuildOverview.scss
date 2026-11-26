@@ -37,6 +37,11 @@
 .guild-tabs {
   overflow-x: auto;
   overflow-y: hidden;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   ul {
     flex-wrap: nowrap;
@@ -157,6 +162,11 @@
 }
 
 @media screen and (max-width: 768px) {
+  .guild-member-filters {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .guild-profile-card {
     .guild-profile-heading {
       flex-direction: column;
@@ -174,6 +184,28 @@
   }
 
   .guild-overview {
+    .columns {
+      margin-left: 0;
+      margin-right: 0;
+
+      > .column {
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+
+    .level.is-mobile {
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+
+      .level-left,
+      .level-right {
+        flex-basis: 100%;
+        margin: 0;
+      }
+    }
+
     .guild-battle-row {
       grid-template-columns: minmax(0, 1fr) auto auto;
       gap: 0.65rem;

@@ -1,0 +1,111 @@
+.kill-mobile-cards {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.kill-mobile-card {
+  background: rgba(17, 18, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: 2px solid rgba(255, 174, 0, 0.7);
+  border-radius: 0.35rem;
+  padding: 0.75rem;
+}
+
+.kill-mobile-time {
+  color: rgba(255, 255, 255, 0.65);
+  display: block;
+  font-size: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.kill-mobile-parties {
+  align-items: start;
+  display: grid;
+  gap: 0.45rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+}
+
+.kill-mobile-party {
+  display: flex;
+  gap: 0.4rem;
+  min-width: 0;
+
+  > .image {
+    flex: 0 0 24px;
+    height: 24px;
+    margin: 0;
+    width: 24px;
+
+    img {
+      height: 24px;
+      width: 24px;
+    }
+  }
+}
+
+.kill-mobile-party-details {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow-wrap: anywhere;
+
+  a {
+    line-height: 1.25;
+  }
+
+  small {
+    color: rgba(255, 255, 255, 0.65);
+    white-space: nowrap;
+  }
+}
+
+.kill-mobile-party-label {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.7rem;
+  margin-bottom: 0.15rem;
+}
+
+.kill-mobile-versus {
+  color: #ffae00;
+  font-size: 0.75rem;
+  padding-top: 1.4rem;
+}
+
+.kill-mobile-footer {
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.7rem;
+  padding-top: 0.55rem;
+}
+
+@media screen and (max-width: 380px) {
+  .kill-mobile-card {
+    padding: 0.6rem;
+  }
+
+  .kill-mobile-parties {
+    gap: 0.3rem;
+  }
+
+  .kill-mobile-party {
+    gap: 0.25rem;
+  }
+
+  .kill-mobile-party-details {
+    font-size: 0.9rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .kill-mobile-parties {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kill-mobile-versus {
+    padding: 0;
+    text-align: center;
+  }
+}

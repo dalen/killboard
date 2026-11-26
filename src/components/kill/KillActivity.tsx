@@ -55,6 +55,10 @@ const getActivityRange = (period: string) => {
       from = subMinutes(to, 240);
       break;
     }
+    case 'last24h': {
+      from = subDays(to, 1);
+      break;
+    }
     case 'last7d': {
       from = subDays(to, 7);
       break;

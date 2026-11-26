@@ -1,0 +1,77 @@
+.activity-page-heading,
+.activity-page-filters {
+  align-items: flex-start;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.activity-page-heading > :first-child {
+  min-width: 0;
+}
+
+.activity-page-filters {
+  flex: 0 0 auto;
+}
+
+.activity-page-filters .field {
+  margin-bottom: 0;
+}
+
+.activity-timeline {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.activity-timeline-entry {
+  align-items: flex-start;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
+  padding: 0.85rem 0.25rem;
+}
+
+.activity-timeline-entry time,
+.activity-timeline-detail {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.activity-timeline-content {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem 0.7rem;
+  min-width: 0;
+}
+
+.activity-timeline-title {
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.activity-timeline-detail {
+  flex-basis: 100%;
+  font-size: 0.85rem;
+}
+
+@media screen and (max-width: 600px) {
+  .activity-page-heading {
+    flex-direction: column;
+  }
+
+  .activity-page-filters {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .activity-page-filters .field,
+  .activity-page-filters .select,
+  .activity-page-filters select {
+    width: 100%;
+  }
+
+  .activity-timeline-entry {
+    gap: 0.4rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
