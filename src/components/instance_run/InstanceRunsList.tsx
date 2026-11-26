@@ -455,15 +455,27 @@ export const InstanceRunsList = ({
               .reduce((total, entry) => total + entry.deaths, 0);
 
             const rows = [
-              <tr key={group.key}>
-                <td>
+              <tr key={group.key} className="instance-run-summary-row">
+                <td
+                  className="instance-run-start-cell"
+                  data-label={t('pages:instanceRuns.startTime')}
+                  aria-label={t('pages:instanceRuns.startTime')}
+                >
                   <small>
-                    <span style={{ whiteSpace: 'nowrap' }}>
-                      {format(startDate, 'yyyy-MM-dd HH:mm')}
-                    </span>
+                    <time
+                      className="instance-run-date-time"
+                      dateTime={startDate.toISOString()}
+                    >
+                      <span>{format(startDate, 'yyyy-MM-dd')}</span>{' '}
+                      <span>{format(startDate, 'HH:mm')}</span>
+                    </time>
                   </small>
                 </td>
-                <td>
+                <td
+                  className="instance-run-instance-cell"
+                  data-label={t('pages:instanceRuns.instance')}
+                  aria-label={t('pages:instanceRuns.instance')}
+                >
                   <div>{family?.name ?? run.instance.name}</div>
                   {family && segments.length > 1 && (
                     <button
@@ -495,7 +507,11 @@ export const InstanceRunsList = ({
                     </button>
                   )}
                 </td>
-                <td>
+                <td
+                  className="instance-run-duration-cell"
+                  data-label={t('pages:instanceRuns.duration')}
+                  aria-label={t('pages:instanceRuns.duration')}
+                >
                   {duration}
                   {groupBossKills.length > 1 && (
                     <div className="is-size-7 has-text-grey-light">
@@ -512,6 +528,9 @@ export const InstanceRunsList = ({
                   )}
                 </td>
                 <td
+                  className="instance-run-bosses-cell"
+                  data-label={t('pages:instanceRuns.bossesRecorded')}
+                  aria-label={t('pages:instanceRuns.bossesRecorded')}
                   title={
                     lostValeComplete
                       ? t('pages:instanceRuns.lostValeCompletionTitle')
@@ -545,7 +564,11 @@ export const InstanceRunsList = ({
                 <td align="center" className="is-hidden-mobile">
                   {numDPS}
                 </td>
-                <td>
+                <td
+                  className="instance-run-details-cell"
+                  data-label={t('common:details')}
+                  aria-label={t('common:details')}
+                >
                   <Link
                     to={{
                       pathname: `/instance-run/${run.id}`,
@@ -563,10 +586,13 @@ export const InstanceRunsList = ({
 
             if (expanded) {
               rows.push(
-                <tr key={`${group.key}-breakdown`}>
+                <tr
+                  key={`${group.key}-breakdown`}
+                  className="instance-run-breakdown-row"
+                >
                   <td colSpan={12}>
                     <div className="table-container">
-                      <table className="table is-fullwidth is-narrow mb-0">
+                      <table className="table is-fullwidth is-narrow instance-run-detail-table mb-0">
                         <thead>
                           <tr>
                             <th>{t('pages:instanceRuns.section')}</th>
@@ -601,21 +627,40 @@ export const InstanceRunsList = ({
 
                             return (
                               <tr key={segment.id}>
-                                <td>{segment.instance.name}</td>
-                                <td>
+                                <td
+                                  data-label={t('pages:instanceRuns.section')}
+                                  aria-label={t('pages:instanceRuns.section')}
+                                >
+                                  {segment.instance.name}
+                                </td>
+                                <td
+                                  data-label={t('pages:instanceRuns.startTime')}
+                                  aria-label={t('pages:instanceRuns.startTime')}
+                                >
                                   <span style={{ whiteSpace: 'nowrap' }}>
                                     {format(segmentStart, 'yyyy-MM-dd HH:mm')}
                                   </span>
                                 </td>
-                                <td>{formatCompactDuration(segmentDuration)}</td>
-                                <td>
+                                <td
+                                  data-label={t('pages:instanceRuns.sectionDuration')}
+                                  aria-label={t('pages:instanceRuns.sectionDuration')}
+                                >
+                                  {formatCompactDuration(segmentDuration)}
+                                </td>
+                                <td
+                                  data-label={t('pages:instanceRuns.encounters')}
+                                  aria-label={t('pages:instanceRuns.encounters')}
+                                >
                                   {segmentKills.length} /{' '}
                                   {Math.max(
                                     segmentExpectedCount,
                                     segmentKills.length,
                                   )}
                                 </td>
-                                <td>
+                                <td
+                                  data-label={t('pages:instanceRuns.bossesKilled')}
+                                  aria-label={t('pages:instanceRuns.bossesKilled')}
+                                >
                                   {segmentKills.length ? (
                                     <ol className="instance-run-boss-list">
                                       {segmentKills.map((encounter) => (
@@ -641,7 +686,10 @@ export const InstanceRunsList = ({
                                     '—'
                                   )}
                                 </td>
-                                <td>
+                                <td
+                                  data-label={t('pages:instanceRuns.firstBossKill')}
+                                  aria-label={t('pages:instanceRuns.firstBossKill')}
+                                >
                                   {firstKill
                                     ? format(
                                         new Date(firstKill.end),
@@ -649,7 +697,10 @@ export const InstanceRunsList = ({
                                       )
                                     : '—'}
                                 </td>
-                                <td>
+                                <td
+                                  data-label={t('pages:instanceRuns.lastBossKill')}
+                                  aria-label={t('pages:instanceRuns.lastBossKill')}
+                                >
                                   {lastKill
                                     ? format(
                                         new Date(lastKill.end),
@@ -657,7 +708,10 @@ export const InstanceRunsList = ({
                                       )
                                     : '—'}
                                 </td>
-                                <td>
+                                <td
+                                  data-label={t('common:details')}
+                                  aria-label={t('common:details')}
+                                >
                                   <Link
                                     to={`/instance-run/${segment.id}`}
                                     className="instance-run-action-link"

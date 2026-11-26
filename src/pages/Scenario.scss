@@ -7,3 +7,60 @@
 .scenario-time-zone-select select {
   max-width: 100%;
 }
+
+.scenario-most-kills {
+  margin-top: -0.25rem;
+}
+
+.scenario-most-kills--order {
+  color: #3298dc;
+}
+
+.scenario-most-kills--destruction {
+  color: #f14668;
+}
+
+@media screen and (max-width: 768px) {
+  .scenario-breadcrumb ul {
+    flex-wrap: wrap;
+  }
+
+  .scenario-breadcrumb li.is-active {
+    flex: 1 1 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .scenario-breadcrumb li.is-active a {
+    max-width: 100%;
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .scenario-detail-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    li {
+      flex: 0 0 auto;
+    }
+
+    a {
+      white-space: nowrap;
+    }
+  }
+
+  .scenario-team-composition > .columns,
+  .scenario-match-leaders > .columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

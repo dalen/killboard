@@ -170,6 +170,7 @@
     "quittersSummary": "Players marked as quitters: {{count}}",
     "teamComposition": "Recorded team composition",
     "teamCompositionNote": "Estimated from scoreboard totals: tank and DPS careers stay in their usual roles. Healer careers count as DPS only when recorded kill damage is higher than healing; ties stay under Healers.",
+    "mostKills": "Most kills",
     "roles": {
       "tank": "Tanks",
       "healer": "Healers",

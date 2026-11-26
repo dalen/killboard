@@ -311,7 +311,12 @@
     "completedRuns": "Completed Runs",
     "medianDuration": "Median Duration",
     "medianDeaths": "Median Deaths",
-    "averageDeaths": "Average Deaths"
+    "averageDeaths": "Average Deaths",
+    "comparePrevious": "Compare median duration with the previous period",
+    "previousWindow": "Previous period: {{from}} through {{through}}",
+    "comparisonLimit": "Comparison is available for date ranges up to 31 days.",
+    "previousMedian": "Previous: {{duration}} ({{count}} runs)",
+    "previousNoRuns": "Previous: no runs recorded"
   },
   "instanceHub": {
     "tabs": {

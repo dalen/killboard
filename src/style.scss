@@ -934,6 +934,25 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 }
 
 @media screen and (max-width: 768px) {
+  .instance-runs-filter-form .columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .instance-runs-filter-form .columns.is-mobile {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .instance-runs-filter-form .columns.is-mobile > .column {
+    min-width: 0;
+  }
+
+  .instance-runs-filter-form input[type='date'] {
+    min-width: 0;
+    width: 100%;
+  }
+
   .instance-runs-main-table {
     width: 100%;
     table-layout: fixed;
@@ -947,24 +966,27 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 
   .instance-runs-main-table th:nth-child(1),
   .instance-runs-main-table td:nth-child(1) {
-    width: 28%;
+    width: 24%;
   }
 
   .instance-runs-main-table th:nth-child(2),
   .instance-runs-main-table td:nth-child(2) {
-    width: 31%;
+    width: 20%;
   }
 
   .instance-runs-main-table th:nth-child(3),
   .instance-runs-main-table td:nth-child(3) {
-    width: 24%;
+    width: 18%;
   }
 
   .instance-runs-main-table th:nth-child(4),
-  .instance-runs-main-table td:nth-child(4),
+  .instance-runs-main-table td:nth-child(4) {
+    width: 18%;
+  }
+
   .instance-runs-main-table th:last-child,
   .instance-runs-main-table td:last-child {
-    width: 17%;
+    width: 20%;
   }
 
   .instance-run-detail-table table {
@@ -1090,6 +1112,260 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   .instance-run-breakdown-toggle {
     font-size: 0.72rem;
     padding: 0.32rem 0.45rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .instance-runs-main-table thead {
+    display: none;
+  }
+
+  .instance-runs-main-table tbody {
+    display: block;
+  }
+
+  .instance-runs-main-table .instance-run-summary-row {
+    align-items: center;
+    background: rgba(0, 0, 0, 0.18);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: grid;
+    gap: 0.15rem 0.75rem;
+    grid-template-areas:
+      'instance details'
+      'time duration'
+      'bosses bosses';
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 0.35rem;
+  }
+
+  .instance-runs-main-table .instance-run-summary-row:nth-of-type(even) {
+    background: rgba(42, 46, 52, 0.72);
+  }
+
+  .instance-runs-main-table .instance-run-summary-row > td {
+    border: 0;
+    display: block;
+    min-width: 0;
+    padding: 0.2rem 0.25rem;
+    width: auto;
+  }
+
+  .instance-runs-main-table .instance-run-summary-row > td::before {
+    color: #a9adb4;
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 600;
+    content: attr(data-label);
+  }
+
+  .instance-run-instance-cell {
+    font-weight: 600;
+    grid-area: instance;
+  }
+
+  .instance-run-instance-cell::before,
+  .instance-run-details-cell::before {
+    display: none !important;
+  }
+
+  .instance-run-start-cell {
+    grid-area: time;
+    white-space: nowrap;
+  }
+
+  .instance-run-duration-cell {
+    grid-area: duration;
+    overflow-wrap: anywhere;
+    text-align: right;
+  }
+
+  .instance-run-duration-cell > div {
+    font-size: 0.62rem;
+    font-weight: 400;
+    overflow-wrap: anywhere;
+    text-align: left;
+  }
+
+  .instance-run-bosses-cell {
+    grid-area: bosses;
+  }
+
+  .instance-run-details-cell {
+    grid-area: details;
+    justify-self: end;
+    text-align: right;
+  }
+
+  .instance-run-details-cell .instance-run-action-link {
+    float: none;
+  }
+
+  .instance-runs-main-table .instance-run-breakdown-row {
+    display: block;
+  }
+
+  .instance-runs-main-table .instance-run-breakdown-row > td {
+    display: block;
+    width: 100%;
+  }
+
+  .instance-run-breakdown-row .table-container {
+    overflow: visible;
+  }
+
+  .instance-run-detail-table {
+    width: 100%;
+  }
+
+  .instance-run-detail-table thead {
+    display: none;
+  }
+
+  .instance-run-detail-table tbody {
+    display: grid;
+    gap: 0.5rem;
+  }
+
+  .instance-run-detail-table tbody > tr {
+    background: rgba(0, 0, 0, 0.28);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.25rem;
+    display: grid;
+    gap: 0.2rem 0.75rem;
+    grid-template-areas:
+      'section details'
+      'start duration'
+      'encounters encounters'
+      'bosses bosses'
+      'first first'
+      'last last';
+    grid-template-columns: minmax(0, 1fr) auto;
+    padding: 0.4rem;
+  }
+
+  .instance-run-detail-table tbody > tr > td {
+    box-sizing: border-box;
+    border: 0;
+    display: block;
+    min-width: 0;
+    padding: 0.2rem !important;
+    width: 100%;
+  }
+
+  .instance-run-detail-table tbody > tr > td::before {
+    color: #a9adb4;
+    display: block;
+    font-size: 0.66rem;
+    font-weight: 600;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(1) {
+    font-weight: 600;
+    grid-area: section;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(1)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(2) {
+    grid-area: start;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(2)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(3) {
+    grid-area: duration;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(3)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(4) {
+    grid-area: encounters;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(4)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(5) {
+    grid-area: bosses;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(5)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(6) {
+    grid-area: first;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(6)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(7) {
+    grid-area: last;
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(7)::before {
+    content: attr(data-label);
+  }
+
+  .instance-run-detail-table tbody > tr > td:nth-child(8) {
+    align-items: flex-start;
+    display: flex;
+    grid-area: details;
+    justify-content: flex-end;
+    justify-self: stretch;
+    text-align: right;
+  }
+
+  .instance-run-detail-table .instance-run-boss-list li > span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .instance-run-detail-table .instance-run-boss-list time {
+    flex: 0 0 auto;
+  }
+
+  .instance-run-date-time > span {
+    display: inline;
+  }
+
+  .instance-list-table th:first-child,
+  .instance-list-table td:first-child {
+    width: 32%;
+  }
+
+  .instance-list-table th:nth-child(2),
+  .instance-list-table td:nth-child(2) {
+    width: 26%;
+  }
+
+  .instance-list-table th:nth-child(3),
+  .instance-list-table td:nth-child(3) {
+    width: 14%;
+  }
+
+  .instance-list-table th:nth-child(4),
+  .instance-list-table td:nth-child(4) {
+    width: 28%;
+  }
+
+  .instance-run-date-time > span {
+    display: inline;
+    white-space: nowrap;
+  }
+
+  .instance-run-action-link {
+    font-size: 0.68rem;
+    padding: 0.22rem 0.28rem;
   }
 }
 

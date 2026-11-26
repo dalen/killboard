@@ -233,7 +233,7 @@ export const InstanceRunsFilters = ({
   return (
     <div className="card mb-5">
       <form
-        className="card-content"
+        className="card-content instance-runs-filter-form"
         onSubmit={(event) => {
           event.preventDefault();
           applyFilters();

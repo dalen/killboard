@@ -20,6 +20,48 @@ const getLocalDateBoundary = (value: string, nextDay = false): string => {
   return date.toISOString();
 };
 
+const getPreviousDateRange = (from: string, through: string) => {
+  const start = new Date(`${from}T00:00:00`);
+  const end = new Date(`${through}T00:00:00`);
+  const dayCount =
+    Math.round((end.getTime() - start.getTime()) / 86_400_000) + 1;
+  const previousThrough = new Date(start);
+  previousThrough.setDate(previousThrough.getDate() - 1);
+  const previousFrom = new Date(previousThrough);
+  previousFrom.setDate(previousFrom.getDate() - dayCount + 1);
+  const toDateInputValue = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  };
+
+  return {
+    from: toDateInputValue(previousFrom),
+    through: toDateInputValue(previousThrough),
+    dayCount,
+  };
+};
+
+export const getPreviousInstanceEncounterRunsFilters = (
+  search: URLSearchParams,
+): InstanceEncounterRunFilterInput | null => {
+  const from = getValidDate(search.get('dateFrom'));
+  const through = getValidDate(search.get('dateThrough'));
+  if (!from || !through || from > through) return null;
+
+  const previous = getPreviousDateRange(from, through);
+  if (previous.dayCount > 31) return null;
+
+  return {
+    ...getInstanceEncounterRunsFilters(search),
+    start: {
+      gte: getLocalDateBoundary(previous.from),
+      lt: getLocalDateBoundary(from),
+    },
+  };
+};
+
 const getCompletedEncountersFilters = (
   search: URLSearchParams,
 ): InstanceEncounterRunFilterInput => {
@@ -200,16 +242,47 @@ export const InstanceEncounterRunsFilters = (): ReactElement => {
     });
   }, [search]);
 
+  useEffect(() => {
+    if (search.get('compare') !== 'previous') return;
+    const from = getValidDate(search.get('dateFrom'));
+    const through = getValidDate(search.get('dateThrough'));
+    const range =
+      from && through && from <= through
+        ? getPreviousDateRange(from, through)
+        : null;
+    if (range && range.dayCount <= 31) return;
+
+    const next = new URLSearchParams(search);
+    next.delete('compare');
+    setSearch(next, { replace: true });
+  }, [search, setSearch]);
+
   const applyDateFilters = () => {
     const next = new URLSearchParams(search);
     if (dateRange.from) next.set('dateFrom', dateRange.from);
     else next.delete('dateFrom');
     if (dateRange.through) next.set('dateThrough', dateRange.through);
     else next.delete('dateThrough');
+    const appliedFrom = getValidDate(next.get('dateFrom'));
+    const appliedThrough = getValidDate(next.get('dateThrough'));
+    const appliedRange =
+      appliedFrom && appliedThrough && appliedFrom <= appliedThrough
+        ? getPreviousDateRange(appliedFrom, appliedThrough)
+        : null;
+    if (!appliedRange || appliedRange.dayCount > 31) {
+      next.delete('compare');
+    }
     setSearch(next);
   };
   const invalidDateRange =
     dateRange.from && dateRange.through && dateRange.from > dateRange.through;
+  const comparisonRange =
+    dateRange.from && dateRange.through && !invalidDateRange
+      ? getPreviousDateRange(dateRange.from, dateRange.through)
+      : null;
+  const canComparePrevious = Boolean(
+    comparisonRange && comparisonRange.dayCount <= 31,
+  );
 
   return (
     <div className="card mb-5">
@@ -262,6 +335,38 @@ export const InstanceEncounterRunsFilters = (): ReactElement => {
                 </button>
               </div>
             </div>
+          </div>
+          <div className="column is-12 pt-0">
+            <label className="checkbox">
+              <input
+                className="mr-2"
+                type="checkbox"
+                checked={
+                  search.get('compare') === 'previous' && canComparePrevious
+                }
+                disabled={!canComparePrevious}
+                onChange={(event) => {
+                  const next = new URLSearchParams(search);
+                  if (event.target.checked) next.set('compare', 'previous');
+                  else next.delete('compare');
+                  setSearch(next);
+                }}
+              />
+              {t('pages:instanceStatistics.comparePrevious')}
+            </label>
+            {comparisonRange && (
+              <p className="help">
+                {t('pages:instanceStatistics.previousWindow', {
+                  from: comparisonRange.from,
+                  through: comparisonRange.through,
+                })}
+              </p>
+            )}
+            {comparisonRange && !canComparePrevious && (
+              <p className="help">
+                {t('pages:instanceStatistics.comparisonLimit')}
+              </p>
+            )}
           </div>
           <div className="column">
             <div className="field">

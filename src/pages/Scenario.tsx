@@ -131,10 +131,18 @@ export const Scenario = ({
       start: startDate,
     }),
   );
+  const mostKillsByTeam = ([0, 1] as const).map((team) =>
+    Math.max(
+      0,
+      ...(scenario.scoreboardEntries ?? [])
+        .filter((entry) => entry.team === team)
+        .map((entry) => Number(entry.kills)),
+    ),
+  );
 
   return (
     <div className="container is-max-widescreen mt-2">
-      <nav className="breadcrumb" aria-label="breadcrumbs">
+      <nav className="breadcrumb scenario-breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
             <Link to="/">{t('common:home')}</Link>
@@ -214,6 +222,9 @@ export const Scenario = ({
               >
                 {scenario.points?.[0]}
               </p>
+              <p className="is-size-7 scenario-most-kills scenario-most-kills--order">
+                {t('components:scenarioScoreboard.mostKills')}: <strong>{mostKillsByTeam[0]}</strong>
+              </p>
               {scenario.wasSurrender &&
               scenario.points[1] > scenario.points[0] ? (
                 <img
@@ -248,6 +259,9 @@ export const Scenario = ({
               >
                 {scenario.points?.[1]}
               </p>
+              <p className="is-size-7 scenario-most-kills scenario-most-kills--destruction">
+                {t('components:scenarioScoreboard.mostKills')}: <strong>{mostKillsByTeam[1]}</strong>
+              </p>
               {scenario.wasSurrender &&
               scenario.points[0] > scenario.points[1] ? (
                 <img
@@ -270,7 +284,7 @@ export const Scenario = ({
           </div>
         </div>
       </div>
-      <div className="tabs">
+      <div className="tabs scenario-detail-tabs">
         <li className={tab === 'scoreboard' ? 'is-active' : ''}>
           <Link to={`/scenario/${id}`}>
             {t('pages:scenarioPage.scoreboard')}
