@@ -14,6 +14,7 @@ export const ScenarioScoreboard = ({
 }): ReactElement => {
   const { items, requestSort, sortConfig } = useSortableData(entries);
   const { t } = useTranslation(['components']);
+  const quitterCount = entries.filter((entry) => entry.quitter).length;
 
   const getClassName = (name: string) => {
     if (!sortConfig) {
@@ -23,7 +24,13 @@ export const ScenarioScoreboard = ({
   };
 
   return (
-    <div className="table-container">
+    <>
+      <p className="has-text-grey is-size-7 mb-2">
+        {t('components:scenarioScoreboard.quittersSummary', {
+          count: quitterCount,
+        })}
+      </p>
+      <div className="table-container">
       <table className="table is-fullwidth">
         <thead className="is-relative">
           <tr>
@@ -136,6 +143,11 @@ export const ScenarioScoreboard = ({
                 <Link to={`/character/${entry.character.id}`}>
                   {entry.character.name}
                 </Link>
+                {entry.quitter && (
+                  <span className="tag is-warning is-light is-small ml-2">
+                    {t('components:scenarioScoreboard.quitter')}
+                  </span>
+                )}
               </td>
               <td>
                 {entry.guild && (
@@ -232,6 +244,7 @@ export const ScenarioScoreboard = ({
           ))}
         </tbody>
       </table>
-    </div>
+      </div>
+    </>
   );
 };

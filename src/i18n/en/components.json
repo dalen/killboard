@@ -165,7 +165,9 @@
     "name": "Name",
     "objectiveScore": "Objectives",
     "protection": "Protection",
-    "rank": "Rank"
+    "rank": "Rank",
+    "quitter": "Quitter",
+    "quittersSummary": "Players marked as quitters: {{count}}"
   },
   "scenarioList": {
     "matchesFound": "Matches found: {{count}}",
