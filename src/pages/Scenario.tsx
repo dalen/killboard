@@ -1,21 +1,18 @@
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
-import {
-  format,
-  formatDuration,
-  formatISO,
-  intervalToDuration,
-} from 'date-fns';
+import { formatDuration, intervalToDuration } from 'date-fns';
 
 import { useTranslation } from 'react-i18next';
-import { Link, useParams } from 'react-router';
+import { Link, useParams, useSearchParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { formatKillTime, type KillTimeZoneMode } from '@/components/kill/killTime';
 import { ScenarioKills } from '@/components/scenario/ScenarioKills';
 import { ScenarioScoreboard } from '@/components/scenario/ScenarioScoreboard';
 import { ScenarioHeatmap } from '@/components/scenario/ScenarioHeatmap';
 import { ScenarioSkirmishes } from '@/components/scenario/ScenarioSkirmishes';
 import type { ReactElement } from 'react';
 import type { GetScenarioInfoQuery } from '@/__generated__/graphql';
+import './Scenario.scss';
 
 export const SCENARIO_SCOREBOARD_FRAGMENT = gql`
   fragment ScenarioScoreboardEntry on ScenarioScoreboardEntry {
@@ -102,8 +99,11 @@ export const Scenario = ({
 }: {
   tab: 'scoreboard' | 'kills' | 'skirmishes' | 'map';
 }): ReactElement => {
-  const { t } = useTranslation(['common', 'pages']);
+  const { t } = useTranslation(['common', 'pages', 'components']);
   const { id } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const timeZoneMode: KillTimeZoneMode =
+    searchParams.get('timeZone') === 'local' ? 'local' : 'altdorf';
 
   const { loading, error, data } = useQuery<GetScenarioInfoQuery>(
     SCENARIO_INFO,
@@ -158,11 +158,33 @@ export const Scenario = ({
               </p>
               <p>
                 <strong>{t('pages:scenarioPage.date')}: </strong>
-                {formatISO(startDate, { representation: 'date' })}
+                {formatKillTime(startDate, timeZoneMode, 'date')}
               </p>
               <p>
                 <strong>{t('pages:scenarioPage.time')}: </strong>
-                {format(startDate, 'HH:mm:ss')}
+                {formatKillTime(startDate, timeZoneMode, 'time')}{' '}
+                <span className="select is-small scenario-time-zone-select">
+                  <select
+                    aria-label={t('components:killsFilters.timeZone')}
+                    value={timeZoneMode}
+                    onChange={(event) => {
+                      const nextSearchParams = new URLSearchParams(searchParams);
+                      if (event.target.value === 'local') {
+                        nextSearchParams.set('timeZone', 'local');
+                      } else {
+                        nextSearchParams.delete('timeZone');
+                      }
+                      setSearchParams(nextSearchParams, { replace: true });
+                    }}
+                  >
+                    <option value="altdorf">
+                      {t('components:killsFilters.altdorfTime')}
+                    </option>
+                    <option value="local">
+                      {t('components:killsFilters.computerTime')}
+                    </option>
+                  </select>
+                </span>
               </p>
               <p>
                 <strong>{t('pages:scenarioPage.duration')}: </strong>

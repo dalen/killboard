@@ -112,13 +112,18 @@ export const ScenarioScoreboard = ({
         Number(entry.objectiveScore),
     },
   ];
+  const getRealmTone = (team: number): 'order' | 'destruction' | 'unknown' =>
+    team === 0 ? 'order' : team === 1 ? 'destruction' : 'unknown';
   const matchLeaders = highlightMetrics.flatMap((metric) => {
     const value = Math.max(0, ...entries.map(metric.value));
     if (value === 0) return [];
+    const leaders = entries.filter((entry) => metric.value(entry) === value);
+    const realmTones = new Set(leaders.map((leader) => getRealmTone(leader.team)));
     return [{
       ...metric,
       value,
-      leaders: entries.filter((entry) => metric.value(entry) === value),
+      leaders,
+      cardTone: realmTones.size === 1 ? [...realmTones][0] : 'mixed',
     }];
   });
 
@@ -213,7 +218,7 @@ export const ScenarioScoreboard = ({
                 className="column is-6-tablet is-4-widescreen"
                 key={highlight.key}
               >
-                <div className="scenario-match-leaders__card">
+                <div className={`scenario-match-leaders__card scenario-match-leaders__card--${highlight.cardTone}`}>
                   <p className="has-text-grey is-size-7 mb-1">
                     {highlight.label}
                   </p>
@@ -221,14 +226,27 @@ export const ScenarioScoreboard = ({
                     {highlight.value.toLocaleString()}
                   </p>
                   <p className="scenario-match-leaders__names mb-0">
-                    {highlight.leaders.map((leader, index) => (
-                      <span key={leader.character.id}>
-                        {index > 0 && ', '}
-                        <Link to={`/character/${leader.character.id}`}>
-                          {leader.character.name}
-                        </Link>
-                      </span>
-                    ))}
+                    {highlight.leaders.map((leader) => {
+                      const realmTone = getRealmTone(leader.team);
+                      const realmName = leader.team === 0
+                        ? t('pages:scenarioPage.order')
+                        : leader.team === 1
+                          ? t('pages:scenarioPage.destruction')
+                          : '';
+                      return (
+                        <span
+                          className={`scenario-match-leaders__name scenario-match-leaders__name--${realmTone}`}
+                          key={leader.character.id}
+                        >
+                          <Link
+                            to={`/character/${leader.character.id}`}
+                            title={realmName}
+                          >
+                            {leader.character.name}
+                          </Link>
+                        </span>
+                      );
+                    })}
                   </p>
                 </div>
               </div>

@@ -72,6 +72,37 @@
   padding: 0.75rem;
 }
 
+.scenario-match-leaders__card--order {
+  border: 2px solid rgba(50, 152, 220, 0.9);
+}
+
+.scenario-match-leaders__card--destruction {
+  border: 2px solid rgba(241, 70, 104, 0.9);
+}
+
+.scenario-match-leaders__card--mixed {
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
 .scenario-match-leaders__names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
   overflow-wrap: anywhere;
+}
+
+.scenario-match-leaders__name {
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.25rem;
+  padding: 0.1rem 0.35rem;
+}
+
+.scenario-match-leaders__name--order {
+  background: rgba(50, 152, 220, 0.1);
+  border-color: rgba(50, 152, 220, 0.75);
+}
+
+.scenario-match-leaders__name--destruction {
+  background: rgba(241, 70, 104, 0.1);
+  border-color: rgba(241, 70, 104, 0.75);
 }
