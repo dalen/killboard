@@ -63,6 +63,8 @@
     "title": "Recent Activity",
     "description": "A combined view of recently recorded kills, skirmishes, and dungeon runs.",
     "methodology": "We show up to 10 newest records of each type in the selected period. A fight may appear as both a skirmish and individual kills. These are recorded events, not a count of players currently online.",
+    "activityType": "Activity type",
+    "allActivityTypes": "All activity",
     "period": "Time period",
     "types": {
       "kill": "Player kill",

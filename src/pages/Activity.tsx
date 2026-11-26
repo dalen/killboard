@@ -15,8 +15,12 @@ const RECENT_ACTIVITY = gql`
     $from: DateTime!
     $first: Int!
     $runWhere: InstanceRunFilterInput!
+    $includeKills: Boolean!
+    $includeSkirmishes: Boolean!
+    $includeInstanceRuns: Boolean!
   ) {
-    kills(first: $first, where: { time: { gte: $from } }) {
+    kills(first: $first, where: { time: { gte: $from } })
+      @include(if: $includeKills) {
       nodes {
         id
         time
@@ -38,7 +42,8 @@ const RECENT_ACTIVITY = gql`
         }
       }
     }
-    skirmishes(first: $first, where: { startTime: { gte: $from } }) {
+    skirmishes(first: $first, where: { startTime: { gte: $from } })
+      @include(if: $includeSkirmishes) {
       nodes {
         id
         startTime
@@ -55,7 +60,8 @@ const RECENT_ACTIVITY = gql`
         numberOfKills
       }
     }
-    instanceRuns(first: $first, where: $runWhere, order: { start: DESC }) {
+    instanceRuns(first: $first, where: $runWhere, order: { start: DESC })
+      @include(if: $includeInstanceRuns) {
       nodes {
         id
         start
@@ -80,8 +86,12 @@ type RecentActivityVariables = {
   from: string;
   first: number;
   runWhere: InstanceRunFilterInput;
+  includeKills: boolean;
+  includeSkirmishes: boolean;
+  includeInstanceRuns: boolean;
 };
 type ActivityPeriod = 'last30m' | 'last2h' | 'last24h' | 'last7d';
+type ActivityKindFilter = 'all' | ActivityEntry['kind'];
 
 const SEWER_INSTANCE_IDS = INSTANCE_RUN_FAMILIES.find(
   (family) => family.key === 'altdorf-sewers',
@@ -92,6 +102,13 @@ const PERIOD_OPTIONS: ActivityPeriod[] = [
   'last2h',
   'last24h',
   'last7d',
+];
+
+const ACTIVITY_KIND_OPTIONS: ActivityKindFilter[] = [
+  'all',
+  'kill',
+  'skirmish',
+  'instance',
 ];
 
 const getPeriodStart = (period: ActivityPeriod): Date => {
@@ -123,6 +140,12 @@ export const Activity = (): ReactElement => {
   )
     ? (selectedPeriod as ActivityPeriod)
     : 'last24h';
+  const selectedActivityKind = search.get('activityType');
+  const activityKind: ActivityKindFilter = ACTIVITY_KIND_OPTIONS.includes(
+    selectedActivityKind as ActivityKindFilter,
+  )
+    ? (selectedActivityKind as ActivityKindFilter)
+    : 'all';
   const timeZoneMode: KillTimeZoneMode =
     search.get('timeZone') === 'local' ? 'local' : 'altdorf';
   const variables = useMemo<RecentActivityVariables>(
@@ -131,6 +154,11 @@ export const Activity = (): ReactElement => {
       return {
         from,
         first: 10,
+        includeKills: activityKind === 'all' || activityKind === 'kill',
+        includeSkirmishes:
+          activityKind === 'all' || activityKind === 'skirmish',
+        includeInstanceRuns:
+          activityKind === 'all' || activityKind === 'instance',
         runWhere: {
           // Empty-run rows are useful for Sewers, but not for other dungeons.
           or: [
@@ -141,7 +169,7 @@ export const Activity = (): ReactElement => {
         },
       };
     },
-    [period],
+    [activityKind, period],
   );
   const { data, loading, error } = useQuery<
     RecentActivityData,
@@ -247,6 +275,31 @@ export const Activity = (): ReactElement => {
               </p>
             </div>
             <div className="activity-page-filters">
+              <div className="field">
+                <label className="label" htmlFor="activity-type">
+                  {t('pages:activityPage.activityType')}
+                </label>
+                <div className="select">
+                  <select
+                    id="activity-type"
+                    value={activityKind}
+                    onChange={(event) =>
+                      updateSearch(
+                        'activityType',
+                        event.target.value === 'all' ? '' : event.target.value,
+                      )
+                    }
+                  >
+                    {ACTIVITY_KIND_OPTIONS.map((option) => (
+                      <option key={option} value={option}>
+                        {option === 'all'
+                          ? t('pages:activityPage.allActivityTypes')
+                          : t(`pages:activityPage.types.${option}`)}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
               <div className="field">
                 <label className="label" htmlFor="activity-period">
                   {t('pages:activityPage.period')}
