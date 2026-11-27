@@ -38,6 +38,7 @@ export const WarhammerScrollPane = ({
   ariaLabel,
   scrollUpLabel,
   scrollDownLabel,
+  viewportTabIndex = 0,
   outerRef,
   style,
   onMouseEnter,
@@ -49,6 +50,7 @@ export const WarhammerScrollPane = ({
   ariaLabel: string;
   scrollUpLabel: string;
   scrollDownLabel: string;
+  viewportTabIndex?: number;
   outerRef?: Ref<HTMLDivElement>;
   style?: CSSProperties;
   onMouseEnter?: () => void;
@@ -173,7 +175,7 @@ export const WarhammerScrollPane = ({
         ref={viewportRef}
         className={`warhammer-scroll-viewport ${viewportClassName}`}
         onScroll={updateMetrics}
-        tabIndex={0}
+        tabIndex={viewportTabIndex}
         aria-label={ariaLabel}
       >
         <div className="warhammer-scroll-content">{children}</div>

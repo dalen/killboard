@@ -1,21 +1,24 @@
-// EA_Button_DefaultResizeable from defaultbutton.xml. Preserve its 27px end caps
-// and resize only the 76px center, matching HorizontalResizeImage behavior.
+// EA_Button_DefaultResizeable from defaultbutton.xml. Each complete state image
+// is the contiguous 130x39 atlas row. Nine-slice only its 27px end caps so the
+// shared art cannot develop seams where separately composited slices meet.
 .button:not(.is-ghost):not(.is-text):not(.is-static),
 .pagination-link,
 .pagination-previous,
 .pagination-next {
-  --warhammer-button-left: url('/gear-preview/ui/warhammer-button-normal-left.png');
-  --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-normal-middle.png');
-  --warhammer-button-right: url('/gear-preview/ui/warhammer-button-normal-right.png');
+  --warhammer-button-image: url('/images/warhammer/controls/action-normal.png');
   --warhammer-button-height: 39px;
 
   appearance: none;
   background-color: transparent !important;
-  background-image: var(--warhammer-button-left), var(--warhammer-button-middle), var(--warhammer-button-right) !important;
-  background-position: left center, 27px center, right center !important;
-  background-repeat: no-repeat !important;
-  background-size: 27px var(--warhammer-button-height), calc(100% - 54px) var(--warhammer-button-height), 27px var(--warhammer-button-height) !important;
-  border: 0 !important;
+  background-image: none !important;
+  border-color: transparent !important;
+  border-image-source: var(--warhammer-button-image) !important;
+  border-image-slice: 0 27 fill !important;
+  border-image-width: 0 27px !important;
+  border-image-outset: 0 !important;
+  border-image-repeat: stretch !important;
+  border-style: solid !important;
+  border-width: 0 27px !important;
   border-radius: 0 !important;
   box-shadow: none !important;
   color: rgb(226, 216, 45) !important;
@@ -23,35 +26,28 @@
   height: var(--warhammer-button-height);
   min-height: var(--warhammer-button-height);
   min-width: 110px;
-  // Keep labels clear of the fixed 27px game-art end caps.
-  padding-inline: 27px;
+  padding-inline: 0;
   position: relative;
   text-decoration: none;
   white-space: nowrap;
 
   &:hover:not(:disabled):not([aria-disabled='true']) {
-    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-hover-left.png');
-    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-hover-middle.png');
-    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-hover-right.png');
+    --warhammer-button-image: url('/images/warhammer/controls/action-hover.png');
   }
 
   &:active:not(:disabled):not([aria-disabled='true']) {
-    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-pressed-left.png');
-    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-pressed-middle.png');
-    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-pressed-right.png');
+    --warhammer-button-image: url('/images/warhammer/controls/action-pressed.png');
   }
 
   &:disabled,
   &[aria-disabled='true'] {
-    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-disabled-left.png');
-    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-disabled-middle.png');
-    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-disabled-right.png');
+    --warhammer-button-image: url('/images/warhammer/controls/action-disabled.png');
     color: #777 !important;
     cursor: not-allowed;
   }
 
   &.is-small {
-    padding-inline: 27px;
+    padding-inline: 0;
   }
 
   &.is-danger {
@@ -70,9 +66,7 @@
 }
 
 .pagination-link.is-current {
-  --warhammer-button-left: url('/gear-preview/ui/warhammer-button-pressed-left.png');
-  --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-pressed-middle.png');
-  --warhammer-button-right: url('/gear-preview/ui/warhammer-button-pressed-right.png');
+  --warhammer-button-image: url('/images/warhammer/controls/action-pressed.png');
   color: #fff0a7 !important;
 }
 

@@ -1,3 +1,35 @@
+# Follow-up release - shared Warhammer controls
+
+Status: release candidate verified locally; approved for push and deployment. Previous production release and its evidence are preserved below. No dependency files changed in this follow-up.
+
+## Included
+
+- Shared Warhammer form controls, starting with Scenarios: authentic MYP combobox fields/arrows and menus, text/date entries, checkboxes/radios, and compact filter framing. Custom dates appear only for Custom range; Apply remains on the desktop filter row. Filtering and URL state are retained.
+- Shared action-button rendering uses one complete MYP state image with the original fixed end caps and scalable center. The user visually approved the button design.
+- Shared scroll pane focusability adjustment needed by the accessible filter menu.
+- Updated AGENTS.md permanent MYP compositing and design-acceptance rules; updated the continuous-improvement queue.
+- New production assets are isolated to public/images/warhammer/controls/.
+
+## Explicitly excluded
+
+- Separate Gear Preview / Dressing Room route, renderer, models, textures, features and dependencies. No experimental route or application code is part of this follow-up.
+- Untracked `public/gear-preview/ui/` extraction/crop files are excluded from staging. The existing Armory's already approved shared UI assets are untouched.
+- No dependency upgrades or package-lock changes.
+
+## Verification
+
+- `npm test` passed: TypeScript, production build and type-aware Oxlint. Existing Sass deprecation, generated-file lint and bundle-size warnings remain.
+- `npm audit` reports the previously documented three Moderate development/transitive records for minimatch alert #175; the safe path remains deferred because the proposed forced Codegen downgrade is breaking. No override or forced upgrade was introduced. `npm audit --omit=dev` reports zero vulnerabilities.
+- `git diff --check` passed; all ten new Warhammer control assets appear in the production build with matching filename case.
+- Headless Playwright verified populated Mrak Scenarios (114 matches), custom date bounds, URL-backed type/tier filters, keyboard selection, compact expanded menu, and preset/custom date visibility. The guild Premade Only checkbox adds/removes its URL parameter. Desktop 1440x1000, tablet 768x1024 and phone 390x844 layouts show no horizontal overflow; the phone option menu fits its viewport.
+- The user has accepted the action-button design. The earlier Armory scrollbar interaction is user-confirmed and was not modified by this batch.
+
+## Deployment
+
+Pending: commit and push to Dalen's `main`, verify GitHub Actions and the live Scenarios route, then update this section with the exact deployed commit/run.
+
+---
+
 # Current release — deployed
 
 Status: deployed to Dalen's `main` after explicit approval on 2026-11-27. Application release commit: `c60f0b14bef6cd8235d44341e0604c6cf169e3d9` (`feat: release compact Warhammer profile and Armory updates`). GitHub Actions Build and Deploy run [46076658075](https://github.com/dalen/killboard/actions/runs/46076658075) completed successfully with the expected head SHA. A documentation-only follow-up records completed production verification and release status.

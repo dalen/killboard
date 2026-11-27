@@ -6,6 +6,12 @@ import { format, subDays, subMonths, subYears } from 'date-fns';
 import { type ReactElement, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
+import {
+  WarhammerCheckbox,
+  WarhammerDateInput,
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
 
 const getQueueTypeFilters = (
   search: URLSearchParams,
@@ -208,7 +214,6 @@ export const ScenarioFilters = ({
   const [datePreset, setDatePreset] = useState<ScenarioDatePreset>(() =>
     getMatchingDatePreset(dateRange),
   );
-
   const queueType = search.get('queue_type') || 'all';
 
   useEffect(() => {
@@ -219,16 +224,10 @@ export const ScenarioFilters = ({
 
   const applyDateFilters = () => {
     const next = new URLSearchParams(search);
-    if (dateRange.from) {
-      next.set('dateFrom', dateRange.from);
-    } else {
-      next.delete('dateFrom');
-    }
-    if (dateRange.through) {
-      next.set('dateThrough', dateRange.through);
-    } else {
-      next.delete('dateThrough');
-    }
+    if (dateRange.from) next.set('dateFrom', dateRange.from);
+    else next.delete('dateFrom');
+    if (dateRange.through) next.set('dateThrough', dateRange.through);
+    else next.delete('dateThrough');
     setSearch(next);
   };
 
@@ -239,180 +238,105 @@ export const ScenarioFilters = ({
 
   const chooseDatePreset = (value: ScenarioDatePreset) => {
     setDatePreset(value);
-    if (value !== 'custom') {
-      setDateRange(getPresetDateRange(value));
-    }
+    if (value !== 'custom') setDateRange(getPresetDateRange(value));
   };
 
+  const queueOptions = [
+    { value: 'all', label: t('scenarioFilters.queueTypeAll') },
+    { value: 'standard', label: t('scenarioFilters.queueTypeStandard') },
+    { value: 'solo', label: t('scenarioFilters.queueTypeSolo') },
+    { value: 'city_siege', label: t('scenarioFilters.queueTypeCitySiege') },
+    { value: 'group_ranked', label: t('scenarioFilters.queueTypeGroupRanked') },
+    { value: 'solo_ranked', label: t('scenarioFilters.queueTypeSoloRanked') },
+  ];
+  const tierOptions = [
+    { value: 'all', label: t('scenarioFilters.tierAll') },
+    { value: '1', label: '1' },
+    { value: '3', label: '3' },
+    { value: '4', label: '4' },
+  ];
+  const dateOptions = [
+    { value: '7d', label: t('scenarioFilters.last7Days') },
+    { value: '30d', label: t('scenarioFilters.last30Days') },
+    { value: '90d', label: t('scenarioFilters.last90Days') },
+    { value: '6m', label: t('scenarioFilters.last6Months') },
+    { value: '1y', label: t('scenarioFilters.lastYear') },
+    { value: 'custom', label: t('scenarioFilters.customDates') },
+  ];
+
   return (
-    <div className="card mb-5 character-filters">
-      <div className="card-content">
-        <div className="columns is-multiline is-align-items-flex-end">
-          <div className="column is-6-tablet is-2-desktop">
-            <div className="field">
-              <label className="label" htmlFor="queueType-select">
-                {t('scenarioFilters.queueType')}
-              </label>
-              <div className="control">
-                <div className="select is-fullwidth">
-                  <select
-                    id="queueType-select"
-                    value={queueType}
-                    onChange={(event) => {
-                      search.set('queue_type', event.target.value);
-                      setSearch(search);
-                    }}
-                  >
-                    <option value="all">
-                      {t('scenarioFilters.queueTypeAll')}
-                    </option>
-                    <option value="standard">
-                      {t('scenarioFilters.queueTypeStandard')}
-                    </option>
-                    <option value="solo">
-                      {t('scenarioFilters.queueTypeSolo')}
-                    </option>
-                    <option value="city_siege">
-                      {t('scenarioFilters.queueTypeCitySiege')}
-                    </option>
-                    <option value="group_ranked">
-                      {t('scenarioFilters.queueTypeGroupRanked')}
-                    </option>
-                    <option value="solo_ranked">
-                      {t('scenarioFilters.queueTypeSoloRanked')}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column is-6-tablet is-2-desktop">
-            <div className="field">
-              <label className="label" htmlFor="tier-select">
-                {t('scenarioFilters.tier')}
-              </label>
-              <div className="control">
-                <div className="select is-fullwidth">
-                  <select
-                    id="tier-select"
-                    value={search.get('tier') || 'all'}
-                    onChange={(event) => {
-                      search.set('tier', event.target.value);
-                      setSearch(search);
-                    }}
-                  >
-                    <option value="all">{t('scenarioFilters.tierAll')}</option>
-                    <option value="1">1</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column is-6-tablet is-2-desktop">
-            <div className="field">
-              <label className="label" htmlFor="scenario-date-preset">
-                {t('scenarioFilters.dateRange')}
-              </label>
-              <div className="control">
-                <div className="select is-fullwidth">
-                  <select
-                    id="scenario-date-preset"
-                    value={datePreset}
-                    onChange={(event) =>
-                      chooseDatePreset(
-                        event.currentTarget.value as ScenarioDatePreset,
-                      )
-                    }
-                  >
-                    <option value="7d">{t('scenarioFilters.last7Days')}</option>
-                    <option value="30d">
-                      {t('scenarioFilters.last30Days')}
-                    </option>
-                    <option value="90d">
-                      {t('scenarioFilters.last90Days')}
-                    </option>
-                    <option value="6m">
-                      {t('scenarioFilters.last6Months')}
-                    </option>
-                    <option value="1y">{t('scenarioFilters.lastYear')}</option>
-                    <option value="custom">
-                      {t('scenarioFilters.customDates')}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="column is-12-mobile is-6-tablet is-3-desktop">
-            <div className="field">
-              <label className="label" htmlFor="scenario-date-from">
-                {t('scenarioFilters.dateFrom')}
-              </label>
-              <div className="control">
-                <input
-                  className="input"
-                  id="scenario-date-from"
-                  type="date"
-                  value={dateRange.from}
-                  max={dateRange.through || undefined}
-                  onChange={(event) =>
-                    updateDateRange({ from: event.currentTarget.value })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="column is-12-mobile is-6-tablet is-3-desktop">
-            <div className="field">
-              <label className="label" htmlFor="scenario-date-through">
-                {t('scenarioFilters.dateThrough')}
-              </label>
-              <div className="control">
-                <input
-                  className="input"
-                  id="scenario-date-through"
-                  type="date"
-                  value={dateRange.through}
-                  min={dateRange.from || undefined}
-                  onChange={(event) =>
-                    updateDateRange({ through: event.currentTarget.value })
-                  }
-                />
-              </div>
-            </div>
-          </div>
-          <div className="column is-12 has-text-right">
-            <button
-              className="button is-primary"
-              type="button"
-              onClick={applyDateFilters}
-            >
-              {t('scenarioFilters.applyDateFilters')}
-            </button>
-          </div>
+    <WarhammerFilterPanel className="character-filters scenario-filters">
+      <div
+        className={`scenario-filter-grid${datePreset === 'custom' ? ' is-custom-date-range' : ''}`}
+      >
+        <WarhammerSelect
+          id="queueType-select"
+          label={t('scenarioFilters.queueType')}
+          value={queueType}
+          options={queueOptions}
+          onChange={(value) => {
+            const next = new URLSearchParams(search);
+            next.set('queue_type', value);
+            setSearch(next);
+          }}
+        />
+        <WarhammerSelect
+          id="tier-select"
+          label={t('scenarioFilters.tier')}
+          value={search.get('tier') || 'all'}
+          options={tierOptions}
+          onChange={(value) => {
+            const next = new URLSearchParams(search);
+            next.set('tier', value);
+            setSearch(next);
+          }}
+        />
+        <WarhammerSelect
+          id="scenario-date-preset"
+          label={t('scenarioFilters.dateRange')}
+          value={datePreset}
+          options={dateOptions}
+          onChange={(value) => chooseDatePreset(value as ScenarioDatePreset)}
+        />
+        {datePreset === 'custom' && (
+          <>
+            <WarhammerDateInput
+              id="scenario-date-from"
+              label={t('scenarioFilters.dateFrom')}
+              value={dateRange.from}
+              max={dateRange.through || undefined}
+              onChange={(from) => updateDateRange({ from })}
+            />
+            <WarhammerDateInput
+              id="scenario-date-through"
+              label={t('scenarioFilters.dateThrough')}
+              value={dateRange.through}
+              min={dateRange.from || undefined}
+              onChange={(through) => updateDateRange({ through })}
+            />
+          </>
+        )}
+        <div className="scenario-filter-actions">
+          <button className="button is-primary" type="button" onClick={applyDateFilters}>
+            {t('scenarioFilters.applyDateFilters')}
+          </button>
           {showPremadeOnly && (
-            <div className="column">
-              <label title="Scenarios with 6+ guild members only">
-                <input
-                  type="checkbox"
-                  checked={search.has('premadeOnly')}
-                  onChange={(event) => {
-                    if (event.target.checked) {
-                      search.set('premadeOnly', 'true');
-                    } else {
-                      search.delete('premadeOnly');
-                    }
-                    setSearch(search);
-                  }}
-                />{' '}
-                {t('scenarioFilters.premadeOnly')}
-              </label>
-            </div>
+            <WarhammerCheckbox
+              id="scenario-premade-only"
+              title="Scenarios with 6+ guild members only"
+              checked={search.has('premadeOnly')}
+              onChange={(checked) => {
+                const next = new URLSearchParams(search);
+                if (checked) next.set('premadeOnly', 'true');
+                else next.delete('premadeOnly');
+                setSearch(next);
+              }}
+            >
+              {t('scenarioFilters.premadeOnly')}
+            </WarhammerCheckbox>
           )}
         </div>
       </div>
-    </div>
+    </WarhammerFilterPanel>
   );
 };
