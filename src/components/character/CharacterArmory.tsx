@@ -9,6 +9,7 @@ import {
   EQUIPPED_ITEM_FRAGMENT,
 } from '@/components/character/CharacterItem';
 import type { ReactElement } from 'react';
+import './CharacterArmory.scss';
 
 const CHARACTER_ARMORY = gql`
   query GetCharacterArmory($id: ID!) {
@@ -76,7 +77,6 @@ export const CharacterArmory = ({ id }: { id: number }): ReactElement => {
 
   const character = data && data.character;
   const items = character ? character.items : [];
-
   const mainHand = items.find((item) => item.equipSlot === EquipSlot.MainHand);
   const offHand = items.find((item) => item.equipSlot === EquipSlot.OffHand);
   const ranged = items.find(
@@ -109,7 +109,10 @@ export const CharacterArmory = ({ id }: { id: number }): ReactElement => {
   const pocket2 = items.find((item) => item.equipSlot === EquipSlot.Pocket2);
 
   return (
-    <div className="columns pl-3" style={{ marginBottom: '250px' }}>
+    <div
+      className="columns pl-3 character-armory-layout"
+      style={{ marginBottom: '250px' }}
+    >
       <div className="column">
         <div className="content">
           <strong className="mb-2">Armor</strong>

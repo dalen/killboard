@@ -1,0 +1,24 @@
+.zone-heatmap-heading {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.zone-heatmap-heading .title,
+.zone-heatmap-heading p {
+  margin-bottom: 0.4rem;
+}
+
+@media screen and (max-width: 600px) {
+  .zone-heatmap-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .zone-heatmap-heading .select,
+  .zone-heatmap-heading select {
+    width: 100%;
+  }
+}

@@ -89,7 +89,15 @@ export const SkirmishListTable = ({
                           </figure>
                         </figure>
                         <div className="media-content">
-                          {skirmish.primaryZone?.name}
+                          {skirmish.primaryZone?.id != null ? (
+                            <Link
+                              to={`/zone_heatmap/${skirmish.primaryZone.id}`}
+                            >
+                              {skirmish.primaryZone.name}
+                            </Link>
+                          ) : (
+                            skirmish.primaryZone?.name
+                          )}
                           <br />
                           {skirmish.primaryZoneArea?.name}
                         </div>

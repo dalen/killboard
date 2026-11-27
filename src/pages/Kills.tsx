@@ -67,10 +67,11 @@ const LATEST_KILLS = gql`
     $before: String
     $after: String
     $time: DateTimeOperationFilterInput
+    $zoneId: IdOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
-      where: { time: $time }
+      where: { time: $time, zoneId: $zoneId }
       first: $first
       last: $last
       before: $before
@@ -91,10 +92,11 @@ const LATEST_KILLS_WITHOUT_COUNT = gql`
     $before: String
     $after: String
     $time: DateTimeOperationFilterInput
+    $zoneId: IdOperationFilterInput
     $soloOnly: Boolean
   ) {
     kills(
-      where: { time: $time }
+      where: { time: $time, zoneId: $zoneId }
       first: $first
       last: $last
       before: $before
@@ -109,7 +111,7 @@ const LATEST_KILLS_WITHOUT_COUNT = gql`
 
 export const Kills = (): ReactElement => {
   const { t } = useTranslation(['common', 'pages']);
-  const [search] = useSearchParams();
+  const [search, setSearch] = useSearchParams();
   const period = search.get('period') || 'last7d';
   const timeZoneMode: KillTimeZoneMode =
     search.get('timeZone') === 'local' ? 'local' : 'altdorf';
@@ -138,6 +140,22 @@ export const Kills = (): ReactElement => {
       </nav>
       <div>
         <KillsFilters defaultPeriod="last7d" showTimeZone />
+        {search.get('zoneId') && (
+          <p className="mb-4">
+            {t('pages:killsPage.zoneFilter', { zoneId: search.get('zoneId') })}{' '}
+            <button
+              className="button is-small is-text"
+              type="button"
+              onClick={() => {
+                const next = new URLSearchParams(search);
+                next.delete('zoneId');
+                setSearch(next);
+              }}
+            >
+              {t('pages:killsPage.clearZoneFilter')}
+            </button>
+          </p>
+        )}
         <KillActivity defaultPeriod="last7d" />
         <KillsList
           query={period === 'all' ? LATEST_KILLS_WITHOUT_COUNT : LATEST_KILLS}
@@ -147,6 +165,7 @@ export const Kills = (): ReactElement => {
           title={t('pages:killsPage.title')}
           showTotalCount={period !== 'all'}
           description={period === 'all' ? t('pages:killsPage.allTimeDescription') : undefined}
+          includeZoneFilter
         />
       </div>
     </div>

@@ -135,7 +135,7 @@ export const Skirmish = ({
   const [, , max] = _.maxBy(heatmapData, (d) => d[2]) || [0, 0, 1];
 
   return (
-    <div className="container is-max-widescreen mt-2">
+    <div className="container is-max-widescreen mt-2 skirmish-page">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>

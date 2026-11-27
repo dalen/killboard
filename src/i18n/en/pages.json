@@ -31,6 +31,9 @@
     "allRanks": "All ranks",
     "loadingMembers": "Loading guild members: {{loaded}} of {{total}}",
     "showingMembers": "Showing {{shown}} of {{total}} members",
+    "compositionTitle": "Career composition",
+    "compositionCoverage": "Recorded careers across {{count}} loaded members ({{total}} total members).",
+    "careerShare": "{{career}}: {{count}} members, {{percentage}} percent",
     "noMatchingMembers": "No members match these filters.",
     "pageOf": "Page {{page}} of {{pages}}",
     "level": "Level",
@@ -55,6 +58,8 @@
     "killId": "Kill #{{killId}}"
   },
   "killsPage": {
+    "zoneFilter": "Recorded kills in zone {{zoneId}}",
+    "clearZoneFilter": "Clear zone filter",
     "title": "Kills",
     "sections": "Killboard sections",
     "allTimeDescription": "Showing the newest kills first. Use Next to browse older kills."
@@ -76,6 +81,8 @@
     "killSummary": "{{killer}} killed {{victim}}",
     "unknownPlayer": "Unknown player",
     "unknownLocation": "Location not recorded",
+    "viewZoneHeatmap": "View zone heatmap",
+    "openZoneHeatmap": "View the {{zone}} kill heatmap",
     "skirmish": "Recorded skirmish",
     "skirmishPlayerCount_one": "{{count}} player",
     "skirmishPlayerCount_other": "{{count}} players",
@@ -85,6 +92,37 @@
     "instanceBossCount_other": "{{count}} bosses recorded",
     "instancePlayerCount_one": "{{count}} player",
     "instancePlayerCount_other": "{{count}} players"
+  },
+  "itemCompare": {
+    "title": "Equipment Compare",
+    "description": "Compare two recorded items side by side. Values reflect the item data available to the Killboard.",
+    "compareThisItem": "Compare this item",
+    "chooseFirst": "First item",
+    "chooseSecond": "Second item",
+    "searchPrompt": "Search by item name",
+    "searchHint": "Enter at least two characters to find items.",
+    "noMatches": "No matching items found.",
+    "selectedItem": "Selected item: {{name}}",
+    "clearSelection": "Clear selection",
+    "comparePrompt": "Choose two items to compare.",
+    "loading": "Loading selected items…",
+    "item": "Item",
+    "slot": "Slot",
+    "type": "Type",
+    "rarity": "Rarity",
+    "itemLevel": "Item level",
+    "levelRequirement": "Level requirement",
+    "renownRequirement": "Renown requirement",
+    "armor": "Armor / block",
+    "damagePerSecond": "Damage per second",
+    "speed": "Weapon speed",
+    "talismanSlots": "Talisman slots",
+    "stats": "Stats",
+    "set": "Set",
+    "noSet": "Not part of a recorded set",
+    "leftValue": "First item value",
+    "rightValue": "Second item value",
+    "difference": "Difference"
   },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
@@ -162,7 +200,12 @@
     "totalKills": "Total Kills:"
   },
   "mapPage": {
-    "zoneId": "Zone #{{zoneId}}"
+    "zoneId": "Zone #{{zoneId}}",
+    "title": "Recorded kill heatmap",
+    "description": "Map of recorded player kills in this zone during the selected period.",
+    "period": "Time period",
+    "noResults": "No recorded kills are available for this zone and period.",
+    "viewZoneKills": "Browse recorded kills in this zone and period"
   },
   "itemPage": {
     "itemId": "Item #{{itemId}}",
@@ -342,7 +385,8 @@
     "previousWindow": "Previous period: {{from}} through {{through}}",
     "comparisonLimit": "Comparison is available for date ranges up to 31 days.",
     "previousMedian": "Previous: {{duration}} ({{count}} runs)",
-    "previousNoRuns": "Previous: no runs recorded"
+    "previousNoRuns": "Previous: no runs recorded",
+    "viewRecentRuns": "View recent recorded runs (7 days)"
   },
   "instanceHub": {
     "tabs": {

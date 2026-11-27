@@ -121,9 +121,13 @@ const getSoloKillsFilters = (search: URLSearchParams) => {
 export const getCurrentFilters = (
   search: URLSearchParams,
   defaultPeriod = 'all',
+  includeZone = false,
 ) => ({
   ...getPeriodFilters(search, defaultPeriod),
   ...getSoloKillsFilters(search),
+  ...(includeZone && search.get('zoneId')
+    ? { zoneId: { eq: search.get('zoneId') } }
+    : {}),
 });
 
 export const KillsFilters = ({

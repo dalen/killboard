@@ -10,7 +10,6 @@ import {
 import { Link, useParams, useSearchParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { Archetype } from '@/__generated__/graphql';
-import useWindowDimensions from '@/hooks/useWindowDimensions';
 import {
   INSTANCE_RUN_SCOREBOARD_FRAGMENT,
   InstanceRunScoreboard,
@@ -201,9 +200,6 @@ export const InstanceRun = (): ReactElement => {
     },
     skip: !groupedRunDetails || !instanceFamily || selectedRuns.length === 0,
   });
-  const { width } = useWindowDimensions();
-  const isMobile = width <= 768;
-
   if (
     loading ||
     !data?.instanceRun?.encounters ||

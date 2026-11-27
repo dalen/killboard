@@ -1,52 +1,93 @@
-# Killboard Continuous Improvement Queue
+# Killboard Continuous Improvement — Phase II
 
-Updated: 2026-11-26 (Instance Runs verified; API-dependent work queued)
+Updated: 2026-11-26. Current release base: `308a681cab437cbe13a5b100262f9e7ca61f8e42`.
 
-This file is the persistent checkpoint for Killboard improvement work. User feedback adds to this queue unless the user explicitly cancels or replaces an item. Keep code changes local and reviewable; pushes and deployments require separate, explicit approval each time.
+This file is the authoritative current objective, implementation queue, checkpoint, and resume point. Sections under **Historical technical and verification evidence** preserve prior decisions and evidence; they do not govern current execution. API limitations apply only to the affected feature. Continue independently actionable Phase II work without waiting for a schema change.
 
-## Steering and interruption protocol
+## Current objective
 
-1. Before switching tasks, record the active task and its exact progress here.
-2. Add new feedback to this queue and the audit ledger, then decide whether it is urgent or can wait.
-3. Address urgent bugs and expressly immediate changes first.
-4. Implement and verify the requested change, then resume the interrupted task from its checkpoint.
-5. Approval such as “looks good” resumes the next unfinished item; it does not end the overall project.
-6. A question should be answered, then work should continue unless a decision is required.
-7. Approval to push or deploy applies only to that specific release; it does not authorize later releases.
-8. Preserve this queue and its checkpoints through interruptions and context compaction.
-9. Stop the overall project only when actionable work is completed and verified, a genuine project-wide blocker prevents progress, or the user explicitly pauses/cancels it.
-10. Responsive behavior is part of the original implementation task: include rendered phone and tablet checks at the requested viewport sizes before marking a UI change complete. If the in-chat browser cannot provide the viewport, try a supported alternative and record the limitation instead of claiming a pass.
-11. Use headless Chromium and Playwright for routine automated browser checks. For authenticated routes, first check whether an authorized browser session can be reused securely. If manual authentication is required, use the in-chat browser or a visible Chromium window, notify the user when login is ready, wait for authentication, then resume automation. Reuse authorized sessions where supported. Never expose credentials, tokens, or cookies in logs, source, screenshots, or project documentation; never commit browser auth state. An auth blocker on one task does not block independent work unless it prevents all remaining work.
+Substantially expand the official Killboard player experience using existing repository functionality, the current public GraphQL API, the completed Maartenson/Emissary audit, and reusable public-facing metric definitions from Emissary. The previous comparative audit is a research record, not the limit of possible improvements. Keep changes local until explicitly approved for release.
 
-## Current active task
+## Active task
 
-**Active task: Waiting on documented Dalen API changes.**
+Continue Phase II implementation from the existing queue. The user rejected the Armory set-progress card and homepage quick-access panel; neither should return. Current navigation remains in existing menus. Recent additions include a 7-day dungeon statistics-to-runs shortcut, links from recorded RvR skirmish zones to their heatmaps, and character-only results in Players search. Continue compact, data-focused profile and related-content improvements; keep API/infrastructure blockers feature-specific.
 
-The Players improvement batch is complete locally: guarded guild links, responsive character kill/death cards, and per-opponent feud navigation. It passed TypeScript, production build, diff checks, and rendered populated browser verification at the profile and feud routes. Details and evidence are recorded below. Preserve this local-only work; no push, merge, or deployment was authorized.
+## Actionable implementation queue
 
-Checkpoint: Guild Members verification and Instance Runs performance work are complete locally. Instance Runs now defaults to a bounded last-7-day range and supports 30/90-day, 6-month, 1-year, and custom dates, applied directly to the API while preserving URL state, filters, pagination, and date-scoped statistics. Rendered populated desktop/phone/tablet checks and before/after measurements are recorded in the task queue and audit ledger. Recent Teammate History and catalog/loot eligibility work remain blocked on documented Dalen API changes. Resume only when a reported schema change makes those items actionable; do not repeat API research. No push, merge, or deployment was authorized.
+| Priority | Task | Feasibility and current checkpoint | Acceptance |
+|---|---|---|---|
+| 1 | Homepage improvements | Removed the “Explore the Killboard” shortcut panel at the user's direction; homepage search is followed directly by populated leaderboards and recent kills. | In-chat and Playwright review confirmed live data begins higher on the page at desktop/phone/tablet. |
+| 2 | Navigation and feature discoverability | Equipment Compare and Instance Runs are in the existing Database dropdown; Activity is reachable from Kills, and Guild Register from the Guilds page. Players search uses the character connection and returns only characters. No homepage duplicate navigation. | Existing menu and logical page entry points verified; character-only results and pagination pass desktop/phone/tablet checks. |
+| 3 | Equipment comparison | Implemented on `/item-compare` using bounded equipment-name search and exact-ID lookup; URL-backed selections compare item details and stat lines. | Verified with Invader Steadkeeps #434912 and Vanquisher Klad #3192, refresh restore, item-page entry, and populated 1440/768/390 widths. |
+| 4 | Gear-set discovery and progression | Item details expose `itemSet.items` and bonuses; existing item details show set pieces, thresholds, links, vendor prices and partial/full totals. The Armory progress card was rejected for screen-space cost. | Keep existing item detail set discovery; do not re-add the Armory summary. |
+| 5 | Character profile enhancements | Character skirmish rows now link RvR zone names to the matching heatmap using returned `primaryZone.id`; scenarios remain plain text. | Murked (#868231): 15 loaded skirmishes, seven zone links; clicking Zone #103 opened a populated heatmap at desktop/phone/tablet with no errors or overflow. |
+| 6 | Guild roster composition summaries | Implemented career counts and percentages from the roster members already loaded by the page; coverage label states the loaded/total counts. | Kingsmen #16: 12 career groups, 392/392 loaded; rendered at 1440/768/390 widths. Never call observed members a premade. |
+| 7 | Dungeon records and encounter comparisons | Core filters, bounded dates and opt-in prior-window median/sample comparison are complete. Added a shortcut from instance statistics to recent runs for that instance using a 7-day bound. | Gunbad #60 returned 9 populated groups with the run query filtered to IDs [60,65,66] and a 7-day time range; desktop/phone/tablet fit with no browser errors. |
+| 8 | RvR activity summaries | Implemented URL-backed 24h/7d/30d zone heatmap bounds; added navigation from a heatmap to kills filtered by that zone and same period. Bounded kill query returned 10 rows at 390px. | Keep language to recorded activity; no population or campaign outcome claims. Continue evaluating paired-zone comparisons with identical bounded windows. |
+| 9 | Zone and pairing combat comparisons | Potentially feasible with `kills(where: {zoneId,time})` bounded to selected zones and period; verify endpoint cost before shipping. Null `instanceId` filtering timed out and must not be used without further bounded investigation. | Same period and denominator on both sides; link back to zone evidence; no outcome inference. |
+| 10 | Bounded scenario analytics | Individual scenario records and current summaries exist. Add only analytics whose denominator can be exact within a bounded query or existing aggregate; never call first-N results full-corpus rankings. | Selected date/tier/map scope is visible; sample size and metric definitions accompany every comparison. |
+| 11 | Visualizations of accurately scoped data | Item comparison presents the union of returned stat lines; zone heatmaps use API counts and selected time bounds; encounter median comparison remains complete. | Accessible labels/table and responsive checks required for each additional visualization. |
+| 12 | Related-content navigation throughout the database | Added item-to-comparison, heatmap-to-filtered-kills, and RvR skirmish-zone-to-heatmap links using returned IDs. Continue creature/quest/instance/guild/player links only where they add distinct value. | Links use returned IDs, preserve useful context, and never fabricate absent relations. |
+| 13 | Additional comparative-audit opportunities | Evaluate Mask Finder, Pie Finder, class/career guide, guild trends and scenario views individually. Recipe/guide work can be static or bounded; live-population, authoritative campaign and broad analytics need their own data contracts. | Add only where player value exceeds maintenance and the source/coverage is explicit. |
 
-The Players and Guild Register improvements are complete locally and rendered with populated results. Continue with current-API-supported work only; the uncompleted audit items are API-dependent, so do not re-investigate them until Dalen reports a schema patch. Do not reopen comparative Emissary/Martenson audits. The last approved release be4c35a is on origin/main; GitHub Pages run 906 succeeded. All future pushes/deployments require fresh explicit approval.
+## Completed and verified work
 
-## Task queue
+- Phase I release `308a681` is live and verified; historical evidence is retained below.
+- Recent Activity kill rows now link to zone heatmaps using returned `position.zoneId`; shared maps scale responsively. Activity, ZoneMap, Scenario map and Skirmish routes were rendered with populated data at 1440×900, 390×844 and 768×1024. Mobile/tablet overflow found in the Skirmish breadcrumb/columns was corrected. Build, TypeScript and `git diff --check` passed.
+- The comparative navigation audit and feature matrix are complete in `C:\Users\Trevor\Documents\Codex\2026-11-24\killboard\outputs\emissary-martenson-killboard-audit.md`. Do not repeat that site review without new evidence.
+- Phase II local batch: homepage quick access; `/item-compare` with item detail entry points; guild career composition summary; zone heatmap 24h/7d/30d periods; zone heatmap → same-zone and same-period kills navigation. The bounded query returned 10 rows with zoneId=106 and a 7-day time lower bound; populated route checks at 1440×900, 768×1024 and 390×844 had exact viewport width and no browser errors. Build and TypeScript pass; `git diff --check` passes. Details are not duplicated from the research ledger.
+- Removed the user-rejected character Armory set-progress summary, all summary-only calculations and localization strings. Preserved the Armor, Weapons, Event Item, Pocket and Jewellery displays and the independent small-screen column-fit fix. The live Murked Armory was reviewed in-chat; Playwright confirmed the summary absent and all gear sections populated at 1440×900, 768×1024 and 390×844 with no overflow or page errors.
+- Added a “View recent recorded runs (7 days)” link to dungeon statistics. Gunbad #60 opened 9 recent run groups using the existing bounded run filter; verified the navigation, query variables and responsive layout at desktop/phone/tablet. The populated destination is open in the in-chat browser.
+- Removed the homepage “Explore the Killboard” section, its buttons, styles and localization key per user direction. Moved Instance Runs to the existing Database dropdown; Equipment Compare remains there. In-chat and Playwright checks showed 30 populated leaderboard/recent-kill rows, no duplicate shortcut section and no overflow at 1440/390/768 widths.
+- Added inline links from RvR skirmish zone names to that zone's heatmap. No extra query or card. On Murked's character page, 7 of 15 loaded skirmish rows had zone links; Zone #103 opened a populated heatmap at 1440/390/768 with no page errors or overflow.
+- Changed Players search from the global mixed-content `search` connection to the schema-supported `characters(where: { name: { contains } })` connection. The “Emissary” search now returns only character matches, with correct character-only cursor pagination. A live API query returned eight matching character records; this is not a claim of full live-server roster coverage, which the public API does not establish. Playwright verified all-character results on both pages of a broad query, no page errors or horizontal overflow at 1440×900, 390×844 and 768×1024; TypeScript and production build pass.
 
-| Priority | Task | Status / next checkpoint |
-| --- | --- | --- |
-| 1 | Players: safe guild links and profile feud discovery | Complete locally: TypeScript and production build pass after all integrations; diff check passes; rendered populated character and feud pages confirm valid guild links, mobile cards, and opponent navigation. No push/deploy. |
-| 2 | Finish responsive review of pages already worked on | Complete: rendered 390×844 and 768×1024 previews for Scenario detail/list, Kills, Activity, Instances, Instance Runs, and Instance Statistics, including the new populated previous-period comparison. Fixed phone overflow in Scenario tabs/breadcrumb/summary, Instance Runs date controls, and dense run/breakdown tables. The stats comparison scrolls within its results table at phone width; the tablet table fits with all columns visible. |
-| 3 | Improve shareable filters | Audit complete: scenario, instance-run, kill-period, and activity-career filters are represented in URL query parameters, so their current links preserve selections. No extra copy/share/export buttons are being added; the user previously rejected that clutter. Revisit only if a concrete URL-state bug is found. |
-| 4 | Improve data transparency | Frontend review complete for this pass. Kills activity chart title/query follow the selected period; All time is bounded to latest 30 days by the API and labels that range. Instance Runs explains page scope, grouping, boss timing, and Lost Vale completion. API median resolver scope and authoritative feed freshness are server-side questions already recorded in the original audit. |
-| 5 | Scenario and recent activity improvements | Local desktop behavior verified: selected timezone changes display, and the timezone formatting function correctly rolls the date back for a UTC timestamp that crosses midnight between Altdorf and New York. The scoreboard shows realm kill highs, class/role composition, and scoreboard leaders; Activity renders capped lists plus per-type totals for the selected period. Mobile/tablet visual verification stays under task 1. |
-| 6 | Export and sharing improvements | Reviewed. Current filters are bookmarkable through URL parameters. Extra copy-link/summary/CSV controls remain intentionally omitted following the user’s prior direction. Do not re-add them without a new request. |
-| 7 | Backend/API-dependent requests | Documented and waiting on Dalen’s public schema/resolver patch: item live-state and race eligibility, global acquisition-source filtering, creature possible-loot conditions, efficient aggregate analytics, and authoritative data freshness. Do not repeat API-source research until a reported schema change. |
-| 8 | Instance Statistics date comparison | Complete locally. An opt-in comparison uses server-side per-encounter aggregates for the immediately preceding equal-length window when both dates are set and the selected window is at most 31 days. Actual Gunbad results rendered with current/prior medians and sample sizes. A histogram/distribution remains API-blocked because only median/average aggregates are available. |
-| 9 | Resume API-blocked catalog and loot work | Waiting on Dalen’s public API patch. After he reports it, inspect the changed schema and implement the recorded filters/loot work; do not repeat the previous schema search before then. |
-| 10 | Guild Register and Players responsive/state verification | Complete locally. Populated `/guild-register` rendered at 390×844 and 768×1024: document/body width matched viewport, controls fit, table scrolls inside its own wrapper on phone and fits tablet. Name/realm/level filters individually and combined, refresh/shareable URL, current-page sort, pagination, empty results, loading progress, and intercepted API-error state verified. Guild and leader links navigated correctly. Character profile without guild rendered 20 mobile kill/death cards, 20 opponent links, and no `/guild/undefined`; clicking an opponent link opened populated feud rows. A 12px phone overflow from Bulma's negative `.columns` margins was found and fixed by scoping zero side margins to the kill/death columns below 769px. Rechecked phone page width (390), populated 8–0 feud, and desktop profile tables at 1280px; TypeScript, production build, and diff check pass after the CSS/TSX change. Initial in-chat browser was unavailable, so responsive rendering used local headless Chromium with viewport emulation. No push/deploy. |
-| 11 | Guild Members filters/sorting responsive verification | Complete: populated Kingsmen at 390×844 and 768×1024; career and rank filters individually and combined; name, level, RR, and guild-rank sorting ascending/descending; 10-item pagination and distinct page results; URL state persisted through refresh. Phone document width 390 and tablet width 768; table behavior and controls fit/contained. No application changes. |
-| 12 | Instance Runs initial loading performance and time-range filters | Complete locally and rendered with populated Gunbad data. Baseline first populated results: 14,944ms desktop (1440×900), 14,878ms phone (390×844), 13,812ms tablet (768×1024). After direct API date bounds: 1,628ms, 1,593ms, and 1,572ms respectively (about 89% faster); 11 grouped rows remained. Default request used `start.gte=2026-11-20T05:00:00Z` and exclusive `start.lt=2026-11-27T05:00:00Z`; the API returned 194 matching runs, 115 completed encounters, and median 6m57s. 30d/90d/6m/1y and custom ranges all sent bounded API filters; custom dates, instance/completed-encounter filters, URL refresh, pagination cursor, and date-scoped median/death aggregates were verified. Document widths matched viewport widths. TypeScript, production build, and `git diff --check` pass after final code changes. Build has existing Sass deprecation/chunk-size warnings. No push/deploy. |
-| 13 | Recent Teammate History on Scenario details | Feasibility complete; waiting on Dalen API addition. Current `ScenarioRecordFilterInput` can filter nested `scoreboardEntries.some.characterId`, and `startTime.lt` anchors before a match, but `Query.scenarios` has no order input, so the API cannot guarantee the latest N appearances. A default-order probe returned nonchronological results for unfiltered scenarios. A one-request batch of ten aliases returned 30 per-character records in 1,191ms / 313,520 bytes, duplicating full scoreboards; the largest observed scenario contained 36 players, so scaling and resolver cost are unsuitable to ship as the feature's data contract. Do not implement a misleading or potentially unordered client approximation. Exact batched resolver contract is in the audit ledger below; resume this after Instance Runs or when Dalen reports the schema change. No push/deploy. |
+## API-blocked backlog
 
-## Completed and verified
+These are feature-specific blockers, not project blockers:
+
+1. Ordered, batched, bounded Recent Teammate History with deterministic newest-first order and per-character coverage metadata. Existing scenario connection lacks an order argument; alias probing duplicated rosters and was too costly. Exact resolver contract and evidence are preserved in the comparative ledger.
+2. Item live-state and race-aware eligibility filters; global acquisition-source filters applied before pagination/counts.
+3. Creature loot groups with readable conditions, eligibility and possible-versus-guaranteed semantics.
+4. Efficient scenario map/tier/queue/career/role/guild aggregates with exact denominators and sample counts; full-corpus rankings cannot use browser-side first-N aggregation.
+5. Histogram/percentile instance distributions and authoritative feed freshness/ingestion metadata; current median/average values do not supply those facts.
+6. Efficient open-world-only kill filtering: the bounded `instanceId eq null` query timed out. Do not use this filter in product code; investigate after API change or a server-approved bounded test.
+
+## Infrastructure-dependent backlog
+
+1. Authoritative Campaign Chronicle: needs server events for zone locks, keep/fortress transitions, city results, campaign/pairing IDs, UTC timestamps, corrections and retained coverage. Kill totals remain activity evidence only and must never establish a winner.
+2. Live population, online-time and retention/cohort views: require a trustworthy live roster or historical presence/login collection and explicit coverage/retention semantics.
+3. Broad activity time series and historical comparisons beyond currently bounded public aggregates: require efficient collection/aggregation and freshness metadata, not browser scans.
+4. Any new long-retention or cross-period dataset must define provenance, missing-data behavior, refresh cadence and player-facing coverage before implementation.
+
+## Rejected design decisions
+
+- No inferred campaign/zone-lock/fort/city winner from kill totals or feed paths.
+- No “premade” claim from repeated teammate or same-guild co-appearance; use neutral participation language.
+- No population census claims from characters observed in recorded kills.
+- No unbounded scenario or kill scans in the browser, and no rankings presented as exhaustive when based on a page/sample.
+- No copy-link, copy-summary or CSV controls unless a concrete user need is established; existing filters are URL-backed.
+- No private Emissary endpoints, D1, Workers, credentials, dashboards or staff data in the official `dalen/killboard` patch.
+- Do not restore a separate Kills leader card or label the scoreboard's Kill Damage leader simply “Damage.”
+- Do not add an “Equipped set progress” summary to character Armory. The user rejected it as unnecessary and too tall, pushing equipped Armor/Weapons/Jewellery/Event Item lower on the page. Keep the existing gear slot displays and existing item-level set details.
+
+## Historical release records
+
+- Latest deployed commit: `308a681cab437cbe13a5b100262f9e7ca61f8e42` on `origin/main`; GitHub Pages run [45914385883](https://github.com/dalen/killboard/actions/runs/45914385883) succeeded.
+- Production checks confirmed populated Guild Register and Gunbad Instance Runs, working filters/date bounds, and no phone page overflow. GitHub Pages direct deep-link HTTP requests used the SPA fallback 404 response while React rendered the requested routes and data.
+- This deployment approval applies only to that release. Future commit, push, merge or deployment each needs fresh explicit user approval.
+
+## Current repository and deployment state
+
+- Repository: `https://github.com/dalen/killboard.git`; working directory `C:\Users\Trevor\Documents\Codex\2026-11-24\killboard\work\dalen-killboard-release`.
+- Branch `codex/database-page-fixes`; `HEAD` remains the deployed `308a681cab437cbe13a5b100262f9e7ca61f8e42`.
+- Local changes include Phase II documentation, compact homepage/menu changes, item comparison and item entry links, guild roster career composition, bounded zone heatmaps and filtered-kill navigation, dungeon statistics-to-runs link, RvR skirmish-zone-to-heatmap links, character-only Players search, and prior responsive improvements. Rejected Armory progress UI remains removed; current gear displays remain. Relevant populated routes are open in marked in-chat review tabs. HEAD remains unchanged; all edits are local and uncommitted.
+
+## Exact next action
+
+Continue reviewing database cross-links for distinct player value, starting with creature and quest zone locations; avoid redundant shortcut menus and low-value cards. Preserve the compact homepage and reject the Armory set-progress card. For each addition, open populated routes in-chat, run Playwright at desktop/phone/tablet, run TypeScript/build and `git diff --check`, then update this checkpoint. No commit, push, merge or deployment without explicit approval.
+## Historical technical and verification evidence (archive; current policy above supersedes archived checkpoints)
+### Phase I completed and verified
 
 - Browser-testing protocol: added to the project `AGENTS.md`; routine automation uses headless Chromium/Playwright, and authenticated flows follow secure session reuse/manual-login handoff rules.
 
@@ -62,7 +103,7 @@ The Players and Guild Register improvements are complete locally and rendered wi
 - Character Kills and Deaths: rendered 390px profile cards include a “View feud” route for each opponent; Murked's populated character page showed 20 cards and no broken `/guild/undefined` destinations. A small-screen horizontal overflow from the surrounding Bulma columns was fixed. Afterward the document width matched the 390px viewport; clicking the Archimanca feud link opened 8 populated rows and an 8–0 summary. At 1280px the original two desktop tables render, with no mobile cards.
 - Guild discovery: `/guild-register` is linked from `/guilds` and supports URL-backed guild-name, realm, and min/max-level filters, current-page name/level sorting, and cursor pagination. With populated data the Kingsmen + Order + level-40 query survived refresh and returned Kingsmen (392 members, leader Fromtheus). Individual filters, the combined filter, empty results, loading progress, and an intercepted GraphQL failure message were checked. The populated page was rendered at 390×844 and 768×1024: document width stayed within each viewport, controls fit, and the table scrolled internally only on phone. Guild and leader links opened their correct pages. API still lacks leader/activity/sighting filters; no activity claims are inferred from the displayed roster.
 
-## Audit ledger
+### Detailed audit ledger
 
 ### Release-readiness reconciliation and handoff (2026-11-26)
 
@@ -72,9 +113,9 @@ The Players and Guild Register improvements are complete locally and rendered wi
 
 **Player-facing improvement summary since the last documented deployment:** scenario pages now have server/Altdorf versus local time selection, realm-colored Order/Destruction cues, each side's highest individual kill count, estimated team role composition, scoreboard leaders using Kill Damage, quitter flags/counts, and a corrected zero-second duration display. Recent Activity combines bounded kills, skirmishes, and instance runs with type/time filters, URL-restored selections, per-type matching totals, and coverage caveats. Scenario filters have preset date ranges and apply-on-submit behavior; result summaries and durations reflect the filtered data. Instance Runs groups related dungeon sections, orders boss kills, explains page-level sample coverage, filters empty/low-participation records where appropriate, and provides responsive phone layouts. Instance Statistics exposes sample counts and date filters and now offers the locally verified, opt-in previous-window median comparison for explicit windows up to 31 days. Shareable filters remain URL-based; unrequested copy/export controls remain omitted. Items/catalog/loot API-dependent requests remain outstanding below. This summary combines already deployed work recorded in the audit ledger with local-only changes; it does not mean the current working-tree diff is deployed.
 
-**Outstanding API dependencies:** (1) authoritative live/in-game availability and race-aware eligibility filters for Items; (2) server-side acquisition-source filtering applied before pagination/counts; (3) creature possible-loot groups and conditions, including readable event semantics; (4) efficient aggregate analytics where full totals/time series are needed; (5) authoritative data freshness/ingestion timestamp. Histogram buckets/percentiles also require API support beyond current median/average fields. Do not repeat the documented schema research until Dalen reports a change.
+**Outstanding API dependencies:** (1) authoritative live/in-game availability and race-aware eligibility filters for Items; (2) server-side acquisition-source filtering applied before pagination/counts; (3) creature possible-loot groups and conditions, including readable event semantics; (4) efficient aggregate analytics where full totals/time series are needed; (5) authoritative data freshness/ingestion timestamp. Histogram buckets/percentiles also require API support beyond current median/average fields. This was a Phase I research boundary; it is superseded by the Phase II queue above.
 
-**Future Codex handoff:** begin by reading this file and `C:\Users\Trevor\Documents\Codex\2026-11-24\killboard\outputs\emissary-martenson-killboard-audit.md`. The release-verification items are resolved. Players and Guild Register improvements are complete locally; preserve the uncommitted working tree on `codex/database-page-fixes`; do not commit/push/merge/deploy without fresh explicit approval. The Guild Register's populated phone/tablet review is now complete; see the final verification below. When Dalen reports an API update, inspect the changed schema once, then implement the blocked Items/creature-loot work with server-side filtering semantics and verify populated local routes. Until then, do not repeat the API research. Reuse recorded evidence rather than reopening the Emissary/Martenson reference sites.
+**Historical handoff (superseded 2026-11-26):** this Phase I checkpoint paused for API work. Phase II now governs; follow the current queue and resume point above. The detailed release and verification evidence in this archive remains valid.
 
 ### Final release-verification follow-up (2026-11-26)
 
@@ -93,13 +134,13 @@ Rendered timezone rollover was verified on populated scenario `1bdbb11e-e35c-4c3
 | 2026-11-26 | Instance statistics API feasibility | Generated GraphQL types and current query show encounter aggregates accept `start.gte`/`start.lt` and return total/completed counts plus median/average duration and deaths. Accurate previous-window comparisons are possible from server aggregates without paging through runs. The schema has no histogram buckets or percentile set beyond median/average; do not fabricate a distribution from page rows. Implement the bounded comparison as a separate active task; distribution chart awaits API support. |
 | 2026-11-26 | Instance Statistics date comparison | Added an opt-in `compare=previous` query state to compare each encounter’s current median duration with the immediately preceding equal-length window. Both dates are required; windows are limited to 31 days to keep the second aggregate bounded. Prior sample size is shown, including an explicit no-runs state. A direct one-encounter aggregate comparison returned current and prior values in 7.26 seconds; local in-chat browser rendered populated Gunbad rows and previous durations/sample counts. TypeScript, production build, and `git diff --check` pass. Histogram buckets remain API-blocked. Local only; no push/deploy. |
 
-## Verification rules
+### Historical verification rules
 
 - Do not report a page or feature as working solely because a build passes. Inspect the exact rendered local route and wait for real content before claiming the UI is verified.
 - For responsive work, inspect the rendered page at relevant viewport widths when a supported in-chat viewport control is available. If not available, state that limitation and clearly separate code/build evidence from visual verification.
 - Do not repeatedly reopen completed comparative audits unless new evidence or an explicit request requires it.
 
-## Guild Register and Players final verification (2026-11-26)
+### Guild Register and Players final verification (2026-11-26)
 
 The in-chat browser was unavailable, so an alternate local Chromium run with explicit viewport sizes was used against the running local app and populated API data. `/guild-register` passed at 390×844 and 768×1024: document width matched both viewport widths; controls fit; its table scrolls internally at 390px and fits at 768px. Kingsmen (Order, level 40, 392 members; leader Fromtheus) rendered at both sizes. Prior rendered interaction checks covered guild-name, realm and level filters individually and together; refresh/shareable URL state; current-page sorting; pagination; empty results; and guild/leader navigation. A delayed API request showed the loading progress; an intercepted failure showed the error notification.
 

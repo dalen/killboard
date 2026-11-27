@@ -37,6 +37,7 @@ const RECENT_ACTIVITY = gql`
           name
         }
         position {
+          zoneId
           zone {
             name
           }
@@ -132,6 +133,7 @@ type ActivityEntry = {
   title: string;
   detail: string;
   href: string;
+  mapHref?: string;
 };
 
 export const Activity = (): ReactElement => {
@@ -196,6 +198,11 @@ export const Activity = (): ReactElement => {
         kill.scenario?.name ??
         t('pages:activityPage.unknownLocation'),
       href: `/kill/${kill.id}`,
+      mapHref:
+        kill.position.zoneId != null &&
+        String(kill.position.zoneId) !== '0'
+          ? `/zone_heatmap/${kill.position.zoneId}`
+          : undefined,
     }));
     const skirmishes = (data?.skirmishes?.nodes ?? []).map((skirmish) => ({
       id: skirmish.id,
@@ -425,6 +432,17 @@ export const Activity = (): ReactElement => {
                     <span className="activity-timeline-detail">
                       {entry.detail}
                     </span>
+                    {entry.mapHref && (
+                      <Link
+                        to={entry.mapHref}
+                        className="activity-timeline-map-link"
+                        aria-label={t('pages:activityPage.openZoneHeatmap', {
+                          zone: entry.detail,
+                        })}
+                      >
+                        {t('pages:activityPage.viewZoneHeatmap')}
+                      </Link>
+                    )}
                   </div>
                 </article>
               ))}

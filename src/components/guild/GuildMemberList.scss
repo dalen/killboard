@@ -1,0 +1,53 @@
+.guild-member-composition-heading {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1rem;
+  justify-content: space-between;
+}
+
+.guild-member-composition-heading .title,
+.guild-member-composition-heading p {
+  margin-bottom: 0.75rem;
+}
+
+.guild-member-career-grid {
+  display: grid;
+  gap: 0.65rem 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.guild-member-career-label {
+  align-items: center;
+  display: flex;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.guild-member-career-label .image {
+  flex: 0 0 24px;
+  height: 24px;
+  width: 24px;
+}
+
+.guild-member-career-label .image img {
+  height: 24px;
+  width: 24px;
+}
+
+.guild-member-career-label span {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.guild-member-career .progress {
+  margin-bottom: 0;
+  margin-top: 0.35rem;
+}
+
+@media screen and (max-width: 600px) {
+  .guild-member-career-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

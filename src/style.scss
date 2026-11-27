@@ -344,6 +344,25 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 }
 
 @media screen and (max-width: 768px) {
+  .breadcrumb ul {
+    flex-wrap: wrap;
+  }
+
+  .breadcrumb li.is-active {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .breadcrumb li.is-active a {
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .skirmish-page .columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   nav.navbar .navbar-menu {
     max-width: 100%;
     overflow-x: auto;

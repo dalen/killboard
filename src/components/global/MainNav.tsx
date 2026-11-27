@@ -15,6 +15,7 @@ export const MainNav = (): ReactElement => {
     pathname.startsWith('/gameobject') ||
     pathname.startsWith('/instance') ||
     pathname.startsWith('/item') ||
+    pathname.startsWith('/item-compare') ||
     pathname.startsWith('/quest') ||
     pathname.startsWith('/storylines');
 
@@ -105,8 +106,10 @@ export const MainNav = (): ReactElement => {
             >
               <Link to="/creatures">{t('pages:home.showCreatures')}</Link>
               <Link to="/instances">{t('pages:home.showInstances')}</Link>
+              <Link to="/instance-runs">{t('pages:instanceRuns.title')}</Link>
               <Link to="/gameobjects">{t('pages:gameObjects.title')}</Link>
               <Link to="/items">{t('pages:home.showItems')}</Link>
+              <Link to="/item-compare">{t('pages:itemCompare.title')}</Link>
               <Link to="/quests">{t('pages:home.showQuests')}</Link>
               <Link to="/storylines">{t('pages:home.showStorylines')}</Link>
             </div>

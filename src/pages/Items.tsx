@@ -379,6 +379,11 @@ export const Items = (): ReactElement => {
           </li>
         </ul>
       </nav>
+      <div className="has-text-right mb-4">
+        <Link className="button is-outlined" to="/item-compare">
+          {t('pages:itemCompare.title')}
+        </Link>
+      </div>
       <form
         className="card mb-5"
         onSubmit={(event: FormEvent<HTMLFormElement>) => {

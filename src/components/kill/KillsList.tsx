@@ -24,6 +24,7 @@ export const KillsList = ({
   timeZoneMode = 'local',
   showTotalCount = true,
   description,
+  includeZoneFilter = false,
 }: {
   query: DocumentNode;
   queryOptions?: useQuery.Options<Query>;
@@ -38,14 +39,15 @@ export const KillsList = ({
   timeZoneMode?: KillTimeZoneMode;
   showTotalCount?: boolean;
   description?: string;
+  includeZoneFilter?: boolean;
 }): React.ReactElement | null => {
   const [currentPerPage, setPerPage] = React.useState(perPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const searchKey = search.toString();
   const currentFilters = React.useMemo(
-    () => getCurrentFilters(new URLSearchParams(searchKey), defaultPeriod),
-    [defaultPeriod, searchKey],
+    () => getCurrentFilters(new URLSearchParams(searchKey), defaultPeriod, includeZoneFilter),
+    [defaultPeriod, includeZoneFilter, searchKey],
   );
 
   const { loading, error, data, refetch } = useQuery<Query>(query, {

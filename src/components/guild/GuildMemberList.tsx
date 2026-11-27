@@ -8,6 +8,7 @@ import clsx from 'clsx';
 import { CareerIcon } from '@/components/CareerIcon';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
+import './GuildMemberList.scss';
 
 const MEMBERS_PER_REQUEST = 50;
 
@@ -227,6 +228,19 @@ export const GuildMemberList = ({
       ),
     [members],
   );
+  const careerComposition = useMemo(() => {
+    const counts = new Map<Career, number>();
+    members.forEach(({ character: { career } }) => {
+      counts.set(career, (counts.get(career) ?? 0) + 1);
+    });
+    return [...counts.entries()].toSorted(
+      ([firstCareer, firstCount], [secondCareer, secondCount]) =>
+        secondCount - firstCount ||
+        t(`enums:career.${firstCareer}`).localeCompare(
+          t(`enums:career.${secondCareer}`),
+        ),
+    );
+  }, [members, t]);
   const careers = useMemo(
     () =>
       Object.values(Career).toSorted((first, second) =>
@@ -314,6 +328,45 @@ export const GuildMemberList = ({
         </div>
       ) : (
         <>
+          <section className="card guild-member-composition mb-4" aria-labelledby="guild-member-composition-title">
+            <div className="card-content">
+              <div className="guild-member-composition-heading">
+                <h2 className="title is-5" id="guild-member-composition-title">
+                  {t('pages:guildMembers.compositionTitle')}
+                </h2>
+                <p className="has-text-grey">
+                  {t('pages:guildMembers.compositionCoverage', {
+                    count: members.length,
+                    total: totalCount,
+                  })}
+                </p>
+              </div>
+              <div className="guild-member-career-grid">
+                {careerComposition.map(([career, count]) => {
+                  const percentage = totalCount > 0 ? (count / totalCount) * 100 : 0;
+                  return (
+                    <div className="guild-member-career" key={career}>
+                      <div className="guild-member-career-label">
+                        <CareerIcon career={career} />
+                        <span>{t(`enums:career.${career}`)}</span>
+                        <strong>{count} · {Math.round(percentage)}%</strong>
+                      </div>
+                      <progress
+                        className="progress is-small is-warning"
+                        value={count}
+                        max={totalCount || 1}
+                        aria-label={t('pages:guildMembers.careerShare', {
+                          career: t(`enums:career.${career}`),
+                          count,
+                          percentage: Math.round(percentage),
+                        })}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </section>
           <div className="columns guild-member-filters is-multiline is-align-items-flex-end mb-2">
             <div className="column is-one-quarter-desktop is-half-tablet">
               <label className="label" htmlFor="guild-member-career-filter">

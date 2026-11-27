@@ -226,6 +226,14 @@ export const Item = ({
                     </div>
                   </div>
                   <div className="mb-1">{item.description}</div>
+                  {item.slot !== EquipSlot.None && item.slot !== EquipSlot.Event && (
+                    <Link
+                      className="button is-small is-outlined mt-2"
+                      to={`/item-compare?left=${encodeURIComponent(item.id)}`}
+                    >
+                      {t('pages:itemCompare.compareThisItem')}
+                    </Link>
+                  )}
                   {item.slot !== EquipSlot.None && (
                     <div>{t(`enums:itemSlot.${item.slot}`)}</div>
                   )}

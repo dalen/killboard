@@ -61,9 +61,17 @@ export const InstanceStatistics = (): ReactElement => {
         </ul>
       </nav>
 
-      <p className="is-size-4">
-        <strong>{instance.name}</strong>
-      </p>
+      <div className="is-flex is-align-items-center is-justify-content-space-between is-flex-wrap-wrap mb-3">
+        <p className="is-size-4 mb-1">
+          <strong>{instance.name}</strong>
+        </p>
+        <Link
+          className="button is-small"
+          to={`/instance-runs?instance=${encodeURIComponent(id ?? '')}&period=7d`}
+        >
+          {t('pages:instanceStatistics.viewRecentRuns')}
+        </Link>
+      </div>
 
       <InstanceEncounterRunsFilters />
       <div className="table-container">

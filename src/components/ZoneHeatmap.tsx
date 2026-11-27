@@ -31,14 +31,29 @@ export const ZoneHeatmap = ({
   return (
     <div
       ref={divElement}
-      style={{ height: `${size}px`, position: 'relative', width: `${size}px` }}
+      style={{
+        height: 'auto',
+        maxWidth: '100%',
+        position: 'relative',
+        width: `${size}px`,
+      }}
     >
-      <img src={`/images/maps/${zoneId}.webp`} alt="Zone kills heatmap" />
+      <img
+        src={`/images/maps/${zoneId}.webp`}
+        alt="Zone kills heatmap"
+        style={{ display: 'block', height: 'auto', width: '100%' }}
+      />
       <canvas
         ref={canvasElement}
         width={size}
         height={size}
-        style={{ left: '0px', position: 'absolute', top: '0px' }}
+        style={{
+          height: 'auto',
+          left: '0px',
+          position: 'absolute',
+          top: '0px',
+          width: '100%',
+        }}
       />
     </div>
   );
