@@ -1,21 +1,22 @@
-# Current local release checkpoint — Kills section
+# Deployed release checkpoint — Kills section
 
-Status: Kills, Recent Activity and Zone Comparison batch has been explicitly approved for this release; deployment is pending. The shared Scenarios form controls and approved button fix are already deployed in `0a0b452d2c3198bb2a5611deb1ef8d7f77a535f1` and are not being retested here. This approval applies only to this batch.
+Status: deployed to Dalen's `main` in `3199ad7348fd3d52909a47bb36e1846a039a6b37`; GitHub Actions Build and Deploy run [46084829887](https://github.com/dalen/killboard/actions/runs/46084829887) succeeded. The shared Scenarios form controls and approved button fix are already deployed in `0a0b452d2c3198bb2a5611deb1ef8d7f77a535f1` and are not being retested here. This approval applied only to this batch.
 
-## Included in the current local batch
+## Included in the deployed batch
 
 - Shared Warhammer tabs across Kills, Recent Activity and Zone Comparison; compact filters and framed panels reuse approved components.
 - Kills: reduced activity chart, compact career selector, thousands-formatted totals, realm-aware table entries and phone cards.
 - Recent Activity: compact combat log with the approved heading typography and Details buttons, narrower Activity Type column, accessible activity and killer/victim career icons, clear selected counter state, deduplicated skirmish location, and consistent panel padding.
 - Zone Comparison: zone labels without internal IDs, existing map thumbnails, common-scale themed bars, formatted combined/difference values and preserved API-backed date coverage and heatmap links.
 
-## Verification and release state
+## Verification and production state
 
 - `npm test` passed on this source batch (TypeScript, production Vite build and Oxlint); existing Sass deprecation, generated-code lint and large-bundle notices remain. `git diff --check` passed.
-- Populated headless Playwright checks at 1440, 768 and 390px verified all three routes and shared tabs, responsive widths, Activity's 10-per-type display and 30 combined rows, 20 career icons, 30 compact Details actions, counter URL state across refresh/back/forward, Kills phone cards, populated Zone Comparison values, and no page errors or horizontal overflow.
+- Local populated headless Playwright checks at 1440, 768 and 390px verified all three routes and shared tabs, responsive widths, Activity's 10-per-type display and 30 combined rows, 20 career icons, 30 compact Details actions, counter URL state across refresh/back/forward, Kills phone cards, populated Zone Comparison values, and no page errors or horizontal overflow.
+- Production headless Playwright then checked all three live routes sequentially at 1440px. Kills showed 10 rows; Activity showed 30 rows and current counters; Zone Comparison showed Ekrund 1,635 and Kadrin Valley 1,784 (combined 3,419, difference 149, 9%). Each route showed the three shared tabs with the correct active state; there were no client errors or horizontal overflow. GitHub Pages returns HTTP 404 for direct routes before the existing SPA fallback hydrates the app and renders live data.
 - Recent Activity desktop rows measure about 50px. The in-chat browser was unavailable in this chat after reset; required rendered checks were completed with headless Playwright without opening the personal desktop browser.
 - No dependency files changed in this batch. The separate Gear Preview/Dressing Room remains excluded and untouched; the untracked `public/gear-preview/ui/` crop files remain excluded from any release staging.
-- Next queued feature: Guild Members Warhammer styling for Goblin Workers Union (#3936). Keep the present batch local until release review and fresh approval.
+- Next feature in progress: Guild Members Warhammer styling for Goblin Workers Union (#3936).
 
 ---
 
