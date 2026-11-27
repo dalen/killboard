@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link, useParams } from 'react-router';
 import { CareerIcon } from '@/components/CareerIcon';
+import { GuildLink } from '@/components/global/GuildLink';
 import { SearchBox } from '@/components/global/SearchBox';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
@@ -171,11 +172,7 @@ export const Search = (): ReactElement => {
                         <strong>{searchItem.name}</strong>
                       </Link>
                       <br />
-                      <Link
-                        to={`/guild/${searchItem.guildMembership?.guild?.id}`}
-                      >
-                        {searchItem.guildMembership?.guild?.name}
-                      </Link>
+                      <GuildLink guild={searchItem.guildMembership?.guild} />
                     </td>
                     <td>
                       <small>

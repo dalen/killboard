@@ -140,7 +140,8 @@
     "title": "Location"
   },
   "playerFeud": {
-    "title": "Player Feud"
+    "title": "Player Feud",
+    "viewFeud": "View feud"
   },
   "searchBox": {
     "placeholder": "Search"

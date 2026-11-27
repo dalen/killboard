@@ -6,6 +6,8 @@ import { MonthlyGuildLeaderboard } from '@/components/kill/MonthlyLeaderboard.Gu
 import { WeeklyLeaderboardGuild } from '@/components/kill/WeeklyLeaderboardGuild';
 import { ScenarioFilters } from '@/components/scenario/ScenarioFilters';
 import { ScenarioList } from '@/components/scenario/ScenarioList';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { LatestSkirmishes } from '@/components/skirmish/LatestSkirmishes';
 import { TopSkirmishes } from '@/components/skirmish/TopSkirmishes';
 import type { ReactElement } from 'react';
@@ -16,6 +18,7 @@ export const Home = ({
 }: {
   tab: 'players' | 'guilds' | 'scenarios' | 'skirmishes';
 }): ReactElement => {
+  const { t } = useTranslation(['pages']);
   return (
     <div className="container is-mobile mt-2">
       {tab === 'scenarios' && (
@@ -41,6 +44,11 @@ export const Home = ({
       {tab === 'guilds' && (
         <>
           <SearchBox isPlayer={false} />
+          <div className="has-text-right mb-4">
+            <Link className="button is-outlined" to="/guild-register">
+              {t('pages:guildRegister.browse')}
+            </Link>
+          </div>
           <div className="columns home-leaderboard-columns">
             <div className="column is-6">
               <MonthlyGuildLeaderboard />

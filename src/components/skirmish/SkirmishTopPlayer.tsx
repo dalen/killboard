@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import type { Query, SkirmishScoreboardEntry } from '@/__generated__/graphql';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
+import { GuildLink } from '@/components/global/GuildLink';
 import { careerIcon } from '@/utils';
 import type { ReactElement } from 'react';
 import clsx from 'clsx';
@@ -136,7 +137,7 @@ export const SkirmishTopPlayer = ({
           </span>
         </div>
 
-        {player.guild && (
+        {player.guild?.id != null && player.guild.name && (
           <span className="icon-text">
             <span className="icon">
               <GuildHeraldry
@@ -145,7 +146,7 @@ export const SkirmishTopPlayer = ({
                 realm={player.guild.realm}
               />
             </span>
-            <Link to={`/guild/${player.guild?.id}`}>{player.guild?.name}</Link>
+            <GuildLink guild={player.guild} />
           </span>
         )}
       </div>

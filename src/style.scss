@@ -934,6 +934,11 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 }
 
 @media screen and (max-width: 768px) {
+  .character-kill-columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
   .instance-runs-filter-form .columns {
     margin-left: 0;
     margin-right: 0;

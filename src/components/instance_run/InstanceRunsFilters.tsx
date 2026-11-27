@@ -1,3 +1,4 @@
+import { format, subDays, subMonths, subYears } from 'date-fns';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
@@ -25,21 +26,85 @@ const getInstanceFilters = (
 const getStartDateFilters = (
   search: URLSearchParams,
 ): InstanceRunFilterInput => {
-  const from = search.get('from');
-  const through = search.get('through');
+  const range = getInstanceRunDateRange(search);
   const start: NonNullable<InstanceRunFilterInput['start']> = {};
 
-  if (from && /^\d{4}-\d{2}-\d{2}$/.test(from)) {
-    const [year, month, day] = from.split('-').map(Number);
+  if (range.from && /^\d{4}-\d{2}-\d{2}$/.test(range.from)) {
+    const [year, month, day] = range.from.split('-').map(Number);
     start.gte = new Date(year, month - 1, day).toISOString();
   }
 
-  if (through && /^\d{4}-\d{2}-\d{2}$/.test(through)) {
-    const [year, month, day] = through.split('-').map(Number);
+  if (range.through && /^\d{4}-\d{2}-\d{2}$/.test(range.through)) {
+    const [year, month, day] = range.through.split('-').map(Number);
     start.lt = new Date(year, month - 1, day + 1).toISOString();
   }
 
   return Object.keys(start).length ? { start } : {};
+};
+
+type InstanceRunPeriod = '7d' | '30d' | '90d' | '6m' | '1y' | 'custom';
+type InstanceRunDateRange = { from: string; through: string };
+const instanceRunPeriods: InstanceRunPeriod[] = [
+  '7d',
+  '30d',
+  '90d',
+  '6m',
+  '1y',
+  'custom',
+];
+
+const formatDateInput = (date: Date) => format(date, 'yyyy-MM-dd');
+
+const getPresetDateRange = (
+  period: Exclude<InstanceRunPeriod, 'custom'>,
+): InstanceRunDateRange => {
+  const today = new Date();
+  let start: Date;
+  switch (period) {
+    case '7d':
+      start = subDays(today, 6);
+      break;
+    case '30d':
+      start = subDays(today, 29);
+      break;
+    case '90d':
+      start = subDays(today, 89);
+      break;
+    case '6m':
+      start = subMonths(today, 6);
+      break;
+    case '1y':
+      start = subYears(today, 1);
+      break;
+  }
+  return { from: formatDateInput(start), through: formatDateInput(today) };
+};
+
+const getValidDate = (value: string | null): string => {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return '';
+  const date = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value
+    ? value
+    : '';
+};
+
+const getSelectedPeriod = (search: URLSearchParams): InstanceRunPeriod => {
+  const period = search.get('period');
+  if (instanceRunPeriods.includes(period as InstanceRunPeriod)) {
+    return period as InstanceRunPeriod;
+  }
+  return search.has('from') || search.has('through') ? 'custom' : '7d';
+};
+
+export const getInstanceRunDateRange = (
+  search: URLSearchParams,
+): InstanceRunDateRange => {
+  const period = getSelectedPeriod(search);
+  if (period !== 'custom') return getPresetDateRange(period);
+  const from = getValidDate(search.get('from'));
+  const through = getValidDate(search.get('through'));
+  // Treat an empty custom URL as the safe default instead of an all-history query.
+  return !from && !through ? getPresetDateRange('7d') : { from, through };
 };
 
 const getCompletedEncountersFilters = (
@@ -212,12 +277,19 @@ export const InstanceRunsFilters = ({
       const next = new URLSearchParams(current);
       if (value) next.set(key, value);
       else next.delete(key);
+      if (key === 'from' || key === 'through') next.set('period', 'custom');
       return next;
     });
   };
 
   const applyFilters = (values = draft) => {
     const next = new URLSearchParams(values);
+    const period = getSelectedPeriod(next);
+    next.set('period', period);
+    if (period !== 'custom') {
+      next.delete('from');
+      next.delete('through');
+    }
     next.delete('after');
     next.delete('before');
     setSearch(next);
@@ -227,8 +299,18 @@ export const InstanceRunsFilters = ({
   const requestedInstance = draft.get('instance') ?? 'all';
   const instance =
     getInstanceRunFamily(requestedInstance)?.key ?? requestedInstance;
-  const from = draft.get('from') ?? '';
-  const through = draft.get('through') ?? '';
+  const period = getSelectedPeriod(draft);
+  const range = period === 'custom'
+    ? {
+        from: getValidDate(draft.get('from')),
+        through: getValidDate(draft.get('through')),
+      }
+    : getPresetDateRange(period);
+  const from = range.from;
+  const through = range.through;
+  const invalidCustomRange =
+    period === 'custom' &&
+    (!from || !through || from > through);
 
   return (
     <div className="card mb-5">
@@ -241,6 +323,33 @@ export const InstanceRunsFilters = ({
       >
         <div className="columns">
           <div className="column">
+            <div className="field">
+              <label className="label" htmlFor="instance-run-period">
+                {t('pages:instanceRuns.timePeriod')}
+              </label>
+              <div className="select">
+                <select
+                  id="instance-run-period"
+                  value={period}
+                  onChange={(event) => {
+                    const next = new URLSearchParams(draft);
+                    next.set('period', event.currentTarget.value);
+                    if (event.currentTarget.value !== 'custom') {
+                      next.delete('from');
+                      next.delete('through');
+                    }
+                    setDraft(next);
+                  }}
+                >
+                  <option value="7d">{t('pages:instanceRuns.last7Days')}</option>
+                  <option value="30d">{t('pages:instanceRuns.last30Days')}</option>
+                  <option value="90d">{t('pages:instanceRuns.last90Days')}</option>
+                  <option value="6m">{t('pages:instanceRuns.last6Months')}</option>
+                  <option value="1y">{t('pages:instanceRuns.lastYear')}</option>
+                  <option value="custom">{t('pages:instanceRuns.customDateRange')}</option>
+                </select>
+              </div>
+            </div>
             <div className="field">
               <label className="label" htmlFor="instance-select">
                 Instance
@@ -282,6 +391,9 @@ export const InstanceRunsFilters = ({
                   className="input"
                   type="date"
                   value={from}
+                  disabled={period !== 'custom'}
+                  required={period === 'custom'}
+                  max={through || undefined}
                   onChange={(event) => updateDraft('from', event.target.value)}
                 />
               </div>
@@ -294,12 +406,20 @@ export const InstanceRunsFilters = ({
                   className="input"
                   type="date"
                   value={through}
+                  disabled={period !== 'custom'}
+                  required={period === 'custom'}
+                  min={from || undefined}
                   onChange={(event) =>
                     updateDraft('through', event.target.value)
                   }
                 />
               </div>
             </div>
+            {invalidCustomRange && (
+              <p className="help is-danger" role="alert">
+                {t('pages:instanceRuns.customRangeRequired')}
+              </p>
+            )}
             <div className="field">
               <label className="label" htmlFor="completedEncounters">
                 Min completed encounters
@@ -456,7 +576,11 @@ export const InstanceRunsFilters = ({
           </div>
         </div>
         <div className="is-flex is-justify-content-flex-end mt-2">
-          <button className="button is-primary" type="submit">
+          <button
+            className="button is-primary"
+            type="submit"
+            disabled={invalidCustomRange}
+          >
             {t('pages:instanceRuns.applyFilters')}
           </button>
         </div>

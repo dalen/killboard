@@ -2,10 +2,10 @@ import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/client/react';
 import { getUnixTime, startOfWeek } from 'date-fns';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
 import type { Query } from '@/__generated__/graphql';
 import { careerIcon } from '@/utils';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { GuildLink } from '@/components/global/GuildLink';
 import type { ReactElement } from 'react';
 
 const CHARACTER_INFO = gql`
@@ -87,12 +87,10 @@ export const CharacterInfo = ({ id }: { id: number }): ReactElement => {
               {data.character.renownRank}
             </p>
 
-            {data.character.guildMembership?.guild != null && (
+            {data.character.guildMembership?.guild?.name && (
               <p>
                 <strong>{`${t('components:characterInfo.guild')} `}</strong>
-                <Link to={`/guild/${data.character.guildMembership.guild.id}`}>
-                  {data.character.guildMembership.guild.name}
-                </Link>
+                <GuildLink guild={data.character.guildMembership.guild} />
               </p>
             )}
           </div>

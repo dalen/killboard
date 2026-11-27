@@ -6,6 +6,7 @@ import { Character } from '@/pages/Character';
 import { Home } from '@/pages/Home';
 import { Kill } from '@/pages/Kill';
 import { Guild } from '@/pages/Guild';
+import { GuildRegister } from '@/pages/GuildRegister';
 import { Search } from '@/pages/Search';
 import { SearchGuild } from '@/pages/SearchGuild';
 import { PlayerFeudPage } from '@/pages/PlayerFeudPage';
@@ -63,6 +64,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home tab="players" />} />
         <Route path="/guilds" element={<Home tab="guilds" />} />
+        <Route path="/guild-register" element={<GuildRegister />} />
         <Route path="/scenarios" element={<Home tab="scenarios" />} />
         <Route path="/kill/:id" element={<Kill />} />
         <Route path="/kills" element={<Kills />} />

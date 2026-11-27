@@ -6,6 +6,7 @@ import useWindowDimensions from '@/hooks/useWindowDimensions';
 import type { Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
+import { GuildLink } from '@/components/global/GuildLink';
 import { CareerIcon } from '@/components/CareerIcon';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { type ReactElement, useState } from 'react';
@@ -163,9 +164,7 @@ export const RankedLeaderboardTable = ({
                             <strong>{entry.character.name}</strong>
                           </Link>
                           <br />
-                          <Link to={`/guild/${entry.guild?.id}`}>
-                            {entry.guild?.name}
-                          </Link>
+                          <GuildLink guild={entry.guild} />
                           <br />
                           <small>
                             {t('components:rankedLeaderboard.renownRank')}&nbsp;
@@ -202,7 +201,7 @@ export const RankedLeaderboardTable = ({
                     </Link>
                   </td>
                   <td>
-                    {entry.guild && (
+                    {entry.guild?.id != null && (
                       <Link to={`/guild/${entry.guild.id}`}>
                         <GuildHeraldry
                           size="32"
@@ -213,11 +212,7 @@ export const RankedLeaderboardTable = ({
                     )}
                   </td>
                   <td>
-                    {entry.guild && (
-                      <Link to={`/guild/${entry.guild.id}`}>
-                        {entry.guild.name}
-                      </Link>
-                    )}
+                    <GuildLink guild={entry.guild} />
                   </td>
                   <td align="right">{entry.renownRank}</td>
                   <td align="right">{entry.wins}</td>

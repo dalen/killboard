@@ -2,6 +2,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import type { KillLeaderboardEntry } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
+import { GuildLink } from '@/components/global/GuildLink';
 import '@/components/styles/table.scss';
 
 export const LeaderboardTable = ({
@@ -37,11 +38,9 @@ export const LeaderboardTable = ({
                       <strong>{leaderboardEntry.character.name}</strong>
                     </Link>
                     <br />
-                    <Link
-                      to={`/guild/${leaderboardEntry.character.guildMembership?.guild?.id}`}
-                    >
-                      {leaderboardEntry.character.guildMembership?.guild?.name}
-                    </Link>
+                    <GuildLink
+                      guild={leaderboardEntry.character.guildMembership?.guild}
+                    />
                   </div>
                 </div>
                 <div className="media-content player-rr-lvl-container">

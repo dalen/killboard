@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import type { Kill } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
+import { GuildLink } from '@/components/global/GuildLink';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 import { type KillTimeZoneMode, formatKillTime } from './killTime';
@@ -14,6 +15,7 @@ export const KillsListTable = ({
   showVictim = true,
   showKiller = true,
   mobileCards = false,
+  feudPlayerId,
   timeZoneMode = 'local',
 }: {
   data: Kill[];
@@ -21,6 +23,7 @@ export const KillsListTable = ({
   showVictim?: boolean;
   showKiller?: boolean;
   mobileCards?: boolean;
+  feudPlayerId?: number;
   timeZoneMode?: KillTimeZoneMode;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
@@ -34,6 +37,13 @@ export const KillsListTable = ({
           const attacker = kill.attackers[0];
           const victim = kill.victim;
           const date = new Date(kill.time);
+          const opponentId = showVictim
+            ? victim.character.id
+            : attacker?.character.id;
+          const feudUrl =
+            feudPlayerId != null && opponentId != null
+              ? `/character/${feudPlayerId}/feud/${opponentId}`
+              : null;
 
           return (
             <article className="kill-mobile-card" key={kill.id}>
@@ -53,11 +63,7 @@ export const KillsListTable = ({
                       <Link to={`/character/${attacker.character.id}`}>
                         <strong>{attacker.character.name}</strong>
                       </Link>
-                      {attacker.guild && (
-                        <Link to={`/guild/${attacker.guild.id}`}>
-                          {attacker.guild.name}
-                        </Link>
-                      )}
+                      <GuildLink guild={attacker.guild} />
                       <small>
                         Lvl {attacker.level} · RR {attacker.renownRank}
                       </small>
@@ -79,11 +85,7 @@ export const KillsListTable = ({
                       <Link to={`/character/${victim.character.id}`}>
                         <strong>{victim.character.name}</strong>
                       </Link>
-                      {victim.guild && (
-                        <Link to={`/guild/${victim.guild.id}`}>
-                          {victim.guild.name}
-                        </Link>
-                      )}
+                      <GuildLink guild={victim.guild} />
                       <small>
                         Lvl {victim.level} · RR {victim.renownRank}
                       </small>
@@ -93,12 +95,19 @@ export const KillsListTable = ({
               </div>
               <footer className="kill-mobile-footer">
                 <span>{kill.scenario ? 'Scenario' : 'RvR'}</span>
-                <Link
-                  to={`/kill/${kill.id}`}
-                  className="button is-primary is-small"
-                >
-                  {t('components:killsList.details')}
-                </Link>
+                <div className="kill-mobile-actions">
+                  {feudUrl && (
+                    <Link to={feudUrl} className="button is-light is-small">
+                      {t('components:playerFeud.viewFeud')}
+                    </Link>
+                  )}
+                  <Link
+                    to={`/kill/${kill.id}`}
+                    className="button is-primary is-small"
+                  >
+                    {t('components:killsList.details')}
+                  </Link>
+                </div>
               </footer>
             </article>
           );
@@ -134,6 +143,13 @@ export const KillsListTable = ({
         <tbody>
           {data.map((kill) => {
             const date = new Date(kill.time);
+            const opponentId = showVictim
+              ? kill.victim.character.id
+              : kill.attackers[0]?.character.id;
+            const feudUrl =
+              feudPlayerId != null && opponentId != null
+                ? `/character/${feudPlayerId}/feud/${opponentId}`
+                : null;
 
             return (
               <tr key={kill.id}>
@@ -162,9 +178,7 @@ export const KillsListTable = ({
                             <strong>{kill.attackers[0].character.name}</strong>
                           </Link>
                           <br />
-                          <Link to={`/guild/${kill.attackers[0].guild?.id}`}>
-                            {kill.attackers[0].guild?.name}
-                          </Link>
+                          <GuildLink guild={kill.attackers[0].guild} />
                         </div>
                       </div>
                       <div className="media-right">
@@ -189,9 +203,7 @@ export const KillsListTable = ({
                             <strong>{kill.victim.character.name}</strong>
                           </Link>
                           <br />
-                          <Link to={`/guild/${kill.victim.guild?.id}`}>
-                            {kill.victim.guild?.name}
-                          </Link>
+                          <GuildLink guild={kill.victim.guild} />
                         </div>
                       </div>
                       <div className="media-right">
@@ -262,10 +274,12 @@ export const KillsListTable = ({
                   )}
                 </td>
                 <td>
-                  <Link
-                    to={`/kill/${kill.id}`}
-                    className="button is-primary p-2 is-pulled-right"
-                  >
+                  {feudUrl && (
+                    <Link to={feudUrl} className="button is-light is-small mr-2">
+                      {t('components:playerFeud.viewFeud')}
+                    </Link>
+                  )}
+                  <Link to={`/kill/${kill.id}`} className="button is-primary p-2 is-pulled-right">
                     {t('components:killsList.details')}
                   </Link>
                 </td>

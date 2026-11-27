@@ -59,7 +59,7 @@ export const Character = ({
       {tab === 'kills' && (
         <>
           <KillsFilters />
-          <div className="columns is-desktop">
+          <div className="columns is-desktop character-kill-columns">
             <div className="column">
               <CharacterRecentKills id={Number(id)} />
             </div>

@@ -19,6 +19,7 @@ export const KillsList = ({
   showVictim = true,
   showKiller = true,
   mobileCards = false,
+  feudPlayerId,
   defaultPeriod = 'all',
   timeZoneMode = 'local',
   showTotalCount = true,
@@ -32,6 +33,7 @@ export const KillsList = ({
   showVictim?: boolean;
   showKiller?: boolean;
   mobileCards?: boolean;
+  feudPlayerId?: number;
   defaultPeriod?: string;
   timeZoneMode?: KillTimeZoneMode;
   showTotalCount?: boolean;
@@ -89,6 +91,7 @@ export const KillsList = ({
         showKiller={showKiller}
         showVictim={showVictim}
         mobileCards={mobileCards}
+        feudPlayerId={feudPlayerId}
         timeZoneMode={timeZoneMode}
       />
       <QueryPagination

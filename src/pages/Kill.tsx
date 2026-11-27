@@ -10,6 +10,7 @@ import {
   KILL_DAMAGE_FRAGMENT,
 } from '@/components/kill/Attacker';
 import { CareerIcon } from '@/components/CareerIcon';
+import { GuildLink } from '@/components/global/GuildLink';
 import { PlayerFeud } from '@/components/kill/PlayerFeud';
 import { Map } from '@/components/Map';
 import { GuildFeud } from '@/components/guild/GuildFeud';
@@ -213,9 +214,7 @@ export const Kill = (): ReactElement => {
                     />
                   </figure>
                   <div className="media-content">
-                    <Link to={`/guild/${kill.victim.guild?.id}`}>
-                      {kill.victim.guild?.name}
-                    </Link>
+                    <GuildLink guild={kill.victim.guild} />
                   </div>
                 </article>
               </div>

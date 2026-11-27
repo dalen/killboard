@@ -72,6 +72,8 @@ export const CharacterRecentDeaths = ({ id }: { id: number }): ReactElement => {
       perPage={10}
       showTime={false}
       showVictim={false}
+      mobileCards
+      feudPlayerId={id}
     />
   );
 };

@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 import { sum } from 'lodash';
 import { CareerIcon } from '@/components/CareerIcon';
+import { GuildLink } from '@/components/global/GuildLink';
 import { GuildHeraldry } from '@/components/guild/GuildHeraldry';
 import { killDamageText } from '@/utils';
 import type { ReactElement } from 'react';
@@ -125,7 +126,7 @@ export const Attacker = ({
               RR {attacker.renownRank}
             </small>
           </figure>
-          {attacker.guild && (
+          {attacker.guild?.id != null && attacker.guild.name && (
             <>
               <figure className="media-left">
                 <GuildHeraldry
@@ -135,9 +136,7 @@ export const Attacker = ({
                 />
               </figure>
               <div className="media-content">
-                <Link to={`/guild/${attacker.guild?.id}`}>
-                  {attacker.guild?.name}
-                </Link>
+                <GuildLink guild={attacker.guild} />
               </div>
             </>
           )}

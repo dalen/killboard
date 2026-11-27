@@ -81,6 +81,14 @@
   padding-top: 0.55rem;
 }
 
+.kill-mobile-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
 @media screen and (max-width: 380px) {
   .kill-mobile-card {
     padding: 0.6rem;
