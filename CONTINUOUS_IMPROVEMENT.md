@@ -10,7 +10,7 @@ Substantially expand the official Killboard player experience using existing rep
 
 ## Active task
 
-The approved application release is deployed and verified. Production headless checks covered populated character Kills, Scenarios, Skirmishes and Armory, plus all five Kingsmen guild tabs at desktop/tablet/phone sizes; no app errors, shared-asset failures or horizontal overflow. GitHub Actions run 46076658075 succeeded. Dependabot PRs #1081 and #1077 were incorporated and closed with explanatory comments. Alert #175 remains a development-only maintenance finding. Resume implementation now at the shared Warhammer filters/form redesign, using Scenarios as the first reference. Keep all new development changes local pending a separate release approval. The local Vite server remains on port 3002.
+The Scenarios filter redesign and accepted shared button fix were deployed in `0a0b452d2c3198bb2a5611deb1ef8d7f77a535f1`; GitHub Actions run 46080764607 succeeded. Production headless verification confirmed 114 populated Mrak matches, preset/custom date visibility and no horizontal overflow at desktop/tablet/phone widths, with no application errors. The existing direct-route SPA fallback responds HTTP 404 before hydrating the working client app. Alert #175 remains a documented development-only maintenance finding; production audit is clean. The next queue item is to reconcile retired live-event-calendar PR #1072 against current routes and the public API, then implement only if it still adds value. Keep subsequent changes local until separately approved. The local Vite server remains on port 3002.
 
 ## Actionable implementation queue
 

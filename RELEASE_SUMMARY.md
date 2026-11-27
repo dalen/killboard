@@ -26,7 +26,7 @@ Status: release candidate verified locally; approved for push and deployment. Pr
 
 ## Deployment
 
-Pending: commit and push to Dalen's `main`, verify GitHub Actions and the live Scenarios route, then update this section with the exact deployed commit/run.
+Deployed to Dalen's `main` as `0a0b452d2c3198bb2a5611deb1ef8d7f77a535f1`. GitHub Actions Build and Deploy run [46080764607](https://github.com/dalen/killboard/actions/runs/46080764607) succeeded. Production headless verification loaded the deployed bundle and 114 populated Mrak matches, confirmed preset dates hidden/custom dates revealed, no page errors, and no horizontal overflow at desktop (1440px), tablet (768px) or phone (390px). The production SPA fallback returns HTTP 404 for a direct route document request while the app hydrates and works normally; record this existing hosting behavior as a routing caveat, not an application failure.
 
 ---
 
