@@ -1,6 +1,6 @@
 # Killboard Continuous Improvement — Phase II
 
-Updated: 2026-11-26. Current release base: `308a681cab437cbe13a5b100262f9e7ca61f8e42`.
+Updated: 2026-11-26. Current application release: `36eff05e38742aa9d0d333da9886b342319adba4`.
 
 This file is the authoritative current objective, implementation queue, checkpoint, and resume point. Sections under **Historical technical and verification evidence** preserve prior decisions and evidence; they do not govern current execution. API limitations apply only to the affected feature. Continue independently actionable Phase II work without waiting for a schema change.
 
@@ -41,6 +41,7 @@ Continue Phase II implementation from the existing queue. The user rejected the 
 - Removed the homepage “Explore the Killboard” section, its buttons, styles and localization key per user direction. Moved Instance Runs to the existing Database dropdown; Equipment Compare remains there. In-chat and Playwright checks showed 30 populated leaderboard/recent-kill rows, no duplicate shortcut section and no overflow at 1440/390/768 widths.
 - Added inline links from RvR skirmish zone names to that zone's heatmap. No extra query or card. On Murked's character page, 7 of 15 loaded skirmish rows had zone links; Zone #103 opened a populated heatmap at 1440/390/768 with no page errors or overflow.
 - Changed Players search from the global mixed-content `search` connection to the schema-supported `characters(where: { name: { contains } })` connection. The “Emissary” search now returns only character matches, with correct character-only cursor pagination. A live API query returned eight matching character records; this is not a claim of full live-server roster coverage, which the public API does not establish. Playwright verified all-character results on both pages of a broad query, no page errors or horizontal overflow at 1440×900, 390×844 and 768×1024; TypeScript and production build pass.
+- Phase II feature release `36eff05e38742aa9d0d333da9886b342319adba4` was pushed to `main`; GitHub Pages run [45927214253](https://github.com/dalen/killboard/actions/runs/45927214253) completed successfully. Production Playwright checks confirmed populated homepage, Players search, Equipment Compare, Guild Members, zone heatmap and Armory routes at 1440×900, 768×1024 and 390×844, with no horizontal overflow or page errors. The Armory's rejected progress summary remains absent and its four existing gear sections are present.
 
 ## API-blocked backlog
 
@@ -73,19 +74,20 @@ These are feature-specific blockers, not project blockers:
 
 ## Historical release records
 
-- Latest deployed commit: `308a681cab437cbe13a5b100262f9e7ca61f8e42` on `origin/main`; GitHub Pages run [45914385883](https://github.com/dalen/killboard/actions/runs/45914385883) succeeded.
+- Previous deployed commit: `308a681cab437cbe13a5b100262f9e7ca61f8e42`; its release evidence is preserved in run [45914385883](https://github.com/dalen/killboard/actions/runs/45914385883).
+- Latest application release commit: `36eff05e38742aa9d0d333da9886b342319adba4` on `main`; GitHub Pages run [45927214253](https://github.com/dalen/killboard/actions/runs/45927214253) succeeded.
 - Production checks confirmed populated Guild Register and Gunbad Instance Runs, working filters/date bounds, and no phone page overflow. GitHub Pages direct deep-link HTTP requests used the SPA fallback 404 response while React rendered the requested routes and data.
 - This deployment approval applies only to that release. Future commit, push, merge or deployment each needs fresh explicit user approval.
 
 ## Current repository and deployment state
 
 - Repository: `https://github.com/dalen/killboard.git`; working directory `C:\Users\Trevor\Documents\Codex\2026-11-24\killboard\work\dalen-killboard-release`.
-- Branch `codex/database-page-fixes`; `HEAD` remains the deployed `308a681cab437cbe13a5b100262f9e7ca61f8e42`.
-- Local changes include Phase II documentation, compact homepage/menu changes, item comparison and item entry links, guild roster career composition, bounded zone heatmaps and filtered-kill navigation, dungeon statistics-to-runs link, RvR skirmish-zone-to-heatmap links, character-only Players search, and prior responsive improvements. Rejected Armory progress UI remains removed; current gear displays remain. Relevant populated routes are open in marked in-chat review tabs. HEAD remains unchanged; all edits are local and uncommitted.
+- Branch `codex/database-page-fixes` is synchronized with `origin/main`; application release `36eff05e38742aa9d0d333da9886b342319adba4` is deployed. A documentation-only checkpoint commit reconciles this release state without changing the application bundle.
+- The Phase II feature batch is deployed, including compact homepage/menu updates, Equipment Compare, guild career composition, bounded zone heatmaps and filtered-kill navigation, the dungeon recent-runs shortcut, RvR zone-to-heatmap links and character-only Players search. The rejected Armory progress UI remains absent; its existing gear displays remain. Production route checks above were performed at desktop/phone/tablet widths.
 
 ## Exact next action
 
-Continue reviewing database cross-links for distinct player value, starting with creature and quest zone locations; avoid redundant shortcut menus and low-value cards. Preserve the compact homepage and reject the Armory set-progress card. For each addition, open populated routes in-chat, run Playwright at desktop/phone/tablet, run TypeScript/build and `git diff --check`, then update this checkpoint. No commit, push, merge or deployment without explicit approval.
+Continue reviewing database cross-links for distinct player value, starting with creature and quest zone locations; avoid redundant shortcut menus and low-value cards. Preserve the compact homepage and reject the Armory set-progress card. For each addition, open populated routes in-chat, run Playwright at desktop/phone/tablet, run TypeScript/build and `git diff --check`, then update this checkpoint. No further commit, push, merge or deployment without fresh explicit approval.
 ## Historical technical and verification evidence (archive; current policy above supersedes archived checkpoints)
 ### Phase I completed and verified
 
