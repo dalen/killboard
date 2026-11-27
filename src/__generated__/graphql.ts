@@ -615,10 +615,10 @@ export type GetCharacterArmoryQueryVariables = Exact<{
 }>;
 
 
-export type GetCharacterArmoryQuery = { character: { items: Array<{ equipSlot: EquipSlot, talismans: Array<{ id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ stat: Stat, value: any }>, buffs: Array<{ id: string, description: string | null }> }>, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
+export type GetCharacterArmoryQuery = { character: { name: string, career: Career, level: any, renownRank: any, items: Array<{ equipSlot: EquipSlot, talismans: Array<{ id: string, name: string, rarity: ItemRarity, iconUrl: any, stats: Array<{ stat: Stat, value: any, percentage: boolean }>, buffs: Array<{ id: string, description: string | null }> }>, item: { id: string, iconUrl: any, name: string, careerRestriction: Array<Career>, raceRestriction: Array<Race>, uniqueEquipped: boolean, description: string, type: ItemType, slot: EquipSlot, rarity: ItemRarity, armor: any, dps: any, speed: any, levelRequirement: any, renownRankRequirement: any, itemLevel: any, talismanSlots: any, itemSet: { id: string, name: string, items: Array<{ id: string }>, bonuses: Array<{ itemsRequired: any, bonus:
               | { __typename: 'Ability', description: string | null }
               | { __typename: 'ItemStat', stat: Stat, value: any, percentage: boolean }
-             }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any }> } }> } | null };
+             }> } | null, abilities: Array<{ id: string, description: string | null }>, buffs: Array<{ id: string, description: string | null }>, stats: Array<{ stat: Stat, value: any, percentage: boolean }> } }> } | null };
 
 export type GetCharacterInfoQueryVariables = Exact<{
   id: string | number;

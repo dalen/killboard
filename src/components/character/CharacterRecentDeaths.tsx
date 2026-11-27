@@ -69,7 +69,7 @@ export const CharacterRecentDeaths = ({ id }: { id: number }): ReactElement => {
       queryOptions={{
         variables: { id, time: {} },
       }}
-      perPage={10}
+      perPage={25}
       showTime={false}
       showVictim={false}
       mobileCards

@@ -49,6 +49,8 @@ $table-head-cell-color: $link;
   $breadcrumb-item-active-color: $text-strong
 );
 
+@use './components/global/warhammer-button.scss' as *;
+
 .item-list-sources {
   display: flex;
   flex-wrap: wrap;
@@ -289,7 +291,6 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   max-height: min(70vh, 36rem);
   max-width: min(22rem, calc(100vw - 2rem));
   min-width: min(18rem, calc(100vw - 2rem));
-  overflow-y: auto;
   padding: 10px;
   pointer-events: none;
 }
@@ -298,6 +299,10 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   max-height: min(68vh, 44rem);
   overflow: auto;
   overscroll-behavior: contain;
+}
+
+.item-relation-scroll:not(.is-overflowing) .warhammer-scrollbar {
+  display: none;
 }
 
 .item-relation-scroll .table thead th {
@@ -436,6 +441,7 @@ $tooltip-item-bonus: rgb(255, 255, 0);
 }
 
 .item-relation-tooltip {
+  align-items: stretch;
   background: rgba(0, 0, 0, 0.96);
   border: 1px solid rgb(83, 66, 53);
   border-radius: 5px;
@@ -445,13 +451,16 @@ $tooltip-item-bonus: rgb(255, 255, 0);
   line-height: 1.35;
   max-height: min(60vh, 28rem);
   max-width: min(22rem, calc(100vw - 2rem));
-  overflow-y: auto;
   padding: 0.65rem 0.75rem;
-  pointer-events: none;
+  pointer-events: auto;
   width: max-content;
 }
 
-.item-relation-tooltip > * + * {
+.item-relation-tooltip:not(.is-overflowing) .warhammer-scrollbar {
+  display: none;
+}
+
+.item-relation-tooltip .warhammer-scroll-content > * + * {
   margin-top: 0.25rem;
 }
 

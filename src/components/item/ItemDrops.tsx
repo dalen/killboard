@@ -7,6 +7,7 @@ import { Career, type Query, Realm } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { HoverPopupTrigger } from '@/components/global/HoverPopupTrigger';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { WarhammerScrollPane } from '@/components/global/WarhammerScrollPane';
 import { ItemPopupTrigger } from '@/components/item/ItemPopupTrigger';
 import { canUseItem } from '@/itemUtils';
 
@@ -187,7 +188,12 @@ export const ItemDrops = ({
           </div>
         </div>
       )}
-      <div className="item-relation-scroll">
+      <WarhammerScrollPane
+        className="item-relation-scroll"
+        ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+        scrollUpLabel={t('pages:characterPage.scrollUp')}
+        scrollDownLabel={t('pages:characterPage.scrollDown')}
+      >
         <table
           className={`table is-striped is-fullwidth${source === 'chapters' ? ' item-chapter-rewards' : ''}`}
         >
@@ -228,8 +234,14 @@ export const ItemDrops = ({
                 <tr key={creature.id}>
                   <td>
                     <HoverPopupTrigger
+                      interactive
                       content={
-                        <div className="item-relation-tooltip">
+                        <WarhammerScrollPane
+                          className="item-relation-tooltip"
+                          ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+                          scrollUpLabel={t('pages:characterPage.scrollUp')}
+                          scrollDownLabel={t('pages:characterPage.scrollDown')}
+                        >
                           <strong>{creature.name}</strong>
                           {creature.title && (
                             <div>{creature.title.replaceAll('_', ' ')}</div>
@@ -239,7 +251,7 @@ export const ItemDrops = ({
                             <div>{creature.modelName}</div>
                           )}
                           {zones.length > 0 && <div>{zones.join(', ')}</div>}
-                        </div>
+                        </WarhammerScrollPane>
                       }
                     >
                       <Link to={`/creature/${creature.id}`}>
@@ -261,8 +273,14 @@ export const ItemDrops = ({
                 <tr key={gameObject.id}>
                   <td>
                     <HoverPopupTrigger
+                      interactive
                       content={
-                        <div className="item-relation-tooltip">
+                        <WarhammerScrollPane
+                          className="item-relation-tooltip"
+                          ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+                          scrollUpLabel={t('pages:characterPage.scrollUp')}
+                          scrollDownLabel={t('pages:characterPage.scrollDown')}
+                        >
                           <strong>{gameObject.name}</strong>
                           {gameObject.modelName && (
                             <div>{gameObject.modelName}</div>
@@ -270,7 +288,7 @@ export const ItemDrops = ({
                           {zones.length > 0 && (
                             <div>{[...new Set(zones)].join(', ')}</div>
                           )}
-                        </div>
+                        </WarhammerScrollPane>
                       }
                     >
                       <Link to={`/gameobject/${gameObject.id}`}>
@@ -344,7 +362,7 @@ export const ItemDrops = ({
             })}
           </tbody>
         </table>
-      </div>
+      </WarhammerScrollPane>
       <QueryPagination
         pageInfo={connection.pageInfo}
         perPage={perPage}

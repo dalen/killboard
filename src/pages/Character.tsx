@@ -1,6 +1,6 @@
 import { Link, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { CharacterInfo } from '@/components/character/CharacterInfo';
+import { CharacterIdentityHeader } from '@/components/character/CharacterInfo';
 import { CharacterRecentDeaths } from '@/components/character/CharacterRecentDeaths';
 import { CharacterRecentKills } from '@/components/character/CharacterRecentKills';
 import { KillsFilters } from '@/components/kill/KillsFilters';
@@ -10,6 +10,7 @@ import { CharacterArmory } from '@/components/character/CharacterArmory';
 import { ScenarioCount } from '@/components/scenario/ScenarioCount';
 import { CharacterLatestSkirmishes } from '@/components/character/CharacterLatestSkirmishes';
 import type { ReactElement } from 'react';
+import './Character.scss';
 
 export const Character = ({
   tab,
@@ -20,8 +21,8 @@ export const Character = ({
 
   const { id } = useParams();
   return (
-    <div className="container is-max-widescreen mt-2">
-      <nav className="breadcrumb" aria-label="breadcrumbs">
+    <div className="container is-max-widescreen character-page">
+      <nav className="breadcrumb character-breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
             <Link to="/">{t('common:home')}</Link>
@@ -33,29 +34,38 @@ export const Character = ({
           </li>
         </ul>
       </nav>
-      <CharacterInfo id={Number(id)} />
+      <CharacterIdentityHeader id={Number(id)} />
 
-      <div className="tabs">
+      <nav className="tabs is-boxed character-tabs" aria-label={t('pages:characterPage.characterNavigation')}>
+        <ul>
         <li className={tab === 'kills' ? 'is-active' : ''}>
-          <Link to={`/character/${id}`}>{t('pages:characterPage.kills')}</Link>
+          <Link to={`/character/${id}`} aria-current={tab === 'kills' ? 'page' : undefined}><span className="warhammer-tab-label">{t('pages:characterPage.kills')}</span></Link>
         </li>
         <li className={tab === 'scenarios' ? 'is-active' : ''}>
-          <Link to={`/character/${id}/scenarios`}>
+          <Link to={`/character/${id}/scenarios`} aria-current={tab === 'scenarios' ? 'page' : undefined}>
+            <span className="warhammer-tab-label">
             {t('pages:characterPage.scenarios')}
+            </span>
           </Link>
         </li>
         <li className={tab === 'skirmishes' ? 'is-active' : ''}>
-          <Link to={`/character/${id}/skirmishes`}>
+          <Link to={`/character/${id}/skirmishes`} aria-current={tab === 'skirmishes' ? 'page' : undefined}>
+            <span className="warhammer-tab-label">
             {t('pages:characterPage.skirmishes')}
+            </span>
           </Link>
         </li>
         <li className={tab === 'armory' ? 'is-active' : ''}>
-          <Link to={`/character/${id}/armory`}>
+          <Link to={`/character/${id}/armory`} aria-current={tab === 'armory' ? 'page' : undefined}>
+            <span className="warhammer-tab-label">
             {t('pages:characterPage.armory')}
+            </span>
           </Link>
         </li>
-      </div>
+        </ul>
+      </nav>
 
+      <main className="character-page-content">
       {tab === 'kills' && (
         <>
           <KillsFilters />
@@ -80,11 +90,14 @@ export const Character = ({
               <ScenarioCount characterId={id} wins={false} title="Losses" />
             </div>
           </div>
-          <ScenarioList characterId={id} />
+          <ScenarioList characterId={id} perPage={25} />
         </div>
       )}
       {tab === 'skirmishes' && <CharacterLatestSkirmishes characterId={id} />}
-      {tab === 'armory' && <CharacterArmory id={Number(id)} />}
+      {tab === 'armory' && (
+        <CharacterArmory id={Number(id)} />
+      )}
+      </main>
     </div>
   );
 };

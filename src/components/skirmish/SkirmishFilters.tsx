@@ -70,7 +70,7 @@ export const SkirmishFilters = (): ReactElement => {
   const minPlayers = search.get('minPlayers') || 'all';
 
   return (
-    <div className="card mb-5">
+    <div className="card mb-5 character-filters">
       <div className="card-content">
         <div className="columns">
           <div className="column">

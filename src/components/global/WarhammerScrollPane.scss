@@ -1,0 +1,183 @@
+.warhammer-scroll-pane {
+  align-items: stretch;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.warhammer-scroll-viewport {
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  touch-action: pan-y;
+
+  &::-webkit-scrollbar {
+    display: none;
+    height: 0;
+    width: 0;
+  }
+}
+
+.warhammer-scroll-content {
+  min-width: 0;
+}
+
+.warhammer-scrollbar {
+  align-items: center;
+  display: flex;
+  flex: 0 0 22px;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+  user-select: none;
+
+  pointer-events: none;
+  visibility: hidden;
+
+  &.is-scrollable {
+    pointer-events: auto;
+    visibility: visible;
+  }
+}
+
+.warhammer-scroll-arrow {
+  appearance: none;
+  background-color: transparent;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 26px 26px;
+  border: 0;
+  cursor: pointer;
+  flex: 0 0 26px;
+  height: 26px;
+  margin-left: -2px;
+  margin-right: -2px;
+  padding: 0;
+  width: 26px;
+
+  &.is-up {
+    background-image: url('/gear-preview/ui/scrollbar-up-normal.png');
+  }
+
+  &.is-down {
+    background-image: url('/gear-preview/ui/scrollbar-down-normal.png');
+  }
+
+  &.is-up:hover:not(:disabled) {
+    background-image: url('/gear-preview/ui/scrollbar-up-hover.png');
+  }
+
+  &.is-down:hover:not(:disabled) {
+    background-image: url('/gear-preview/ui/scrollbar-down-hover.png');
+  }
+
+  &.is-up:active:not(:disabled) {
+    background-image: url('/gear-preview/ui/scrollbar-up-pressed.png');
+  }
+
+  &.is-down:active:not(:disabled) {
+    background-image: url('/gear-preview/ui/scrollbar-down-pressed.png');
+  }
+
+  &:disabled {
+    cursor: default;
+    filter: brightness(0.72);
+  }
+
+  &:focus-visible {
+    outline: 1px solid #e8c56d;
+    outline-offset: -2px;
+  }
+}
+
+.warhammer-scroll-track {
+  background-color: #080807;
+  background-image: url('/gear-preview/ui/scrollbar-track.png');
+  background-position: center top;
+  background-repeat: repeat-y;
+  background-size: 22px 30px;
+  cursor: pointer;
+  flex: 1 1 auto;
+  min-height: 0;
+  position: relative;
+  width: 22px;
+}
+
+.warhammer-scroll-thumb {
+  --thumb-top: url('/gear-preview/ui/scrollbar-thumb-top.png');
+  --thumb-middle: url('/gear-preview/ui/scrollbar-thumb-middle.png');
+  --thumb-bottom: url('/gear-preview/ui/scrollbar-thumb-bottom.png');
+  background-image:
+    url('/gear-preview/ui/scrollbar-nubs.png'),
+    var(--thumb-middle),
+    var(--thumb-top),
+    var(--thumb-bottom);
+  background-position:
+    center center,
+    center 9px,
+    center top,
+    center bottom;
+  background-repeat:
+    no-repeat,
+    repeat-y,
+    no-repeat,
+    no-repeat;
+  background-size:
+    5px 20px,
+    14px 16px,
+    14px 9px,
+    14px 9px;
+  cursor: grab;
+  left: 5px;
+  min-height: 34px;
+  position: absolute;
+  touch-action: none;
+  width: 14px;
+
+  &:hover {
+    --thumb-top: url('/gear-preview/ui/scrollbar-thumb-top-hover.png');
+    --thumb-middle: url('/gear-preview/ui/scrollbar-thumb-middle-hover.png');
+    --thumb-bottom: url('/gear-preview/ui/scrollbar-thumb-bottom-hover.png');
+  }
+
+  &.is-dragging,
+  &:active {
+    --thumb-top: url('/gear-preview/ui/scrollbar-thumb-top-pressed.png');
+    --thumb-middle: url('/gear-preview/ui/scrollbar-thumb-middle-pressed.png');
+    --thumb-bottom: url('/gear-preview/ui/scrollbar-thumb-bottom-pressed.png');
+    cursor: grabbing;
+  }
+
+  &:focus-visible {
+    filter: brightness(1.2);
+    outline: 1px solid #e8c56d;
+    outline-offset: -1px;
+  }
+}
+
+.warhammer-equipment-tooltip {
+  max-height: calc(100vh - 16px);
+  max-width: min(360px, calc(100vw - 16px));
+  min-width: min(340px, calc(100vw - 16px));
+  pointer-events: auto !important;
+}
+
+.warhammer-equipment-tooltip .warhammer-scroll-viewport {
+  padding: 0.1rem 0.45rem 0.3rem 0.1rem;
+}
+
+.warhammer-equipment-tooltip:not(.is-overflowing) .warhammer-scrollbar {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .warhammer-scroll-pane * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}

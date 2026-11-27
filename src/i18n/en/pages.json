@@ -1,10 +1,30 @@
 {
   "characterPage": {
     "characterId": "Character #{{characterId}}",
+    "characterNavigation": "Character sections",
+    "characterIdentity": "Character identity",
+    "scrollUp": "Scroll up",
+    "scrollDown": "Scroll down",
     "kills": "Kills",
     "scenarios": "Scenarios",
     "skirmishes": "Skirmishes",
-    "armory": "Armory"
+    "armory": "Armory",
+    "equippedGearBonuses": "Equipped gear bonuses",
+    "gearBonusesNote": "Gear, talismans and active set stats; base stats excluded.",
+    "otherGearBonuses_one": "Other gear bonus ({{count}})",
+    "otherGearBonuses_other": "Other gear bonuses ({{count}})",
+    "armorySlot": {
+      "event": "Event",
+      "pocket": "Pocket"
+    },
+    "armorySection": {
+      "eventItem": "Event Item",
+      "armor": "Armor",
+      "jewellery": "Jewellery",
+      "trophies": "Trophies",
+      "weapons": "Weapons",
+      "pocket": "Pocket"
+    }
   },
   "guildFeud": {
     "guildFeudId": "#{{guildId1}} vs #{{guildId2}}",
@@ -114,6 +134,8 @@
     "chooseSecond": "Second item",
     "searchPrompt": "Search by item name",
     "searchHint": "Enter at least two characters to find items.",
+    "sameSlotFirst": "Matching equipment slots appear first; different-slot items remain available below.",
+    "sameSlot": "Same slot",
     "noMatches": "No matching items found.",
     "selectedItem": "Selected item: {{name}}",
     "clearSelection": "Clear selection",
@@ -121,6 +143,9 @@
     "loading": "Loading selected items…",
     "item": "Item",
     "slot": "Slot",
+    "careerRestriction": "Career restriction",
+    "raceRestriction": "Race restriction",
+    "noRestriction": "No recorded restriction",
     "type": "Type",
     "rarity": "Rarity",
     "itemLevel": "Item level",
@@ -135,7 +160,17 @@
     "noSet": "Not part of a recorded set",
     "leftValue": "First item value",
     "rightValue": "Second item value",
-    "difference": "Difference"
+    "difference": "Difference",
+    "swapItems": "Swap items",
+    "statGainsLosses": "Recorded stat gains / losses",
+    "higherOnItem": "Higher recorded values on {{name}}",
+    "noHigherStats": "No higher numeric stats in this comparison.",
+    "noNumericStatDifferences": "These items have no comparable recorded stats.",
+    "rawDeltaNote": "Delta is second item minus first. Numeric differences describe recorded values; they do not determine which item is better.",
+    "deltaSecondMinusFirst": "Delta (2nd − 1st)",
+    "differentSlotsNote": "These items occupy different equipment slots; compare only properties relevant to your intended build.",
+    "careerRestrictionDiffers": "Recorded career eligibility differs between these items; review each item's career restriction.",
+    "careerRestrictionsIncompatible": "These items have no career in common that can equip both."
   },
   "playerFeud": {
     "playerFeudId": "#{{playerId1}} vs #{{playerId2}}"
@@ -145,6 +180,7 @@
     "name": "Name",
     "renownRank": "RR",
     "search": "Search",
+    "matchCount": "{{count}} matching characters returned by the public API",
     "prevPage": "Prev",
     "nextPage": "Next"
   },
@@ -233,6 +269,7 @@
     "partialSetTotal": "War Crest total for {{priced}} of {{total}} priced pieces: {{count}}"
   },
   "itemSources": {
+    "scrollPaneLabel": "Scrollable related item records",
     "droppedByCreatures": "Dropped by creatures",
     "droppedByGameObjects": "Found in objects",
     "chapters": "Chapter rewards",
@@ -243,6 +280,7 @@
     "chapterWithoutName": "Chapter {{chapterId}}"
   },
   "itemPopup": {
+    "scrollPaneLabel": "{{name}} equipment details",
     "vendorCosts": "Vendor costs",
     "moreOptions": "+{{count}} more price options"
   },

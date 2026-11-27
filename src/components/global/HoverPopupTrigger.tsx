@@ -20,11 +20,13 @@ export const HoverPopupTrigger = ({
   content,
   placement = 'top',
   offset,
+  interactive = false,
 }: {
   children: ReactElement;
   content: ReactNode;
   placement?: Placement;
   offset?: [number, number];
+  interactive?: boolean;
 }): ReactElement => {
   const resizeObserver = useRef<ResizeObserver | null>(null);
 
@@ -32,6 +34,7 @@ export const HoverPopupTrigger = ({
     <Tippy
       appendTo={() => document.body}
       duration={0}
+      interactive={interactive}
       placement={placement}
       offset={offset}
       onMount={(instance) => {

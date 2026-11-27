@@ -6,6 +6,7 @@ import { useQuery } from '@apollo/client/react';
 import { GoldPrice } from '@/components/GoldPrice';
 import { type Query, Realm } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { WarhammerScrollPane } from '@/components/global/WarhammerScrollPane';
 import {
   ItemVendorsFilters,
   getCurrentFilters,
@@ -103,7 +104,12 @@ export const ItemVendorsPurchase = ({
   return (
     <>
       <ItemVendorsFilters />
-      <div className="item-relation-scroll">
+      <WarhammerScrollPane
+        className="item-relation-scroll"
+        ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+        scrollUpLabel={t('pages:characterPage.scrollUp')}
+        scrollDownLabel={t('pages:characterPage.scrollDown')}
+      >
         <table className="table is-striped is-fullwidth">
           <thead>
             <tr>
@@ -207,7 +213,7 @@ export const ItemVendorsPurchase = ({
             })}
           </tbody>
         </table>
-      </div>
+      </WarhammerScrollPane>
       <QueryPagination
         pageInfo={pageInfo}
         refetch={refetch}

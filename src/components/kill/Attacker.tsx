@@ -146,8 +146,10 @@ export const Attacker = ({
             <tbody>
               {killDamageGrouped
                 .toSorted((e1, e2) => e2.damageAmount - e1.damageAmount)
-                .map((damage) => (
-                  <tr>
+                .map((damage, index) => (
+                  <tr
+                    key={`${damage.attackerType}-${damage.damageType}-${damage.ability?.id ?? 'none'}-${index}`}
+                  >
                     <td style={{ verticalAlign: 'middle' }}>
                       {damage.ability && (
                         <figure className="image is-24x24">

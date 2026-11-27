@@ -1,0 +1,129 @@
+@use '../components/global/WarhammerProfileStyles';
+
+.character-page {
+  margin-top: 0.45rem !important;
+}
+
+.character-identity-card {
+  @extend .warhammer-identity-frame;
+
+  margin: 0 0 0.45rem !important;
+}
+
+.character-identity-emblem {
+  flex: 0 0 48px;
+  height: 48px;
+  object-fit: contain;
+  width: 48px;
+}
+
+.character-identity-main {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 8rem;
+}
+
+.character-identity-name {
+  color: #ffad16;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.character-identity-career {
+  align-items: center;
+  color: #d5d0c4;
+  display: flex;
+  font-size: 0.78rem;
+  gap: 0.35rem;
+
+  img {
+    height: 20px;
+    object-fit: contain;
+    width: 20px;
+  }
+}
+
+.character-identity-facts {
+  align-items: center;
+  color: #e8e3d6;
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0.35rem 1.2rem;
+  min-width: 0;
+
+  span {
+    font-size: 0.78rem;
+    white-space: nowrap;
+  }
+
+  strong {
+    color: #a8c4e4;
+  }
+
+  .character-identity-guild {
+    min-width: 0;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+}
+
+.character-breadcrumb {
+  margin-bottom: 0.35rem !important;
+}
+
+.character-page-content {
+  width: 100%;
+
+  .columns {
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  > .card.mb-5 {
+    margin-bottom: 0.65rem !important;
+  }
+
+  > .card.mb-5 > .card-content {
+    padding: 0.7rem;
+  }
+
+  .character-filters .card-content {
+    padding: 0.75rem;
+  }
+}
+
+.character-tabs {
+  @extend .warhammer-profile-tabs;
+}
+
+@media screen and (max-width: 480px) {
+  .character-identity-card {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.35rem 0.5rem;
+    min-height: 0;
+    padding: 0.35rem 0.45rem;
+  }
+
+  .character-identity-emblem {
+    flex-basis: 40px;
+    height: 40px;
+    width: 40px;
+  }
+
+  .character-identity-main {
+    min-width: 0;
+  }
+
+  .character-identity-facts {
+    flex-basis: calc(100% - 48px);
+    gap: 0.2rem 0.65rem;
+    margin-left: 48px;
+
+    span {
+      font-size: 0.7rem;
+    }
+  }
+}

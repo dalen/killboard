@@ -21,10 +21,21 @@ export const ITEM_TALISMAN_FRAGMENT = gql`
     stats {
       stat
       value
+      percentage
     }
     buffs {
       id
       description
+    }
+  }
+`;
+
+export const EQUIPPED_ITEM_STATS_FRAGMENT = gql`
+  fragment EquippedItemStats on Item {
+    stats {
+      stat
+      value
+      percentage
     }
   }
 `;
@@ -37,9 +48,11 @@ export const EQUIPPED_ITEM_FRAGMENT = gql`
     }
     item {
       ...ItemListEntry
+      ...EquippedItemStats
     }
   }
   ${ITEM_TALISMAN_FRAGMENT}
+  ${EQUIPPED_ITEM_STATS_FRAGMENT}
   ${ITEM_FRAGMENT}
 `;
 
@@ -47,10 +60,12 @@ export const CharacterItem = ({
   item,
   talismans = [],
   itemsEquipped = [],
+  altText,
 }: {
   item: ItemListEntryFragment;
   talismans?: TalismanFragment[];
   itemsEquipped?: EquippedCharacterItemFragment[];
+  altText?: string;
 }): ReactElement => {
   const { t } = useTranslation(['enums']);
   const [modalOpen, setModalOpen] = useState(false);
@@ -83,7 +98,7 @@ export const CharacterItem = ({
                 item,
               )} [item-figure] image is-64x64 m-0`} // Remove [...] from item-figure to add coloured borders
             >
-              <img src={item.iconUrl} alt={item.name} />
+              <img src={item.iconUrl} alt={altText ?? item.name} />
             </figure>
           ) : (
             <Link to={`/item/${item.id}`}>
@@ -92,7 +107,7 @@ export const CharacterItem = ({
                   item,
                 )} [item-figure] image is-64x64 m-0`} // Remove [...] from item-figure to add coloured borders
               >
-                <img src={item.iconUrl} alt={item.name} />
+                <img src={item.iconUrl} alt={altText ?? item.name} />
               </figure>
             </Link>
           )}

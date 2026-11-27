@@ -1,14 +1,66 @@
-# Local release review summary
+# Current unreleased candidate — approval required
+
+Status: release stabilization is complete and the candidate is ready for review. Nothing is staged, committed, pushed or deployed. The current branch is `codex/database-page-fixes`, based on `origin/main` at `fb2e56fe57f17aa1737f1765684e3d0bb13f1c87`; it is 0 commits ahead and 0 behind. Production remains on the previously deployed release recorded below.
+
+## Candidate contents
+
+### Included — Killboard and shared Warhammer UI
+
+- Shared compact character identity and framed tab navigation across Kills, Scenarios, Skirmishes and Armory; complete MYP tab-state textures eliminate the black seams at 75%, 80%, 100%, 125%, 150%, 175% and 200% browser zoom.
+- Compact guild identity and framed tabs; Kingsmen overview, kills, members, scenarios and skirmishes show populated data. Header alignment remains stable, the emblem stays anchored while the description expands, and desktop/tablet/phone layouts have no horizontal overflow.
+- Expanded full-width Armory paper doll with authentic empty-slot art, rarity-colored item names, bounded equipment tooltips and reusable MYP chain scrolling. The visible scrollbar was captured at top/middle/bottom; the user confirms its Armory interaction works.
+- Shared MYP action buttons, including complete normal, hover, pressed and disabled artwork; compact table actions and Browse Guilds fit their labels.
+- Equipment Compare improvements, API-backed Players result count, character-only search and 25-row defaults for the relevant character lists and Recent Kills.
+- Item-to-creature/quest related links and Warhammer scroll panes for long item relation lists.
+- Approved compatible `react-i18next` 17.0.16 and Prettier 3.9.10 updates, with `package-lock.json` refreshed against this codebase.
+- Localization fixes, render-key warning fixes, `AGENTS.md` release workflow rules and updated queue/security documentation.
+
+### Explicitly excluded — separate Gear Preview / Dressing Room feature
+
+- The separate checkout is `C:\Users\Trevor\.codex\worktrees\gear-preview-emissaryx\killboard-emissaryx` (HEAD `a23660cc5d761563ab87a446632703328cb0b8f7`); this candidate checkout is `C:\Users\Trevor\Documents\Codex\2026-11-24\killboard\work\dalen-killboard-release` on `codex/database-page-fixes`.
+- Excluded are its `/character/:id/gear-preview` route and navigation/tab entry, 3D renderer and models, Gear Preview components/materials/dyes, model assets, and `three`, `@react-three/fiber` and `@react-three/drei` dependencies. These changes remain in the separate checkout untouched.
+- The only `public/gear-preview/` content staged for this release is 49 PNG UI assets referenced by the existing Killboard Armory, authentic window/tab/button/chain artwork, and empty equipment slots. They are shared UI resources, not character-model assets. The 29 unreferenced MYP extraction/crop files remain unstaged and local. The production build contains no Gear Preview route or feature component, and this candidate adds no Gear Preview dependencies.
+- Some files also changed in both checkouts (`Character.tsx`, `CharacterItemPopup.tsx`, `enums.json`, package manifests/lockfiles and the asset directory). The candidate contains only its own profile/Armory/tooltip/translation changes and two approved dependency updates; no route, renderer or 3D dependency was copied over. Keep the other checkout's implementation intact.
+
+## Release verification
+
+- `npm test`: passed on the exact candidate after the final render-key fix (TypeScript, production Vite build and type-aware Oxlint). Existing Sass deprecation, generated-type/lint warning and large-chunk notices remain.
+- `npm audit`: three Moderate records, all the same development-only `minimatch` #175 advisory. The dependency path is Codegen → `graphql-config` → `minimatch`; npm's suggested fix is a breaking Codegen downgrade. No override or forced change was made.
+- `npm audit --omit=dev`: passed, zero production vulnerabilities.
+- `git diff --check`: passed. Asset filename/path casing and build-copy checks passed for the Killboard's shared UI assets. No unfinished Dressing Room route or renderer was found in this candidate's source/build.
+- Populated routes were checked with headless Playwright: character Kills, Scenarios, Skirmishes and Armory; all five Kingsmen guild tabs; Players, Recent Kills, Browse Guilds, Item Compare and related item pages. Guild/character responsive checks covered desktop, tablet and phone. Character and guild tab artwork also passed the actual zoom levels listed above. There were no application page errors or horizontal overflows.
+- Gear bonus values were independently recomputed from the live Armory GraphQL result by summing equipped-item stats, talismans and active ItemStat set bonuses. The computed values matched every displayed stat. `Critical Damage Taken Reduction` is translated.
+- The local Vite server remains available on port 3002. No authenticated or personal desktop browser was used.
+
+## Candidate size and repository state
+
+- 91 staged files: 36 modified tracked files and 55 new files (49 referenced PNG UI assets and 6 source/style files). The 29 unreferenced PNGs are preserved locally and excluded from the release.
+- Text changes: 2,440 insertions and 537 deletions; binary asset bytes are excluded from line counts.
+- Branch: `codex/database-page-fixes`; remote state matches `origin/main` at `fb2e56fe57f17aa1737f1765684e3d0bb13f1c87` (0 ahead / 0 behind). No files are staged.
+- Known maintenance item: development-only Moderate Dependabot alert #175. The site-wide Warhammer filters/forms work remains deferred to the next batch. Other pending independent queue items and API-specific blockers remain listed in `CONTINUOUS_IMPROVEMENT.md`.
+
+## Approval gate
+
+The candidate is ready for your review. Commit, push to Dalen's `main` and deploy only after your explicit approval. After approval, verify the exact GitHub Actions deployment and populated production routes, reconcile Dependabot PRs #1081 and #1077, then resume the remaining queue. The release approval does not authorize changing or publishing the separate Gear Preview checkout.
+
+---
+
+# Previously deployed release review summary
 
 Status: released to `main` on 2026-11-27 after explicit user approval. Release commit: `986dcef96ca8977a1602b88597602f5d15c3af66`. GitHub Pages deployment succeeded in [run 45933054161](https://github.com/dalen/killboard/actions/runs/45933054161).
 
 ## Track A — dependency security
 
+### Current Dependabot reconciliation (2026-11-27)
+
+- GitHub Dependabot has reconciled the deployed updates: open alerts fell from 38 to 1. Alert #175 is the remaining Moderate, Development, Transitive `minimatch` globparts-amplification denial-of-service alert.
+- `npm explain minimatch` confirms `@graphql-codegen/cli@7.4.6` → `graphql-config@5.1.8` → `minimatch@10.2.6`; `graphql-config` requires `^10.0.0`. Patched `minimatch` 11.0.1 is outside that range. npm's proposed Codegen 5.0.2 remedy is a major downgrade. No overrides or forced dependency changes were introduced.
+- `npm audit --omit=dev` reports zero vulnerabilities. Reconciliation is complete; retain #175 as a maintenance item pending compatible upstream support or a separately tested Codegen migration.
+
 - Scope: compatible dependency updates in `package-lock.json`; root `package.json` is unchanged.
 - Reviewed baseline: 38 Dependabot alerts (1 critical, 19 high, 16 moderate, 2 low) across 18 package families. Critical/high findings and other safely patchable findings were resolved with in-range updates.
-- Verification: `npm audit --omit=dev` reports zero findings. Three moderate findings remain in the development-only `minimatch` path (`graphql-config@5.1.8` → Codegen); no unsafe override or major downgrade was applied. See `DEPENDABOT_REVIEW.md` for package paths, severity, exposure, and recommended upstream follow-up.
-- After deployment, GitHub's Dependabot API still reported the 38 alert records as open. The pushed `package-lock.json` contains patched versions for the addressed packages, while GitHub's alert records still identify their older vulnerable ranges. Treat remote alert state as pending refresh/reconciliation; do not report those records cleared. Continue to preserve the three moderate development-only findings as described in the audit.
-- After the later approved scenario release `becd0eb5bbc9ba9f858628962d70da18bf33f698`, GitHub reported only one open moderate alert: `minimatch` #175 in development tooling. It remains outside the current parent's supported range and was not force-upgraded.
+- Verification: `npm audit --omit=dev` reports zero findings. Alert #175 remains in the development-only `minimatch` path (`graphql-config@5.1.8` → Codegen); no unsafe override or major downgrade was applied. See `DEPENDABOT_REVIEW.md` for severity, exposure and follow-up.
+- Historical note: GitHub temporarily continued to show 38 records open after the first deployment; after the later approved scenario release it reported one open alert. The latest Dependabot reconciliation confirms the 37 patched alerts are now closed and only #175 remains.
 - This track does not include Phase II UI work.
 
 ## Track B — Phase II player-facing improvements
@@ -23,4 +75,4 @@ Status: released to `main` on 2026-11-27 after explicit user approval. Release c
 
 ## Review disposition
 
-Both tracks were included in the approved release. The local development server remains available on port 3002. Three moderate development-tooling findings are intentionally retained pending a compatible upstream dependency update or separately validated Codegen migration. The remote Dependabot records still need reconciliation after their refresh; no further release action is currently authorized.
+Both tracks were included in the approved release. The local development server remains available on port 3002. Dependabot reconciliation is complete: only alert #175 remains, intentionally retained pending a compatible upstream dependency update or separately validated Codegen migration. No further release action is authorized by this summary.

@@ -46,6 +46,7 @@ const PLAYER_SEARCH = gql`
         hasPreviousPage
         startCursor
       }
+      totalCount
     }
   }
 `;
@@ -61,6 +62,7 @@ interface PlayerSearchData {
       guildMembership?: { guild: { id: string; name: string } } | null;
     }[] | null;
     pageInfo: PageInfo;
+    totalCount: number;
   } | null;
 }
 
@@ -104,6 +106,9 @@ export const Search = (): ReactElement => {
         </ul>
       </nav>
       <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
+      <p className="help search-result-count">
+        {t('pages:searchPage.matchCount', { count: data.characters.totalCount })}
+      </p>
       <div className="table-container">
         <table
           className={clsx(

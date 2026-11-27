@@ -143,7 +143,7 @@ export const KillsFilters = ({
   const period = search.get('period') || defaultPeriod;
 
   return (
-    <div className="card mb-5">
+    <div className="card mb-5 character-filters">
       <div className="card-content">
         <div className="columns">
           <div className="column">

@@ -8,9 +8,10 @@ import {
 } from '@/__generated__/graphql';
 import { isPercentage } from '@/utils';
 import { itemNameClass, statMultiplier } from '@/itemUtils';
-import type { ReactElement } from 'react';
+import type { ReactElement, Ref } from 'react';
 import type { ItemListEntryFragment } from '@/__generated__/graphql';
 import { GoldPrice } from '@/components/GoldPrice';
+import { WarhammerScrollPane } from '@/components/global/WarhammerScrollPane';
 
 type ItemVendorCost = {
   price: number;
@@ -48,13 +49,21 @@ export const CharacterItemPopup = ({
   talismans,
   itemsEquipped,
   popupClassName = 'popup',
+  popupRef,
+  popupPosition,
   vendorCosts = [],
+  onMouseEnter,
+  onMouseLeave,
 }: {
   item: ItemListEntryFragment;
   talismans: TalismanFragment[];
   itemsEquipped: EquippedCharacterItemFragment[];
   popupClassName?: string;
+  popupRef?: Ref<HTMLDivElement>;
+  popupPosition?: { left: number; top: number; width: number; maxHeight: number };
   vendorCosts?: ItemVendorCost[];
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }): ReactElement => {
   const { t } = useTranslation(['enums', 'pages']);
 
@@ -81,7 +90,24 @@ export const CharacterItemPopup = ({
     : 0;
 
   return (
-    <div className={popupClassName}>
+    <WarhammerScrollPane
+      outerRef={popupRef}
+      className={clsx(popupClassName, 'warhammer-equipment-tooltip')}
+      ariaLabel={t('pages:itemPopup.scrollPaneLabel', { name: item.name })}
+      scrollUpLabel={t('pages:characterPage.scrollUp')}
+      scrollDownLabel={t('pages:characterPage.scrollDown')}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      style={popupPosition ? {
+        boxSizing: 'border-box',
+        left: popupPosition.left,
+        top: popupPosition.top,
+        width: popupPosition.width,
+        minWidth: 0,
+        maxHeight: popupPosition.maxHeight,
+        position: 'fixed',
+      } : undefined}
+    >
       <div className="item-popup-header mb-4">
         <div className="is-flex item-popup-title">
           <figure className="image is-32x32 m-0">
@@ -187,8 +213,8 @@ export const CharacterItemPopup = ({
             <div className="is-size-7 stats-text-highlight">
               {talisman.name}
             </div>
-            {talisman.stats.map((stat) => (
-              <div className="is-size-7 stats-text-highlight">
+            {talisman.stats.map((stat, index) => (
+              <div key={`${stat.stat}-${index}`} className="is-size-7 stats-text-highlight">
                 + {stat.value * statMultiplier(stat.stat)}
                 {isPercentage(stat.stat)} {t(`enums:stat.${stat.stat}`)}
               </div>
@@ -210,6 +236,7 @@ export const CharacterItemPopup = ({
           {item.itemSet.name}
           {item.itemSet.bonuses.map((bonus) => (
             <div
+              key={bonus.itemsRequired}
               className={clsx('ml-2', {
                 'item-text-set-bonus-disabled':
                   numEquipped < bonus.itemsRequired,
@@ -259,6 +286,6 @@ export const CharacterItemPopup = ({
           })}
         </div>
       )}
-    </div>
+    </WarhammerScrollPane>
   );
 };

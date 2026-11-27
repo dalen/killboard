@@ -1,0 +1,164 @@
+@use '../global/WarhammerProfileStyles';
+
+.guild-profile-card {
+  align-items: start;
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  grid-template-rows: auto auto;
+  gap: 0.35rem 0.75rem;
+  margin: 0 0 0.45rem !important;
+  min-height: 80px;
+
+  > .image {
+    height: 56px;
+    grid-column: 1;
+    grid-row: 1 / span 2;
+    margin: 0;
+    width: 56px;
+  }
+
+  &.is-order .guild-profile-realm {
+    border-color: #329bd5;
+    color: #82cfff;
+  }
+
+  &.is-destruction .guild-profile-realm {
+    border-color: #c7413e;
+    color: #ff7772;
+  }
+}
+
+.guild-profile-main {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 0;
+}
+
+.guild-profile-name {
+  color: #ffad16;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.1;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.guild-profile-motto {
+  color: #d5d0c4;
+  font-size: 0.76rem;
+  line-height: 1.25;
+  margin: 0.16rem 0 0.25rem;
+}
+
+.guild-profile-facts {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  margin-top: 0.28rem;
+}
+
+.guild-profile-fact {
+  border-left: 2px solid rgba(215, 185, 112, 0.65);
+  color: #d8d4c7;
+  font-size: 0.68rem;
+  line-height: 1.25;
+  padding: 0.08rem 0.3rem;
+}
+
+.guild-profile-leader {
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  grid-column: 3;
+  grid-row: 1;
+  gap: 0.15rem;
+  margin: 0;
+  min-width: 7rem;
+
+  > span {
+    color: #a8c4e4;
+    font-size: 0.68rem;
+  }
+}
+
+.guild-profile-description {
+  grid-column: 2 / -1;
+  grid-row: 2;
+  margin-top: 0.25rem;
+
+  summary {
+    color: #ffb52e;
+    cursor: pointer;
+    font-size: 0.74rem;
+    width: fit-content;
+  }
+
+  div {
+    color: #d5d0c4;
+    font-size: 0.74rem;
+    margin-top: 0.4rem;
+    white-space: pre-wrap;
+  }
+}
+
+.guild-tabs {
+  overflow-x: auto;
+}
+
+.guild-profile-page {
+  margin-top: 0.45rem !important;
+
+  .character-filters {
+    margin-bottom: 0.65rem !important;
+
+    > .card-content {
+      padding: 0.7rem;
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .guild-profile-page .columns {
+    margin-inline: 0;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .guild-profile-card {
+    grid-template-columns: 42px minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    gap: 0.3rem 0.55rem;
+    min-height: 0;
+    padding: 0.35rem 0.45rem;
+
+    > .image {
+      height: 42px;
+      width: 42px;
+    }
+  }
+
+  .guild-profile-name {
+    font-size: 1rem;
+  }
+
+  .guild-profile-leader {
+    grid-column: 2;
+    grid-row: 2;
+    min-width: 0;
+  }
+
+  .guild-profile-main {
+    min-height: 78px;
+  }
+
+  .guild-profile-description {
+    grid-column: 2;
+    grid-row: 3;
+  }
+
+  .guild-profile-facts {
+    gap: 0.2rem 0.35rem;
+  }
+}

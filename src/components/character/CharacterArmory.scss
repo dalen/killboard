@@ -1,6 +1,364 @@
-@media screen and (max-width: 768px) {
-  .character-armory-layout {
-    margin-left: 0;
-    margin-right: 0;
+.character-armory-paperdoll {
+  background: rgba(0, 0, 0, 0.9);
+  border: 8px solid transparent;
+  border-width: 8px 11px 19px;
+  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 8px 11px 19px 11px / 0 stretch;
+  color: #ece5d2;
+  margin: 0 0 1.25rem;
+  max-width: none;
+  padding: 0.75rem;
+  width: 100%;
+}
+
+.character-armory-paperdoll-main {
+  align-items: stretch;
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: minmax(0, 1fr) minmax(320px, 400px) minmax(0, 1fr);
+}
+
+.character-armory-side {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.character-armory-side-right .character-armory-slot {
+  grid-template-columns: minmax(0, 1fr) 42px;
+}
+
+.character-armory-side-right .character-armory-slot-frame {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.character-armory-side-right .character-armory-slot-copy {
+  grid-column: 1;
+  grid-row: 1;
+  text-align: right;
+}
+
+.character-armory-side > .character-armory-slot-group:last-child {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.character-armory-slot-group h3,
+.character-armory-bottom-group h3 {
+  border-bottom: 1px solid rgba(142, 116, 67, 0.42);
+  color: #d7b970;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  margin: 0 0 0.3rem;
+  padding-bottom: 0.2rem;
+  text-transform: uppercase;
+}
+
+.character-armory-slot-stack {
+  align-content: space-between;
+  display: grid;
+  flex: 1 1 auto;
+  gap: 0.18rem;
+}
+
+.character-armory-center {
+  justify-self: center;
+  max-width: 400px;
+  min-width: 0;
+  width: 100%;
+}
+
+.character-armory-stats-window {
+  background: rgba(0, 0, 0, 0.9);
+  border: 8px solid transparent;
+  border-width: 8px 11px 19px;
+  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 8px 11px 19px 11px / 0 stretch;
+  height: clamp(480px, 56vh, 540px);
+}
+
+.character-armory-stats-screen {
+  color: #ece5d2;
+  padding: 0.65rem 0.25rem 0.65rem 0.65rem;
+
+  h2,
+  h3 {
+    border-bottom: 1px solid rgba(142, 116, 67, 0.35);
+    color: #d7b970;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    margin: 0 0 0.28rem;
+    padding-bottom: 0.23rem;
+    text-transform: uppercase;
+  }
+
+}
+
+.character-armory-stats-note {
+  color: #77889e;
+  font-size: 0.66rem;
+  line-height: 1.3;
+  margin: 0 0 0.45rem;
+}
+
+.character-armory-primary-gear-stats {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.character-armory-primary-stat-row {
+  display: grid;
+  gap: 0.35rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.character-armory-gear-stat {
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  font-size: 0.72rem;
+  gap: 0.22rem;
+  justify-content: space-between;
+  min-width: 0;
+  padding: 0.26rem 0.03rem;
+
+  span:first-child {
+    color: #a8c4e4;
+    min-width: 0;
+  }
+
+  span:last-child {
+    color: #f2f0e8;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
+.character-armory-other-gear-stats {
+  margin-top: 0.45rem;
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+.character-armory-gear-stat-list {
+  .character-armory-gear-stat span:last-child {
+    color: #e8c46e;
+  }
+}
+
+.character-armory-slot {
+  align-items: center;
+  display: grid;
+  gap: 0.4rem;
+  grid-template-columns: 42px minmax(0, 1fr);
+  min-width: 0;
+  position: relative;
+}
+
+.character-armory-slot-frame {
+  align-items: center;
+  background: url('/gear-preview/ui/slot-frame.png') center / 100% 100% no-repeat;
+  display: flex;
+  filter: drop-shadow(0 2px 3px #000);
+  height: 42px;
+  justify-content: center;
+  width: 42px;
+
+  img {
+    height: 31px;
+    object-fit: contain;
+    width: 31px;
+  }
+
+  &.is-empty img {
+    height: 35px;
+    width: 35px;
+  }
+
+  &.is-equipped:hover,
+  &.is-equipped:focus-visible {
+    filter: drop-shadow(0 0 4px #d7b970cc);
+  }
+}
+
+.character-armory-slot-copy {
+  min-width: 0;
+}
+
+.character-armory-slot-label {
+  color: #aaa28f;
+  display: block;
+  font-size: 0.58rem;
+  line-height: 1.1;
+  text-transform: uppercase;
+}
+
+.character-armory-slot-name {
+  display: -webkit-box;
+  font-size: 0.82rem;
+  line-height: 1.18;
+  margin-top: 0.12rem;
+  overflow: hidden;
+  overflow-wrap: anywhere;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.character-armory-slot-popup {
+  left: 8px;
+  max-height: calc(100vh - 16px);
+  max-width: min(360px, calc(100vw - 16px));
+  min-width: min(340px, calc(100vw - 16px));
+  position: fixed !important;
+  top: 8px;
+  z-index: 30;
+}
+
+.character-armory-bottom {
+  align-items: flex-start;
+  border-top: 1px solid rgba(142, 116, 67, 0.5);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  justify-content: center;
+  margin-top: 0.65rem;
+  padding: 0.6rem 0.2rem 0;
+}
+
+.character-armory-bottom-group {
+  min-width: 0;
+}
+
+.character-armory-bottom-slots {
+  align-items: start;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+
+  .character-armory-slot {
+    display: flex;
+    flex-direction: column;
+    max-width: 88px;
+    text-align: center;
+  }
+
+  .character-armory-slot-frame {
+    height: 50px;
+    width: 50px;
+
+    img {
+      height: 38px;
+      width: 38px;
+    }
+
+    &.is-empty img {
+      height: 42px;
+      width: 42px;
+    }
+  }
+
+  .character-armory-slot-copy {
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .character-armory-paperdoll {
+    padding: 0.5rem;
+  }
+
+  .character-armory-paperdoll-main {
+    gap: 0.45rem;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .character-armory-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+  }
+
+  .character-armory-side-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .character-armory-side-right {
+    grid-column: 2;
+    grid-row: 2;
+  }
+
+  .character-armory-stats-screen {
+    height: min(370px, 46vh);
+  }
+
+  .character-armory-stats-window {
+    height: 420px;
+  }
+
+  .character-armory-slot {
+    gap: 0.25rem;
+    grid-template-columns: 36px minmax(0, 1fr);
+  }
+
+  .character-armory-slot-frame {
+    height: 36px;
+    width: 36px;
+
+    img {
+      height: 27px;
+      width: 27px;
+    }
+
+    &.is-empty img {
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  .character-armory-bottom-slots .character-armory-slot-frame {
+    height: 44px;
+    width: 44px;
+
+    img {
+      height: 34px;
+      width: 34px;
+    }
+
+    &.is-empty img {
+      height: 38px;
+      width: 38px;
+    }
+  }
+
+  .character-armory-slot-name {
+    font-size: 0.67rem;
+  }
+
+}
+
+@media screen and (min-width: 701px) and (max-width: 900px) {
+  .character-armory-paperdoll-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .character-armory-center {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    max-width: none;
+  }
+
+  .character-armory-side-left {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .character-armory-side-right {
+    grid-column: 2;
+    grid-row: 2;
   }
 }

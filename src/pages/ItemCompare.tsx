@@ -5,7 +5,7 @@ import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { EquipSlot, type ItemFilterInput, type Query, type Stat } from '@/__generated__/graphql';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import './ItemCompare.scss';
 
 const ITEM_COMPARE_FIELDS = `
@@ -14,6 +14,8 @@ const ITEM_COMPARE_FIELDS = `
   iconUrl
   type
   slot
+  careerRestriction
+  raceRestriction
   rarity
   itemLevel
   levelRequirement
@@ -96,12 +98,23 @@ const formatStat = (value?: number, percentage = false) =>
   value == null ? '—' : `${value > 0 ? '+' : ''}${value}${percentage ? '%' : ''}`;
 const formatScaledWeaponValue = (value: number, divisor: number) =>
   value > 0 ? (value / divisor).toFixed(1) : '—';
+const numericDifference = (first: unknown, second: unknown): number | undefined =>
+  typeof first === 'number' && typeof second === 'number' ? second - first : undefined;
+const scaledDifference = (first: unknown, second: unknown, divisor: number): number | undefined => {
+  if (typeof first !== 'number' || first <= 0 || typeof second !== 'number' || second <= 0) {
+    return undefined;
+  }
+  return (second - first) / divisor;
+};
+const formatDifference = (difference?: number, percentage = false) =>
+  difference == null ? '—' : `${difference > 0 ? '+' : ''}${difference}${percentage ? '%' : ''}`;
 
 const ItemSearchBox = ({
   id,
   label,
   selectedItem,
   excludedId,
+  preferredSlot,
   onSelect,
   onClear,
 }: {
@@ -109,6 +122,7 @@ const ItemSearchBox = ({
   label: string;
   selectedItem?: ItemRecord;
   excludedId?: string;
+  preferredSlot?: EquipSlot;
   onSelect: (itemId: string) => void;
   onClear: () => void;
 }): ReactElement => {
@@ -119,22 +133,43 @@ const ItemSearchBox = ({
     const timer = globalThis.setTimeout(() => setNormalizedQuery(query.trim()), 250);
     return () => globalThis.clearTimeout(timer);
   }, [query]);
-  const { data, loading, error } = useQuery<Pick<Query, 'items'>, {
+  const preferredQuery = useQuery<Pick<Query, 'items'>, {
     where: ItemFilterInput;
     first: number;
   }>(ITEM_COMPARE_SEARCH, {
     variables: {
       where: {
         name: { contains: normalizedQuery },
-        slot: { in: EQUIPMENT_SLOTS },
+        slot: { eq: preferredSlot },
+      },
+      first: 8,
+    },
+    skip: normalizedQuery.length < 2 || preferredSlot == null,
+  });
+  const otherSlotsQuery = useQuery<Pick<Query, 'items'>, {
+    where: ItemFilterInput;
+    first: number;
+  }>(ITEM_COMPARE_SEARCH, {
+    variables: {
+      where: {
+        name: { contains: normalizedQuery },
+        and: preferredSlot == null
+          ? [{ slot: { in: EQUIPMENT_SLOTS } }]
+          : [
+              { slot: { in: EQUIPMENT_SLOTS } },
+              { slot: { nin: [preferredSlot] } },
+            ],
       },
       first: 8,
     },
     skip: normalizedQuery.length < 2,
   });
-  const results = (data?.items?.nodes ?? []).filter(
-    (item) => item.id !== excludedId,
-  );
+  const loading = preferredQuery.loading || otherSlotsQuery.loading;
+  const error = preferredQuery.error ?? otherSlotsQuery.error;
+  const results = [
+    ...(preferredQuery.data?.items?.nodes ?? []),
+    ...(otherSlotsQuery.data?.items?.nodes ?? []),
+  ].filter((item, index, all) => item.id !== excludedId && all.findIndex((candidate) => candidate.id === item.id) === index);
 
   return (
     <section className="item-compare-picker">
@@ -158,6 +193,9 @@ const ItemSearchBox = ({
       )}
       {normalizedQuery.length < 2 && (
         <p className="help">{t('pages:itemCompare.searchHint')}</p>
+      )}
+      {preferredSlot && normalizedQuery.length >= 2 && (
+        <p className="help">{t('pages:itemCompare.sameSlotFirst')}</p>
       )}
       {loading && <progress className="progress is-small mt-2" />}
       {error && <ErrorMessage name={error.name} message={error.message} />}
@@ -185,6 +223,11 @@ const ItemSearchBox = ({
                 <small>
                   {t(`enums:itemSlot.${item.slot}`)} · {t(`enums:itemRarity.${item.rarity}`)} · #{item.id}
                 </small>
+                {preferredSlot === item.slot && (
+                  <span className="tag is-small item-compare-same-slot">
+                    {t('pages:itemCompare.sameSlot')}
+                  </span>
+                )}
               </span>
             </button>
           ))}
@@ -209,6 +252,12 @@ export const ItemCompare = (): ReactElement => {
   );
   const leftItem = itemById.get(leftId);
   const rightItem = itemById.get(rightId);
+  const careerRestrictionsDiffer = leftItem && rightItem &&
+    [...leftItem.careerRestriction].toSorted().join('|') !== [...rightItem.careerRestriction].toSorted().join('|');
+  const careerRestrictionsIncompatible = leftItem && rightItem &&
+    leftItem.careerRestriction.length > 0 &&
+    rightItem.careerRestriction.length > 0 &&
+    !leftItem.careerRestriction.some((career) => rightItem.careerRestriction.includes(career));
   const items = [leftItem, rightItem].filter(
     (item): item is CompareItem => item != null,
   );
@@ -226,8 +275,57 @@ export const ItemCompare = (): ReactElement => {
     }
     setSearch(next);
   };
+  const swapSelectedItems = () => {
+    const next = new URLSearchParams(search);
+    if (rightId) next.set('left', rightId);
+    else next.delete('left');
+    if (leftId) next.set('right', leftId);
+    else next.delete('right');
+    setSearch(next);
+  };
   const renderSet = (item?: CompareItem) =>
     item?.itemSet?.name ?? t('pages:itemCompare.noSet');
+  const formatEnumList = (namespace: string, values: string[]) =>
+    values.length
+      ? values.map((value) => t(`enums:${namespace}.${value}`, { defaultValue: value.toLowerCase().replaceAll('_', ' ') })).join(', ')
+      : undefined;
+  const statComparisons = leftItem && rightItem
+    ? statNames.map((stat) => {
+        const first = findStat(leftItem, stat);
+        const second = findStat(rightItem, stat);
+        const percentage = first?.percentage ?? second?.percentage ?? false;
+        const sameUnits = first == null || second == null || first.percentage === second.percentage;
+        const difference = sameUnits
+          ? (second?.value ?? 0) - (first?.value ?? 0)
+          : undefined;
+        return { stat, first, second, percentage, difference };
+      })
+    : [];
+  const firstHigherStats = statComparisons.filter(
+    (entry) => entry.difference != null && entry.difference < 0,
+  );
+  const secondHigherStats = statComparisons.filter(
+    (entry) => entry.difference != null && entry.difference > 0,
+  );
+
+  const itemRows: { key: string; left: ReactNode; right: ReactNode; difference?: number }[] =
+    leftItem && rightItem
+      ? [
+          { key: 'slot', left: t(`enums:itemSlot.${leftItem.slot}`), right: t(`enums:itemSlot.${rightItem.slot}`) },
+          { key: 'careerRestriction', left: formatEnumList('career', leftItem.careerRestriction) ?? t('pages:itemCompare.noRestriction'), right: formatEnumList('career', rightItem.careerRestriction) ?? t('pages:itemCompare.noRestriction') },
+          { key: 'raceRestriction', left: formatEnumList('race', leftItem.raceRestriction) ?? t('pages:itemCompare.noRestriction'), right: formatEnumList('race', rightItem.raceRestriction) ?? t('pages:itemCompare.noRestriction') },
+          { key: 'type', left: t(`enums:itemType.${leftItem.type}`), right: t(`enums:itemType.${rightItem.type}`) },
+          { key: 'rarity', left: t(`enums:itemRarity.${leftItem.rarity}`), right: t(`enums:itemRarity.${rightItem.rarity}`) },
+          { key: 'itemLevel', left: leftItem.itemLevel, right: rightItem.itemLevel, difference: numericDifference(leftItem.itemLevel, rightItem.itemLevel) },
+          { key: 'levelRequirement', left: leftItem.levelRequirement, right: rightItem.levelRequirement, difference: numericDifference(leftItem.levelRequirement, rightItem.levelRequirement) },
+          { key: 'renownRequirement', left: leftItem.renownRankRequirement, right: rightItem.renownRankRequirement, difference: numericDifference(leftItem.renownRankRequirement, rightItem.renownRankRequirement) },
+          { key: 'armor', left: leftItem.armor, right: rightItem.armor, difference: numericDifference(leftItem.armor, rightItem.armor) },
+          { key: 'damagePerSecond', left: formatScaledWeaponValue(leftItem.dps, 10), right: formatScaledWeaponValue(rightItem.dps, 10), difference: scaledDifference(leftItem.dps, rightItem.dps, 10) },
+          { key: 'speed', left: formatScaledWeaponValue(leftItem.speed, 100), right: formatScaledWeaponValue(rightItem.speed, 100), difference: scaledDifference(leftItem.speed, rightItem.speed, 100) },
+          { key: 'talismanSlots', left: leftItem.talismanSlots, right: rightItem.talismanSlots, difference: numericDifference(leftItem.talismanSlots, rightItem.talismanSlots) },
+          { key: 'set', left: renderSet(leftItem), right: renderSet(rightItem) },
+        ]
+      : [];
 
   return (
     <div className="container is-max-widescreen mt-2 item-compare-page">
@@ -248,6 +346,7 @@ export const ItemCompare = (): ReactElement => {
               label={t('pages:itemCompare.chooseFirst')}
               selectedItem={leftItem}
               excludedId={rightId}
+              preferredSlot={rightItem?.slot}
               onSelect={(id) => setSelectedItem('left', id)}
               onClear={() => setSelectedItem('left', '')}
             />
@@ -256,10 +355,18 @@ export const ItemCompare = (): ReactElement => {
               label={t('pages:itemCompare.chooseSecond')}
               selectedItem={rightItem}
               excludedId={leftId}
+              preferredSlot={leftItem?.slot}
               onSelect={(id) => setSelectedItem('right', id)}
               onClear={() => setSelectedItem('right', '')}
             />
           </div>
+          {leftId && rightId && (
+            <div className="item-compare-picker-actions">
+              <button className="button is-small" type="button" onClick={swapSelectedItems}>
+                {t('pages:itemCompare.swapItems')}
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
@@ -271,6 +378,46 @@ export const ItemCompare = (): ReactElement => {
       {!loading && !error && items.length === 2 && leftItem && rightItem && (
         <section className="card" aria-label={t('pages:itemCompare.title')}>
           <div className="card-content">
+            <section className="item-compare-summary" aria-labelledby="item-compare-summary-title">
+              <div className="item-compare-summary-heading">
+                <h2 id="item-compare-summary-title">{t('pages:itemCompare.statGainsLosses')}</h2>
+                <p>{t('pages:itemCompare.rawDeltaNote')}</p>
+              </div>
+              {leftItem.slot !== rightItem.slot && (
+                <p className="item-compare-slot-warning">{t('pages:itemCompare.differentSlotsNote')}</p>
+              )}
+              {careerRestrictionsIncompatible ? (
+                <p className="item-compare-slot-warning">{t('pages:itemCompare.careerRestrictionsIncompatible')}</p>
+              ) : careerRestrictionsDiffer && (
+                <p className="item-compare-slot-warning">{t('pages:itemCompare.careerRestrictionDiffers')}</p>
+              )}
+              {statComparisons.length === 0 ? (
+                <p className="help">{t('pages:itemCompare.noNumericStatDifferences')}</p>
+              ) : (
+                <div className="item-compare-summary-columns">
+                  {[
+                    { item: leftItem, entries: firstHigherStats },
+                    { item: rightItem, entries: secondHigherStats },
+                  ].map(({ item, entries }) => (
+                    <div className="item-compare-summary-side" key={item.id}>
+                      <strong>{t('pages:itemCompare.higherOnItem', { name: item.name })}</strong>
+                      {entries.length === 0 ? (
+                        <span className="help">{t('pages:itemCompare.noHigherStats')}</span>
+                      ) : (
+                        <ul>
+                          {entries.map(({ stat, difference, percentage }) => (
+                            <li key={stat}>
+                              <span>{t(`enums:stat.${stat}`)}</span>
+                              <strong>{formatDifference(Math.abs(difference ?? 0), percentage)}</strong>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </section>
             <div className="item-compare-table-wrap">
               <table className="table is-fullwidth item-compare-table">
                 <thead>
@@ -284,41 +431,30 @@ export const ItemCompare = (): ReactElement => {
                         </Link>
                       </th>
                     ))}
+                    <th scope="col">{t('pages:itemCompare.deltaSecondMinusFirst')}</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    ['slot', t(`enums:itemSlot.${leftItem.slot}`), t(`enums:itemSlot.${rightItem.slot}`)],
-                    ['type', t(`enums:itemType.${leftItem.type}`), t(`enums:itemType.${rightItem.type}`)],
-                    ['rarity', t(`enums:itemRarity.${leftItem.rarity}`), t(`enums:itemRarity.${rightItem.rarity}`)],
-                    ['itemLevel', leftItem.itemLevel, rightItem.itemLevel],
-                    ['levelRequirement', leftItem.levelRequirement, rightItem.levelRequirement],
-                    ['renownRequirement', leftItem.renownRankRequirement, rightItem.renownRankRequirement],
-                    ['armor', leftItem.armor, rightItem.armor],
-                    ['damagePerSecond', formatScaledWeaponValue(leftItem.dps, 10), formatScaledWeaponValue(rightItem.dps, 10)],
-                    ['speed', formatScaledWeaponValue(leftItem.speed, 100), formatScaledWeaponValue(rightItem.speed, 100)],
-                    ['talismanSlots', leftItem.talismanSlots, rightItem.talismanSlots],
-                    ['set', renderSet(leftItem), renderSet(rightItem)],
-                  ].map(([key, leftValue, rightValue]) => (
+                  {itemRows.map(({ key, left, right, difference }) => (
                     <tr key={key}>
                       <th scope="row">{t(`pages:itemCompare.${key}`)}</th>
-                      <td>{leftValue}</td>
-                      <td>{rightValue}</td>
+                      <td>{left ?? '—'}</td>
+                      <td>{right ?? '—'}</td>
+                      <td>{formatDifference(difference)}</td>
                     </tr>
                   ))}
-                  {statNames.map((stat) => {
-                    const leftStat = findStat(leftItem, stat);
-                    const rightStat = findStat(rightItem, stat);
+                  {statComparisons.map(({ stat, first, second, difference, percentage }) => {
                     return (
                       <tr key={stat}>
                         <th scope="row">{t(`enums:stat.${stat}`)}</th>
-                        <td>{formatStat(leftStat?.value, leftStat?.percentage)}</td>
-                        <td>{formatStat(rightStat?.value, rightStat?.percentage)}</td>
+                        <td>{formatStat(first?.value, first?.percentage)}</td>
+                        <td>{formatStat(second?.value, second?.percentage)}</td>
+                        <td>{formatDifference(difference, percentage)}</td>
                       </tr>
                     );
                   })}
                   {statNames.length === 0 && (
-                    <tr><th scope="row">{t('pages:itemCompare.stats')}</th><td>—</td><td>—</td></tr>
+                    <tr><th scope="row">{t('pages:itemCompare.stats')}</th><td>—</td><td>—</td><td>—</td></tr>
                   )}
                 </tbody>
               </table>

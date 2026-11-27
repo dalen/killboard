@@ -84,8 +84,8 @@ export const Guild = ({
   }
 
   return (
-    <div className="container is-max-widescreen mt-2">
-      <nav className="breadcrumb" aria-label="breadcrumbs">
+    <div className="container is-max-widescreen guild-profile-page">
+      <nav className="breadcrumb character-breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
             <Link to="/">{t('common:home')}</Link>
@@ -98,27 +98,33 @@ export const Guild = ({
         </ul>
       </nav>
       <GuildInfo guild={data.guild} />
-      <div className="tabs is-boxed guild-tabs mb-5">
+      <div className="tabs guild-tabs warhammer-profile-tabs">
         <ul>
           <li className={tab === 'overview' ? 'is-active' : ''}>
-            <Link to={`/guild/${id}`}>{t('pages:guildPage.overview')}</Link>
+            <Link to={`/guild/${id}`}><span className="warhammer-tab-label">{t('pages:guildPage.overview')}</span></Link>
           </li>
           <li className={tab === 'kills' ? 'is-active' : ''}>
-            <Link to={`/guild/${id}/kills`}>{t('pages:guildPage.kills')}</Link>
+            <Link to={`/guild/${id}/kills`}><span className="warhammer-tab-label">{t('pages:guildPage.kills')}</span></Link>
           </li>
           <li className={tab === 'members' ? 'is-active' : ''}>
             <Link to={`/guild/${id}/members`}>
+              <span className="warhammer-tab-label">
               {t('pages:guildPage.members')}
+              </span>
             </Link>
           </li>
           <li className={tab === 'scenarios' ? 'is-active' : ''}>
             <Link to={`/guild/${id}/scenarios`}>
+              <span className="warhammer-tab-label">
               {t('pages:guildPage.scenarios')}
+              </span>
             </Link>
           </li>
           <li className={tab === 'skirmishes' ? 'is-active' : ''}>
             <Link to={`/guild/${id}/skirmishes`}>
+              <span className="warhammer-tab-label">
               {t('pages:guildPage.skirmishes')}
+              </span>
             </Link>
           </li>
         </ul>

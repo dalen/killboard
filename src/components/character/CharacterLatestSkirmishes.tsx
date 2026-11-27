@@ -74,7 +74,7 @@ const LATEST_SKIRMISHES = gql`
 
 export const CharacterLatestSkirmishes = ({
   characterId,
-  perPage = 15,
+  perPage = 25,
 }: {
   characterId?: string;
   perPage?: number;

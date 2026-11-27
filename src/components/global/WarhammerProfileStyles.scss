@@ -1,0 +1,125 @@
+.warhammer-identity-frame {
+  align-items: center;
+  background: rgba(0, 0, 0, 0.68);
+  border: 8px solid transparent;
+  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 6px 8px 10px 8px / 0 stretch;
+  display: flex;
+  gap: 0.75rem;
+  min-height: 80px;
+  padding: 0.4rem 0.65rem;
+  width: 100%;
+}
+
+.warhammer-profile-tabs {
+  margin: 0 0 0.55rem !important;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  ul {
+    align-items: stretch;
+    border-bottom: 0;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.3rem;
+    min-width: 100%;
+  }
+
+  li {
+    flex: 1 1 0;
+    min-width: 5rem;
+  }
+
+  li a {
+    --tab-art: url('/gear-preview/ui/tabs/normal.png');
+    appearance: none;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    color: #dec032 !important;
+    isolation: isolate;
+    font-size: 0.88rem;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.35rem 19px;
+    position: relative;
+    text-align: center;
+    transition: color 120ms ease, filter 120ms ease;
+    z-index: 0;
+  }
+
+  li a::before {
+    border-color: transparent;
+    border-style: solid;
+    border-width: 15px 19px 16px;
+    border-image-source: var(--tab-art);
+    border-image-slice: 15 19 16 19 fill;
+    border-image-width: 15px 19px 16px 19px;
+    border-image-outset: 0;
+    border-image-repeat: stretch;
+    content: '';
+    inset: 0;
+    pointer-events: none;
+    position: absolute;
+    z-index: -1;
+  }
+
+  .warhammer-tab-label {
+    position: relative;
+    z-index: 1;
+  }
+
+  li a:hover,
+  li a:focus-visible {
+    --tab-art: url('/gear-preview/ui/tabs/hover.png');
+    color: #fff0a1 !important;
+  }
+
+  li a:active {
+    --tab-art: url('/gear-preview/ui/tabs/pressed.png');
+  }
+
+  li.is-active a,
+  li.is-active a:hover {
+    --tab-art: url('/gear-preview/ui/tabs/selected.png');
+    color: #f4eee0 !important;
+    font-weight: 700 !important;
+  }
+
+  li.is-active a:hover,
+  li.is-active a:focus-visible {
+    color: #f4eee0 !important;
+  }
+
+  li a:focus-visible {
+    outline: 2px solid #f1d888;
+    outline-offset: -3px;
+    z-index: 1;
+  }
+
+  li a[aria-disabled='true'],
+  li a:disabled {
+    filter: grayscale(1) brightness(0.65);
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .warhammer-profile-tabs ul {
+    gap: 0.15rem;
+  }
+
+  .warhammer-profile-tabs li {
+    min-width: 3.6rem;
+  }
+
+  .warhammer-profile-tabs li a {
+    font-size: 0.72rem;
+    min-height: 34px;
+    padding: 0.25rem 19px;
+  }
+}

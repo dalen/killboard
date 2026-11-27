@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import type { Query, SkirmishKillDamage } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { killDamageText } from '@/utils';
-import { CharacterInfo } from '@/components/character/CharacterInfo';
+import { CharacterIdentityHeader } from '@/components/character/CharacterInfo';
 import type { ReactElement } from 'react';
 
 const SKIRMISH_DAMAGE_BY_CHARACTER = gql`
@@ -82,7 +82,7 @@ export const SkirmishDamageByCharacter = ({
 
   return (
     <div>
-      <CharacterInfo id={Number(characterId)} />
+      <CharacterIdentityHeader id={Number(characterId)} />
       <table className="table is-striped is-narrow" width="100%">
         <tbody>
           {killDamageGrouped

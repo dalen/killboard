@@ -10,6 +10,7 @@ import { HoverPopupTrigger } from '@/components/global/HoverPopupTrigger';
 import { ItemPopupTrigger } from './ItemPopupTrigger';
 import { questTypeIcon } from '@/utils';
 import { QueryPagination } from '@/components/global/QueryPagination';
+import { WarhammerScrollPane } from '@/components/global/WarhammerScrollPane';
 
 const ITEM_INFO = gql`
   query GetItemRewardedFromQuests(
@@ -98,7 +99,12 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
 
   return (
     <>
-      <div className="item-relation-scroll">
+      <WarhammerScrollPane
+        className="item-relation-scroll"
+        ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+        scrollUpLabel={t('pages:characterPage.scrollUp')}
+        scrollDownLabel={t('pages:characterPage.scrollDown')}
+      >
         <table className="table is-striped is-fullwidth">
           <thead>
             <tr>
@@ -117,9 +123,15 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
               <tr key={quest.id}>
                 <td>
                   <HoverPopupTrigger
+                    interactive
                     placement="top"
                     content={
-                      <div className="item-relation-tooltip">
+                      <WarhammerScrollPane
+                        className="item-relation-tooltip"
+                        ariaLabel={t('pages:itemSources.scrollPaneLabel')}
+                        scrollUpLabel={t('pages:characterPage.scrollUp')}
+                        scrollDownLabel={t('pages:characterPage.scrollDown')}
+                      >
                         <strong>{quest.name}</strong>
                         <div>
                           {t('pages:quests.minLevel')}: {quest.minLevel}
@@ -140,7 +152,7 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
                               ? t('pages:quests.repeatabilityOptions.done')
                               : t('pages:quests.repeatabilityOptions.none')}
                         </div>
-                      </div>
+                      </WarhammerScrollPane>
                     }
                   >
                     <Link to={`/quest/${quest.id}`}>
@@ -261,7 +273,7 @@ export const ItemQuests = ({ itemId }: { itemId: string | undefined }) => {
             ))}
           </tbody>
         </table>
-      </div>
+      </WarhammerScrollPane>
       <QueryPagination
         pageInfo={pageInfo}
         perPage={perPage}

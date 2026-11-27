@@ -1,0 +1,96 @@
+// EA_Button_DefaultResizeable from defaultbutton.xml. Preserve its 27px end caps
+// and resize only the 76px center, matching HorizontalResizeImage behavior.
+.button:not(.is-ghost):not(.is-text):not(.is-static),
+.pagination-link,
+.pagination-previous,
+.pagination-next {
+  --warhammer-button-left: url('/gear-preview/ui/warhammer-button-normal-left.png');
+  --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-normal-middle.png');
+  --warhammer-button-right: url('/gear-preview/ui/warhammer-button-normal-right.png');
+  --warhammer-button-height: 39px;
+
+  appearance: none;
+  background-color: transparent !important;
+  background-image: var(--warhammer-button-left), var(--warhammer-button-middle), var(--warhammer-button-right) !important;
+  background-position: left center, 27px center, right center !important;
+  background-repeat: no-repeat !important;
+  background-size: 27px var(--warhammer-button-height), calc(100% - 54px) var(--warhammer-button-height), 27px var(--warhammer-button-height) !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: rgb(226, 216, 45) !important;
+  box-sizing: border-box;
+  height: var(--warhammer-button-height);
+  min-height: var(--warhammer-button-height);
+  min-width: 110px;
+  // Keep labels clear of the fixed 27px game-art end caps.
+  padding-inline: 27px;
+  position: relative;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover:not(:disabled):not([aria-disabled='true']) {
+    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-hover-left.png');
+    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-hover-middle.png');
+    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-hover-right.png');
+  }
+
+  &:active:not(:disabled):not([aria-disabled='true']) {
+    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-pressed-left.png');
+    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-pressed-middle.png');
+    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-pressed-right.png');
+  }
+
+  &:disabled,
+  &[aria-disabled='true'] {
+    --warhammer-button-left: url('/gear-preview/ui/warhammer-button-disabled-left.png');
+    --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-disabled-middle.png');
+    --warhammer-button-right: url('/gear-preview/ui/warhammer-button-disabled-right.png');
+    color: #777 !important;
+    cursor: not-allowed;
+  }
+
+  &.is-small {
+    padding-inline: 27px;
+  }
+
+  &.is-danger {
+    color: #ffc0b8 !important;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #f1d888;
+    outline-offset: 2px;
+  }
+}
+
+.button:not(.is-ghost):not(.is-text):not(.is-static):disabled,
+.button:not(.is-ghost):not(.is-text):not(.is-static)[aria-disabled='true'] {
+  color: #777 !important;
+}
+
+.pagination-link.is-current {
+  --warhammer-button-left: url('/gear-preview/ui/warhammer-button-pressed-left.png');
+  --warhammer-button-middle: url('/gear-preview/ui/warhammer-button-pressed-middle.png');
+  --warhammer-button-right: url('/gear-preview/ui/warhammer-button-pressed-right.png');
+  color: #fff0a7 !important;
+}
+
+.pagination-link,
+.pagination-previous,
+.pagination-next {
+  min-width: 72px;
+}
+
+@media (max-width: 480px) {
+  .button:not(.is-ghost):not(.is-text):not(.is-static),
+  .pagination-link,
+  .pagination-previous,
+  .pagination-next {
+    min-width: 72px;
+  }
+
+  .button:not(.is-ghost):not(.is-text):not(.is-static) {
+    min-width: 104px;
+  }
+}

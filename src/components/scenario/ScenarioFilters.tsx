@@ -245,7 +245,7 @@ export const ScenarioFilters = ({
   };
 
   return (
-    <div className="card mb-5">
+    <div className="card mb-5 character-filters">
       <div className="card-content">
         <div className="columns is-multiline is-align-items-flex-end">
           <div className="column is-6-tablet is-2-desktop">

@@ -70,7 +70,7 @@ export const LatestKills = (): ReactElement => {
       <div className="is-size-4 is-family-secondary is-uppercase">
         {t('latestKills.title')}
       </div>
-      <KillsList query={LATEST_KILLS} perPage={10} />
+      <KillsList query={LATEST_KILLS} perPage={25} />
     </div>
   );
 };
