@@ -19,18 +19,25 @@ export const ScenarioCount = ({
   guildId,
   wins,
   title,
+  defaultLast30Days = true,
 }: {
   characterId?: string;
   guildId?: string;
   wins: boolean;
   title: string;
+  defaultLast30Days?: boolean;
 }): React.ReactElement | null => {
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
 
   const { loading, error, data } = useQuery<Query>(SCENARIO_COUNT, {
     variables: {
-      where: getScenarioFilters(search, { characterId, guildId, wins }),
+      where: getScenarioFilters(search, {
+        characterId,
+        guildId,
+        wins,
+        defaultLast30Days,
+      }),
     },
   });
 

@@ -105,9 +105,9 @@ const getAverageDurationParts = (
 
 const hasBoundedDateRange = (
   search: URLSearchParams,
-  defaultLastWeek: boolean,
+  defaultLast30Days: boolean,
 ): boolean => {
-  const { from, through } = getScenarioDateRange(search, defaultLastWeek);
+  const { from, through } = getScenarioDateRange(search, defaultLast30Days);
   if (!from || !through) {
     return false;
   }
@@ -131,22 +131,22 @@ export const ScenarioList = ({
   characterId,
   guildId,
   perPage: initialPerPage = 15,
-  defaultLastWeek = false,
+  defaultLast30Days = true,
 }: {
   characterId?: string;
   guildId?: string;
   perPage?: number;
-  defaultLastWeek?: boolean;
+  defaultLast30Days?: boolean;
 }): React.ReactElement | null => {
   const [perPage, setPerPage] = useState(initialPerPage);
   const { t } = useTranslation(['common', 'components']);
   const [search] = useSearchParams();
   const scenarioFilters = getScenarioFilters(search, {
     characterId,
-    defaultLastWeek,
+    defaultLast30Days,
     guildId,
   });
-  const shouldLoadAverages = hasBoundedDateRange(search, defaultLastWeek);
+  const shouldLoadAverages = hasBoundedDateRange(search, defaultLast30Days);
 
   const { loading, error, data, refetch } = useQuery<ScenarioListQuery>(
     SCENARIO_LIST,

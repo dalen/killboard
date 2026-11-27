@@ -23,8 +23,8 @@ export const Home = ({
     <div className="container is-mobile mt-2">
       {tab === 'scenarios' && (
         <>
-          <ScenarioFilters defaultLastWeek />
-          <ScenarioList perPage={10} defaultLastWeek />
+          <ScenarioFilters />
+          <ScenarioList perPage={10} />
         </>
       )}
       {tab === 'players' && (

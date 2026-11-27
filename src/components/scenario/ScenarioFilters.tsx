@@ -95,13 +95,13 @@ const getPresetDateRange = (
 
 export const getScenarioDateRange = (
   search: URLSearchParams,
-  defaultLastWeek = false,
+  defaultLast30Days = true,
 ): ScenarioDateRange => {
   const fromValue = search.get('dateFrom');
   const throughValue = search.get('dateThrough');
 
-  if (defaultLastWeek && fromValue == null && throughValue == null) {
-    return getPresetDateRange('7d');
+  if (defaultLast30Days && fromValue == null && throughValue == null) {
+    return getPresetDateRange('30d');
   }
 
   return {
@@ -136,9 +136,9 @@ const getLocalDateBoundary = (value: string, nextDay = false): string => {
 
 const getStartDateFilter = (
   search: URLSearchParams,
-  defaultLastWeek: boolean,
+  defaultLast30Days: boolean,
 ): DateTimeOperationFilterInput | undefined => {
-  const { from, through } = getScenarioDateRange(search, defaultLastWeek);
+  const { from, through } = getScenarioDateRange(search, defaultLast30Days);
   const filter: DateTimeOperationFilterInput = {};
 
   if (from) {
@@ -157,19 +157,19 @@ export const getScenarioFilters = (
     characterId,
     guildId,
     wins,
-    defaultLastWeek = false,
+    defaultLast30Days = true,
   }: {
     characterId?: string;
     guildId?: string;
     wins?: boolean;
-    defaultLastWeek?: boolean;
+    defaultLast30Days?: boolean;
   } = {},
 ): ScenarioRecordFilterInput => {
   const { queueType, premadeOnly } = getQueueTypeFilters(search);
   const where: ScenarioRecordFilterInput = {
     ...getTierFilters(search),
   };
-  const startTime = getStartDateFilter(search, defaultLastWeek);
+  const startTime = getStartDateFilter(search, defaultLast30Days);
 
   if (startTime) {
     where.startTime = startTime;
@@ -194,15 +194,15 @@ export const getScenarioFilters = (
 
 export const ScenarioFilters = ({
   showPremadeOnly = false,
-  defaultLastWeek = false,
+  defaultLast30Days = true,
 }: {
   showPremadeOnly?: boolean;
-  defaultLastWeek?: boolean;
+  defaultLast30Days?: boolean;
 }): ReactElement => {
   const { t } = useTranslation('components');
   const [search, setSearch] = useSearchParams();
   const [dateRange, setDateRange] = useState<ScenarioDateRange>(() =>
-    getScenarioDateRange(search, defaultLastWeek),
+    getScenarioDateRange(search, defaultLast30Days),
   );
   const [datePreset, setDatePreset] = useState<ScenarioDatePreset>(() =>
     getMatchingDatePreset(dateRange),
@@ -211,10 +211,10 @@ export const ScenarioFilters = ({
   const queueType = search.get('queue_type') || 'all';
 
   useEffect(() => {
-    const nextRange = getScenarioDateRange(search, defaultLastWeek);
+    const nextRange = getScenarioDateRange(search, defaultLast30Days);
     setDateRange(nextRange);
     setDatePreset(getMatchingDatePreset(nextRange));
-  }, [defaultLastWeek, search]);
+  }, [defaultLast30Days, search]);
 
   const applyDateFilters = () => {
     const next = new URLSearchParams(search);
