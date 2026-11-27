@@ -12,6 +12,7 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Career, type Query } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { WarhammerSelect } from '@/components/global/WarhammerFormControls';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import { useSearchParams } from 'react-router';
 import { type KillTimeZoneMode, formatKillTime } from './killTime';
@@ -110,7 +111,7 @@ export const KillActivity = ({
   } | null>(null);
   const isCompact = width <= 480;
   const svgWidth = isCompact ? 360 : 720;
-  const svgHeight = isCompact ? 110 : 220;
+  const svgHeight = isCompact ? 76 : 145;
   const padding = isCompact
     ? { top: 8, right: 8, bottom: 22, left: 28 }
     : { top: 16, right: 12, bottom: 34, left: 42 };
@@ -177,39 +178,33 @@ export const KillActivity = ({
 
   if (loading) {
     return (
-      <div className="card mb-5">
-        <div className="card-content">
-          <p className="is-size-5 has-text-weight-semibold mb-2">
-            {activityTitle}
-          </p>
-          <progress className="progress" />
-        </div>
+      <div className="warhammer-window-panel kill-activity-panel mb-3">
+        <p className="is-size-5 has-text-weight-semibold mb-2">
+          {activityTitle}
+        </p>
+        <progress className="progress" />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="card mb-5">
-        <div className="card-content">
-          <p className="is-size-5 has-text-weight-semibold mb-2">
-            {activityTitle}
-          </p>
-          <ErrorMessage name={error.name} message={error.message} />
-        </div>
+      <div className="warhammer-window-panel kill-activity-panel mb-3">
+        <p className="is-size-5 has-text-weight-semibold mb-2">
+          {activityTitle}
+        </p>
+        <ErrorMessage name={error.name} message={error.message} />
       </div>
     );
   }
 
   if (points.length === 0) {
     return (
-      <div className="card mb-5">
-        <div className="card-content">
-          <p className="is-size-5 has-text-weight-semibold mb-2">
-            {activityTitle}
-          </p>
-          <p>{t('common:noResults')}</p>
-        </div>
+      <div className="warhammer-window-panel kill-activity-panel mb-3">
+        <p className="is-size-5 has-text-weight-semibold mb-2">
+          {activityTitle}
+        </p>
+        <p>{t('common:noResults')}</p>
       </div>
     );
   }
@@ -257,194 +252,184 @@ export const KillActivity = ({
   };
 
   return (
-    <section className="card mb-5" aria-labelledby="kill-activity-title">
-      <div className="card-content">
+    <section
+      className="warhammer-window-panel kill-activity-panel mb-3"
+      aria-labelledby="kill-activity-title"
+    >
+      <div className="kill-activity-heading">
         <h2
           className="is-size-5 has-text-weight-semibold mb-1"
           id="kill-activity-title"
         >
           {activityTitle}
         </h2>
-        <p className="has-text-grey mb-3">
-          {t('components:killActivity.description')}
-        </p>
-        <div className="field mb-3">
-          <label className="label" htmlFor="kill-activity-career">
-            {t('components:killActivity.careerFilter')}
-          </label>
-          <div className="control">
-            <div className="select is-fullwidth">
-              <select
-                id="kill-activity-career"
-                value={career ?? 'all'}
-                onChange={(event) => {
-                  const next = new URLSearchParams(search);
-                  if (event.target.value === 'all') {
-                    next.delete('activityCareer');
-                  } else {
-                    next.set('activityCareer', event.target.value);
-                  }
-                  setSearch(next);
-                }}
-              >
-                <option value="all">
-                  {t('components:killActivity.allCareers')}
-                </option>
-                {Object.values(Career).map((careerOption) => (
-                  <option key={careerOption} value={careerOption}>
-                    {t(`enums:career.${careerOption}`)}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-        </div>
-        <div className="kill-activity-legend" aria-hidden="true">
-          <span className="kill-activity-legend-order" />
-          {t('components:killActivity.order')}
-          <span className="kill-activity-legend-destruction" />
-          {t('components:killActivity.destruction')}
-        </div>
-        <div className="kill-activity-chart-wrap">
-          <svg
-            ref={chartRef}
-            className="kill-activity-chart"
-            viewBox={`0 0 ${svgWidth} ${svgHeight}`}
-            role="img"
-            aria-label={t(
-              dailyAverage
-                ? 'components:killActivity.dailyChartLabel'
-                : 'components:killActivity.chartLabel',
-            )}
-          >
-            {[0, 0.5, 1].map((fraction) => {
-              const gridY = padding.top + plotHeight * (1 - fraction);
-              const value = Math.round(maxValue * fraction);
+        <WarhammerSelect
+          id="kill-activity-career"
+          label={t('components:killActivity.careerFilter')}
+          value={career ?? 'all'}
+          options={[
+            { value: 'all', label: t('components:killActivity.allCareers') },
+            ...Object.values(Career).map((careerOption) => ({
+              value: careerOption,
+              label: t(`enums:career.${careerOption}`),
+            })),
+          ]}
+          onChange={(value) => {
+            const next = new URLSearchParams(search);
+            if (value === 'all') next.delete('activityCareer');
+            else next.set('activityCareer', value);
+            setSearch(next);
+          }}
+        />
+      </div>
+      <p className="has-text-grey kill-activity-description">
+        {t('components:killActivity.description')}
+      </p>
+      <div className="kill-activity-legend" aria-hidden="true">
+        <span className="kill-activity-legend-order" />
+        {t('components:killActivity.order')}
+        <span className="kill-activity-legend-destruction" />
+        {t('components:killActivity.destruction')}
+      </div>
+      <div className="kill-activity-chart-wrap">
+        <svg
+          ref={chartRef}
+          className="kill-activity-chart"
+          viewBox={`0 0 ${svgWidth} ${svgHeight}`}
+          role="img"
+          aria-label={t(
+            dailyAverage
+              ? 'components:killActivity.dailyChartLabel'
+              : 'components:killActivity.chartLabel',
+          )}
+        >
+          {[0, 0.5, 1].map((fraction) => {
+            const gridY = padding.top + plotHeight * (1 - fraction);
+            const value = Math.round(maxValue * fraction);
 
-              return (
-                <g key={fraction}>
-                  <line
-                    x1={padding.left}
-                    x2={svgWidth - padding.right}
-                    y1={gridY}
-                    y2={gridY}
-                    className="kill-activity-gridline"
-                  />
-                  <text
-                    x={padding.left - 8}
-                    y={gridY + 4}
-                    textAnchor="end"
-                    className="kill-activity-axis-label"
-                  >
-                    {value}
-                  </text>
-                </g>
-              );
-            })}
-            <polyline
-              points={orderLine}
-              className="kill-activity-line-order"
-              fill="none"
-            />
-            <polyline
-              points={destructionLine}
-              className="kill-activity-line-destruction"
-              fill="none"
-            />
-            {points.map((point, index) => (
-              <g key={point.hour}>
-                <circle
-                  cx={x(index)}
-                  cy={y(point.order)}
-                  r="4"
-                  className="kill-activity-point-order"
-                  tabIndex={0}
-                  aria-label={`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')}; ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
-                  onPointerEnter={() => showPointTooltip(index, point.order)}
-                  onFocus={() => showPointTooltip(index, point.order)}
-                  onPointerLeave={() => setHoveredPoint(null)}
-                  onBlur={() => setHoveredPoint(null)}
-                >
-                  <title>
-                    {`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')} — ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${valueDescription}${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
-                  </title>
-                </circle>
-                <circle
-                  cx={x(index)}
-                  cy={y(point.destruction)}
-                  r="4"
-                  className="kill-activity-point-destruction"
-                  tabIndex={0}
-                  aria-label={`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')}; ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
-                  onPointerEnter={() =>
-                    showPointTooltip(index, point.destruction)
-                  }
-                  onFocus={() => showPointTooltip(index, point.destruction)}
-                  onPointerLeave={() => setHoveredPoint(null)}
-                  onBlur={() => setHoveredPoint(null)}
-                >
-                  <title>
-                    {`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')} — ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${valueDescription}${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
-                  </title>
-                </circle>
-              </g>
-            ))}
-            {labelIndexes.map((index) => {
-              let textAnchor: 'start' | 'end' | 'middle' = 'middle';
-              if (index === 0) {
-                textAnchor = 'start';
-              } else if (index === points.length - 1) {
-                textAnchor = 'end';
-              }
-
-              return (
+            return (
+              <g key={fraction}>
+                <line
+                  x1={padding.left}
+                  x2={svgWidth - padding.right}
+                  y1={gridY}
+                  y2={gridY}
+                  className="kill-activity-gridline"
+                />
                 <text
-                  key={index}
-                  x={x(index)}
-                  y={svgHeight - 5}
-                  textAnchor={textAnchor}
+                  x={padding.left - 8}
+                  y={gridY + 4}
+                  textAnchor="end"
                   className="kill-activity-axis-label"
                 >
-                  {formatKillTime(
-                    new Date(points[index].hour),
-                    timeZoneMode,
-                    dailyAverage ? 'day' : 'chart',
-                  )}
+                  {value}
                 </text>
-              );
-            })}
-          </svg>
-          {hoveredPoint && points[hoveredPoint.index] && (
-            <div
-              className={`kill-activity-tooltip${hoveredPoint.above ? ' kill-activity-tooltip--above' : ''}`}
-              style={{ left: hoveredPoint.left, top: hoveredPoint.top }}
-              role="status"
-            >
-              <strong>
+              </g>
+            );
+          })}
+          <polyline
+            points={orderLine}
+            className="kill-activity-line-order"
+            fill="none"
+          />
+          <polyline
+            points={destructionLine}
+            className="kill-activity-line-destruction"
+            fill="none"
+          />
+          {points.map((point, index) => (
+            <g key={point.hour}>
+              <circle
+                cx={x(index)}
+                cy={y(point.order)}
+                r="4"
+                className="kill-activity-point-order"
+                tabIndex={0}
+                aria-label={`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')}; ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
+                onPointerEnter={() => showPointTooltip(index, point.order)}
+                onFocus={() => showPointTooltip(index, point.order)}
+                onPointerLeave={() => setHoveredPoint(null)}
+                onBlur={() => setHoveredPoint(null)}
+              >
+                <title>
+                  {`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')} — ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${valueDescription}${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
+                </title>
+              </circle>
+              <circle
+                cx={x(index)}
+                cy={y(point.destruction)}
+                r="4"
+                className="kill-activity-point-destruction"
+                tabIndex={0}
+                aria-label={`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')}; ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
+                onPointerEnter={() =>
+                  showPointTooltip(index, point.destruction)
+                }
+                onFocus={() => showPointTooltip(index, point.destruction)}
+                onPointerLeave={() => setHoveredPoint(null)}
+                onBlur={() => setHoveredPoint(null)}
+              >
+                <title>
+                  {`${formatKillTime(new Date(point.hour), timeZoneMode, dailyAverage ? 'day' : 'full')} — ${valueDescription}${t('components:killActivity.order')}: ${point.order}; ${valueDescription}${t('components:killActivity.destruction')}: ${point.destruction}; ${t('components:killActivity.total')}: ${point.total}`}
+                </title>
+              </circle>
+            </g>
+          ))}
+          {labelIndexes.map((index) => {
+            let textAnchor: 'start' | 'end' | 'middle' = 'middle';
+            if (index === 0) {
+              textAnchor = 'start';
+            } else if (index === points.length - 1) {
+              textAnchor = 'end';
+            }
+
+            return (
+              <text
+                key={index}
+                x={x(index)}
+                y={svgHeight - 5}
+                textAnchor={textAnchor}
+                className="kill-activity-axis-label"
+              >
                 {formatKillTime(
-                  new Date(points[hoveredPoint.index].hour),
+                  new Date(points[index].hour),
                   timeZoneMode,
-                  dailyAverage ? 'day' : 'full',
+                  dailyAverage ? 'day' : 'chart',
                 )}
-              </strong>
-              {dailyAverage && <em>{dailyAverageLabel}</em>}
-              <span>
-                <i className="kill-activity-legend-order" />
-                {t('components:killActivity.order')}:{' '}
-                {points[hoveredPoint.index].order}
-              </span>
-              <span>
-                <i className="kill-activity-legend-destruction" />
-                {t('components:killActivity.destruction')}:{' '}
-                {points[hoveredPoint.index].destruction}
-              </span>
-              <span>
-                {t('components:killActivity.total')}:{' '}
-                {points[hoveredPoint.index].total}
-              </span>
-            </div>
-          )}
-        </div>
+              </text>
+            );
+          })}
+        </svg>
+        {hoveredPoint && points[hoveredPoint.index] && (
+          <div
+            className={`kill-activity-tooltip${hoveredPoint.above ? ' kill-activity-tooltip--above' : ''}`}
+            style={{ left: hoveredPoint.left, top: hoveredPoint.top }}
+            role="status"
+          >
+            <strong>
+              {formatKillTime(
+                new Date(points[hoveredPoint.index].hour),
+                timeZoneMode,
+                dailyAverage ? 'day' : 'full',
+              )}
+            </strong>
+            {dailyAverage && <em>{dailyAverageLabel}</em>}
+            <span>
+              <i className="kill-activity-legend-order" />
+              {t('components:killActivity.order')}:{' '}
+              {points[hoveredPoint.index].order}
+            </span>
+            <span>
+              <i className="kill-activity-legend-destruction" />
+              {t('components:killActivity.destruction')}:{' '}
+              {points[hoveredPoint.index].destruction}
+            </span>
+            <span>
+              {t('components:killActivity.total')}:{' '}
+              {points[hoveredPoint.index].total}
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

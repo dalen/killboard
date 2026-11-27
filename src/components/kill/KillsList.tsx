@@ -10,6 +10,8 @@ import { KillsListTable } from '@/components/kill/KillsListTable';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import type { KillTimeZoneMode } from './killTime';
 
+const killTotalFormat = new Intl.NumberFormat();
+
 export const KillsList = ({
   query,
   queryOptions,
@@ -46,7 +48,12 @@ export const KillsList = ({
   const [search] = useSearchParams();
   const searchKey = search.toString();
   const currentFilters = React.useMemo(
-    () => getCurrentFilters(new URLSearchParams(searchKey), defaultPeriod, includeZoneFilter),
+    () =>
+      getCurrentFilters(
+        new URLSearchParams(searchKey),
+        defaultPeriod,
+        includeZoneFilter,
+      ),
     [defaultPeriod, includeZoneFilter, searchKey],
   );
 
@@ -83,10 +90,14 @@ export const KillsList = ({
       {title && (
         <div className="is-size-4 is-family-secondary is-uppercase mb-2">
           {title}
-          {showTotalCount && kills.totalCount != null ? ` ${kills.totalCount}` : ''}
+          {showTotalCount && kills.totalCount != null
+            ? ` ${killTotalFormat.format(kills.totalCount)}`
+            : ''}
         </div>
       )}
-      {description && <p className="is-size-7 has-text-grey-light mb-2">{description}</p>}
+      {description && (
+        <p className="is-size-7 has-text-grey-light mb-2">{description}</p>
+      )}
       <KillsListTable
         data={currentPageKills}
         showTime={showTime}

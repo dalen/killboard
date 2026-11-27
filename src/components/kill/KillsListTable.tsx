@@ -1,13 +1,24 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
-import type { Kill } from '@/__generated__/graphql';
+import { Career, type Kill } from '@/__generated__/graphql';
 import { CareerIcon } from '@/components/CareerIcon';
 import { GuildLink } from '@/components/global/GuildLink';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import clsx from 'clsx';
 import { type KillTimeZoneMode, formatKillTime } from './killTime';
+import { getCareerRealm } from './careerRealm';
 import './KillsListTable.scss';
+
+const RealmLabel = ({ career }: { career: Career }): React.ReactElement => {
+  const { t } = useTranslation('components');
+  const realm = getCareerRealm(career);
+  return (
+    <span className={`kill-realm-label is-${realm}`}>
+      {t(`killsList.${realm}`)}
+    </span>
+  );
+};
 
 export const KillsListTable = ({
   data,
@@ -63,6 +74,7 @@ export const KillsListTable = ({
                       <Link to={`/character/${attacker.character.id}`}>
                         <strong>{attacker.character.name}</strong>
                       </Link>
+                      <RealmLabel career={attacker.character.career} />
                       <GuildLink guild={attacker.guild} />
                       <small>
                         Lvl {attacker.level} · RR {attacker.renownRank}
@@ -85,6 +97,7 @@ export const KillsListTable = ({
                       <Link to={`/character/${victim.character.id}`}>
                         <strong>{victim.character.name}</strong>
                       </Link>
+                      <RealmLabel career={victim.character.career} />
                       <GuildLink guild={victim.guild} />
                       <small>
                         Lvl {victim.level} · RR {victim.renownRank}
@@ -94,7 +107,11 @@ export const KillsListTable = ({
                 )}
               </div>
               <footer className="kill-mobile-footer">
-                <span>{kill.scenario ? 'Scenario' : 'RvR'}</span>
+                <span>
+                  {kill.scenario?.name ??
+                    kill.position.zone?.name ??
+                    (kill.scenario ? 'Scenario' : 'RvR')}
+                </span>
                 <div className="kill-mobile-actions">
                   {feudUrl && (
                     <Link to={feudUrl} className="button is-light is-small">
@@ -124,20 +141,29 @@ export const KillsListTable = ({
           'is-striped',
           'is-hoverable',
           'is-marginless',
+          'warhammer-kills-table',
           isMobile ? 'is-narrow' : 'is-fullwidth',
         )}
       >
         <thead>
           <tr>
-            {showTime && <th id="th-time">{t('components:killsList.time')}</th>}
+            {showTime && (
+              <th id="th-time" scope="col">
+                {t('components:killsList.time')}
+              </th>
+            )}
             {showKiller && (
-              <th id="th-killer">{t('components:killsList.killer')}</th>
+              <th id="th-killer" scope="col">
+                {t('components:killsList.killer')}
+              </th>
             )}
             {showVictim && (
-              <th id="th-victim">{t('components:killsList.victim')}</th>
+              <th id="th-victim" scope="col">
+                {t('components:killsList.victim')}
+              </th>
             )}
-            <th>{t('components:killsList.type')}</th>
-            <th aria-label="empty header" />
+            <th scope="col">{t('components:killsList.type')}</th>
+            <th aria-label={t('components:killsList.actions')} scope="col" />
           </tr>
         </thead>
         <tbody>
@@ -177,6 +203,9 @@ export const KillsListTable = ({
                           >
                             <strong>{kill.attackers[0].character.name}</strong>
                           </Link>
+                          <RealmLabel
+                            career={kill.attackers[0].character.career}
+                          />
                           <br />
                           <GuildLink guild={kill.attackers[0].guild} />
                         </div>
@@ -202,6 +231,7 @@ export const KillsListTable = ({
                           <Link to={`/character/${kill.victim.character.id}`}>
                             <strong>{kill.victim.character.name}</strong>
                           </Link>
+                          <RealmLabel career={kill.victim.character.career} />
                           <br />
                           <GuildLink guild={kill.victim.guild} />
                         </div>
@@ -275,14 +305,17 @@ export const KillsListTable = ({
                 </td>
                 <td className="kill-row-actions-cell">
                   <div className="kill-row-actions">
-                  {feudUrl && (
-                    <Link to={feudUrl} className="button is-light is-small">
-                      {t('components:playerFeud.viewFeud')}
+                    {feudUrl && (
+                      <Link to={feudUrl} className="button is-light is-small">
+                        {t('components:playerFeud.viewFeud')}
+                      </Link>
+                    )}
+                    <Link
+                      to={`/kill/${kill.id}`}
+                      className="button is-primary is-small"
+                    >
+                      {t('components:killsList.details')}
                     </Link>
-                  )}
-                  <Link to={`/kill/${kill.id}`} className="button is-primary is-small">
-                    {t('components:killsList.details')}
-                  </Link>
                   </div>
                 </td>
               </tr>

@@ -2,12 +2,21 @@
   align-items: center;
   background: rgba(0, 0, 0, 0.68);
   border: 8px solid transparent;
-  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 6px 8px 10px 8px / 0 stretch;
+  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 6px 8px
+    10px 8px / 0 stretch;
   display: flex;
   gap: 0.75rem;
   min-height: 80px;
   padding: 0.4rem 0.65rem;
   width: 100%;
+}
+
+.warhammer-window-panel {
+  background: rgba(0, 0, 0, 0.78);
+  border: 8px solid transparent;
+  border-image: url('/gear-preview/ui/window-frame.png') 8 11 19 11 / 6px 8px
+    10px 8px / 0 stretch;
+  padding: 0.65rem 0.8rem;
 }
 
 .warhammer-profile-tabs {
@@ -49,7 +58,9 @@
     padding: 0.35rem 19px;
     position: relative;
     text-align: center;
-    transition: color 120ms ease, filter 120ms ease;
+    transition:
+      color 120ms ease,
+      filter 120ms ease;
     z-index: 0;
   }
 

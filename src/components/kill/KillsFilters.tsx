@@ -9,6 +9,11 @@ import {
 import type { ReactElement } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
+import {
+  WarhammerCheckbox,
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
 
 const getPeriodFilters = (search: URLSearchParams, defaultPeriod: string) => {
   const period = search.get('period') || defaultPeriod;
@@ -142,84 +147,64 @@ export const KillsFilters = ({
 
   const period = search.get('period') || defaultPeriod;
 
+  const periodOptions = [
+    ['all', 'allTime'],
+    ['last30m', 'last30m'],
+    ['last1h', 'last1h'],
+    ['last2h', 'last2h'],
+    ['last4h', 'last4h'],
+    ['last24h', 'last24h'],
+    ['last7d', 'last7d'],
+    ['last30d', 'last30d'],
+    ['thisWeek', 'thisWeek'],
+    ['lastWeek', 'lastWeek'],
+    ['thisMonth', 'thisMonth'],
+    ['lastMonth', 'lastMonth'],
+  ].map(([value, label]) => ({ value, label: t(`killsFilters.${label}`) }));
+
+  const updateParam = (key: string, value: string): void => {
+    const next = new URLSearchParams(search);
+    if (value) next.set(key, value);
+    else next.delete(key);
+    setSearch(next);
+  };
+
   return (
-    <div className="card mb-5 character-filters">
-      <div className="card-content">
-        <div className="columns">
-          <div className="column">
-            <div className="select">
-              <select
-                value={period}
-                onChange={(event) => {
-                  search.set('period', event.target.value);
-                  setSearch(search);
-                }}
-              >
-                <option value="all">{t('killsFilters.allTime')}</option>
-                <option value="last30m">{t('killsFilters.last30m')}</option>
-                <option value="last1h">{t('killsFilters.last1h')}</option>
-                <option value="last2h">{t('killsFilters.last2h')}</option>
-                <option value="last4h">{t('killsFilters.last4h')}</option>
-                <option value="last24h">{t('killsFilters.last24h')}</option>
-                <option value="last7d">{t('killsFilters.last7d')}</option>
-                <option value="last30d">{t('killsFilters.last30d')}</option>
-                <option value="thisWeek">{t('killsFilters.thisWeek')}</option>
-                <option value="lastWeek">{t('killsFilters.lastWeek')}</option>
-                <option value="thisMonth">{t('killsFilters.thisMonth')}</option>
-                <option value="lastMonth">{t('killsFilters.lastMonth')}</option>
-              </select>
-            </div>
-          </div>
-          <div className="column">
-            <label className="label">
-              <input
-                type="checkbox"
-                checked={search.get('soloOnly') === 'true'}
-                onChange={(event) => {
-                  if (event.target.checked) {
-                    search.set('soloOnly', 'true');
-                  } else {
-                    search.delete('soloOnly');
-                  }
-                  setSearch(search);
-                }}
-              />{' '}
-              {t('killsFilters.soloOnly')}
-            </label>
-          </div>
-          {showTimeZone && (
-            <div className="column">
-              <label className="label" htmlFor="kills-time-zone">
-                {t('killsFilters.timeZone')}
-              </label>
-              <div className="select">
-                <select
-                  id="kills-time-zone"
-                  value={
-                    search.get('timeZone') === 'local' ? 'local' : 'altdorf'
-                  }
-                  onChange={(event) => {
-                    const next = new URLSearchParams(search);
-                    if (event.target.value === 'local') {
-                      next.set('timeZone', 'local');
-                    } else {
-                      next.delete('timeZone');
-                    }
-                    setSearch(next);
-                  }}
-                >
-                  <option value="altdorf">
-                    {t('killsFilters.altdorfTime')}
-                  </option>
-                  <option value="local">
-                    {t('killsFilters.computerTime')}
-                  </option>
-                </select>
-              </div>
-            </div>
-          )}
-        </div>
+    <WarhammerFilterPanel className="character-filters">
+      <div
+        className={`warhammer-filter-grid kills-filter-grid${showTimeZone ? ' has-time-zone' : ''}`}
+      >
+        <WarhammerSelect
+          id="kills-period"
+          label={t('killsFilters.timePeriod')}
+          value={period}
+          options={periodOptions}
+          onChange={(value) =>
+            updateParam('period', value === defaultPeriod ? '' : value)
+          }
+        />
+        <WarhammerCheckbox
+          id="kills-solo-only"
+          checked={search.get('soloOnly') === 'true'}
+          onChange={(checked) => updateParam('soloOnly', checked ? 'true' : '')}
+        >
+          {t('killsFilters.soloOnly')}
+        </WarhammerCheckbox>
+        {showTimeZone && (
+          <WarhammerSelect
+            id="kills-time-zone"
+            label={t('killsFilters.timeZone')}
+            value={search.get('timeZone') === 'local' ? 'local' : 'altdorf'}
+            options={[
+              { value: 'altdorf', label: t('killsFilters.altdorfTime') },
+              { value: 'local', label: t('killsFilters.computerTime') },
+            ]}
+            onChange={(value) =>
+              updateParam('timeZone', value === 'local' ? 'local' : '')
+            }
+          />
+        )}
       </div>
-    </div>
+    </WarhammerFilterPanel>
   );
 };

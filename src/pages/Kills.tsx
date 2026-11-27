@@ -1,11 +1,11 @@
 import { gql } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
-import { Link } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { KillsFilters } from '@/components/kill/KillsFilters';
 import { KillsList } from '@/components/kill/KillsList';
 import { KillActivity } from '@/components/kill/KillActivity';
+import { WarhammerKillTabs } from '@/components/global/WarhammerKillTabs';
 import type { ReactElement } from 'react';
-import { useSearchParams } from 'react-router';
 import type { KillTimeZoneMode } from '@/components/kill/killTime';
 
 const KILL_RESULT_FIELDS = gql`
@@ -117,7 +117,7 @@ export const Kills = (): ReactElement => {
     search.get('timeZone') === 'local' ? 'local' : 'altdorf';
 
   return (
-    <div className="container is-max-widescreen mt-2">
+    <div className="container is-max-widescreen mt-2 kills-page">
       <nav className="breadcrumb" aria-label="breadcrumbs">
         <ul>
           <li>
@@ -128,21 +128,7 @@ export const Kills = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <nav className="tabs is-boxed mb-4" aria-label={t('pages:killsPage.sections')}>
-        <ul>
-          <li className="is-active">
-            <Link to="/kills">{t('pages:killsPage.title')}</Link>
-          </li>
-          <li>
-            <Link to="/activity">{t('pages:activityPage.title')}</Link>
-          </li>
-          <li>
-            <Link to="/zone-comparison">
-              {t('pages:zoneComparisonPage.title')}
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <WarhammerKillTabs active="kills" />
       <div>
         <KillsFilters defaultPeriod="last7d" showTimeZone />
         {search.get('zoneId') && (
@@ -162,16 +148,23 @@ export const Kills = (): ReactElement => {
           </p>
         )}
         <KillActivity defaultPeriod="last7d" />
-        <KillsList
-          query={period === 'all' ? LATEST_KILLS_WITHOUT_COUNT : LATEST_KILLS}
-          perPage={10}
-          defaultPeriod="last7d"
-          timeZoneMode={timeZoneMode}
-          title={t('pages:killsPage.title')}
-          showTotalCount={period !== 'all'}
-          description={period === 'all' ? t('pages:killsPage.allTimeDescription') : undefined}
-          includeZoneFilter
-        />
+        <section className="warhammer-window-panel kills-results-panel">
+          <KillsList
+            query={period === 'all' ? LATEST_KILLS_WITHOUT_COUNT : LATEST_KILLS}
+            perPage={10}
+            mobileCards
+            defaultPeriod="last7d"
+            timeZoneMode={timeZoneMode}
+            title={t('pages:killsPage.title')}
+            showTotalCount={period !== 'all'}
+            description={
+              period === 'all'
+                ? t('pages:killsPage.allTimeDescription')
+                : undefined
+            }
+            includeZoneFilter
+          />
+        </section>
       </div>
     </div>
   );

@@ -5,6 +5,12 @@ import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useSearchParams } from 'react-router';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { WarhammerKillTabs } from '@/components/global/WarhammerKillTabs';
+import {
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
+import './ZoneComparison.scss';
 import { creatureLocationOptions } from '@/data/creatureFilterOptions';
 import type { ReactElement } from 'react';
 
@@ -15,10 +21,14 @@ const ZONE_ACTIVITY_COMPARISON = gql`
     $zoneA: ID!
     $zoneB: ID!
   ) {
-    zoneA: kills(where: { time: { gte: $from, lt: $to }, zoneId: { eq: $zoneA } }) {
+    zoneA: kills(
+      where: { time: { gte: $from, lt: $to }, zoneId: { eq: $zoneA } }
+    ) {
       totalCount
     }
-    zoneB: kills(where: { time: { gte: $from, lt: $to }, zoneId: { eq: $zoneB } }) {
+    zoneB: kills(
+      where: { time: { gte: $from, lt: $to }, zoneId: { eq: $zoneB } }
+    ) {
       totalCount
     }
   }
@@ -33,8 +43,8 @@ type ComparisonPeriod = keyof typeof PERIOD_DAYS;
 
 const DEFAULT_ZONE_A = '6';
 const DEFAULT_ZONE_B = '105';
-const sortedZones = [...creatureLocationOptions].sort((a, b) =>
-  a.name.localeCompare(b.name) || Number(a.id) - Number(b.id),
+const sortedZones = [...creatureLocationOptions].sort(
+  (a, b) => a.name.localeCompare(b.name) || Number(a.id) - Number(b.id),
 );
 const validZoneIds: ReadonlySet<string> = new Set(
   sortedZones.map((zone) => zone.id),
@@ -128,104 +138,62 @@ export const ZoneComparison = (): ReactElement => {
         </ul>
       </nav>
 
-      <nav
-        className="tabs is-boxed mb-4"
-        aria-label={t('pages:killsPage.sections')}
-        style={{ overflowX: 'auto' }}
-      >
-        <ul style={{ minWidth: 'max-content' }}>
-          <li>
-            <Link to="/kills">{t('pages:killsPage.title')}</Link>
-          </li>
-          <li>
-            <Link to="/activity">{t('pages:activityPage.title')}</Link>
-          </li>
-          <li className="is-active">
-            <Link to="/zone-comparison">
-              {t('pages:zoneComparisonPage.title')}
-            </Link>
-          </li>
-        </ul>
-      </nav>
+      <WarhammerKillTabs active="zone-comparison" />
 
       <main>
-        <h1 className="title is-4 mb-2">
+        <h1 className="title is-5 mb-1">
           {t('pages:zoneComparisonPage.title')}
         </h1>
-        <p className="has-text-grey mb-4">
+        <p className="has-text-grey mb-2">
           {t('pages:zoneComparisonPage.description')}
         </p>
 
-        <div className="columns is-multiline mx-0 mb-2">
-          <div className="column is-5-desktop is-6-tablet is-12-mobile">
-            <label className="label" htmlFor="zone-comparison-a">
-              {t('pages:zoneComparisonPage.zoneA')}
-            </label>
-            <div className="select is-fullwidth">
-              <select
-                id="zone-comparison-a"
-                value={zoneA}
-                onChange={(event) => updateSearch('zoneA', event.target.value)}
-              >
-                {sortedZones.map((zone) => (
-                  <option key={zone.id} value={zone.id}>
-                    {zone.name} (#{zone.id})
-                  </option>
-                ))}
-              </select>
-            </div>
+        <WarhammerFilterPanel className="zone-comparison-filter-shell">
+          <div className="warhammer-filter-grid zone-comparison-filter-grid">
+            <WarhammerSelect
+              id="zone-comparison-a"
+              label={t('pages:zoneComparisonPage.zoneA')}
+              value={zoneA}
+              options={sortedZones.map((zone) => ({
+                value: zone.id,
+                label: zone.name,
+              }))}
+              onChange={(value) => updateSearch('zoneA', value)}
+            />
+            <WarhammerSelect
+              id="zone-comparison-b"
+              label={t('pages:zoneComparisonPage.zoneB')}
+              value={zoneB}
+              options={sortedZones.map((zone) => ({
+                value: zone.id,
+                label: zone.name,
+              }))}
+              onChange={(value) => updateSearch('zoneB', value)}
+            />
+            <WarhammerSelect
+              id="zone-comparison-period"
+              label={t('pages:zoneComparisonPage.period')}
+              value={period}
+              options={(Object.keys(PERIOD_DAYS) as ComparisonPeriod[]).map(
+                (option) => ({
+                  value: option,
+                  label: t(`components:killsFilters.${option}`),
+                }),
+              )}
+              onChange={(value) => updateSearch('period', value)}
+            />
           </div>
-          <div className="column is-5-desktop is-6-tablet is-12-mobile">
-            <label className="label" htmlFor="zone-comparison-b">
-              {t('pages:zoneComparisonPage.zoneB')}
-            </label>
-            <div className="select is-fullwidth">
-              <select
-                id="zone-comparison-b"
-                value={zoneB}
-                onChange={(event) => updateSearch('zoneB', event.target.value)}
-              >
-                {sortedZones.map((zone) => (
-                  <option key={zone.id} value={zone.id}>
-                    {zone.name} (#{zone.id})
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <div className="column is-2-desktop is-12-tablet is-12-mobile">
-            <label className="label" htmlFor="zone-comparison-period">
-              {t('pages:zoneComparisonPage.period')}
-            </label>
-            <div className="select is-fullwidth">
-              <select
-                id="zone-comparison-period"
-                value={period}
-                onChange={(event) =>
-                  updateSearch('period', event.target.value)
-                }
-              >
-                {(Object.keys(PERIOD_DAYS) as ComparisonPeriod[]).map(
-                  (option) => (
-                    <option key={option} value={option}>
-                      {t(`components:killsFilters.${option}`)}
-                    </option>
-                  ),
-                )}
-              </select>
-            </div>
-          </div>
-        </div>
+        </WarhammerFilterPanel>
 
         <p className="is-size-7 has-text-grey mb-3">
           {t('pages:zoneComparisonPage.methodology')}
         </p>
 
         <section
-          className="card mb-4"
+          className="warhammer-window-panel zone-comparison-results mb-4"
           aria-label={t('pages:zoneComparisonPage.results')}
         >
-          <div className="card-content">
+          <div>
             {zoneA === zoneB ? (
               <p>{t('pages:zoneComparisonPage.chooseDifferentZones')}</p>
             ) : loading ? (
@@ -240,15 +208,23 @@ export const ZoneComparison = (): ReactElement => {
                     to: utcDateTime.format(new Date(variables.to)),
                   })}
                 </p>
-                <div className="columns is-multiline mb-1">
+                <div className="zone-comparison-cards">
                   {[
                     { id: zoneA, name: nameA, count: countA },
                     { id: zoneB, name: nameB, count: countB },
                   ].map((zone) => (
-                    <div className="column is-6" key={zone.id}>
-                      <div className="box mb-2">
+                    <div className="zone-comparison-card" key={zone.id}>
+                      <div className="zone-comparison-card-inner">
                         <div className="is-flex is-justify-content-space-between is-align-items-center">
-                          <strong>{zone.name}</strong>
+                          <div className="is-flex is-align-items-center">
+                            <img
+                              className="zone-comparison-thumb"
+                              src={`/images/maps/${zone.id}.webp`}
+                              alt=""
+                              loading="lazy"
+                            />
+                            <strong>{zone.name}</strong>
+                          </div>
                           <Link
                             to={`/zone_heatmap/${zone.id}?period=${period}`}
                           >
@@ -260,24 +236,46 @@ export const ZoneComparison = (): ReactElement => {
                             count: numberFormat.format(zone.count),
                           })}
                         </p>
-                        <progress
-                          className="progress is-info is-small mb-0"
-                          value={zone.count}
-                          max={maxCount}
+                        <div
+                          className="zone-comparison-track"
+                          role="img"
                           aria-label={t(
                             'pages:zoneComparisonPage.sampleCount',
                             { count: numberFormat.format(zone.count) },
                           )}
-                        />
+                        >
+                          <span
+                            style={{
+                              width: `${(zone.count / maxCount) * 100}%`,
+                            }}
+                          />
+                        </div>
                       </div>
                     </div>
                   ))}
                 </div>
+                <dl className="zone-comparison-summary">
+                  <div>
+                    <dt>{t('pages:zoneComparisonPage.combined')}</dt>
+                    <dd>{numberFormat.format(countA + countB)}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('pages:zoneComparisonPage.difference')}</dt>
+                    <dd>{numberFormat.format(Math.abs(countA - countB))}</dd>
+                  </div>
+                  <div>
+                    <dt>{t('pages:zoneComparisonPage.relativeDifference')}</dt>
+                    <dd>
+                      {Math.min(countA, countB) === 0
+                        ? t('pages:zoneComparisonPage.noBaseline')
+                        : `${numberFormat.format(Math.round((Math.abs(countA - countB) / Math.min(countA, countB)) * 100))}%`}
+                    </dd>
+                  </div>
+                </dl>
               </>
             )}
           </div>
         </section>
-
       </main>
     </div>
   );

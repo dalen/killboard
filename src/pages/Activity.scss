@@ -1,116 +1,248 @@
-.activity-page-heading,
-.activity-page-filters {
-  align-items: flex-start;
-  display: flex;
-  gap: 1rem;
-  justify-content: space-between;
+.activity-panel {
+  padding: 0.65rem 0.8rem;
 }
 
-.activity-page-heading > :first-child {
-  min-width: 0;
+.activity-page-heading {
+  align-items: end;
+  display: grid;
+  gap: 0.65rem 1rem;
+  grid-template-columns: minmax(13rem, 0.85fr) minmax(0, 1.5fr);
 }
 
-.activity-page-filters {
-  flex: 0 0 auto;
+.activity-page-heading h1 {
+  font-size: 1.35rem;
+  margin-bottom: 0.15rem !important;
+  text-transform: uppercase;
 }
 
-.activity-page-filters .field {
-  min-width: 0;
+.activity-page-heading p {
+  font-size: 0.85rem;
+  margin: 0;
 }
 
-.activity-page-filters .field {
-  margin-bottom: 0;
+.activity-filter-shell {
+  margin: 0 !important;
+  padding: 0.45rem 0.55rem;
 }
 
-.activity-timeline {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+.activity-page-filters .warhammer-form-label {
+  font-size: 0.72rem;
 }
 
 .activity-counts {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.4rem;
+  margin-top: 0.45rem;
 }
 
 .activity-count {
-  align-items: baseline;
-  background: rgba(20, 22, 25, 0.68);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 0.3rem;
+  align-items: center;
+  appearance: none;
+  background: rgba(16, 17, 19, 0.88);
+  border: 1px solid rgba(184, 148, 76, 0.5);
+  color: #e7ddc9;
+  cursor: pointer;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.25rem 0.65rem;
+  font: inherit;
+  font-size: 0.76rem;
+  gap: 0.55rem;
   justify-content: space-between;
-  min-width: 12rem;
-  padding: 0.45rem 0.65rem;
+  min-height: 30px;
+  padding: 0.25rem 0.55rem;
 }
 
 .activity-count strong {
-  color: rgba(255, 255, 255, 0.85);
-  font-size: 0.85rem;
+  color: #a9cfff;
+  font-size: 0.72rem;
+  font-weight: 500;
 }
 
-.activity-timeline-entry {
-  align-items: flex-start;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+.activity-count:hover,
+.activity-count.is-selected {
+  background: rgba(115, 20, 10, 0.7);
+  border-color: #d49a37;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 208, 85, 0.35),
+    0 0 0.45rem rgba(194, 120, 18, 0.25);
+  color: #ffd34c;
+}
+
+.activity-count.is-selected strong {
+  color: #fff0ad;
+}
+
+.activity-count:focus-visible {
+  outline: 2px solid #e4bb69;
+  outline-offset: 2px;
+}
+
+.activity-log {
+  border-top: 1px solid rgba(179, 142, 79, 0.46);
+}
+
+.activity-log-header,
+.activity-log-row {
+  align-items: center;
   display: grid;
-  gap: 1rem;
-  grid-template-columns: minmax(10rem, 0.28fr) minmax(0, 1fr);
-  padding: 0.85rem 0.25rem;
+  gap: 0.65rem;
+  grid-template-columns:
+    minmax(9rem, 1.05fr) minmax(4.1rem, 0.36fr) minmax(14rem, 1.9fr)
+    minmax(8rem, 1fr) auto;
 }
 
-.activity-timeline-entry time,
-.activity-timeline-detail {
-  color: rgba(255, 255, 255, 0.68);
+.activity-log-header {
+  color: #e3b347;
+  font-size: 0.7rem;
+  font-weight: 700;
+  min-height: 29px;
+  padding: 0.2rem 0.3rem;
+  text-transform: uppercase;
 }
 
-.activity-timeline-content {
-  align-items: baseline;
+.activity-log-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.78rem;
+  min-height: 42px;
+  padding: 0.3rem;
+}
+
+.activity-log-row:nth-child(odd) {
+  background: rgba(38, 42, 47, 0.43);
+}
+
+.activity-log-row time,
+.activity-location,
+.activity-event small {
+  color: #c4c9d0;
+}
+
+.activity-kind {
+  border-left: 2px solid #cf9d31;
+  color: #e9d9b5;
+  font-size: 0.7rem;
+  padding-left: 0.35rem;
+}
+
+.activity-kind-kill {
+  border-color: #a32119;
+}
+.activity-kind-skirmish {
+  border-color: #c39030;
+}
+.activity-kind-instance {
+  border-color: #597eaa;
+}
+
+.activity-kind img {
+  display: block;
+  height: 22px;
+  width: 22px;
+}
+
+.activity-event {
+  align-items: center;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem 0.7rem;
+  gap: 0.35rem;
   min-width: 0;
 }
 
-.activity-timeline-title {
-  font-weight: 700;
+.activity-event > .image,
+.activity-event > figure {
+  flex: 0 0 22px;
+  margin: 0;
+}
+
+.activity-career-icon {
+  align-items: center;
+  display: inline-flex;
+  flex: 0 0 20px;
+  height: 20px;
+  vertical-align: middle;
+  width: 20px;
+}
+
+.activity-career-icon .image,
+.activity-career-icon img {
+  height: 20px;
+  margin: 0;
+  width: 20px;
+}
+
+.activity-log-title {
+  font-weight: 650;
+  min-width: 0;
   overflow-wrap: anywhere;
 }
 
-.activity-timeline-detail {
-  flex-basis: 100%;
-  font-size: 0.85rem;
+.activity-event small {
+  display: none;
 }
 
-.activity-timeline-map-link {
-  font-size: 0.85rem;
+.activity-character.is-order {
+  color: #58a9e8;
+}
+.activity-character.is-destruction {
+  color: #f05266;
+}
+
+.activity-location {
+  font-size: 0.75rem;
+  min-width: 0;
+}
+
+.activity-location a {
+  color: #f0a61c;
+}
+
+.activity-details-link {
+  color: #f4c33f !important;
+  font-size: 0.72rem !important;
+  margin: 0;
+  white-space: nowrap;
 }
 
 @media screen and (max-width: 800px) {
   .activity-page-heading {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
-
-  .activity-page-filters {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    width: 100%;
+  .activity-log-header {
+    display: none;
   }
-
-  .activity-page-filters .field,
-  .activity-page-filters .select,
-  .activity-page-filters select {
-    width: 100%;
+  .activity-log-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.25rem 0.6rem;
+    padding: 0.45rem 0.3rem;
   }
-
-  .activity-timeline-entry {
-    gap: 0.4rem;
-    grid-template-columns: minmax(0, 1fr);
+  .activity-log-row time {
+    grid-column: 1;
+  }
+  .activity-kind {
+    grid-column: 2;
+    grid-row: 1;
+    justify-self: end;
+  }
+  .activity-event {
+    grid-column: 1 / -1;
+  }
+  .activity-event small {
+    display: inline;
+  }
+  .activity-location {
+    grid-column: 1;
+  }
+  .activity-details-link {
+    grid-column: 2;
+    grid-row: 3;
+    justify-self: end;
   }
 }
 
 @media screen and (max-width: 600px) {
-  .activity-page-filters {
-    grid-template-columns: minmax(0, 1fr);
+  .activity-panel {
+    padding: 0.5rem;
+  }
+  .activity-count {
+    flex: 1 1 100%;
   }
 }

@@ -72,6 +72,7 @@
   },
   "killsFilters": {
     "allTime": "All time",
+    "timePeriod": "Time period",
     "last30m": "Last 30 minutes",
     "last1h": "Last hour",
     "last2h": "Last 2 hours",
@@ -91,7 +92,7 @@
   "killActivity": {
     "title": "Killboard activity ({{range}})",
     "allTimeRange": "All time — latest 30 days shown",
-    "description": "Unique characters recorded in kills per hour, split by realm. For ranges longer than a day, each point shows that day's average hourly activity. The API limits this chart to 31 days, so All time shows only the latest 30 days. Recent hours appear after processing. Times use the selected time zone.",
+    "description": "Recorded unique kill participants by realm. Longer ranges show daily hourly averages; All time is limited to the latest 30 days by the API. Recent hours appear after processing. Times use the selected zone.",
     "dailyAverage": "Daily average per hour",
     "careerFilter": "Career activity",
     "allCareers": "All careers",
@@ -102,10 +103,13 @@
     "total": "Total"
   },
   "killsList": {
+    "actions": "Actions",
+    "destruction": "Destruction",
     "details": "Details",
     "errorTitle": "Error :(",
     "killer": "Killer",
     "soloKill": "Solo kill",
+    "order": "Order",
     "time": "Time",
     "type": "Type",
     "victim": "Victim",

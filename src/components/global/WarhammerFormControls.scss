@@ -1,7 +1,8 @@
 .warhammer-filter-panel {
   background: rgba(10, 10, 10, 0.68);
   border: 4px solid transparent;
-  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 / 4px / 0 stretch;
+  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 / 4px / 0
+    stretch;
   margin-bottom: 0.65rem;
   padding: 0.7rem 0.8rem;
 
@@ -14,11 +15,50 @@
   align-items: end;
   display: grid;
   gap: 0.65rem 0.8rem;
-  grid-template-columns: minmax(8.5rem, 1.2fr) minmax(7rem, 0.8fr) minmax(9rem, 1fr) auto;
+  grid-template-columns: minmax(8.5rem, 1.2fr) minmax(7rem, 0.8fr) minmax(
+      9rem,
+      1fr
+    ) auto;
 
   &.is-custom-date-range {
-    grid-template-columns: minmax(8.5rem, 1.1fr) minmax(7rem, 0.8fr) minmax(8.5rem, 1fr) repeat(2, minmax(9rem, 1.1fr)) auto;
+    grid-template-columns: minmax(8.5rem, 1.1fr) minmax(7rem, 0.8fr) minmax(
+        8.5rem,
+        1fr
+      ) repeat(2, minmax(9rem, 1.1fr)) auto;
   }
+}
+
+.warhammer-filter-grid {
+  display: grid;
+  gap: 0.65rem 0.8rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.kills-filter-grid {
+  align-items: end;
+  grid-template-columns: minmax(9rem, 1.15fr) auto minmax(10rem, 1fr);
+}
+
+.kills-filter-grid:not(.has-time-zone) {
+  grid-template-columns: minmax(9rem, 1fr) auto;
+}
+
+.kills-filter-grid .warhammer-checkbox {
+  align-self: end;
+  margin-bottom: 0.3rem;
+}
+
+.activity-filter-grid {
+  align-items: end;
+  grid-template-columns: repeat(3, minmax(8rem, 1fr));
+}
+
+.zone-comparison-filter-grid {
+  align-items: end;
+  grid-template-columns: minmax(10rem, 1fr) minmax(10rem, 1fr) minmax(
+      8rem,
+      0.6fr
+    );
 }
 
 .warhammer-form-field {
@@ -44,7 +84,8 @@
   appearance: none;
   background: transparent;
   border: 5px solid transparent;
-  border-image: url('/images/warhammer/controls/combo-frame.png') 5 7 fill / 5px 7px / 0 stretch;
+  border-image: url('/images/warhammer/controls/combo-frame.png') 5 7 fill / 5px
+    7px / 0 stretch;
   color: #f0e9dc;
   cursor: pointer;
   display: flex;
@@ -102,7 +143,8 @@
 .warhammer-select-menu-frame {
   background: rgba(0, 0, 0, 0.94);
   border: 4px solid transparent;
-  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 fill / 4px / 0 stretch;
+  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 fill /
+    4px / 0 stretch;
   left: 0;
   min-width: 100%;
   position: absolute;
@@ -151,7 +193,8 @@
   appearance: none;
   background-color: rgba(0, 0, 0, 0.32);
   border: 4px solid transparent;
-  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 fill / 4px / 0 stretch;
+  border-image: url('/images/warhammer/controls/combo-frame.png') 4 4 fill /
+    4px / 0 stretch;
   color: #f0e9dc;
   font: inherit;
   font-size: 0.86rem;
@@ -271,10 +314,15 @@
   }
 
   &:checked {
-    background-image: url('/images/warhammer/controls/radio-selected-overlay.png'),
+    background-image:
+      url('/images/warhammer/controls/radio-selected-overlay.png'),
       url('/images/warhammer/controls/radio-states.png');
-    background-position: 0 0, -22px 0;
-    background-size: 22px 22px, 88px 22px;
+    background-position:
+      0 0,
+      -22px 0;
+    background-size:
+      22px 22px,
+      88px 22px;
   }
 
   &:disabled {
@@ -282,7 +330,9 @@
   }
 
   &:checked:disabled {
-    background-position: 0 0, -44px 0;
+    background-position:
+      0 0,
+      -44px 0;
   }
 
   &:focus-visible {
@@ -309,6 +359,12 @@
     grid-column: 1 / -1;
     justify-content: flex-end;
   }
+
+  .kills-filter-grid,
+  .activity-filter-grid,
+  .zone-comparison-filter-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -320,6 +376,17 @@
   .scenario-filter-grid.is-custom-date-range {
     gap: 0.55rem;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .warhammer-filter-grid {
+    gap: 0.55rem;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .kills-filter-grid,
+  .activity-filter-grid,
+  .zone-comparison-filter-grid {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .scenario-filter-actions {

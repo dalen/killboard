@@ -4,10 +4,21 @@ import { useMemo } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import { WarhammerKillTabs } from '@/components/global/WarhammerKillTabs';
+import {
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
+import { CareerIcon } from '@/components/CareerIcon';
+import { getCareerRealm } from '@/components/kill/careerRealm';
+import type { Career } from '@/__generated__/graphql';
 import { INSTANCE_RUN_FAMILIES } from '@/components/instance_run/instanceRunFamilies';
-import { formatKillTime, type KillTimeZoneMode } from '@/components/kill/killTime';
+import {
+  formatKillTime,
+  type KillTimeZoneMode,
+} from '@/components/kill/killTime';
 import type { InstanceRunFilterInput, Query } from '@/__generated__/graphql';
-import type { ReactElement } from 'react';
+import type { ReactElement, ReactNode } from 'react';
 import './Activity.scss';
 
 const RECENT_ACTIVITY = gql`
@@ -15,22 +26,22 @@ const RECENT_ACTIVITY = gql`
     $from: DateTime!
     $first: Int!
     $runWhere: InstanceRunFilterInput!
-    $includeKills: Boolean!
-    $includeSkirmishes: Boolean!
-    $includeInstanceRuns: Boolean!
   ) {
-    kills(first: $first, where: { time: { gte: $from } })
-      @include(if: $includeKills) {
+    kills(first: $first, where: { time: { gte: $from } }) {
       totalCount
       nodes {
         id
         time
         deathblow {
+          id
           name
+          career
         }
         victim {
           character {
+            id
             name
+            career
           }
         }
         scenario {
@@ -44,8 +55,7 @@ const RECENT_ACTIVITY = gql`
         }
       }
     }
-    skirmishes(first: $first, where: { startTime: { gte: $from } })
-      @include(if: $includeSkirmishes) {
+    skirmishes(first: $first, where: { startTime: { gte: $from } }) {
       totalCount
       nodes {
         id
@@ -63,8 +73,7 @@ const RECENT_ACTIVITY = gql`
         numberOfKills
       }
     }
-    instanceRuns(first: $first, where: $runWhere, order: { start: DESC })
-      @include(if: $includeInstanceRuns) {
+    instanceRuns(first: $first, where: $runWhere, order: { start: DESC }) {
       totalCount
       nodes {
         id
@@ -90,16 +99,14 @@ type RecentActivityVariables = {
   from: string;
   first: number;
   runWhere: InstanceRunFilterInput;
-  includeKills: boolean;
-  includeSkirmishes: boolean;
-  includeInstanceRuns: boolean;
 };
 type ActivityPeriod = 'last30m' | 'last2h' | 'last24h' | 'last7d';
 type ActivityKindFilter = 'all' | ActivityEntry['kind'];
 
-const SEWER_INSTANCE_IDS = INSTANCE_RUN_FAMILIES.find(
-  (family) => family.key === 'altdorf-sewers',
-)?.ids.map(Number) ?? [];
+const SEWER_INSTANCE_IDS =
+  INSTANCE_RUN_FAMILIES.find(
+    (family) => family.key === 'altdorf-sewers',
+  )?.ids.map(Number) ?? [];
 
 const PERIOD_OPTIONS: ActivityPeriod[] = [
   'last30m',
@@ -130,14 +137,18 @@ type ActivityEntry = {
   id: string;
   kind: 'kill' | 'skirmish' | 'instance';
   time: string;
-  title: string;
+  title: ReactNode;
   detail: string;
+  location: string;
   href: string;
   mapHref?: string;
 };
 
+const realmClass = (career?: Career): string =>
+  career ? `is-${getCareerRealm(career)}` : '';
+
 export const Activity = (): ReactElement => {
-  const { t } = useTranslation(['common', 'pages', 'components']);
+  const { t } = useTranslation(['common', 'pages', 'components', 'enums']);
   const [search, setSearch] = useSearchParams();
   const selectedPeriod = search.get('period');
   const period: ActivityPeriod = PERIOD_OPTIONS.includes(
@@ -153,76 +164,117 @@ export const Activity = (): ReactElement => {
     : 'all';
   const timeZoneMode: KillTimeZoneMode =
     search.get('timeZone') === 'local' ? 'local' : 'altdorf';
-  const variables = useMemo<RecentActivityVariables>(
-    () => {
-      const from = getPeriodStart(period).toISOString();
-      return {
-        from,
-        first: 10,
-        includeKills: activityKind === 'all' || activityKind === 'kill',
-        includeSkirmishes:
-          activityKind === 'all' || activityKind === 'skirmish',
-        includeInstanceRuns:
-          activityKind === 'all' || activityKind === 'instance',
-        runWhere: {
-          // Empty-run rows are useful for Sewers, but not for other dungeons.
-          or: [
-            { completedEncounters: { gte: 1 } },
-            { instanceId: { in: SEWER_INSTANCE_IDS } },
-          ],
-          start: { gte: from },
-        },
-      };
-    },
-    [activityKind, period],
-  );
+  const variables = useMemo<RecentActivityVariables>(() => {
+    const from = getPeriodStart(period).toISOString();
+    return {
+      from,
+      first: 10,
+      runWhere: {
+        // Empty-run rows are useful for Sewers, but not for other dungeons.
+        or: [
+          { completedEncounters: { gte: 1 } },
+          { instanceId: { in: SEWER_INSTANCE_IDS } },
+        ],
+        start: { gte: from },
+      },
+    };
+  }, [period]);
   const { data, loading, error } = useQuery<
     RecentActivityData,
     RecentActivityVariables
-  >(
-    RECENT_ACTIVITY,
-    { variables },
-  );
+  >(RECENT_ACTIVITY, { variables });
 
   const entries = useMemo<ActivityEntry[]>(() => {
     const kills = (data?.kills?.nodes ?? []).map((kill) => ({
       id: kill.id,
       kind: 'kill' as const,
       time: kill.time,
-      title: t('pages:activityPage.killSummary', {
-        killer: kill.deathblow?.name ?? t('pages:activityPage.unknownPlayer'),
-        victim: kill.victim.character?.name ?? t('pages:activityPage.unknownPlayer'),
-      }),
-      detail:
+      title: (
+        <>
+          {kill.deathblow && (
+            <span
+              className="activity-career-icon"
+              title={t('pages:activityPage.killerCareer', {
+                career: t(`enums:career.${kill.deathblow.career}`),
+              })}
+              aria-label={t('pages:activityPage.killerCareer', {
+                career: t(`enums:career.${kill.deathblow.career}`),
+              })}
+            >
+              <CareerIcon career={kill.deathblow.career} />
+            </span>
+          )}
+          {kill.deathblow ? (
+            <Link
+              className={`activity-character ${realmClass(kill.deathblow.career)}`}
+              to={`/character/${kill.deathblow.id}`}
+            >
+              {kill.deathblow.name}
+            </Link>
+          ) : (
+            t('pages:activityPage.unknownPlayer')
+          )}{' '}
+          {t('pages:activityPage.killed')}{' '}
+          {kill.victim.character && (
+            <span
+              className="activity-career-icon"
+              title={t('pages:activityPage.victimCareer', {
+                career: t(`enums:career.${kill.victim.character.career}`),
+              })}
+              aria-label={t('pages:activityPage.victimCareer', {
+                career: t(`enums:career.${kill.victim.character.career}`),
+              })}
+            >
+              <CareerIcon career={kill.victim.character.career} />
+            </span>
+          )}
+          {kill.victim.character ? (
+            <Link
+              className={`activity-character ${realmClass(kill.victim.character.career)}`}
+              to={`/character/${kill.victim.character.id}`}
+            >
+              {kill.victim.character.name}
+            </Link>
+          ) : (
+            t('pages:activityPage.unknownPlayer')
+          )}
+        </>
+      ),
+      detail: '',
+      location:
         kill.position.zone?.name ??
         kill.scenario?.name ??
         t('pages:activityPage.unknownLocation'),
       href: `/kill/${kill.id}`,
       mapHref:
-        kill.position.zoneId != null &&
-        String(kill.position.zoneId) !== '0'
+        kill.position.zoneId != null && String(kill.position.zoneId) !== '0'
           ? `/zone_heatmap/${kill.position.zoneId}`
           : undefined,
     }));
-    const skirmishes = (data?.skirmishes?.nodes ?? []).map((skirmish) => ({
-      id: skirmish.id,
-      kind: 'skirmish' as const,
-      time: skirmish.startTime,
-      title:
-        skirmish.scenario?.name ??
-        skirmish.primaryZoneArea?.name ??
-        skirmish.primaryZone?.name ??
-        t('pages:activityPage.skirmish'),
-      detail: [
-        t('pages:activityPage.skirmishPlayerCount', {
-          count: skirmish.numberOfPlayers,
-        }),
-        t('pages:activityPage.skirmishKillCount', {
-          count: skirmish.numberOfKills,
-        }),
-      ].join(' · '),
-      href: `/skirmish/${skirmish.id}`,
-    }));
+    const skirmishes = (data?.skirmishes?.nodes ?? []).map((skirmish) => {
+      const title = skirmish.scenario?.name ?? t('pages:activityPage.skirmish');
+      const recordedLocation =
+        skirmish.primaryZoneArea?.name ?? skirmish.primaryZone?.name ?? '';
+      return {
+        id: skirmish.id,
+        kind: 'skirmish' as const,
+        time: skirmish.startTime,
+        title,
+        detail: [
+          t('pages:activityPage.skirmishPlayerCount', {
+            count: skirmish.numberOfPlayers,
+          }),
+          t('pages:activityPage.skirmishKillCount', {
+            count: skirmish.numberOfKills,
+          }),
+        ].join(' · '),
+        location:
+          recordedLocation === title
+            ? ''
+            : recordedLocation || t('pages:activityPage.unknownLocation'),
+        href: `/skirmish/${skirmish.id}`,
+      };
+    });
     const instances = (data?.instanceRuns?.nodes ?? []).map((run) => ({
       id: run.id,
       kind: 'instance' as const,
@@ -237,13 +289,14 @@ export const Activity = (): ReactElement => {
           count: run.scoreboardEntries.length,
         }),
       ].join(' · '),
+      location: t('pages:activityPage.unknownLocation'),
       href: `/instance-run/${run.id}`,
     }));
 
-    return [...kills, ...skirmishes, ...instances].sort(
-      (left, right) => Date.parse(right.time) - Date.parse(left.time),
-    );
-  }, [data, t]);
+    return [...kills, ...skirmishes, ...instances]
+      .filter((entry) => activityKind === 'all' || entry.kind === activityKind)
+      .sort((left, right) => Date.parse(right.time) - Date.parse(left.time));
+  }, [activityKind, data, t]);
 
   const updateSearch = (key: string, value: string) => {
     const next = new URLSearchParams(search);
@@ -267,188 +320,222 @@ export const Activity = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <nav
-        className="tabs is-boxed mb-4"
-        aria-label={t('pages:killsPage.sections')}
+      <WarhammerKillTabs active="activity" />
+
+      <section
+        className="warhammer-window-panel activity-panel"
+        aria-labelledby="activity-page-title"
       >
-        <ul>
-          <li>
-            <Link to="/kills">{t('pages:killsPage.title')}</Link>
-          </li>
-          <li className="is-active">
-            <Link to="/activity">{t('pages:activityPage.title')}</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <section className="card mb-5" aria-labelledby="activity-page-title">
-        <div className="card-content">
-          <div className="activity-page-heading">
-            <div>
-              <h1 className="title is-3" id="activity-page-title">
-                {t('pages:activityPage.title')}
-              </h1>
-              <p className="has-text-grey">
-                {t('pages:activityPage.description')}
-              </p>
-            </div>
-            <div className="activity-page-filters">
-              <div className="field">
-                <label className="label" htmlFor="activity-type">
-                  {t('pages:activityPage.activityType')}
-                </label>
-                <div className="select">
-                  <select
-                    id="activity-type"
-                    value={activityKind}
-                    onChange={(event) =>
-                      updateSearch(
-                        'activityType',
-                        event.target.value === 'all' ? '' : event.target.value,
-                      )
-                    }
-                  >
-                    {ACTIVITY_KIND_OPTIONS.map((option) => (
-                      <option key={option} value={option}>
-                        {option === 'all'
-                          ? t('pages:activityPage.allActivityTypes')
-                          : t(`pages:activityPage.types.${option}`)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="field">
-                <label className="label" htmlFor="activity-period">
-                  {t('pages:activityPage.period')}
-                </label>
-                <div className="select">
-                  <select
-                    id="activity-period"
-                    value={period}
-                    onChange={(event) =>
-                      updateSearch('period', event.target.value)
-                    }
-                  >
-                    {PERIOD_OPTIONS.map((option) => (
-                      <option key={option} value={option}>
-                        {t(`components:killsFilters.${option}`)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              <div className="field">
-                <label className="label" htmlFor="activity-time-zone">
-                  {t('components:killsFilters.timeZone')}
-                </label>
-                <div className="select">
-                  <select
-                    id="activity-time-zone"
-                    value={timeZoneMode}
-                    onChange={(event) =>
-                      updateSearch(
-                        'timeZone',
-                        event.target.value === 'local' ? 'local' : '',
-                      )
-                    }
-                  >
-                    <option value="altdorf">
-                      {t('components:killsFilters.altdorfTime')}
-                    </option>
-                    <option value="local">
-                      {t('components:killsFilters.computerTime')}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <p className="is-size-7 has-text-grey mt-4">
-            {t('pages:activityPage.methodology')}
-          </p>
-
-          {!loading && !error && (
-            <div
-              className="activity-counts mt-4"
-              aria-label={t('pages:activityPage.recordsInPeriod')}
+        <div className="activity-page-heading">
+          <div>
+            <h1
+              className="title is-3 is-family-secondary"
+              id="activity-page-title"
             >
-              {activityKind === 'all' || activityKind === 'kill' ? (
-                <div className="activity-count">
-                  <span>{t('pages:activityPage.types.kill')}</span>
-                  <strong>
-                    {t('pages:activityPage.countSummary', {
-                      shown: data?.kills?.nodes?.length ?? 0,
-                      total: (data?.kills?.totalCount ?? 0).toLocaleString(),
-                    })}
-                  </strong>
-                </div>
-              ) : null}
-              {activityKind === 'all' || activityKind === 'skirmish' ? (
-                <div className="activity-count">
-                  <span>{t('pages:activityPage.types.skirmish')}</span>
-                  <strong>
-                    {t('pages:activityPage.countSummary', {
-                      shown: data?.skirmishes?.nodes?.length ?? 0,
-                      total: (data?.skirmishes?.totalCount ?? 0).toLocaleString(),
-                    })}
-                  </strong>
-                </div>
-              ) : null}
-              {activityKind === 'all' || activityKind === 'instance' ? (
-                <div className="activity-count">
-                  <span>{t('pages:activityPage.types.instance')}</span>
-                  <strong>
-                    {t('pages:activityPage.countSummary', {
-                      shown: data?.instanceRuns?.nodes?.length ?? 0,
-                      total: (data?.instanceRuns?.totalCount ?? 0).toLocaleString(),
-                    })}
-                  </strong>
-                </div>
-              ) : null}
+              {t('pages:activityPage.title')}
+            </h1>
+            <p className="has-text-grey">
+              {t('pages:activityPage.description')}
+            </p>
+          </div>
+          <WarhammerFilterPanel className="activity-filter-shell">
+            <div className="warhammer-filter-grid activity-filter-grid activity-page-filters">
+              <WarhammerSelect
+                id="activity-type"
+                label={t('pages:activityPage.activityType')}
+                value={activityKind}
+                options={ACTIVITY_KIND_OPTIONS.map((option) => ({
+                  value: option,
+                  label:
+                    option === 'all'
+                      ? t('pages:activityPage.allActivityTypes')
+                      : t(`pages:activityPage.types.${option}`),
+                }))}
+                onChange={(value) =>
+                  updateSearch('activityType', value === 'all' ? '' : value)
+                }
+              />
+              <WarhammerSelect
+                id="activity-period"
+                label={t('pages:activityPage.period')}
+                value={period}
+                options={PERIOD_OPTIONS.map((option) => ({
+                  value: option,
+                  label: t(`components:killsFilters.${option}`),
+                }))}
+                onChange={(value) => updateSearch('period', value)}
+              />
+              <WarhammerSelect
+                id="activity-time-zone"
+                label={t('components:killsFilters.timeZone')}
+                value={timeZoneMode}
+                options={[
+                  {
+                    value: 'altdorf',
+                    label: t('components:killsFilters.altdorfTime'),
+                  },
+                  {
+                    value: 'local',
+                    label: t('components:killsFilters.computerTime'),
+                  },
+                ]}
+                onChange={(value) =>
+                  updateSearch('timeZone', value === 'local' ? 'local' : '')
+                }
+              />
             </div>
-          )}
-
-          {loading && <progress className="progress mt-4" />}
-          {error && <ErrorMessage name={error.name} message={error.message} />}
-          {!loading && !error && entries.length === 0 && (
-            <p className="has-text-grey mt-4">{t('common:noResults')}</p>
-          )}
-          {!loading && !error && entries.length > 0 && (
-            <div className="activity-timeline mt-4">
-              {entries.map((entry) => (
-                <article className="activity-timeline-entry" key={`${entry.kind}-${entry.id}`}>
-                  <time dateTime={entry.time}>
-                    {formatKillTime(new Date(entry.time), timeZoneMode, 'full')}
-                  </time>
-                  <div className="activity-timeline-content">
-                    <span className="tag is-dark">
-                      {t(`pages:activityPage.types.${entry.kind}`)}
-                    </span>
-                    <Link to={entry.href} className="activity-timeline-title">
-                      {entry.title}
-                    </Link>
-                    <span className="activity-timeline-detail">
-                      {entry.detail}
-                    </span>
-                    {entry.mapHref && (
-                      <Link
-                        to={entry.mapHref}
-                        className="activity-timeline-map-link"
-                        aria-label={t('pages:activityPage.openZoneHeatmap', {
-                          zone: entry.detail,
-                        })}
-                      >
-                        {t('pages:activityPage.viewZoneHeatmap')}
-                      </Link>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-          )}
+          </WarhammerFilterPanel>
         </div>
+
+        <p className="is-size-7 has-text-grey mt-4">
+          {t('pages:activityPage.methodology')}
+        </p>
+
+        {!loading && !error && (
+          <div
+            className="activity-counts"
+            aria-label={t('pages:activityPage.recordsInPeriod')}
+          >
+            <button
+              type="button"
+              className={`activity-count${activityKind === 'kill' ? ' is-selected' : ''}`}
+              aria-pressed={activityKind === 'kill'}
+              onClick={() =>
+                updateSearch(
+                  'activityType',
+                  activityKind === 'kill' ? '' : 'kill',
+                )
+              }
+            >
+              <span>{t('pages:activityPage.types.kill')}</span>
+              <strong>
+                {t('pages:activityPage.countSummary', {
+                  shown: data?.kills?.nodes?.length ?? 0,
+                  total: (data?.kills?.totalCount ?? 0).toLocaleString(),
+                })}
+              </strong>
+            </button>
+            <button
+              type="button"
+              className={`activity-count${activityKind === 'skirmish' ? ' is-selected' : ''}`}
+              aria-pressed={activityKind === 'skirmish'}
+              onClick={() =>
+                updateSearch(
+                  'activityType',
+                  activityKind === 'skirmish' ? '' : 'skirmish',
+                )
+              }
+            >
+              <span>{t('pages:activityPage.types.skirmish')}</span>
+              <strong>
+                {t('pages:activityPage.countSummary', {
+                  shown: data?.skirmishes?.nodes?.length ?? 0,
+                  total: (data?.skirmishes?.totalCount ?? 0).toLocaleString(),
+                })}
+              </strong>
+            </button>
+            <button
+              type="button"
+              className={`activity-count${activityKind === 'instance' ? ' is-selected' : ''}`}
+              aria-pressed={activityKind === 'instance'}
+              onClick={() =>
+                updateSearch(
+                  'activityType',
+                  activityKind === 'instance' ? '' : 'instance',
+                )
+              }
+            >
+              <span>{t('pages:activityPage.types.instance')}</span>
+              <strong>
+                {t('pages:activityPage.countSummary', {
+                  shown: data?.instanceRuns?.nodes?.length ?? 0,
+                  total: (data?.instanceRuns?.totalCount ?? 0).toLocaleString(),
+                })}
+              </strong>
+            </button>
+          </div>
+        )}
+
+        {loading && <progress className="progress mt-4" />}
+        {error && <ErrorMessage name={error.name} message={error.message} />}
+        {!loading && !error && entries.length === 0 && (
+          <p className="has-text-grey mt-4">{t('common:noResults')}</p>
+        )}
+        {!loading && !error && entries.length > 0 && (
+          <div
+            className="activity-log mt-3"
+            role="table"
+            aria-label={t('pages:activityPage.title')}
+          >
+            <div className="activity-log-header" role="row">
+              <span role="columnheader">{t('pages:activityPage.time')}</span>
+              <span role="columnheader">
+                {t('pages:activityPage.activityType')}
+              </span>
+              <span role="columnheader">{t('pages:activityPage.event')}</span>
+              <span role="columnheader">
+                {t('pages:activityPage.location')}
+              </span>
+              <span role="columnheader">{t('pages:activityPage.details')}</span>
+            </div>
+            {entries.map((entry) => (
+              <article
+                className="activity-log-row"
+                role="row"
+                key={`${entry.kind}-${entry.id}`}
+              >
+                <time role="cell" dateTime={entry.time}>
+                  {formatKillTime(new Date(entry.time), timeZoneMode, 'full')}
+                </time>
+                <span
+                  role="cell"
+                  className={`activity-kind activity-kind-${entry.kind}`}
+                  title={t(`pages:activityPage.types.${entry.kind}`)}
+                  aria-label={t(`pages:activityPage.types.${entry.kind}`)}
+                >
+                  <span className="is-sr-only">
+                    {t(`pages:activityPage.types.${entry.kind}`)}
+                  </span>
+                  <img
+                    src={
+                      entry.kind === 'kill'
+                        ? '/images/icons/rvr.png'
+                        : entry.kind === 'skirmish'
+                          ? '/images/icons/scenario.png'
+                          : '/images/icons/quest_rvr.png'
+                    }
+                    alt=""
+                  />
+                </span>
+                <div role="cell" className="activity-event">
+                  <span className="activity-log-title">{entry.title}</span>
+                  {entry.detail && <small>{entry.detail}</small>}
+                </div>
+                <span role="cell" className="activity-location">
+                  {entry.mapHref ? (
+                    <Link
+                      to={entry.mapHref}
+                      aria-label={t('pages:activityPage.openZoneHeatmap', {
+                        zone: entry.location,
+                      })}
+                    >
+                      {entry.location}
+                    </Link>
+                  ) : (
+                    entry.location
+                  )}
+                </span>
+                <Link
+                  role="cell"
+                  className="button is-small activity-details-link"
+                  to={entry.href}
+                >
+                  {t('pages:activityPage.details')}
+                </Link>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );
