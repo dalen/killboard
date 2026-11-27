@@ -8,6 +8,7 @@ Status: released to `main` on 2026-11-27 after explicit user approval. Release c
 - Reviewed baseline: 38 Dependabot alerts (1 critical, 19 high, 16 moderate, 2 low) across 18 package families. Critical/high findings and other safely patchable findings were resolved with in-range updates.
 - Verification: `npm audit --omit=dev` reports zero findings. Three moderate findings remain in the development-only `minimatch` path (`graphql-config@5.1.8` → Codegen); no unsafe override or major downgrade was applied. See `DEPENDABOT_REVIEW.md` for package paths, severity, exposure, and recommended upstream follow-up.
 - After deployment, GitHub's Dependabot API still reported the 38 alert records as open. The pushed `package-lock.json` contains patched versions for the addressed packages, while GitHub's alert records still identify their older vulnerable ranges. Treat remote alert state as pending refresh/reconciliation; do not report those records cleared. Continue to preserve the three moderate development-only findings as described in the audit.
+- After the later approved scenario release `becd0eb5bbc9ba9f858628962d70da18bf33f698`, GitHub reported only one open moderate alert: `minimatch` #175 in development tooling. It remains outside the current parent's supported range and was not force-upgraded.
 - This track does not include Phase II UI work.
 
 ## Track B — Phase II player-facing improvements
