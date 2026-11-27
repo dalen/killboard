@@ -12,6 +12,7 @@ import { SearchGuild } from '@/pages/SearchGuild';
 import { PlayerFeudPage } from '@/pages/PlayerFeudPage';
 import { GuildFeudPage } from '@/pages/GuildFeudPage';
 import { Kills } from '@/pages/Kills';
+import { ZoneComparison } from '@/pages/ZoneComparison';
 import { Activity } from '@/pages/Activity';
 import { Scenario } from '@/pages/Scenario';
 import { ZoneMap } from '@/pages/ZoneMap';
@@ -69,6 +70,7 @@ const App = () => {
         <Route path="/scenarios" element={<Home tab="scenarios" />} />
         <Route path="/kill/:id" element={<Kill />} />
         <Route path="/kills" element={<Kills />} />
+        <Route path="/zone-comparison" element={<ZoneComparison />} />
         <Route path="/activity" element={<Activity />} />
         <Route path="/character/:id" element={<Character tab="kills" />} />
         <Route

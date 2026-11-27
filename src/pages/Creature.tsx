@@ -198,6 +198,13 @@ export const Creature = ({
             </p>
           )
         )}
+        {zone != null && (
+          <p className="mb-3">
+            <Link to={`/zone_heatmap/${zone.id}`}>
+              {t('pages:activityPage.openZoneHeatmap', { zone: zone.name })}
+            </Link>
+          </p>
+        )}
           {zone != null && mapSetup != null && (
             <div
               className={activeTab == null ? 'map-only-viewport-fit' : undefined}

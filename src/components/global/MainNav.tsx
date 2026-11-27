@@ -94,7 +94,11 @@ export const MainNav = (): ReactElement => {
         <li className={clsx({ 'is-active': pathname === '/skirmishes' })}>
           <Link to="/skirmishes">{t('pages:home.showSkirmishes')}</Link>
         </li>
-        <li className={clsx({ 'is-active': pathname === '/kills' })}>
+        <li
+          className={clsx({
+            'is-active': pathname === '/kills' || pathname === '/zone-comparison',
+          })}
+        >
           <Link to="/kills">{t('pages:killsPage.title')}</Link>
         </li>
         <li className={clsx('nav-database', { 'is-active': isDatabaseActive })}>

@@ -129,6 +129,10 @@ export const ZoneMap = (): ReactElement => {
         <Link to={`/kills?period=${period}&zoneId=${encodeURIComponent(id || '')}`}>
           {t('pages:mapPage.viewZoneKills')}
         </Link>
+        {' · '}
+        <Link to={`/zone-comparison?zoneA=${encodeURIComponent(id || '')}&period=${period}`}>
+          {t('pages:mapPage.compareZone')}
+        </Link>
       </p>
       <ZoneHeatmap
         zoneId={Number(id).toString()}

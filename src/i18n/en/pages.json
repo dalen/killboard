@@ -64,6 +64,19 @@
     "sections": "Killboard sections",
     "allTimeDescription": "Showing the newest kills first. Use Next to browse older kills."
   },
+  "zoneComparisonPage": {
+    "title": "Zone Comparison",
+    "description": "Compare recorded player-kill activity between two selected zones over the same bounded period.",
+    "zoneA": "First zone",
+    "zoneB": "Second zone",
+    "period": "Time period",
+    "results": "Zone activity comparison results",
+    "coverage": "Coverage: {{from}} to {{to}} UTC",
+    "sampleCount": "{{count}} recorded player-kill events",
+    "heatmap": "View heatmap",
+    "chooseDifferentZones": "Choose two different zones to compare.",
+    "methodology": "Counts are recorded player-kill events, not unique players or faction strength. The API provides no canonical campaign-pairing membership or outcome data."
+  },
   "activityPage": {
     "title": "Recent Activity",
     "description": "A combined view of recently recorded kills, skirmishes, and dungeon runs.",
@@ -205,7 +218,8 @@
     "description": "Map of recorded player kills in this zone during the selected period.",
     "period": "Time period",
     "noResults": "No recorded kills are available for this zone and period.",
-    "viewZoneKills": "Browse recorded kills in this zone and period"
+    "viewZoneKills": "Browse recorded kills in this zone and period",
+    "compareZone": "Compare with another zone"
   },
   "itemPage": {
     "itemId": "Item #{{itemId}}",

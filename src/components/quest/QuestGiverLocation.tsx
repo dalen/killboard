@@ -149,6 +149,13 @@ export const QuestGiverLocation = ({
                     <p className="is-family-secondary has-text-info mb-2">
                       {activeLocation.zone.name}
                     </p>
+                    <p className="mb-3">
+                      <Link to={`/zone_heatmap/${activeLocation.zone.id}`}>
+                        {t('pages:activityPage.openZoneHeatmap', {
+                          zone: activeLocation.zone.name,
+                        })}
+                      </Link>
+                    </p>
                     {activeLocation.mapSetup != null ? (
                       <div
                         style={{

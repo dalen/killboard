@@ -136,6 +136,11 @@ export const Kills = (): ReactElement => {
           <li>
             <Link to="/activity">{t('pages:activityPage.title')}</Link>
           </li>
+          <li>
+            <Link to="/zone-comparison">
+              {t('pages:zoneComparisonPage.title')}
+            </Link>
+          </li>
         </ul>
       </nav>
       <div>
