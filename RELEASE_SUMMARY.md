@@ -1,6 +1,6 @@
-# Current unreleased candidate — approval required
+# Current release — deployed
 
-Status: release stabilization is complete and the candidate is ready for review. Nothing is staged, committed, pushed or deployed. The current branch is `codex/database-page-fixes`, based on `origin/main` at `fb2e56fe57f17aa1737f1765684e3d0bb13f1c87`; it is 0 commits ahead and 0 behind. Production remains on the previously deployed release recorded below.
+Status: deployed to Dalen's `main` after explicit approval on 2026-11-27. Application release commit: `c60f0b14bef6cd8235d44341e0604c6cf169e3d9` (`feat: release compact Warhammer profile and Armory updates`). GitHub Actions Build and Deploy run [46076658075](https://github.com/dalen/killboard/actions/runs/46076658075) completed successfully with the expected head SHA. A documentation-only follow-up records completed production verification and release status.
 
 ## Candidate contents
 
@@ -32,16 +32,23 @@ Status: release stabilization is complete and the candidate is ready for review.
 - Gear bonus values were independently recomputed from the live Armory GraphQL result by summing equipped-item stats, talismans and active ItemStat set bonuses. The computed values matched every displayed stat. `Critical Damage Taken Reduction` is translated.
 - The local Vite server remains available on port 3002. No authenticated or personal desktop browser was used.
 
-## Candidate size and repository state
+## Production deployment verification
 
-- 91 staged files: 36 modified tracked files and 55 new files (49 referenced PNG UI assets and 6 source/style files). The 29 unreferenced PNGs are preserved locally and excluded from the release.
+- GitHub Actions run 46076658075 completed with `conclusion: success`; deployed SHA matches `c60f0b14bef6cd8235d44341e0604c6cf169e3d9`.
+- Headless Chromium verified populated live character Kills (50 rows), Scenarios (25), Skirmishes (25), and Armory (23 equipment slots); all five Kingsmen guild tabs loaded, including Kills (20), Scenarios (15) and Skirmishes (15). Tablet and phone passes confirmed the requested tabs and populated records with no horizontal overflow. No application page errors or failed shared UI asset requests were reported.
+- The initial broad route sweep observed `/guild-register` during a transient GraphQL error and `/search/Emissary` before results settled. A focused retry waited for live data: Guild Register rendered 25 populated guild rows, and Players search rendered 8 matching characters returned by the API. Both completed without browser errors.
+- PR #1081 (`react-i18next` 17.0.16) and #1077 (Prettier 3.9.10) were incorporated in the release, passed candidate verification, and were closed with explanatory comments after deployment verification. Alert #175 remains documented development-only maintenance.
+
+## Release size and repository state
+
+- 91 release files: 36 modified tracked files and 55 new files (49 referenced PNG UI assets and 6 source/style files). The 29 unreferenced PNGs are preserved locally and excluded from the release.
 - Text changes: 2,440 insertions and 537 deletions; binary asset bytes are excluded from line counts.
-- Branch: `codex/database-page-fixes`; remote state matches `origin/main` at `fb2e56fe57f17aa1737f1765684e3d0bb13f1c87` (0 ahead / 0 behind). No files are staged.
+- At application deployment, local `codex/database-page-fixes` and `origin/main` both resolved to `c60f0b14bef6cd8235d44341e0604c6cf169e3d9` (0 ahead / 0 behind). The 29 unreferenced extracted/cropped PNGs remain untracked and preserved locally; they were not included or staged. A documentation-only follow-up records this release verification.
 - Known maintenance item: development-only Moderate Dependabot alert #175. The site-wide Warhammer filters/forms work remains deferred to the next batch. Other pending independent queue items and API-specific blockers remain listed in `CONTINUOUS_IMPROVEMENT.md`.
 
-## Approval gate
+## Next batch
 
-The candidate is ready for your review. Commit, push to Dalen's `main` and deploy only after your explicit approval. After approval, verify the exact GitHub Actions deployment and populated production routes, reconcile Dependabot PRs #1081 and #1077, then resume the remaining queue. The release approval does not authorize changing or publishing the separate Gear Preview checkout.
+The site-wide Warhammer filter/form redesign is the next feature batch, starting from Scenarios. It is not part of this deployed release. Keep future changes local until a new release approval. The separate Gear Preview checkout and experimental feature remain excluded and untouched.
 
 ---
 
