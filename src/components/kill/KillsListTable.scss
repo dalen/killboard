@@ -89,6 +89,23 @@
   justify-content: flex-end;
 }
 
+.kill-row-actions-cell {
+  min-width: 150px;
+  white-space: nowrap;
+}
+
+.kill-row-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+
+  .button {
+    flex: 0 0 auto;
+  }
+}
+
 @media screen and (max-width: 380px) {
   .kill-mobile-card {
     padding: 0.6rem;

@@ -273,15 +273,17 @@ export const KillsListTable = ({
                     </article>
                   )}
                 </td>
-                <td>
+                <td className="kill-row-actions-cell">
+                  <div className="kill-row-actions">
                   {feudUrl && (
-                    <Link to={feudUrl} className="button is-light is-small mr-2">
+                    <Link to={feudUrl} className="button is-light is-small">
                       {t('components:playerFeud.viewFeud')}
                     </Link>
                   )}
-                  <Link to={`/kill/${kill.id}`} className="button is-primary p-2 is-pulled-right">
+                  <Link to={`/kill/${kill.id}`} className="button is-primary is-small">
                     {t('components:killsList.details')}
                   </Link>
+                  </div>
                 </td>
               </tr>
             );

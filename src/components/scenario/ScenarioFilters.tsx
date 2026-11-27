@@ -55,7 +55,8 @@ const getValidDate = (value: string | null): string | undefined => {
   }
 
   const date = new Date(`${value}T00:00:00.000Z`);
-  return Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value
+  return Number.isNaN(date.getTime()) ||
+    date.toISOString().slice(0, 10) !== value
     ? undefined
     : value;
 };
@@ -246,75 +247,65 @@ export const ScenarioFilters = ({
   return (
     <div className="card mb-5">
       <div className="card-content">
-        <div className="columns is-multiline">
+        <div className="columns is-multiline is-align-items-flex-end">
           <div className="column is-6-tablet is-2-desktop">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="queueType-select">
-                  {t('scenarioFilters.queueType')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="queueType-select"
-                      value={queueType}
-                      onChange={(event) => {
-                        search.set('queue_type', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.queueTypeAll')}
-                      </option>
-                      <option value="standard">
-                        {t('scenarioFilters.queueTypeStandard')}
-                      </option>
-                      <option value="solo">
-                        {t('scenarioFilters.queueTypeSolo')}
-                      </option>
-                      <option value="city_siege">
-                        {t('scenarioFilters.queueTypeCitySiege')}
-                      </option>
-                      <option value="group_ranked">
-                        {t('scenarioFilters.queueTypeGroupRanked')}
-                      </option>
-                      <option value="solo_ranked">
-                        {t('scenarioFilters.queueTypeSoloRanked')}
-                      </option>
-                    </select>
-                  </div>
+            <div className="field">
+              <label className="label" htmlFor="queueType-select">
+                {t('scenarioFilters.queueType')}
+              </label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select
+                    id="queueType-select"
+                    value={queueType}
+                    onChange={(event) => {
+                      search.set('queue_type', event.target.value);
+                      setSearch(search);
+                    }}
+                  >
+                    <option value="all">
+                      {t('scenarioFilters.queueTypeAll')}
+                    </option>
+                    <option value="standard">
+                      {t('scenarioFilters.queueTypeStandard')}
+                    </option>
+                    <option value="solo">
+                      {t('scenarioFilters.queueTypeSolo')}
+                    </option>
+                    <option value="city_siege">
+                      {t('scenarioFilters.queueTypeCitySiege')}
+                    </option>
+                    <option value="group_ranked">
+                      {t('scenarioFilters.queueTypeGroupRanked')}
+                    </option>
+                    <option value="solo_ranked">
+                      {t('scenarioFilters.queueTypeSoloRanked')}
+                    </option>
+                  </select>
                 </div>
               </div>
             </div>
           </div>
           <div className="column is-6-tablet is-2-desktop">
-            <div className="field is-horizontal">
-              <div className="field-label is-normal">
-                <label className="label" htmlFor="tier-select">
-                  {t('scenarioFilters.tier')}
-                </label>
-              </div>
-              <div className="field-body">
-                <div className="control">
-                  <div className="select">
-                    <select
-                      id="tier-select"
-                      value={search.get('tier') || 'all'}
-                      onChange={(event) => {
-                        search.set('tier', event.target.value);
-                        setSearch(search);
-                      }}
-                    >
-                      <option value="all">
-                        {t('scenarioFilters.tierAll')}
-                      </option>
-                      <option value="1">1</option>
-                      <option value="3">3</option>
-                      <option value="4">4</option>
-                    </select>
-                  </div>
+            <div className="field">
+              <label className="label" htmlFor="tier-select">
+                {t('scenarioFilters.tier')}
+              </label>
+              <div className="control">
+                <div className="select is-fullwidth">
+                  <select
+                    id="tier-select"
+                    value={search.get('tier') || 'all'}
+                    onChange={(event) => {
+                      search.set('tier', event.target.value);
+                      setSearch(search);
+                    }}
+                  >
+                    <option value="all">{t('scenarioFilters.tierAll')}</option>
+                    <option value="1">1</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -335,16 +326,16 @@ export const ScenarioFilters = ({
                       )
                     }
                   >
-                    <option value="7d">
-                      {t('scenarioFilters.last7Days')}
-                    </option>
+                    <option value="7d">{t('scenarioFilters.last7Days')}</option>
                     <option value="30d">
                       {t('scenarioFilters.last30Days')}
                     </option>
                     <option value="90d">
                       {t('scenarioFilters.last90Days')}
                     </option>
-                    <option value="6m">{t('scenarioFilters.last6Months')}</option>
+                    <option value="6m">
+                      {t('scenarioFilters.last6Months')}
+                    </option>
                     <option value="1y">{t('scenarioFilters.lastYear')}</option>
                     <option value="custom">
                       {t('scenarioFilters.customDates')}
