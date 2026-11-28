@@ -1,6 +1,6 @@
-# Current local batch — shared debounced search
+# Latest deployed batch — shared debounced search
 
-Status: implemented and locally verified; **not committed, pushed or deployed**. Waiting for release-specific approval.
+Status: deployed to Dalen's `main` in `2c76841e4e4a1544293a7e34dde93f9b139d9006` (`feat: debounce shared search`). GitHub Actions Build and Deploy run [46097367467](https://github.com/dalen/killboard/actions/runs/46097367467) succeeded.
 
 ## Scope
 
@@ -13,11 +13,12 @@ Status: implemented and locally verified; **not committed, pushed or deployed**.
 
 - `npm test` passed (TypeScript, production Vite build and type-aware Oxlint); existing Sass deprecation, bundle-size and repository lint warnings remain. `git diff --check` passed.
 - One headless Playwright instance verified the 300ms delay, retained focus, populated character search (`Mrak`, 115 substring matches), populated guild search (`Kingsmen`), Creature URL-filter synchronization, and browser back/forward behavior. Populated character results rendered without horizontal overflow at 1440×900, 768×1024 and 390×844. Screenshots: `%TEMP%\killboard-search-{desktop,tablet,phone}.png`.
+- Production headless Chromium verified homepage debounce and focus transfer, populated Mrak character and Kingsmen guild results, browser back/forward, Creature URL-filter synchronization, and populated character search at 1440, 768 and 390px without horizontal overflow or page errors.
 - The browser closed in `finally`; no personal desktop browser was used. The in-chat browser is unavailable in this session.
 
 ## Release state
 
-Four application/localization files plus these two checkpoint documents are the reviewed scope. The candidate remains local pending approval; no commit or deployment is authorized yet. Preserve the 29 untracked texture extracts.
+The deployment contains four application/localization files plus these two checkpoint documents. Commit `2c76841` is on `origin/main`; the 29 untracked texture extracts remain preserved and excluded, and the Dressing Room remains excluded.
 
 ---
 
