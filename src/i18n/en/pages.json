@@ -49,6 +49,7 @@
     "rankFilter": "Guild rank",
     "allClasses": "All classes",
     "allRanks": "All ranks",
+    "clearFilters": "Clear filters",
     "loadingMembers": "Loading guild members: {{loaded}} of {{total}}",
     "showingMembers": "Showing {{shown}} of {{total}} members",
     "compositionTitle": "Career composition",

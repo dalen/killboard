@@ -7,6 +7,10 @@ import { Link, useSearchParams } from 'react-router';
 import clsx from 'clsx';
 import { CareerIcon } from '@/components/CareerIcon';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
+import {
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
 import './GuildMemberList.scss';
 
@@ -241,6 +245,7 @@ export const GuildMemberList = ({
         ),
     );
   }, [members, t]);
+  const compositionMemberCount = members.length;
   const careers = useMemo(
     () =>
       Object.values(Career).toSorted((first, second) =>
@@ -328,8 +333,7 @@ export const GuildMemberList = ({
         </div>
       ) : (
         <>
-          <section className="card guild-member-composition mb-4" aria-labelledby="guild-member-composition-title">
-            <div className="card-content">
+          <section className="warhammer-window-panel guild-member-composition mb-3" aria-labelledby="guild-member-composition-title">
               <div className="guild-member-composition-heading">
                 <h2 className="title is-5" id="guild-member-composition-title">
                   {t('pages:guildMembers.compositionTitle')}
@@ -343,86 +347,86 @@ export const GuildMemberList = ({
               </div>
               <div className="guild-member-career-grid">
                 {careerComposition.map(([career, count]) => {
-                  const percentage = totalCount > 0 ? (count / totalCount) * 100 : 0;
+                  const percentage = compositionMemberCount > 0 ? (count / compositionMemberCount) * 100 : 0;
+                  const selected = careerFilter === career;
+                  const careerName = t(`enums:career.${career}`);
                   return (
-                    <div className="guild-member-career" key={career}>
-                      <div className="guild-member-career-label">
+                    <button
+                      className={`guild-member-career${selected ? ' is-selected' : ''}`}
+                      key={career}
+                      type="button"
+                      aria-pressed={selected}
+                      aria-label={t('pages:guildMembers.careerShare', {
+                        career: careerName,
+                        count,
+                        percentage: Math.round(percentage),
+                      })}
+                      onClick={() => updateMemberSearch({
+                        career: selected ? null : career,
+                        membersPage: null,
+                      })}
+                    >
+                      <span className="guild-member-career-label">
                         <CareerIcon career={career} />
-                        <span>{t(`enums:career.${career}`)}</span>
+                        <span>{careerName}</span>
                         <strong>{count} · {Math.round(percentage)}%</strong>
-                      </div>
-                      <progress
-                        className="progress is-small is-warning"
-                        value={count}
-                        max={totalCount || 1}
-                        aria-label={t('pages:guildMembers.careerShare', {
-                          career: t(`enums:career.${career}`),
-                          count,
-                          percentage: Math.round(percentage),
-                        })}
-                      />
-                    </div>
+                      </span>
+                      <span className="guild-member-career-track" aria-hidden="true">
+                        <span style={{ width: `${percentage}%` }} />
+                      </span>
+                    </button>
                   );
                 })}
               </div>
-            </div>
           </section>
-          <div className="columns guild-member-filters is-multiline is-align-items-flex-end mb-2">
-            <div className="column is-one-quarter-desktop is-half-tablet">
-              <label className="label" htmlFor="guild-member-career-filter">
-                {t('pages:guildMembers.classFilter')}
-              </label>
-              <div className="select is-fullwidth">
-                <select
-                  id="guild-member-career-filter"
-                  value={careerFilter}
-                  onChange={(event) => {
-                    updateMemberSearch({
-                      career: event.currentTarget.value,
-                      membersPage: null,
-                    });
-                  }}
-                >
-                  <option value="">{t('pages:guildMembers.allClasses')}</option>
-                  {careers.map((career) => (
-                    <option key={career} value={career}>
-                      {t(`enums:career.${career}`)}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="column is-one-quarter-desktop is-half-tablet">
-              <label className="label" htmlFor="guild-member-rank-filter">
-                {t('pages:guildMembers.rankFilter')}
-              </label>
-              <div className="select is-fullwidth">
-                <select
-                  id="guild-member-rank-filter"
-                  value={rankFilter}
-                  onChange={(event) => {
-                    updateMemberSearch({
-                      guildRank: event.currentTarget.value,
-                      membersPage: null,
-                    });
-                  }}
-                >
-                  <option value="">{t('pages:guildMembers.allRanks')}</option>
-                  {ranks.map((rank) => (
-                    <option key={rank} value={rank}>
-                      {rank}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="column has-text-right-desktop">
+          <WarhammerFilterPanel className="guild-member-filters">
+            <div className="guild-member-filter-row">
+              <WarhammerSelect
+                id="guild-member-career-filter"
+                label={t('pages:guildMembers.classFilter')}
+                value={careerFilter}
+                options={[
+                  { value: '', label: t('pages:guildMembers.allClasses') },
+                  ...careers.map((career) => ({
+                    value: career,
+                    label: t(`enums:career.${career}`),
+                  })),
+                ]}
+                onChange={(value) => updateMemberSearch({ career: value, membersPage: null })}
+              />
+              <WarhammerSelect
+                id="guild-member-rank-filter"
+                label={t('pages:guildMembers.rankFilter')}
+                value={rankFilter}
+                options={[
+                  { value: '', label: t('pages:guildMembers.allRanks') },
+                  ...ranks.map((rank) => ({ value: rank, label: rank })),
+                ]}
+                onChange={(value) => updateMemberSearch({ guildRank: value, membersPage: null })}
+              />
+              <div className="guild-member-filter-summary">
+                <span>
               {t('pages:guildMembers.showingMembers', {
                 shown: filteredMembers.length,
                 total: totalCount,
               })}
+                </span>
+                {(careerFilter || rankFilter) && (
+                  <button
+                    className="button is-small guild-member-clear-filters"
+                    type="button"
+                    onClick={() => updateMemberSearch({
+                      career: null,
+                      guildRank: null,
+                      membersPage: null,
+                    })}
+                  >
+                    {t('pages:guildMembers.clearFilters')}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
+          </WarhammerFilterPanel>
 
           <div className="table-container">
             <table
@@ -431,6 +435,7 @@ export const GuildMemberList = ({
                 'is-striped',
                 'is-hoverable',
                 'is-fullwidth',
+                'warhammer-guild-member-table',
                 isMobile && 'is-narrow',
               )}
             >

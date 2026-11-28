@@ -8,12 +8,12 @@
 
 .guild-member-composition-heading .title,
 .guild-member-composition-heading p {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.35rem;
 }
 
 .guild-member-career-grid {
   display: grid;
-  gap: 0.65rem 1.5rem;
+  gap: 0.55rem 1.1rem;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -22,6 +22,39 @@
   display: flex;
   gap: 0.5rem;
   min-width: 0;
+}
+
+.guild-member-career {
+  appearance: none;
+  background: rgba(5, 5, 5, 0.55);
+  border: 1px solid rgba(134, 108, 67, 0.5);
+  color: inherit;
+  cursor: pointer;
+  min-width: 0;
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+  transition:
+    border-color 120ms ease,
+    background-color 120ms ease,
+    box-shadow 120ms ease;
+  width: 100%;
+}
+
+.guild-member-career:hover,
+.guild-member-career:focus-visible {
+  background: rgba(49, 36, 18, 0.78);
+  border-color: #bd8c3a;
+  outline: none;
+}
+
+.guild-member-career:focus-visible {
+  box-shadow: 0 0 0 2px rgba(240, 202, 117, 0.6);
+}
+
+.guild-member-career.is-selected {
+  background: rgba(61, 34, 15, 0.86);
+  border-color: #e2aa39;
+  box-shadow: inset 0 0 0 1px rgba(226, 170, 57, 0.25);
 }
 
 .guild-member-career-label .image {
@@ -41,13 +74,85 @@
   overflow-wrap: anywhere;
 }
 
-.guild-member-career .progress {
-  margin-bottom: 0;
-  margin-top: 0.35rem;
+.guild-member-career-label strong {
+  color: #f2e7d4;
+  flex: 0 0 auto;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.guild-member-career-track {
+  background: #252932;
+  border: 1px solid rgba(178, 141, 72, 0.35);
+  display: block;
+  height: 7px;
+  margin-top: 0.4rem;
+  overflow: hidden;
+}
+
+.guild-member-career-track > span {
+  background: linear-gradient(90deg, #986116, #f3b71b);
+  display: block;
+  height: 100%;
+  min-width: 2px;
+}
+
+.guild-member-filter-row {
+  align-items: end;
+  display: grid;
+  gap: 0.65rem 0.85rem;
+  grid-template-columns: minmax(12rem, 0.9fr) minmax(12rem, 0.9fr) minmax(15rem, 1.3fr);
+}
+
+.guild-member-filter-summary {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  justify-content: flex-end;
+  min-height: 2.4rem;
+}
+
+.guild-member-clear-filters {
+  margin: 0;
+}
+
+.warhammer-guild-member-table {
+  background: rgba(0, 0, 0, 0.38);
+  color: #efe8da;
+}
+
+.warhammer-guild-member-table thead th {
+  background: rgba(22, 18, 13, 0.92);
+  border-bottom: 1px solid rgba(191, 146, 56, 0.75);
+  color: #ffb01f;
+  vertical-align: middle;
+}
+
+.warhammer-guild-member-table tbody td {
+  border-bottom: 1px solid rgba(196, 180, 145, 0.16);
+  color: #efe8da;
+  vertical-align: middle;
+}
+
+.warhammer-guild-member-table tbody tr:nth-child(even) {
+  background: rgba(56, 61, 70, 0.4);
+}
+
+.warhammer-guild-member-table tbody tr:hover {
+  background: rgba(106, 75, 29, 0.34);
 }
 
 @media screen and (max-width: 600px) {
   .guild-member-career-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guild-member-filter-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .guild-member-filter-summary {
+    justify-content: space-between;
   }
 }

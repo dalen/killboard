@@ -16,7 +16,11 @@ Status: deployed to Dalen's `main` in `3199ad7348fd3d52909a47bb36e1846a039a6b37`
 - Production headless Playwright then checked all three live routes sequentially at 1440px. Kills showed 10 rows; Activity showed 30 rows and current counters; Zone Comparison showed Ekrund 1,635 and Kadrin Valley 1,784 (combined 3,419, difference 149, 9%). Each route showed the three shared tabs with the correct active state; there were no client errors or horizontal overflow. GitHub Pages returns HTTP 404 for direct routes before the existing SPA fallback hydrates the app and renders live data.
 - Recent Activity desktop rows measure about 50px. The in-chat browser was unavailable in this chat after reset; required rendered checks were completed with headless Playwright without opening the personal desktop browser.
 - No dependency files changed in this batch. The separate Gear Preview/Dressing Room remains excluded and untouched; the untracked `public/gear-preview/ui/` crop files remain excluded from any release staging.
-- Next feature in progress: Guild Members Warhammer styling for Goblin Workers Union (#3936).
+- Next batch checkpoint: Guild Members Warhammer styling for Goblin Workers Union (#3936) is complete and verified locally. It is not committed or deployed and needs its own release approval. The live-event calendar assessment is queued as a separate batch after that release.
+
+## Next queue assessment — Live event calendar
+
+The current schema exposes `Query.events` without arguments and returns the common Event fields. A live read returned 8 events, 5 upcoming. The query works without selecting the historical problematic LiveEvent `id`. Recommendation: build a compact upcoming schedule with event types and server/local times, linked from the existing Database menu. The API offers no pagination, so display a coverage caveat if the response grows. Assessment only; no calendar code is included in the Guild Members batch.
 
 ---
 
