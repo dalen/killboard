@@ -1,12 +1,12 @@
-# Live Event Calendar — deployed with copy refinement
+# Latest deployed batch — Live Event Calendar
 
-The calendar was pushed to `main` in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da`; Build and Deploy run [46094219173](https://github.com/dalen/killboard/actions/runs/46094219173) succeeded. The user asked to remove technical API wording from the page; this follow-up uses natural copy and counts only active/upcoming entries.
+The calendar shipped to `main` in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da` (run [46094219173](https://github.com/dalen/killboard/actions/runs/46094219173)); its player-copy refinement shipped in `be034945f837d742b05cabbe0f576e756fd019a9` (run [46094514448](https://github.com/dalen/killboard/actions/runs/46094514448)). Both workflows succeeded. Production verification showed 8 active/upcoming entries at desktop, tablet and phone widths, with concise player-facing text and no page errors or horizontal overflow. One screenshot showed a temporary failed data load; a fresh production check succeeded without failed requests.
 
 ## Candidate scope
 
 - Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming live-event, city-siege and Zandri-expedition records with local and server start/end times, plus a concise active/upcoming event count. It handles loading, errors, empty results and no active/upcoming records.
 - No dependency changes, new MYP assets or Dressing Room functionality are included. The 29 untracked `public/gear-preview/ui/` texture extracts remain excluded and preserved.
-- Source changes: `src/App.tsx`, `src/components/global/MainNav.tsx`, `src/i18n/en/pages.json`, `src/pages/Events.tsx`, and `src/pages/Events.scss`. Checkpoint documentation changes are in `CONTINUOUS_IMPROVEMENT.md` and this file.
+- Deployed source changes: `src/App.tsx`, `src/components/global/MainNav.tsx`, `src/i18n/en/pages.json`, `src/pages/Events.tsx`, and `src/pages/Events.scss`. Checkpoint documentation changes are in `CONTINUOUS_IMPROVEMENT.md` and this file.
 
 ## Verification
 
@@ -15,9 +15,13 @@ The calendar was pushed to `main` in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da`;
 - Populated data returned 8 active/upcoming events. Headless Chromium checks at desktop, tablet and phone widths confirmed the natural wording, accurate count, all 8 rows, Database-menu navigation, no document horizontal overflow and no page errors. Screenshots: `%TEMP%\\event-calendar-final-desktop.png`, `%TEMP%\\event-calendar-local-desktop.png` and `%TEMP%\\event-calendar-local-phone-clean.png`.
 - The known Playwright configuration was reused with one browser and sequential viewport checks; the browser closed in `finally`. The in-chat browser is unavailable in this chat, so no personal desktop browser was opened or controlled.
 
-## Release state
+## Current local follow-up
 
-The approved calendar batch is on `main`; its player-facing wording refinement is part of this follow-up. The original base deployment succeeded; verify the latest pushed commit's workflow and live page before marking the follow-up complete. The 29 untracked texture extracts remain excluded. Following production verification, resume the queue with the next independent item in `CONTINUOUS_IMPROVEMENT.md`.
+- Alphabetizes the Database menu.
+- Replaces raw network error details and technical empty-state text with concise player-facing wording.
+- Records the player-facing content standard in `AGENTS.md`; no site-wide copy rewrite is planned.
+- `npm test` and `git diff --check` pass. Headless Playwright verified the full alphabetical menu and populated calendar at 1440, 768 and 390px (8 rows, no overflow/errors). A simulated data-load failure displays “We couldn't load the event schedule. Please try again in a moment.” without exposing raw error text. Screenshot: `%TEMP%\\event-calendar-error-state.png`.
+- This follow-up is locally verified and awaits release approval. The 29 untracked texture extracts remain excluded and untouched.
 
 ---
 

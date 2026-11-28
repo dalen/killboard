@@ -116,6 +116,11 @@
   padding: 0.8rem 0.2rem;
 }
 
+.event-calendar-error {
+  color: #e5ddcb;
+  margin: 0.6rem 0.2rem;
+}
+
 @media screen and (max-width: 760px) {
   .event-calendar-row {
     align-items: start;

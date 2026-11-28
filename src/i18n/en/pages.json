@@ -88,8 +88,9 @@
     "ends": "Ends",
     "localTime": "Your local time",
     "serverTime": "Altdorf time (server)",
-    "noEvents": "The API did not return any event records.",
-    "noUpcoming": "There are no active or upcoming events in the current API response."
+    "noEvents": "There are no event records available right now.",
+    "noUpcoming": "There are no active or upcoming events.",
+    "loadError": "We couldn't load the event schedule. Please try again in a moment."
   },
   "killPage": {
     "killer": "Killer",

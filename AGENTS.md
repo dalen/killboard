@@ -37,6 +37,12 @@
 
 ## Player-facing design preference
 
+### Player-facing content standard
+
+- Write descriptions and labels for players, not developers. Avoid implementation terms such as public API, GraphQL, endpoints, schema and query limitations in ordinary interface copy.
+- Explain data coverage or limitations in concise plain language only when players need that context. Keep headings and explanatory text short; remove redundant introductions.
+- Keep technical details in development documentation. Apply this standard to new features and existing player-facing text whenever that area is updated; do not initiate a separate site-wide copy rewrite unless requested.
+
 - Prioritize usable screen space. Keep character headers, navigation and decoration compact so they do not unnecessarily push primary content down the page.
 - When recreating the original Warhammer interface, prioritize authentic MYP textures and UI definitions over approximations.
 - Keep the homepage compact and data-focused. Do not add duplicate navigation sections, unnecessary introductions, or oversized low-value cards that push player data down the page.

@@ -3,7 +3,6 @@ import { useQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router';
 import type { Event as ApiEvent } from '@/__generated__/graphql';
-import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { formatKillTime } from '@/components/kill/killTime';
 import type { ReactElement, ReactNode } from 'react';
 import '../components/global/WarhammerProfileStyles.scss';
@@ -59,14 +58,6 @@ export const Events = (): ReactElement => {
   const { data, error, loading } = useQuery<EventCalendarQuery>(EVENT_CALENDAR);
   const now = Date.now();
 
-  if (error) {
-    return (
-      <div className="container is-max-widescreen mt-2">
-        <ErrorMessage name={error.name} message={error.message} />
-      </div>
-    );
-  }
-
   const allEvents = data?.events ?? [];
   const schedule = allEvents
     .flatMap((event) => {
@@ -85,7 +76,13 @@ export const Events = (): ReactElement => {
     .toSorted((left, right) => left.start.getTime() - right.start.getTime());
 
   let scheduleContent: ReactNode = null;
-  if (loading) {
+  if (error) {
+    scheduleContent = (
+      <p className="event-calendar-error" role="alert">
+        {t('pages:eventCalendar.loadError')}
+      </p>
+    );
+  } else if (loading) {
     scheduleContent = <progress className="progress" aria-label={t('common:loading')} />;
   } else if (schedule.length === 0) {
     scheduleContent = (
@@ -166,11 +163,13 @@ export const Events = (): ReactElement => {
       </header>
 
       <section className="warhammer-window-panel event-calendar-panel" aria-label={t('pages:eventCalendar.title')}>
-        <p className="event-calendar-coverage" role="note">
-          {loading
-            ? t('common:loading')
-            : t('pages:eventCalendar.coverage', { count: schedule.length })}
-        </p>
+        {!error && (
+          <p className="event-calendar-coverage" role="note">
+            {loading
+              ? t('common:loading')
+              : t('pages:eventCalendar.coverage', { count: schedule.length })}
+          </p>
+        )}
 
         {scheduleContent}
       </section>
