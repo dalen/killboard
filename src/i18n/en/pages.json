@@ -72,7 +72,24 @@
     "showItems": "Items",
     "showQuests": "Quests",
     "showInstances": "Instances",
+    "showEventCalendar": "Event Calendar",
     "showStorylines": "Storylines"
+  },
+  "eventCalendar": {
+    "title": "Event Calendar",
+    "description": "Live events and scheduled city sieges or expeditions reported by the public API.",
+    "coverage": "The API currently returns {{count}} event records and does not provide pagination. This view shows events that are active or scheduled to begin.",
+    "upcoming": "Upcoming",
+    "active": "Active",
+    "liveEvent": "Live event",
+    "citySiege": "City siege",
+    "zandriExpedition": "Zandri expedition",
+    "starts": "Starts",
+    "ends": "Ends",
+    "localTime": "Your local time",
+    "serverTime": "Altdorf time (server)",
+    "noEvents": "The API did not return any event records.",
+    "noUpcoming": "There are no active or upcoming events in the current API response."
   },
   "killPage": {
     "killer": "Killer",

@@ -1,4 +1,27 @@
-# Current release candidate — Armory tooltips and Skirmish filters
+# Current release candidate — Live Event Calendar
+
+Status: implemented and verified locally; awaiting explicit release approval. This candidate is separate from the already deployed Armory tooltip and Skirmish filter batch. No commit, push or deployment has been made for the calendar.
+
+## Candidate scope
+
+- Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming live-event, city-siege and Zandri-expedition records with local and server start/end times, plus the current API record-count/coverage caveat. It handles loading, errors, empty API results and no active/upcoming records.
+- No dependency changes, new MYP assets or Dressing Room functionality are included. The 29 untracked `public/gear-preview/ui/` texture extracts remain excluded and preserved.
+- Source changes: `src/App.tsx`, `src/components/global/MainNav.tsx`, `src/i18n/en/pages.json`, `src/pages/Events.tsx`, and `src/pages/Events.scss`. Checkpoint documentation changes are in `CONTINUOUS_IMPROVEMENT.md` and this file.
+
+## Verification
+
+- `npm test` passed on the current candidate: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
+- `git diff --check` passed.
+- Populated local API response returned 8 events. Headless Chromium checks at desktop, tablet and phone widths confirmed all 8 current active/upcoming records, Database-menu navigation closes on route change, no document horizontal overflow and no page errors. Existing screenshots: `%TEMP%\\event-calendar-local-desktop.png` and `%TEMP%\\event-calendar-local-phone-clean.png`.
+- The known Playwright configuration was reused with one browser and sequential viewport checks; the browser closed in `finally`. The in-chat browser is unavailable in this chat, so no personal desktop browser was opened or controlled.
+
+## Release state
+
+The candidate is local and not yet staged, committed or deployed. Request fresh approval before staging/pushing/deploying this batch. Following production verification, resume the queue with the next independent item in `CONTINUOUS_IMPROVEMENT.md`.
+
+---
+
+# Latest deployed batch — Armory tooltips and Skirmish filters
 
 Status: deployed after explicit approval in commit `8d0988dfbb1962477305a738d759abef90b834de` (`feat: refine Armory tooltips and skirmish filters`). GitHub Actions Build and Deploy run [46092546941](https://github.com/dalen/killboard/actions/runs/46092546941) succeeded.
 
