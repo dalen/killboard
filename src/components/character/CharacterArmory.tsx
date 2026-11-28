@@ -130,7 +130,7 @@ const ArmorySlot = ({
   const [popupPosition, setPopupPosition] = useState({
     left: 8,
     top: 8,
-    width: 320,
+    width: 312,
     maxHeight: 480,
   });
   const iconRef = useRef<HTMLImageElement>(null);
@@ -157,39 +157,46 @@ const ArmorySlot = ({
 
   useLayoutEffect(() => {
     if (!popupOpen || !iconRef.current || !popupRef.current) return;
-    const slotRect = iconRef.current.getBoundingClientRect();
-    const popupRect = popupRef.current.getBoundingClientRect();
-    const margin = 8;
-    const gap = 8;
-    let width = Math.min(360, window.innerWidth - margin * 2);
-    const rightSpace = window.innerWidth - slotRect.right - gap - margin;
-    const leftSpace = slotRect.left - gap - margin;
-    let left: number;
-    if (rightSpace >= width) {
-      left = slotRect.right + gap;
-    } else if (leftSpace >= width) {
-      left = slotRect.left - width - gap;
-    } else if (rightSpace >= leftSpace) {
-      width = Math.max(120, rightSpace);
-      left = slotRect.right + gap;
-    } else {
-      width = Math.max(120, leftSpace);
-      left = slotRect.left - width - gap;
-    }
-    left = Math.max(margin, Math.min(left, window.innerWidth - width - margin));
-    const maxHeight = window.innerHeight - margin * 2;
-    const visibleHeight = Math.min(popupRect.height, maxHeight);
-    const top = Math.max(
-      margin,
-      Math.min(slotRect.top, window.innerHeight - visibleHeight - margin),
-    );
-    setPopupPosition({ left, top, width, maxHeight });
+    const updatePosition = (): void => {
+      if (!iconRef.current || !popupRef.current) return;
+      const slotRect = iconRef.current.getBoundingClientRect();
+      const popupRect = popupRef.current.getBoundingClientRect();
+      const margin = 8;
+      const gap = 8;
+      const width = Math.min(312, window.innerWidth - margin * 2);
+      const rightSpace = window.innerWidth - slotRect.right - gap - margin;
+      const leftSpace = slotRect.left - gap - margin;
+      const preferRight = rightSpace >= width || rightSpace >= leftSpace;
+      const requestedLeft = preferRight
+        ? slotRect.right + gap
+        : slotRect.left - width - gap;
+      const left = Math.max(
+        margin,
+        Math.min(requestedLeft, window.innerWidth - width - margin),
+      );
+      const maxHeight = Math.min(
+        window.innerHeight * 0.68,
+        window.innerHeight - margin * 2,
+      );
+      const visibleHeight = Math.min(popupRect.height, maxHeight);
+      const top = Math.max(
+        margin,
+        Math.min(slotRect.top, window.innerHeight - visibleHeight - margin),
+      );
+      setPopupPosition({ left, top, width, maxHeight });
+    };
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+    return () => {
+      window.removeEventListener('resize', updatePosition);
+      window.removeEventListener('scroll', updatePosition, true);
+    };
   }, [popupOpen, popupPosition.width]);
 
   return (
     <div
       className={`character-armory-slot character-armory-slot-${side}`}
-      title={slotName}
       onMouseEnter={showPopup}
       onMouseLeave={hidePopupSoon}
       onFocus={showPopup}

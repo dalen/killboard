@@ -1,4 +1,35 @@
-# Deployed release checkpoint — Kills section
+# Current release candidate — Armory tooltips and Skirmish filters
+
+Status: locally verified and awaiting separate deployment approval. No candidate changes have been committed, staged, pushed or deployed. The base is `ca8f8e77a68587dbd84ead3165a22321a8b7c316` (`feat: style guild member roster with Warhammer controls`), which is also `origin/main`.
+
+## Candidate scope
+
+- Armory equipment tooltips: 312px maximum width (304px at a 320px viewport), 68vh height cap, opaque black background, tighter readable spacing, viewport-clamped placement and no redundant native slot `title`. The shared authentic chain scrollbar appears when content overflows; in a constrained 320×568 headless render, the tooltip was 304×386px, content scrollHeight was 473px versus a 374px client area, the actual chain track/thumb textures rendered, and wheel scrolling moved the content 98px. Tooltip edges stayed within the viewport and the native scrollbar was hidden. Desktop and phone screenshots were captured in `%TEMP%`.
+- Skirmish filters: replaced the generic controls with existing Warhammer filter/select components while retaining query behavior and URL state. On populated Mrak (#3207915), `type=rvr&minPlayers=12` returned 19 rows; selection updated the URL, browser back/forward restored the prior states, and refresh restored the selected labels and parameters. At desktop 1440×900, tablet 768×1024 and phone 390×844, all 19 records remained visible and document width matched viewport width; no client errors occurred.
+- Guild Members production verification: Goblin Workers Union (#3936) rendered 470/470 members, 12 career composition entries and 25 table rows at 1440, 768 and 390px with no horizontal overflow or client errors. Career selection wrote `career=CHOSEN`; clearing returned to the base URL. This code is already deployed and is not a source change in this candidate.
+- `AGENTS.md` records the known-working Windows Playwright import, browser binary and launch arguments for reuse after context compaction.
+- No dependencies or production assets change in this candidate. The 29 untracked `public/gear-preview/ui/` texture extracts are preserved and excluded. The separate Gear Preview/Dressing Room remains excluded.
+
+## Final checks
+
+- `npm test` passed: TypeScript, production Vite build and type-aware Oxlint. Existing Sass deprecation notices, existing lint warnings and the large-bundle warning remain.
+- `npm audit` still reports three Moderate development/transitive records for minimatch alert #175 through GraphQL Codegen. The suggested forced Codegen change is breaking; no override or forced dependency change was made. `npm audit --omit=dev` passed with zero production vulnerabilities.
+- `git diff --check` passed. No final deployment pipeline has been run remotely because this candidate is awaiting approval.
+- Headless screenshots and checks used the existing Playwright installation and one browser at a time; every script closes the browser in `finally`. No personal desktop browser was used. The in-chat browser is unavailable in this session.
+
+## Pending approval
+
+Approve this specific Armory tooltip and Skirmish filter batch for commit, push to Dalen's `main` and deployment. After approval, stage only the reviewed source and documentation files, verify the deployment run, check production Armory/Skirmish routes, then resume the remaining queue. Current branch remains `codex/database-page-fixes`; current application commit is `ca8f8e7`. The 29 texture extracts remain untracked and unstaged.
+
+---
+
+# Latest deployed release checkpoint — Guild Members
+
+Status: `ca8f8e77a68587dbd84ead3165a22321a8b7c316` (`feat: style guild member roster with Warhammer controls`) is deployed to Dalen's `main`. GitHub Actions Build and Deploy run [46089078017](https://github.com/dalen/killboard/actions/runs/46089078017) succeeded. Production Guild Members verification is recorded in the candidate section above. The 29 untracked texture extracts remain local and preserved.
+
+---
+
+# Previous deployed release checkpoint — Kills section
 
 Status: deployed to Dalen's `main` in `3199ad7348fd3d52909a47bb36e1846a039a6b37`; GitHub Actions Build and Deploy run [46084829887](https://github.com/dalen/killboard/actions/runs/46084829887) succeeded. The shared Scenarios form controls and approved button fix are already deployed in `0a0b452d2c3198bb2a5611deb1ef8d7f77a535f1` and are not being retested here. This approval applied only to this batch.
 

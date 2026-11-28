@@ -11,6 +11,7 @@
 - Never expose credentials, authentication tokens, or session cookies in logs, source code, screenshots, or project documentation.
 - Never commit browser authentication state to the repository.
 - If authentication blocks one task, continue other independent tasks where practical. Treat authentication as a project-wide blocker only when it prevents all remaining work.
+- Known working headless Playwright setup for this Windows checkout (verified 2026-11-27): from a `.cjs` script, load `chromium` with `require('C:/Users/Trevor/AppData/Local/npm-cache/_npx/e41f203b7505f1fb/node_modules/playwright-core')`; launch with `headless: true`, `executablePath: 'C:/Users/Trevor/AppData/Local/ms-playwright/chromium-1255/chrome-win64/chrome.exe'`, and `args: ['--enable-gpu', '--use-gl=angle']`. Keep one browser instance, run viewport checks sequentially, and close it in `finally`. Reuse this exact setup instead of importing `playwright` from the project or searching other package directories. If the recorded path is no longer present, inspect recent successful Killboard scripts for the updated path before changing the setup.
 
 ## Player-facing feature review
 

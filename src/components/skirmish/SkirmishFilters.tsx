@@ -2,6 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { useSearchParams } from 'react-router';
 import type { SkirmishFilterInput } from '@/__generated__/graphql';
 import type { ReactElement } from 'react';
+import {
+  WarhammerFilterPanel,
+  WarhammerSelect,
+} from '@/components/global/WarhammerFormControls';
 
 const getLocationTypeFilter = (
   search: URLSearchParams,
@@ -69,64 +73,44 @@ export const SkirmishFilters = (): ReactElement => {
   const locationType = search.get('type') || 'all';
   const minPlayers = search.get('minPlayers') || 'all';
 
+  const locationOptions = [
+    { value: 'all', label: t('skirmishFilters.locationTypeAll') },
+    { value: 'rvr', label: t('skirmishFilters.locationTypeRvr') },
+    { value: 'rvrt1', label: t('skirmishFilters.locationTypeRvrT1') },
+    { value: 'scenario', label: t('skirmishFilters.locationTypeScenario') },
+  ];
+  const minPlayerOptions = [
+    { value: 'all', label: t('skirmishFilters.minPlayersAll') },
+    { value: '12', label: t('skirmishFilters.minPlayers12') },
+    { value: '48', label: t('skirmishFilters.minPlayers48') },
+    { value: '100', label: t('skirmishFilters.minPlayers100') },
+  ];
+
+  const updateFilter = (key: 'type' | 'minPlayers', value: string): void => {
+    const next = new URLSearchParams(search);
+    if (value === 'all') next.delete(key);
+    else next.set(key, value);
+    setSearch(next);
+  };
+
   return (
-    <div className="card mb-5 character-filters">
-      <div className="card-content">
-        <div className="columns">
-          <div className="column">
-            <div className="field">
-              <label className="label">
-                {t('skirmishFilters.locationType')}
-              </label>
-              <div className="select is-fullwidth">
-                <select
-                  value={locationType}
-                  onChange={(event) => {
-                    search.set('type', event.target.value);
-                    setSearch(search);
-                  }}
-                >
-                  <option value="all">
-                    {t('skirmishFilters.locationTypeAll')}
-                  </option>
-                  <option value="rvr">
-                    {t('skirmishFilters.locationTypeRvr')}
-                  </option>
-                  <option value="rvrt1">
-                    {t('skirmishFilters.locationTypeRvrT1')}
-                  </option>
-                  <option value="scenario">
-                    {t('skirmishFilters.locationTypeScenario')}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <div className="field">
-              <label className="label">{t('skirmishFilters.minPlayers')}</label>
-              <div className="select is-fullwidth">
-                <select
-                  value={minPlayers}
-                  onChange={(event) => {
-                    search.set('minPlayers', event.target.value);
-                    setSearch(search);
-                  }}
-                >
-                  <option value="all">
-                    {t('skirmishFilters.minPlayersAll')}
-                  </option>
-                  <option value="12">{t('skirmishFilters.minPlayers12')}</option>
-                  <option value="48">{t('skirmishFilters.minPlayers48')}</option>
-                  <option value="100">
-                    {t('skirmishFilters.minPlayers100')}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
+    <WarhammerFilterPanel className="character-filters">
+      <div className="warhammer-filter-grid">
+        <WarhammerSelect
+          id="skirmish-location-type"
+          label={t('skirmishFilters.locationType')}
+          value={locationType}
+          options={locationOptions}
+          onChange={(value) => updateFilter('type', value)}
+        />
+        <WarhammerSelect
+          id="skirmish-min-players"
+          label={t('skirmishFilters.minPlayers')}
+          value={minPlayers}
+          options={minPlayerOptions}
+          onChange={(value) => updateFilter('minPlayers', value)}
+        />
       </div>
-    </div>
+    </WarhammerFilterPanel>
   );
 };

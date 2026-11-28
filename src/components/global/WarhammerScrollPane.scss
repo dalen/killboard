@@ -161,10 +161,23 @@
 }
 
 .warhammer-equipment-tooltip {
-  max-height: calc(100vh - 16px);
-  max-width: min(360px, calc(100vw - 16px));
-  min-width: min(340px, calc(100vw - 16px));
+  max-height: min(68vh, calc(100vh - 16px));
+  max-width: min(312px, calc(100vw - 16px));
+  min-width: min(300px, calc(100vw - 16px));
   pointer-events: auto !important;
+}
+
+.popup.warhammer-equipment-tooltip {
+  background: rgba(0, 0, 0, 0.98);
+  padding: 5px 7px;
+}
+
+.warhammer-equipment-tooltip .item-popup-header {
+  margin-bottom: 0.5rem !important;
+}
+
+.warhammer-equipment-tooltip .warhammer-scroll-content {
+  line-height: 1.2;
 }
 
 .warhammer-equipment-tooltip .warhammer-scroll-viewport {
