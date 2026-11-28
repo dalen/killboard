@@ -1,23 +1,23 @@
-# Current release candidate — Live Event Calendar
+# Live Event Calendar — deployed with copy refinement
 
-Status: implemented and verified locally; awaiting explicit release approval. This candidate is separate from the already deployed Armory tooltip and Skirmish filter batch. No commit, push or deployment has been made for the calendar.
+The calendar was pushed to `main` in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da`; Build and Deploy run [46094219173](https://github.com/dalen/killboard/actions/runs/46094219173) succeeded. The user asked to remove technical API wording from the page; this follow-up uses natural copy and counts only active/upcoming entries.
 
 ## Candidate scope
 
-- Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming live-event, city-siege and Zandri-expedition records with local and server start/end times, plus the current API record-count/coverage caveat. It handles loading, errors, empty API results and no active/upcoming records.
+- Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming live-event, city-siege and Zandri-expedition records with local and server start/end times, plus a concise active/upcoming event count. It handles loading, errors, empty results and no active/upcoming records.
 - No dependency changes, new MYP assets or Dressing Room functionality are included. The 29 untracked `public/gear-preview/ui/` texture extracts remain excluded and preserved.
 - Source changes: `src/App.tsx`, `src/components/global/MainNav.tsx`, `src/i18n/en/pages.json`, `src/pages/Events.tsx`, and `src/pages/Events.scss`. Checkpoint documentation changes are in `CONTINUOUS_IMPROVEMENT.md` and this file.
 
 ## Verification
 
-- `npm test` passed on the current candidate: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
+- `npm test` passed after the copy refinement: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
 - `git diff --check` passed.
-- Populated local API response returned 8 events. Headless Chromium checks at desktop, tablet and phone widths confirmed all 8 current active/upcoming records, Database-menu navigation closes on route change, no document horizontal overflow and no page errors. Existing screenshots: `%TEMP%\\event-calendar-local-desktop.png` and `%TEMP%\\event-calendar-local-phone-clean.png`.
+- Populated data returned 8 active/upcoming events. Headless Chromium checks at desktop, tablet and phone widths confirmed the natural wording, accurate count, all 8 rows, Database-menu navigation, no document horizontal overflow and no page errors. Screenshots: `%TEMP%\\event-calendar-final-desktop.png`, `%TEMP%\\event-calendar-local-desktop.png` and `%TEMP%\\event-calendar-local-phone-clean.png`.
 - The known Playwright configuration was reused with one browser and sequential viewport checks; the browser closed in `finally`. The in-chat browser is unavailable in this chat, so no personal desktop browser was opened or controlled.
 
 ## Release state
 
-The candidate is local and not yet staged, committed or deployed. Request fresh approval before staging/pushing/deploying this batch. Following production verification, resume the queue with the next independent item in `CONTINUOUS_IMPROVEMENT.md`.
+The approved calendar batch is on `main`; its player-facing wording refinement is part of this follow-up. The original base deployment succeeded; verify the latest pushed commit's workflow and live page before marking the follow-up complete. The 29 untracked texture extracts remain excluded. Following production verification, resume the queue with the next independent item in `CONTINUOUS_IMPROVEMENT.md`.
 
 ---
 

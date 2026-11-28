@@ -77,8 +77,8 @@
   },
   "eventCalendar": {
     "title": "Event Calendar",
-    "description": "Live events and scheduled city sieges or expeditions reported by the public API.",
-    "coverage": "The API currently returns {{count}} event records and does not provide pagination. This view shows events that are active or scheduled to begin.",
+    "description": "Live events, city sieges, and expeditions.",
+    "coverage": "Showing {{count}} active or upcoming events.",
     "upcoming": "Upcoming",
     "active": "Active",
     "liveEvent": "Live event",

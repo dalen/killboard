@@ -169,7 +169,7 @@ export const Events = (): ReactElement => {
         <p className="event-calendar-coverage" role="note">
           {loading
             ? t('common:loading')
-            : t('pages:eventCalendar.coverage', { count: allEvents.length })}
+            : t('pages:eventCalendar.coverage', { count: schedule.length })}
         </p>
 
         {scheduleContent}
