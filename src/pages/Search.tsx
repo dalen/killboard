@@ -53,14 +53,16 @@ const PLAYER_SEARCH = gql`
 
 interface PlayerSearchData {
   characters?: {
-    nodes?: {
-      id: string;
-      name: string;
-      level: number;
-      career: Career;
-      renownRank: number;
-      guildMembership?: { guild: { id: string; name: string } } | null;
-    }[] | null;
+    nodes?:
+      | {
+          id: string;
+          name: string;
+          level: number;
+          career: Career;
+          renownRank: number;
+          guildMembership?: { guild: { id: string; name: string } } | null;
+        }[]
+      | null;
     pageInfo: PageInfo;
     totalCount: number;
   } | null;
@@ -77,21 +79,8 @@ export const Search = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.characters == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const { pageInfo, nodes } = data.characters;
-  const players = nodes ?? [];
-  const handleSubmit = (newQuery: string): void => {
-    void refetch({ first: perPage, query: newQuery });
-  };
+  const characters = data?.characters;
+  const players = characters?.nodes ?? [];
 
   return (
     <div className="container is-max-desktop mt-2">
@@ -105,67 +94,77 @@ export const Search = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} isPlayer />
-      <p className="help search-result-count">
-        {t('pages:searchPage.matchCount', { count: data.characters.totalCount })}
-      </p>
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th></th>
-              <th>Name</th>
-              <th>Info</th>
-              <th align="right">Type</th>
-            </tr>
-          </thead>
-          <tbody>
-            {players.length === 0 ? (
-              <tr>
-                <td colSpan={4}>{t('common:notFound')}</td>
-              </tr>
-            ) : (
-              players.map((player) => (
-                <tr key={player.id}>
-                  <td>
-                    <CareerIcon career={player.career} />
-                  </td>
-                  <td>
-                    <Link to={`/character/${player.id}`}>
-                      <strong>{player.name}</strong>
-                    </Link>
-                    <br />
-                    <GuildLink guild={player.guildMembership?.guild} />
-                  </td>
-                  <td>
-                    <small>
-                      Lvl {player.level}
-                      <br />
-                      RR {player.renownRank}
-                    </small>
-                  </td>
-                  <td align="right">
-                    <span className="tag is-primary">Character</span>
-                  </td>
+      <SearchBox initialQuery={query} isPlayer />
+      {loading ? (
+        <progress className="progress" aria-label={t('common:loading')} />
+      ) : error ? (
+        <ErrorMessage name={error.name} message={error.message} />
+      ) : characters == null ? (
+        <ErrorMessage customText={t('common:notFound')} />
+      ) : (
+        <>
+          <p className="help search-result-count">
+            {t('pages:searchPage.matchCount', { count: characters.totalCount })}
+          </p>
+          <div className="table-container">
+            <table
+              className={clsx(
+                'table',
+                'is-striped',
+                'is-hoverable',
+                isMobile ? 'is-narrow' : 'is-fullwidth',
+              )}
+            >
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Name</th>
+                  <th>Info</th>
+                  <th align="right">Type</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        onPerPageChange={setPerPage}
-        refetch={refetch}
-      />
+              </thead>
+              <tbody>
+                {players.length === 0 ? (
+                  <tr>
+                    <td colSpan={4}>{t('common:notFound')}</td>
+                  </tr>
+                ) : (
+                  players.map((player) => (
+                    <tr key={player.id}>
+                      <td>
+                        <CareerIcon career={player.career} />
+                      </td>
+                      <td>
+                        <Link to={`/character/${player.id}`}>
+                          <strong>{player.name}</strong>
+                        </Link>
+                        <br />
+                        <GuildLink guild={player.guildMembership?.guild} />
+                      </td>
+                      <td>
+                        <small>
+                          Lvl {player.level}
+                          <br />
+                          RR {player.renownRank}
+                        </small>
+                      </td>
+                      <td align="right">
+                        <span className="tag is-primary">Character</span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <QueryPagination
+            pageInfo={characters.pageInfo}
+            perPage={perPage}
+            onPerPageChange={setPerPage}
+            refetch={refetch}
+          />
+        </>
+      )}
     </div>
   );
 };

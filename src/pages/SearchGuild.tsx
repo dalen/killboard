@@ -63,21 +63,7 @@ export const SearchGuild = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.guilds?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
-
-  const { pageInfo } = data.guilds;
-
-  const handleSubmit = (newQuery: string): void => {
-    void refetch({ first: perPage, query: newQuery });
-  };
+  const guilds = data?.guilds;
 
   return (
     <div className="container is-max-desktop mt-2">
@@ -91,48 +77,58 @@ export const SearchGuild = (): ReactElement => {
           </li>
         </ul>
       </nav>
-      <SearchBox initialQuery={query} onSubmit={handleSubmit} />
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:searchPageGuild.guild')}</th>
-              <th>{t('pages:searchPageGuild.leader')}</th>
-              <th>{t('pages:searchPageGuild.members')}</th>
-              <th>{t('pages:searchPageGuild.level')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.guilds.nodes.map((guild) => (
-              <tr key={guild.id}>
-                <td>
-                  <Link to={`/guild/${guild.id}`}>{guild.name}</Link>
-                </td>
-                <td>
-                  <Link to={`/character/${guild.leader?.id}`}>
-                    {guild.leader?.name}
-                  </Link>
-                </td>
-                <td>{guild.members?.totalCount}</td>
-                <td>{guild.level}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        onPerPageChange={setPerPage}
-        refetch={refetch}
-      />
+      <SearchBox initialQuery={query} />
+      {loading ? (
+        <progress className="progress" aria-label={t('common:loading')} />
+      ) : error ? (
+        <ErrorMessage name={error.name} message={error.message} />
+      ) : guilds?.nodes == null ? (
+        <ErrorMessage customText={t('common:notFound')} />
+      ) : (
+        <>
+          <div className="table-container">
+            <table
+              className={clsx(
+                'table',
+                'is-striped',
+                'is-hoverable',
+                isMobile ? 'is-narrow' : 'is-fullwidth',
+              )}
+            >
+              <thead>
+                <tr>
+                  <th>{t('pages:searchPageGuild.guild')}</th>
+                  <th>{t('pages:searchPageGuild.leader')}</th>
+                  <th>{t('pages:searchPageGuild.members')}</th>
+                  <th>{t('pages:searchPageGuild.level')}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {guilds.nodes.map((guild) => (
+                  <tr key={guild.id}>
+                    <td>
+                      <Link to={`/guild/${guild.id}`}>{guild.name}</Link>
+                    </td>
+                    <td>
+                      <Link to={`/character/${guild.leader?.id}`}>
+                        {guild.leader?.name}
+                      </Link>
+                    </td>
+                    <td>{guild.members?.totalCount}</td>
+                    <td>{guild.level}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <QueryPagination
+            pageInfo={guilds.pageInfo}
+            perPage={perPage}
+            onPerPageChange={setPerPage}
+            refetch={refetch}
+          />
+        </>
+      )}
     </div>
   );
 };

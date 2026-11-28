@@ -1,3 +1,26 @@
+# Current local batch — shared debounced search
+
+Status: implemented and locally verified; **not committed, pushed or deployed**. Waiting for release-specific approval.
+
+## Scope
+
+- Updated the shared search box so typed searches apply after 300ms, while Enter applies immediately. Search terms are URL-encoded.
+- Kept the character and guild search fields mounted while results load, and restored keyboard focus when a homepage search navigates to its results route. Character search continues to query characters only.
+- Creature name filtering now uses the same debounce while preserving its URL parameter. The character result count uses concise player-facing wording.
+- No dependency or asset changes. The separate Dressing Room remains excluded; all 29 untracked `public/gear-preview/ui/` texture extracts remain untouched and excluded.
+
+## Verification
+
+- `npm test` passed (TypeScript, production Vite build and type-aware Oxlint); existing Sass deprecation, bundle-size and repository lint warnings remain. `git diff --check` passed.
+- One headless Playwright instance verified the 300ms delay, retained focus, populated character search (`Mrak`, 115 substring matches), populated guild search (`Kingsmen`), Creature URL-filter synchronization, and browser back/forward behavior. Populated character results rendered without horizontal overflow at 1440×900, 768×1024 and 390×844. Screenshots: `%TEMP%\killboard-search-{desktop,tablet,phone}.png`.
+- The browser closed in `finally`; no personal desktop browser was used. The in-chat browser is unavailable in this session.
+
+## Release state
+
+Four application/localization files plus these two checkpoint documents are the reviewed scope. The candidate remains local pending approval; no commit or deployment is authorized yet. Preserve the 29 untracked texture extracts.
+
+---
+
 # Latest deployed batch — Live Event Calendar and Database menu
 
 Status: deployed in commit `2b69023ea10b2de85755d980040bd4139d0388f7`; Build and Deploy run [46095228779](https://github.com/dalen/killboard/actions/runs/46095228779) succeeded. The calendar was introduced in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da`; copy refinement followed in `be034945f837d742b05cabbe0f576e756fd019a9`.
@@ -14,6 +37,7 @@ Status: deployed in commit `2b69023ea10b2de85755d980040bd4139d0388f7`; Build and
 - `npm test` passed: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
 - `git diff --check` passed.
 - Production headless Chromium checks at 1440, 768 and 390px confirmed the alphabetical menu, 8 populated event rows, player-facing count, no horizontal overflow and no page errors. A cache-busted rerun was needed after one request returned a stale menu response. A simulated event-data failure showed a friendly retry message without exposing raw error details. Screenshot: `%TEMP%\\event-calendar-production-menu.png`.
+- After a later user screenshot showed a fetch error, a targeted production recheck on 2026-11-27 loaded all 8 events with no failed requests or page errors; the reported failure did not reproduce.
 - The known Playwright configuration was reused with one browser and sequential viewport checks; the browser closed in `finally`. The in-chat browser is unavailable in this chat, so no personal desktop browser was opened or controlled.
 
 ## Release state

@@ -210,7 +210,7 @@
     "name": "Name",
     "renownRank": "RR",
     "search": "Search",
-    "matchCount": "{{count}} matching characters returned by the public API",
+    "matchCount": "{{count}} matching characters",
     "prevPage": "Prev",
     "nextPage": "Next"
   },
