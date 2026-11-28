@@ -1,27 +1,24 @@
-# Latest deployed batch — Live Event Calendar
+# Latest deployed batch — Live Event Calendar and Database menu
 
-The calendar shipped to `main` in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da` (run [46094219173](https://github.com/dalen/killboard/actions/runs/46094219173)); its player-copy refinement shipped in `be034945f837d742b05cabbe0f576e756fd019a9` (run [46094514448](https://github.com/dalen/killboard/actions/runs/46094514448)). Both workflows succeeded. Production verification showed 8 active/upcoming entries at desktop, tablet and phone widths, with concise player-facing text and no page errors or horizontal overflow. One screenshot showed a temporary failed data load; a fresh production check succeeded without failed requests.
+Status: deployed in commit `2b69023ea10b2de85755d980040bd4139d0388f7`; Build and Deploy run [46095228779](https://github.com/dalen/killboard/actions/runs/46095228779) succeeded. The calendar was introduced in `f41d9b7c574106ef7e7eeca9a5d3c29b0de122da`; copy refinement followed in `be034945f837d742b05cabbe0f576e756fd019a9`.
 
 ## Candidate scope
 
-- Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming live-event, city-siege and Zandri-expedition records with local and server start/end times, plus a concise active/upcoming event count. It handles loading, errors, empty results and no active/upcoming records.
+- Added `/events` using the existing Warhammer framed panel, Altdorf time formatter and Database navigation menu. The view shows active and upcoming events with local and server start/end times and a concise count. Error and empty states use plain player-facing wording.
+- Alphabetized the Database menu and added the player-facing content standard to `AGENTS.md`; future copy should avoid developer-facing terms and redundant explanations.
 - No dependency changes, new MYP assets or Dressing Room functionality are included. The 29 untracked `public/gear-preview/ui/` texture extracts remain excluded and preserved.
 - Deployed source changes: `src/App.tsx`, `src/components/global/MainNav.tsx`, `src/i18n/en/pages.json`, `src/pages/Events.tsx`, and `src/pages/Events.scss`. Checkpoint documentation changes are in `CONTINUOUS_IMPROVEMENT.md` and this file.
 
 ## Verification
 
-- `npm test` passed after the copy refinement: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
+- `npm test` passed: TypeScript, Vite production build and type-aware Oxlint. Existing Sass deprecation and repository lint warnings remain; there were no errors.
 - `git diff --check` passed.
-- Populated data returned 8 active/upcoming events. Headless Chromium checks at desktop, tablet and phone widths confirmed the natural wording, accurate count, all 8 rows, Database-menu navigation, no document horizontal overflow and no page errors. Screenshots: `%TEMP%\\event-calendar-final-desktop.png`, `%TEMP%\\event-calendar-local-desktop.png` and `%TEMP%\\event-calendar-local-phone-clean.png`.
+- Production headless Chromium checks at 1440, 768 and 390px confirmed the alphabetical menu, 8 populated event rows, player-facing count, no horizontal overflow and no page errors. A cache-busted rerun was needed after one request returned a stale menu response. A simulated event-data failure showed a friendly retry message without exposing raw error details. Screenshot: `%TEMP%\\event-calendar-production-menu.png`.
 - The known Playwright configuration was reused with one browser and sequential viewport checks; the browser closed in `finally`. The in-chat browser is unavailable in this chat, so no personal desktop browser was opened or controlled.
 
-## Current local follow-up
+## Release state
 
-- Alphabetizes the Database menu.
-- Replaces raw network error details and technical empty-state text with concise player-facing wording.
-- Records the player-facing content standard in `AGENTS.md`; no site-wide copy rewrite is planned.
-- `npm test` and `git diff --check` pass. Headless Playwright verified the full alphabetical menu and populated calendar at 1440, 768 and 390px (8 rows, no overflow/errors). A simulated data-load failure displays “We couldn't load the event schedule. Please try again in a moment.” without exposing raw error text. Screenshot: `%TEMP%\\event-calendar-error-state.png`.
-- This follow-up is locally verified and awaits release approval. The 29 untracked texture extracts remain excluded and untouched.
+The user-approved calendar and menu follow-up is deployed and production-verified. The 29 untracked `public/gear-preview/ui/` texture extracts remain excluded and untouched; no Dressing Room functionality or dependencies were included. Resume the queue with shared debounced search as a separate small batch.
 
 ---
 
