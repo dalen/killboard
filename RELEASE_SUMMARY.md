@@ -1,6 +1,6 @@
 # Current release candidate — Armory tooltips and Skirmish filters
 
-Status: locally verified and awaiting separate deployment approval. No candidate changes have been committed, staged, pushed or deployed. The base is `ca8f8e77a68587dbd84ead3165a22321a8b7c316` (`feat: style guild member roster with Warhammer controls`), which is also `origin/main`.
+Status: deployed after explicit approval in commit `8d0988dfbb1962477305a738d759abef90b834de` (`feat: refine Armory tooltips and skirmish filters`). GitHub Actions Build and Deploy run [46092546941](https://github.com/dalen/killboard/actions/runs/46092546941) succeeded.
 
 ## Candidate scope
 
@@ -14,12 +14,12 @@ Status: locally verified and awaiting separate deployment approval. No candidate
 
 - `npm test` passed: TypeScript, production Vite build and type-aware Oxlint. Existing Sass deprecation notices, existing lint warnings and the large-bundle warning remain.
 - `npm audit` still reports three Moderate development/transitive records for minimatch alert #175 through GraphQL Codegen. The suggested forced Codegen change is breaking; no override or forced dependency change was made. `npm audit --omit=dev` passed with zero production vulnerabilities.
-- `git diff --check` passed. No final deployment pipeline has been run remotely because this candidate is awaiting approval.
+- `git diff --check` passed. Production Playwright verification rendered the deployed Armory tooltip at 320×568 with visible chain textures and confirmed all seven scrollbar texture/arrow assets returned HTTP 200. The deployed Skirmish route rendered 19 populated filtered rows at 1440, 768 and 390px, with no page errors or horizontal overflow. Direct route document requests return HTTP 404 before the existing SPA fallback hydrates the app; the populated page works normally after hydration.
 - Headless screenshots and checks used the existing Playwright installation and one browser at a time; every script closes the browser in `finally`. No personal desktop browser was used. The in-chat browser is unavailable in this session.
 
-## Pending approval
+## Release state
 
-Approve this specific Armory tooltip and Skirmish filter batch for commit, push to Dalen's `main` and deployment. After approval, stage only the reviewed source and documentation files, verify the deployment run, check production Armory/Skirmish routes, then resume the remaining queue. Current branch remains `codex/database-page-fixes`; current application commit is `ca8f8e7`. The 29 texture extracts remain untracked and unstaged.
+The approved six-file source/documentation batch is committed and deployed. The current local branch `codex/database-page-fixes` and `origin/main` are synchronized at `8d0988dfbb1962477305a738d759abef90b834de`. Exactly 29 untracked texture extracts remain untouched and excluded. The local Vite server remains available on port 3002. Resume the next queue item, the assessed compact live-event calendar, as a separate small batch.
 
 ---
 
