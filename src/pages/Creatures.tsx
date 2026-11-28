@@ -14,9 +14,14 @@ import {
   creatureRoleOptions,
 } from '@/data/creatureFilterOptions';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
-import { SearchBox } from '@/components/global/SearchBox';
 import { QueryPagination } from '@/components/global/QueryPagination';
-import { type ReactElement, useState } from 'react';
+import {
+  WarhammerFilterPanel,
+  WarhammerSelect,
+  WarhammerTextInput,
+  type WarhammerOption,
+} from '@/components/global/WarhammerFormControls';
+import { type ReactElement, useCallback, useEffect, useState } from 'react';
 import clsx from 'clsx';
 import {
   creatureTitleIcon,
@@ -75,9 +80,7 @@ const CREATURES_IN_LOCATION = gql`
       last: $last
       before: $before
       after: $after
-      where: {
-        and: [$where, { zones: { some: { eq: $locationId } } }]
-      }
+      where: { and: [$where, { zones: { some: { eq: $locationId } } }] }
     ) {
       nodes {
         id
@@ -155,6 +158,7 @@ const duplicatedLocationNames = new Set(
 export const Creatures = (): ReactElement => {
   const [perPage, setPerPage] = useState(50);
   const [search, setSearch] = useSearchParams();
+  const [draftName, setDraftName] = useState(search.get('name') ?? '');
   const { t } = useTranslation(['common', 'pages', 'enums']);
   const locationId = getCreatureLocation(search);
   const query = locationId ? CREATURES_IN_LOCATION : CREATURES;
@@ -168,44 +172,73 @@ export const Creatures = (): ReactElement => {
   const { width } = useWindowDimensions();
   const isMobile = width <= 768;
 
-  const updateFilter = (key: string, value: string) => {
-    const nextSearch = new URLSearchParams(search);
-    if (value === 'all' || value === '') {
-      nextSearch.delete(key);
-    } else {
-      nextSearch.set(key, value);
-    }
-    const nextLocationId = getCreatureLocation(nextSearch);
-    setSearch(nextSearch);
+  useEffect(() => {
+    setDraftName(search.get('name') ?? '');
+  }, [search]);
 
-    // Switching between the two query documents resets pagination naturally.
-    // Within one document, explicitly clear the cursor when filters change.
-    if (Boolean(locationId) !== Boolean(nextLocationId)) {
-      return;
-    }
+  const updateFilter = useCallback(
+    (key: string, value: string) => {
+      const nextSearch = new URLSearchParams(search);
+      if (value === 'all' || value === '') {
+        nextSearch.delete(key);
+      } else {
+        nextSearch.set(key, value);
+      }
+      const nextLocationId = getCreatureLocation(nextSearch);
+      setSearch(nextSearch);
 
-    void refetch({
-      after: undefined,
-      before: undefined,
-      first: perPage,
-      last: undefined,
-      where: getFilters(nextSearch),
-      ...(nextLocationId ? { locationId: nextLocationId } : {}),
-    });
-  };
+      // Switching between the two query documents resets pagination naturally.
+      // Within one document, explicitly clear the cursor when filters change.
+      if (Boolean(locationId) !== Boolean(nextLocationId)) {
+        return;
+      }
 
-  if (loading) {
-    return <progress className="progress" />;
-  }
-  if (error) {
-    return <ErrorMessage name={error.name} message={error.message} />;
-  }
-  if (data?.creatures?.nodes == null) {
-    return <ErrorMessage customText={t('common:notFound')} />;
-  }
+      void refetch({
+        after: undefined,
+        before: undefined,
+        first: perPage,
+        last: undefined,
+        where: getFilters(nextSearch),
+        ...(nextLocationId ? { locationId: nextLocationId } : {}),
+      });
+    },
+    [locationId, perPage, refetch, search, setSearch],
+  );
 
-  const entries = data.creatures.nodes;
-  const { pageInfo } = data.creatures;
+  useEffect(() => {
+    const normalized = draftName.trim();
+    if (normalized === (search.get('name') ?? '')) return undefined;
+    const timeout = window.setTimeout(
+      () => updateFilter('name', normalized),
+      300,
+    );
+    return () => window.clearTimeout(timeout);
+  }, [draftName, search, updateFilter]);
+
+  const entries = data?.creatures?.nodes ?? [];
+  const pageInfo = data?.creatures?.pageInfo;
+  const realmOptions: WarhammerOption[] = [
+    { value: 'all', label: t('pages:creatures.allRealms') },
+    { value: Realm.Order, label: t('common:realmOrder') },
+    { value: Realm.Destruction, label: t('common:realmDestruction') },
+    { value: Realm.Neutral, label: t('common:realmNeutral') },
+  ];
+  const roleOptions: WarhammerOption[] = [
+    { value: 'all', label: t('pages:creatures.allRoles') },
+    ...creatureRoleOptions.map((role) => ({
+      value: role,
+      label: creatureTitleLabel(role),
+    })),
+  ];
+  const locationOptions: WarhammerOption[] = [
+    { value: 'all', label: t('pages:creatures.allLocations') },
+    ...playerFacingLocationOptions.map((zone) => ({
+      value: zone.id,
+      label: duplicatedLocationNames.has(zone.name)
+        ? `${zone.name} (#${zone.id})`
+        : zone.name,
+    })),
+  ];
 
   return (
     <div className="container is-max-widescreen mt-2">
@@ -220,205 +253,175 @@ export const Creatures = (): ReactElement => {
         </ul>
       </nav>
 
-      <div className="card mb-5">
-        <div className="card-content">
-          <div className="columns is-multiline">
-            <div className="column is-12-mobile is-6-tablet is-4-desktop">
-              <div className="field">
-                <label className="label">{t('pages:creatures.search')}</label>
-                <SearchBox
-                  initialQuery={search.get('name') || ''}
-                  onSubmit={(event) => {
-                    updateFilter('name', event || '');
-                  }}
-                />
-              </div>
-            </div>
-            <div className="column is-12-mobile is-6-tablet is-2-desktop">
-              <div className="field">
-                <label className="label" htmlFor="creature-realm">
-                  {t('pages:creatures.realm')}
-                </label>
-                <div className="select is-fullwidth">
-                  <select
-                    id="creature-realm"
-                    value={search.get('realm') ?? 'all'}
-                    onChange={(event) => {
-                      updateFilter('realm', event.target.value);
-                    }}
-                  >
-                    <option value="all">
-                      {t('pages:creatures.allRealms')}
-                    </option>
-                    <option value={Realm.Order}>
-                      {t('common:realmOrder')}
-                    </option>
-                    <option value={Realm.Destruction}>
-                      {t('common:realmDestruction')}
-                    </option>
-                    <option value={Realm.Neutral}>
-                      {t('common:realmNeutral')}
-                    </option>
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="column is-12-mobile is-6-tablet is-3-desktop">
-              <div className="field">
-                <label className="label" htmlFor="creature-role">
-                  {t('pages:creatures.role')}
-                </label>
-                <div className="select is-fullwidth">
-                  <select
-                    id="creature-role"
-                    value={search.get('role') ?? 'all'}
-                    onChange={(event) =>
-                      updateFilter('role', event.target.value)
-                    }
-                  >
-                    <option value="all">
-                      {t('pages:creatures.allRoles')}
-                    </option>
-                    {creatureRoleOptions.map((role) => (
-                      <option key={role} value={role}>
-                        {creatureTitleLabel(role)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-            <div className="column is-12-mobile is-6-tablet is-3-desktop">
-              <div className="field">
-                <label className="label" htmlFor="creature-location">
-                  {t('pages:creatures.location')}
-                </label>
-                <div className="select is-fullwidth">
-                  <select
-                    id="creature-location"
-                    value={search.get('location') ?? 'all'}
-                    onChange={(event) =>
-                      updateFilter('location', event.target.value)
-                    }
-                  >
-                    <option value="all">
-                      {t('pages:creatures.allLocations')}
-                    </option>
-                    {playerFacingLocationOptions.map((zone) => (
-                      <option key={zone.id} value={zone.id}>
-                        {duplicatedLocationNames.has(zone.name)
-                          ? `${zone.name} (#${zone.id})`
-                          : zone.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-            </div>
-          </div>
+      <WarhammerFilterPanel className="creature-filter-shell">
+        <div className="creature-filter-grid">
+          <form
+            className="creature-name-filter"
+            onSubmit={(event) => {
+              event.preventDefault();
+              updateFilter('name', draftName);
+            }}
+          >
+            <WarhammerTextInput
+              id="creature-name"
+              label={t('pages:creatures.search')}
+              value={draftName}
+              onChange={setDraftName}
+              placeholder={t('pages:creatures.search')}
+              type="search"
+            />
+          </form>
+          <WarhammerSelect
+            id="creature-realm"
+            label={t('pages:creatures.realm')}
+            value={search.get('realm') ?? 'all'}
+            options={realmOptions}
+            onChange={(value) => updateFilter('realm', value)}
+          />
+          <WarhammerSelect
+            id="creature-role"
+            label={t('pages:creatures.role')}
+            value={search.get('role') ?? 'all'}
+            options={roleOptions}
+            onChange={(value) => updateFilter('role', value)}
+          />
+          <WarhammerSelect
+            id="creature-location"
+            label={t('pages:creatures.location')}
+            value={search.get('location') ?? 'all'}
+            options={locationOptions}
+            onChange={(value) => updateFilter('location', value)}
+          />
         </div>
-      </div>
+      </WarhammerFilterPanel>
 
-      <div className="table-container">
-        <table
-          className={clsx(
-            'table',
-            'is-striped',
-            'is-hoverable',
-            isMobile ? 'is-narrow' : 'is-fullwidth',
-          )}
-        >
-          <thead>
-            <tr>
-              <th>{t('pages:creatures.id')}</th>
-              <th>{t('pages:creatures.name')}</th>
-              <th>{t('pages:creatures.realm')}</th>
-              <th>{t('pages:creatures.role')}</th>
-              <th>{t('pages:creatures.location')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {entries.map((creature) => {
-              const zoneNames = [
-                ...new Set(
-                  creature.spawns
-                    .map((spawn) => spawn.zone?.name)
-                    .filter(
-                      (name): name is string =>
-                        Boolean(name) && isPlayerFacingZone(name),
-                    ),
-                ),
-              ];
-              const icon = creatureTitleIcon(creature.title);
-              const label = creatureTitleLabel(creature.title);
+      {loading && (
+        <progress
+          className="progress"
+          aria-label={t('pages:creatures.loading')}
+        />
+      )}
+      {error && !data && (
+        <ErrorMessage name={error.name} message={error.message} />
+      )}
+      {!loading && !error && data?.creatures?.nodes == null && (
+        <ErrorMessage customText={t('common:notFound')} />
+      )}
 
-              return (
-                <tr key={creature.id}>
-                  <td>{creature.id}</td>
-                  <td>
-                    <Link to={`/creature/${creature.id}`}>{creature.name}</Link>
-                  </td>
-                  <td>
-                    {creature.realm === Realm.Order && (
-                      <span className="icon-text">
-                        <figure className="image is-24x24 m-0 mr-1">
-                          <img
-                            src="/images/icons/scenario/order.png"
-                            width={24}
-                            height={24}
-                            alt={t('common:realmOrder')}
-                          />
-                        </figure>
-                        {t('common:realmOrder')}
-                      </span>
-                    )}
-                    {creature.realm === Realm.Destruction && (
-                      <span className="icon-text">
-                        <figure className="image is-24x24 m-0 mr-1">
-                          <img
-                            src="/images/icons/scenario/destruction.png"
-                            width={24}
-                            height={24}
-                            alt={t('common:realmDestruction')}
-                          />
-                        </figure>
-                        {t('common:realmDestruction')}
-                      </span>
-                    )}
-                    {creature.realm == null && t('common:realmNeutral')}
-                  </td>
-                  <td>
-                    {label && (
-                      <span className="icon-text">
-                        {icon && (
-                          <figure className="image is-24x24 m-0 mr-1">
-                            <img src={icon} width={24} height={24} alt="" />
-                          </figure>
-                        )}
-                        {label}
-                      </span>
-                    )}
-                  </td>
-                  <td>
-                    {zoneNames.length > 0 && (
-                      <span>
-                        {zoneNames[0]}
-                        {zoneNames.length > 1 && ` (+${zoneNames.length - 1})`}
-                      </span>
-                    )}
+      {!loading && data?.creatures?.nodes != null && (
+        <div className="table-container">
+          <table
+            className={clsx(
+              'table',
+              'is-striped',
+              'is-hoverable',
+              isMobile ? 'is-narrow' : 'is-fullwidth',
+            )}
+          >
+            <thead>
+              <tr>
+                <th>{t('pages:creatures.id')}</th>
+                <th>{t('pages:creatures.name')}</th>
+                <th>{t('pages:creatures.realm')}</th>
+                <th>{t('pages:creatures.role')}</th>
+                <th>{t('pages:creatures.location')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {entries.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="has-text-centered py-4">
+                    {t('common:noResults')}
                   </td>
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
-      <QueryPagination
-        pageInfo={pageInfo}
-        perPage={perPage}
-        onPerPageChange={setPerPage}
-        refetch={refetch}
-      />
+              )}
+              {entries.map((creature) => {
+                const zoneNames = [
+                  ...new Set(
+                    creature.spawns
+                      .map((spawn) => spawn.zone?.name)
+                      .filter(
+                        (name): name is string =>
+                          Boolean(name) && isPlayerFacingZone(name),
+                      ),
+                  ),
+                ];
+                const icon = creatureTitleIcon(creature.title);
+                const label = creatureTitleLabel(creature.title);
+
+                return (
+                  <tr key={creature.id}>
+                    <td>{creature.id}</td>
+                    <td>
+                      <Link to={`/creature/${creature.id}`}>
+                        {creature.name}
+                      </Link>
+                    </td>
+                    <td>
+                      {creature.realm === Realm.Order && (
+                        <span className="icon-text">
+                          <figure className="image is-24x24 m-0 mr-1">
+                            <img
+                              src="/images/icons/scenario/order.png"
+                              width={24}
+                              height={24}
+                              alt={t('common:realmOrder')}
+                            />
+                          </figure>
+                          {t('common:realmOrder')}
+                        </span>
+                      )}
+                      {creature.realm === Realm.Destruction && (
+                        <span className="icon-text">
+                          <figure className="image is-24x24 m-0 mr-1">
+                            <img
+                              src="/images/icons/scenario/destruction.png"
+                              width={24}
+                              height={24}
+                              alt={t('common:realmDestruction')}
+                            />
+                          </figure>
+                          {t('common:realmDestruction')}
+                        </span>
+                      )}
+                      {creature.realm == null && t('common:realmNeutral')}
+                    </td>
+                    <td>
+                      {label && (
+                        <span className="icon-text">
+                          {icon && (
+                            <figure className="image is-24x24 m-0 mr-1">
+                              <img src={icon} width={24} height={24} alt="" />
+                            </figure>
+                          )}
+                          {label}
+                        </span>
+                      )}
+                    </td>
+                    <td>
+                      {zoneNames.length > 0 && (
+                        <span>
+                          {zoneNames[0]}
+                          {zoneNames.length > 1 &&
+                            ` (+${zoneNames.length - 1})`}
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
+      {!loading && pageInfo && (
+        <QueryPagination
+          pageInfo={pageInfo}
+          perPage={perPage}
+          onPerPageChange={setPerPage}
+          refetch={refetch}
+        />
+      )}
     </div>
   );
 };

@@ -8,9 +8,13 @@ import {
 } from '@apollo/client';
 import { useApolloClient, useQuery } from '@apollo/client/react';
 import type { Query, VendorItem } from '@/__generated__/graphql';
+import { Career } from '@/__generated__/graphql';
 import { ErrorMessage } from '@/components/global/ErrorMessage';
 import { QueryPagination } from '@/components/global/QueryPagination';
 import { GoldPrice } from '@/components/GoldPrice';
+import { WarhammerSelect, WarhammerTextInput } from '@/components/global/WarhammerFormControls';
+import { WarhammerScrollPane } from '@/components/global/WarhammerScrollPane';
+import '@/components/global/WarhammerProfileStyles.scss';
 
 const VENDOR_ITEMS = gql`
   query GetVendorItemsFromCreature(
@@ -33,6 +37,7 @@ const VENDOR_ITEMS = gql`
             id
             name
             iconUrl
+            careerRestriction
           }
           price
           requiredItems {
@@ -83,6 +88,8 @@ export const VendorItems = ({
 }) => {
   const [perPage, setPerPage] = useState(25);
   const [pageStart, setPageStart] = useState(0);
+  const [itemFilter, setItemFilter] = useState('');
+  const [careerFilter, setCareerFilter] = useState('');
   const [recoveredPage, setRecoveredPage] = useState<{
     key: string;
     status: 'loading' | 'done' | 'failed';
@@ -172,17 +179,14 @@ export const VendorItems = ({
                   last: count,
                   after: undefined,
                   before:
-                    end < edges.length
-                      ? edges[end]?.cursor
-                      : variables.before,
+                    end < edges.length ? edges[end]?.cursor : variables.before,
                 }
               : {
                   creatureId,
                   first: count,
                   last: undefined,
                   before: undefined,
-                  after:
-                    start > 0 ? edges[start - 1]?.cursor : variables.after,
+                  after: start > 0 ? edges[start - 1]?.cursor : variables.after,
                 };
 
             return client.query<Query>({
@@ -200,9 +204,7 @@ export const VendorItems = ({
           if (!nodes || result.error) {
             throw new Error('Could not recover valid vendor item entries.');
           }
-          items.push(
-            ...nodes.filter((node: VendorItem) => node?.item != null),
-          );
+          items.push(...nodes.filter((node: VendorItem) => node?.item != null));
         }
 
         if (!cancelled) {
@@ -255,13 +257,27 @@ export const VendorItems = ({
   const { nodes, pageInfo, totalCount } = vendorItems;
   const pageRecovery =
     recoveredPage?.key === currentPageKey ? recoveredPage : null;
-  if (needsRecovery && pageRecovery?.status !== 'done' && pageRecovery?.status !== 'failed') {
+  if (
+    needsRecovery &&
+    pageRecovery?.status !== 'done' &&
+    pageRecovery?.status !== 'failed'
+  ) {
     return <progress className="progress" />;
   }
   const entries =
     pageRecovery?.status === 'done'
       ? pageRecovery.items
       : (nodes ?? []).filter((node) => node?.item != null);
+  const visibleEntries = entries.filter((entry) => {
+    const matchesName = entry.item.name
+      .toLocaleLowerCase()
+      .includes(itemFilter.trim().toLocaleLowerCase());
+    const matchesCareer =
+      careerFilter === '' ||
+      entry.item.careerRestriction.length === 0 ||
+      entry.item.careerRestriction.includes(careerFilter as Career);
+    return matchesName && matchesCareer;
+  });
   const rangeStart = totalCount === 0 ? 0 : pageStart + 1;
   const rangeEnd = Math.min(pageStart + perPage, totalCount);
 
@@ -288,8 +304,37 @@ export const VendorItems = ({
           {t('components:itemVendors.incompleteData')}
         </div>
       )}
+      <div className="vendor-items-filter">
+        <WarhammerTextInput
+          id="vendor-item-filter"
+          label={t('components:itemVendors.filterItems')}
+          value={itemFilter}
+          onChange={setItemFilter}
+          type="search"
+        />
+        <WarhammerSelect
+          id="vendor-item-career-filter"
+          label={t('components:itemVendors.careerFilter')}
+          value={careerFilter}
+          onChange={setCareerFilter}
+          options={[
+            { value: '', label: t('components:itemVendors.allCareers') },
+            ...Object.values(Career).map((career) => ({
+              value: career,
+              label: t(`enums:career.${career}`),
+            })),
+          ]}
+        />
+      </div>
       {entries.length > 0 && (
-        <div style={{ height: '60vh', overflowY: 'auto' }}>
+        <WarhammerScrollPane
+          className="vendor-items-scroll"
+          viewportClassName="vendor-items-viewport"
+          ariaLabel={t('components:itemVendors.item')}
+          scrollUpLabel={t('pages:characterPage.scrollUp')}
+          scrollDownLabel={t('pages:characterPage.scrollDown')}
+          style={{ height: '60vh' }}
+        >
           <table className="table is-striped is-fullwidth mb-0">
             <thead>
               <tr>
@@ -316,7 +361,7 @@ export const VendorItems = ({
               </tr>
             </thead>
             <tbody>
-              {entries.map((vendorItem) => (
+              {visibleEntries.map((vendorItem) => (
                 <tr key={vendorItem.item.id}>
                   <td>
                     <span className="icon-text">
@@ -334,7 +379,10 @@ export const VendorItems = ({
                     {vendorItem.requiredItems.map((requiredItem) => (
                       <span key={requiredItem.item.id} className="icon-text">
                         <figure className="image is-24x24 mx-1">
-                          <img src={requiredItem.item.iconUrl} alt="Item Icon" />
+                          <img
+                            src={requiredItem.item.iconUrl}
+                            alt="Item Icon"
+                          />
                         </figure>
                         <Link
                           to={`/item/${requiredItem.item.id}`}
@@ -350,7 +398,12 @@ export const VendorItems = ({
               ))}
             </tbody>
           </table>
-        </div>
+        </WarhammerScrollPane>
+      )}
+      {entries.length > 0 && visibleEntries.length === 0 && (
+        <p className="py-3" role="status">
+          {t('common:noResults')}
+        </p>
       )}
       <div
         className="is-flex is-flex-wrap-wrap is-justify-content-space-between is-align-items-center mt-2 pt-2"

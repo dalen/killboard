@@ -8,7 +8,7 @@
     "kills": "Kills",
     "scenarios": "Scenarios",
     "skirmishes": "Skirmishes",
-    "armory": "Armory",
+    "armory": "Equipment",
     "equippedGearBonuses": "Equipped gear bonuses",
     "gearBonusesNote": "Gear, talismans and active set stats; base stats excluded.",
     "otherGearBonuses_one": "Other gear bonus ({{count}})",
@@ -346,6 +346,7 @@
   },
   "creatures": {
     "title": "Creatures",
+    "loading": "Loading creatures",
     "search": "Name",
     "name": "Name",
     "id": "ID",

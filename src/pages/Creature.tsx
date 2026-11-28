@@ -128,7 +128,8 @@ export const Creature = ({
     (hasVendorItems ? 'vendorItems' : undefined);
 
   const questSortField = search.get('sort');
-  const questSortDirection = search.get('direction') === 'DESC' ? 'DESC' : 'ASC';
+  const questSortDirection =
+    search.get('direction') === 'DESC' ? 'DESC' : 'ASC';
   const sortedQuests = [...entry.questsStarter];
   if (
     questSortField === 'minLevel' ||
@@ -205,50 +206,47 @@ export const Creature = ({
             </Link>
           </p>
         )}
-          {zone != null && mapSetup != null && (
-            <div
-              className={activeTab == null ? 'map-only-viewport-fit' : undefined}
-              style={{
-                width: '100%',
-                maxWidth:
-                  activeTab == null
-                    ? 'min(640px, calc(100vw - 4rem), max(280px, calc(100vh - 26rem)))'
-                    : '640px',
-                margin: '0 auto',
-              }}
-            >
-              <MapPositions
-                positions={entry.spawns
-                  .filter((spawn) => spawn.position.zone?.id === zone.id)
-                  .map((spawn) => ({
-                    x: spawn.position.x,
-                    y: spawn.position.y,
-                  }))}
-                zoneId={Number(zone.id)}
-                nwCornerX={mapSetup.nwCornerX}
-                nwCornerY={mapSetup.nwCornerY}
-                seCornerX={mapSetup.seCornerX}
-                seCornerY={mapSetup.seCornerY}
-              />
-            </div>
-          )}
-          {entry.spawns.length === 0 && (
-            <div className="notification is-dark mb-0">
-              {t('pages:creature.noSpawnLocations')}
-            </div>
-          )}
-          {entry.spawns.length > 0 &&
-            (zone == null || mapSetup == null) && (
-              <MapFallback
-                key={zone?.id ?? 'unmapped'}
-                zoneId={zone?.id}
-                zoneName={zone?.name}
-                mapUnavailableText={t('pages:creature.mapUnavailable')}
-                markersUnavailableText={t(
-                  'pages:creature.mapMarkersUnavailable',
-                )}
-              />
-            )}
+        {zone != null && mapSetup != null && (
+          <div
+            className={activeTab == null ? 'map-only-viewport-fit' : undefined}
+            style={{
+              width: '100%',
+              maxWidth:
+                activeTab == null
+                  ? 'min(640px, calc(100vw - 4rem), max(280px, calc(100vh - 26rem)))'
+                  : '640px',
+              margin: '0 auto',
+            }}
+          >
+            <MapPositions
+              positions={entry.spawns
+                .filter((spawn) => spawn.position.zone?.id === zone.id)
+                .map((spawn) => ({
+                  x: spawn.position.x,
+                  y: spawn.position.y,
+                }))}
+              zoneId={Number(zone.id)}
+              nwCornerX={mapSetup.nwCornerX}
+              nwCornerY={mapSetup.nwCornerY}
+              seCornerX={mapSetup.seCornerX}
+              seCornerY={mapSetup.seCornerY}
+            />
+          </div>
+        )}
+        {entry.spawns.length === 0 && (
+          <div className="notification is-dark mb-0">
+            {t('pages:creature.noSpawnLocations')}
+          </div>
+        )}
+        {entry.spawns.length > 0 && (zone == null || mapSetup == null) && (
+          <MapFallback
+            key={zone?.id ?? 'unmapped'}
+            zoneId={zone?.id}
+            zoneName={zone?.name}
+            mapUnavailableText={t('pages:creature.mapUnavailable')}
+            markersUnavailableText={t('pages:creature.mapMarkersUnavailable')}
+          />
+        )}
       </div>
     </div>
   );
@@ -270,10 +268,7 @@ export const Creature = ({
                     questSortDirection,
                   )}
                 >
-                  {questSortHeader(
-                    'minLevel',
-                    t('pages:quests.minLevel'),
-                  )}
+                  {questSortHeader('minLevel', t('pages:quests.minLevel'))}
                 </th>
                 <th
                   aria-sort={getQuestAriaSort(
@@ -339,9 +334,7 @@ export const Creature = ({
         <div className="column is-12-desktop is-5-widescreen">
           {zoneMapPanel}
         </div>
-        <div className="column is-12-desktop is-7-widescreen">
-          {questPanel}
-        </div>
+        <div className="column is-12-desktop is-7-widescreen">{questPanel}</div>
       </div>
     );
   } else if (activeTab === 'vendorItems') {
@@ -351,11 +344,12 @@ export const Creature = ({
           {zoneMapPanel}
         </div>
         <div className="column is-12-desktop is-7-widescreen">
-          <div className="card mb-5">
-            <div className="card-content">
-              <VendorItems creatureId={id} />
-            </div>
-          </div>
+          <section
+            className="warhammer-window-panel creature-vendor-panel mb-5"
+            aria-label={t('pages:creature.vendorItems')}
+          >
+            <VendorItems creatureId={id} />
+          </section>
         </div>
       </div>
     );

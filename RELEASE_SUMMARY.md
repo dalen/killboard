@@ -221,3 +221,30 @@ Status: released to `main` on 2026-11-27 after explicit user approval. Release c
 ## Review disposition
 
 Both tracks were included in the approved release. The local development server remains available on port 3002. Dependabot reconciliation is complete: only alert #175 remains, intentionally retained pending a compatible upstream dependency update or separately validated Codegen migration. No further release action is authorized by this summary.
+
+# Current local batch — Creature filters and vendor inventory
+
+Status: implemented and verified locally; approved for the current release. Deployment verification will be recorded after the workflow completes.
+
+## Scope
+
+- Replaced the Creature list’s generic search, realm, role and location controls with the shared Warhammer text field, selects and compact framed filter panel.
+- Kept the controls mounted during loading so keyboard focus remains in the name field. Name filtering updates after 300 ms, Enter submits immediately, and all active filters remain in the URL.
+- Added a local vendor item name filter explicitly scoped to the currently displayed page. Existing cursor pagination and full inventory counts remain unchanged; the component does not prefetch the entire inventory.
+- Added a shared Warhammer career filter using each item's recorded career eligibility. Items with no recorded career restriction remain visible for every selected career.
+- Corrected the Character navigation label from “Armory” to “Equipment” as a label-only follow-up; existing URLs and bookmarks are unchanged. This was requested for the prior shared-search release but was missed there, so it is not claimed as deployed.
+- Framed the vendor inventory with the shared Warhammer window panel and reused `WarhammerScrollPane` for overflow.
+- Deferred retired Instance Hub PR #1070 after finding its navigation duplicated existing routes and its long-range workflow was unbounded.
+- No dependency or asset changes. All 29 untracked texture files remain untouched and excluded; the separate Dressing Room remains excluded.
+
+## Verification
+
+- `npm test` passed (TypeScript, production Vite build and type-aware Oxlint). Existing Sass deprecation, bundle-size and repository lint warnings remain. `git diff --check` passed.
+- Local headless Playwright verified 50 populated Creature records; realm, role and location controls update URL filters; direct `?name=Imperator` returned two matching creatures; 300 ms debounce and Enter submission worked; focus remained in the search field during loading; browser Back restored the prior filter state. On Imperator Yran (#4), the Bright Wizard filter reduced the current vendor page from 25 entries to two eligible items; unrestricted War Crest prices remained visible. Desktop, tablet and phone layouts had no horizontal overflow.
+- A populated vendor-inventory check used Imperator Yran (#4), with 96 total vendor items and 25 rows on the current page. Filtering “Ironmantle” reduced the displayed page to one row without changing the “Items 1–25 of 96” page range. The chain scrollbar rendered visibly when content overflowed (scrollHeight 1040px / clientHeight 540px), and its down arrow advanced the scroll position 40px.
+- Creature list screenshots at desktop/tablet/phone: `%TEMP%\creatures-desktop.png`, `%TEMP%\creatures-tablet.png`, `%TEMP%\creatures-phone.png`. Vendor inventory screenshots: `%TEMP%\vendor-items-chain-overflow.png`, `%TEMP%\vendor-items-desktop.png`, `%TEMP%\vendor-items-tablet.png`, `%TEMP%\vendor-items-phone.png`.
+- Document width matched 1440, 768 and 390px viewports on the populated vendor route; chain visibility and overflow detection remained enabled at each width. No page or console errors were observed. Each Playwright browser closed in `finally`; the personal desktop browser was not used. In-chat browser access was unavailable in this chat, so the interactive preview was verified through local headless Chromium screenshots and behavior checks.
+
+## Release state
+
+Tracked application, localization and queue/release documentation changes are present in this batch. The 29 untracked texture extracts and unfinished Instance Run work are excluded. The user approved committing, pushing to Dalen's main branch and deploying this batch.
